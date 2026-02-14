@@ -621,6 +621,68 @@ tr:nth-child(even) {
   background: #fafafa;
 }
 
+/* --- Extra Resources --- */
+.extra-resources {
+  background: var(--color-white);
+  border: 2px solid var(--color-explore-border);
+  border-radius: 8px;
+  padding: var(--space-lg);
+  margin: var(--space-lg) 0;
+}
+
+.extra-resources h3 {
+  margin-top: 0;
+  margin-bottom: var(--space-sm);
+  color: var(--color-explore-border);
+}
+
+.extra-resources ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.extra-resources li {
+  margin-bottom: var(--space-sm);
+}
+
+.extra-resources a {
+  font-weight: 600;
+}
+
+/* --- Resource Cards (index.html) --- */
+.resource-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: var(--space-md);
+  margin: var(--space-md) 0;
+}
+
+.resource-card {
+  background: var(--color-white);
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  padding: var(--space-md);
+  text-align: center;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.resource-card:hover {
+  border-color: var(--color-explore-border);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.resource-card h4 {
+  margin-top: 0;
+  margin-bottom: var(--space-xs);
+  font-size: 1rem;
+}
+
+.resource-card p {
+  font-size: 0.9rem;
+  color: var(--color-text-light);
+  margin-bottom: var(--space-sm);
+}
+
 /* --- Footer --- */
 .site-footer {
   text-align: center;
