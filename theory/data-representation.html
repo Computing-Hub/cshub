@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Data Representation - Python Fundamentals</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/style.css" />
+</head>
+<body>
+
+  <header class="site-header">
+    <p><a href="../index.html">&larr; Back to Course</a></p>
+    <h1>Data Representation</h1>
+    <p class="subtitle">How computers store everything &mdash; from text and numbers to images and music &mdash; using nothing but 0s and 1s</p>
+  </header>
+
+  <main>
+
+    <!-- ==================== THE IDEA ==================== -->
+    <section class="idea">
+      <span class="section-label">The Idea</span>
+      <h2>Everything Is Numbers</h2>
+
+      <p>Here is something that might surprise you: your computer does not understand words, pictures, videos, or music. It does not understand English, emojis, or the colour red. Deep down, <strong>everything</strong> inside a computer is stored as numbers &mdash; specifically, as patterns of <strong>0s and 1s</strong>.</p>
+
+      <p>This is because computers are built from billions of tiny electronic switches called <strong>transistors</strong>. Each transistor can be in one of two states: <strong>on</strong> (represented by 1) or <strong>off</strong> (represented by 0). A single 0 or 1 is called a <strong>bit</strong> (short for &ldquo;binary digit&rdquo;), and it is the smallest unit of data in computing.</p>
+
+      <p>So how does a computer use just 0s and 1s to represent a photo of your cat, your favourite song, or this webpage? That is exactly what this topic is all about.</p>
+
+      <div class="key-concept">
+        <strong>Key Concept: Units of Data</strong>
+        1 <strong>bit</strong> = a single 0 or 1. 4 bits = 1 <strong>nibble</strong>. 8 bits = 1 <strong>byte</strong>. 1,000 bytes = 1 <strong>kilobyte (KB)</strong>. 1,000 KB = 1 <strong>megabyte (MB)</strong>. 1,000 MB = 1 <strong>gigabyte (GB)</strong>. 1,000 GB = 1 <strong>terabyte (TB)</strong>. (Note: technically, computers use 1,024 rather than 1,000, but most exam boards accept either.)
+      </div>
+    </section>
+
+    <!-- ==================== EXPLORE ==================== -->
+    <section class="explore">
+      <span class="section-label">Explore</span>
+      <h2>Number Systems</h2>
+
+      <h3>Denary (Base 10)</h3>
+      <p>This is the number system you use every day. It has <strong>10 digits</strong>: 0, 1, 2, 3, 4, 5, 6, 7, 8, 9. Each column is worth 10 times more than the one to its right. The number 345 means: 3 hundreds + 4 tens + 5 ones.</p>
+
+      <h3>Binary (Base 2)</h3>
+      <p>Binary has only <strong>2 digits</strong>: 0 and 1. Each column is worth <strong>2 times</strong> more than the one to its right. This is the language computers speak natively.</p>
+
+      <p><strong>Binary place values (8-bit):</strong></p>
+      <table>
+        <thead>
+          <tr><th>128</th><th>64</th><th>32</th><th>16</th><th>8</th><th>4</th><th>2</th><th>1</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>2<sup>7</sup></td><td>2<sup>6</sup></td><td>2<sup>5</sup></td><td>2<sup>4</sup></td><td>2<sup>3</sup></td><td>2<sup>2</sup></td><td>2<sup>1</sup></td><td>2<sup>0</sup></td></tr>
+        </tbody>
+      </table>
+
+      <p><strong>Example: Convert binary 11010110 to denary.</strong></p>
+      <table>
+        <thead>
+          <tr><th>128</th><th>64</th><th>32</th><th>16</th><th>8</th><th>4</th><th>2</th><th>1</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>1</td><td>1</td><td>0</td><td>1</td><td>0</td><td>1</td><td>1</td><td>0</td></tr>
+        </tbody>
+      </table>
+      <p>128 + 64 + 16 + 4 + 2 = <strong>214</strong></p>
+
+      <p><strong>Example: Convert denary 75 to binary.</strong></p>
+      <p>Start with the largest place value that fits: 64 fits into 75 (75 &minus; 64 = 11). 32 is too big. 8 fits (11 &minus; 8 = 3). 4 is too big. 2 fits (3 &minus; 2 = 1). 1 fits (1 &minus; 1 = 0).</p>
+      <table>
+        <thead>
+          <tr><th>128</th><th>64</th><th>32</th><th>16</th><th>8</th><th>4</th><th>2</th><th>1</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>0</td><td>1</td><td>0</td><td>0</td><td>1</td><td>0</td><td>1</td><td>1</td></tr>
+        </tbody>
+      </table>
+      <p>75 in binary = <strong>01001011</strong></p>
+
+      <h3>Hexadecimal (Base 16)</h3>
+      <p>Hexadecimal (hex for short) uses <strong>16 digits</strong>: 0&ndash;9 and then A&ndash;F (where A=10, B=11, C=12, D=13, E=14, F=15). It is used as a shorthand for binary because one hex digit represents exactly 4 binary digits (a nibble).</p>
+
+      <table>
+        <thead>
+          <tr><th>Denary</th><th>Binary (4-bit)</th><th>Hex</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>0</td><td>0000</td><td>0</td></tr>
+          <tr><td>1</td><td>0001</td><td>1</td></tr>
+          <tr><td>2</td><td>0010</td><td>2</td></tr>
+          <tr><td>3</td><td>0011</td><td>3</td></tr>
+          <tr><td>4</td><td>0100</td><td>4</td></tr>
+          <tr><td>5</td><td>0101</td><td>5</td></tr>
+          <tr><td>6</td><td>0110</td><td>6</td></tr>
+          <tr><td>7</td><td>0111</td><td>7</td></tr>
+          <tr><td>8</td><td>1000</td><td>8</td></tr>
+          <tr><td>9</td><td>1001</td><td>9</td></tr>
+          <tr><td>10</td><td>1010</td><td>A</td></tr>
+          <tr><td>11</td><td>1011</td><td>B</td></tr>
+          <tr><td>12</td><td>1100</td><td>C</td></tr>
+          <tr><td>13</td><td>1101</td><td>D</td></tr>
+          <tr><td>14</td><td>1110</td><td>E</td></tr>
+          <tr><td>15</td><td>1111</td><td>F</td></tr>
+        </tbody>
+      </table>
+
+      <p><strong>Why use hex?</strong> Binary numbers get very long very quickly. The byte 11010110 is much easier to read and remember as <strong>D6</strong> in hex. Hex is commonly used for colour codes in web design (e.g. #FF5733), memory addresses, MAC addresses, and error codes.</p>
+
+      <div class="try-this">
+        <strong>Quick Conversions to Try:</strong> Convert binary 10110011 to hex (split into nibbles: 1011 0011 = B3). Convert hex A7 to binary (A = 1010, 7 = 0111 = 10100111). Convert hex 2F to denary (2 &times; 16 + 15 = 47).
+      </div>
+    </section>
+
+    <!-- ==================== UNDERSTAND ==================== -->
+    <section class="understand">
+      <span class="section-label">Understand</span>
+      <h2>Key Topics in Detail</h2>
+
+      <!-- BINARY ADDITION -->
+      <h3>Binary Addition</h3>
+      <p>Adding in binary follows the same rules as denary addition, but you only have 0 and 1:</p>
+      <ul>
+        <li>0 + 0 = 0</li>
+        <li>0 + 1 = 1</li>
+        <li>1 + 0 = 1</li>
+        <li>1 + 1 = 10 (that is 0, carry 1)</li>
+        <li>1 + 1 + 1 = 11 (that is 1, carry 1)</li>
+      </ul>
+
+      <p><strong>Example: 01101011 + 00110101</strong></p>
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Binary Addition</span>
+        </div>
+        <pre><code>  Carry:  1 1 1 1 1
+          0 1 1 0 1 0 1 1   (107)
+        + 0 0 1 1 0 1 0 1   ( 53)
+        -----------------
+          1 0 1 0 0 0 0 0   (160)</code></pre>
+      </div>
+
+      <div class="warning">
+        <strong>Watch Out &mdash; Overflow:</strong> If the result of a binary addition does not fit in the available number of bits, an <strong>overflow error</strong> occurs. For example, with 8 bits the largest number is 11111111 (255). Adding 200 + 100 = 300 would cause an overflow because 300 cannot be stored in 8 bits.
+      </div>
+
+      <!-- BINARY SHIFTS -->
+      <h3>Binary Shifts</h3>
+      <p>A <strong>binary shift</strong> moves all the bits left or right by a given number of places:</p>
+      <ul>
+        <li><strong>Left shift</strong> by 1 = multiply by 2 (e.g. 00001010 &rarr; 00010100, i.e. 10 &rarr; 20)</li>
+        <li><strong>Right shift</strong> by 1 = integer divide by 2 (e.g. 00010100 &rarr; 00001010, i.e. 20 &rarr; 10)</li>
+        <li>Shift by 2 places = multiply or divide by 4. Shift by 3 = multiply or divide by 8.</li>
+      </ul>
+      <p>Bits that &ldquo;fall off&rdquo; the end are lost, and the empty spaces are filled with 0s.</p>
+
+      <div class="key-concept">
+        <strong>Key Concept: Shifts and Multiplication</strong>
+        A left shift by <em>n</em> positions multiplies the number by 2<sup>n</sup>. A right shift by <em>n</em> positions performs an integer division by 2<sup>n</sup>. Shifts are faster for a computer to perform than multiplication, which is why they are used in low-level programming.
+      </div>
+
+      <!-- NEGATIVE NUMBERS -->
+      <h3>Negative Numbers: Two&rsquo;s Complement</h3>
+      <p>Computers need a way to represent negative numbers using only 0s and 1s. The most common method is <strong>two&rsquo;s complement</strong>.</p>
+      <p>In two&rsquo;s complement, the <strong>leftmost bit</strong> (the most significant bit) represents a <strong>negative</strong> value:</p>
+      <table>
+        <thead>
+          <tr><th>-128</th><th>64</th><th>32</th><th>16</th><th>8</th><th>4</th><th>2</th><th>1</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>0</td><td>1</td><td>1</td></tr>
+        </tbody>
+      </table>
+      <p>&minus;128 + 64 + 32 + 16 + 8 + 2 + 1 = <strong>&minus;5</strong></p>
+
+      <p><strong>To convert a positive number to its negative (two&rsquo;s complement):</strong></p>
+      <ol>
+        <li>Write the positive number in binary</li>
+        <li>Flip all the bits (0 becomes 1, 1 becomes 0) &mdash; this is called the one&rsquo;s complement</li>
+        <li>Add 1</li>
+      </ol>
+      <p><strong>Example:</strong> &minus;5 in two&rsquo;s complement (8-bit): Start with 5 = 00000101. Flip: 11111010. Add 1: <strong>11111011</strong>.</p>
+
+      <!-- CHARACTER ENCODING -->
+      <h3>Character Encoding: ASCII and Unicode</h3>
+      <p>Computers store text by giving each character a unique number code:</p>
+
+      <h4>ASCII</h4>
+      <ul>
+        <li>Uses <strong>7 bits</strong> per character</li>
+        <li>Can represent <strong>128 characters</strong> (0&ndash;127)</li>
+        <li>Includes uppercase letters (A=65), lowercase letters (a=97), digits (0=48), and common symbols</li>
+        <li>Only covers English characters &mdash; no accents, no Chinese, no Arabic, no emojis</li>
+      </ul>
+
+      <h4>Unicode</h4>
+      <ul>
+        <li>Uses <strong>up to 32 bits</strong> per character</li>
+        <li>Can represent <strong>over 143,000 characters</strong> from every writing system in the world</li>
+        <li>Includes all ASCII characters (so it is backwards compatible) plus accented letters, Chinese, Arabic, Japanese, emojis, mathematical symbols, and much more</li>
+        <li>The most common encoding is <strong>UTF-8</strong>, which uses 1&ndash;4 bytes per character</li>
+      </ul>
+
+      <div class="key-concept">
+        <strong>Key Concept: ASCII vs Unicode</strong>
+        ASCII is simpler and uses less storage, but only supports English characters. Unicode supports every language and symbol but uses more storage. Modern systems almost always use Unicode (UTF-8) so that text in any language can be displayed correctly.
+      </div>
+
+      <!-- IMAGE REPRESENTATION -->
+      <h3>Image Representation</h3>
+      <p>A digital image is made up of tiny squares called <strong>pixels</strong> (picture elements). Each pixel is stored as a binary number representing its colour.</p>
+
+      <ul>
+        <li><strong>Resolution</strong> &mdash; The number of pixels in the image (e.g. 1920 &times; 1080). Higher resolution = more detail but larger file size.</li>
+        <li><strong>Colour depth</strong> &mdash; The number of bits used to store the colour of each pixel. 1 bit = 2 colours (black/white). 8 bits = 256 colours. 24 bits = over 16 million colours (true colour, using 8 bits each for red, green, and blue).</li>
+      </ul>
+
+      <div class="key-concept">
+        <strong>Key Formula: Image File Size</strong>
+        File size (bits) = <strong>width &times; height &times; colour depth</strong><br />
+        Example: A 1920 &times; 1080 image with 24-bit colour = 1920 &times; 1080 &times; 24 = 49,766,400 bits = 6,220,800 bytes &asymp; <strong>5.93 MB</strong> (uncompressed).
+      </div>
+
+      <!-- SOUND REPRESENTATION -->
+      <h3>Sound Representation</h3>
+      <p>Sound is a continuous (analogue) wave. To store it digitally, a computer takes regular &ldquo;snapshots&rdquo; of the wave &mdash; this process is called <strong>sampling</strong>.</p>
+
+      <ul>
+        <li><strong>Sample rate</strong> &mdash; How many samples are taken per second, measured in Hertz (Hz). CD quality is 44,100 Hz (44,100 samples per second). Higher sample rate = more accurate sound but larger file.</li>
+        <li><strong>Bit depth</strong> &mdash; The number of bits used to store each sample. Higher bit depth = more precise amplitude values. CD quality uses 16-bit depth.</li>
+      </ul>
+
+      <div class="key-concept">
+        <strong>Key Formula: Sound File Size</strong>
+        File size (bits) = <strong>sample rate &times; bit depth &times; duration (seconds)</strong><br />
+        For stereo, multiply by 2 (two channels).<br />
+        Example: 30 seconds of CD quality stereo audio = 44,100 &times; 16 &times; 30 &times; 2 = 42,336,000 bits &asymp; <strong>5.04 MB</strong> (uncompressed).
+      </div>
+
+      <!-- COMPRESSION -->
+      <h3>Compression</h3>
+      <p>Uncompressed files are often huge. <strong>Compression</strong> reduces the file size so files take up less storage space and are faster to transmit. There are two types:</p>
+
+      <h4>Lossy Compression</h4>
+      <ul>
+        <li><strong>Permanently removes</strong> some data that is considered less important</li>
+        <li>The original file <strong>cannot</strong> be perfectly restored</li>
+        <li>Achieves much smaller file sizes</li>
+        <li>Examples: <strong>MP3</strong> (audio &mdash; removes sounds humans can barely hear), <strong>JPEG</strong> (images &mdash; reduces colour detail), <strong>MP4</strong> (video)</li>
+        <li>Best for media files where small quality loss is acceptable</li>
+      </ul>
+
+      <h4>Lossless Compression</h4>
+      <ul>
+        <li><strong>No data is lost</strong> &mdash; the original file can be perfectly reconstructed</li>
+        <li>Achieves smaller reductions in file size compared to lossy</li>
+        <li>Examples: <strong>PNG</strong> (images), <strong>FLAC</strong> (audio), <strong>ZIP</strong> (any file type)</li>
+        <li>Best for text files, program files, and situations where quality must be preserved (e.g. medical images)</li>
+      </ul>
+
+      <div class="warning">
+        <strong>Common Mistake:</strong> Students often say lossy compression &ldquo;loses quality.&rdquo; Be more precise: lossy compression <strong>permanently removes data</strong> that cannot be recovered. Each time you re-save a JPEG, it loses more data. Lossless compression reduces file size without any loss of data at all.
+      </div>
+    </section>
+
+    <!-- ==================== PRACTICE ==================== -->
+    <section class="practice">
+      <span class="section-label">Practice</span>
+      <h2>Test Yourself</h2>
+      <p>Click on each question to reveal the answer. Try to work it out yourself first!</p>
+
+      <div class="hint">
+        <div class="hint-title">Q1: Convert the binary number 10110011 to denary.</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> Place values: 128 + 0 + 32 + 16 + 0 + 0 + 2 + 1 = <strong>179</strong>. (128=1, 64=0, 32=1, 16=1, 8=0, 4=0, 2=1, 1=1)</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q2: Convert the denary number 200 to binary (8-bit).</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> 128 fits (200&minus;128=72). 64 fits (72&minus;64=8). 32 no. 16 no. 8 fits (8&minus;8=0). 4 no. 2 no. 1 no. Binary: <strong>11001000</strong>.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q3: Convert the binary number 11101010 to hexadecimal.</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> Split into nibbles: 1110 = E, 1010 = A. So 11101010 in hex = <strong>EA</strong>.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q4: What is the result of the binary addition 01011010 + 00101101?</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> 01011010 (90) + 00101101 (45) = <strong>10000111</strong> (135). Work from right to left, carrying 1 when the sum of a column exceeds 1.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q5: What happens when you perform a left shift by 2 on the binary number 00000110?</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> 00000110 (6) shifted left by 2 becomes <strong>00011000</strong> (24). A left shift by 2 multiplies by 2<sup>2</sup> = 4, and 6 &times; 4 = 24.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q6: How many characters can 7-bit ASCII represent, and why is this a limitation?</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> 7-bit ASCII can represent <strong>128 characters</strong> (2<sup>7</sup> = 128). This is a limitation because it only covers English letters, digits, and basic punctuation. It cannot represent characters from other languages (e.g. Chinese, Arabic, accented letters) or modern symbols like emojis. Unicode was created to solve this problem.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q7: An image is 800 &times; 600 pixels with a colour depth of 24 bits. Calculate the file size in megabytes.</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> File size = 800 &times; 600 &times; 24 = 11,520,000 bits. Divide by 8 to get bytes = 1,440,000 bytes. Divide by 1,000,000 (or 1,048,576 for precise calculation) &asymp; <strong>1.44 MB</strong> (or &asymp; 1.37 MiB). This is the uncompressed size.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q8: A 10-second mono audio clip is recorded at 22,050 Hz with a bit depth of 8 bits. Calculate the file size.</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> File size = 22,050 &times; 8 &times; 10 = 1,764,000 bits. Divide by 8 = 220,500 bytes &asymp; <strong>220.5 KB</strong> (or about 0.22 MB).</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q9: Explain the difference between lossy and lossless compression. Give one example file format for each.</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> <strong>Lossy compression</strong> permanently removes some data to achieve a smaller file size; the original cannot be perfectly restored. Example: <strong>JPEG</strong> (or MP3). <strong>Lossless compression</strong> reduces file size without losing any data; the original file can be perfectly reconstructed. Example: <strong>PNG</strong> (or ZIP, FLAC).</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q10: Represent the denary number &minus;20 in 8-bit two&rsquo;s complement binary.</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> Start with +20 in binary: <strong>00010100</strong>. Flip all bits (one&rsquo;s complement): 11101011. Add 1: <strong>11101100</strong>. Check: &minus;128 + 64 + 32 + 8 + 4 = &minus;128 + 108 = &minus;20. Correct!</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== REFLECT ==================== -->
+    <section class="reflect">
+      <span class="section-label">Reflect</span>
+      <h2>Think About It</h2>
+
+      <p>Understanding data representation helps you make informed decisions every day:</p>
+
+      <ul>
+        <li><strong>Choosing file formats:</strong> Should you save your photo as JPEG or PNG? Now you know JPEG uses lossy compression (smaller but loses some detail) while PNG uses lossless compression (larger but perfect quality). For a website banner, JPEG is usually fine. For a logo with sharp edges, PNG is better.</li>
+        <li><strong>Understanding quality settings:</strong> When Spotify offers &ldquo;high quality&rdquo; streaming, it is using a higher bit rate (more bits per second), which means more data but better sound. Now you know why it uses more mobile data!</li>
+        <li><strong>Storage planning:</strong> If you know how to calculate image and sound file sizes, you can estimate how many photos or songs will fit on your phone or USB drive.</li>
+        <li><strong>Web design:</strong> Hex colour codes like #FF5733 now make sense &mdash; FF is the red component (255), 57 is green (87), and 33 is blue (51).</li>
+      </ul>
+
+      <p>The next time you take a photo, stream a song, or send a message, remember: every single one of those things is being stored, transmitted, and recreated using nothing but billions of tiny 0s and 1s. That is both remarkable and beautiful.</p>
+
+      <div class="extra-resources">
+        <h3>Further Reading</h3>
+        <ul>
+          <li><a href="https://hvgcsecs.cshub.org.je/topics/topic2.html" target="_blank" rel="noopener">GCSE Topic 2: Data Representation</a> &mdash; Full Edexcel specification coverage with interactive binary tools</li>
+          <li><a href="https://hvgcsecs.cshub.org.je/activities/index.html" target="_blank" rel="noopener">Revision Activities</a> &mdash; Memory match games and connection walls for data representation</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ==================== NAVIGATION ==================== -->
+    <nav class="chapter-nav">
+      <a href="computational-thinking.html">&larr; Previous: Computational Thinking</a>
+      <a href="../index.html">Course Home</a>
+      <a href="computer-systems.html">Next: Computer Systems &rarr;</a>
+    </nav>
+
+  </main>
+
+  <footer class="site-footer">
+    <p>Python Fundamentals &mdash; A KS4 Learning Platform</p>
+    <p>Data Representation &mdash; GCSE Computer Science Theory</p>
+  </footer>
+
+</body>
+</html>

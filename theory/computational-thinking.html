@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Computational Thinking &amp; Algorithms - Python Fundamentals</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/style.css" />
+</head>
+<body>
+
+  <header class="site-header">
+    <p><a href="../index.html">&larr; Back to Course</a></p>
+    <h1>Computational Thinking &amp; Algorithms</h1>
+    <p class="subtitle">Learn to think like a computer scientist &mdash; break down problems, spot patterns, and design step-by-step solutions</p>
+  </header>
+
+  <main>
+
+    <!-- ==================== THE IDEA ==================== -->
+    <section class="idea">
+      <span class="section-label">The Idea</span>
+      <h2>What Is Computational Thinking?</h2>
+
+      <p>Before you can write a single line of code, you need to <strong>think</strong> about the problem you are trying to solve. Computational thinking is a set of mental tools that help you do exactly that. It is the process of taking a big, messy, real-world problem and breaking it down into something a computer &mdash; or a human &mdash; can work with.</p>
+
+      <p>You might think computational thinking is only for programmers, but it is used everywhere. A doctor diagnosing an illness? They are decomposing symptoms and looking for patterns. A chef creating a recipe? They are writing an algorithm. A football coach planning a strategy? They are using abstraction to focus on what matters most.</p>
+
+      <p><strong>Computational thinking has four key pillars:</strong></p>
+      <ul>
+        <li><strong>Decomposition</strong> &mdash; Breaking a complex problem into smaller, manageable parts</li>
+        <li><strong>Pattern recognition</strong> &mdash; Spotting similarities or trends across problems</li>
+        <li><strong>Abstraction</strong> &mdash; Removing unnecessary detail to focus on what matters</li>
+        <li><strong>Algorithmic thinking</strong> &mdash; Creating a step-by-step solution (an algorithm)</li>
+      </ul>
+
+      <p>These skills are at the heart of GCSE Computer Science, and they will help you in every other subject too. Let&rsquo;s explore each one.</p>
+    </section>
+
+    <!-- ==================== EXPLORE ==================== -->
+    <section class="explore">
+      <span class="section-label">Explore</span>
+      <h2>The Four Pillars in Action</h2>
+
+      <h3>Decomposition: Breaking Problems Down</h3>
+      <p>Imagine your teacher says: &ldquo;Plan the Year 11 prom.&rdquo; That sounds overwhelming, right? But if you break it into smaller tasks, it becomes manageable:</p>
+      <ul>
+        <li>Book a venue</li>
+        <li>Choose a date</li>
+        <li>Organise food and drinks</li>
+        <li>Arrange music and a DJ</li>
+        <li>Design and send invitations</li>
+        <li>Plan decorations</li>
+      </ul>
+      <p>Each of those smaller tasks can be broken down further. &ldquo;Organise food&rdquo; becomes: decide on a menu, check for dietary requirements, find a caterer, agree a price. <strong>That&rsquo;s decomposition</strong> &mdash; turning one big problem into lots of small, solvable ones.</p>
+
+      <div class="key-concept">
+        <strong>Key Concept: Decomposition</strong>
+        Decomposition means breaking a complex problem into smaller sub-problems that are easier to understand, solve, and test individually. In programming, this often means splitting a large program into separate functions or modules.
+      </div>
+
+      <h3>Pattern Recognition: Spotting What&rsquo;s the Same</h3>
+      <p>Once you have broken a problem down, you often notice that some parts are similar to each other &mdash; or similar to problems you have solved before. For example:</p>
+      <ul>
+        <li>Every invitation needs: the guest&rsquo;s name, the date, the venue, and an RSVP link. That&rsquo;s a <strong>pattern</strong> you can reuse.</li>
+        <li>If you have built a login system before, you know the pattern: ask for a username, ask for a password, check them against stored data.</li>
+      </ul>
+      <p>Recognising patterns saves time because you can reuse solutions rather than starting from scratch every time.</p>
+
+      <h3>Abstraction: Focusing on What Matters</h3>
+      <p>Think about the London Underground map. It does not show the real distances between stations or the exact layout of the tunnels. It removes all of that unnecessary detail and just shows which stations connect to which lines. That&rsquo;s <strong>abstraction</strong>.</p>
+
+      <p>Another example: when you use a TV remote, you press &ldquo;volume up&rdquo; without worrying about the electronic circuits inside. The remote <em>abstracts away</em> the complexity so you only deal with what you need.</p>
+
+      <div class="key-concept">
+        <strong>Key Concept: Abstraction</strong>
+        Abstraction means filtering out unnecessary detail and focusing only on the important information needed to solve the problem. It simplifies complex systems by hiding how things work &ldquo;under the hood.&rdquo;
+      </div>
+
+      <h3>Algorithmic Thinking: Writing Step-by-Step Solutions</h3>
+      <p>An <strong>algorithm</strong> is simply a step-by-step set of instructions for solving a problem. You follow algorithms every day without realising it:</p>
+      <ul>
+        <li>A recipe for making a cup of tea</li>
+        <li>Directions from Google Maps</li>
+        <li>The method for solving a quadratic equation</li>
+      </ul>
+      <p>In computer science, an algorithm must be:</p>
+      <ul>
+        <li><strong>Precise</strong> &mdash; Every step is clear and unambiguous</li>
+        <li><strong>Ordered</strong> &mdash; The steps happen in the right sequence</li>
+        <li><strong>Finite</strong> &mdash; It must eventually stop (no infinite loops!)</li>
+      </ul>
+
+      <div class="try-this">
+        <strong>Think About It:</strong> Write an algorithm (in plain English) for making a cheese sandwich. How many steps do you need? Could someone with no cooking experience follow your instructions exactly?
+      </div>
+    </section>
+
+    <!-- ==================== UNDERSTAND ==================== -->
+    <section class="understand">
+      <span class="section-label">Understand</span>
+      <h2>Key Topics in Detail</h2>
+
+      <!-- PSEUDOCODE -->
+      <h3>Pseudocode</h3>
+      <p><strong>Pseudocode</strong> is a way of writing an algorithm using structured English that looks a bit like programming code, but is not written in any specific language. It lets you plan your logic without worrying about syntax rules.</p>
+
+      <p>Here is an example &mdash; an algorithm to check if a student has passed an exam:</p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Pseudocode</span>
+        </div>
+        <pre><code>INPUT score
+IF score >= 50 THEN
+    OUTPUT "Pass"
+ELSE
+    OUTPUT "Fail"
+ENDIF</code></pre>
+      </div>
+
+      <p>And a slightly more complex example &mdash; finding the largest number in a list:</p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Pseudocode</span>
+        </div>
+        <pre><code>INPUT numbers (a list of values)
+SET largest TO numbers[0]
+FOR EACH number IN numbers
+    IF number > largest THEN
+        SET largest TO number
+    ENDIF
+ENDFOR
+OUTPUT largest</code></pre>
+      </div>
+
+      <div class="key-concept">
+        <strong>Key Concept: Pseudocode</strong>
+        Pseudocode is not a real programming language &mdash; there is no single &ldquo;correct&rdquo; way to write it. The aim is to clearly communicate the logic of an algorithm in a way that any programmer could understand and convert into actual code. Common keywords include: INPUT, OUTPUT, IF...THEN...ELSE, FOR, WHILE, SET, and REPEAT...UNTIL.
+      </div>
+
+      <!-- FLOWCHARTS -->
+      <h3>Flowcharts</h3>
+      <p>A <strong>flowchart</strong> is a visual diagram that shows the steps of an algorithm using standard symbols connected by arrows. They make it easy to see the flow of logic at a glance.</p>
+
+      <p><strong>The four key flowchart symbols you must know:</strong></p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Shape</th>
+            <th>Name</th>
+            <th>What It Means</th>
+            <th>Example</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Oval (rounded rectangle)</td>
+            <td>Terminator</td>
+            <td>Start or End of the algorithm</td>
+            <td>START / STOP</td>
+          </tr>
+          <tr>
+            <td>Rectangle</td>
+            <td>Process</td>
+            <td>An action or calculation</td>
+            <td>total = price * quantity</td>
+          </tr>
+          <tr>
+            <td>Diamond</td>
+            <td>Decision</td>
+            <td>A Yes/No question (selection)</td>
+            <td>Is score >= 50?</td>
+          </tr>
+          <tr>
+            <td>Parallelogram</td>
+            <td>Input/Output</td>
+            <td>Data going in or results coming out</td>
+            <td>INPUT name / OUTPUT result</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p>Arrows connect the symbols and show which step comes next. Decision diamonds always have two paths coming out: one for &ldquo;Yes&rdquo; and one for &ldquo;No.&rdquo;</p>
+
+      <div class="warning">
+        <strong>Common Mistake:</strong> Students often forget to use the correct shapes in flowcharts. Remember &mdash; rectangles are for processes, diamonds are for decisions, and parallelograms are for input/output. Using the wrong shape will lose you marks in the exam.
+      </div>
+
+      <!-- THREE PROGRAMMING CONSTRUCTS -->
+      <h3>The Three Programming Constructs</h3>
+      <p>Every algorithm, no matter how complex, is built from just <strong>three basic building blocks</strong>. These are the three programming constructs:</p>
+
+      <h4>1. Sequence</h4>
+      <p>Instructions are executed <strong>one after another</strong>, in the order they are written &mdash; like following a recipe from top to bottom. This is the simplest construct.</p>
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Pseudocode &mdash; Sequence</span>
+        </div>
+        <pre><code>INPUT radius
+SET area TO 3.14 * radius * radius
+OUTPUT area</code></pre>
+      </div>
+
+      <h4>2. Selection (Decisions)</h4>
+      <p>The program makes a <strong>decision</strong> based on a condition. If the condition is true, one path is followed; if false, a different path is taken. This is like a fork in the road.</p>
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Pseudocode &mdash; Selection</span>
+        </div>
+        <pre><code>INPUT age
+IF age >= 18 THEN
+    OUTPUT "You can vote"
+ELSE
+    OUTPUT "You cannot vote yet"
+ENDIF</code></pre>
+      </div>
+
+      <h4>3. Iteration (Loops)</h4>
+      <p>A section of code is <strong>repeated</strong> either a set number of times or until a condition is met. This saves you from writing the same instructions over and over again.</p>
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Pseudocode &mdash; Iteration</span>
+        </div>
+        <pre><code>SET count TO 1
+WHILE count <= 10
+    OUTPUT count
+    SET count TO count + 1
+ENDWHILE</code></pre>
+      </div>
+
+      <div class="key-concept">
+        <strong>Key Concept: The Three Constructs</strong>
+        <strong>Sequence</strong> = instructions in order. <strong>Selection</strong> = making a choice (IF/ELSE). <strong>Iteration</strong> = repeating instructions (FOR/WHILE). Every program ever written uses some combination of these three constructs. Learn them well!
+      </div>
+
+      <!-- SEARCHING ALGORITHMS -->
+      <h3>Searching Algorithms</h3>
+      <p>A <strong>searching algorithm</strong> finds a specific item within a collection of data. You need to know two:</p>
+
+      <h4>Linear Search</h4>
+      <p>Imagine you have lost your phone somewhere in your bedroom. You look at every single object, one at a time, starting from one corner and working your way across the room until you find it. That&rsquo;s a <strong>linear search</strong>.</p>
+      <ul>
+        <li>Start at the <strong>first item</strong> in the list</li>
+        <li>Compare it to the item you are looking for</li>
+        <li>If it matches, you are done</li>
+        <li>If not, move to the <strong>next item</strong></li>
+        <li>Repeat until you find it or reach the end of the list</li>
+      </ul>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Pseudocode &mdash; Linear Search</span>
+        </div>
+        <pre><code>INPUT searchItem
+FOR i = 0 TO LENGTH(list) - 1
+    IF list[i] == searchItem THEN
+        OUTPUT "Found at position " + i
+        STOP
+    ENDIF
+ENDFOR
+OUTPUT "Item not found"</code></pre>
+      </div>
+
+      <p><strong>Pros:</strong> Works on any list (sorted or unsorted). Simple to understand and implement.</p>
+      <p><strong>Cons:</strong> Slow for large lists &mdash; in the worst case, you check every single item.</p>
+
+      <h4>Binary Search</h4>
+      <p>Now imagine looking up &ldquo;Python&rdquo; in a dictionary. You would not start at page 1 and read every word. Instead, you would open the dictionary roughly in the middle. If &ldquo;Python&rdquo; comes after the words on that page, you look in the <strong>second half</strong>. If it comes before, you look in the <strong>first half</strong>. You keep halving the remaining pages until you find it. That&rsquo;s a <strong>binary search</strong>.</p>
+
+      <ul>
+        <li>The list <strong>must be sorted</strong> first</li>
+        <li>Look at the <strong>middle item</strong></li>
+        <li>If it matches, you are done</li>
+        <li>If your target is smaller, discard the right half</li>
+        <li>If your target is larger, discard the left half</li>
+        <li>Repeat on the remaining half until found or nothing left</li>
+      </ul>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Pseudocode &mdash; Binary Search</span>
+        </div>
+        <pre><code>INPUT searchItem
+SET low TO 0
+SET high TO LENGTH(list) - 1
+WHILE low <= high
+    SET mid TO (low + high) DIV 2
+    IF list[mid] == searchItem THEN
+        OUTPUT "Found at position " + mid
+        STOP
+    ELSEIF list[mid] < searchItem THEN
+        SET low TO mid + 1
+    ELSE
+        SET high TO mid - 1
+    ENDIF
+ENDWHILE
+OUTPUT "Item not found"</code></pre>
+      </div>
+
+      <p><strong>Pros:</strong> Very fast, even with huge lists. Each step eliminates half the remaining data.</p>
+      <p><strong>Cons:</strong> Only works on <strong>sorted</strong> data. Slightly more complex to implement.</p>
+
+      <div class="warning">
+        <strong>Common Mistake:</strong> Students often forget that binary search <strong>requires a sorted list</strong>. If the data is not sorted, binary search will not work correctly. If asked which search to use on unsorted data, the answer is always linear search.
+      </div>
+
+      <!-- SORTING ALGORITHMS -->
+      <h3>Sorting Algorithms</h3>
+      <p>Sorting means arranging data into a particular order (usually ascending or descending). You need to know two sorting algorithms:</p>
+
+      <h4>Bubble Sort</h4>
+      <p>Imagine you have a hand of playing cards that are all jumbled up. You compare the first two cards &mdash; if the first is bigger than the second, you swap them. Then you compare the second and third, and swap if needed. You keep going through the entire hand, and the largest card &ldquo;bubbles&rdquo; to the end. You repeat the whole process until no more swaps are needed.</p>
+
+      <ul>
+        <li>Compare each pair of <strong>adjacent items</strong></li>
+        <li>If they are in the wrong order, <strong>swap them</strong></li>
+        <li>Repeat the entire pass through the list</li>
+        <li>Stop when a complete pass is made with <strong>no swaps</strong></li>
+      </ul>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Pseudocode &mdash; Bubble Sort</span>
+        </div>
+        <pre><code>REPEAT
+    SET swapped TO FALSE
+    FOR i = 0 TO LENGTH(list) - 2
+        IF list[i] > list[i + 1] THEN
+            SWAP list[i] AND list[i + 1]
+            SET swapped TO TRUE
+        ENDIF
+    ENDFOR
+UNTIL swapped == FALSE</code></pre>
+      </div>
+
+      <p><strong>Example walkthrough:</strong> Sorting [5, 3, 8, 1]</p>
+      <table>
+        <thead>
+          <tr><th>Pass</th><th>Comparisons &amp; Swaps</th><th>List After Pass</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>1</td><td>5&gt;3 swap, 5&lt;8 no swap, 8&gt;1 swap</td><td>[3, 5, 1, 8]</td></tr>
+          <tr><td>2</td><td>3&lt;5 no swap, 5&gt;1 swap, 5&lt;8 no swap</td><td>[3, 1, 5, 8]</td></tr>
+          <tr><td>3</td><td>3&gt;1 swap, 3&lt;5 no swap, 5&lt;8 no swap</td><td>[1, 3, 5, 8]</td></tr>
+          <tr><td>4</td><td>No swaps needed &mdash; DONE</td><td>[1, 3, 5, 8]</td></tr>
+        </tbody>
+      </table>
+
+      <p><strong>Pros:</strong> Simple to understand and code. Detects if the list is already sorted (no swaps = stop early).</p>
+      <p><strong>Cons:</strong> Very slow for large lists. Makes many unnecessary comparisons.</p>
+
+      <h4>Merge Sort</h4>
+      <p>Merge sort uses a &ldquo;divide and conquer&rdquo; approach. Imagine you have a messy pile of exam papers to sort alphabetically. Instead of sorting the whole pile at once, you split it in half, then split those halves in half again, and keep going until you have piles of just one paper each (which are already &ldquo;sorted&rdquo;). Then you <strong>merge</strong> the piles back together in the right order.</p>
+
+      <ul>
+        <li><strong>Divide:</strong> Split the list in half, repeatedly, until each sub-list has just one item</li>
+        <li><strong>Conquer:</strong> Merge pairs of sub-lists back together in sorted order</li>
+        <li>Keep merging until you have one fully sorted list</li>
+      </ul>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Pseudocode &mdash; Merge Sort</span>
+        </div>
+        <pre><code>FUNCTION mergeSort(list)
+    IF LENGTH(list) <= 1 THEN
+        RETURN list
+    ENDIF
+    SET mid TO LENGTH(list) DIV 2
+    SET left TO mergeSort(list[0 TO mid - 1])
+    SET right TO mergeSort(list[mid TO end])
+    RETURN merge(left, right)
+ENDFUNCTION
+
+FUNCTION merge(left, right)
+    SET result TO empty list
+    WHILE left is not empty AND right is not empty
+        IF left[0] <= right[0] THEN
+            APPEND left[0] TO result
+            REMOVE first item from left
+        ELSE
+            APPEND right[0] TO result
+            REMOVE first item from right
+        ENDIF
+    ENDWHILE
+    APPEND remaining items to result
+    RETURN result
+ENDFUNCTION</code></pre>
+      </div>
+
+      <p><strong>Example walkthrough:</strong> Sorting [6, 3, 8, 1]</p>
+      <table>
+        <thead>
+          <tr><th>Step</th><th>Action</th><th>Result</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Split</td><td>[6, 3, 8, 1] &rarr; [6, 3] and [8, 1]</td><td>Two halves</td></tr>
+          <tr><td>Split again</td><td>[6, 3] &rarr; [6] and [3]; [8, 1] &rarr; [8] and [1]</td><td>Four singles</td></tr>
+          <tr><td>Merge</td><td>[6] + [3] &rarr; [3, 6]; [8] + [1] &rarr; [1, 8]</td><td>Two sorted pairs</td></tr>
+          <tr><td>Merge</td><td>[3, 6] + [1, 8] &rarr; [1, 3, 6, 8]</td><td>Fully sorted</td></tr>
+        </tbody>
+      </table>
+
+      <p><strong>Pros:</strong> Much faster than bubble sort for large lists. Consistent performance regardless of how the data starts.</p>
+      <p><strong>Cons:</strong> Uses more memory (needs extra space for the sub-lists). More complex to code.</p>
+
+      <div class="key-concept">
+        <strong>Key Concept: Comparing Sorts</strong>
+        <strong>Bubble sort</strong> is simple but slow &mdash; best for small or nearly-sorted lists. <strong>Merge sort</strong> is faster for large data sets but uses more memory. In exams, you may be asked to trace through each algorithm step by step, so practise with small lists until you are confident.
+      </div>
+    </section>
+
+    <!-- ==================== PRACTICE ==================== -->
+    <section class="practice">
+      <span class="section-label">Practice</span>
+      <h2>Test Yourself</h2>
+      <p>Click on each question to reveal the answer. Try to answer in your head first!</p>
+
+      <div class="hint">
+        <div class="hint-title">Q1: What are the four pillars of computational thinking?</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> The four pillars are <strong>decomposition</strong> (breaking a problem into smaller parts), <strong>pattern recognition</strong> (spotting similarities), <strong>abstraction</strong> (removing unnecessary detail), and <strong>algorithmic thinking</strong> (creating step-by-step solutions).</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q2: What is the difference between pseudocode and actual programming code?</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> Pseudocode is written in structured English and is not tied to any specific programming language. It cannot be executed by a computer. Its purpose is to plan and communicate the logic of an algorithm in a way that any programmer can understand, regardless of which language they use.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q3: In a flowchart, what shape represents a decision?</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> A <strong>diamond</strong> shape represents a decision (a Yes/No question). It always has two paths coming out of it &mdash; one for Yes (true) and one for No (false). Other shapes: oval = start/end, rectangle = process, parallelogram = input/output.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q4: Name the three programming constructs and give one example of each.</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> <strong>Sequence</strong> &mdash; instructions run in order, e.g. calculating the area of a rectangle (length * width). <strong>Selection</strong> &mdash; a decision is made, e.g. IF age >= 17 THEN &ldquo;can learn to drive.&rdquo; <strong>Iteration</strong> &mdash; instructions repeat, e.g. a WHILE loop that keeps asking for a password until the correct one is entered.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q5: What is the main requirement for binary search that is not needed for linear search?</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> Binary search requires the data to be <strong>sorted</strong> before it can work. Linear search can work on any list, whether sorted or unsorted. This is the most important distinction between the two algorithms.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q6: A list contains 1,000 items. In the worst case, how many comparisons would a linear search need? How many would a binary search need?</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> Linear search: up to <strong>1,000 comparisons</strong> (checking every single item). Binary search: up to approximately <strong>10 comparisons</strong> (since 2<sup>10</sup> = 1,024, and each step halves the data). This shows how dramatically more efficient binary search is for large data sets.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q7: In bubble sort, how do you know the algorithm has finished?</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> Bubble sort is complete when a full pass through the list is made with <strong>no swaps</strong>. This means every adjacent pair is already in the correct order, so the list must be fully sorted.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q8: What approach does merge sort use, and what does this mean?</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> Merge sort uses a <strong>divide and conquer</strong> approach. This means it repeatedly <strong>divides</strong> the problem in half (splitting the list into smaller sub-lists) until the sub-problems are trivially small, then <strong>conquers</strong> by merging the solved sub-problems back together in the correct order.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q9: Give a real-world example of abstraction that is not related to computing.</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> A London Underground map is a classic example. It shows which stations connect to which lines, but removes unnecessary details like real distances, street layouts, and the depth of tunnels. This makes the map much easier to use. Other examples include: a car dashboard (hides engine complexity), a restaurant menu (hides how dishes are prepared), or a school timetable (hides room booking logistics).</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q10: Trace through a bubble sort of the list [4, 2, 7, 1]. Show the list after each pass.</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong></p>
+          <p><strong>Original:</strong> [4, 2, 7, 1]</p>
+          <p><strong>Pass 1:</strong> Compare 4,2 &rarr; swap &rarr; [2, 4, 7, 1]. Compare 4,7 &rarr; no swap. Compare 7,1 &rarr; swap &rarr; [2, 4, 1, 7].</p>
+          <p><strong>Pass 2:</strong> Compare 2,4 &rarr; no swap. Compare 4,1 &rarr; swap &rarr; [2, 1, 4, 7]. Compare 4,7 &rarr; no swap.</p>
+          <p><strong>Pass 3:</strong> Compare 2,1 &rarr; swap &rarr; [1, 2, 4, 7]. Compare 2,4 &rarr; no swap. Compare 4,7 &rarr; no swap.</p>
+          <p><strong>Pass 4:</strong> No swaps &rarr; sorted! <strong>Final list: [1, 2, 4, 7]</strong></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== REFLECT ==================== -->
+    <section class="reflect">
+      <span class="section-label">Reflect</span>
+      <h2>Think About It</h2>
+
+      <p>Computational thinking is not just for computer science lessons. These skills are transferable to almost every area of life:</p>
+
+      <ul>
+        <li><strong>Science:</strong> Decomposing an experiment into variables, methods, and results</li>
+        <li><strong>Maths:</strong> Following algorithms for long division, solving equations, or finding prime factors</li>
+        <li><strong>English:</strong> Planning an essay by breaking it into introduction, paragraphs, and conclusion</li>
+        <li><strong>Everyday life:</strong> Planning a trip, organising your revision timetable, or troubleshooting why your Wi-Fi is not working</li>
+      </ul>
+
+      <p>Next time you face a big, complex problem &mdash; in any subject or in life &mdash; try applying the four pillars:</p>
+      <ol>
+        <li>Break it down (decomposition)</li>
+        <li>Look for patterns you have seen before (pattern recognition)</li>
+        <li>Ignore the unnecessary detail (abstraction)</li>
+        <li>Write a clear, step-by-step plan (algorithmic thinking)</li>
+      </ol>
+
+      <p>The more you practise this way of thinking, the more natural it becomes. And when you start writing code, you will find that the hardest part is not the programming language itself &mdash; it is <strong>thinking through the problem clearly</strong>. Get that right, and the code almost writes itself.</p>
+
+      <div class="extra-resources">
+        <h3>Further Reading</h3>
+        <ul>
+          <li><a href="https://hvgcsecs.cshub.org.je/topics/topic1.html" target="_blank" rel="noopener">GCSE Topic 1: Computational Thinking &amp; Algorithms</a> &mdash; Full Edexcel specification coverage with interactive examples</li>
+          <li><a href="https://hvgcse.cshub.org.je/CS_Escape_Room.html" target="_blank" rel="noopener">Computer Science Escape Room</a> &mdash; Test your computational thinking with interactive puzzles</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ==================== NAVIGATION ==================== -->
+    <nav class="chapter-nav">
+      <a href="../index.html">&larr; Course Home</a>
+      <a href="../index.html">Course Home</a>
+      <a href="data-representation.html">Next: Data Representation &rarr;</a>
+    </nav>
+
+  </main>
+
+  <footer class="site-footer">
+    <p>Python Fundamentals &mdash; A KS4 Learning Platform</p>
+    <p>Computational Thinking &amp; Algorithms &mdash; GCSE Computer Science Theory</p>
+  </footer>
+
+</body>
+</html>

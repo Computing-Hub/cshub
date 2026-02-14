@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Computer Systems - Python Fundamentals</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/style.css" />
+</head>
+<body>
+
+  <header class="site-header">
+    <p><a href="../index.html">&larr; Back to Course</a></p>
+    <h1>Computer Systems</h1>
+    <p class="subtitle">What&rsquo;s inside the box? The CPU, memory, storage, software, and how they all work together</p>
+  </header>
+
+  <main>
+
+    <!-- ==================== THE IDEA ==================== -->
+    <section class="idea">
+      <span class="section-label">The Idea</span>
+      <h2>Inside the Machine</h2>
+
+      <p>You use computers every day &mdash; your phone, your laptop, your games console, even the self-checkout at Tesco. But have you ever wondered what is actually happening <strong>inside</strong> these devices? How does tapping an icon on a screen cause a video to play, a message to send, or a game to load?</p>
+
+      <p>In this topic, you will learn about the physical components (hardware) that make up a computer system, how the CPU processes instructions at incredible speed, where data is stored, and the software that ties it all together. Understanding how computers work &ldquo;under the hood&rdquo; will make you a better programmer and help you make smarter decisions about the technology you use.</p>
+
+      <p><strong>This topic covers:</strong></p>
+      <ul>
+        <li>The CPU and how it executes instructions (the fetch-decode-execute cycle)</li>
+        <li>Memory: RAM, ROM, and virtual memory</li>
+        <li>Secondary storage: hard drives, SSDs, and optical media</li>
+        <li>System software: operating systems and utility programs</li>
+        <li>Programming languages: high-level vs low-level, compilers vs interpreters</li>
+      </ul>
+    </section>
+
+    <!-- ==================== EXPLORE ==================== -->
+    <section class="explore">
+      <span class="section-label">Explore</span>
+      <h2>The Central Processing Unit (CPU)</h2>
+
+      <p>The <strong>CPU</strong> (Central Processing Unit) is the &ldquo;brain&rdquo; of the computer. It carries out all the processing &mdash; performing calculations, making decisions, and controlling everything else in the system. Modern CPUs are tiny silicon chips, yet they can perform billions of operations per second.</p>
+
+      <h3>Key Components of the CPU</h3>
+
+      <h4>ALU (Arithmetic Logic Unit)</h4>
+      <p>This is where the actual calculations happen. The ALU performs:</p>
+      <ul>
+        <li><strong>Arithmetic operations</strong>: addition, subtraction, multiplication, division</li>
+        <li><strong>Logic operations</strong>: comparisons (e.g. is A greater than B?), AND, OR, NOT</li>
+      </ul>
+      <p>Think of the ALU as the &ldquo;maths department&rdquo; of the CPU.</p>
+
+      <h4>CU (Control Unit)</h4>
+      <p>The control unit is the &ldquo;manager&rdquo; &mdash; it coordinates all the activities of the CPU. It:</p>
+      <ul>
+        <li>Fetches instructions from memory</li>
+        <li>Decodes them to work out what needs to happen</li>
+        <li>Sends signals to the ALU, memory, and other components to carry out the instruction</li>
+        <li>Controls the timing of operations using the system clock</li>
+      </ul>
+
+      <h4>Registers</h4>
+      <p>Registers are <strong>tiny, ultra-fast storage locations</strong> inside the CPU itself. They hold the data and instructions the CPU is currently working on. Key registers include:</p>
+      <ul>
+        <li><strong>Program Counter (PC)</strong> &mdash; Holds the address of the next instruction to fetch</li>
+        <li><strong>Memory Address Register (MAR)</strong> &mdash; Holds the address of the memory location being accessed</li>
+        <li><strong>Memory Data Register (MDR)</strong> &mdash; Holds the data that has been fetched from or is about to be written to memory</li>
+        <li><strong>Accumulator (ACC)</strong> &mdash; Holds the results of calculations from the ALU</li>
+      </ul>
+
+      <h4>Cache</h4>
+      <p>Cache is a small amount of <strong>very fast memory</strong> built into or very close to the CPU. It stores copies of frequently used data and instructions so the CPU does not have to fetch them from the slower main memory (RAM) every time. There are usually multiple levels: L1 (smallest, fastest), L2, and L3 (largest, slowest of the three, but still much faster than RAM).</p>
+
+      <div class="key-concept">
+        <strong>Key Concept: The Fetch-Decode-Execute (FDE) Cycle</strong>
+        Every instruction the CPU runs goes through three stages, repeated billions of times per second:
+        <br /><br />
+        <strong>1. Fetch:</strong> The CPU reads the next instruction from memory (the address is in the Program Counter). The PC is then incremented to point to the following instruction.
+        <br /><strong>2. Decode:</strong> The Control Unit works out what the instruction means and what operation is needed.
+        <br /><strong>3. Execute:</strong> The instruction is carried out &mdash; this might involve the ALU doing a calculation, data being moved, or a result being stored.
+        <br /><br />
+        This cycle repeats continuously until the program ends or the computer is turned off.
+      </div>
+
+      <h3>What Makes a CPU Faster?</h3>
+      <table>
+        <thead>
+          <tr><th>Factor</th><th>What It Is</th><th>How It Helps</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Clock speed</strong></td>
+            <td>The number of FDE cycles per second, measured in GHz</td>
+            <td>Higher clock speed = more instructions processed per second. A 3.5 GHz CPU does 3.5 billion cycles per second.</td>
+          </tr>
+          <tr>
+            <td><strong>Number of cores</strong></td>
+            <td>A core is an independent processing unit within the CPU</td>
+            <td>More cores = more tasks can be processed simultaneously (parallel processing). A quad-core CPU can handle 4 tasks at once.</td>
+          </tr>
+          <tr>
+            <td><strong>Cache size</strong></td>
+            <td>The amount of fast memory built into the CPU</td>
+            <td>More cache = more frequently used data is kept close, reducing the need to access slower RAM.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="warning">
+        <strong>Common Mistake:</strong> Students often say &ldquo;more cores always makes a computer faster.&rdquo; This is not always true. Software must be designed to use multiple cores (parallelisation). A single-threaded program running on 8 cores will not be faster than on 1 core &mdash; it can only use one at a time.
+      </div>
+    </section>
+
+    <!-- ==================== UNDERSTAND ==================== -->
+    <section class="understand">
+      <span class="section-label">Understand</span>
+      <h2>Key Topics in Detail</h2>
+
+      <!-- MEMORY -->
+      <h3>Memory: RAM and ROM</h3>
+
+      <h4>RAM (Random Access Memory)</h4>
+      <ul>
+        <li><strong>Volatile</strong> &mdash; Data is lost when the power is turned off</li>
+        <li>Stores the programs and data currently being used</li>
+        <li>Can be <strong>read from and written to</strong></li>
+        <li>Fast access (but slower than cache or registers)</li>
+        <li>Typical sizes: 8 GB &ndash; 32 GB in modern PCs</li>
+      </ul>
+      <p>Think of RAM as your desk: it holds everything you are currently working on. The bigger your desk, the more things you can have open at once.</p>
+
+      <h4>ROM (Read-Only Memory)</h4>
+      <ul>
+        <li><strong>Non-volatile</strong> &mdash; Data is retained when the power is off</li>
+        <li>Stores the <strong>BIOS/UEFI</strong> (the startup instructions that boot the computer)</li>
+        <li>Can only be <strong>read from</strong> (not easily written to)</li>
+        <li>Very small compared to RAM</li>
+      </ul>
+      <p>Think of ROM as a permanent instruction manual built into the computer that tells it how to start up.</p>
+
+      <h4>Virtual Memory</h4>
+      <p>When RAM is full, the operating system uses a section of the hard drive/SSD as temporary extra memory. This is called <strong>virtual memory</strong>. It prevents the computer from crashing when RAM runs out, but it is <strong>much slower</strong> than real RAM because secondary storage is slower than memory. If your computer starts to feel sluggish when lots of programs are open, virtual memory is often the reason.</p>
+
+      <div class="key-concept">
+        <strong>Key Concept: RAM vs ROM</strong>
+        <strong>RAM</strong> is volatile (loses data when power is off), read/write, and stores currently running programs. <strong>ROM</strong> is non-volatile (keeps data without power), read-only, and stores the boot-up instructions. Do not confuse RAM with storage &mdash; RAM is temporary working memory, while storage (HDD/SSD) is for permanent files.
+      </div>
+
+      <!-- SECONDARY STORAGE -->
+      <h3>Secondary Storage</h3>
+      <p>Secondary storage keeps data <strong>permanently</strong>, even when the computer is switched off. There are three main types:</p>
+
+      <h4>Magnetic Storage (HDD &mdash; Hard Disk Drive)</h4>
+      <ul>
+        <li>Uses spinning metal <strong>platters</strong> with a magnetic coating</li>
+        <li>A read/write head moves across the surface to access data</li>
+        <li><strong>High capacity</strong> (1 TB &ndash; 20 TB), <strong>low cost per GB</strong></li>
+        <li>Slower than SSD, has moving parts (can break if dropped), uses more power</li>
+        <li>Good for: bulk storage, backups, servers</li>
+      </ul>
+
+      <h4>Solid State Storage (SSD &mdash; Solid State Drive)</h4>
+      <ul>
+        <li>Uses <strong>flash memory</strong> (electronic circuits, no moving parts)</li>
+        <li>Much <strong>faster</strong> than HDDs (both reading and writing)</li>
+        <li><strong>More durable</strong> (no moving parts to break), silent, lower power consumption</li>
+        <li>More <strong>expensive per GB</strong> than HDDs, though prices are falling</li>
+        <li>Good for: operating system drives, laptops, portable devices</li>
+      </ul>
+
+      <h4>Optical Storage (CD, DVD, Blu-ray)</h4>
+      <ul>
+        <li>Uses a <strong>laser</strong> to read (and sometimes write) data on a disc</li>
+        <li>CD: ~700 MB. DVD: ~4.7 GB. Blu-ray: ~25&ndash;50 GB</li>
+        <li>Cheap, portable, good for distributing software or media</li>
+        <li>Slow compared to HDD/SSD, relatively <strong>low capacity</strong>, easily scratched</li>
+        <li>Becoming less common as streaming and USB drives replace them</li>
+      </ul>
+
+      <h4>Cloud Storage</h4>
+      <ul>
+        <li>Data is stored on <strong>remote servers</strong> accessed via the internet</li>
+        <li>Accessible from any device, anywhere with an internet connection</li>
+        <li>Automatically backed up and maintained by the provider</li>
+        <li>Requires an internet connection, monthly subscription costs, and raises privacy/security concerns</li>
+        <li>Examples: Google Drive, OneDrive, iCloud, Dropbox</li>
+      </ul>
+
+      <table>
+        <thead>
+          <tr><th>Feature</th><th>HDD</th><th>SSD</th><th>Optical</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Speed</td><td>Moderate</td><td>Fast</td><td>Slow</td></tr>
+          <tr><td>Capacity</td><td>Very high</td><td>High</td><td>Low</td></tr>
+          <tr><td>Cost per GB</td><td>Low</td><td>Medium</td><td>Very low</td></tr>
+          <tr><td>Durability</td><td>Fragile (moving parts)</td><td>Robust</td><td>Easily scratched</td></tr>
+          <tr><td>Portability</td><td>Moderate</td><td>High</td><td>High</td></tr>
+        </tbody>
+      </table>
+
+      <!-- OPERATING SYSTEMS -->
+      <h3>Operating Systems</h3>
+      <p>An <strong>operating system</strong> (OS) is system software that manages the computer&rsquo;s hardware and provides a platform for application software to run. Examples include Windows, macOS, Linux, Android, and iOS.</p>
+
+      <p><strong>The OS handles:</strong></p>
+      <ul>
+        <li><strong>Memory management</strong> &mdash; Allocating RAM to programs, managing virtual memory, ensuring programs do not interfere with each other&rsquo;s memory</li>
+        <li><strong>File management</strong> &mdash; Organising files into folders, controlling read/write access, managing the file system (e.g. NTFS, ext4)</li>
+        <li><strong>User interface</strong> &mdash; Providing a way for humans to interact with the computer (e.g. a graphical desktop, touchscreen, command line)</li>
+        <li><strong>Peripheral management</strong> &mdash; Communicating with printers, keyboards, mice, and other devices using <strong>drivers</strong></li>
+        <li><strong>Multitasking</strong> &mdash; Running multiple programs &ldquo;at the same time&rdquo; by rapidly switching between them (time-slicing)</li>
+        <li><strong>Security</strong> &mdash; User accounts, passwords, access permissions, and controlling who can do what</li>
+      </ul>
+
+      <!-- UTILITY SOFTWARE -->
+      <h3>Utility Software</h3>
+      <p>Utility software performs specific maintenance or housekeeping tasks to keep the computer running smoothly:</p>
+
+      <ul>
+        <li><strong>Antivirus/anti-malware</strong> &mdash; Scans for and removes malicious software. Uses a database of known threats and monitors behaviour for suspicious activity.</li>
+        <li><strong>Defragmentation</strong> &mdash; Reorganises fragmented files on an HDD so that each file is stored in consecutive blocks, improving read speed. (Not needed for SSDs as they have no read head.)</li>
+        <li><strong>Encryption</strong> &mdash; Scrambles data so it can only be read by someone with the correct key/password. Protects sensitive data if a device is lost or stolen.</li>
+        <li><strong>Backup software</strong> &mdash; Creates copies of files so they can be restored if the originals are lost, corrupted, or damaged. Can be full, incremental, or differential backups.</li>
+        <li><strong>Disk cleanup / compression</strong> &mdash; Removes temporary files and compresses data to free up storage space.</li>
+      </ul>
+
+      <!-- LANGUAGES -->
+      <h3>High-Level vs Low-Level Languages</h3>
+
+      <table>
+        <thead>
+          <tr><th>Feature</th><th>High-Level Language</th><th>Low-Level Language</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Examples</td><td>Python, Java, C#, JavaScript</td><td>Assembly language, Machine code</td></tr>
+          <tr><td>Readability</td><td>Easy to read and write (close to English)</td><td>Difficult to read (cryptic codes/binary)</td></tr>
+          <tr><td>Portability</td><td>Works on different types of hardware</td><td>Specific to one type of CPU</td></tr>
+          <tr><td>Translation</td><td>Must be translated (compiled/interpreted)</td><td>Assembly needs an assembler; machine code runs directly</td></tr>
+          <tr><td>Speed</td><td>Slower to execute (needs translation)</td><td>Faster (closer to what the CPU understands)</td></tr>
+          <tr><td>Use cases</td><td>Most software development</td><td>Device drivers, embedded systems, performance-critical code</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Compilers vs Interpreters</h3>
+      <p>High-level code must be translated into machine code before the CPU can execute it. There are two main approaches:</p>
+
+      <h4>Compiler</h4>
+      <ul>
+        <li>Translates the <strong>entire program at once</strong> into an executable file</li>
+        <li>You only need to compile once &mdash; then the program runs directly without the compiler</li>
+        <li>Produces an executable file that runs <strong>fast</strong></li>
+        <li>Error messages appear after the whole program is checked, which can be harder to debug</li>
+        <li>The original source code does not need to be distributed &mdash; good for commercial software</li>
+        <li>Examples: C, C++, Java (partly compiled)</li>
+      </ul>
+
+      <h4>Interpreter</h4>
+      <ul>
+        <li>Translates and runs the code <strong>one line at a time</strong></li>
+        <li>Stops as soon as it finds an error and reports exactly where it is &mdash; great for debugging</li>
+        <li>The interpreter must be present every time the program runs &mdash; <strong>slower</strong> overall</li>
+        <li>The source code must be available to run the program</li>
+        <li>Examples: Python, JavaScript, Ruby</li>
+      </ul>
+
+      <div class="key-concept">
+        <strong>Key Concept: Compiler vs Interpreter</strong>
+        A <strong>compiler</strong> translates all the code at once and produces a standalone executable &mdash; fast execution, but errors are reported all together. An <strong>interpreter</strong> translates one line at a time &mdash; slower execution, but errors are caught immediately, making development easier. Python uses an interpreter, which is one reason it is so beginner-friendly.
+      </div>
+
+      <div class="warning">
+        <strong>Common Mistake:</strong> Students sometimes say &ldquo;Python is compiled&rdquo; or &ldquo;C++ is interpreted.&rdquo; While some languages can technically use both methods, in exams you should say Python is <strong>interpreted</strong> and C/C++ are <strong>compiled</strong>. Also, do not confuse translation methods with the language itself &mdash; a compiler/interpreter is a separate piece of software, not a feature of the language.
+      </div>
+    </section>
+
+    <!-- ==================== PRACTICE ==================== -->
+    <section class="practice">
+      <span class="section-label">Practice</span>
+      <h2>Test Yourself</h2>
+      <p>Click on each question to reveal the answer. Try to answer in your head first!</p>
+
+      <div class="hint">
+        <div class="hint-title">Q1: Name the three stages of the fetch-decode-execute cycle and briefly explain each.</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> <strong>Fetch:</strong> The next instruction is retrieved from memory using the address in the Program Counter (PC), and the PC is incremented. <strong>Decode:</strong> The Control Unit interprets the instruction to determine what operation is required. <strong>Execute:</strong> The instruction is carried out, which may involve the ALU performing a calculation, data being transferred, or a result being stored.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q2: What is the role of the ALU in the CPU?</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> The ALU (Arithmetic Logic Unit) performs all <strong>arithmetic operations</strong> (addition, subtraction, multiplication, division) and <strong>logic operations</strong> (comparisons such as greater than, less than, equal to, and Boolean operations like AND, OR, NOT). It is the part of the CPU where actual calculations take place.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q3: Name three factors that affect CPU performance and explain how each one helps.</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> <strong>1. Clock speed</strong> &mdash; Measured in GHz; a higher clock speed means more fetch-decode-execute cycles per second, so more instructions are processed. <strong>2. Number of cores</strong> &mdash; More cores allow multiple instructions to be processed in parallel (at the same time). <strong>3. Cache size</strong> &mdash; A larger cache stores more frequently used data close to the CPU, reducing the time spent fetching data from slower RAM.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q4: What is the difference between RAM and ROM?</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> <strong>RAM</strong> is volatile (loses data when power is off), can be read from and written to, and stores programs and data currently in use. <strong>ROM</strong> is non-volatile (retains data without power), is read-only, and stores the BIOS/UEFI boot-up instructions. RAM is much larger than ROM and changes constantly during use.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q5: Explain what virtual memory is and give one disadvantage of using it.</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> Virtual memory is a section of the hard drive or SSD that the operating system uses as temporary extra RAM when physical RAM is full. It prevents the computer from crashing when too many programs are open. <strong>Disadvantage:</strong> Virtual memory is much slower than real RAM because secondary storage has slower read/write speeds, causing the computer to slow down noticeably (sometimes called &ldquo;thrashing&rdquo;).</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q6: Compare SSDs and HDDs. Give two advantages of each.</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> <strong>SSD advantages:</strong> (1) Much faster read/write speeds, so programs load quicker. (2) More durable because there are no moving parts, making them better for portable devices. <strong>HDD advantages:</strong> (1) Lower cost per gigabyte, making them cheaper for storing large amounts of data. (2) Available in very high capacities (up to 20+ TB), good for bulk storage and backups.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q7: Name four functions of an operating system.</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> Any four from: <strong>(1) Memory management</strong> &mdash; allocating RAM to programs. <strong>(2) File management</strong> &mdash; organising files and controlling access. <strong>(3) User interface</strong> &mdash; providing a way for users to interact with the computer. <strong>(4) Peripheral management</strong> &mdash; communicating with external devices via drivers. <strong>(5) Multitasking</strong> &mdash; running multiple programs by switching between them rapidly. <strong>(6) Security</strong> &mdash; managing user accounts and access permissions.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q8: What is defragmentation, and why is it not needed for SSDs?</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> Defragmentation reorganises files on an HDD so that each file&rsquo;s data is stored in <strong>consecutive blocks</strong> rather than scattered across the disk. This improves read speed because the read/write head does not have to jump around. It is <strong>not needed for SSDs</strong> because SSDs have no moving read head &mdash; they can access any location equally quickly regardless of where the data is stored. In fact, defragmenting an SSD can reduce its lifespan by causing unnecessary write operations.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q9: Give two advantages of using a high-level programming language over a low-level language.</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> <strong>(1) Easier to read, write, and debug</strong> &mdash; High-level languages use English-like syntax, making them more accessible to programmers. <strong>(2) Portable</strong> &mdash; High-level code can run on different types of hardware (with appropriate translation), whereas low-level code is written for a specific CPU architecture and cannot be easily transferred to another system.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q10: What is the difference between a compiler and an interpreter? Give one advantage of each.</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> A <strong>compiler</strong> translates the entire source code into machine code all at once, producing a standalone executable file. <strong>Advantage:</strong> The compiled program runs faster because it does not need translating again each time. An <strong>interpreter</strong> translates and executes the code one line at a time. <strong>Advantage:</strong> It stops at the first error and tells you exactly where it is, making it easier to find and fix bugs during development.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== REFLECT ==================== -->
+    <section class="reflect">
+      <span class="section-label">Reflect</span>
+      <h2>Think About It</h2>
+
+      <p>Understanding how computer hardware works is not just for people who build PCs. It genuinely helps you write better software:</p>
+
+      <ul>
+        <li><strong>Performance awareness:</strong> Knowing that RAM is fast but limited helps you understand why loading a massive file into memory might slow things down &mdash; and why you should process large files in chunks instead.</li>
+        <li><strong>Choosing the right tool:</strong> When you need to store data permanently, you now understand why you write to a file (secondary storage) rather than just keeping it in a variable (RAM, which disappears when the program stops).</li>
+        <li><strong>Debugging:</strong> If your program works perfectly on your computer but crashes on a friend&rsquo;s, it might be because their system has less RAM, a different OS, or a different CPU architecture. Understanding systems helps you diagnose these issues.</li>
+        <li><strong>Making purchase decisions:</strong> Next time you (or a family member) buy a computer, you will actually understand what the specs mean. Is 8 GB RAM enough? Do you need an SSD or is an HDD fine? Now you know how to decide.</li>
+      </ul>
+
+      <p>Every line of Python you write eventually becomes machine code instructions that travel through the CPU&rsquo;s fetch-decode-execute cycle. Understanding that journey &mdash; from your high-level <code>print("Hello")</code> to electrons flowing through transistors &mdash; is one of the most fascinating parts of computer science.</p>
+
+      <div class="extra-resources">
+        <h3>Further Reading</h3>
+        <ul>
+          <li><a href="https://hvgcsecs.cshub.org.je/topics/topic3.html" target="_blank" rel="noopener">GCSE Topic 3: Computer Systems</a> &mdash; Full Edexcel specification coverage with diagrams and interactive examples</li>
+          <li><a href="https://hvgcsecs.cshub.org.je/activities/index.html" target="_blank" rel="noopener">Revision Activities</a> &mdash; Memory match and connection wall games for computer systems</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ==================== NAVIGATION ==================== -->
+    <nav class="chapter-nav">
+      <a href="data-representation.html">&larr; Previous: Data Representation</a>
+      <a href="../index.html">Course Home</a>
+      <a href="networks.html">Next: Networks &amp; the Internet &rarr;</a>
+    </nav>
+
+  </main>
+
+  <footer class="site-footer">
+    <p>Python Fundamentals &mdash; A KS4 Learning Platform</p>
+    <p>Computer Systems &mdash; GCSE Computer Science Theory</p>
+  </footer>
+
+</body>
+</html>

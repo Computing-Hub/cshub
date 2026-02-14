@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Networks &amp; the Internet - Python Fundamentals</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/style.css" />
+</head>
+<body>
+
+  <header class="site-header">
+    <p><a href="../index.html">&larr; Back to Course</a></p>
+    <h1>Networks &amp; the Internet</h1>
+    <p class="subtitle">How billions of devices communicate, share data, and connect the world &mdash; and what happens when you visit a website</p>
+  </header>
+
+  <main>
+
+    <!-- ==================== THE IDEA ==================== -->
+    <section class="idea">
+      <span class="section-label">The Idea</span>
+      <h2>A World Connected</h2>
+
+      <p>Right now, as you read this page, data is flying around the world at incredible speed. Your device sent a request across a network, through cables and routers, possibly across an ocean, to a server that sent this webpage back to you &mdash; all in a fraction of a second. How does that actually work?</p>
+
+      <p>A <strong>network</strong> is simply two or more devices connected together so they can communicate and share resources. Your home Wi-Fi is a network. Your school&rsquo;s computers form a network. The <strong>internet</strong> is the biggest network of all &mdash; a global network of networks connecting billions of devices.</p>
+
+      <p>Understanding networks is essential because nearly every modern application relies on them: streaming music, sending messages, playing online games, backing up to the cloud, and even your smart fridge checking the weather.</p>
+
+      <p><strong>In this topic you will learn:</strong></p>
+      <ul>
+        <li>The different types of networks (LAN, WAN, PAN)</li>
+        <li>Network topologies (how devices are arranged)</li>
+        <li>Protocols (the rules devices follow to communicate)</li>
+        <li>How data travels across networks (packet switching)</li>
+        <li>Network security and cyber threats</li>
+      </ul>
+    </section>
+
+    <!-- ==================== EXPLORE ==================== -->
+    <section class="explore">
+      <span class="section-label">Explore</span>
+      <h2>Types of Networks</h2>
+
+      <h3>LAN (Local Area Network)</h3>
+      <p>A LAN covers a <strong>small geographical area</strong>, such as a single building, a school, or a home. All the hardware (cables, switches, routers) is typically owned by the organisation or individual.</p>
+      <ul>
+        <li>Example: The computers in your school&rsquo;s IT room connected to the school&rsquo;s server</li>
+        <li>Fast data transfer speeds</li>
+        <li>Relatively cheap to set up and maintain</li>
+      </ul>
+
+      <h3>WAN (Wide Area Network)</h3>
+      <p>A WAN covers a <strong>large geographical area</strong>, connecting LANs across cities, countries, or even continents. The infrastructure is usually owned by telecommunications companies.</p>
+      <ul>
+        <li>Example: A company with offices in London and Edinburgh connected together</li>
+        <li>The <strong>internet</strong> is the largest WAN in the world</li>
+        <li>Slower than a LAN (data has to travel further), more expensive to maintain</li>
+      </ul>
+
+      <h3>PAN (Personal Area Network)</h3>
+      <p>A PAN covers a <strong>very small area</strong> &mdash; typically within a few metres of a person. It connects personal devices.</p>
+      <ul>
+        <li>Example: Your phone connected to your wireless earbuds via Bluetooth</li>
+        <li>Very short range, low power consumption</li>
+      </ul>
+
+      <h3>Benefits and Drawbacks of Networks</h3>
+      <table>
+        <thead>
+          <tr><th>Benefits</th><th>Drawbacks</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Share files and resources (e.g. printers)</td><td>Security risks (hackers, malware can spread)</td></tr>
+          <tr><td>Central backups of data</td><td>Expensive to set up (cabling, hardware)</td></tr>
+          <tr><td>Communication (email, messaging)</td><td>If the server fails, users lose access</td></tr>
+          <tr><td>Central management of software/updates</td><td>Requires specialist staff to maintain</td></tr>
+          <tr><td>Internet access for all connected devices</td><td>Privacy concerns (network traffic can be monitored)</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Network Topologies</h3>
+      <p>A <strong>topology</strong> is the arrangement or layout of how devices are connected in a network.</p>
+
+      <h4>Star Topology</h4>
+      <p>Every device is connected to a <strong>central switch or hub</strong>. All data passes through this central device. Think of it like a spider&rsquo;s web with the switch at the centre.</p>
+      <ul>
+        <li><strong>Advantages:</strong> If one cable fails, only that device is affected. Easy to add new devices. Fast performance because each device has its own connection.</li>
+        <li><strong>Disadvantages:</strong> If the central switch fails, the entire network goes down. Requires more cabling than a bus topology. The central switch can be expensive.</li>
+      </ul>
+
+      <h4>Bus Topology</h4>
+      <p>All devices are connected to a single <strong>main cable</strong> (called the backbone or bus). Data sent by one device travels along the cable in both directions, and all devices can see it.</p>
+      <ul>
+        <li><strong>Advantages:</strong> Cheap and easy to set up. Uses less cabling than a star topology.</li>
+        <li><strong>Disadvantages:</strong> If the main cable fails, the whole network goes down. Performance slows as more devices are added (data collisions). Difficult to troubleshoot faults. Security issues as all devices can see all data.</li>
+      </ul>
+
+      <h4>Mesh Topology</h4>
+      <p>Every device is connected to <strong>every other device</strong> (full mesh) or to several other devices (partial mesh). Data can take multiple paths between any two devices.</p>
+      <ul>
+        <li><strong>Advantages:</strong> Very reliable &mdash; if one connection fails, data can take an alternative route. No single point of failure. Fast communication.</li>
+        <li><strong>Disadvantages:</strong> Very expensive (lots of cabling and network ports). Complex to set up and maintain. Mostly used for critical infrastructure like the internet&rsquo;s backbone.</li>
+      </ul>
+
+      <div class="key-concept">
+        <strong>Key Concept: Star vs Bus vs Mesh</strong>
+        <strong>Star</strong> is the most common in schools and offices (reliable, easy to manage). <strong>Bus</strong> is simple but fragile (one cable break = network down). <strong>Mesh</strong> is the most resilient but most expensive. In exams, you should be able to draw each topology and explain the pros and cons.
+      </div>
+    </section>
+
+    <!-- ==================== UNDERSTAND ==================== -->
+    <section class="understand">
+      <span class="section-label">Understand</span>
+      <h2>Key Topics in Detail</h2>
+
+      <!-- PROTOCOLS -->
+      <h3>Network Protocols</h3>
+      <p>A <strong>protocol</strong> is a set of rules that devices must follow to communicate with each other. Without protocols, devices would be like people speaking different languages &mdash; they could not understand each other.</p>
+
+      <table>
+        <thead>
+          <tr><th>Protocol</th><th>Full Name</th><th>Purpose</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>TCP/IP</strong></td><td>Transmission Control Protocol / Internet Protocol</td><td>The fundamental protocol of the internet. TCP ensures data is delivered reliably and in order. IP handles addressing and routing.</td></tr>
+          <tr><td><strong>HTTP</strong></td><td>HyperText Transfer Protocol</td><td>Used for loading web pages. Your browser sends an HTTP request; the server sends back the page.</td></tr>
+          <tr><td><strong>HTTPS</strong></td><td>HTTP Secure</td><td>Same as HTTP but with <strong>encryption</strong>, keeping data private (e.g. bank logins, online shopping). Look for the padlock icon in your browser.</td></tr>
+          <tr><td><strong>FTP</strong></td><td>File Transfer Protocol</td><td>Used for uploading and downloading files between computers. Often used by web developers to upload website files to a server.</td></tr>
+          <tr><td><strong>SMTP</strong></td><td>Simple Mail Transfer Protocol</td><td>Used for <strong>sending</strong> emails from a client to a server, or between servers.</td></tr>
+          <tr><td><strong>POP3</strong></td><td>Post Office Protocol 3</td><td>Used for <strong>receiving</strong> emails. Downloads emails to your device and typically deletes them from the server.</td></tr>
+          <tr><td><strong>IMAP</strong></td><td>Internet Message Access Protocol</td><td>Used for <strong>receiving</strong> emails. Keeps emails on the server so you can access them from multiple devices (more modern than POP3).</td></tr>
+          <tr><td><strong>DNS</strong></td><td>Domain Name System</td><td>Translates human-friendly domain names (e.g. google.com) into IP addresses (e.g. 142.250.187.46) that computers use to find each other.</td></tr>
+        </tbody>
+      </table>
+
+      <!-- TCP/IP LAYERS -->
+      <h3>The TCP/IP Layer Model</h3>
+      <p>The TCP/IP model divides network communication into <strong>four layers</strong>. Each layer has a specific job and passes data to the layer above or below it. This layered approach means each layer can be developed and updated independently.</p>
+
+      <table>
+        <thead>
+          <tr><th>Layer</th><th>Name</th><th>What It Does</th><th>Protocols</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>4 (top)</td><td><strong>Application</strong></td><td>Provides network services directly to the user/software (e.g. web browsing, email)</td><td>HTTP, HTTPS, FTP, SMTP, DNS</td></tr>
+          <tr><td>3</td><td><strong>Transport</strong></td><td>Breaks data into packets, ensures reliable delivery, and reassembles at the other end</td><td>TCP, UDP</td></tr>
+          <tr><td>2</td><td><strong>Internet</strong></td><td>Handles addressing (IP addresses) and routing packets across networks</td><td>IP</td></tr>
+          <tr><td>1 (bottom)</td><td><strong>Network Interface</strong></td><td>Handles the physical transmission of data (electrical signals, Wi-Fi radio waves, etc.)</td><td>Ethernet, Wi-Fi</td></tr>
+        </tbody>
+      </table>
+
+      <!-- PACKET SWITCHING -->
+      <h3>Packet Switching</h3>
+      <p>When you send data across the internet &mdash; an email, a photo, a web page request &mdash; it does not travel as one big block. Instead, it is split into small chunks called <strong>packets</strong>.</p>
+
+      <p><strong>Each packet contains:</strong></p>
+      <ul>
+        <li><strong>Header</strong> &mdash; The source IP address, destination IP address, packet number (so packets can be reassembled in order), and the total number of packets</li>
+        <li><strong>Payload</strong> &mdash; A chunk of the actual data being sent</li>
+        <li><strong>Trailer/footer</strong> &mdash; Error-checking data to verify the packet arrived correctly</li>
+      </ul>
+
+      <p><strong>How it works:</strong></p>
+      <ol>
+        <li>The data is split into packets</li>
+        <li>Each packet is sent independently &mdash; they may take <strong>different routes</strong> across the network</li>
+        <li>Routers at each point decide the best path for each packet based on current network traffic</li>
+        <li>At the destination, packets are <strong>reassembled</strong> in the correct order using the packet numbers</li>
+        <li>If any packets are missing or corrupted, they are <strong>re-requested</strong></li>
+      </ol>
+
+      <div class="key-concept">
+        <strong>Key Concept: Why Packet Switching?</strong>
+        Packet switching is efficient because no single path is reserved for one communication &mdash; the network is shared. If one route is congested or fails, packets can take alternative routes. This makes the internet robust and able to handle millions of simultaneous users.
+      </div>
+
+      <!-- IP ADDRESSING -->
+      <h3>IP Addressing</h3>
+      <p>Every device on a network needs a unique address so that data can be sent to the right place. This is the <strong>IP address</strong> (Internet Protocol address).</p>
+
+      <h4>IPv4</h4>
+      <ul>
+        <li>Four numbers separated by dots, each between 0 and 255</li>
+        <li>Example: <code>192.168.1.1</code></li>
+        <li>Uses 32 bits, giving approximately <strong>4.3 billion</strong> unique addresses</li>
+        <li>Running out of addresses due to the huge number of internet-connected devices</li>
+      </ul>
+
+      <h4>IPv6</h4>
+      <ul>
+        <li>Eight groups of four hexadecimal digits, separated by colons</li>
+        <li>Example: <code>2001:0db8:85a3:0000:0000:8a2e:0370:7334</code></li>
+        <li>Uses 128 bits, giving approximately <strong>340 undecillion</strong> (3.4 &times; 10<sup>38</sup>) unique addresses</li>
+        <li>Created to solve the IPv4 shortage &mdash; enough addresses for every grain of sand on Earth, many times over</li>
+      </ul>
+
+      <!-- NETWORK SECURITY -->
+      <h3>Network Security</h3>
+      <p>Networks are incredibly useful, but they also create vulnerabilities. Here are the key security measures:</p>
+
+      <h4>Firewalls</h4>
+      <p>A firewall monitors and filters incoming and outgoing network traffic based on a set of security rules. It can block suspicious connections and prevent unauthorised access. Firewalls can be hardware devices or software programs.</p>
+
+      <h4>Encryption</h4>
+      <p>Encryption scrambles data into an unreadable format so that only authorised recipients can read it. There are two main types:</p>
+      <ul>
+        <li><strong>Symmetric encryption</strong> &mdash; The same key is used to encrypt and decrypt the data. Fast, but the key must be shared securely.</li>
+        <li><strong>Asymmetric encryption</strong> &mdash; Uses a pair of keys: a <strong>public key</strong> (shared openly) to encrypt, and a <strong>private key</strong> (kept secret) to decrypt. More secure for internet communication (used in HTTPS).</li>
+      </ul>
+
+      <h4>Authentication</h4>
+      <p>Verifying that a user or device is who they claim to be. Methods include passwords, biometrics (fingerprint, face recognition), two-factor authentication (2FA), and digital certificates.</p>
+
+      <h4>MAC Address Filtering</h4>
+      <p>Every network device has a unique <strong>MAC address</strong> (Media Access Control) burned into its hardware. A network can be configured to only allow devices with approved MAC addresses to connect. However, MAC addresses can be spoofed (faked), so this should not be the only security measure.</p>
+
+      <!-- THREATS -->
+      <h3>Network Threats</h3>
+
+      <h4>Malware</h4>
+      <p>Malicious software designed to damage, disrupt, or gain unauthorised access to a system:</p>
+      <ul>
+        <li><strong>Virus</strong> &mdash; Attaches itself to a legitimate program and spreads when that program is run. Can corrupt or delete files.</li>
+        <li><strong>Worm</strong> &mdash; Self-replicating malware that spreads across networks without needing a host program. Can consume bandwidth and crash networks.</li>
+        <li><strong>Trojan</strong> &mdash; Disguises itself as legitimate software but performs malicious actions in the background (e.g. opening a &ldquo;backdoor&rdquo; for hackers).</li>
+        <li><strong>Ransomware</strong> &mdash; Encrypts the victim&rsquo;s files and demands payment (a ransom) for the decryption key. Has targeted hospitals, schools, and businesses.</li>
+        <li><strong>Spyware</strong> &mdash; Secretly monitors user activity and collects data (passwords, browsing habits, keystrokes) without consent.</li>
+      </ul>
+
+      <h4>Other Attacks</h4>
+      <ul>
+        <li><strong>Phishing</strong> &mdash; Fake emails or websites that trick users into revealing personal information (passwords, bank details). Often disguised as messages from trusted organisations.</li>
+        <li><strong>Brute force attack</strong> &mdash; Systematically trying every possible password combination until the correct one is found. Strong, long passwords take much longer to crack.</li>
+        <li><strong>DDoS (Distributed Denial of Service)</strong> &mdash; Flooding a server with so many requests that it cannot respond to legitimate users. Often uses a &ldquo;botnet&rdquo; (network of compromised computers).</li>
+        <li><strong>SQL injection</strong> &mdash; Inserting malicious SQL code into a website&rsquo;s input field (e.g. a login form) to manipulate the database. Can expose, modify, or delete data.</li>
+        <li><strong>Social engineering</strong> &mdash; Manipulating people (rather than technology) into giving up confidential information. Includes phishing, pretexting (creating a fake scenario), and tailgating (following someone into a secure area).</li>
+      </ul>
+
+      <div class="warning">
+        <strong>Common Mistake:</strong> Students often confuse viruses and worms. A <strong>virus</strong> needs a host program to attach to and requires human action (like opening a file) to spread. A <strong>worm</strong> is standalone and spreads automatically across networks without any human action. Both are types of malware, but they work differently.
+      </div>
+    </section>
+
+    <!-- ==================== PRACTICE ==================== -->
+    <section class="practice">
+      <span class="section-label">Practice</span>
+      <h2>Test Yourself</h2>
+      <p>Click on each question to reveal the answer. Try to answer in your head first!</p>
+
+      <div class="hint">
+        <div class="hint-title">Q1: What is the difference between a LAN and a WAN?</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> A <strong>LAN</strong> (Local Area Network) covers a small geographical area such as a single building, school, or home, and the hardware is usually owned by the organisation. A <strong>WAN</strong> (Wide Area Network) covers a large geographical area (cities, countries, or the whole world) and typically uses infrastructure owned by telecommunications companies. The internet is the largest WAN.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q2: In a star topology, what happens if the central switch fails?</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> If the central switch (or hub) fails in a star topology, the <strong>entire network goes down</strong> because all devices rely on the central switch to communicate. This is the main disadvantage of a star topology &mdash; the central switch is a single point of failure. However, if just one cable or device fails, only that device is affected and the rest of the network continues working.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q3: What does DNS stand for, and what does it do?</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> DNS stands for <strong>Domain Name System</strong>. It translates human-friendly domain names (like <code>google.com</code>) into IP addresses (like <code>142.250.187.46</code>) that computers use to locate each other on the network. DNS works like a phone book for the internet &mdash; you look up a name and get the number you need to make the connection.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q4: Name the four layers of the TCP/IP model, from top to bottom.</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> From top to bottom: <strong>1. Application layer</strong> (provides services to the user, e.g. HTTP, FTP, SMTP). <strong>2. Transport layer</strong> (breaks data into packets, ensures reliable delivery, e.g. TCP). <strong>3. Internet layer</strong> (handles IP addressing and routing). <strong>4. Network Interface layer</strong> (handles physical transmission of data, e.g. Ethernet, Wi-Fi).</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q5: Explain how packet switching works. Why is data split into packets?</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> Data is split into small <strong>packets</strong>, each containing a header (source/destination addresses, packet number), payload (a chunk of the actual data), and error-checking information. Packets are sent independently and may take different routes across the network. At the destination, they are reassembled in the correct order. Data is split into packets because: (1) the network can be shared efficiently between many users, (2) if one route fails, packets can take alternative paths, and (3) lost or corrupted packets can be individually re-requested rather than resending everything.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q6: Why was IPv6 created when we already had IPv4?</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> IPv4 uses 32-bit addresses, allowing approximately <strong>4.3 billion</strong> unique addresses. With billions of internet-connected devices (phones, laptops, smart devices, servers), IPv4 addresses have run out. IPv6 uses 128-bit addresses, providing approximately <strong>3.4 &times; 10<sup>38</sup></strong> addresses &mdash; essentially unlimited. IPv6 was created to ensure every device can have a unique address as the internet continues to grow.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q7: What is the difference between symmetric and asymmetric encryption?</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> <strong>Symmetric encryption</strong> uses the <strong>same key</strong> for both encryption and decryption. It is fast but requires the key to be shared securely between both parties. <strong>Asymmetric encryption</strong> uses a <strong>pair of keys</strong>: a public key (shared openly) to encrypt the data, and a private key (kept secret) to decrypt it. Asymmetric encryption is more secure for internet communication because the private key never needs to be shared. HTTPS uses asymmetric encryption.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q8: What is a DDoS attack, and how does it work?</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> A <strong>DDoS (Distributed Denial of Service)</strong> attack floods a server or network with an overwhelming number of requests from many different sources (often a botnet of compromised computers). The server becomes unable to handle legitimate traffic and either slows to a crawl or crashes entirely. The goal is to make a website or service unavailable, not to steal data.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q9: Explain the difference between a virus and a worm.</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> A <strong>virus</strong> attaches itself to a legitimate program or file and only spreads when a user runs that infected program (requires human action). A <strong>worm</strong> is standalone malware that replicates and spreads automatically across networks without needing a host program or human action. Both can cause damage, but worms can spread much faster because they do not need anyone to open or run anything.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q10: What is SQL injection, and how can it be prevented?</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> <strong>SQL injection</strong> is an attack where malicious SQL code is entered into an input field on a website (e.g. a login form or search box). If the website does not properly validate inputs, the SQL code can be executed on the database, potentially allowing the attacker to view, modify, or delete data. It can be prevented by: <strong>(1) input validation/sanitisation</strong> &mdash; checking and cleaning all user input before processing it, <strong>(2) parameterised queries</strong> &mdash; using prepared statements that separate SQL code from user data, and <strong>(3) limiting database permissions</strong> so the web application only has access to what it needs.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== REFLECT ==================== -->
+    <section class="reflect">
+      <span class="section-label">Reflect</span>
+      <h2>Staying Safe Online</h2>
+
+      <p>Now that you understand how networks work and the threats that exist, here are some practical steps you can take to protect yourself:</p>
+
+      <ul>
+        <li><strong>Use strong, unique passwords</strong> &mdash; At least 12 characters, mixing uppercase, lowercase, numbers, and symbols. Use a password manager so you do not have to remember them all. Never reuse passwords across different accounts.</li>
+        <li><strong>Enable two-factor authentication (2FA)</strong> &mdash; This adds a second layer of security (like a code sent to your phone) so even if someone gets your password, they still cannot access your account.</li>
+        <li><strong>Look for HTTPS</strong> &mdash; Before entering any personal information on a website, check for the padlock icon and &ldquo;https://&rdquo; in the address bar. This means your connection is encrypted.</li>
+        <li><strong>Be sceptical of emails and links</strong> &mdash; Phishing attacks are increasingly sophisticated. If an email asks you to click a link or enter personal information, verify it is genuine before acting. Check the sender&rsquo;s actual email address, not just the display name.</li>
+        <li><strong>Keep software updated</strong> &mdash; Updates often contain security patches that fix vulnerabilities. Enable automatic updates where possible.</li>
+        <li><strong>Think before you share</strong> &mdash; Information you post online is very difficult to remove completely. Consider whether you would be happy for a teacher, parent, or future employer to see it.</li>
+      </ul>
+
+      <p>The internet is an incredible tool for learning, creativity, and connection. Understanding how it works &mdash; and where the risks lie &mdash; empowers you to use it confidently and safely.</p>
+
+      <div class="extra-resources">
+        <h3>Further Reading</h3>
+        <ul>
+          <li><a href="https://hvgcsecs.cshub.org.je/topics/topic4.html" target="_blank" rel="noopener">GCSE Topic 4: Networks &amp; the Internet</a> &mdash; Full Edexcel specification coverage with diagrams and interactive examples</li>
+          <li><a href="https://hvgcsecs.cshub.org.je/activities/index.html" target="_blank" rel="noopener">Revision Activities</a> &mdash; Memory match and connection wall games for networks</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ==================== NAVIGATION ==================== -->
+    <nav class="chapter-nav">
+      <a href="computer-systems.html">&larr; Previous: Computer Systems</a>
+      <a href="../index.html">Course Home</a>
+      <a href="issues-and-impact.html">Next: Issues &amp; Impact &rarr;</a>
+    </nav>
+
+  </main>
+
+  <footer class="site-footer">
+    <p>Python Fundamentals &mdash; A KS4 Learning Platform</p>
+    <p>Networks &amp; the Internet &mdash; GCSE Computer Science Theory</p>
+  </footer>
+
+</body>
+</html>

@@ -4,24 +4,51 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Python Fundamentals - KS4 Learning Platform</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
 
-  <header class="site-header">
+  <!-- ===== HERO ===== -->
+  <header class="hero">
     <h1>Python Fundamentals</h1>
-    <p class="subtitle">An interactive KS4 course &mdash; learn Python right in your browser</p>
+    <p class="subtitle">Learn to code right in your browser &mdash; no installs, no fuss</p>
+    <div class="badge-row">
+      <span class="badge">11 Chapters</span>
+      <span class="badge">Runs in Browser</span>
+      <span class="badge">100% Free</span>
+    </div>
   </header>
 
   <main>
-    <section class="idea">
-      <span class="section-label">About This Course</span>
-      <h2>Welcome</h2>
-      <p>This course teaches you the fundamentals of Python programming, from your very first line of code to building a complete quiz game. Every example runs right here in your browser &mdash; no software to install.</p>
-      <p>Each chapter follows the same pattern: <strong>Idea</strong> (why it matters), <strong>Explore</strong> (try working code), <strong>Understand</strong> (how it works), <strong>Practice</strong> (exercises), and <strong>Reflect</strong> (check your understanding).</p>
-    </section>
 
-    <h2>Chapters</h2>
+    <!-- ===== STATS ===== -->
+    <div class="stats-bar">
+      <div class="stat">
+        <span class="stat-number">11</span>
+        <span class="stat-label">Chapters</span>
+      </div>
+      <div class="stat">
+        <span class="stat-number">33</span>
+        <span class="stat-label">Exercises</span>
+      </div>
+      <div class="stat">
+        <span class="stat-number">5</span>
+        <span class="stat-label">Theory Topics</span>
+      </div>
+      <div class="stat">
+        <span class="stat-number">25+</span>
+        <span class="stat-label">Games</span>
+      </div>
+    </div>
+
+    <!-- ===== PYTHON CHAPTERS ===== -->
+    <div class="section-heading">
+      <span class="icon" role="img" aria-label="snake">&#x1F40D;</span>
+      <h2>Python Chapters</h2>
+    </div>
 
     <div class="chapter-list">
 
@@ -115,108 +142,186 @@
 
     </div>
 
-    <h2>Interactive Games &amp; Tools</h2>
-    <p>Practise your Python skills with these interactive games and tools from the <a href="https://hvgcse.cshub.org.je/">CS Hub</a>:</p>
+    <!-- ===== THEORY TOPICS ===== -->
+    <div class="section-heading">
+      <span class="icon" role="img" aria-label="brain">&#x1F9E0;</span>
+      <h2>Computer Science Theory</h2>
+    </div>
+
+    <p>These topics cover the theory side of GCSE Computer Science &mdash; the ideas behind the code. Each page has clear explanations, key terms, worked examples, and a quiz to test yourself.</p>
+
+    <div class="chapter-list">
+
+      <div class="chapter-card theory-card">
+        <div class="chapter-number">Theory</div>
+        <h3>Computational Thinking &amp; Algorithms</h3>
+        <div class="exercise-difficulty difficulty-1">Beginner</div>
+        <p>Decomposition, abstraction, pseudocode, flowcharts, searching and sorting algorithms.</p>
+        <a href="theory/computational-thinking.html" class="button">Start Topic</a>
+      </div>
+
+      <div class="chapter-card theory-card">
+        <div class="chapter-number">Theory</div>
+        <h3>Data Representation</h3>
+        <div class="exercise-difficulty difficulty-2">Intermediate</div>
+        <p>Binary, hexadecimal, ASCII, images, sound, and compression &mdash; how computers store everything as numbers.</p>
+        <a href="theory/data-representation.html" class="button">Start Topic</a>
+      </div>
+
+      <div class="chapter-card theory-card">
+        <div class="chapter-number">Theory</div>
+        <h3>Computer Systems</h3>
+        <div class="exercise-difficulty difficulty-2">Intermediate</div>
+        <p>The CPU, memory, storage, operating systems, and the difference between high-level and low-level languages.</p>
+        <a href="theory/computer-systems.html" class="button">Start Topic</a>
+      </div>
+
+      <div class="chapter-card theory-card">
+        <div class="chapter-number">Theory</div>
+        <h3>Networks &amp; the Internet</h3>
+        <div class="exercise-difficulty difficulty-2">Intermediate</div>
+        <p>LANs, WANs, protocols, packet switching, network security, and how the internet works.</p>
+        <a href="theory/networks.html" class="button">Start Topic</a>
+      </div>
+
+      <div class="chapter-card theory-card">
+        <div class="chapter-number">Theory</div>
+        <h3>Issues &amp; Impact</h3>
+        <div class="exercise-difficulty difficulty-1">Beginner</div>
+        <p>Ethics, privacy, the law, environmental impact, AI, and the social effects of technology.</p>
+        <a href="theory/issues-and-impact.html" class="button">Start Topic</a>
+      </div>
+
+    </div>
+
+    <!-- ===== GAMES & TOOLS ===== -->
+    <div class="section-heading">
+      <span class="icon" role="img" aria-label="game controller">&#x1F3AE;</span>
+      <h2>Interactive Games &amp; Tools</h2>
+    </div>
+
+    <p>Practise your Python skills with these interactive games and tools from the <a href="https://hvgcse.cshub.org.je/" target="_blank" rel="noopener">CS Hub</a>:</p>
 
     <div class="resource-grid">
       <div class="resource-card">
-        <h4>Python Code Fixer</h4>
+        <span class="card-icon" role="img" aria-label="bug">&#x1F41B;</span>
+        <h4>Code Fixer</h4>
         <p>Find and fix bugs in real Python programs</p>
         <a href="https://hvgcse.cshub.org.je/Python_Code_Fixer.html" class="button" target="_blank" rel="noopener">Play</a>
       </div>
 
       <div class="resource-card">
+        <span class="card-icon" role="img" aria-label="detective">&#x1F575;</span>
         <h4>Error Spotter</h4>
         <p>Spot syntax, logic and runtime errors</p>
         <a href="https://hvgcse.cshub.org.je/Python_Error_Spotter.html" class="button" target="_blank" rel="noopener">Play</a>
       </div>
 
       <div class="resource-card">
+        <span class="card-icon" role="img" aria-label="building blocks">&#x1F9F1;</span>
         <h4>Program Builder</h4>
-        <p>Drag-and-drop code construction challenges</p>
+        <p>Drag-and-drop code construction</p>
         <a href="https://hvgcse.cshub.org.je/Program_Builder.html" class="button" target="_blank" rel="noopener">Play</a>
       </div>
 
       <div class="resource-card">
-        <h4>Array Learning Game</h4>
-        <p>Interactive array practice with drag-and-drop</p>
+        <span class="card-icon" role="img" aria-label="puzzle">&#x1F9E9;</span>
+        <h4>Array Game</h4>
+        <p>Interactive array practice</p>
         <a href="https://hvgcse.cshub.org.je/array-learning-game.html" class="button" target="_blank" rel="noopener">Play</a>
       </div>
 
       <div class="resource-card">
-        <h4>Python Block Editor</h4>
-        <p>Visual block-based Python programming</p>
+        <span class="card-icon" role="img" aria-label="blocks">&#x1F4E6;</span>
+        <h4>Block Editor</h4>
+        <p>Visual block-based Python</p>
         <a href="https://hvgcse.cshub.org.je/hvide.html" class="button" target="_blank" rel="noopener">Open</a>
       </div>
 
       <div class="resource-card">
+        <span class="card-icon" role="img" aria-label="exam">&#x1F4DD;</span>
         <h4>Paper 2 Practice</h4>
-        <p>Full Python exam questions with model answers</p>
+        <p>Exam questions with model answers</p>
         <a href="https://hvgcse.cshub.org.je/paper2.html" class="button" target="_blank" rel="noopener">Start</a>
       </div>
 
       <div class="resource-card">
-        <h4>CS Escape Room</h4>
-        <p>Solve 6 computing puzzles to escape</p>
+        <span class="card-icon" role="img" aria-label="locked">&#x1F512;</span>
+        <h4>Escape Room</h4>
+        <p>Solve computing puzzles to escape</p>
         <a href="https://hvgcse.cshub.org.je/CS_Escape_Room.html" class="button" target="_blank" rel="noopener">Play</a>
       </div>
 
       <div class="resource-card">
-        <h4>Programming Mindmap</h4>
-        <p>Visual overview of programming concepts</p>
+        <span class="card-icon" role="img" aria-label="mind map">&#x1F5FA;</span>
+        <h4>Mindmap</h4>
+        <p>Visual programming concept map</p>
         <a href="https://hvgcse.cshub.org.je/ProgrammingMindmap.html" class="button" target="_blank" rel="noopener">View</a>
       </div>
     </div>
 
-    <h2>Edexcel GCSE Revision</h2>
+    <!-- ===== GCSE REVISION ===== -->
+    <div class="section-heading">
+      <span class="icon" role="img" aria-label="graduation cap">&#x1F393;</span>
+      <h2>Edexcel GCSE Revision</h2>
+    </div>
+
     <p>Preparing for your GCSE? These resources from the <a href="https://hvgcsecs.cshub.org.je/" target="_blank" rel="noopener">Edexcel GCSE CS course</a> map directly to the exam specification:</p>
 
     <div class="resource-grid">
       <div class="resource-card">
-        <h4>Topic 6: Programming</h4>
-        <p>Full GCSE programming curriculum with 9 code editors and 6 challenges</p>
+        <span class="card-icon" role="img" aria-label="code">&#x1F4BB;</span>
+        <h4>Topic 6: Code</h4>
+        <p>Full GCSE programming curriculum</p>
         <a href="https://hvgcsecs.cshub.org.je/topics/topic6.html" class="button" target="_blank" rel="noopener">Study</a>
       </div>
 
       <div class="resource-card">
+        <span class="card-icon" role="img" aria-label="thinking">&#x1F4A1;</span>
         <h4>Topic 1: Algorithms</h4>
-        <p>Computational thinking, searching and sorting with Python</p>
+        <p>Computational thinking with Python</p>
         <a href="https://hvgcsecs.cshub.org.je/topics/topic1.html" class="button" target="_blank" rel="noopener">Study</a>
       </div>
 
       <div class="resource-card">
+        <span class="card-icon" role="img" aria-label="joystick">&#x1F579;</span>
         <h4>Revision Activities</h4>
-        <p>Memory match, connection walls, category sort and more</p>
+        <p>Memory match, connection walls</p>
         <a href="https://hvgcsecs.cshub.org.je/activities/index.html" class="button" target="_blank" rel="noopener">Play</a>
       </div>
 
       <div class="resource-card">
+        <span class="card-icon" role="img" aria-label="binary">&#x1F522;</span>
         <h4>Topic 2: Data</h4>
-        <p>Binary, hex, images, sound and compression</p>
+        <p>Binary, hex, images, sound</p>
         <a href="https://hvgcsecs.cshub.org.je/topics/topic2.html" class="button" target="_blank" rel="noopener">Study</a>
       </div>
 
       <div class="resource-card">
+        <span class="card-icon" role="img" aria-label="computer">&#x1F5A5;</span>
         <h4>Topic 3: Systems</h4>
-        <p>CPU, memory, storage, software and languages</p>
+        <p>CPU, memory, storage, software</p>
         <a href="https://hvgcsecs.cshub.org.je/topics/topic3.html" class="button" target="_blank" rel="noopener">Study</a>
       </div>
 
       <div class="resource-card">
+        <span class="card-icon" role="img" aria-label="globe">&#x1F310;</span>
         <h4>Topic 4: Networks</h4>
-        <p>Network types, protocols, security and the internet</p>
+        <p>Protocols, security, the internet</p>
         <a href="https://hvgcsecs.cshub.org.je/topics/topic4.html" class="button" target="_blank" rel="noopener">Study</a>
       </div>
 
       <div class="resource-card">
+        <span class="card-icon" role="img" aria-label="balance">&#x2696;</span>
         <h4>Topic 5: Issues</h4>
-        <p>Ethical, legal, environmental and social impacts</p>
+        <p>Ethics, law, environment, AI</p>
         <a href="https://hvgcsecs.cshub.org.je/topics/topic5.html" class="button" target="_blank" rel="noopener">Study</a>
       </div>
 
       <div class="resource-card">
-        <h4>Full GCSE Course</h4>
-        <p>The complete Edexcel 1CP2 revision site</p>
+        <span class="card-icon" role="img" aria-label="star">&#x2B50;</span>
+        <h4>Full Course</h4>
+        <p>Complete Edexcel 1CP2 site</p>
         <a href="https://hvgcsecs.cshub.org.je/" class="button" target="_blank" rel="noopener">Visit</a>
       </div>
     </div>
