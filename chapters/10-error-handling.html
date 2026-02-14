@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chapter 10: Error Handling - Python Fundamentals</title>
+  <link rel="stylesheet" href="../css/style.css" />
+  <script src="https://cdn.jsdelivr.net/pyodide/v0.24.0/full/pyodide.js"></script>
+</head>
+<body>
+
+  <header class="site-header">
+    <p><a href="../index.html">&larr; Back to Course</a></p>
+    <h1>Chapter 10: Error Handling</h1>
+    <p class="subtitle">Learn to anticipate, catch, and recover from errors so your programs never crash unexpectedly</p>
+  </header>
+
+  <main>
+
+    <!-- ==================== THE IDEA ==================== -->
+    <section class="idea">
+      <span class="section-label">The Idea</span>
+      <h2>Expect the Unexpected</h2>
+
+      <p>Every programmer makes mistakes. The difference between a beginner and an expert? <strong>Experts plan for errors.</strong></p>
+
+      <p>Think about it: what happens if a user types their name when your program is asking for a number? What if you try to open a file that doesn&rsquo;t exist? What if your code tries to divide by zero? Without error handling, your program would simply <strong>crash</strong> &mdash; it stops running and shows an angry red message. That&rsquo;s a terrible experience for the person using your program.</p>
+
+      <p>Errors aren&rsquo;t failures &mdash; they&rsquo;re <strong>information</strong>. When something goes wrong, Python tells you <em>exactly</em> what happened and where it happened. Once you learn to read error messages, they become your best friend for debugging. And once you learn to <em>handle</em> errors, you can write programs that recover gracefully instead of crashing.</p>
+
+      <p>You see error handling everywhere in the real world. When a website says <strong>&ldquo;Are you sure you want to delete this?&rdquo;</strong>, that&rsquo;s handling a potential mistake before it happens. When a form highlights a field in red and says <strong>&ldquo;Please enter a valid email address&rdquo;</strong>, that&rsquo;s catching bad input. When your phone says <strong>&ldquo;No internet connection &mdash; try again later&rdquo;</strong> instead of just freezing, that&rsquo;s graceful error handling. Professional software is full of it.</p>
+
+      <p><strong>By the end of this chapter, you will be able to:</strong></p>
+      <ul>
+        <li>Understand the most common types of Python errors and what causes them</li>
+        <li>Use <code>try</code> and <code>except</code> to catch errors and keep your program running</li>
+        <li>Handle specific error types differently depending on what went wrong</li>
+        <li>Use the <code>finally</code> block to run clean-up code no matter what happens</li>
+      </ul>
+    </section>
+
+    <!-- ==================== EXPLORE ==================== -->
+    <section class="explore">
+      <span class="section-label">Explore</span>
+      <h2>See It in Action</h2>
+
+      <!-- Example 1 -->
+      <h3>Example 1: Common Errors</h3>
+      <p>Before we learn how to handle errors, let&rsquo;s see what they actually look like. Python has many different error types, and each one tells you something specific about what went wrong. Run each of these examples one at a time to see the error messages Python produces. <strong>Don&rsquo;t worry &mdash; errors won&rsquo;t break anything!</strong></p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Python Code</span>
+          <div>
+            <button class="copy-button">Copy Code</button>
+            <button class="run-button">Run Code</button>
+          </div>
+        </div>
+        <pre><code contenteditable="true"># NameError - using a variable that doesn't exist
+print(my_score)</code></pre>
+        <div class="output-box empty">(click "Run Code" to see output)</div>
+      </div>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Python Code</span>
+          <div>
+            <button class="copy-button">Copy Code</button>
+            <button class="run-button">Run Code</button>
+          </div>
+        </div>
+        <pre><code contenteditable="true"># TypeError - trying to add a string and a number
+result = "Age: " + 15
+print(result)</code></pre>
+        <div class="output-box empty">(click "Run Code" to see output)</div>
+      </div>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Python Code</span>
+          <div>
+            <button class="copy-button">Copy Code</button>
+            <button class="run-button">Run Code</button>
+          </div>
+        </div>
+        <pre><code contenteditable="true"># ZeroDivisionError - dividing by zero
+answer = 100 / 0
+print(answer)</code></pre>
+        <div class="output-box empty">(click "Run Code" to see output)</div>
+      </div>
+
+      <p>Each error message has two important parts: the <strong>error type</strong> (like <code>NameError</code> or <code>ZeroDivisionError</code>) and a <strong>description</strong> that explains what went wrong. Learning to read these messages is one of the most useful skills in programming.</p>
+
+      <div class="try-this">
+        <strong>Try This:</strong> Edit the code above to cause different errors. What happens if you try <code>print("hello" * "world")</code>? What about <code>int("abc")</code>? Read the error messages carefully &mdash; can you understand what Python is telling you?
+      </div>
+
+      <!-- Example 2 -->
+      <h3>Example 2: Try/Except to the Rescue</h3>
+      <p>Now for the good part &mdash; we can <strong>catch</strong> errors before they crash our program using <code>try</code> and <code>except</code>. You put the &ldquo;risky&rdquo; code inside a <code>try</code> block, and if an error occurs, Python jumps to the <code>except</code> block instead of crashing.</p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Python Code</span>
+          <div>
+            <button class="copy-button">Copy Code</button>
+            <button class="run-button">Run Code</button>
+          </div>
+        </div>
+        <pre><code contenteditable="true"># Without try/except, this would crash!
+try:
+    result = 10 / 0
+except ZeroDivisionError:
+    print("Can't divide by zero!")
+
+print("Program keeps running!")</code></pre>
+        <div class="output-box empty">(click "Run Code" to see output)</div>
+      </div>
+
+      <p>Notice how the program <strong>doesn&rsquo;t crash</strong>. When Python hits the error inside the <code>try</code> block, it jumps straight to the <code>except</code> block and runs that code instead. Then it carries on with the rest of the program as normal. The line <code>"Program keeps running!"</code> still prints &mdash; without <code>try/except</code>, it never would.</p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Python Code</span>
+          <div>
+            <button class="copy-button">Copy Code</button>
+            <button class="run-button">Run Code</button>
+          </div>
+        </div>
+        <pre><code contenteditable="true"># A practical example: safely converting user input
+user_input = "hello"  # Imagine the user typed this
+
+try:
+    number = int(user_input)
+    print("You entered:", number)
+except ValueError:
+    print("That's not a valid number!")
+    print("You typed:", user_input)</code></pre>
+        <div class="output-box empty">(click "Run Code" to see output)</div>
+      </div>
+
+      <div class="try-this">
+        <strong>Try This:</strong> Change <code>user_input</code> to <code>"42"</code> and run the code again. What happens when the conversion <em>succeeds</em>? The <code>except</code> block is simply skipped. Try other values like <code>"3.14"</code> or <code>""</code> (an empty string) to see what happens.
+      </div>
+
+      <!-- Example 3 -->
+      <h3>Example 3: Multiple Except Blocks and Finally</h3>
+      <p>Sometimes different things can go wrong in the same piece of code. You can use <strong>multiple <code>except</code> blocks</strong> to handle each type of error differently. You can also add a <code>finally</code> block that <strong>always runs</strong>, whether an error occurred or not.</p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Python Code</span>
+          <div>
+            <button class="copy-button">Copy Code</button>
+            <button class="run-button">Run Code</button>
+          </div>
+        </div>
+        <pre><code contenteditable="true"># Handling different errors differently
+def divide(a, b):
+    try:
+        result = a / b
+        print("Result:", result)
+    except ZeroDivisionError:
+        print("Error: You can't divide by zero!")
+    except TypeError:
+        print("Error: Both values must be numbers!")
+    finally:
+        print("--- Calculation attempt finished ---")
+
+# Test with different inputs
+print("Test 1: Normal division")
+divide(10, 3)
+
+print()
+print("Test 2: Division by zero")
+divide(10, 0)
+
+print()
+print("Test 3: Wrong type")
+divide("ten", 2)</code></pre>
+        <div class="output-box empty">(click "Run Code" to see output)</div>
+      </div>
+
+      <p>Look at the output carefully. The <code>finally</code> block runs <strong>every single time</strong> &mdash; after a successful division, after a <code>ZeroDivisionError</code>, and after a <code>TypeError</code>. This makes <code>finally</code> perfect for clean-up tasks that must happen no matter what, like closing a file or saving progress.</p>
+
+      <div class="try-this">
+        <strong>Try This:</strong> Add another test call: <code>divide(10, "two")</code>. Which except block catches it? Now try calling <code>divide()</code> with no arguments at all &mdash; what error do you get? Could you add another <code>except</code> block to handle it?
+      </div>
+
+    </section>
+
+    <!-- ==================== UNDERSTAND ==================== -->
+    <section class="understand">
+      <span class="section-label">Understand</span>
+      <h2>How Does It Work?</h2>
+
+      <h3>Types of Errors</h3>
+      <p>Python has many built-in error types (officially called <strong>exceptions</strong>). Here are the ones you&rsquo;ll encounter most often:</p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Error Type</th>
+            <th>What Causes It</th>
+            <th>Example</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>SyntaxError</code></td>
+            <td>Your code breaks Python&rsquo;s grammar rules</td>
+            <td><code>print("hello"</code> &mdash; missing closing bracket</td>
+          </tr>
+          <tr>
+            <td><code>NameError</code></td>
+            <td>You used a variable that doesn&rsquo;t exist</td>
+            <td><code>print(score)</code> when <code>score</code> was never created</td>
+          </tr>
+          <tr>
+            <td><code>TypeError</code></td>
+            <td>You used the wrong type of data</td>
+            <td><code>"hello" + 5</code> &mdash; can&rsquo;t add a string and an integer</td>
+          </tr>
+          <tr>
+            <td><code>ValueError</code></td>
+            <td>Right type, but the value doesn&rsquo;t make sense</td>
+            <td><code>int("abc")</code> &mdash; can&rsquo;t convert letters to a number</td>
+          </tr>
+          <tr>
+            <td><code>ZeroDivisionError</code></td>
+            <td>You tried to divide by zero</td>
+            <td><code>10 / 0</code></td>
+          </tr>
+          <tr>
+            <td><code>IndexError</code></td>
+            <td>You tried to access a list index that doesn&rsquo;t exist</td>
+            <td><code>my_list[99]</code> when the list only has 3 items</td>
+          </tr>
+          <tr>
+            <td><code>KeyError</code></td>
+            <td>You tried to access a dictionary key that doesn&rsquo;t exist</td>
+            <td><code>my_dict["age"]</code> when there is no <code>"age"</code> key</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p><strong>Important note:</strong> <code>SyntaxError</code> is different from the others. It means your code is incorrectly written and Python can&rsquo;t even <em>start</em> running it. You <strong>cannot</strong> catch a <code>SyntaxError</code> with <code>try/except</code> because the error happens before your code runs. The only fix for a <code>SyntaxError</code> is to correct the code itself.</p>
+
+      <h3>The Try/Except Structure</h3>
+      <p>Here is the general pattern for handling errors in Python:</p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Python Code</span>
+          <div>
+            <button class="copy-button">Copy Code</button>
+          </div>
+        </div>
+        <pre><code contenteditable="true"># The basic structure
+try:
+    # Code that might cause an error
+    # (the "risky" code goes here)
+    pass
+except SomeErrorType:
+    # What to do if that specific error happens
+    pass
+except AnotherErrorType:
+    # What to do if a different error happens
+    pass
+finally:
+    # Code that ALWAYS runs, error or not
+    # (optional - you don't always need this)
+    pass</code></pre>
+      </div>
+
+      <p>Here&rsquo;s how Python executes this:</p>
+      <ol>
+        <li>Python tries to run the code inside the <code>try</code> block</li>
+        <li>If <strong>no error</strong> occurs, it skips all the <code>except</code> blocks and runs the <code>finally</code> block (if there is one)</li>
+        <li>If <strong>an error occurs</strong>, Python stops the <code>try</code> block immediately, finds the matching <code>except</code> block, runs it, then runs the <code>finally</code> block</li>
+        <li>If an error occurs but <strong>no matching <code>except</code></strong> is found, the program crashes as normal (the <code>finally</code> block still runs first)</li>
+      </ol>
+
+      <h3>Catching Specific Errors vs General Except</h3>
+      <p>You can write a &ldquo;catch-all&rdquo; except block that catches <em>any</em> error:</p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Python Code</span>
+          <div>
+            <button class="copy-button">Copy Code</button>
+            <button class="run-button">Run Code</button>
+          </div>
+        </div>
+        <pre><code contenteditable="true"># Catching ANY error (use with caution!)
+try:
+    result = 10 / 0
+except:
+    print("Something went wrong!")
+
+# Better: catch the specific error
+try:
+    result = 10 / 0
+except ZeroDivisionError:
+    print("Can't divide by zero!")</code></pre>
+        <div class="output-box empty">(click "Run Code" to see output)</div>
+      </div>
+
+      <div class="key-concept">
+        <strong>Key Concept: Always Catch Specific Errors When Possible</strong>
+        A bare <code>except:</code> (without naming an error type) will catch <em>every</em> error, including ones you didn&rsquo;t expect. This sounds helpful, but it&rsquo;s actually dangerous because it can <strong>hide bugs</strong> in your code. If you catch everything, you might never notice that your code has a logic error. Always name the specific error types you expect, like <code>except ValueError:</code> or <code>except ZeroDivisionError:</code>. This way, unexpected errors still show up and you can fix them.
+      </div>
+
+      <h3>The Finally Block</h3>
+      <p>The <code>finally</code> block is optional, but when you use it, it <strong>always runs</strong> &mdash; whether the <code>try</code> block succeeded, whether an error was caught, or even if an error was <em>not</em> caught. This makes it ideal for clean-up tasks:</p>
+      <ul>
+        <li>Closing a file that was opened</li>
+        <li>Saving data before the program ends</li>
+        <li>Printing a &ldquo;finished&rdquo; message</li>
+        <li>Resetting a value back to its default</li>
+      </ul>
+
+      <h3>Common Misconceptions</h3>
+      <div class="warning">
+        <strong>Watch out:</strong> Some learners think that wrapping everything in <code>try/except</code> is always a good idea. It isn&rsquo;t. Using <code>try/except</code> wisely means catching errors you <em>expect</em> and know how to recover from &mdash; like a user typing letters when you need a number. Don&rsquo;t catch everything blindly, because you&rsquo;ll hide real bugs. If your code has a <code>NameError</code> because you misspelt a variable, you <em>want</em> to see that error so you can fix it &mdash; not sweep it under the carpet!
+      </div>
+
+      <div class="warning">
+        <strong>Watch out:</strong> Remember that <code>SyntaxError</code> cannot be caught with <code>try/except</code>. If Python can&rsquo;t understand your code at all, it never gets as far as running the <code>try</code> block. The fix for a <code>SyntaxError</code> is always to correct the code itself &mdash; check for missing colons, brackets, or quotation marks.
+      </div>
+    </section>
+
+    <!-- ==================== PRACTICE ==================== -->
+    <section class="practice">
+      <span class="section-label">Practice</span>
+      <h2>Your Turn</h2>
+
+      <!-- Exercise 1: Guided -->
+      <div class="exercise">
+        <div class="exercise-title">Exercise 1: Safe Division</div>
+        <div class="exercise-difficulty difficulty-1">Guided</div>
+        <p>Write a program that divides two numbers safely. If the user tries to divide by zero, the program should print a friendly error message instead of crashing. Complete the code below by filling in the blanks.</p>
+
+        <div class="pseudocode">
+          <div class="pseudocode-label">Pseudocode:</div>
+          STEP 1: Set the numerator to 20 and the denominator to 0<br />
+          STEP 2: Inside a try block, divide the numerator by the denominator<br />
+          STEP 3: Print the result if the division succeeds<br />
+          STEP 4: In the except block, catch ZeroDivisionError and print a helpful message<br />
+          STEP 5: Test with different values for the denominator
+        </div>
+
+        <div class="code-block">
+          <div class="code-block-header">
+            <span class="code-block-label">Your Code</span>
+            <div>
+              <button class="copy-button">Copy Code</button>
+              <button class="run-button">Run Code</button>
+            </div>
+          </div>
+          <pre><code contenteditable="true">numerator = 20
+denominator = 0
+
+try:
+    result = numerator / ____
+    print("The answer is:", ____)
+except ____:
+    print("Oops! You can't divide by zero.")
+
+print("Program finished safely.")</code></pre>
+          <div class="output-box empty">(click "Run Code" to see output)</div>
+        </div>
+
+        <div class="hint">
+          <div class="hint-title">Need a hint?</div>
+          <div class="hint-content">
+            <p>Fill in the three blanks:</p>
+            <ul>
+              <li>The first blank should be <code>denominator</code> &mdash; we want to divide by the denominator variable</li>
+              <li>The second blank should be <code>result</code> &mdash; we want to print the answer we calculated</li>
+              <li>The third blank should be <code>ZeroDivisionError</code> &mdash; that&rsquo;s the specific error type for dividing by zero</li>
+            </ul>
+            <p>Once it works with <code>denominator = 0</code>, change it to <code>denominator = 4</code> and run again to see the successful result.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Exercise 2: Partially Guided -->
+      <div class="exercise">
+        <div class="exercise-title">Exercise 2: Number Converter</div>
+        <div class="exercise-difficulty difficulty-2">Partially Guided</div>
+        <p>Write a program that tries to convert a list of strings into integers. Some of the strings are valid numbers and some are not. Your program should convert the valid ones and print a helpful message for the invalid ones, without crashing.</p>
+
+        <div class="pseudocode">
+          <div class="pseudocode-label">Pseudocode:</div>
+          STEP 1: Create a list of strings: ["10", "hello", "42", "3.5", "seven", "99"]<br />
+          STEP 2: Loop through each item in the list<br />
+          STEP 3: Inside a try block, convert the item to an integer using int()<br />
+          STEP 4: If it works, print the converted number<br />
+          STEP 5: If a ValueError occurs, print which value could not be converted<br />
+          STEP 6: After the loop, print how the program completed without crashing
+        </div>
+
+        <div class="code-block">
+          <div class="code-block-header">
+            <span class="code-block-label">Your Code</span>
+            <div>
+              <button class="copy-button">Copy Code</button>
+              <button class="run-button">Run Code</button>
+            </div>
+          </div>
+          <pre><code contenteditable="true"># Number converter - handle invalid conversions gracefully
+values = ["10", "hello", "42", "3.5", "seven", "99"]
+converted_count = 0
+
+for item in values:
+    # Add your try/except code here
+    pass
+
+print("Done! Successfully converted", converted_count, "values.")</code></pre>
+          <div class="output-box empty">(click "Run Code" to see output)</div>
+        </div>
+
+        <div class="hint">
+          <div class="hint-title">Need a hint?</div>
+          <div class="hint-content">
+            <p>Replace <code>pass</code> with a <code>try/except</code> block inside the loop. Here is the structure:</p>
+            <p><code>try:</code></p>
+            <p>&nbsp;&nbsp;&nbsp;&nbsp;<code>number = int(item)</code></p>
+            <p>&nbsp;&nbsp;&nbsp;&nbsp;<code>print("Converted:", number)</code></p>
+            <p>&nbsp;&nbsp;&nbsp;&nbsp;<code>converted_count += 1</code></p>
+            <p><code>except ValueError:</code></p>
+            <p>&nbsp;&nbsp;&nbsp;&nbsp;<code>print("Cannot convert '" + item + "' to a whole number")</code></p>
+            <p>Remember to update <code>converted_count</code> only when the conversion succeeds (inside the <code>try</code> block, after the conversion). Note that <code>"3.5"</code> will also cause a <code>ValueError</code> because <code>int()</code> cannot directly convert a decimal string &mdash; only <code>float()</code> can do that.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Exercise 3: Open-Ended -->
+      <div class="exercise">
+        <div class="exercise-title">Exercise 3: Robust Calculator</div>
+        <div class="exercise-difficulty difficulty-3">Open-Ended</div>
+        <p>Create a calculator program that handles <strong>all possible errors</strong> gracefully. The calculator should take two numbers and an operator, perform the calculation, and handle every error that could occur &mdash; invalid numbers, division by zero, and unsupported operators. Use multiple <code>except</code> blocks and a <code>finally</code> block.</p>
+
+        <div class="pseudocode">
+          <div class="pseudocode-label">Pseudocode:</div>
+          STEP 1: Set two number variables (as strings, to simulate user input) and an operator<br />
+          STEP 2: Inside a try block:<br />
+          &nbsp;&nbsp;&mdash; Convert both strings to numbers (float)<br />
+          &nbsp;&nbsp;&mdash; Use if/elif to check the operator (+, -, *, /)<br />
+          &nbsp;&nbsp;&mdash; If the operator is not recognised, print an error message<br />
+          &nbsp;&nbsp;&mdash; Print the result<br />
+          STEP 3: Add except blocks for ValueError (bad numbers) and ZeroDivisionError<br />
+          STEP 4: Add a finally block that prints "Calculation complete"<br />
+          STEP 5: Test with different inputs: valid numbers, invalid strings, division by zero, unknown operators
+        </div>
+
+        <div class="code-block">
+          <div class="code-block-header">
+            <span class="code-block-label">Your Code</span>
+            <div>
+              <button class="copy-button">Copy Code</button>
+              <button class="run-button">Run Code</button>
+            </div>
+          </div>
+          <pre><code contenteditable="true"># Robust calculator - handle every possible error!
+# Change these values to test different scenarios
+num1_text = "10"
+num2_text = "3"
+operator = "+"
+
+# Write your try/except/finally code below
+
+
+</code></pre>
+          <div class="output-box empty">(click "Run Code" to see output)</div>
+        </div>
+
+        <div class="hint">
+          <div class="hint-title">Need a hint?</div>
+          <div class="hint-content">
+            <p>Here is a structure to get you started:</p>
+            <p><code>try:</code></p>
+            <p>&nbsp;&nbsp;&nbsp;&nbsp;<code>num1 = float(num1_text)</code></p>
+            <p>&nbsp;&nbsp;&nbsp;&nbsp;<code>num2 = float(num2_text)</code></p>
+            <p>&nbsp;&nbsp;&nbsp;&nbsp;Then use <code>if operator == "+":</code> and <code>elif</code> for each operator (<code>-</code>, <code>*</code>, <code>/</code>). In the <code>else</code> clause, print that the operator is not recognised.</p>
+            <p><code>except ValueError:</code></p>
+            <p>&nbsp;&nbsp;&nbsp;&nbsp;<code>print("Error: Please enter valid numbers.")</code></p>
+            <p><code>except ZeroDivisionError:</code></p>
+            <p>&nbsp;&nbsp;&nbsp;&nbsp;<code>print("Error: Cannot divide by zero.")</code></p>
+            <p><code>finally:</code></p>
+            <p>&nbsp;&nbsp;&nbsp;&nbsp;<code>print("Calculation complete.")</code></p>
+            <p>To test thoroughly, try these combinations: <code>"10"</code> and <code>"3"</code> with <code>"+"</code> (should work), <code>"abc"</code> and <code>"3"</code> (should trigger ValueError), <code>"10"</code> and <code>"0"</code> with <code>"/"</code> (should trigger ZeroDivisionError), and <code>"10"</code> and <code>"3"</code> with <code>"%"</code> (should show unknown operator).</p>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ==================== REFLECT ==================== -->
+    <section class="reflect">
+      <span class="section-label">Reflect</span>
+      <h2>Think About It</h2>
+
+      <p>Take a moment to think about what you&rsquo;ve learnt in this chapter. Try to answer these questions in your head or discuss them with a classmate:</p>
+
+      <ul>
+        <li>Why is it better to catch <em>specific</em> error types (like <code>ValueError</code>) rather than using a bare <code>except:</code> that catches everything?</li>
+        <li>Can you think of three situations in your own programs where error handling would be useful? (Hint: think about any time your program takes input or works with data that could be unexpected.)</li>
+        <li>What is the difference between a <code>SyntaxError</code> and a <code>ValueError</code>? Why can&rsquo;t you catch a <code>SyntaxError</code> with <code>try/except</code>?</li>
+        <li>When would you use a <code>finally</code> block? Why might it be important to run certain code regardless of whether an error occurred?</li>
+        <li>A classmate says &ldquo;I just put all my code inside one big <code>try/except</code> block so it never crashes.&rdquo; What would you say to them? What are the risks of this approach?</li>
+      </ul>
+
+      <h3>What&rsquo;s Next?</h3>
+      <p>You now have all the tools to build something amazing. You can store data in variables, make decisions with selection, repeat actions with loops, organise code with functions, work with lists and dictionaries, read and write files, and now &mdash; handle errors like a professional. In <strong>Chapter 11: Capstone &mdash; Quiz Game</strong>, you&rsquo;ll bring <em>everything</em> together to build a complete, interactive quiz game from scratch. This is where all your hard work pays off!</p>
+    </section>
+
+    <!-- ==================== NAVIGATION ==================== -->
+    <nav class="chapter-nav">
+      <a href="09-file-handling.html">&larr; Previous: Chapter 9: File Handling</a>
+      <a href="../index.html">Course Home</a>
+      <a href="11-capstone-quiz.html">Next: Chapter 11: Capstone &mdash; Quiz Game &rarr;</a>
+    </nav>
+
+  </main>
+
+  <footer class="site-footer">
+    <p>Python Fundamentals &mdash; A KS4 Learning Platform</p>
+    <p>Built with <a href="https://pyodide.org/">Pyodide</a> &mdash; Python runs in your browser</p>
+  </footer>
+
+  <script src="../js/pyodide-runner.js"></script>
+</body>
+</html>

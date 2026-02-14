@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chapter 11: Capstone - Quiz Game - Python Fundamentals</title>
+  <link rel="stylesheet" href="../css/style.css" />
+  <script src="https://cdn.jsdelivr.net/pyodide/v0.24.0/full/pyodide.js"></script>
+</head>
+<body>
+
+  <header class="site-header">
+    <p><a href="../index.html">&larr; Back to Course</a></p>
+    <h1>Chapter 11: Capstone &mdash; Quiz Game</h1>
+    <p class="subtitle">Combine everything you have learnt into one complete project &mdash; your very own quiz game</p>
+  </header>
+
+  <main>
+
+    <!-- ==================== THE IDEA ==================== -->
+    <section class="idea">
+      <span class="section-label">The Idea</span>
+      <h2>The Final Challenge</h2>
+
+      <p>You have come an incredibly long way. Over the last ten chapters you have learnt <strong>variables</strong>, <strong>strings</strong>, <strong>lists</strong>, <strong>dictionaries</strong>, <strong>loops</strong>, <strong>functions</strong>, <strong>conditions</strong>, and <strong>error handling</strong>. Each of those topics was a new tool in your programming toolkit. Now it is time to open up that toolkit and use <em>every single tool at once</em> to build something real: <strong>a quiz game</strong>.</p>
+
+      <p>Building a quiz game is the perfect capstone project because it naturally uses every concept from this course. You need dictionaries to store questions, lists to collect them, loops to iterate through them, conditions to check answers, functions to organise your code, strings to compare user input, and error handling to make the program robust. It all comes together.</p>
+
+      <p>This chapter is <strong>different from the ones before it</strong>. There will be less hand-holding and more creativity. You have the skills now &mdash; you are the programmer. We will guide you through the building blocks, but the final product is yours to design, extend, and make your own.</p>
+
+      <p><strong>By the end of this chapter, you will be able to:</strong></p>
+      <ul>
+        <li>Combine all the Python concepts you have learnt into a single, complete program</li>
+        <li>Plan a project by breaking it down into smaller, manageable parts</li>
+        <li>Write a fully working quiz game from scratch</li>
+        <li>Debug independently when things go wrong</li>
+      </ul>
+    </section>
+
+    <!-- ==================== EXPLORE ==================== -->
+    <section class="explore">
+      <span class="section-label">Explore</span>
+      <h2>See It in Action</h2>
+
+      <!-- Example 1: Storing Questions -->
+      <h3>Example 1: Storing Questions</h3>
+      <p>The first thing any quiz game needs is questions. But how do you store a question <em>and</em> its answer together? A dictionary is perfect for this &mdash; each dictionary holds a <code>"question"</code> and an <code>"answer"</code> as a pair. We then put all of our question dictionaries into a list, giving us a neat collection we can loop through later.</p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Python Code</span>
+          <div>
+            <button class="copy-button">Copy Code</button>
+            <button class="run-button">Run Code</button>
+          </div>
+        </div>
+        <pre><code contenteditable="true"># Storing quiz questions as a list of dictionaries
+questions = [
+    {"question": "What is the capital of France?", "answer": "paris"},
+    {"question": "What is 7 * 8?", "answer": "56"},
+    {"question": "What colour do you get mixing red and blue?", "answer": "purple"},
+    {"question": "How many sides does a hexagon have?", "answer": "6"},
+]
+
+# Let's check our data structure
+print(f"Number of questions: {len(questions)}")
+print()
+
+# We can access individual questions like this
+print("First question:", questions[0]["question"])
+print("Its answer:", questions[0]["answer"])
+print()
+
+# And loop through them all
+for i, q in enumerate(questions, 1):
+    print(f"Q{i}: {q['question']}")</code></pre>
+        <div class="output-box empty">(click "Run Code" to see output)</div>
+      </div>
+
+      <div class="try-this">
+        <strong>Try This:</strong> Add two more questions of your own to the list. Remember that each question is a dictionary with <code>"question"</code> and <code>"answer"</code> keys. Store the answers in lowercase so they are easy to compare later. Run the code to check your questions appear correctly.
+      </div>
+
+      <!-- Example 2: The Quiz Loop -->
+      <h3>Example 2: The Quiz Loop</h3>
+      <p>Now that we have our questions stored, we need a loop that presents each question, checks the answer, and keeps track of the score. Since <code>input()</code> does not work in the browser, we will simulate the user&rsquo;s answers using a list. In a real Python program running on your computer, you would use <code>input()</code> to get the player&rsquo;s actual response.</p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Python Code</span>
+          <div>
+            <button class="copy-button">Copy Code</button>
+            <button class="run-button">Run Code</button>
+          </div>
+        </div>
+        <pre><code contenteditable="true"># Our quiz questions
+questions = [
+    {"question": "What is the capital of France?", "answer": "paris"},
+    {"question": "What is 7 * 8?", "answer": "56"},
+    {"question": "What colour do you get mixing red and blue?", "answer": "purple"},
+    {"question": "How many sides does a hexagon have?", "answer": "6"},
+]
+
+# Simulated user answers (since input() doesn't work in the browser)
+# In a real program you'd write: user_answer = input("Your answer: ")
+simulated_answers = ["paris", "54", "purple", "6"]
+
+score = 0
+
+for i, q in enumerate(questions):
+    print(f"Question {i + 1}: {q['question']}")
+
+    # In a real program: user_answer = input("Your answer: ")
+    user_answer = simulated_answers[i]  # simulated answer
+    print(f"Your answer: {user_answer}")
+
+    if user_answer.lower() == q["answer"]:
+        print("Correct!")
+        score += 1
+    else:
+        print(f"Wrong! The answer was {q['answer']}")
+    print()
+
+print(f"Final Score: {score}/{len(questions)}")</code></pre>
+        <div class="output-box empty">(click "Run Code" to see output)</div>
+      </div>
+
+      <div class="try-this">
+        <strong>Try This:</strong> Change some of the simulated answers to see what happens when the player gets questions right or wrong. What happens if you change <code>"54"</code> to <code>"56"</code> in the answers list? Can you add a message at the end that says whether the player passed (e.g., scored more than half)?
+      </div>
+
+      <!-- Example 3: Adding Functions -->
+      <h3>Example 3: Adding Functions</h3>
+      <p>Our quiz works, but all the code is running in one big block. Real programs are organised into <strong>functions</strong> &mdash; each function handles one job. This makes the code easier to read, easier to test, and easier to extend. Let&rsquo;s refactor our quiz into three clear functions: one to create the questions, one to run the quiz, and one to show the results.</p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Python Code</span>
+          <div>
+            <button class="copy-button">Copy Code</button>
+            <button class="run-button">Run Code</button>
+          </div>
+        </div>
+        <pre><code contenteditable="true">def create_questions():
+    """Return a list of quiz question dictionaries."""
+    questions = [
+        {"question": "What is the capital of France?", "answer": "paris"},
+        {"question": "What is 7 * 8?", "answer": "56"},
+        {"question": "What colour do you get mixing red and blue?", "answer": "purple"},
+        {"question": "How many sides does a hexagon have?", "answer": "6"},
+        {"question": "What planet is closest to the Sun?", "answer": "mercury"},
+    ]
+    return questions
+
+
+def run_quiz(questions, player_answers):
+    """Run through the quiz and return the score."""
+    score = 0
+    for i, q in enumerate(questions):
+        print(f"\nQuestion {i + 1}: {q['question']}")
+
+        # In a real program: answer = input("Your answer: ")
+        answer = player_answers[i]
+        print(f"Your answer: {answer}")
+
+        if answer.lower() == q["answer"]:
+            print("Correct!")
+            score += 1
+        else:
+            print(f"Wrong! The answer was {q['answer']}")
+    return score
+
+
+def show_results(score, total):
+    """Display the final results with a rating."""
+    print("\n" + "=" * 30)
+    print(f"  FINAL SCORE: {score}/{total}")
+    print("=" * 30)
+
+    percentage = (score / total) * 100
+    if percentage == 100:
+        print("  Perfect score! Outstanding!")
+    elif percentage >= 70:
+        print("  Great job! Well done!")
+    elif percentage >= 50:
+        print("  Not bad! Keep practising!")
+    else:
+        print("  Keep learning, you'll get there!")
+
+
+# --- Main program ---
+print("Welcome to the Python Quiz!")
+print("=" * 30)
+
+questions = create_questions()
+simulated_answers = ["paris", "56", "purple", "6", "mercury"]
+score = run_quiz(questions, simulated_answers)
+show_results(score, len(questions))</code></pre>
+        <div class="output-box empty">(click "Run Code" to see output)</div>
+      </div>
+
+      <div class="try-this">
+        <strong>Try This:</strong> Modify the <code>show_results()</code> function to add more rating levels. What message would you give for 0%? Can you add a <code>welcome_message()</code> function to replace the print statements at the top? Try changing some simulated answers to test different rating messages.
+      </div>
+    </section>
+
+    <!-- ==================== UNDERSTAND ==================== -->
+    <section class="understand">
+      <span class="section-label">Understand</span>
+      <h2>How Does It All Fit Together?</h2>
+
+      <!-- Planning a Project -->
+      <h3>Planning a Project</h3>
+      <p>Before you write a single line of code, it helps to <strong>plan</strong>. Professional programmers spend a significant amount of time planning before they start coding. For our quiz game, we can break the project into clear parts:</p>
+
+      <ol>
+        <li><strong>Store the data</strong> &mdash; What questions will the quiz ask? How will we store them?</li>
+        <li><strong>Run the quiz</strong> &mdash; How will we present questions and check answers?</li>
+        <li><strong>Track the score</strong> &mdash; How will we count correct answers?</li>
+        <li><strong>Show results</strong> &mdash; How will we display the final score and give feedback?</li>
+      </ol>
+
+      <p>Each of these parts can become a function. Each function has one job. When you combine them, you get a complete program. This approach &mdash; breaking a big problem into smaller pieces &mdash; is called <strong>decomposition</strong>, and it is one of the most important skills in computer science.</p>
+
+      <!-- How the Quiz Game Uses Every Concept -->
+      <h3>Every Concept in One Program</h3>
+      <p>Look at how many topics from this course appear in our quiz game:</p>
+
+      <table style="width:100%; border-collapse:collapse; margin:1rem 0;">
+        <thead>
+          <tr style="text-align:left; border-bottom:2px solid #ccc;">
+            <th style="padding:0.5rem;">Concept</th>
+            <th style="padding:0.5rem;">How It&rsquo;s Used in the Quiz</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-bottom:1px solid #eee;">
+            <td style="padding:0.5rem;"><strong>Dictionaries</strong></td>
+            <td style="padding:0.5rem;">Each question is stored as a dictionary with <code>"question"</code> and <code>"answer"</code> keys</td>
+          </tr>
+          <tr style="border-bottom:1px solid #eee;">
+            <td style="padding:0.5rem;"><strong>Lists</strong></td>
+            <td style="padding:0.5rem;">All the question dictionaries are collected in a list</td>
+          </tr>
+          <tr style="border-bottom:1px solid #eee;">
+            <td style="padding:0.5rem;"><strong>Loops</strong></td>
+            <td style="padding:0.5rem;">A <code>for</code> loop iterates through each question</td>
+          </tr>
+          <tr style="border-bottom:1px solid #eee;">
+            <td style="padding:0.5rem;"><strong>Conditions</strong></td>
+            <td style="padding:0.5rem;"><code>if/elif/else</code> checks whether the answer is correct and assigns a rating</td>
+          </tr>
+          <tr style="border-bottom:1px solid #eee;">
+            <td style="padding:0.5rem;"><strong>Functions</strong></td>
+            <td style="padding:0.5rem;">The code is organised into functions like <code>create_questions()</code>, <code>run_quiz()</code>, and <code>show_results()</code></td>
+          </tr>
+          <tr style="border-bottom:1px solid #eee;">
+            <td style="padding:0.5rem;"><strong>Strings</strong></td>
+            <td style="padding:0.5rem;"><code>.lower()</code> is used to compare answers without worrying about capitals</td>
+          </tr>
+          <tr style="border-bottom:1px solid #eee;">
+            <td style="padding:0.5rem;"><strong>Variables</strong></td>
+            <td style="padding:0.5rem;"><code>score</code>, <code>percentage</code>, and <code>total</code> track the player&rsquo;s progress</td>
+          </tr>
+          <tr style="border-bottom:1px solid #eee;">
+            <td style="padding:0.5rem;"><strong>Error handling</strong></td>
+            <td style="padding:0.5rem;">Can be added to handle unexpected input gracefully with <code>try/except</code></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="key-concept">
+        <strong>Key Concept:</strong>
+        Real programs are never about just one concept. They combine many ideas &mdash; variables, loops, conditions, functions, data structures &mdash; working together. The skill of programming is not just knowing each concept individually, but knowing how to <strong>weave them together</strong> to solve a problem.
+      </div>
+
+      <!-- Tips for Extending -->
+      <h3>Ideas for Making It Your Own</h3>
+      <p>Once your basic quiz works, the fun really begins. Here are some ideas for extending your game:</p>
+
+      <ul>
+        <li><strong>Categories</strong> &mdash; Add a <code>"category"</code> key to each question dictionary (e.g., <code>"science"</code>, <code>"history"</code>, <code>"maths"</code>) and let the player choose a category</li>
+        <li><strong>Difficulty levels</strong> &mdash; Add a <code>"difficulty"</code> key with values like <code>"easy"</code>, <code>"medium"</code>, or <code>"hard"</code>, and award more points for harder questions</li>
+        <li><strong>Random question order</strong> &mdash; Use <code>import random</code> and <code>random.shuffle(questions)</code> to mix up the order each time</li>
+        <li><strong>High scores</strong> &mdash; Keep track of the best score across multiple rounds</li>
+        <li><strong>Timed questions</strong> &mdash; In a desktop Python program, you could add a time limit for each question</li>
+        <li><strong>Multiple choice</strong> &mdash; Add an <code>"options"</code> key with a list of possible answers, making it a multiple-choice quiz</li>
+      </ul>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Python Code</span>
+          <div>
+            <button class="copy-button">Copy Code</button>
+            <button class="run-button">Run Code</button>
+          </div>
+        </div>
+        <pre><code contenteditable="true"># Example: Adding categories and difficulty to your questions
+import random
+
+questions = [
+    {"question": "What is H2O?", "answer": "water", "category": "science", "difficulty": "easy"},
+    {"question": "Who wrote Romeo and Juliet?", "answer": "shakespeare", "category": "english", "difficulty": "easy"},
+    {"question": "What is the square root of 144?", "answer": "12", "category": "maths", "difficulty": "medium"},
+    {"question": "What gas do plants absorb?", "answer": "carbon dioxide", "category": "science", "difficulty": "medium"},
+    {"question": "In what year did World War 2 end?", "answer": "1945", "category": "history", "difficulty": "hard"},
+]
+
+# Shuffle the questions for variety
+random.shuffle(questions)
+
+# Display questions with their metadata
+for i, q in enumerate(questions, 1):
+    print(f"Q{i} [{q['category'].upper()} - {q['difficulty']}]: {q['question']}")
+    print(f"   Answer: {q['answer']}")
+    print()</code></pre>
+        <div class="output-box empty">(click "Run Code" to see output)</div>
+      </div>
+
+      <div class="warning">
+        <strong>Watch out:</strong> When you extend your program, add one feature at a time and test it before moving on. If you try to add everything at once, it becomes very difficult to find bugs. Professional programmers call this <strong>incremental development</strong> &mdash; build a little, test a little, repeat.
+      </div>
+    </section>
+
+    <!-- ==================== PRACTICE ==================== -->
+    <section class="practice">
+      <span class="section-label">Practice</span>
+      <h2>Your Turn</h2>
+
+      <!-- Exercise 1: Guided -->
+      <div class="exercise">
+        <div class="exercise-title">Exercise 1: Complete the Quiz</div>
+        <div class="exercise-difficulty difficulty-1">Guided</div>
+        <p>The quiz game below is almost complete, but some key parts are missing. Your job is to fill in the blanks to make it work. Read the comments carefully &mdash; they tell you exactly what each missing part should do.</p>
+
+        <div class="pseudocode">
+          <div class="pseudocode-label">Pseudocode:</div>
+          STEP 1: Look at the quiz structure and understand what each part does<br />
+          STEP 2: Fill in the blank where the answer is checked (compare <code>user_answer</code> to the correct answer)<br />
+          STEP 3: Fill in the blank where the score is increased by 1<br />
+          STEP 4: Fill in the blank where the final score is printed<br />
+          STEP 5: Run the code and check it produces the correct output
+        </div>
+
+        <div class="code-block">
+          <div class="code-block-header">
+            <span class="code-block-label">Your Code</span>
+            <div>
+              <button class="copy-button">Copy Code</button>
+              <button class="run-button">Run Code</button>
+            </div>
+          </div>
+          <pre><code contenteditable="true"># Exercise 1: Complete the Quiz Game
+# Fill in the blanks (____) to make this quiz work!
+
+questions = [
+    {"question": "What is the largest planet in our solar system?", "answer": "jupiter"},
+    {"question": "How many continents are there?", "answer": "7"},
+    {"question": "What language are we learning in this course?", "answer": "python"},
+]
+
+# Simulated player answers
+player_answers = ["jupiter", "7", "python"]
+
+score = 0
+
+for i, q in enumerate(questions):
+    print(f"Question {i + 1}: {q['question']}")
+    user_answer = player_answers[i]
+    print(f"Your answer: {user_answer}")
+
+    # FILL IN: Check if user_answer (lowercase) equals the correct answer
+    if ____:
+        print("Correct!")
+        # FILL IN: Add 1 to the score
+        ____
+    else:
+        print(f"Wrong! The answer was {q['answer']}")
+    print()
+
+# FILL IN: Print the final score out of the total number of questions
+print(f"____")</code></pre>
+          <div class="output-box empty">(click "Run Code" to see output)</div>
+        </div>
+
+        <div class="hint">
+          <div class="hint-title">Need a hint?</div>
+          <div class="hint-content">
+            <p>For the answer check, you need to compare the user&rsquo;s answer (converted to lowercase) with the stored answer: <code>user_answer.lower() == q["answer"]</code></p>
+            <p>To increase the score, use: <code>score += 1</code></p>
+            <p>For the final score line, try something like: <code>f"Final Score: {score}/{len(questions)}"</code></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Exercise 2: Partially Guided -->
+      <div class="exercise">
+        <div class="exercise-title">Exercise 2: Add Features</div>
+        <div class="exercise-difficulty difficulty-2">Partially Guided</div>
+        <p>Take the working quiz below and add two new functions to it: a <code>welcome_message()</code> function that greets the player, and a <code>get_rating()</code> function that returns a message based on the percentage score. For example, 100% should return <code>"Excellent! Perfect score!"</code>, 70% or above should return <code>"Good job!"</code>, 50% or above should return <code>"Not bad, keep practising!"</code>, and below 50% should return <code>"Keep learning!"</code>.</p>
+
+        <div class="pseudocode">
+          <div class="pseudocode-label">Pseudocode:</div>
+          STEP 1: Write a <code>welcome_message()</code> function that prints a greeting and the rules<br />
+          STEP 2: Write a <code>get_rating(score, total)</code> function that:<br />
+          &nbsp;&nbsp;&nbsp;&nbsp;- Calculates the percentage: <code>(score / total) * 100</code><br />
+          &nbsp;&nbsp;&nbsp;&nbsp;- Returns <code>"Excellent! Perfect score!"</code> if percentage is 100<br />
+          &nbsp;&nbsp;&nbsp;&nbsp;- Returns <code>"Good job!"</code> if percentage is 70 or above<br />
+          &nbsp;&nbsp;&nbsp;&nbsp;- Returns <code>"Not bad, keep practising!"</code> if percentage is 50 or above<br />
+          &nbsp;&nbsp;&nbsp;&nbsp;- Returns <code>"Keep learning!"</code> for anything below 50<br />
+          STEP 3: Call <code>welcome_message()</code> before the quiz starts<br />
+          STEP 4: Call <code>get_rating()</code> after the quiz ends and print the result
+        </div>
+
+        <div class="code-block">
+          <div class="code-block-header">
+            <span class="code-block-label">Your Code</span>
+            <div>
+              <button class="copy-button">Copy Code</button>
+              <button class="run-button">Run Code</button>
+            </div>
+          </div>
+          <pre><code contenteditable="true"># Exercise 2: Add Features to the Quiz
+# Add your two new functions below, then call them in the main program
+
+# TODO: Write a welcome_message() function here
+
+
+# TODO: Write a get_rating(score, total) function here
+
+
+# --- Quiz questions ---
+questions = [
+    {"question": "What is the capital of Japan?", "answer": "tokyo"},
+    {"question": "What is 12 * 12?", "answer": "144"},
+    {"question": "What colour is an emerald?", "answer": "green"},
+    {"question": "How many days are in a leap year?", "answer": "366"},
+    {"question": "What does CPU stand for?", "answer": "central processing unit"},
+]
+
+player_answers = ["tokyo", "144", "green", "366", "central processing unit"]
+
+# TODO: Call welcome_message() here
+
+score = 0
+for i, q in enumerate(questions):
+    print(f"\nQ{i + 1}: {q['question']}")
+    user_answer = player_answers[i]
+    print(f"Your answer: {user_answer}")
+
+    if user_answer.lower() == q["answer"]:
+        print("Correct!")
+        score += 1
+    else:
+        print(f"Wrong! The answer was {q['answer']}")
+
+print(f"\nFinal Score: {score}/{len(questions)}")
+
+# TODO: Call get_rating() and print the result here
+</code></pre>
+          <div class="output-box empty">(click "Run Code" to see output)</div>
+        </div>
+
+        <div class="hint">
+          <div class="hint-title">Need a hint?</div>
+          <div class="hint-content">
+            <p>Your <code>welcome_message()</code> function does not need any parameters &mdash; it simply prints a few lines of text:</p>
+            <p><code>def welcome_message():<br />&nbsp;&nbsp;&nbsp;&nbsp;print("Welcome to the Quiz Game!")<br />&nbsp;&nbsp;&nbsp;&nbsp;print("Answer each question as best you can.")<br />&nbsp;&nbsp;&nbsp;&nbsp;print("Good luck!")</code></p>
+            <p>Your <code>get_rating()</code> function takes <code>score</code> and <code>total</code>, calculates the percentage, and uses <code>if/elif/else</code> to <strong>return</strong> (not print) the appropriate message. Remember to use <code>return</code>, not <code>print</code>, inside the function &mdash; then <code>print(get_rating(score, len(questions)))</code> in the main program.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Exercise 3: Open-Ended -->
+      <div class="exercise">
+        <div class="exercise-title">Exercise 3: Build Your Own Quiz</div>
+        <div class="exercise-difficulty difficulty-3">Open-Ended</div>
+        <p>This is your moment. Build a complete quiz game <strong>from scratch</strong> on any topic you choose &mdash; it could be about your favourite subject at school, a hobby, a TV show, sports, music, history, science, or anything else. Your quiz must include:</p>
+
+        <ul>
+          <li>At least <strong>5 questions</strong> stored as a list of dictionaries</li>
+          <li>At least <strong>two functions</strong> to organise your code</li>
+          <li>A <strong>scoring system</strong> that tracks how many questions the player gets right</li>
+          <li>A <strong>results message</strong> at the end</li>
+          <li>At least <strong>one creative feature</strong> of your own (ideas below)</li>
+        </ul>
+
+        <p><strong>Creative feature ideas:</strong> question categories, difficulty levels, a bonus round, personalised feedback for each wrong answer, a fun ASCII art title screen, random question order, point values that vary by difficulty, a &ldquo;lifeline&rdquo; hint system, or anything else you can imagine.</p>
+
+        <div class="pseudocode">
+          <div class="pseudocode-label">Pseudocode:</div>
+          STEP 1: Choose your quiz topic and write at least 5 question-and-answer pairs<br />
+          STEP 2: Store your questions in a list of dictionaries<br />
+          STEP 3: Write a function to display a welcome message<br />
+          STEP 4: Write a function to run the quiz (loop through questions, check answers, track score)<br />
+          STEP 5: Write a function to display the results<br />
+          STEP 6: Add your creative feature<br />
+          STEP 7: Call your functions in the correct order to run the game<br />
+          STEP 8: Test thoroughly &mdash; try getting all correct, all wrong, and a mix
+        </div>
+
+        <div class="code-block">
+          <div class="code-block-header">
+            <span class="code-block-label">Your Code</span>
+            <div>
+              <button class="copy-button">Copy Code</button>
+              <button class="run-button">Run Code</button>
+            </div>
+          </div>
+          <pre><code contenteditable="true"># Exercise 3: Build Your Own Quiz Game
+# Topic: ____________________
+#
+# Requirements:
+#   - At least 5 questions (list of dictionaries)
+#   - At least 2 functions
+#   - A scoring system
+#   - A results message
+#   - At least 1 creative feature
+#
+# Remember: since input() doesn't work in the browser, use a
+# simulated_answers list to test your quiz.
+#
+# This is YOUR project — be creative and have fun!
+
+</code></pre>
+          <div class="output-box empty">(click "Run Code" to see output)</div>
+        </div>
+
+        <div class="hint">
+          <div class="hint-title">Need a hint?</div>
+          <div class="hint-content">
+            <p>Here is a skeleton you could start with:</p>
+            <p><code>def create_questions():</code> &mdash; returns your list of question dictionaries</p>
+            <p><code>def run_quiz(questions, answers):</code> &mdash; loops through questions, checks answers, returns the score</p>
+            <p><code>def show_results(score, total):</code> &mdash; prints the final score and a rating</p>
+            <p>For a creative feature, try adding a <code>"hint"</code> key to each dictionary. Then, if the player gets a question wrong, print the hint along with the correct answer. Or add a <code>"points"</code> key so harder questions are worth more. There is no single right answer here &mdash; make it yours!</p>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ==================== REFLECT ==================== -->
+    <section class="reflect">
+      <span class="section-label">Reflect</span>
+      <h2>You Did It!</h2>
+
+      <p>Take a moment to appreciate what you have achieved. You started this course with <code>print("Hello, World!")</code> and now you have built a <strong>complete, working program</strong> that uses variables, strings, lists, dictionaries, loops, conditions, functions, and error handling &mdash; all working together. That is a genuinely impressive accomplishment.</p>
+
+      <p>Think back over your journey:</p>
+      <ul>
+        <li>Which chapter or concept was the most challenging for you? How did you overcome it?</li>
+        <li>Which concept was your favourite? Why?</li>
+        <li>How did breaking the quiz game into functions make it easier to build? Could you have written it all in one block?</li>
+        <li>If you were going to teach someone else to code, what is the most important advice you would give them?</li>
+        <li>What feature would you most like to add to your quiz game if you had more time?</li>
+      </ul>
+
+      <h3>Where to Go Next</h3>
+      <p>This course has given you a solid foundation in Python, but your programming journey is just beginning. Here are some paths you might explore next:</p>
+
+      <ul>
+        <li><strong>More Python projects</strong> &mdash; Build a to-do list app, a number guessing game, a text adventure, or a simple calculator. Every project you build makes you a stronger programmer.</li>
+        <li><strong>Web development</strong> &mdash; Learn HTML, CSS, and JavaScript to build websites. You can even use Python on the server side with frameworks like Flask or Django.</li>
+        <li><strong>Game development</strong> &mdash; Try the <code>pygame</code> library to create graphical games with Python, or explore engines like Unity or Godot.</li>
+        <li><strong>Data science</strong> &mdash; Python is the world&rsquo;s most popular language for working with data. Libraries like <code>pandas</code> and <code>matplotlib</code> let you analyse and visualise information.</li>
+        <li><strong>Computer Science GCSE and A Level</strong> &mdash; Everything you have learnt here directly supports the programming components of your qualifications.</li>
+      </ul>
+
+      <div class="key-concept">
+        <strong>Remember:</strong>
+        Every expert programmer was once a beginner. The difference between someone who can code and someone who cannot is simply that the person who can code <strong>kept going</strong>. You have already proved you can do this. Keep writing code, keep making mistakes, keep learning from them, and keep building things. The best way to learn programming is to <strong>program</strong>.
+      </div>
+
+      <p>Congratulations on completing <strong>Python Fundamentals</strong>. You should be proud of yourself. Now go and build something amazing.</p>
+    </section>
+
+    <!-- ==================== NAVIGATION ==================== -->
+    <nav class="chapter-nav">
+      <a href="10-error-handling.html">&larr; Previous: Error Handling</a>
+      <a href="../index.html">Course Home</a>
+      <span class="nav-disabled">Course Complete!</span>
+    </nav>
+
+  </main>
+
+  <footer class="site-footer">
+    <p>Python Fundamentals &mdash; A KS4 Learning Platform</p>
+  </footer>
+
+  <script src="../js/pyodide-runner.js"></script>
+</body>
+</html>

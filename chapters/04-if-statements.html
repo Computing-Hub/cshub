@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chapter 4: If Statements - Python Fundamentals</title>
+  <link rel="stylesheet" href="../css/style.css" />
+  <script src="https://cdn.jsdelivr.net/pyodide/v0.24.0/full/pyodide.js"></script>
+</head>
+<body>
+
+  <!-- ============ HEADER ============ -->
+  <header class="site-header">
+    <a href="../index.html">&larr; Back to Home</a>
+    <h1>Chapter 4: If Statements</h1>
+    <p class="subtitle">Teach your programs to make decisions</p>
+  </header>
+
+  <main>
+
+    <!-- ============ THE IDEA ============ -->
+    <section class="idea">
+      <span class="section-label">The Idea</span>
+      <h2>Why Do Programs Need to Make Decisions?</h2>
+
+      <p>Every day you make decisions. <em>"If it's raining, take an umbrella. Otherwise, wear sunglasses."</em> You check a condition (is it raining?) and then choose what to do based on the answer. Programs can make decisions too &mdash; and they do it millions of times a second.</p>
+
+      <p><strong>Conditional logic</strong> is how programs respond differently to different situations. Without it, a program would do exactly the same thing every single time, no matter what. That would be pretty useless!</p>
+
+      <p>Think about how many things rely on decisions in the real world:</p>
+      <ul>
+        <li><strong>Traffic lights</strong> &mdash; if the timer has finished, change from green to amber to red.</li>
+        <li><strong>Age checks on websites</strong> &mdash; if the user is under 13, block access to the content.</li>
+        <li><strong>Game logic</strong> &mdash; if the player's health reaches zero, the game is over.</li>
+        <li><strong>Weather apps</strong> &mdash; if the temperature drops below zero, display a frost warning.</li>
+      </ul>
+
+      <p>All of these use <strong>if statements</strong> &mdash; the most fundamental way a program makes choices.</p>
+
+      <h3>What You Will Learn</h3>
+      <ul>
+        <li>How to use <code>if</code>, <code>elif</code>, and <code>else</code> to control the flow of your programs</li>
+        <li>How to use <strong>comparison operators</strong> to compare values</li>
+        <li>How to build <strong>boolean expressions</strong> that evaluate to <code>True</code> or <code>False</code></li>
+        <li>How to combine conditions using <strong>logical operators</strong> (<code>and</code>, <code>or</code>, <code>not</code>)</li>
+      </ul>
+    </section>
+
+    <!-- ============ EXPLORE ============ -->
+    <section class="explore">
+      <span class="section-label">Explore</span>
+      <h2>See If Statements in Action</h2>
+
+      <p>The best way to understand if statements is to run some code and experiment with the values. Try each example below, then change the values to see different outcomes.</p>
+
+      <!-- Example 1: Simple If -->
+      <h3>Example 1: A Simple If Statement</h3>
+      <p>This program checks whether someone is old enough to drive. If the condition is <code>True</code>, the indented line runs. If it is <code>False</code>, the indented line is skipped entirely.</p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Python Code</span>
+          <div>
+            <button class="copy-button">Copy Code</button>
+            <button class="run-button">Run Code</button>
+          </div>
+        </div>
+        <pre><code contenteditable="true">age = 16
+
+if age >= 16:
+    print("You can drive!")
+
+print("Thanks for checking.")</code></pre>
+        <div class="output-box empty">(click "Run Code" to see output)</div>
+      </div>
+
+      <div class="try-this">
+        <strong>Try this:</strong> Change <code>age</code> to <code>14</code> and run the code again. What happens to the first message? Why does the second message still appear?
+      </div>
+
+      <!-- Example 2: If/Else -->
+      <h3>Example 2: If / Else</h3>
+      <p>Sometimes you want to do one thing when the condition is true and <em>something else</em> when it is false. That is where <code>else</code> comes in &mdash; it catches everything that does not match the <code>if</code>.</p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Python Code</span>
+          <div>
+            <button class="copy-button">Copy Code</button>
+            <button class="run-button">Run Code</button>
+          </div>
+        </div>
+        <pre><code contenteditable="true">temperature = 25
+
+if temperature >= 20:
+    print("It's warm outside!")
+    print("Wear a t-shirt and sunglasses.")
+else:
+    print("It's a bit chilly.")
+    print("Better grab a jacket.")</code></pre>
+        <div class="output-box empty">(click "Run Code" to see output)</div>
+      </div>
+
+      <div class="try-this">
+        <strong>Try this:</strong> Change <code>temperature</code> to <code>10</code> to see the else branch. What about <code>20</code> exactly &mdash; which branch runs and why?
+      </div>
+
+      <!-- Example 3: If/Elif/Else -->
+      <h3>Example 3: If / Elif / Else &mdash; Multiple Conditions</h3>
+      <p>When there are more than two possible outcomes, use <code>elif</code> (short for "else if") to check additional conditions. Python works through them from top to bottom and runs the <strong>first</strong> one that is true.</p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Python Code</span>
+          <div>
+            <button class="copy-button">Copy Code</button>
+            <button class="run-button">Run Code</button>
+          </div>
+        </div>
+        <pre><code contenteditable="true">score = 75
+
+if score >= 90:
+    grade = "A"
+elif score >= 70:
+    grade = "B"
+elif score >= 50:
+    grade = "C"
+else:
+    grade = "U"
+
+print("Your score is " + str(score))
+print("Your grade is " + grade)</code></pre>
+        <div class="output-box empty">(click "Run Code" to see output)</div>
+      </div>
+
+      <div class="try-this">
+        <strong>Try this:</strong> Try scores of <code>95</code>, <code>70</code>, <code>55</code>, and <code>30</code>. Does each give the grade you expect? What happens if you set the score to exactly <code>90</code>?
+      </div>
+    </section>
+
+    <!-- ============ UNDERSTAND ============ -->
+    <section class="understand">
+      <span class="section-label">Understand</span>
+      <h2>How If Statements Work</h2>
+
+      <h3>The Basic Idea</h3>
+      <p>An if statement asks a question that has a <strong>yes or no answer</strong>. In Python, that answer is either <code>True</code> or <code>False</code> &mdash; these are called <strong>boolean values</strong>.</p>
+      <ul>
+        <li>If the condition is <code>True</code>, the indented block of code runs.</li>
+        <li>If the condition is <code>False</code>, the indented block is skipped.</li>
+      </ul>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Python Code</span>
+          <div>
+            <button class="copy-button">Copy Code</button>
+            <button class="run-button">Run Code</button>
+          </div>
+        </div>
+        <pre><code contenteditable="true"># You can see boolean values directly
+print(10 > 5)     # True
+print(3 == 7)     # False
+print(4 != 4)     # False
+print(6 <= 6)     # True</code></pre>
+        <div class="output-box empty">(click "Run Code" to see output)</div>
+      </div>
+
+      <h3>Comparison Operators</h3>
+      <p>These operators compare two values and return <code>True</code> or <code>False</code>:</p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Operator</th>
+            <th>Meaning</th>
+            <th>Example</th>
+            <th>Result</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>==</code></td>
+            <td>Equal to</td>
+            <td><code>5 == 5</code></td>
+            <td><code>True</code></td>
+          </tr>
+          <tr>
+            <td><code>!=</code></td>
+            <td>Not equal to</td>
+            <td><code>5 != 3</code></td>
+            <td><code>True</code></td>
+          </tr>
+          <tr>
+            <td><code>&lt;</code></td>
+            <td>Less than</td>
+            <td><code>3 &lt; 7</code></td>
+            <td><code>True</code></td>
+          </tr>
+          <tr>
+            <td><code>&gt;</code></td>
+            <td>Greater than</td>
+            <td><code>10 &gt; 20</code></td>
+            <td><code>False</code></td>
+          </tr>
+          <tr>
+            <td><code>&lt;=</code></td>
+            <td>Less than or equal to</td>
+            <td><code>5 &lt;= 5</code></td>
+            <td><code>True</code></td>
+          </tr>
+          <tr>
+            <td><code>&gt;=</code></td>
+            <td>Greater than or equal to</td>
+            <td><code>4 &gt;= 9</code></td>
+            <td><code>False</code></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>Logical Operators: Combining Conditions</h3>
+      <p>Sometimes one condition is not enough. You can combine conditions using <code>and</code>, <code>or</code>, and <code>not</code>:</p>
+      <ul>
+        <li><code>and</code> &mdash; <strong>both</strong> conditions must be true. <em>Example: "If it is Saturday <strong>and</strong> it is sunny, go to the park."</em></li>
+        <li><code>or</code> &mdash; <strong>at least one</strong> condition must be true. <em>Example: "If it is Saturday <strong>or</strong> Sunday, have a lie-in."</em></li>
+        <li><code>not</code> &mdash; <strong>flips</strong> the result. <em>Example: "If it is <strong>not</strong> raining, walk to school."</em></li>
+      </ul>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Python Code</span>
+          <div>
+            <button class="copy-button">Copy Code</button>
+            <button class="run-button">Run Code</button>
+          </div>
+        </div>
+        <pre><code contenteditable="true">age = 15
+has_permission = True
+
+if age >= 13 and has_permission:
+    print("You can create an account.")
+else:
+    print("Sorry, you cannot sign up yet.")
+
+# Try changing age or has_permission to see different results</code></pre>
+        <div class="output-box empty">(click "Run Code" to see output)</div>
+      </div>
+
+      <h3>Indentation Matters!</h3>
+      <p>Unlike many other programming languages, Python uses <strong>indentation</strong> (spaces at the start of a line) to define which lines belong to an if block. Every line inside the block must be indented by the same amount &mdash; typically <strong>four spaces</strong>.</p>
+
+      <div class="key-concept">
+        <strong>Key Concept: The colon and indentation are essential</strong>
+        Every <code>if</code>, <code>elif</code>, and <code>else</code> line must end with a <strong>colon <code>:</code></strong>. The code that belongs to that branch must be <strong>indented</strong> on the next line. If you forget the colon or the indentation, Python will give you a syntax error.
+      </div>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Python Code</span>
+          <div>
+            <button class="copy-button">Copy Code</button>
+            <button class="run-button">Run Code</button>
+          </div>
+        </div>
+        <pre><code contenteditable="true"># Correct - the indented lines belong to the if block
+weather = "rainy"
+
+if weather == "rainy":
+    print("Take an umbrella!")
+    print("Wear a waterproof coat.")
+
+print("Have a good day!")  # This always runs (not indented)</code></pre>
+        <div class="output-box empty">(click "Run Code" to see output)</div>
+      </div>
+
+      <h3>Common Misconception: = vs ==</h3>
+
+      <div class="warning">
+        <strong>Watch out!</strong> A very common mistake is confusing <code>=</code> and <code>==</code>.
+        <ul>
+          <li><code>=</code> is <strong>assignment</strong> &mdash; it stores a value in a variable. Example: <code>name = "Alice"</code></li>
+          <li><code>==</code> is <strong>comparison</strong> &mdash; it checks whether two values are equal. Example: <code>if name == "Alice":</code></li>
+        </ul>
+        <p>If you accidentally write <code>if age = 18:</code> instead of <code>if age == 18:</code>, Python will give you a <strong>SyntaxError</strong>. If you see this error, check your equals signs!</p>
+      </div>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Python Code</span>
+          <div>
+            <button class="copy-button">Copy Code</button>
+            <button class="run-button">Run Code</button>
+          </div>
+        </div>
+        <pre><code contenteditable="true"># Assignment vs Comparison - run this to see the difference
+favourite_colour = "blue"    # = assigns the value
+
+if favourite_colour == "blue":   # == checks the value
+    print("Great choice! Blue it is.")
+else:
+    print("That's a nice colour too.")</code></pre>
+        <div class="output-box empty">(click "Run Code" to see output)</div>
+      </div>
+    </section>
+
+    <!-- ============ PRACTICE ============ -->
+    <section class="practice">
+      <span class="section-label">Practice</span>
+      <h2>Your Turn</h2>
+      <p>Now it is time to write your own if statements. Work through these exercises from easiest to hardest. Remember: the colon <code>:</code> at the end of each condition line, and indent the code inside each block by four spaces.</p>
+
+      <!-- Exercise 1 -->
+      <div class="exercise">
+        <h3 class="exercise-title">Exercise 1: Positive, Negative, or Zero?</h3>
+        <span class="exercise-difficulty difficulty-1">Guided</span>
+        <p>Write a program that checks whether a number is <strong>positive</strong>, <strong>negative</strong>, or <strong>zero</strong>, and prints an appropriate message for each case.</p>
+
+        <div class="pseudocode">
+          <div class="pseudocode-label">Pseudocode</div>
+          <p>
+            SET number TO a value<br />
+            IF number is greater than 0 THEN<br />
+            &nbsp;&nbsp;&nbsp;&nbsp;PRINT "The number is positive"<br />
+            ELSE IF number is less than 0 THEN<br />
+            &nbsp;&nbsp;&nbsp;&nbsp;PRINT "The number is negative"<br />
+            ELSE<br />
+            &nbsp;&nbsp;&nbsp;&nbsp;PRINT "The number is zero"<br />
+          </p>
+        </div>
+
+        <div class="code-block">
+          <div class="code-block-header">
+            <span class="code-block-label">Python Code</span>
+            <div>
+              <button class="copy-button">Copy Code</button>
+              <button class="run-button">Run Code</button>
+            </div>
+          </div>
+          <pre><code contenteditable="true">number = 7
+
+if number > 0:
+    print("The number is positive.")
+elif number < 0:
+    print("The number is negative.")
+else:
+    print("The number is zero.")
+
+print("The number you checked was " + str(number))</code></pre>
+          <div class="output-box empty">(click "Run Code" to see output)</div>
+        </div>
+
+        <div class="hint">
+          <div class="hint-title">Hint</div>
+          <div class="hint-content">
+            <p>Try changing <code>number</code> to <code>-3</code> and then to <code>0</code>. Each time, predict which message will appear before you run the code. You need three branches: <code>if</code> for positive, <code>elif</code> for negative, and <code>else</code> for zero.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Exercise 2 -->
+      <div class="exercise">
+        <h3 class="exercise-title">Exercise 2: Ticket Pricing System</h3>
+        <span class="exercise-difficulty difficulty-2">Partially Guided</span>
+        <p>A cinema charges different prices based on age:</p>
+        <ul>
+          <li><strong>Children</strong> (under 12): &pound;5.00</li>
+          <li><strong>Adults</strong> (12 to 64): &pound;10.00</li>
+          <li><strong>Seniors</strong> (65 and over): &pound;7.00</li>
+        </ul>
+        <p>Write a program that sets an age and prints the correct ticket price. The starter code below has some gaps for you to fill in.</p>
+
+        <div class="pseudocode">
+          <div class="pseudocode-label">Pseudocode</div>
+          <p>
+            SET age TO a value<br />
+            IF age is less than 12 THEN<br />
+            &nbsp;&nbsp;&nbsp;&nbsp;SET price TO 5.00<br />
+            &nbsp;&nbsp;&nbsp;&nbsp;SET ticket_type TO "Child"<br />
+            ELSE IF age is greater than or equal to 65 THEN<br />
+            &nbsp;&nbsp;&nbsp;&nbsp;SET price TO 7.00<br />
+            &nbsp;&nbsp;&nbsp;&nbsp;SET ticket_type TO "Senior"<br />
+            ELSE<br />
+            &nbsp;&nbsp;&nbsp;&nbsp;SET price TO 10.00<br />
+            &nbsp;&nbsp;&nbsp;&nbsp;SET ticket_type TO "Adult"<br />
+            PRINT ticket_type and price<br />
+          </p>
+        </div>
+
+        <div class="code-block">
+          <div class="code-block-header">
+            <span class="code-block-label">Python Code</span>
+            <div>
+              <button class="copy-button">Copy Code</button>
+              <button class="run-button">Run Code</button>
+            </div>
+          </div>
+          <pre><code contenteditable="true">age = 35
+
+if age < 12:
+    price = 5.00
+    ticket_type = "Child"
+elif age >= 65:
+    # Fill in the price and ticket_type for seniors
+    price = ...
+    ticket_type = ...
+else:
+    # Fill in the price and ticket_type for adults
+    price = ...
+    ticket_type = ...
+
+print(ticket_type + " ticket: £" + str(price) + "0")</code></pre>
+          <div class="output-box empty">(click "Run Code" to see output)</div>
+        </div>
+
+        <div class="hint">
+          <div class="hint-title">Hint</div>
+          <div class="hint-content">
+            <p>Replace each <code>...</code> with the correct value. For seniors, the price is <code>7.00</code> and the ticket type is <code>"Senior"</code>. For adults, the price is <code>10.00</code> and the ticket type is <code>"Adult"</code>. Test with ages like <code>8</code>, <code>35</code>, and <code>70</code> to check all three branches.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Exercise 3 -->
+      <div class="exercise">
+        <h3 class="exercise-title">Exercise 3: Decision Game</h3>
+        <span class="exercise-difficulty difficulty-3">Open-Ended</span>
+        <p>Create a simple text-based decision game or quiz question. The player's choice should lead to different outcomes. Use variables, if/elif/else, and print statements to tell a short story.</p>
+        <p>Here is an idea to get you started: the player finds a locked door with three coloured keys. Each key leads to a different room with a different outcome.</p>
+
+        <div class="pseudocode">
+          <div class="pseudocode-label">Pseudocode</div>
+          <p>
+            PRINT the scene description<br />
+            SET choice TO the player's selection ("red", "blue", or "green")<br />
+            IF choice is "red" THEN<br />
+            &nbsp;&nbsp;&nbsp;&nbsp;PRINT the red key outcome<br />
+            ELSE IF choice is "blue" THEN<br />
+            &nbsp;&nbsp;&nbsp;&nbsp;PRINT the blue key outcome<br />
+            ELSE IF choice is "green" THEN<br />
+            &nbsp;&nbsp;&nbsp;&nbsp;PRINT the green key outcome<br />
+            ELSE<br />
+            &nbsp;&nbsp;&nbsp;&nbsp;PRINT "Invalid choice"<br />
+          </p>
+        </div>
+
+        <div class="code-block">
+          <div class="code-block-header">
+            <span class="code-block-label">Python Code</span>
+            <div>
+              <button class="copy-button">Copy Code</button>
+              <button class="run-button">Run Code</button>
+            </div>
+          </div>
+          <pre><code contenteditable="true">print("=== The Three Keys ===")
+print("You find a locked door with three keyholes.")
+print("There is a red key, a blue key, and a green key.")
+print()
+
+# Change this variable to try different choices
+choice = "red"
+
+if choice == "red":
+    print("You use the red key...")
+    print("The door opens to a room full of treasure! You win!")
+elif choice == "blue":
+    print("You use the blue key...")
+    print("The door opens to a library of ancient secrets.")
+    print("You learn a powerful spell!")
+elif choice == "green":
+    print("You use the green key...")
+    print("The door opens to a beautiful garden.")
+    print("You find a friendly dragon who becomes your companion!")
+else:
+    print("That key doesn't exist! Try red, blue, or green.")</code></pre>
+          <div class="output-box empty">(click "Run Code" to see output)</div>
+        </div>
+
+        <div class="hint">
+          <div class="hint-title">Hint</div>
+          <div class="hint-content">
+            <p>This exercise is open-ended &mdash; be creative! Here are some ideas to extend it:</p>
+            <ul>
+              <li>Add more choices or a second decision after the first one.</li>
+              <li>Use <code>and</code> or <code>or</code> to combine conditions (e.g., <code>if choice == "red" or choice == "Red":</code>).</li>
+              <li>Add a scoring system using a variable like <code>points = 0</code>.</li>
+              <li>Turn it into a quiz: set the correct answer and check the player's response.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ============ REFLECT ============ -->
+    <section class="reflect">
+      <span class="section-label">Reflect</span>
+      <h2>Check Your Understanding</h2>
+
+      <p>Before moving on, think about these questions. You do not need to write code &mdash; just think through your answers.</p>
+
+      <ol>
+        <li>What is the difference between <code>=</code> and <code>==</code> in Python?</li>
+        <li>What happens if none of the <code>if</code> or <code>elif</code> conditions are true and there is no <code>else</code>?</li>
+        <li>Can you have an <code>elif</code> without an <code>if</code>? Why or why not?</li>
+        <li>Why does Python use indentation instead of curly braces like some other languages?</li>
+        <li>If you write <code>if x > 5 and x < 10:</code>, what range of numbers would make this condition true?</li>
+      </ol>
+
+      <div class="key-concept">
+        <strong>Key Takeaways</strong>
+        <ul>
+          <li><code>if</code> checks a condition. If it is <code>True</code>, the indented block runs.</li>
+          <li><code>elif</code> checks another condition if the previous ones were <code>False</code>.</li>
+          <li><code>else</code> catches everything that did not match any condition above.</li>
+          <li>Comparison operators (<code>==</code>, <code>!=</code>, <code>&lt;</code>, <code>&gt;</code>, <code>&lt;=</code>, <code>&gt;=</code>) return <code>True</code> or <code>False</code>.</li>
+          <li>Logical operators (<code>and</code>, <code>or</code>, <code>not</code>) let you combine conditions.</li>
+          <li>The colon <code>:</code> and correct <strong>indentation</strong> are essential in Python.</li>
+        </ul>
+      </div>
+
+      <h3>What is Next?</h3>
+      <p>Now that your programs can make decisions, it is time to learn how to <strong>repeat actions</strong>. In <strong>Chapter 5: Loops</strong>, you will discover <code>for</code> loops and <code>while</code> loops &mdash; the tools that let your programs do things over and over without writing the same code hundreds of times.</p>
+    </section>
+
+    <!-- ============ NAVIGATION ============ -->
+    <nav class="chapter-nav">
+      <a href="03-input-output.html">&larr; Chapter 3: Input &amp; Output</a>
+      <a href="../index.html">Home</a>
+      <a href="05-loops.html">Chapter 5: Loops &rarr;</a>
+    </nav>
+
+  </main>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="site-footer">
+    <p>Python Fundamentals &mdash; A KS4 Learning Platform</p>
+    <p>Built with <a href="https://pyodide.org/">Pyodide</a> &mdash; Python runs in your browser</p>
+  </footer>
+
+  <script src="../js/pyodide-runner.js"></script>
+</body>
+</html>

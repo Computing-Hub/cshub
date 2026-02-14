@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chapter 2: Variables &amp; Data Types - Python Fundamentals</title>
+  <link rel="stylesheet" href="../css/style.css" />
+  <script src="https://cdn.jsdelivr.net/pyodide/v0.24.0/full/pyodide.js"></script>
+</head>
+<body>
+
+  <header class="site-header">
+    <p><a href="../index.html">&larr; Back to Course</a></p>
+    <h1>Chapter 2: Variables &amp; Data Types</h1>
+    <p class="subtitle">Learn how to store information and discover the different types of data Python understands</p>
+  </header>
+
+  <main>
+
+    <!-- ==================== THE IDEA ==================== -->
+    <section class="idea">
+      <span class="section-label">The Idea</span>
+      <h2>Why Does This Matter?</h2>
+
+      <p>Imagine you are filling out a form online &mdash; your name goes in one box, your age in another, your email in a third. Each box has a label and stores a piece of information. <strong>Variables in Python work exactly the same way.</strong> They are labelled containers that hold data so your program can remember things and use them later.</p>
+
+      <p>Without variables, a program would forget everything the moment it moved to the next line. You could not keep track of a player's score, remember someone's name, or calculate a total. Variables are the building blocks of every program you will ever write.</p>
+
+      <p>Think about a game you play on your phone. It remembers your high score, your username, and your level. All of that information is stored in variables behind the scenes. Today, you will learn how to create your own.</p>
+
+      <p><strong>By the end of this chapter, you will be able to:</strong></p>
+      <ul>
+        <li>Create variables to store different pieces of information</li>
+        <li>Understand the four main data types: strings, integers, floats, and booleans</li>
+        <li>Use the <code>type()</code> function to check what kind of data a variable holds</li>
+        <li>Change the value stored in a variable</li>
+        <li>Convert between different data types</li>
+      </ul>
+    </section>
+
+    <!-- ==================== EXPLORE ==================== -->
+    <section class="explore">
+      <span class="section-label">Explore</span>
+      <h2>See It in Action</h2>
+
+      <!-- Example 1: Creating Variables -->
+      <h3>Example 1: Creating Variables</h3>
+      <p>Creating a variable in Python is beautifully simple. You pick a name, use the <code>=</code> sign, and then write the value you want to store. Python figures out the rest. Let's create some variables and print them out.</p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Python Code</span>
+          <div>
+            <button class="copy-button">Copy Code</button>
+            <button class="run-button">Run Code</button>
+          </div>
+        </div>
+        <pre><code contenteditable="true"># Creating variables is as easy as picking a name and giving it a value
+name = "Alice"
+age = 15
+favourite_subject = "Computer Science"
+
+# Now let's use them
+print(name)
+print(age)
+print(favourite_subject)</code></pre>
+        <div class="output-box empty">(click "Run Code" to see output)</div>
+      </div>
+
+      <div class="try-this">
+        <strong>Try This:</strong> Change the values to your own name, age, and favourite subject. Run the code again to see your information printed out. What happens if you change <code>name</code> to <code>my_name</code>? Does it still work?
+      </div>
+
+      <!-- Example 2: Data Types -->
+      <h3>Example 2: Data Types</h3>
+      <p>Not all data is the same. A name is text, an age is a whole number, a price might have decimal places, and a yes/no question is either true or false. Python has a different <strong>data type</strong> for each of these. We can use the <code>type()</code> function to find out what type a variable is.</p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Python Code</span>
+          <div>
+            <button class="copy-button">Copy Code</button>
+            <button class="run-button">Run Code</button>
+          </div>
+        </div>
+        <pre><code contenteditable="true"># str - a string (text)
+greeting = "Hello, World!"
+print(greeting, "is type:", type(greeting))
+
+# int - an integer (whole number)
+score = 42
+print(score, "is type:", type(score))
+
+# float - a floating-point number (decimal)
+temperature = 18.5
+print(temperature, "is type:", type(temperature))
+
+# bool - a boolean (True or False)
+is_raining = False
+print(is_raining, "is type:", type(is_raining))</code></pre>
+        <div class="output-box empty">(click "Run Code" to see output)</div>
+      </div>
+
+      <div class="try-this">
+        <strong>Try This:</strong> Create a variable called <code>pi</code> and set it to <code>3.14159</code>. Print its type. Then try <code>is_student = True</code> and check its type. Notice that <code>True</code> and <code>False</code> must start with a capital letter in Python.
+      </div>
+
+      <!-- Example 3: Changing Variables -->
+      <h3>Example 3: Changing Variables</h3>
+      <p>Variables are called "variables" because their values can <strong>vary</strong> &mdash; they can change! This is incredibly useful. Think about a game: your score starts at zero and goes up every time you collect a coin. Let's see how that works.</p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Python Code</span>
+          <div>
+            <button class="copy-button">Copy Code</button>
+            <button class="run-button">Run Code</button>
+          </div>
+        </div>
+        <pre><code contenteditable="true"># Starting score
+score = 0
+print("Starting score:", score)
+
+# Player collects a coin worth 10 points
+score = score + 10
+print("After first coin:", score)
+
+# Player collects another coin
+score = score + 10
+print("After second coin:", score)
+
+# Player finds a bonus star worth 50 points
+score = score + 50
+print("After bonus star:", score)
+
+# Player's name can change too
+player = "Guest"
+print("Player:", player)
+
+player = "SuperCoder99"
+print("Player:", player)</code></pre>
+        <div class="output-box empty">(click "Run Code" to see output)</div>
+      </div>
+
+      <div class="try-this">
+        <strong>Try This:</strong> Add a line where the player loses 5 points (hint: use subtraction). Can you make the score go negative? What happens if you set <code>score = score * 2</code> to double the score?
+      </div>
+    </section>
+
+    <!-- ==================== UNDERSTAND ==================== -->
+    <section class="understand">
+      <span class="section-label">Understand</span>
+      <h2>How Does It Work?</h2>
+
+      <!-- Variable Naming Rules -->
+      <h3>Variable Naming Rules</h3>
+      <p>You cannot call a variable just anything. Python has some rules about what makes a valid variable name:</p>
+      <ul>
+        <li><strong>Must start with a letter or an underscore</strong> (<code>_</code>) &mdash; never a number</li>
+        <li><strong>Can contain letters, numbers, and underscores</strong> &mdash; but no spaces or special characters</li>
+        <li><strong>Case-sensitive</strong> &mdash; <code>Name</code>, <code>name</code>, and <code>NAME</code> are three completely different variables</li>
+        <li><strong>Cannot use Python keywords</strong> &mdash; words like <code>print</code>, <code>if</code>, <code>for</code>, and <code>True</code> are reserved</li>
+      </ul>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Python Code</span>
+          <div>
+            <button class="copy-button">Copy Code</button>
+            <button class="run-button">Run Code</button>
+          </div>
+        </div>
+        <pre><code contenteditable="true"># Good variable names
+player_name = "Aisha"
+score_2 = 100
+_secret = "hidden"
+favouriteColour = "blue"
+
+print(player_name, score_2, _secret, favouriteColour)
+
+# These would cause errors (uncomment to test):
+# 2nd_place = "Bob"      # starts with a number
+# my name = "Charlie"    # contains a space
+# for = "David"          # 'for' is a Python keyword</code></pre>
+        <div class="output-box empty">(click "Run Code" to see output)</div>
+      </div>
+
+      <div class="key-concept">
+        <strong>Key Concept:</strong>
+        Choose variable names that describe what they store. <code>age = 15</code> is much clearer than <code>x = 15</code>. Good names make your code easier to read &mdash; both for others and for your future self.
+      </div>
+
+      <!-- The Four Main Data Types -->
+      <h3>The Four Main Data Types</h3>
+      <p>Python has many data types, but at this stage you need to know four:</p>
+
+      <table style="width:100%; border-collapse:collapse; margin:1rem 0;">
+        <thead>
+          <tr style="text-align:left; border-bottom:2px solid #ccc;">
+            <th style="padding:0.5rem;">Type</th>
+            <th style="padding:0.5rem;">Name</th>
+            <th style="padding:0.5rem;">What It Stores</th>
+            <th style="padding:0.5rem;">Examples</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-bottom:1px solid #eee;">
+            <td style="padding:0.5rem;"><code>str</code></td>
+            <td style="padding:0.5rem;">String</td>
+            <td style="padding:0.5rem;">Text &mdash; letters, words, sentences</td>
+            <td style="padding:0.5rem;"><code>"Hello"</code>, <code>'Python'</code>, <code>"42"</code></td>
+          </tr>
+          <tr style="border-bottom:1px solid #eee;">
+            <td style="padding:0.5rem;"><code>int</code></td>
+            <td style="padding:0.5rem;">Integer</td>
+            <td style="padding:0.5rem;">Whole numbers (positive or negative)</td>
+            <td style="padding:0.5rem;"><code>15</code>, <code>-3</code>, <code>0</code>, <code>1000</code></td>
+          </tr>
+          <tr style="border-bottom:1px solid #eee;">
+            <td style="padding:0.5rem;"><code>float</code></td>
+            <td style="padding:0.5rem;">Float</td>
+            <td style="padding:0.5rem;">Decimal numbers</td>
+            <td style="padding:0.5rem;"><code>3.14</code>, <code>-0.5</code>, <code>100.0</code></td>
+          </tr>
+          <tr style="border-bottom:1px solid #eee;">
+            <td style="padding:0.5rem;"><code>bool</code></td>
+            <td style="padding:0.5rem;">Boolean</td>
+            <td style="padding:0.5rem;">True or False (only two possible values)</td>
+            <td style="padding:0.5rem;"><code>True</code>, <code>False</code></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p>Notice that <code>"42"</code> (with quotes) is a <strong>string</strong>, but <code>42</code> (without quotes) is an <strong>integer</strong>. The quotes make all the difference! A string is just text &mdash; Python does not treat it as a number, even if it looks like one.</p>
+
+      <!-- Type Conversion -->
+      <h3>Type Conversion</h3>
+      <p>Sometimes you need to change a value from one type to another. For example, if a user types in their age, it arrives as text (a string), but you might need it as a number to do maths with it. Python gives you functions to convert between types:</p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Python Code</span>
+          <div>
+            <button class="copy-button">Copy Code</button>
+            <button class="run-button">Run Code</button>
+          </div>
+        </div>
+        <pre><code contenteditable="true"># Converting between types
+age_text = "15"          # This is a string
+age_number = int("15")   # Convert string to integer
+print(age_number + 1)    # Now we can do maths: prints 16
+
+# Convert integer to string
+score = 100
+message = "Your score is " + str(score)
+print(message)
+
+# Convert to float
+whole_number = 7
+decimal_number = float(whole_number)
+print(decimal_number)    # Prints 7.0
+
+# Check the types
+print(type(age_text))
+print(type(age_number))
+print(type(decimal_number))</code></pre>
+        <div class="output-box empty">(click "Run Code" to see output)</div>
+      </div>
+
+      <!-- The = Sign -->
+      <h3>The Assignment Operator</h3>
+      <p>In maths, <code>=</code> means "is equal to". In Python, <code>=</code> means something different: it means <strong>"assign the value on the right to the variable on the left"</strong>. This is why <code>score = score + 10</code> makes sense in Python even though it looks impossible in maths. It means "take the current value of <code>score</code>, add 10, and store the result back in <code>score</code>".</p>
+
+      <div class="key-concept">
+        <strong>Key Concept:</strong>
+        The <code>=</code> sign in Python is the <strong>assignment operator</strong>. It does not mean "equals" &mdash; it means "store this value". Think of it as an arrow pointing left: <code>name &larr; "Alice"</code>.
+      </div>
+
+      <!-- Common Misconceptions -->
+      <h3>Common Misconceptions</h3>
+
+      <div class="warning">
+        <strong>Watch out:</strong> A variable's name does not affect what it can store. You could write <code>age = "hello"</code> and Python would not complain &mdash; it does not know that "age" should be a number. It is up to <em>you</em> to choose sensible names and matching values. Python trusts you!
+      </div>
+
+      <div class="warning">
+        <strong>Watch out:</strong> Strings and numbers are not the same, even if they look similar. <code>"5" + "3"</code> gives <code>"53"</code> (joining two pieces of text together), but <code>5 + 3</code> gives <code>8</code> (adding two numbers). If your program produces unexpected results, check your data types!
+      </div>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Python Code</span>
+          <div>
+            <button class="copy-button">Copy Code</button>
+            <button class="run-button">Run Code</button>
+          </div>
+        </div>
+        <pre><code contenteditable="true"># This is a classic gotcha!
+# String concatenation vs number addition
+print("5" + "3")   # Joins text: "53"
+print(5 + 3)       # Adds numbers: 8
+
+# This is why type() is your friend
+x = "hello"
+print(x, "is a", type(x))
+
+x = 42
+print(x, "is a", type(x))</code></pre>
+        <div class="output-box empty">(click "Run Code" to see output)</div>
+      </div>
+    </section>
+
+    <!-- ==================== PRACTICE ==================== -->
+    <section class="practice">
+      <span class="section-label">Practice</span>
+      <h2>Your Turn</h2>
+
+      <!-- Exercise 1: Guided -->
+      <div class="exercise">
+        <div class="exercise-title">Exercise 1: All About Me</div>
+        <div class="exercise-difficulty difficulty-1">Guided</div>
+        <p>Create three variables to store your name, your age, and your favourite colour. Then print each one on a separate line. Follow the pseudocode below &mdash; just replace the placeholder values with your own information.</p>
+
+        <div class="pseudocode">
+          <div class="pseudocode-label">Pseudocode:</div>
+          STEP 1: Create a variable called <code>my_name</code> and store your name in it (as text)<br />
+          STEP 2: Create a variable called <code>my_age</code> and store your age in it (as a whole number)<br />
+          STEP 3: Create a variable called <code>my_colour</code> and store your favourite colour in it (as text)<br />
+          STEP 4: Print each variable using <code>print()</code>
+        </div>
+
+        <div class="code-block">
+          <div class="code-block-header">
+            <span class="code-block-label">Your Code</span>
+            <div>
+              <button class="copy-button">Copy Code</button>
+              <button class="run-button">Run Code</button>
+            </div>
+          </div>
+          <pre><code contenteditable="true"># Exercise 1: All About Me
+# Replace the blank values with your own information
+
+my_name = "____"
+my_age = ____
+my_colour = "____"
+
+print(my_name)
+print(my_age)
+print(my_colour)</code></pre>
+          <div class="output-box empty">(click "Run Code" to see output)</div>
+        </div>
+
+        <div class="hint">
+          <div class="hint-title">Need a hint?</div>
+          <div class="hint-content">Remember that text (strings) must be wrapped in quotation marks, but numbers (integers) should not. For example: <code>my_name = "Priya"</code> and <code>my_age = 15</code>. Make sure you do not put quotes around your age, or it will be stored as text instead of a number!</div>
+        </div>
+      </div>
+
+      <!-- Exercise 2: Partially Guided -->
+      <div class="exercise">
+        <div class="exercise-title">Exercise 2: Profile Card</div>
+        <div class="exercise-difficulty difficulty-2">Partially Guided</div>
+        <p>Create a simple profile card. Store information about a person in variables, then print a neat, formatted introduction. Your output should look something like:</p>
+        <p><em>"Hi, my name is Priya. I am 15 years old and I live in Manchester."</em></p>
+
+        <div class="pseudocode">
+          <div class="pseudocode-label">Pseudocode:</div>
+          STEP 1: Create variables for name, age, and city<br />
+          STEP 2: Create a variable called <code>introduction</code> that joins the text and variables together into one sentence<br />
+          STEP 3: Print the introduction<br />
+          STEP 4: Print the type of each variable to check your data types
+        </div>
+
+        <div class="code-block">
+          <div class="code-block-header">
+            <span class="code-block-label">Your Code</span>
+            <div>
+              <button class="copy-button">Copy Code</button>
+              <button class="run-button">Run Code</button>
+            </div>
+          </div>
+          <pre><code contenteditable="true"># Exercise 2: Profile Card
+# Create your variables below
+
+name =
+age =
+city =
+
+# Build your introduction (hint: you'll need str() to convert age)
+introduction = "Hi, my name is " + name + ". I am " + str(age) + " years old and I live in " + city + "."
+
+# Print the introduction
+print(introduction)
+
+# Print the type of each variable
+print(type(name))
+print(type(age))
+print(type(city))</code></pre>
+          <div class="output-box empty">(click "Run Code" to see output)</div>
+        </div>
+
+        <div class="hint">
+          <div class="hint-title">Need a hint?</div>
+          <div class="hint-content">When you join strings together with <code>+</code>, every piece must be a string. Since <code>age</code> is an integer, you need to convert it with <code>str(age)</code> before joining. For example: <code>"I am " + str(15) + " years old"</code>. If you see a <code>TypeError</code>, this is almost certainly the issue.</div>
+        </div>
+      </div>
+
+      <!-- Exercise 3: Open-Ended -->
+      <div class="exercise">
+        <div class="exercise-title">Exercise 3: My Favourite Thing</div>
+        <div class="exercise-difficulty difficulty-3">Open-Ended</div>
+        <p>Create a program that stores information about your favourite game, film, book, or TV show. Use at least <strong>four variables</strong> with at least <strong>two different data types</strong>. Display all the information in a clear, readable way. Be creative with how you present it!</p>
+        <p>For example, you might store the title, year of release, your rating out of 10, and whether you would recommend it.</p>
+
+        <div class="pseudocode">
+          <div class="pseudocode-label">Pseudocode:</div>
+          STEP 1: Choose what you want to describe (game, film, book, etc.)<br />
+          STEP 2: Create at least 4 variables using different data types (str, int, float, bool)<br />
+          STEP 3: Print out the information in a clear, readable format<br />
+          STEP 4: Use <code>type()</code> on at least one variable to show the data type
+        </div>
+
+        <div class="code-block">
+          <div class="code-block-header">
+            <span class="code-block-label">Your Code</span>
+            <div>
+              <button class="copy-button">Copy Code</button>
+              <button class="run-button">Run Code</button>
+            </div>
+          </div>
+          <pre><code contenteditable="true"># Exercise 3: My Favourite Thing
+# Create your variables and display them below
+# Use at least 4 variables and at least 2 different data types
+
+</code></pre>
+          <div class="output-box empty">(click "Run Code" to see output)</div>
+        </div>
+
+        <div class="hint">
+          <div class="hint-title">Need a hint?</div>
+          <div class="hint-content">Here is an example structure you could use. For a film, you might have: <code>title = "Spider-Man"</code> (string), <code>year = 2021</code> (integer), <code>rating = 8.5</code> (float), <code>would_recommend = True</code> (boolean). Then print each one with a label, like <code>print("Title: " + title)</code>. Remember to use <code>str()</code> when joining numbers with text!</div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ==================== REFLECT ==================== -->
+    <section class="reflect">
+      <span class="section-label">Reflect</span>
+      <h2>Think About It</h2>
+      <ul>
+        <li>Why do you think Python has different data types instead of treating everything the same? Can you think of a situation where mixing up types could cause a problem?</li>
+        <li>If you wrote <code>age = "fifteen"</code> instead of <code>age = 15</code>, would Python give an error? Why might this cause issues later in your program?</li>
+        <li>Why is <code>score = score + 10</code> not a contradiction? How would you explain what this line does to a friend who has never programmed?</li>
+        <li>What do you think would happen if you tried to convert the string <code>"hello"</code> into an integer using <code>int("hello")</code>? Try it and see!</li>
+      </ul>
+
+      <h3>What's Next?</h3>
+      <p>So far, the information in your programs has been decided by <em>you</em>, the programmer. But what if the user could type their own name? What if they could enter their age, answer a question, or make a choice? In <strong>Chapter 3: Input &amp; Output</strong>, you will learn how to make your programs truly interactive by getting input from the person running them and displaying beautifully formatted output. Your programs are about to come alive!</p>
+    </section>
+
+    <!-- ==================== NAVIGATION ==================== -->
+    <nav class="chapter-nav">
+      <a href="01-what-is-programming.html">&larr; Previous: What is Programming?</a>
+      <a href="../index.html">Course Home</a>
+      <a href="03-input-output.html">Next: Input &amp; Output &rarr;</a>
+    </nav>
+
+  </main>
+
+  <footer class="site-footer">
+    <p>Python Fundamentals &mdash; A KS4 Learning Platform</p>
+  </footer>
+
+  <script src="../js/pyodide-runner.js"></script>
+</body>
+</html>

@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chapter 1: What is Programming? - Python Fundamentals</title>
+  <link rel="stylesheet" href="../css/style.css" />
+  <script src="https://cdn.jsdelivr.net/pyodide/v0.24.0/full/pyodide.js"></script>
+</head>
+<body>
+
+  <header class="site-header">
+    <p><a href="../index.html">&larr; Back to Course</a></p>
+    <h1>Chapter 1: What is Programming?</h1>
+    <p class="subtitle">Write your very first lines of Python and discover how computers follow instructions</p>
+  </header>
+
+  <main>
+
+    <!-- ==================== THE IDEA ==================== -->
+    <section class="idea">
+      <span class="section-label">The Idea</span>
+      <h2>You Already Know How to Program</h2>
+
+      <p>What does it mean to &ldquo;program&rdquo; something? You might think it sounds complicated &mdash; something only tech geniuses do in dark rooms with three monitors. But here&rsquo;s a secret: <strong>you already do it every single day.</strong></p>
+
+      <p>Think about a recipe for making toast. You follow a set of steps in order: take a slice of bread, put it in the toaster, press the lever down, wait until it pops up, spread butter on it. If you gave those instructions to someone who had never made toast before, they could follow them and get the same result. That&rsquo;s programming.</p>
+
+      <p>When you give someone directions to your house, write down your morning routine, or explain the rules of a game &mdash; you&rsquo;re creating a <strong>program</strong>. The only difference with computer programming is that your audience is a machine, and machines need instructions to be <em>extremely</em> precise. A computer won&rsquo;t guess what you mean. It does exactly what you tell it &mdash; nothing more, nothing less.</p>
+
+      <p><strong>Programming</strong> is the art of giving a computer a precise set of instructions to solve a problem or complete a task. The language we will use to write those instructions is called <strong>Python</strong> &mdash; one of the most popular and beginner-friendly programming languages in the world.</p>
+
+      <p><strong>By the end of this chapter, you will be able to:</strong></p>
+      <ul>
+        <li>Write and run your first Python programs directly in the browser</li>
+        <li>Use the <code>print()</code> function to display text and numbers on screen</li>
+        <li>Understand that computers follow instructions step by step, from top to bottom</li>
+        <li>Use Python as a calculator to perform basic arithmetic</li>
+      </ul>
+    </section>
+
+    <!-- ==================== EXPLORE ==================== -->
+    <section class="explore">
+      <span class="section-label">Explore</span>
+      <h2>See It in Action</h2>
+
+      <!-- Example 1 -->
+      <h3>Example 1: Your First Program</h3>
+      <p>Almost every programmer in history started with the same program: making the computer say <strong>&ldquo;Hello, World!&rdquo;</strong>. It&rsquo;s a tradition that goes back to the 1970s. In Python, all it takes is a single line. Click <strong>Run Code</strong> to see it work!</p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Python Code</span>
+          <div>
+            <button class="copy-button">Copy Code</button>
+            <button class="run-button">Run Code</button>
+          </div>
+        </div>
+        <pre><code contenteditable="true">print("Hello, World!")</code></pre>
+        <div class="output-box empty">(click "Run Code" to see output)</div>
+      </div>
+
+      <p>That&rsquo;s it &mdash; one line of code, and the computer does exactly what you asked. The <code>print()</code> function tells Python to display whatever is inside the brackets on screen. The text inside the quotation marks is called a <strong>string</strong> &mdash; it&rsquo;s how we write plain text in Python.</p>
+
+      <div class="try-this">
+        <strong>Try This:</strong> Change the message inside the quotation marks to something else, like <code>print("I am learning Python!")</code> or your favourite quote. Then click Run Code again to see your new message appear.
+      </div>
+
+      <!-- Example 2 -->
+      <h3>Example 2: Multiple Instructions</h3>
+      <p>Programs are rarely just one line. Most of the time, you need several instructions to get something done. Python reads your code <strong>from top to bottom</strong>, running each line in order &mdash; just like reading a book. Watch what happens when we give Python three instructions:</p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Python Code</span>
+          <div>
+            <button class="copy-button">Copy Code</button>
+            <button class="run-button">Run Code</button>
+          </div>
+        </div>
+        <pre><code contenteditable="true">print("Good morning!")
+print("Welcome to Python.")
+print("Let's write some code!")</code></pre>
+        <div class="output-box empty">(click "Run Code" to see output)</div>
+      </div>
+
+      <p>Notice how the three messages appear in the exact order we wrote them. Python ran line 1 first, then line 2, then line 3. It will <em>never</em> jump ahead or skip a line on its own.</p>
+
+      <div class="try-this">
+        <strong>Try This:</strong> Swap the order of the lines around. What happens if you put the last line first? Add a fourth <code>print()</code> statement of your own at the end. Can you make the computer tell a knock-knock joke across multiple lines?
+      </div>
+
+      <!-- Example 3 -->
+      <h3>Example 3: Python as a Calculator</h3>
+      <p>Python isn&rsquo;t just for text &mdash; it&rsquo;s brilliant at maths too. You can use it as a powerful calculator right out of the box. Notice that when we do maths, we <strong>don&rsquo;t</strong> use quotation marks &mdash; we want Python to calculate the answer, not just display the symbols.</p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Python Code</span>
+          <div>
+            <button class="copy-button">Copy Code</button>
+            <button class="run-button">Run Code</button>
+          </div>
+        </div>
+        <pre><code contenteditable="true"># Addition
+print(2 + 3)
+
+# Multiplication
+print(10 * 5)
+
+# Division
+print(100 / 4)
+
+# A bigger calculation
+print(7 + 3 * 2)</code></pre>
+        <div class="output-box empty">(click "Run Code" to see output)</div>
+      </div>
+
+      <p>Did you notice the last answer? <code>7 + 3 * 2</code> gives <strong>13</strong>, not 20. That&rsquo;s because Python follows the same order of operations you learnt in maths (BIDMAS/BODMAS) &mdash; multiplication happens before addition. Lines that start with <code>#</code> are called <strong>comments</strong>. Python ignores them completely; they&rsquo;re just notes for humans reading the code.</p>
+
+      <div class="try-this">
+        <strong>Try This:</strong> Use Python to calculate how many hours there are in a year (<code>365 * 24</code>). What about how many minutes? Can you work out your age in days? Try using brackets to change the order of operations: compare <code>print(7 + 3 * 2)</code> with <code>print((7 + 3) * 2)</code>.
+      </div>
+
+    </section>
+
+    <!-- ==================== UNDERSTAND ==================== -->
+    <section class="understand">
+      <span class="section-label">Understand</span>
+      <h2>How Does It Work?</h2>
+
+      <h3>What is a Program?</h3>
+      <p>A <strong>program</strong> is simply a set of instructions that a computer executes in order. Think of it like a script for a play &mdash; the actors (the computer) follow the directions exactly as written. Each instruction tells the computer to do one specific thing: display some text, perform a calculation, make a decision, and so on.</p>
+
+      <p>The programs you wrote above were short &mdash; just a few lines &mdash; but real programs can be thousands or even millions of lines long. Video games, social media apps, and the website you&rsquo;re reading right now are all programs at heart.</p>
+
+      <h3>What is Python?</h3>
+      <p>Python is a <strong>programming language</strong> &mdash; a set of rules and vocabulary for writing instructions that a computer can understand. It was created by Guido van Rossum in 1991 and named after the comedy group Monty Python (not the snake!).</p>
+
+      <p>Python is one of the most popular languages in the world because:</p>
+      <ul>
+        <li>It reads almost like English, making it great for beginners</li>
+        <li>It is used by professionals at companies like Google, NASA, Netflix, and the NHS</li>
+        <li>It can do almost anything: websites, games, data science, artificial intelligence, and more</li>
+      </ul>
+
+      <h3>How Does <code>print()</code> Work?</h3>
+      <p><code>print()</code> is a <strong>function</strong> built into Python. A function is like a mini-program that performs a specific job. When you write <code>print("Hello")</code>, you are <em>calling</em> the print function and giving it the text <code>"Hello"</code> to display. The text inside the brackets is called an <strong>argument</strong> &mdash; it&rsquo;s the data you&rsquo;re handing to the function so it knows what to do.</p>
+
+      <div class="key-concept">
+        <strong>Key Concept: Sequential Execution</strong>
+        Python executes your code <strong>from top to bottom, one line at a time</strong>. The first line runs, finishes, and then the second line runs, and so on. This is called <em>sequential execution</em>. Understanding this is the foundation of everything else you will learn in programming.
+      </div>
+
+      <h3>Text vs Numbers</h3>
+      <p>You might have noticed an important difference in the examples above:</p>
+      <ul>
+        <li><code>print("2 + 3")</code> &mdash; with quotation marks, Python displays the <em>text</em> <code>2 + 3</code> exactly as written</li>
+        <li><code>print(2 + 3)</code> &mdash; without quotation marks, Python <em>calculates</em> the answer and displays <code>5</code></li>
+      </ul>
+      <p>Quotation marks tell Python &ldquo;this is just text, don&rsquo;t try to do anything clever with it.&rdquo; Without them, Python treats the content as code to be evaluated.</p>
+
+      <h3>Common Misconceptions</h3>
+      <div class="warning">
+        <strong>Watch out:</strong> Many people think computers are &ldquo;smart&rdquo; or can &ldquo;figure things out.&rdquo; They can&rsquo;t. A computer is incredibly fast but has <strong>zero common sense</strong>. It follows your instructions blindly and precisely. If you tell it to do something silly, it will do it without question. If you forget a step, it won&rsquo;t fill in the gap for you. Every time your program does something unexpected, it&rsquo;s almost always because the instructions weren&rsquo;t quite right &mdash; and that&rsquo;s completely normal! Finding and fixing those mistakes is a huge part of programming, and it&rsquo;s called <strong>debugging</strong>.
+      </div>
+
+      <div class="warning">
+        <strong>Watch out:</strong> Spelling and punctuation matter in Python. Writing <code>Print("Hello")</code> with a capital P will cause an error &mdash; Python is <strong>case-sensitive</strong>, so <code>print</code> and <code>Print</code> are completely different words to it. Always use lowercase <code>print</code>.
+      </div>
+    </section>
+
+    <!-- ==================== PRACTICE ==================== -->
+    <section class="practice">
+      <span class="section-label">Practice</span>
+      <h2>Your Turn</h2>
+
+      <!-- Exercise 1: Guided -->
+      <div class="exercise">
+        <div class="exercise-title">Exercise 1: Introduce Yourself</div>
+        <div class="exercise-difficulty difficulty-1">Guided</div>
+        <p>Make the computer introduce you! Replace the blank below with your actual name so that when you run the code, it prints a greeting with your name in it.</p>
+
+        <div class="pseudocode">
+          <div class="pseudocode-label">Pseudocode:</div>
+          STEP 1: Look at the print statement below<br />
+          STEP 2: Replace the ____ with your first name (keep the quotation marks!)<br />
+          STEP 3: Click Run Code to see your greeting
+        </div>
+
+        <div class="code-block">
+          <div class="code-block-header">
+            <span class="code-block-label">Your Code</span>
+            <div>
+              <button class="copy-button">Copy Code</button>
+              <button class="run-button">Run Code</button>
+            </div>
+          </div>
+          <pre><code contenteditable="true"># Replace ____ with your name
+print("Hello, my name is ____!")</code></pre>
+          <div class="output-box empty">(click "Run Code" to see output)</div>
+        </div>
+
+        <div class="hint">
+          <div class="hint-title">Need a hint?</div>
+          <div class="hint-content">Replace just the four underscores with your name. For example, if your name is Priya, the line would read: <code>print("Hello, my name is Priya!")</code>. Make sure you keep both quotation marks and the brackets.</div>
+        </div>
+      </div>
+
+      <!-- Exercise 2: Partially Guided -->
+      <div class="exercise">
+        <div class="exercise-title">Exercise 2: ASCII Art</div>
+        <div class="exercise-difficulty difficulty-2">Partially Guided</div>
+        <p>Use at least <strong>3 print statements</strong> to create a simple picture or pattern using text characters. This is called <strong>ASCII art</strong> &mdash; art made entirely from keyboard characters. Here are some ideas: a house, a face, a rocket, or a simple tree.</p>
+
+        <div class="pseudocode">
+          <div class="pseudocode-label">Pseudocode:</div>
+          STEP 1: Plan your picture &mdash; sketch it on paper or in your head<br />
+          STEP 2: Write one print() statement for each line of your picture<br />
+          STEP 3: Use characters like * - / \ | _ ( ) ^ to build your design<br />
+          STEP 4: Run the code and adjust until it looks right
+        </div>
+
+        <div class="code-block">
+          <div class="code-block-header">
+            <span class="code-block-label">Your Code</span>
+            <div>
+              <button class="copy-button">Copy Code</button>
+              <button class="run-button">Run Code</button>
+            </div>
+          </div>
+          <pre><code contenteditable="true"># Create your ASCII art below
+# Here's an example of a simple cat face to get you started:
+print("  /\_/\  ")
+print(" ( o.o ) ")
+print("  > ^ <  ")
+# Now try making your own!</code></pre>
+          <div class="output-box empty">(click "Run Code" to see output)</div>
+        </div>
+
+        <div class="hint">
+          <div class="hint-title">Need a hint?</div>
+          <div class="hint-content">
+            <p>Each <code>print()</code> statement creates one line of output. Think of your picture row by row. Here is a simple tree you could try:</p>
+            <p><code>print("&nbsp;&nbsp;&nbsp;*&nbsp;&nbsp;&nbsp;")</code></p>
+            <p><code>print("&nbsp;&nbsp;***&nbsp;&nbsp;")</code></p>
+            <p><code>print("&nbsp;*****&nbsp;")</code></p>
+            <p><code>print("*******")</code></p>
+            <p><code>print("&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;")</code></p>
+            <p>Use spaces inside the quotation marks to position your characters. The key is to experiment &mdash; there is no single right answer!</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Exercise 3: Open-Ended -->
+      <div class="exercise">
+        <div class="exercise-title">Exercise 3: Tell a Short Story</div>
+        <div class="exercise-difficulty difficulty-3">Open-Ended</div>
+        <p>Write a program that prints a short story using <strong>at least 5 print statements</strong>. It could be a mini adventure, a joke with a punchline, a poem, a description of your day, or anything you like. Be creative! You can also mix in some maths calculations if you want to include numbers in your story.</p>
+
+        <div class="pseudocode">
+          <div class="pseudocode-label">Pseudocode:</div>
+          STEP 1: Think of a short story, joke, or poem (at least 5 lines)<br />
+          STEP 2: Write each line as a separate print() statement<br />
+          STEP 3: Consider adding blank lines with print() (no text) for spacing<br />
+          STEP 4: Optionally mix in a calculation, e.g. print("I have", 3 + 4, "pets")<br />
+          STEP 5: Run your program and read through the output
+        </div>
+
+        <div class="code-block">
+          <div class="code-block-header">
+            <span class="code-block-label">Your Code</span>
+            <div>
+              <button class="copy-button">Copy Code</button>
+              <button class="run-button">Run Code</button>
+            </div>
+          </div>
+          <pre><code contenteditable="true"># Write your short story here
+# Use at least 5 print() statements
+# Be creative and have fun!
+
+</code></pre>
+          <div class="output-box empty">(click "Run Code" to see output)</div>
+        </div>
+
+        <div class="hint">
+          <div class="hint-title">Need a hint?</div>
+          <div class="hint-content">
+            <p>Here are some ideas to get you started:</p>
+            <ul>
+              <li><strong>A mini adventure:</strong> &ldquo;You wake up in a mysterious forest...&rdquo;</li>
+              <li><strong>A joke:</strong> Build up to a punchline across several lines.</li>
+              <li><strong>A poem:</strong> Write a short rhyming poem, one line per print statement.</li>
+              <li><strong>Fun fact list:</strong> Use calculations like <code>print("There are", 365 * 24, "hours in a year!")</code></li>
+            </ul>
+            <p>Remember: you can print a blank line with just <code>print()</code> (empty brackets) to add spacing between parts of your story. There is no wrong answer here &mdash; the goal is to practise using <code>print()</code> and to have fun doing it!</p>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ==================== REFLECT ==================== -->
+    <section class="reflect">
+      <span class="section-label">Reflect</span>
+      <h2>Think About It</h2>
+
+      <p>Take a moment to think about what you&rsquo;ve learnt in this chapter. Try to answer these questions in your head or discuss them with a classmate:</p>
+
+      <ul>
+        <li>In your own words, what is a program? Can you think of three real-world examples of &ldquo;programs&rdquo; that don&rsquo;t involve computers?</li>
+        <li>Why does the order of instructions matter? What would happen if a recipe told you to &ldquo;put the cake in the oven&rdquo; before &ldquo;mix the ingredients&rdquo;?</li>
+        <li>What is the difference between <code>print("5 + 3")</code> and <code>print(5 + 3)</code>? Why does Python treat them differently?</li>
+        <li>Why is it important that computers follow instructions <em>exactly</em> as written? Can you think of situations where this is a good thing, and situations where it could cause problems?</li>
+        <li>What surprised you most about writing your first Python programs?</li>
+      </ul>
+
+      <h3>What&rsquo;s Next?</h3>
+      <p>So far, your programs display information and then it&rsquo;s gone. But what if you wanted the computer to <em>remember</em> something &mdash; like a player&rsquo;s name, a score, or the result of a calculation &mdash; so you could use it later? In <strong>Chapter 2: Variables &amp; Data Types</strong>, you&rsquo;ll learn how to store information in <strong>variables</strong>, which are like labelled boxes where your program can keep data. This is where things start to get really powerful!</p>
+    </section>
+
+    <!-- ==================== NAVIGATION ==================== -->
+    <nav class="chapter-nav">
+      <a href="../index.html">&larr; Course Home</a>
+      <a href="../index.html">Course Home</a>
+      <a href="02-variables.html">Next: Chapter 2: Variables &amp; Data Types &rarr;</a>
+    </nav>
+
+  </main>
+
+  <footer class="site-footer">
+    <p>Python Fundamentals &mdash; A KS4 Learning Platform</p>
+    <p>Built with <a href="https://pyodide.org/">Pyodide</a> &mdash; Python runs in your browser</p>
+  </footer>
+
+  <script src="../js/pyodide-runner.js"></script>
+</body>
+</html>

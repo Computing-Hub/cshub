@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chapter 3: Input &amp; Output - Python Fundamentals</title>
+  <link rel="stylesheet" href="../css/style.css" />
+  <script src="https://cdn.jsdelivr.net/pyodide/v0.24.0/full/pyodide.js"></script>
+</head>
+<body>
+
+  <header class="site-header">
+    <p><a href="../index.html">&larr; Back to Course</a></p>
+    <h1>Chapter 3: Input &amp; Output</h1>
+    <p class="subtitle">Making your programs communicate with the world</p>
+  </header>
+
+  <main>
+
+    <!-- ==================== THE IDEA ==================== -->
+    <section class="idea">
+      <span class="section-label">The Idea</span>
+      <h2>Why Does This Matter?</h2>
+      <p>Programs that just print the same thing every time are boring. Real programs <strong>respond to people</strong>. They ask questions, accept answers, and produce personalised results. That conversation between a human and a program is what makes software genuinely useful.</p>
+      <p><strong>Output</strong> is what the program shows you &mdash; the messages, results, and information it displays on screen. <strong>Input</strong> is what you tell the program &mdash; your name, your choices, your data. Together, input and output (often shortened to <strong>I/O</strong>) are how programs communicate with the outside world.</p>
+      <p>Think about the software you use every day. An ATM asks for your PIN before dispensing cash. A video game asks for your character's name. A search engine takes your query and returns results. Every one of these is an example of input and output working together.</p>
+      <p><strong>By the end of this chapter, you will be able to:</strong></p>
+      <ul>
+        <li>Use <code>print()</code> with different formatting techniques to produce clear, readable output</li>
+        <li>Use <strong>f-strings</strong> (formatted string literals) to combine variables and text elegantly</li>
+        <li>Join strings together using <strong>concatenation</strong> with the <code>+</code> operator</li>
+        <li>Understand how <code>input()</code> works in Python to collect data from users</li>
+        <li>Control print formatting with the <code>sep</code> and <code>end</code> parameters</li>
+      </ul>
+    </section>
+
+    <!-- ==================== EXPLORE ==================== -->
+    <section class="explore">
+      <span class="section-label">Explore</span>
+      <h2>See It in Action</h2>
+
+      <h3>Example 1: Print Formatting with f-strings</h3>
+      <p>An <strong>f-string</strong> (formatted string literal) lets you embed variables directly inside a string. Just put an <code>f</code> before the opening quote, and wrap any variable name in curly braces <code>{}</code>. Python fills in the values for you.</p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Python Code</span>
+          <div>
+            <button class="copy-button">Copy Code</button>
+            <button class="run-button">Run Code</button>
+          </div>
+        </div>
+        <pre><code contenteditable="true"># f-strings: the modern way to format output
+name = "Alice"
+age = 15
+school = "Greenwood Academy"
+
+print(f"My name is {name} and I am {age} years old.")
+print(f"I attend {school}.")
+print(f"Next year I will be {age + 1}!")</code></pre>
+        <div class="output-box empty">(click "Run Code" to see output)</div>
+      </div>
+
+      <div class="try-this">
+        <strong>Try This:</strong> Change the values of <code>name</code>, <code>age</code>, and <code>school</code> to your own details and run the code again. Notice how the output updates automatically because f-strings pull the current value of each variable.
+      </div>
+
+      <h3>Example 2: String Concatenation</h3>
+      <p>Before f-strings existed, programmers joined strings together using the <code>+</code> operator. This is called <strong>concatenation</strong> (from the Latin word meaning "to chain together"). It still works perfectly and you will see it in lots of existing code.</p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Python Code</span>
+          <div>
+            <button class="copy-button">Copy Code</button>
+            <button class="run-button">Run Code</button>
+          </div>
+        </div>
+        <pre><code contenteditable="true"># String concatenation: joining strings with +
+first_name = "Priya"
+surname = "Sharma"
+
+# Joining strings together
+full_name = first_name + " " + surname
+print("Full name: " + full_name)
+
+# You can build up longer messages
+greeting = "Hello, " + full_name + "! "
+greeting = greeting + "Welcome to Python."
+print(greeting)</code></pre>
+        <div class="output-box empty">(click "Run Code" to see output)</div>
+      </div>
+
+      <div class="try-this">
+        <strong>Try This:</strong> Change the names and add a third variable called <code>nickname</code>. Concatenate it into the greeting so it says something like "Hello, Priya Sharma! Your friends call you Pri."
+      </div>
+
+      <h3>Example 3: Simulating User Input</h3>
+      <p>In a standard Python environment, the <code>input()</code> function pauses the program and waits for the user to type something. Since we are running Python in the browser, we cannot use <code>input()</code> directly. Instead, we will <strong>pre-set variables</strong> to simulate what a user might type. The important thing is to understand the <em>concept</em> &mdash; you will use real <code>input()</code> when you run Python on your own computer.</p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Python Code</span>
+          <div>
+            <button class="copy-button">Copy Code</button>
+            <button class="run-button">Run Code</button>
+          </div>
+        </div>
+        <pre><code contenteditable="true"># In a real Python program, you would write:
+#   name = input("What is your name? ")
+#   colour = input("What is your favourite colour? ")
+# But since we're running in the browser, we set values directly:
+
+name = "Jordan"       # Try changing this to your name!
+colour = "turquoise"  # Try changing this to your favourite colour!
+
+# Now we use the variables just as if the user had typed them
+print(f"Hello, {name}!")
+print(f"Ah, {colour} is a lovely colour.")
+print(f"Here's a fun fact, {name}: Python was named after Monty Python!")</code></pre>
+        <div class="output-box empty">(click "Run Code" to see output)</div>
+      </div>
+
+      <div class="try-this">
+        <strong>Try This:</strong> Change the values of <code>name</code> and <code>colour</code> at the top to your own choices. Add a third variable &mdash; perhaps <code>hobby</code> &mdash; and include it in one of the print statements.
+      </div>
+    </section>
+
+    <!-- ==================== UNDERSTAND ==================== -->
+    <section class="understand">
+      <span class="section-label">Understand</span>
+      <h2>How Does It Work?</h2>
+
+      <h3>The <code>print()</code> Function in Detail</h3>
+      <p>You have been using <code>print()</code> since Chapter 1, but it can do much more than you might think. It accepts <strong>multiple arguments</strong> separated by commas, and has special parameters to control how the output looks.</p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Python Code</span>
+          <div>
+            <button class="copy-button">Copy Code</button>
+            <button class="run-button">Run Code</button>
+          </div>
+        </div>
+        <pre><code contenteditable="true"># Multiple arguments - print() adds a space between each one
+print("Name:", "Alice", "Age:", 15)
+
+# The sep parameter changes what goes between arguments
+print("09", "05", "2010", sep="/")        # Date format
+print("alice", "example", "com", sep="@") # Looks like an email (almost!)
+print("Python", "is", "fun", sep=" --- ")
+
+# The end parameter changes what goes at the very end
+# Normally print() adds a newline (\n) at the end
+print("Loading", end="")
+print("...", end="")
+print(" Done!")</code></pre>
+        <div class="output-box empty">(click "Run Code" to see output)</div>
+      </div>
+
+      <p>By default, <code>print()</code> separates each argument with a space (that is, <code>sep=" "</code>) and ends with a new line (that is, <code>end="\n"</code>). Changing these parameters gives you fine control over your output.</p>
+
+      <h3>f-strings (Formatted String Literals)</h3>
+      <p>f-strings were introduced in Python 3.6 and are now the <strong>preferred way</strong> to combine variables and text. The <code>f</code> before the quote tells Python to look inside the string for curly braces and replace them with the value of whatever expression is inside.</p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Python Code</span>
+          <div>
+            <button class="copy-button">Copy Code</button>
+            <button class="run-button">Run Code</button>
+          </div>
+        </div>
+        <pre><code contenteditable="true"># f-strings can contain any Python expression
+item = "notebook"
+price = 2.50
+quantity = 3
+
+# Simple variable insertion
+print(f"Item: {item}")
+
+# Arithmetic inside the braces
+print(f"Total cost: £{price * quantity}")
+
+# Formatting numbers - .2f means 2 decimal places
+total = price * quantity
+print(f"Total cost (formatted): £{total:.2f}")
+
+# You can even call string methods inside f-strings
+print(f"Item (uppercase): {item.upper()}")
+print(f"Item (capitalised): {item.capitalize()}")</code></pre>
+        <div class="output-box empty">(click "Run Code" to see output)</div>
+      </div>
+
+      <div class="key-concept">
+        <strong>Key Concept:</strong>
+        f-strings are the modern, preferred way to combine variables and text in Python. Place an <code>f</code> before the opening quotation mark, then put any variable or expression inside curly braces: <code>f"Hello, {name}!"</code>. You can even do calculations and call methods inside the braces.
+      </div>
+
+      <h3>String Concatenation with <code>+</code></h3>
+      <p>Concatenation is straightforward: use the <code>+</code> operator to join two strings together. However, there is an important catch &mdash; you can only concatenate strings with other strings. If you try to join a string and a number, Python will raise a <code>TypeError</code>.</p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Python Code</span>
+          <div>
+            <button class="copy-button">Copy Code</button>
+            <button class="run-button">Run Code</button>
+          </div>
+        </div>
+        <pre><code contenteditable="true"># Concatenation works with strings
+word1 = "fire"
+word2 = "fly"
+print(word1 + word2)  # firefly
+
+# But numbers must be converted to strings first!
+score = 42
+# This would cause an error: print("Score: " + score)
+# Instead, use str() to convert the number:
+print("Score: " + str(score))
+
+# f-strings handle this automatically (another reason to prefer them!)
+print(f"Score: {score}")</code></pre>
+        <div class="output-box empty">(click "Run Code" to see output)</div>
+      </div>
+
+      <div class="warning">
+        <strong>Watch out:</strong> A very common mistake is trying to concatenate a string with an integer or float using <code>+</code>. For example, <code>"Age: " + 15</code> will crash with a <code>TypeError</code>. You must convert the number first with <code>str(15)</code>, or better yet, use an f-string: <code>f"Age: {15}"</code>.
+      </div>
+
+      <h3>The Concept of <code>input()</code></h3>
+      <p>In a real Python environment (such as IDLE, VS Code, or the terminal), the <code>input()</code> function is how your program asks the user a question and waits for their response. Here is how it works:</p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Python Code</span>
+          <div>
+            <button class="copy-button">Copy Code</button>
+            <button class="run-button">Run Code</button>
+          </div>
+        </div>
+        <pre><code contenteditable="true"># How input() works in a real Python environment:
+#
+#   name = input("What is your name? ")
+#   age = input("How old are you? ")
+#
+# The program would pause at each line and wait for the user to type.
+# Whatever the user types is stored as a STRING in the variable.
+#
+# IMPORTANT: input() ALWAYS returns a string!
+# So if the user types 15, age would be the string "15", not the number 15.
+# To use it as a number, you must convert it: age = int(age)
+
+# Let's simulate this in the browser:
+name = "Sam"     # Simulates: name = input("What is your name? ")
+age = "14"       # Simulates: age = input("How old are you? ")
+
+# Convert age from a string to an integer
+age = int(age)
+
+print(f"Hello, {name}!")
+print(f"You are {age} years old.")
+print(f"In 10 years you will be {age + 10}.")</code></pre>
+        <div class="output-box empty">(click "Run Code" to see output)</div>
+      </div>
+
+      <div class="key-concept">
+        <strong>Key Concept:</strong>
+        The <code>input()</code> function <strong>always returns a string</strong>, even if the user types a number. If you need to do maths with the input, you must convert it using <code>int()</code> for whole numbers or <code>float()</code> for decimal numbers. For example: <code>age = int(input("How old are you? "))</code>.
+      </div>
+
+      <h3>Comparing the Three Approaches</h3>
+      <p>Here is a quick summary of the three ways to build output strings:</p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Method</th>
+            <th>Example</th>
+            <th>Notes</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>f-string</strong></td>
+            <td><code>f"Hello, {name}!"</code></td>
+            <td>Modern, clean, handles numbers automatically. <strong>Recommended.</strong></td>
+          </tr>
+          <tr>
+            <td><strong>Concatenation</strong></td>
+            <td><code>"Hello, " + name + "!"</code></td>
+            <td>Simple but needs <code>str()</code> for numbers. Can get messy with many variables.</td>
+          </tr>
+          <tr>
+            <td><strong>Multiple arguments</strong></td>
+            <td><code>print("Hello,", name)</code></td>
+            <td>Easy but adds spaces automatically. Less control over formatting.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>Common Misconceptions</h3>
+      <div class="warning">
+        <strong>Watch out:</strong> Do not forget the <code>f</code> before the string! Writing <code>print("Hello, {name}!")</code> without the <code>f</code> will literally print <code>Hello, {name}!</code> instead of the variable's value. You must write <code>print(f"Hello, {name}!")</code>.
+      </div>
+    </section>
+
+    <!-- ==================== PRACTICE ==================== -->
+    <section class="practice">
+      <span class="section-label">Practice</span>
+      <h2>Your Turn</h2>
+
+      <!-- Exercise 1: Guided -->
+      <div class="exercise">
+        <div class="exercise-title">Exercise 1: All About Me</div>
+        <div class="exercise-difficulty difficulty-1">Guided</div>
+        <p>Create variables to store your name, age, and favourite subject. Then use f-strings to print three sentences that introduce yourself.</p>
+
+        <div class="pseudocode">
+          <div class="pseudocode-label">Pseudocode:</div>
+          STEP 1: Create a variable called <code>my_name</code> and store your name in it<br />
+          STEP 2: Create a variable called <code>my_age</code> and store your age as a number<br />
+          STEP 3: Create a variable called <code>fav_subject</code> and store your favourite subject<br />
+          STEP 4: Use <code>print()</code> with f-strings to display: "Hi, I'm [name]!"<br />
+          STEP 5: Print: "I am [age] years old and my favourite subject is [subject]."<br />
+          STEP 6: Print: "In 5 years I will be [age + 5] years old."
+        </div>
+
+        <div class="code-block">
+          <div class="code-block-header">
+            <span class="code-block-label">Your Code</span>
+            <div>
+              <button class="copy-button">Copy Code</button>
+              <button class="run-button">Run Code</button>
+            </div>
+          </div>
+          <pre><code contenteditable="true"># Exercise 1: All About Me
+# Fill in the variables with your own details
+
+my_name = "____"
+my_age = ____
+fav_subject = "____"
+
+# Now use f-strings to print three sentences
+print(f"Hi, I'm ____!")
+print(f"____")
+print(f"____")</code></pre>
+          <div class="output-box empty">(click "Run Code" to see output)</div>
+        </div>
+
+        <div class="hint">
+          <div class="hint-title">Need a hint?</div>
+          <div class="hint-content">Remember that inside an f-string, you place your variable names between curly braces. For example: <code>f"My name is {my_name}"</code>. For the last line, you can do arithmetic inside the braces: <code>{my_age + 5}</code>.</div>
+        </div>
+      </div>
+
+      <!-- Exercise 2: Partially Guided -->
+      <div class="exercise">
+        <div class="exercise-title">Exercise 2: Mad Libs Story</div>
+        <div class="exercise-difficulty difficulty-2">Partially Guided</div>
+        <p>Mad Libs is a word game where you fill in blanks to create a funny story. Create variables for different types of words, then use them to build a short silly paragraph. In a full Python program, these words would come from <code>input()</code> &mdash; here, we pre-set them.</p>
+
+        <div class="pseudocode">
+          <div class="pseudocode-label">Pseudocode:</div>
+          STEP 1: Create variables for: an animal, an adjective, a verb, a place, and a number<br />
+          STEP 2: Use f-strings to print a silly story that uses all five variables<br />
+          STEP 3: The story should be at least three sentences long<br />
+          STEP 4: Print a blank line between the title and the story (use an empty <code>print()</code>)
+        </div>
+
+        <div class="code-block">
+          <div class="code-block-header">
+            <span class="code-block-label">Your Code</span>
+            <div>
+              <button class="copy-button">Copy Code</button>
+              <button class="run-button">Run Code</button>
+            </div>
+          </div>
+          <pre><code contenteditable="true"># Exercise 2: Mad Libs Story
+# In real Python you'd use input() for each word:
+#   animal = input("Enter an animal: ")
+# Here, set them directly:
+
+animal = "penguin"
+adjective = "sparkly"
+verb = "danced"
+place = "the moon"
+number = 47
+
+print("=== My Mad Libs Story ===")
+print()
+# Write your story below using f-strings!
+</code></pre>
+          <div class="output-box empty">(click "Run Code" to see output)</div>
+        </div>
+
+        <div class="hint">
+          <div class="hint-title">Need a hint?</div>
+          <div class="hint-content">Build your story sentence by sentence. For example: <code>print(f"One day, a {adjective} {animal} {verb} all the way to {place}.")</code>. Try to use each variable at least once. You can use <code>{number}</code> for a quantity in the story. The sillier the variable values, the funnier the result!</div>
+        </div>
+      </div>
+
+      <!-- Exercise 3: Open-Ended -->
+      <div class="exercise">
+        <div class="exercise-title">Exercise 3: Formatted Receipt</div>
+        <div class="exercise-difficulty difficulty-3">Open-Ended</div>
+        <p>Create a program that displays a neatly formatted shop receipt or school report card. Use variables for the items/subjects and their prices/grades. Your output should look professional with aligned text, a title, and a total or average at the bottom.</p>
+
+        <div class="code-block">
+          <div class="code-block-header">
+            <span class="code-block-label">Your Code</span>
+            <div>
+              <button class="copy-button">Copy Code</button>
+              <button class="run-button">Run Code</button>
+            </div>
+          </div>
+          <pre><code contenteditable="true"># Exercise 3: Formatted Receipt or Report Card
+# Create a professional-looking display using print() and f-strings.
+#
+# Option A - Shop Receipt:
+#   Create variables for at least 3 items with prices.
+#   Display them neatly with a total at the bottom.
+#
+# Option B - Report Card:
+#   Create variables for at least 4 subjects with grades/percentages.
+#   Display them neatly with an average at the bottom.
+#
+# Tip: Use string multiplication for lines, e.g. print("=" * 30)
+
+# Example start (feel free to replace entirely):
+shop_name = "Python Corner Shop"
+print("=" * 34)
+print(f"  {shop_name}")
+print("=" * 34)
+
+# Add your items and totals below!
+</code></pre>
+          <div class="output-box empty">(click "Run Code" to see output)</div>
+        </div>
+
+        <div class="hint">
+          <div class="hint-title">Need a hint?</div>
+          <div class="hint-content">
+            <p>For a receipt, try something like this structure:</p>
+            <p><code>item1 = "Banana"</code> and <code>price1 = 0.30</code></p>
+            <p>Then print each line: <code>print(f"{item1}............£{price1:.2f}")</code></p>
+            <p>The <code>:.2f</code> format specifier ensures prices always show two decimal places (e.g. £0.30 not £0.3).</p>
+            <p>For neat columns, try padding: <code>f"{'Banana':<20}£{0.30:>6.2f}"</code> &mdash; the <code>&lt;20</code> left-aligns in 20 characters and <code>&gt;6</code> right-aligns in 6 characters.</p>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ==================== REFLECT ==================== -->
+    <section class="reflect">
+      <span class="section-label">Reflect</span>
+      <h2>Think About It</h2>
+      <ul>
+        <li>Why do you think <code>input()</code> always returns a string, even when the user types a number? What problems could this cause if you are not careful?</li>
+        <li>When would you choose concatenation (<code>+</code>) over an f-string? Can you think of a situation where one is clearly better than the other?</li>
+        <li>Think about a program you use every day (a game, an app, a website). What kinds of <strong>input</strong> does it accept, and what kinds of <strong>output</strong> does it produce?</li>
+        <li>Why is formatting important? Imagine a receipt where all the numbers are misaligned, or a report with no headings. How would that affect the user?</li>
+      </ul>
+
+      <h3>What's Next?</h3>
+      <p>So far, your programs run every line from top to bottom, every single time. But what if you want your program to <strong>make decisions</strong>? What if it should say "well done" for a high score but "try again" for a low one? In <strong>Chapter 4: If Statements</strong>, you will learn how to give your programs the power of <strong>choice</strong> &mdash; making them respond differently depending on the situation. Get ready to make your programs truly intelligent!</p>
+    </section>
+
+    <!-- ==================== NAVIGATION ==================== -->
+    <nav class="chapter-nav">
+      <a href="02-variables.html">&larr; Previous: Variables &amp; Data Types</a>
+      <a href="../index.html">Course Home</a>
+      <a href="04-if-statements.html">Next: If Statements &rarr;</a>
+    </nav>
+
+  </main>
+
+  <footer class="site-footer">
+    <p>Python Fundamentals &mdash; A KS4 Learning Platform</p>
+    <p>Built with <a href="https://pyodide.org/">Pyodide</a> &mdash; Python runs in your browser</p>
+  </footer>
+
+  <script src="../js/pyodide-runner.js"></script>
+</body>
+</html>

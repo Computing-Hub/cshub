@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chapter 9: String Manipulation - Python Fundamentals</title>
+  <link rel="stylesheet" href="../css/style.css" />
+  <script src="https://cdn.jsdelivr.net/pyodide/v0.24.0/full/pyodide.js"></script>
+</head>
+<body>
+
+  <header class="site-header">
+    <p><a href="../index.html">&larr; Back to Course</a></p>
+    <h1>Chapter 9: String Manipulation</h1>
+    <p class="subtitle">Learn to slice, search, transform and format text &mdash; one of the most practical skills in programming</p>
+  </header>
+
+  <main>
+
+    <!-- ==================== THE IDEA ==================== -->
+    <section class="idea">
+      <span class="section-label">The Idea</span>
+      <h2>Text Is Everywhere</h2>
+
+      <p>Think about everything you do on a computer or phone: you type usernames, send messages, create passwords, enter search queries, fill in forms, and read web pages. Every single one of those activities involves <strong>text</strong> &mdash; and in Python, text is stored as <strong>strings</strong>.</p>
+
+      <p>Strings are <strong>sequences of characters</strong> &mdash; letters, digits, spaces, punctuation, even emojis. Python gives you a powerful set of tools to work with them: you can pull out individual characters, extract sections, search for words, change capitalisation, replace parts of a sentence, and much more.</p>
+
+      <p>In the real world, string manipulation is everywhere:</p>
+      <ul>
+        <li><strong>Spell checkers</strong> compare what you typed against a dictionary and suggest corrections</li>
+        <li><strong>Search engines</strong> break your query into words, strip out punctuation, and match against millions of pages</li>
+        <li><strong>Password validators</strong> check that your password is long enough and contains the right mix of characters</li>
+        <li><strong>Social media platforms</strong> detect hashtags, mentions, and links inside your posts</li>
+      </ul>
+
+      <p><strong>By the end of this chapter, you will be able to:</strong></p>
+      <ul>
+        <li>Use indexing and slicing to extract characters and sections from a string</li>
+        <li>Use built-in string methods to transform and inspect text</li>
+        <li>Search within strings to find characters, words, and patterns</li>
+        <li>Format and combine text for clear, readable output</li>
+      </ul>
+    </section>
+
+    <!-- ==================== EXPLORE ==================== -->
+    <section class="explore">
+      <span class="section-label">Explore</span>
+      <h2>See It in Action</h2>
+
+      <!-- Example 1 -->
+      <h3>Example 1: String Indexing and Slicing</h3>
+      <p>Every character in a string has a <strong>position number</strong> called an <strong>index</strong>. Python starts counting from <strong>0</strong>, not 1. You can use these positions to pull out individual characters or &ldquo;slices&rdquo; of text. Click <strong>Run Code</strong> to see how it works:</p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Python Code</span>
+          <div>
+            <button class="copy-button">Copy Code</button>
+            <button class="run-button">Run Code</button>
+          </div>
+        </div>
+        <pre><code contenteditable="true">message = "Hello World"
+
+# Indexing - get a single character
+print(message[0])     # First character
+print(message[6])     # Seventh character (index 6)
+
+# Slicing - get a section of the string
+print(message[0:5])   # Characters from index 0 up to (not including) 5
+print(message[-5:])   # Last 5 characters
+
+# The full string, backwards
+print(message[::-1])</code></pre>
+        <div class="output-box empty">(click "Run Code" to see output)</div>
+      </div>
+
+      <p>Notice that <code>message[0:5]</code> gives us <code>Hello</code> &mdash; it starts at index 0 and stops <em>before</em> index 5. The slice <code>message[-5:]</code> uses a negative index to count from the end, giving us <code>World</code>. And <code>[::-1]</code> is a neat trick that reverses the entire string!</p>
+
+      <div class="try-this">
+        <strong>Try This:</strong> Change the message to your own sentence. Can you slice out just one word from it? Try <code>message[6:11]</code> or use negative indices like <code>message[-3:]</code> to grab the last three characters. What happens if you try <code>message[0:5:2]</code>? (That third number is the <em>step</em>.)
+      </div>
+
+      <!-- Example 2 -->
+      <h3>Example 2: String Methods</h3>
+      <p>Python strings come with dozens of built-in <strong>methods</strong> &mdash; special functions that you call using a dot after the string. These let you transform text in all sorts of useful ways:</p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Python Code</span>
+          <div>
+            <button class="copy-button">Copy Code</button>
+            <button class="run-button">Run Code</button>
+          </div>
+        </div>
+        <pre><code contenteditable="true">text = "  Hello, Python Learners!  "
+
+# Changing case
+print(text.upper())          # ALL CAPS
+print(text.lower())          # all lowercase
+print(text.title())          # Title Case
+
+# Removing whitespace
+print(text.strip())          # Remove spaces from both ends
+
+# Replacing text
+print(text.replace("Python", "Amazing"))
+
+# Counting and finding
+message = "abracadabra"
+print(message.count("a"))    # How many times does 'a' appear?
+print(message.find("cad"))   # At which index does 'cad' start?</code></pre>
+        <div class="output-box empty">(click "Run Code" to see output)</div>
+      </div>
+
+      <p>Each of these methods <strong>returns a new string</strong> &mdash; the original is never changed. The <code>.strip()</code> method is especially useful when processing user input, since people often accidentally add extra spaces. The <code>.find()</code> method returns <code>-1</code> if the text is not found.</p>
+
+      <div class="try-this">
+        <strong>Try This:</strong> Try chaining methods together, like <code>text.strip().upper()</code>. What does <code>"hello world".replace("o", "0").replace("l", "1")</code> do? Can you use <code>.count()</code> to count how many times the letter &ldquo;e&rdquo; appears in a sentence of your choice?
+      </div>
+
+      <!-- Example 3 -->
+      <h3>Example 3: String Checking</h3>
+      <p>Sometimes you don&rsquo;t want to <em>change</em> a string &mdash; you just want to <em>check</em> something about it. Python has methods that return <code>True</code> or <code>False</code>, and you can also use the <code>in</code> keyword to search for text within a string:</p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Python Code</span>
+          <div>
+            <button class="copy-button">Copy Code</button>
+            <button class="run-button">Run Code</button>
+          </div>
+        </div>
+        <pre><code contenteditable="true"># Checking what a string starts or ends with
+filename = "homework.pdf"
+print(filename.startswith("home"))   # True
+print(filename.endswith(".pdf"))     # True
+print(filename.endswith(".docx"))    # False
+
+# Checking character types
+pin = "1234"
+word = "Hello"
+mixed = "abc123"
+
+print(pin.isdigit())     # True - all characters are digits
+print(word.isalpha())    # True - all characters are letters
+print(mixed.isalpha())   # False - contains digits too
+
+# Using 'in' to search within a string
+sentence = "The quick brown fox jumps over the lazy dog"
+print("fox" in sentence)         # True
+print("cat" in sentence)         # False
+print("fox" not in sentence)     # False</code></pre>
+        <div class="output-box empty">(click "Run Code" to see output)</div>
+      </div>
+
+      <p>The <code>in</code> keyword is incredibly useful &mdash; it checks whether one string appears anywhere inside another. Combined with <code>if</code> statements, this lets you build things like search features and input validation. The <code>.startswith()</code> and <code>.endswith()</code> methods are perfect for checking file extensions or URL prefixes.</p>
+
+      <div class="try-this">
+        <strong>Try This:</strong> Try checking if your name contains certain letters using <code>in</code>. What does <code>"12.5".isdigit()</code> return, and why? Test <code>"HELLO".isupper()</code> and <code>"hello".islower()</code>. Can you think of a real situation where <code>.endswith()</code> would be useful?
+      </div>
+
+    </section>
+
+    <!-- ==================== UNDERSTAND ==================== -->
+    <section class="understand">
+      <span class="section-label">Understand</span>
+      <h2>How Does It Work?</h2>
+
+      <h3>Strings Are Sequences</h3>
+      <p>A string in Python is a <strong>sequence of characters</strong>, much like a list is a sequence of items. Each character has a numbered position (an <strong>index</strong>), starting at 0 for the first character. This means you can access any character by its position, loop through every character one at a time, and use slicing to extract sections.</p>
+
+      <p>For the string <code>"Python"</code>, the indices look like this:</p>
+
+      <table>
+        <tr>
+          <th>Character</th>
+          <td>P</td>
+          <td>y</td>
+          <td>t</td>
+          <td>h</td>
+          <td>o</td>
+          <td>n</td>
+        </tr>
+        <tr>
+          <th>Index</th>
+          <td>0</td>
+          <td>1</td>
+          <td>2</td>
+          <td>3</td>
+          <td>4</td>
+          <td>5</td>
+        </tr>
+        <tr>
+          <th>Negative index</th>
+          <td>-6</td>
+          <td>-5</td>
+          <td>-4</td>
+          <td>-3</td>
+          <td>-2</td>
+          <td>-1</td>
+        </tr>
+      </table>
+
+      <p>Negative indices count backwards from the end. So <code>"Python"[-1]</code> gives <code>"n"</code> (the last character), and <code>"Python"[-2]</code> gives <code>"o"</code>.</p>
+
+      <h3>Indexing and Slicing Syntax</h3>
+      <p>The full slicing syntax is <code>string[start:stop:step]</code>:</p>
+      <ul>
+        <li><strong>start</strong> &mdash; the index where the slice begins (included). Defaults to 0 if omitted.</li>
+        <li><strong>stop</strong> &mdash; the index where the slice ends (<em>not</em> included). Defaults to the end of the string if omitted.</li>
+        <li><strong>step</strong> &mdash; how many characters to skip. Defaults to 1. A step of <code>-1</code> reverses the string.</li>
+      </ul>
+
+      <p>Some useful examples:</p>
+      <table>
+        <tr>
+          <th>Expression</th>
+          <th>Result</th>
+          <th>Explanation</th>
+        </tr>
+        <tr>
+          <td><code>"Python"[0:3]</code></td>
+          <td><code>"Pyt"</code></td>
+          <td>Characters at index 0, 1, 2</td>
+        </tr>
+        <tr>
+          <td><code>"Python"[2:]</code></td>
+          <td><code>"thon"</code></td>
+          <td>From index 2 to the end</td>
+        </tr>
+        <tr>
+          <td><code>"Python"[:4]</code></td>
+          <td><code>"Pyth"</code></td>
+          <td>From the start up to index 4</td>
+        </tr>
+        <tr>
+          <td><code>"Python"[::2]</code></td>
+          <td><code>"Pto"</code></td>
+          <td>Every second character</td>
+        </tr>
+        <tr>
+          <td><code>"Python"[::-1]</code></td>
+          <td><code>"nohtyP"</code></td>
+          <td>The whole string reversed</td>
+        </tr>
+      </table>
+
+      <h3>Strings Are Immutable</h3>
+      <p>One of the most important things to understand about strings is that they are <strong>immutable</strong> &mdash; you cannot change them after they are created. When you call a method like <code>.upper()</code> or <code>.replace()</code>, Python does not modify the original string. Instead, it creates and returns a <strong>brand new string</strong>. If you want to keep the result, you must store it in a variable:</p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Python Code</span>
+          <div>
+            <button class="copy-button">Copy Code</button>
+            <button class="run-button">Run Code</button>
+          </div>
+        </div>
+        <pre><code contenteditable="true">greeting = "hello"
+
+# This does NOT change greeting
+greeting.upper()
+print(greeting)        # Still "hello"!
+
+# You must save the result
+greeting = greeting.upper()
+print(greeting)        # Now "HELLO"</code></pre>
+        <div class="output-box empty">(click "Run Code" to see output)</div>
+      </div>
+
+      <div class="key-concept">
+        <strong>Key Concept: Strings Are Immutable</strong>
+        String methods never change the original string. They always return a <em>new</em> string. If you want to use the result, you must assign it to a variable &mdash; for example, <code>name = name.upper()</code>. This is one of the most common mistakes beginners make!
+      </div>
+
+      <h3>Common String Methods Summary</h3>
+      <table>
+        <tr>
+          <th>Method</th>
+          <th>What It Does</th>
+          <th>Example</th>
+        </tr>
+        <tr>
+          <td><code>.upper()</code></td>
+          <td>Returns the string in uppercase</td>
+          <td><code>"hi".upper()</code> &rarr; <code>"HI"</code></td>
+        </tr>
+        <tr>
+          <td><code>.lower()</code></td>
+          <td>Returns the string in lowercase</td>
+          <td><code>"HI".lower()</code> &rarr; <code>"hi"</code></td>
+        </tr>
+        <tr>
+          <td><code>.title()</code></td>
+          <td>Capitalises the first letter of each word</td>
+          <td><code>"hi there".title()</code> &rarr; <code>"Hi There"</code></td>
+        </tr>
+        <tr>
+          <td><code>.strip()</code></td>
+          <td>Removes leading and trailing whitespace</td>
+          <td><code>" hi ".strip()</code> &rarr; <code>"hi"</code></td>
+        </tr>
+        <tr>
+          <td><code>.replace(old, new)</code></td>
+          <td>Replaces all occurrences of <em>old</em> with <em>new</em></td>
+          <td><code>"hello".replace("l", "r")</code> &rarr; <code>"herro"</code></td>
+        </tr>
+        <tr>
+          <td><code>.count(sub)</code></td>
+          <td>Counts how many times <em>sub</em> appears</td>
+          <td><code>"banana".count("a")</code> &rarr; <code>3</code></td>
+        </tr>
+        <tr>
+          <td><code>.find(sub)</code></td>
+          <td>Returns the index of the first occurrence, or <code>-1</code></td>
+          <td><code>"hello".find("ll")</code> &rarr; <code>2</code></td>
+        </tr>
+        <tr>
+          <td><code>.startswith(s)</code></td>
+          <td>Checks if the string begins with <em>s</em></td>
+          <td><code>"hello".startswith("he")</code> &rarr; <code>True</code></td>
+        </tr>
+        <tr>
+          <td><code>.endswith(s)</code></td>
+          <td>Checks if the string ends with <em>s</em></td>
+          <td><code>"hello".endswith("lo")</code> &rarr; <code>True</code></td>
+        </tr>
+        <tr>
+          <td><code>.isdigit()</code></td>
+          <td>Returns <code>True</code> if all characters are digits</td>
+          <td><code>"42".isdigit()</code> &rarr; <code>True</code></td>
+        </tr>
+        <tr>
+          <td><code>.isalpha()</code></td>
+          <td>Returns <code>True</code> if all characters are letters</td>
+          <td><code>"hi".isalpha()</code> &rarr; <code>True</code></td>
+        </tr>
+      </table>
+
+      <div class="warning">
+        <strong>Watch out:</strong> A very common misconception is thinking that <code>.replace()</code> changes the original string. It does <strong>not</strong>. For example, after running <code>name = "Alice"</code> followed by <code>name.replace("A", "a")</code>, the variable <code>name</code> is still <code>"Alice"</code>. You must write <code>name = name.replace("A", "a")</code> to save the change.
+      </div>
+
+      <div class="warning">
+        <strong>Watch out:</strong> Remember that string indexing starts at <strong>0</strong>, not 1. The first character of <code>"Hello"</code> is <code>"Hello"[0]</code>, which is <code>"H"</code>. Trying to access an index beyond the length of the string (e.g. <code>"Hello"[10]</code>) will cause an <code>IndexError</code>.
+      </div>
+    </section>
+
+    <!-- ==================== PRACTICE ==================== -->
+    <section class="practice">
+      <span class="section-label">Practice</span>
+      <h2>Your Turn</h2>
+
+      <!-- Exercise 1: Guided -->
+      <div class="exercise">
+        <div class="exercise-title">Exercise 1: Case Converter</div>
+        <div class="exercise-difficulty difficulty-1">Guided</div>
+        <p>Take the sentence below and print it in three different forms: <strong>uppercase</strong>, <strong>lowercase</strong>, and <strong>title case</strong>. The code is mostly written for you &mdash; just fill in the blanks with the correct string methods.</p>
+
+        <div class="pseudocode">
+          <div class="pseudocode-label">Pseudocode:</div>
+          STEP 1: Store a sentence in a variable<br />
+          STEP 2: Print the sentence converted to uppercase<br />
+          STEP 3: Print the sentence converted to lowercase<br />
+          STEP 4: Print the sentence converted to title case
+        </div>
+
+        <div class="code-block">
+          <div class="code-block-header">
+            <span class="code-block-label">Your Code</span>
+            <div>
+              <button class="copy-button">Copy Code</button>
+              <button class="run-button">Run Code</button>
+            </div>
+          </div>
+          <pre><code contenteditable="true">sentence = "the quick brown fox jumps over the lazy dog"
+
+# Print in uppercase (replace ____ with the correct method)
+print(sentence.____())
+
+# Print in lowercase
+print(sentence.____())
+
+# Print in title case
+print(sentence.____())</code></pre>
+          <div class="output-box empty">(click "Run Code" to see output)</div>
+        </div>
+
+        <div class="hint">
+          <div class="hint-title">Need a hint?</div>
+          <div class="hint-content">
+            <p>The three methods you need are: <code>.upper()</code> for all capitals, <code>.lower()</code> for all lowercase, and <code>.title()</code> for capitalising the first letter of each word.</p>
+            <p>Your completed code should look like:</p>
+            <p><code>print(sentence.upper())</code></p>
+            <p><code>print(sentence.lower())</code></p>
+            <p><code>print(sentence.title())</code></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Exercise 2: Partially Guided -->
+      <div class="exercise">
+        <div class="exercise-title">Exercise 2: Vowel Counter</div>
+        <div class="exercise-difficulty difficulty-2">Partially Guided</div>
+        <p>Write a program that counts how many <strong>vowels</strong> (a, e, i, o, u) are in a given word. You will need to loop through each character and check whether it is a vowel.</p>
+
+        <div class="pseudocode">
+          <div class="pseudocode-label">Pseudocode:</div>
+          STEP 1: Store a word in a variable<br />
+          STEP 2: Convert the word to lowercase (so &ldquo;A&rdquo; and &ldquo;a&rdquo; both count)<br />
+          STEP 3: Create a counter variable, starting at 0<br />
+          STEP 4: Loop through each character in the word<br />
+          STEP 5: If the character is in &ldquo;aeiou&rdquo;, add 1 to the counter<br />
+          STEP 6: Print the total number of vowels
+        </div>
+
+        <div class="code-block">
+          <div class="code-block-header">
+            <span class="code-block-label">Your Code</span>
+            <div>
+              <button class="copy-button">Copy Code</button>
+              <button class="run-button">Run Code</button>
+            </div>
+          </div>
+          <pre><code contenteditable="true">word = "Programming"
+word_lower = word.lower()
+count = 0
+
+for char in word_lower:
+    if char in "aeiou":
+        # Add 1 to the count
+        pass  # Replace this line
+
+print("The word '" + word + "' has", count, "vowels.")</code></pre>
+          <div class="output-box empty">(click "Run Code" to see output)</div>
+        </div>
+
+        <div class="hint">
+          <div class="hint-title">Need a hint?</div>
+          <div class="hint-content">
+            <p>Replace the <code>pass</code> line with <code>count = count + 1</code> (or the shorthand <code>count += 1</code>). This increases the counter by 1 each time a vowel is found.</p>
+            <p>The word &ldquo;Programming&rdquo; should have 3 vowels: o, a, i.</p>
+            <p>Try changing the word to your own name or a longer sentence and see if the count is correct!</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Exercise 3: Open-Ended -->
+      <div class="exercise">
+        <div class="exercise-title">Exercise 3: Text Processor</div>
+        <div class="exercise-difficulty difficulty-3">Open-Ended</div>
+        <p>Create a simple text processor that performs <strong>at least two</strong> of the following tasks on a sentence of your choice. Be creative!</p>
+        <ul>
+          <li><strong>Word censor:</strong> Replace a specific word with asterisks (e.g. replace &ldquo;bad&rdquo; with &ldquo;***&rdquo;)</li>
+          <li><strong>String reverser:</strong> Print the sentence backwards</li>
+          <li><strong>Acronym maker:</strong> Take the first letter of each word to form an acronym (e.g. &ldquo;as soon as possible&rdquo; &rarr; &ldquo;ASAP&rdquo;)</li>
+          <li><strong>Character report:</strong> Count letters, digits, and spaces separately</li>
+        </ul>
+
+        <div class="pseudocode">
+          <div class="pseudocode-label">Pseudocode:</div>
+          STEP 1: Store a sentence in a variable<br />
+          STEP 2: Choose at least two of the tasks above<br />
+          STEP 3: Use string methods, slicing, and/or loops to complete each task<br />
+          STEP 4: Print the results with clear labels so the output is easy to read
+        </div>
+
+        <div class="code-block">
+          <div class="code-block-header">
+            <span class="code-block-label">Your Code</span>
+            <div>
+              <button class="copy-button">Copy Code</button>
+              <button class="run-button">Run Code</button>
+            </div>
+          </div>
+          <pre><code contenteditable="true"># Text Processor
+# Choose a sentence and perform at least two tasks on it
+
+sentence = "Python Is Super Cool"
+
+# Task 1: Censor a word
+# (replace a word with asterisks)
+
+# Task 2: Reverse the string
+# (use slicing to reverse it)
+
+# Task 3: Create an acronym
+# (take the first letter of each word)
+
+# Print your results!
+</code></pre>
+          <div class="output-box empty">(click "Run Code" to see output)</div>
+        </div>
+
+        <div class="hint">
+          <div class="hint-title">Need a hint?</div>
+          <div class="hint-content">
+            <p>Here are some approaches for each task:</p>
+            <ul>
+              <li><strong>Censor:</strong> Use <code>sentence.replace("Cool", "****")</code></li>
+              <li><strong>Reverse:</strong> Use <code>sentence[::-1]</code></li>
+              <li><strong>Acronym:</strong> Use <code>sentence.split()</code> to get a list of words, then loop through them and take <code>word[0]</code> from each. Build up the acronym by adding each first letter to an empty string.</li>
+              <li><strong>Character report:</strong> Loop through each character and use <code>.isalpha()</code>, <code>.isdigit()</code>, and check for <code>" "</code> to count each type.</li>
+            </ul>
+            <p>Here is an example that does all three:</p>
+            <p><code>censored = sentence.replace("Cool", "****")</code></p>
+            <p><code>reversed_text = sentence[::-1]</code></p>
+            <p><code>acronym = ""</code></p>
+            <p><code>for word in sentence.split():</code></p>
+            <p><code>&nbsp;&nbsp;&nbsp;&nbsp;acronym = acronym + word[0]</code></p>
+            <p><code>print("Censored:", censored)</code></p>
+            <p><code>print("Reversed:", reversed_text)</code></p>
+            <p><code>print("Acronym:", acronym.upper())</code></p>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ==================== REFLECT ==================== -->
+    <section class="reflect">
+      <span class="section-label">Reflect</span>
+      <h2>Think About It</h2>
+
+      <p>Take a moment to think about what you&rsquo;ve learnt in this chapter. Try to answer these questions in your head or discuss them with a classmate:</p>
+
+      <ul>
+        <li>Why does Python start counting string indices at 0 instead of 1? Can you think of any advantages this might have?</li>
+        <li>What does it mean for strings to be <strong>immutable</strong>? Why do you think Python was designed this way?</li>
+        <li>If you wanted to check whether a user&rsquo;s input was a valid email address, which string methods might you use? (Think about what an email address looks like.)</li>
+        <li>Why is it useful to convert a string to lowercase before searching for something inside it?</li>
+        <li>Can you think of a real-world app or website that must use string manipulation behind the scenes? What might it be doing with the text?</li>
+      </ul>
+
+      <h3>What&rsquo;s Next?</h3>
+      <p>No matter how carefully you write your code, things can go wrong: a user might type a word when you expected a number, a file might not exist, or a calculation might try to divide by zero. In <strong>Chapter 10: Error Handling</strong>, you&rsquo;ll learn how to anticipate these problems and handle them gracefully using <code>try</code> and <code>except</code> blocks &mdash; so your programs don&rsquo;t just crash but instead respond helpfully when something unexpected happens.</p>
+    </section>
+
+    <!-- ==================== NAVIGATION ==================== -->
+    <nav class="chapter-nav">
+      <a href="08-lists.html">&larr; Previous: Chapter 8: Lists</a>
+      <a href="../index.html">Course Home</a>
+      <a href="10-error-handling.html">Next: Chapter 10: Error Handling &rarr;</a>
+    </nav>
+
+  </main>
+
+  <footer class="site-footer">
+    <p>Python Fundamentals &mdash; A KS4 Learning Platform</p>
+    <p>Built with <a href="https://pyodide.org/">Pyodide</a> &mdash; Python runs in your browser</p>
+  </footer>
+
+  <script src="../js/pyodide-runner.js"></script>
+</body>
+</html>

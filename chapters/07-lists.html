@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chapter 7: Lists - Python Fundamentals</title>
+  <link rel="stylesheet" href="../css/style.css" />
+  <script src="https://cdn.jsdelivr.net/pyodide/v0.24.0/full/pyodide.js"></script>
+</head>
+<body>
+
+  <header class="site-header">
+    <p><a href="../index.html">&larr; Back to Course</a></p>
+    <h1>Chapter 7: Lists</h1>
+    <p class="subtitle">Store collections of data in a single variable</p>
+  </header>
+
+  <main>
+
+    <!-- ==================== THE IDEA ==================== -->
+    <section class="idea">
+      <span class="section-label">The Idea</span>
+      <h2>Why Does This Matter?</h2>
+      <p>What if you need to store not just one name, but a whole class register? You could create 30 separate variables &mdash; <code>student1</code>, <code>student2</code>, <code>student3</code>&hellip; &mdash; or you could use a <strong>list</strong>.</p>
+      <p>A list lets you store <strong>multiple items in a single variable</strong>, kept in order. Think of it like a numbered container where each slot holds one piece of data. This is one of the most important ideas in programming: almost every real application works with collections of data, not just single values.</p>
+      <p>You already use lists every day without thinking about it: shopping lists, music playlists, leaderboards in games, a register of names, or even the apps on your phone&rsquo;s home screen. In Python, a <strong>list</strong> works in exactly the same way &mdash; it stores items in a particular order, and you can add, remove, or change them whenever you like.</p>
+      <p><strong>By the end of this chapter, you will be able to:</strong></p>
+      <ul>
+        <li>Create lists that hold multiple items</li>
+        <li>Access individual items using their index position</li>
+        <li>Add and remove items from a list</li>
+        <li>Loop through a list to process every item</li>
+        <li>Use <code>len()</code> to find out how many items a list contains</li>
+      </ul>
+    </section>
+
+    <!-- ==================== EXPLORE ==================== -->
+    <section class="explore">
+      <span class="section-label">Explore</span>
+      <h2>See It in Action</h2>
+
+      <h3>Example 1: Creating and Accessing Lists</h3>
+      <p>A list is created using <strong>square brackets</strong> <code>[]</code> with items separated by commas. Each item has a position number called an <strong>index</strong>, starting from <strong>0</strong>.</p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Python Code</span>
+          <div>
+            <button class="copy-button">Copy Code</button>
+            <button class="run-button">Run Code</button>
+          </div>
+        </div>
+        <pre><code contenteditable="true"># Creating a list of fruits
+fruits = ["apple", "banana", "cherry"]
+
+# Print the whole list
+print(fruits)
+
+# Access individual items by index
+print(fruits[0])   # First item  (index 0)
+print(fruits[1])   # Second item (index 1)
+print(fruits[2])   # Third item  (index 2)
+
+# How many items are in the list?
+print("Number of fruits:", len(fruits))</code></pre>
+        <div class="output-box empty">(click "Run Code" to see output)</div>
+      </div>
+
+      <div class="try-this">
+        <strong>Try This:</strong> Change the list to contain your three favourite fruits. Then try printing <code>fruits[-1]</code> &mdash; what does a negative index do?
+      </div>
+
+      <h3>Example 2: Modifying Lists</h3>
+      <p>Lists are <strong>mutable</strong>, which means you can change them after they have been created. You can add new items, remove existing ones, or change an item at a specific position.</p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Python Code</span>
+          <div>
+            <button class="copy-button">Copy Code</button>
+            <button class="run-button">Run Code</button>
+          </div>
+        </div>
+        <pre><code contenteditable="true"># Start with a list of colours
+colours = ["red", "green", "blue"]
+print("Original list:", colours)
+
+# Add an item to the end
+colours.append("yellow")
+print("After append:", colours)
+
+# Change an item by index
+colours[1] = "purple"
+print("After changing index 1:", colours)
+
+# Remove a specific item
+colours.remove("blue")
+print("After removing blue:", colours)
+
+# Remove and return the last item
+last = colours.pop()
+print("Popped item:", last)
+print("Final list:", colours)</code></pre>
+        <div class="output-box empty">(click "Run Code" to see output)</div>
+      </div>
+
+      <div class="try-this">
+        <strong>Try This:</strong> Add a line that uses <code>colours.insert(0, "orange")</code> to put <code>"orange"</code> at the very start of the list. Where does it appear?
+      </div>
+
+      <h3>Example 3: Looping Through Lists</h3>
+      <p>One of the most powerful things about lists is that you can use a <code>for</code> loop to go through every item automatically, one at a time.</p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Python Code</span>
+          <div>
+            <button class="copy-button">Copy Code</button>
+            <button class="run-button">Run Code</button>
+          </div>
+        </div>
+        <pre><code contenteditable="true"># A list of scores
+scores = [85, 92, 78, 95, 88]
+
+# Loop through and print each score
+print("All scores:")
+for score in scores:
+    print("  Score:", score)
+
+# Calculate the total using a loop
+total = 0
+for score in scores:
+    total = total + score
+
+average = total / len(scores)
+print("Total:", total)
+print("Average:", average)</code></pre>
+        <div class="output-box empty">(click "Run Code" to see output)</div>
+      </div>
+
+      <div class="try-this">
+        <strong>Try This:</strong> Change the scores to your own test marks from this term. Add more items to the list and see how the average updates automatically.
+      </div>
+    </section>
+
+    <!-- ==================== UNDERSTAND ==================== -->
+    <section class="understand">
+      <span class="section-label">Understand</span>
+      <h2>How Does It Work?</h2>
+
+      <h3>List Syntax</h3>
+      <p>A list is created with <strong>square brackets</strong>, and each item is separated by a <strong>comma</strong>:</p>
+      <pre><code>my_list = ["item1", "item2", "item3"]</code></pre>
+      <p>Lists can hold strings, integers, floats, booleans &mdash; even a mixture of types &mdash; although in practice you will usually store items of the same type in a single list.</p>
+      <pre><code># A list with mixed types (valid, but uncommon)
+mixed = ["Alice", 16, True, 9.5]</code></pre>
+
+      <h3>Indexing: It Starts at 0</h3>
+      <p>Every item in a list has a position number called its <strong>index</strong>. The crucial thing to remember is that indexing starts at <strong>0</strong>, not 1.</p>
+
+      <table>
+        <tr>
+          <th>Item</th>
+          <td>"apple"</td>
+          <td>"banana"</td>
+          <td>"cherry"</td>
+        </tr>
+        <tr>
+          <th>Index</th>
+          <td>0</td>
+          <td>1</td>
+          <td>2</td>
+        </tr>
+      </table>
+
+      <p>You can also use <strong>negative indexing</strong> to count backwards from the end of the list. <code>-1</code> is the last item, <code>-2</code> is the second-to-last, and so on.</p>
+
+      <pre><code>fruits = ["apple", "banana", "cherry"]
+print(fruits[-1])   # cherry  (last item)
+print(fruits[-2])   # banana  (second-to-last)</code></pre>
+
+      <div class="key-concept">
+        <strong>Key Concept:</strong>
+        Lists are <strong>mutable</strong> &mdash; you can change their contents after creation. This is different from strings, which cannot be changed once created. You can add, remove, replace, and reorder list items at any time.
+      </div>
+
+      <h3>Common List Methods</h3>
+      <p>Python gives you many built-in methods to work with lists. Here are the ones you will use most often:</p>
+
+      <table>
+        <tr>
+          <th>Method / Function</th>
+          <th>What It Does</th>
+          <th>Example</th>
+        </tr>
+        <tr>
+          <td><code>append(item)</code></td>
+          <td>Adds an item to the end of the list</td>
+          <td><code>fruits.append("mango")</code></td>
+        </tr>
+        <tr>
+          <td><code>insert(index, item)</code></td>
+          <td>Inserts an item at a specific position</td>
+          <td><code>fruits.insert(1, "kiwi")</code></td>
+        </tr>
+        <tr>
+          <td><code>remove(item)</code></td>
+          <td>Removes the first occurrence of the item</td>
+          <td><code>fruits.remove("banana")</code></td>
+        </tr>
+        <tr>
+          <td><code>pop()</code></td>
+          <td>Removes and returns the last item (or item at a given index)</td>
+          <td><code>last = fruits.pop()</code></td>
+        </tr>
+        <tr>
+          <td><code>sort()</code></td>
+          <td>Sorts the list in ascending order</td>
+          <td><code>fruits.sort()</code></td>
+        </tr>
+        <tr>
+          <td><code>len(list)</code></td>
+          <td>Returns the number of items in the list</td>
+          <td><code>print(len(fruits))</code></td>
+        </tr>
+      </table>
+
+      <h3>Looping Through a List</h3>
+      <p>Using a <code>for</code> loop with a list is one of the most common patterns in Python. The loop variable takes the value of each item in turn:</p>
+      <pre><code>for item in my_list:
+    print(item)</code></pre>
+      <p>This links directly to what you learnt in <strong>Chapter 5: Loops</strong>. The <code>for</code> loop is the natural partner of a list.</p>
+
+      <h3>Common Misconceptions</h3>
+      <div class="warning">
+        <strong>Watch out:</strong> The most common mistake with lists is forgetting that the first index is <strong>0</strong>, not 1. If your list has 5 items, the valid indices are 0, 1, 2, 3, and 4. Trying to access index 5 will cause an <code>IndexError</code>.
+      </div>
+      <div class="warning">
+        <strong>Watch out:</strong> <code>remove()</code> deletes by <strong>value</strong>, not by position. If you write <code>my_list.remove(3)</code>, Python removes the item whose value is <code>3</code>, not the item at index 3. To remove by position, use <code>pop(index)</code>.
+      </div>
+    </section>
+
+    <!-- ==================== PRACTICE ==================== -->
+    <section class="practice">
+      <span class="section-label">Practice</span>
+      <h2>Your Turn</h2>
+
+      <!-- Exercise 1: Guided -->
+      <div class="exercise">
+        <div class="exercise-title">Exercise 1: Favourite Foods</div>
+        <div class="exercise-difficulty difficulty-1">Guided</div>
+        <p>Create a list containing 5 of your favourite foods, then use a <code>for</code> loop to print each one on its own line. After the loop, print how many foods are in your list.</p>
+
+        <div class="pseudocode">
+          <div class="pseudocode-label">Pseudocode:</div>
+          STEP 1: Create a list called <strong>foods</strong> with 5 items<br />
+          STEP 2: Use a <strong>for</strong> loop to go through each food in the list<br />
+          STEP 3: Inside the loop, <strong>print</strong> the food<br />
+          STEP 4: After the loop, print the <strong>length</strong> of the list
+        </div>
+
+        <div class="code-block">
+          <div class="code-block-header">
+            <span class="code-block-label">Your Code</span>
+            <div>
+              <button class="copy-button">Copy Code</button>
+              <button class="run-button">Run Code</button>
+            </div>
+          </div>
+          <pre><code contenteditable="true"># Exercise 1 - Favourite Foods
+# Step 1: Create your list of 5 favourite foods
+foods = ["____", "____", "____", "____", "____"]
+
+# Step 2 & 3: Loop through and print each food
+for food in ____:
+    print(____)
+
+# Step 4: Print how many foods are in the list
+print("I have", ____(____),"favourite foods!")</code></pre>
+          <div class="output-box empty">(click "Run Code" to see output)</div>
+        </div>
+
+        <div class="hint">
+          <div class="hint-title">Need a hint?</div>
+          <div class="hint-content">Replace each <code>____</code> with the correct values. The loop variable <code>food</code> holds each item in turn, so you can print it directly. Use <code>len(foods)</code> to get the total number of items.</div>
+        </div>
+      </div>
+
+      <!-- Exercise 2: Partially Guided -->
+      <div class="exercise">
+        <div class="exercise-title">Exercise 2: To-Do List Manager</div>
+        <div class="exercise-difficulty difficulty-2">Partially Guided</div>
+        <p>Create a simple to-do list program. Start with a few tasks already in the list, then add a new task using <code>append()</code>, remove a completed task using <code>remove()</code>, and print the final list.</p>
+
+        <div class="pseudocode">
+          <div class="pseudocode-label">Pseudocode:</div>
+          STEP 1: Create a list called <strong>tasks</strong> with 3 starting items<br />
+          STEP 2: Print the original list of tasks<br />
+          STEP 3: <strong>Append</strong> a new task to the list<br />
+          STEP 4: <strong>Remove</strong> one completed task from the list<br />
+          STEP 5: Print the updated list<br />
+          STEP 6: Print how many tasks remain
+        </div>
+
+        <div class="code-block">
+          <div class="code-block-header">
+            <span class="code-block-label">Your Code</span>
+            <div>
+              <button class="copy-button">Copy Code</button>
+              <button class="run-button">Run Code</button>
+            </div>
+          </div>
+          <pre><code contenteditable="true"># Exercise 2 - To-Do List Manager
+# Step 1: Create your starting task list
+tasks = ["Do homework", "Tidy room", "Walk the dog"]
+print("My to-do list:", tasks)
+
+# Step 3: Add a new task
+
+# Step 4: Remove a completed task
+
+# Step 5: Print the updated list
+print("Updated to-do list:", tasks)
+
+# Step 6: Print how many tasks remain
+</code></pre>
+          <div class="output-box empty">(click "Run Code" to see output)</div>
+        </div>
+
+        <div class="hint">
+          <div class="hint-title">Need a hint?</div>
+          <div class="hint-content">To add a task, use <code>tasks.append("Your new task")</code>. To remove a task, use <code>tasks.remove("Tidy room")</code> (or whichever task you have completed). Remember the string must match exactly, including capital letters.</div>
+        </div>
+      </div>
+
+      <!-- Exercise 3: Open-Ended -->
+      <div class="exercise">
+        <div class="exercise-title">Exercise 3: Student Score Analyser</div>
+        <div class="exercise-difficulty difficulty-3">Open-Ended</div>
+        <p>Create a program that stores a list of student scores, then finds the <strong>highest</strong> score, the <strong>lowest</strong> score, and calculates the <strong>average</strong>. Print all three results with clear labels.</p>
+
+        <div class="pseudocode">
+          <div class="pseudocode-label">Pseudocode:</div>
+          STEP 1: Create a list of at least 6 student scores<br />
+          STEP 2: Find the highest score (you could use <code>max()</code> or a loop)<br />
+          STEP 3: Find the lowest score (you could use <code>min()</code> or a loop)<br />
+          STEP 4: Calculate the total of all scores<br />
+          STEP 5: Calculate the average (total divided by number of scores)<br />
+          STEP 6: Print the highest, lowest, and average with labels
+        </div>
+
+        <div class="code-block">
+          <div class="code-block-header">
+            <span class="code-block-label">Your Code</span>
+            <div>
+              <button class="copy-button">Copy Code</button>
+              <button class="run-button">Run Code</button>
+            </div>
+          </div>
+          <pre><code contenteditable="true"># Exercise 3 - Student Score Analyser
+# Build a program that analyses a list of scores
+
+# Your code here
+</code></pre>
+          <div class="output-box empty">(click "Run Code" to see output)</div>
+        </div>
+
+        <div class="hint">
+          <div class="hint-title">Need a hint?</div>
+          <div class="hint-content">Python has built-in functions <code>max()</code>, <code>min()</code>, and <code>sum()</code> that work on lists of numbers. For example, <code>max(scores)</code> returns the highest value. To calculate the average, divide <code>sum(scores)</code> by <code>len(scores)</code>. For an extra challenge, try finding the highest score using a loop and an <code>if</code> statement instead of <code>max()</code>.</div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ==================== REFLECT ==================== -->
+    <section class="reflect">
+      <span class="section-label">Reflect</span>
+      <h2>Think About It</h2>
+      <ul>
+        <li>Why do you think Python starts counting list indices at 0 instead of 1?</li>
+        <li>If you had a list of 100 student names, how would a loop be better than accessing each one individually?</li>
+        <li>What is the difference between <code>remove()</code> and <code>pop()</code>? When would you use each one?</li>
+        <li>Can you think of three examples from real life where data is naturally stored as a list?</li>
+      </ul>
+
+      <h3>What&rsquo;s Next?</h3>
+      <p>Lists are brilliant for storing collections of items, but what if you want to store not just values, but <strong>pairs</strong> of related information? For example, a student&rsquo;s name <em>and</em> their score together. In <strong>Chapter 8: Dictionaries</strong>, you will learn how to link keys to values &mdash; unlocking a whole new way of organising data.</p>
+    </section>
+
+    <!-- ==================== NAVIGATION ==================== -->
+    <nav class="chapter-nav">
+      <a href="06-functions.html">&larr; Previous: Functions</a>
+      <a href="../index.html">Course Home</a>
+      <a href="08-dictionaries.html">Next: Dictionaries &rarr;</a>
+    </nav>
+
+  </main>
+
+  <footer class="site-footer">
+    <p>Python Fundamentals &mdash; A KS4 Learning Platform</p>
+  </footer>
+
+  <script src="../js/pyodide-runner.js"></script>
+</body>
+</html>

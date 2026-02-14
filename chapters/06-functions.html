@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chapter 6: Functions - Python Fundamentals</title>
+  <link rel="stylesheet" href="../css/style.css" />
+  <script src="https://cdn.jsdelivr.net/pyodide/v0.24.0/full/pyodide.js"></script>
+</head>
+<body>
+
+  <!-- ==================== HEADER ==================== -->
+  <header class="site-header">
+    <a href="../index.html">&larr; Back to Home</a>
+    <h1>Chapter 6: Functions</h1>
+    <p class="subtitle">Organise your code into reusable blocks &mdash; write once, use many times</p>
+  </header>
+
+  <main>
+
+    <!-- ==================== THE IDEA ==================== -->
+    <section class="idea">
+      <span class="section-label">The Idea</span>
+      <h2>Why Functions?</h2>
+
+      <p>You already use functions every day &mdash; <code>print()</code> is a function! So is <code>input()</code>, <code>len()</code>, and <code>range()</code>. But what if you could create your <em>own</em> functions that do exactly what you need?</p>
+
+      <p><strong>Functions are reusable blocks of code with a name.</strong> You define them once, and then you can <em>call</em> (run) them whenever you like &mdash; as many times as you want.</p>
+
+      <div class="key-concept">
+        <strong>Real-world analogy</strong>
+        Think of a recipe. You write it down once, and then every time you want that dish, you follow the same steps. You do not rewrite the recipe each time &mdash; you just say &ldquo;make the pasta bake&rdquo; and follow the instructions you already have. A function works in exactly the same way: you <em>define</em> it once, then <em>call</em> it whenever you want that piece of code to run.
+      </div>
+
+      <h3>What you will learn</h3>
+      <ul>
+        <li>How to <strong>define</strong> your own functions using <code>def</code></li>
+        <li>How to use <strong>parameters and arguments</strong> to pass information into a function</li>
+        <li>How to use <strong>return values</strong> to get information back out</li>
+        <li>How <strong>scope</strong> affects where variables can be used</li>
+      </ul>
+    </section>
+
+    <!-- ==================== EXPLORE ==================== -->
+    <section class="explore">
+      <span class="section-label">Explore</span>
+      <h2>See Functions in Action</h2>
+
+      <p>Work through each example below. Read the code, run it, then try the suggestions underneath.</p>
+
+      <!-- Example 1: Defining and Calling -->
+      <h3>Example 1 &mdash; Defining and Calling a Function</h3>
+      <p>The simplest possible function: it takes no information in and just does one thing.</p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Python Code</span>
+          <div>
+            <button class="copy-button">Copy Code</button>
+            <button class="run-button">Run Code</button>
+          </div>
+        </div>
+        <pre><code contenteditable="true">def greet():
+    print("Hello!")
+
+greet()</code></pre>
+        <div class="output-box empty">(click "Run Code" to see output)</div>
+      </div>
+
+      <div class="try-this">
+        <strong>Try this:</strong>
+        <ul>
+          <li>Call <code>greet()</code> three times in a row. What happens?</li>
+          <li>Change the message inside the function to something else, then run it again.</li>
+          <li>What happens if you remove the line <code>greet()</code> and only keep the <code>def</code> block? Why?</li>
+        </ul>
+      </div>
+
+      <!-- Example 2: Parameters -->
+      <h3>Example 2 &mdash; Parameters</h3>
+      <p>Functions become much more useful when you can pass information into them. The values inside the brackets are called <strong>parameters</strong>.</p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Python Code</span>
+          <div>
+            <button class="copy-button">Copy Code</button>
+            <button class="run-button">Run Code</button>
+          </div>
+        </div>
+        <pre><code contenteditable="true">def greet(name):
+    print(f"Hello, {name}!")
+
+greet("Alice")
+greet("Bob")
+greet("Charlie")</code></pre>
+        <div class="output-box empty">(click "Run Code" to see output)</div>
+      </div>
+
+      <div class="try-this">
+        <strong>Try this:</strong>
+        <ul>
+          <li>Call <code>greet()</code> with your own name.</li>
+          <li>Add a second parameter called <code>greeting</code> so you can say <code>greet("Alice", "Good morning")</code>.</li>
+          <li>What error do you get if you call <code>greet()</code> without any argument? Read the error message carefully.</li>
+        </ul>
+      </div>
+
+      <!-- Example 3: Return Values -->
+      <h3>Example 3 &mdash; Return Values</h3>
+      <p>Sometimes you want a function to <em>give a value back</em> rather than just printing something. That is what <code>return</code> does.</p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Python Code</span>
+          <div>
+            <button class="copy-button">Copy Code</button>
+            <button class="run-button">Run Code</button>
+          </div>
+        </div>
+        <pre><code contenteditable="true">def add(a, b):
+    return a + b
+
+result = add(3, 4)
+print(result)</code></pre>
+        <div class="output-box empty">(click "Run Code" to see output)</div>
+      </div>
+
+      <div class="try-this">
+        <strong>Try this:</strong>
+        <ul>
+          <li>Change the numbers passed to <code>add()</code> and check the result.</li>
+          <li>Create a new function called <code>multiply</code> that returns the product of two numbers.</li>
+          <li>Try using the return value directly in a print: <code>print(add(10, 20))</code>.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ==================== UNDERSTAND ==================== -->
+    <section class="understand">
+      <span class="section-label">Understand</span>
+      <h2>How Functions Work</h2>
+
+      <h3>The anatomy of a function</h3>
+      <p>Every function definition has the same structure:</p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Python Code</span>
+          <div>
+            <button class="copy-button">Copy Code</button>
+            <button class="run-button">Run Code</button>
+          </div>
+        </div>
+        <pre><code contenteditable="true">def say_hello(name):
+    message = f"Hello, {name}! Welcome."
+    print(message)
+
+say_hello("Priya")</code></pre>
+        <div class="output-box empty">(click "Run Code" to see output)</div>
+      </div>
+
+      <ul>
+        <li><code>def</code> &mdash; the keyword that tells Python you are <strong>defining</strong> a function</li>
+        <li><code>say_hello</code> &mdash; the <strong>function name</strong> (you choose this; use snake_case)</li>
+        <li><code>(name)</code> &mdash; the <strong>parentheses</strong> contain any <strong>parameters</strong> the function needs</li>
+        <li><code>:</code> &mdash; the <strong>colon</strong> marks the start of the function body</li>
+        <li>The <strong>indented lines</strong> underneath are the <strong>body</strong> &mdash; the code that runs when the function is called</li>
+      </ul>
+
+      <h3>Parameters vs arguments</h3>
+      <p>These two words are often mixed up, but there is a simple difference:</p>
+      <table>
+        <thead>
+          <tr>
+            <th>Term</th>
+            <th>Where?</th>
+            <th>Example</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Parameter</strong></td>
+            <td>In the function <em>definition</em></td>
+            <td><code>def greet(<strong>name</strong>):</code></td>
+          </tr>
+          <tr>
+            <td><strong>Argument</strong></td>
+            <td>In the function <em>call</em></td>
+            <td><code>greet(<strong>"Alice"</strong>)</code></td>
+          </tr>
+        </tbody>
+      </table>
+      <p>Think of the parameter as a label on an empty box. The argument is what you put inside that box when you use the function.</p>
+
+      <h3><code>return</code> vs <code>print</code></h3>
+      <p>This is one of the most important distinctions to understand:</p>
+      <table>
+        <thead>
+          <tr>
+            <th></th>
+            <th><code>return</code></th>
+            <th><code>print</code></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>What it does</strong></td>
+            <td>Gives a value <em>back</em> to the code that called the function</td>
+            <td>Displays text on the screen</td>
+          </tr>
+          <tr>
+            <td><strong>Can you store the result?</strong></td>
+            <td>Yes &mdash; <code>x = add(3, 4)</code></td>
+            <td>No &mdash; <code>x = print("hi")</code> stores <code>None</code></td>
+          </tr>
+          <tr>
+            <td><strong>When to use</strong></td>
+            <td>When you need to use the result later</td>
+            <td>When you just want to show something to the user</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Python Code</span>
+          <div>
+            <button class="copy-button">Copy Code</button>
+            <button class="run-button">Run Code</button>
+          </div>
+        </div>
+        <pre><code contenteditable="true"># Compare return vs print
+def add_return(a, b):
+    return a + b
+
+def add_print(a, b):
+    print(a + b)
+
+result1 = add_return(3, 4)
+result2 = add_print(3, 4)
+
+print(f"result1 = {result1}")
+print(f"result2 = {result2}")</code></pre>
+        <div class="output-box empty">(click "Run Code" to see output)</div>
+      </div>
+
+      <h3>Why functions matter</h3>
+      <ul>
+        <li><strong>Reusability</strong> &mdash; Write code once, use it as many times as you need</li>
+        <li><strong>Readability</strong> &mdash; A well-named function makes your program easier to understand</li>
+        <li><strong>Organisation</strong> &mdash; Break a big problem into smaller, manageable pieces</li>
+        <li><strong>Testing</strong> &mdash; Smaller blocks of code are easier to check and fix</li>
+      </ul>
+
+      <div class="key-concept">
+        <strong>Key concept: Functions must be defined before they are called</strong>
+        Python reads your code from top to bottom. If you try to call a function <em>above</em> the line where it is defined, you will get a <code>NameError</code>. Always put your function definitions at the top of your program.
+      </div>
+
+      <div class="warning">
+        <strong>Common misconception: Defining is not calling</strong>
+        <p>A very common mistake is to write a function with <code>def</code> but then forget to actually <em>call</em> it. Just defining a function does not run the code inside it &mdash; you must call it by writing the function name followed by parentheses, e.g. <code>greet()</code>.</p>
+      </div>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Python Code</span>
+          <div>
+            <button class="copy-button">Copy Code</button>
+            <button class="run-button">Run Code</button>
+          </div>
+        </div>
+        <pre><code contenteditable="true"># This does NOTHING visible - the function is defined but never called
+def say_goodbye():
+    print("Goodbye!")
+
+# Uncomment the line below to actually run the function:
+# say_goodbye()</code></pre>
+        <div class="output-box empty">(click "Run Code" to see output)</div>
+      </div>
+
+      <h3>Scope &mdash; where variables live</h3>
+      <p>Variables created <em>inside</em> a function only exist inside that function. This is called <strong>local scope</strong>. Variables created <em>outside</em> any function are in the <strong>global scope</strong> and can be seen everywhere.</p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Python Code</span>
+          <div>
+            <button class="copy-button">Copy Code</button>
+            <button class="run-button">Run Code</button>
+          </div>
+        </div>
+        <pre><code contenteditable="true">def my_function():
+    secret = "I only exist inside the function"
+    print(secret)
+
+my_function()
+
+# This next line will cause an error - try it!
+# print(secret)</code></pre>
+        <div class="output-box empty">(click "Run Code" to see output)</div>
+      </div>
+    </section>
+
+    <!-- ==================== PRACTICE ==================== -->
+    <section class="practice">
+      <span class="section-label">Practice</span>
+      <h2>Your Turn</h2>
+      <p>Work through these exercises in order. Each one builds on the skills from the last.</p>
+
+      <!-- Exercise 1 -->
+      <div class="exercise">
+        <h3 class="exercise-title">Exercise 1 &mdash; Personalised Greeting</h3>
+        <span class="exercise-difficulty difficulty-1">Guided</span>
+        <p>Write a function called <code>personalised_greeting</code> that takes a person's <code>name</code> as a parameter and prints a friendly, personalised greeting.</p>
+        <p>For example, calling <code>personalised_greeting("Amara")</code> should print something like <code>Hi Amara, welcome to Python!</code></p>
+
+        <div class="pseudocode">
+          <div class="pseudocode-label">Pseudocode</div>
+          <p>DEFINE function personalised_greeting that takes name<br />
+          &nbsp;&nbsp;&nbsp;&nbsp;PRINT a greeting that includes the name<br />
+          END function<br /><br />
+          CALL personalised_greeting with a name</p>
+        </div>
+
+        <div class="code-block">
+          <div class="code-block-header">
+            <span class="code-block-label">Python Code</span>
+            <div>
+              <button class="copy-button">Copy Code</button>
+              <button class="run-button">Run Code</button>
+            </div>
+          </div>
+          <pre><code contenteditable="true"># Exercise 1: Personalised Greeting
+# Write your function below
+
+def personalised_greeting(name):
+    # Replace the line below with your greeting
+    pass
+
+# Test your function
+personalised_greeting("Amara")
+personalised_greeting("James")</code></pre>
+          <div class="output-box empty">(click "Run Code" to see output)</div>
+        </div>
+
+        <div class="hint">
+          <div class="hint-title">Hint 1</div>
+          <div class="hint-content">
+            <p>Replace <code>pass</code> with a <code>print()</code> statement. Use an f-string to include the <code>name</code> parameter in the message: <code>print(f"Hi {name}, welcome to Python!")</code></p>
+          </div>
+        </div>
+
+        <div class="hint">
+          <div class="hint-title">Hint 2 &mdash; Full Solution</div>
+          <div class="hint-content">
+            <p><code>def personalised_greeting(name):</code><br />
+            <code>&nbsp;&nbsp;&nbsp;&nbsp;print(f"Hi {name}, welcome to Python!")</code></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Exercise 2 -->
+      <div class="exercise">
+        <h3 class="exercise-title">Exercise 2 &mdash; Area of a Rectangle</h3>
+        <span class="exercise-difficulty difficulty-2">Partially Guided</span>
+        <p>Write a function called <code>rectangle_area</code> that takes two parameters &mdash; <code>length</code> and <code>width</code> &mdash; and <strong>returns</strong> the area (length &times; width). Then call it and print the result.</p>
+
+        <div class="pseudocode">
+          <div class="pseudocode-label">Pseudocode</div>
+          <p>DEFINE function rectangle_area that takes length and width<br />
+          &nbsp;&nbsp;&nbsp;&nbsp;CALCULATE area as length multiplied by width<br />
+          &nbsp;&nbsp;&nbsp;&nbsp;RETURN area<br />
+          END function<br /><br />
+          STORE the result of calling rectangle_area with two numbers<br />
+          PRINT the result</p>
+        </div>
+
+        <div class="code-block">
+          <div class="code-block-header">
+            <span class="code-block-label">Python Code</span>
+            <div>
+              <button class="copy-button">Copy Code</button>
+              <button class="run-button">Run Code</button>
+            </div>
+          </div>
+          <pre><code contenteditable="true"># Exercise 2: Area of a Rectangle
+# Write your function below
+
+
+
+# Test your function
+area = rectangle_area(5, 3)
+print(f"The area is {area}")</code></pre>
+          <div class="output-box empty">(click "Run Code" to see output)</div>
+        </div>
+
+        <div class="hint">
+          <div class="hint-title">Hint 1</div>
+          <div class="hint-content">
+            <p>Start with <code>def rectangle_area(length, width):</code> and use <code>return</code> (not <code>print</code>) to send the result back.</p>
+          </div>
+        </div>
+
+        <div class="hint">
+          <div class="hint-title">Hint 2</div>
+          <div class="hint-content">
+            <p>Inside the function, calculate <code>area = length * width</code> and then <code>return area</code>. You can also write it in one line: <code>return length * width</code>.</p>
+          </div>
+        </div>
+
+        <div class="hint">
+          <div class="hint-title">Hint 3 &mdash; Full Solution</div>
+          <div class="hint-content">
+            <p><code>def rectangle_area(length, width):</code><br />
+            <code>&nbsp;&nbsp;&nbsp;&nbsp;return length * width</code></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Exercise 3 -->
+      <div class="exercise">
+        <h3 class="exercise-title">Exercise 3 &mdash; Mini Calculator</h3>
+        <span class="exercise-difficulty difficulty-3">Open-Ended</span>
+        <p>Create a mini calculator by writing <strong>four separate functions</strong>: <code>add</code>, <code>subtract</code>, <code>multiply</code>, and <code>divide</code>. Each function should take two numbers as parameters and <strong>return</strong> the result.</p>
+        <p>Then test each function by printing its output. For the <code>divide</code> function, think about what should happen if someone tries to divide by zero.</p>
+
+        <div class="pseudocode">
+          <div class="pseudocode-label">Pseudocode</div>
+          <p>DEFINE function add that takes a and b<br />
+          &nbsp;&nbsp;&nbsp;&nbsp;RETURN a plus b<br />
+          END function<br /><br />
+          DEFINE function subtract that takes a and b<br />
+          &nbsp;&nbsp;&nbsp;&nbsp;RETURN a minus b<br />
+          END function<br /><br />
+          DEFINE function multiply that takes a and b<br />
+          &nbsp;&nbsp;&nbsp;&nbsp;RETURN a times b<br />
+          END function<br /><br />
+          DEFINE function divide that takes a and b<br />
+          &nbsp;&nbsp;&nbsp;&nbsp;IF b equals 0<br />
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RETURN an error message<br />
+          &nbsp;&nbsp;&nbsp;&nbsp;ELSE<br />
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RETURN a divided by b<br />
+          END function<br /><br />
+          CALL each function and PRINT the results</p>
+        </div>
+
+        <div class="code-block">
+          <div class="code-block-header">
+            <span class="code-block-label">Python Code</span>
+            <div>
+              <button class="copy-button">Copy Code</button>
+              <button class="run-button">Run Code</button>
+            </div>
+          </div>
+          <pre><code contenteditable="true"># Exercise 3: Mini Calculator
+# Write your four functions below
+
+
+
+# Test your functions
+print(f"10 + 3 = {add(10, 3)}")
+print(f"10 - 3 = {subtract(10, 3)}")
+print(f"10 * 3 = {multiply(10, 3)}")
+print(f"10 / 3 = {divide(10, 3)}")
+print(f"10 / 0 = {divide(10, 0)}")</code></pre>
+          <div class="output-box empty">(click "Run Code" to see output)</div>
+        </div>
+
+        <div class="hint">
+          <div class="hint-title">Hint 1</div>
+          <div class="hint-content">
+            <p>Each function follows the same pattern. For example: <code>def add(a, b):</code> followed by <code>return a + b</code>. Write all four using the correct operator (<code>+</code>, <code>-</code>, <code>*</code>, <code>/</code>).</p>
+          </div>
+        </div>
+
+        <div class="hint">
+          <div class="hint-title">Hint 2</div>
+          <div class="hint-content">
+            <p>For the <code>divide</code> function, use an <code>if</code> statement to check whether <code>b == 0</code> before dividing. If it is zero, return the string <code>"Error: cannot divide by zero"</code> instead.</p>
+          </div>
+        </div>
+
+        <div class="hint">
+          <div class="hint-title">Hint 3 &mdash; Full Solution</div>
+          <div class="hint-content">
+            <p>
+              <code>def add(a, b):</code><br />
+              <code>&nbsp;&nbsp;&nbsp;&nbsp;return a + b</code><br /><br />
+              <code>def subtract(a, b):</code><br />
+              <code>&nbsp;&nbsp;&nbsp;&nbsp;return a - b</code><br /><br />
+              <code>def multiply(a, b):</code><br />
+              <code>&nbsp;&nbsp;&nbsp;&nbsp;return a * b</code><br /><br />
+              <code>def divide(a, b):</code><br />
+              <code>&nbsp;&nbsp;&nbsp;&nbsp;if b == 0:</code><br />
+              <code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return "Error: cannot divide by zero"</code><br />
+              <code>&nbsp;&nbsp;&nbsp;&nbsp;return a / b</code>
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== REFLECT ==================== -->
+    <section class="reflect">
+      <span class="section-label">Reflect</span>
+      <h2>Check Your Understanding</h2>
+
+      <p>Before moving on, see if you can answer these questions. Think about each one before revealing the answer.</p>
+
+      <div class="hint">
+        <div class="hint-title">1. What keyword do you use to create a new function in Python?</div>
+        <div class="hint-content">
+          <p>The <code>def</code> keyword, followed by the function name, parentheses (with any parameters), and a colon. For example: <code>def my_function():</code></p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">2. What is the difference between a parameter and an argument?</div>
+        <div class="hint-content">
+          <p>A <strong>parameter</strong> is the variable name in the function definition (e.g. <code>name</code> in <code>def greet(name):</code>). An <strong>argument</strong> is the actual value you pass when calling the function (e.g. <code>"Alice"</code> in <code>greet("Alice")</code>).</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">3. What is the difference between <code>return</code> and <code>print</code>?</div>
+        <div class="hint-content">
+          <p><code>return</code> sends a value back to the code that called the function, so you can store it in a variable or use it in further calculations. <code>print</code> simply displays text on the screen but does not give any usable value back &mdash; if you try to store the result of <code>print()</code>, you get <code>None</code>.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">4. Why might you get a <code>NameError</code> when calling a function?</div>
+        <div class="hint-content">
+          <p>Two common reasons: (1) you tried to call the function <em>before</em> it was defined &mdash; Python reads top to bottom, so the definition must come first; (2) you misspelt the function name when calling it.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">5. What happens if you define a function but never call it?</div>
+        <div class="hint-content">
+          <p>Nothing! The code inside the function will never run. Defining a function only tells Python what it <em>should</em> do &mdash; you must actually call it (e.g. <code>greet()</code>) for the code to execute.</p>
+        </div>
+      </div>
+
+      <div class="key-concept">
+        <strong>Coming up next &mdash; Chapter 7: Lists</strong>
+        Now that you can organise code into functions, it is time to learn how to organise <em>data</em>. In the next chapter, you will discover <strong>lists</strong> &mdash; a way to store collections of items in a single variable. You will learn to add, remove, search, and sort items in a list.
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ==================== NAVIGATION ==================== -->
+  <nav class="chapter-nav" aria-label="Chapter navigation">
+    <a href="05-loops.html">&larr; Chapter 5: Loops</a>
+    <a href="../index.html">Home</a>
+    <a href="07-lists.html">Chapter 7: Lists &rarr;</a>
+  </nav>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="site-footer">
+    <p>Python Fundamentals &mdash; A KS4 Learning Platform</p>
+    <p>Built with <a href="https://pyodide.org/">Pyodide</a> &mdash; Python runs in your browser</p>
+  </footer>
+
+  <script src="../js/pyodide-runner.js"></script>
+</body>
+</html>
