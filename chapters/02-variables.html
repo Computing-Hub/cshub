@@ -4,6 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Chapter 2: Variables &amp; Data Types - Python Fundamentals</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="../css/style.css" />
   <script src="https://cdn.jsdelivr.net/pyodide/v0.24.0/full/pyodide.js"></script>
 </head>
@@ -26,7 +29,16 @@
 
       <p>Without variables, a program would forget everything the moment it moved to the next line. You could not keep track of a player's score, remember someone's name, or calculate a total. Variables are the building blocks of every program you will ever write.</p>
 
-      <p>Think about a game you play on your phone. It remembers your high score, your username, and your level. All of that information is stored in variables behind the scenes. Today, you will learn how to create your own.</p>
+      <p>Think about a game you play on your phone. It remembers your high score, your username, and your level. All of that information is stored in variables behind the scenes. Every app on your phone &mdash; from Instagram to your calculator &mdash; relies on variables to function. Today, you will learn how to create your own.</p>
+
+      <h3>Variables in the Real World</h3>
+      <p>Variables are not just an abstract programming concept. They are everywhere in the software you use every single day:</p>
+      <ul>
+        <li><strong>Game development:</strong> Every game stores information like <code>health = 100</code>, <code>score = 0</code>, <code>level = 1</code>, and <code>player_name = "Alex"</code>. When you collect a power-up, the game updates a variable. When you take damage, another variable changes. The entire game state is just a collection of variables working together.</li>
+        <li><strong>Social media:</strong> Your profile on any platform is a set of variables &mdash; <code>username = "coder_99"</code>, <code>followers_count = 342</code>, <code>is_verified = False</code>, <code>bio = "Year 10 student"</code>. Every like, follow, and post updates variables in a database somewhere.</li>
+        <li><strong>Weather apps:</strong> When you check the weather, the app displays variables like <code>temperature = 18.5</code>, <code>humidity = 72</code>, <code>wind_speed = 15.3</code>, and <code>is_raining = True</code>. These values are updated constantly from weather stations around the world.</li>
+        <li><strong>Banking:</strong> Your bank account is essentially a variable called <code>account_balance</code>. Every time you receive money, it goes up. Every time you buy something, it goes down. The bank's software updates this variable with every single transaction.</li>
+      </ul>
 
       <p><strong>By the end of this chapter, you will be able to:</strong></p>
       <ul>
@@ -35,6 +47,9 @@
         <li>Use the <code>type()</code> function to check what kind of data a variable holds</li>
         <li>Change the value stored in a variable</li>
         <li>Convert between different data types</li>
+        <li>Use augmented assignment operators like <code>+=</code> and <code>-=</code></li>
+        <li>Follow Python naming conventions including constants</li>
+        <li>Assign multiple variables in a single line</li>
       </ul>
     </section>
 
@@ -145,6 +160,133 @@ print("Player:", player)</code></pre>
       <div class="try-this">
         <strong>Try This:</strong> Add a line where the player loses 5 points (hint: use subtraction). Can you make the score go negative? What happens if you set <code>score = score * 2</code> to double the score?
       </div>
+
+      <!-- Example 4: Augmented Assignment Operators -->
+      <h3>Example 4: Augmented Assignment Operators</h3>
+      <p>Writing <code>score = score + 10</code> works perfectly, but Python gives you a shortcut. Instead of repeating the variable name, you can use <strong>augmented assignment operators</strong> like <code>+=</code>, <code>-=</code>, and <code>*=</code>. These do exactly the same thing but with less typing &mdash; and programmers love less typing!</p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Python Code</span>
+          <div>
+            <button class="copy-button">Copy Code</button>
+            <button class="run-button">Run Code</button>
+          </div>
+        </div>
+        <pre><code contenteditable="true"># Start with a score of 100
+score = 100
+print("Starting score:", score)
+
+# Add 25 points (same as score = score + 25)
+score += 25
+print("After bonus (+25):", score)
+
+# Lose 10 points (same as score = score - 10)
+score -= 10
+print("After penalty (-10):", score)
+
+# Double the score (same as score = score * 2)
+score *= 2
+print("Score doubled (*2):", score)
+
+# These work with floats too
+price = 19.99
+price -= 5.00
+print("Discounted price:", price)</code></pre>
+        <div class="output-box empty">(click "Run Code" to see output)</div>
+      </div>
+
+      <div class="try-this">
+        <strong>Try This:</strong> Create a variable called <code>lives</code> set to <code>3</code>. Use <code>-=</code> to remove a life, then print the result. What happens if you keep removing lives until the number goes below zero? Can you use <code>+=</code> to add an extra life?
+      </div>
+
+      <!-- Example 5: Constants and Naming Conventions -->
+      <h3>Example 5: Constants and Naming Conventions</h3>
+      <p>Sometimes you have values in your program that should <strong>never change</strong> &mdash; like the value of pi, the maximum score in a game, or the number of lives a player starts with. In Python, we call these <strong>constants</strong>. We write their names in ALL_UPPER_CASE to signal to other programmers: "Do not change this value!"</p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Python Code</span>
+          <div>
+            <button class="copy-button">Copy Code</button>
+            <button class="run-button">Run Code</button>
+          </div>
+        </div>
+        <pre><code contenteditable="true"># Constants - values that should not change
+# Written in UPPER_CASE by convention
+PI = 3.14159
+MAX_SCORE = 100
+STARTING_LIVES = 3
+GAME_TITLE = "Space Invaders"
+
+# Regular variables - values that DO change
+# Written in lower_snake_case
+current_score = 0
+lives_remaining = STARTING_LIVES
+player_name = "Aisha"
+
+# Using constants in calculations
+radius = 5
+area = PI * radius * radius
+
+print(GAME_TITLE)
+print("Player:", player_name)
+print("Lives:", lives_remaining)
+print("Max possible score:", MAX_SCORE)
+print("Circle area with radius", radius, "is", area)</code></pre>
+        <div class="output-box empty">(click "Run Code" to see output)</div>
+      </div>
+
+      <div class="key-concept">
+        <strong>Key Concept:</strong>
+        Python does not actually <em>prevent</em> you from changing a constant &mdash; the UPPER_CASE naming is just a convention that programmers agree to follow. It is a polite way of saying "please do not change this value". Other languages like Java and C# have proper constant keywords, but Python relies on trust and good practice.
+      </div>
+
+      <div class="try-this">
+        <strong>Try This:</strong> Add a constant called <code>GRAVITY = 9.8</code> and use it to calculate how far an object falls in 3 seconds using the formula <code>distance = 0.5 * GRAVITY * time * time</code>. Print the result.
+      </div>
+
+      <!-- Example 6: Multiple Assignment -->
+      <h3>Example 6: Multiple Assignment</h3>
+      <p>Python lets you assign values to several variables in a single line. This is not just a neat trick &mdash; it is genuinely useful, especially when you want to set up several related variables at once or swap the values of two variables.</p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Python Code</span>
+          <div>
+            <button class="copy-button">Copy Code</button>
+            <button class="run-button">Run Code</button>
+          </div>
+        </div>
+        <pre><code contenteditable="true"># Assign multiple variables in one line
+x, y, z = 1, 2, 3
+print("x =", x)
+print("y =", y)
+print("z =", z)
+
+# This is great for setting up related data
+name, age, city = "Priya", 15, "Manchester"
+print(name, "is", age, "and lives in", city)
+
+# Swapping two variables - the Python way!
+a = "hello"
+b = "world"
+print("Before swap: a =", a, ", b =", b)
+
+# In most languages, you'd need a temporary variable
+# In Python, you can just do this:
+a, b = b, a
+print("After swap:  a =", a, ", b =", b)
+
+# You can also assign the same value to multiple variables
+red = green = blue = 0
+print("RGB:", red, green, blue)</code></pre>
+        <div class="output-box empty">(click "Run Code" to see output)</div>
+      </div>
+
+      <div class="try-this">
+        <strong>Try This:</strong> Create three variables <code>gold, silver, bronze</code> in a single line and assign them the values <code>1st</code>, <code>2nd</code>, <code>3rd</code> (as strings). Print them all. Then try swapping <code>gold</code> and <code>bronze</code> &mdash; can you do it in one line?
+      </div>
     </section>
 
     <!-- ==================== UNDERSTAND ==================== -->
@@ -161,6 +303,8 @@ print("Player:", player)</code></pre>
         <li><strong>Case-sensitive</strong> &mdash; <code>Name</code>, <code>name</code>, and <code>NAME</code> are three completely different variables</li>
         <li><strong>Cannot use Python keywords</strong> &mdash; words like <code>print</code>, <code>if</code>, <code>for</code>, and <code>True</code> are reserved</li>
       </ul>
+
+      <p>The recommended style in Python is called <strong>snake_case</strong> &mdash; all lowercase letters, with words separated by underscores. For example: <code>player_name</code>, <code>high_score</code>, <code>is_game_over</code>. This makes your code easy to read, and it is what professional Python developers use every day.</p>
 
       <div class="code-block">
         <div class="code-block-header">
@@ -187,7 +331,7 @@ print(player_name, score_2, _secret, favouriteColour)
 
       <div class="key-concept">
         <strong>Key Concept:</strong>
-        Choose variable names that describe what they store. <code>age = 15</code> is much clearer than <code>x = 15</code>. Good names make your code easier to read &mdash; both for others and for your future self.
+        Choose variable names that describe what they store. <code>age = 15</code> is much clearer than <code>x = 15</code>. Good names make your code easier to read &mdash; both for others and for your future self. Imagine coming back to your code in six months: would you know what <code>x</code> means? Probably not. But <code>student_age</code>? That is crystal clear.
       </div>
 
       <!-- The Four Main Data Types -->
@@ -233,9 +377,19 @@ print(player_name, score_2, _secret, favouriteColour)
 
       <p>Notice that <code>"42"</code> (with quotes) is a <strong>string</strong>, but <code>42</code> (without quotes) is an <strong>integer</strong>. The quotes make all the difference! A string is just text &mdash; Python does not treat it as a number, even if it looks like one.</p>
 
+      <div class="key-concept">
+        <strong>Did You Know?</strong>
+        Python is a <strong>dynamically typed</strong> language. This means you do not need to declare the type of a variable when you create it &mdash; Python works it out automatically from the value you assign. In other languages like Java or C#, you would have to write <code>int age = 15;</code> or <code>String name = "Alice";</code>, explicitly telling the computer what type each variable is. Python's approach is simpler, but it means you need to be more careful about keeping track of your types yourself!
+      </div>
+
+      <div class="key-concept">
+        <strong>Did You Know?</strong>
+        The word <strong>"boolean"</strong> comes from <strong>George Boole</strong> (1815&ndash;1864), an English mathematician who invented a system of logic using only two values: true and false. His work became the foundation of all modern computing. Every decision a computer makes &mdash; from "should this pixel be on or off?" to "has the player won the game?" &mdash; ultimately comes down to a boolean value. So the next time you write <code>is_raining = True</code>, you are using ideas that are over 150 years old!
+      </div>
+
       <!-- Type Conversion -->
-      <h3>Type Conversion</h3>
-      <p>Sometimes you need to change a value from one type to another. For example, if a user types in their age, it arrives as text (a string), but you might need it as a number to do maths with it. Python gives you functions to convert between types:</p>
+      <h3>Type Conversion (Casting)</h3>
+      <p>Sometimes you need to change a value from one type to another. This is called <strong>type conversion</strong> or <strong>casting</strong>. For example, if a user types in their age, it arrives as text (a string), but you might need it as a number to do maths with it. Python gives you functions to convert between types:</p>
 
       <div class="code-block">
         <div class="code-block-header">
@@ -260,6 +414,12 @@ whole_number = 7
 decimal_number = float(whole_number)
 print(decimal_number)    # Prints 7.0
 
+# Convert to boolean
+print(bool(1))       # True  (any non-zero number is True)
+print(bool(0))       # False (zero is False)
+print(bool("hello")) # True  (any non-empty string is True)
+print(bool(""))      # False (empty string is False)
+
 # Check the types
 print(type(age_text))
 print(type(age_number))
@@ -276,8 +436,29 @@ print(type(decimal_number))</code></pre>
         The <code>=</code> sign in Python is the <strong>assignment operator</strong>. It does not mean "equals" &mdash; it means "store this value". Think of it as an arrow pointing left: <code>name &larr; "Alice"</code>.
       </div>
 
-      <!-- Common Misconceptions -->
-      <h3>Common Misconceptions</h3>
+      <!-- Common Mistakes -->
+      <h3>Common Mistakes</h3>
+      <p>Even experienced programmers make mistakes with variables. Here are the most common ones &mdash; learn to recognise them now, and you will save yourself hours of debugging later!</p>
+
+      <div class="warning">
+        <strong>Mistake: Using spaces in variable names</strong>
+        <br />Writing <code>my name = "Ali"</code> will cause a <code>SyntaxError</code>. Variable names cannot contain spaces. Use an underscore instead: <code>my_name = "Ali"</code>.
+      </div>
+
+      <div class="warning">
+        <strong>Mistake: Starting a variable name with a number</strong>
+        <br />Writing <code>1st_place = "Winner"</code> will cause a <code>SyntaxError</code>. Variable names must start with a letter or underscore. Try <code>first_place = "Winner"</code> instead.
+      </div>
+
+      <div class="warning">
+        <strong>Mistake: Forgetting str() when concatenating</strong>
+        <br />Writing <code>"Age: " + 15</code> will cause a <code>TypeError</code> because Python cannot join a string and an integer directly. You need to convert the number first: <code>"Age: " + str(15)</code>. This is one of the most common errors beginners encounter!
+      </div>
+
+      <div class="warning">
+        <strong>Mistake: Using a Python keyword as a variable name</strong>
+        <br />Writing <code>print = 5</code> will not cause an immediate error, but it <em>overrides</em> the built-in <code>print()</code> function! After this line, you will no longer be able to print anything. The same goes for <code>input</code>, <code>type</code>, <code>list</code>, and other built-in names. Always choose unique, descriptive names for your variables.
+      </div>
 
       <div class="warning">
         <strong>Watch out:</strong> A variable's name does not affect what it can store. You could write <code>age = "hello"</code> and Python would not complain &mdash; it does not know that "age" should be a number. It is up to <em>you</em> to choose sensible names and matching values. Python trusts you!
@@ -305,9 +486,154 @@ x = "hello"
 print(x, "is a", type(x))
 
 x = 42
-print(x, "is a", type(x))</code></pre>
+print(x, "is a", type(x))
+
+# Common mistake: forgetting str()
+age = 15
+# This would cause an error:
+# print("I am " + age + " years old")
+# This is the fix:
+print("I am " + str(age) + " years old")</code></pre>
         <div class="output-box empty">(click "Run Code" to see output)</div>
       </div>
+
+      <div class="key-concept">
+        <strong>Did You Know?</strong>
+        Python has <strong>no dedicated "constant" keyword</strong>. Unlike languages such as Java (<code>final</code>) or JavaScript (<code>const</code>), Python cannot actually stop you from changing a value. The UPPER_CASE naming convention (like <code>MAX_SPEED = 120</code>) is purely a social agreement among Python developers. It is the programmer's way of saying: "I promise not to change this, and neither should you." This philosophy is sometimes described as "we are all consenting adults here."
+      </div>
+
+      <!-- Worked Example -->
+      <h3>Worked Example: Building a Character Stats Card</h3>
+      <p>Let's put everything together in a longer example. We will create variables for a game character, display them in a formatted way, and then simulate the character taking damage and levelling up. Follow along step by step.</p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Python Code</span>
+          <div>
+            <button class="copy-button">Copy Code</button>
+            <button class="run-button">Run Code</button>
+          </div>
+        </div>
+        <pre><code contenteditable="true"># === STEP 1: Set up the character's starting stats ===
+# We use different data types for different kinds of information
+character_name = "Elena the Brave"    # str
+health = 100                          # int
+attack_power = 25                     # int
+is_alive = True                       # bool
+level = 1                             # int
+experience = 0.0                      # float
+
+# A constant for the max health - this should never change
+MAX_HEALTH = 100
+
+# === STEP 2: Display the character stats card ===
+print("=============================")
+print("   CHARACTER STATS CARD")
+print("=============================")
+print("Name:    " + character_name)
+print("Level:   " + str(level))
+print("Health:  " + str(health) + "/" + str(MAX_HEALTH))
+print("Attack:  " + str(attack_power))
+print("Alive:   " + str(is_alive))
+print("XP:      " + str(experience))
+print("=============================")
+
+# === STEP 3: Simulate taking damage ===
+print("\n--- A wild goblin attacks! ---")
+damage_taken = 35
+health -= damage_taken
+print("Ouch! Lost " + str(damage_taken) + " health.")
+print("Health is now: " + str(health) + "/" + str(MAX_HEALTH))
+
+# === STEP 4: Simulate levelling up ===
+print("\n--- Quest completed! ---")
+experience += 50.5
+level += 1
+attack_power += 5
+print("Gained 50.5 XP! Total XP: " + str(experience))
+print("LEVEL UP! Now level " + str(level))
+print("Attack power increased to " + str(attack_power))
+
+# === STEP 5: Display updated stats ===
+print("\n=============================")
+print("   UPDATED STATS CARD")
+print("=============================")
+print("Name:    " + character_name)
+print("Level:   " + str(level))
+print("Health:  " + str(health) + "/" + str(MAX_HEALTH))
+print("Attack:  " + str(attack_power))
+print("Alive:   " + str(is_alive))
+print("XP:      " + str(experience))
+print("=============================")</code></pre>
+        <div class="output-box empty">(click "Run Code" to see output)</div>
+      </div>
+
+      <div class="try-this">
+        <strong>Try This:</strong> Add a second attack from the goblin that does 80 damage. After this attack, check if health has dropped to 0 or below &mdash; if so, change <code>is_alive</code> to <code>False</code>. Can you add a healing potion that restores 20 health? Make sure health does not go above <code>MAX_HEALTH</code>!
+      </div>
+
+      <!-- Key Vocabulary -->
+      <h3>Key Vocabulary</h3>
+      <p>Here are the essential terms you need to know for this topic. You will see these in your exams and in professional programming discussions:</p>
+
+      <table style="width:100%; border-collapse:collapse; margin:1rem 0;">
+        <thead>
+          <tr style="text-align:left; border-bottom:2px solid #ccc;">
+            <th style="padding:0.5rem;">Term</th>
+            <th style="padding:0.5rem;">Definition</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-bottom:1px solid #eee;">
+            <td style="padding:0.5rem;"><strong>Variable</strong></td>
+            <td style="padding:0.5rem;">A named storage location in memory that holds a value which can change during the program's execution.</td>
+          </tr>
+          <tr style="border-bottom:1px solid #eee;">
+            <td style="padding:0.5rem;"><strong>Data Type</strong></td>
+            <td style="padding:0.5rem;">The kind of value a variable holds, which determines what operations can be performed on it.</td>
+          </tr>
+          <tr style="border-bottom:1px solid #eee;">
+            <td style="padding:0.5rem;"><strong>String (str)</strong></td>
+            <td style="padding:0.5rem;">A data type that stores text &mdash; any sequence of characters enclosed in quotation marks.</td>
+          </tr>
+          <tr style="border-bottom:1px solid #eee;">
+            <td style="padding:0.5rem;"><strong>Integer (int)</strong></td>
+            <td style="padding:0.5rem;">A data type that stores whole numbers, both positive and negative (e.g. <code>42</code>, <code>-7</code>, <code>0</code>).</td>
+          </tr>
+          <tr style="border-bottom:1px solid #eee;">
+            <td style="padding:0.5rem;"><strong>Float (float)</strong></td>
+            <td style="padding:0.5rem;">A data type that stores decimal numbers, also known as floating-point numbers (e.g. <code>3.14</code>, <code>-0.5</code>).</td>
+          </tr>
+          <tr style="border-bottom:1px solid #eee;">
+            <td style="padding:0.5rem;"><strong>Boolean (bool)</strong></td>
+            <td style="padding:0.5rem;">A data type with only two possible values: <code>True</code> or <code>False</code>. Used for yes/no decisions.</td>
+          </tr>
+          <tr style="border-bottom:1px solid #eee;">
+            <td style="padding:0.5rem;"><strong>Assignment Operator</strong></td>
+            <td style="padding:0.5rem;">The <code>=</code> symbol, which stores (assigns) the value on the right into the variable on the left.</td>
+          </tr>
+          <tr style="border-bottom:1px solid #eee;">
+            <td style="padding:0.5rem;"><strong>Type Conversion (Casting)</strong></td>
+            <td style="padding:0.5rem;">Changing a value from one data type to another using functions like <code>int()</code>, <code>str()</code>, <code>float()</code>.</td>
+          </tr>
+          <tr style="border-bottom:1px solid #eee;">
+            <td style="padding:0.5rem;"><strong>Concatenation</strong></td>
+            <td style="padding:0.5rem;">Joining two or more strings together using the <code>+</code> operator (e.g. <code>"Hello" + " " + "World"</code>).</td>
+          </tr>
+          <tr style="border-bottom:1px solid #eee;">
+            <td style="padding:0.5rem;"><strong>Dynamic Typing</strong></td>
+            <td style="padding:0.5rem;">A feature of Python where you do not need to declare the type of a variable &mdash; Python determines it automatically from the assigned value.</td>
+          </tr>
+          <tr style="border-bottom:1px solid #eee;">
+            <td style="padding:0.5rem;"><strong>Constant</strong></td>
+            <td style="padding:0.5rem;">A variable whose value is intended to never change. In Python, written in <code>UPPER_CASE</code> by convention.</td>
+          </tr>
+          <tr style="border-bottom:1px solid #eee;">
+            <td style="padding:0.5rem;"><strong>snake_case</strong></td>
+            <td style="padding:0.5rem;">The naming convention used in Python where words are separated by underscores and written in lowercase (e.g. <code>player_name</code>).</td>
+          </tr>
+        </tbody>
+      </table>
     </section>
 
     <!-- ==================== PRACTICE ==================== -->
@@ -442,6 +768,106 @@ print(type(city))</code></pre>
         </div>
       </div>
 
+      <!-- Exercise 4: Partially Guided -->
+      <div class="exercise">
+        <div class="exercise-title">Exercise 4: Temperature Converter</div>
+        <div class="exercise-difficulty difficulty-2">Partially Guided</div>
+        <p>Write a program that stores a temperature in Celsius, converts it to Fahrenheit, and displays both values. The formula to convert Celsius to Fahrenheit is:</p>
+        <p><strong>F = C &times; 9/5 + 32</strong></p>
+        <p>For example, 20&deg;C should convert to 68.0&deg;F.</p>
+
+        <div class="pseudocode">
+          <div class="pseudocode-label">Pseudocode:</div>
+          STEP 1: Create a variable called <code>celsius</code> and store a temperature value (e.g. 20)<br />
+          STEP 2: Create a variable called <code>fahrenheit</code> and calculate the conversion using the formula<br />
+          STEP 3: Print both temperatures with labels, e.g. "20°C is 68.0°F"<br />
+          STEP 4: Test with different values &mdash; try 0, 100, and 37 (body temperature)
+        </div>
+
+        <div class="code-block">
+          <div class="code-block-header">
+            <span class="code-block-label">Your Code</span>
+            <div>
+              <button class="copy-button">Copy Code</button>
+              <button class="run-button">Run Code</button>
+            </div>
+          </div>
+          <pre><code contenteditable="true"># Exercise 4: Temperature Converter
+# Store a temperature in Celsius and convert it to Fahrenheit
+
+celsius = ____
+
+# Convert using the formula: F = C * 9/5 + 32
+fahrenheit = ____
+
+# Display both temperatures
+print(str(celsius) + " degrees C is " + str(fahrenheit) + " degrees F")
+
+# Try changing the celsius value and running again!
+# What Fahrenheit value do you get for 0°C? For 100°C?</code></pre>
+          <div class="output-box empty">(click "Run Code" to see output)</div>
+        </div>
+
+        <div class="hint">
+          <div class="hint-title">Need a hint?</div>
+          <div class="hint-content">Replace the first blank with a number like <code>20</code>. For the formula, write: <code>fahrenheit = celsius * 9/5 + 32</code>. Python follows the standard order of operations (BIDMAS/BODMAS), so the multiplication and division happen before the addition. If you want to be extra safe, you can use brackets: <code>fahrenheit = (celsius * 9 / 5) + 32</code>. Water freezes at 0&deg;C (32&deg;F) and boils at 100&deg;C (212&deg;F) &mdash; use these to check your formula is working!</div>
+        </div>
+      </div>
+
+      <!-- Exercise 5: Open-Ended -->
+      <div class="exercise">
+        <div class="exercise-title">Exercise 5: Personal Stats Dashboard</div>
+        <div class="exercise-difficulty difficulty-3">Open-Ended</div>
+        <p>Create a "personal stats dashboard" &mdash; a program that displays interesting facts and statistics about you in a visually appealing format. Use <strong>at least 6 variables</strong> of <strong>at least 3 different data types</strong>.</p>
+        <p>Think creatively! You could include things like: your name, age, height, number of pets, favourite number, whether you like maths, hours of sleep per night, number of countries visited, and so on. Format the output neatly with borders and labels.</p>
+
+        <div class="pseudocode">
+          <div class="pseudocode-label">Pseudocode:</div>
+          STEP 1: Plan your dashboard &mdash; decide what facts to include<br />
+          STEP 2: Create at least 6 variables using at least 3 data types (str, int, float, bool)<br />
+          STEP 3: Display all the information in a formatted, visually appealing way<br />
+          STEP 4: Include at least one calculation (e.g. your age in days: <code>age * 365</code>)<br />
+          STEP 5: Use <code>type()</code> to verify at least two of your variables
+        </div>
+
+        <div class="code-block">
+          <div class="code-block-header">
+            <span class="code-block-label">Your Code</span>
+            <div>
+              <button class="copy-button">Copy Code</button>
+              <button class="run-button">Run Code</button>
+            </div>
+          </div>
+          <pre><code contenteditable="true"># Exercise 5: Personal Stats Dashboard
+# Create at least 6 variables of at least 3 different types
+# Display them as a formatted dashboard
+
+# Your variables here:
+
+
+# Your formatted output here:
+
+</code></pre>
+          <div class="output-box empty">(click "Run Code" to see output)</div>
+        </div>
+
+        <div class="hint">
+          <div class="hint-title">Need a hint?</div>
+          <div class="hint-content">
+            Here is a structure to get you started:
+            <br /><br />
+            <code>name = "Your Name"</code> (str)<br />
+            <code>age = 15</code> (int)<br />
+            <code>height = 1.65</code> (float, in metres)<br />
+            <code>num_pets = 2</code> (int)<br />
+            <code>likes_coding = True</code> (bool)<br />
+            <code>sleep_hours = 8.5</code> (float)<br />
+            <br />
+            For the display, try using <code>print("=" * 30)</code> to create a border line. You can calculate your approximate age in days with <code>age_in_days = age * 365</code> and your age in hours with <code>age_in_hours = age_in_days * 24</code>. Remember to use <code>str()</code> when joining numbers with text!
+          </div>
+        </div>
+      </div>
+
     </section>
 
     <!-- ==================== REFLECT ==================== -->
@@ -453,12 +879,68 @@ print(type(city))</code></pre>
         <li>If you wrote <code>age = "fifteen"</code> instead of <code>age = 15</code>, would Python give an error? Why might this cause issues later in your program?</li>
         <li>Why is <code>score = score + 10</code> not a contradiction? How would you explain what this line does to a friend who has never programmed?</li>
         <li>What do you think would happen if you tried to convert the string <code>"hello"</code> into an integer using <code>int("hello")</code>? Try it and see!</li>
+        <li>Why do you think Python uses the convention of UPPER_CASE for constants instead of having a proper constant keyword? What are the advantages and disadvantages of this approach?</li>
+        <li>Can you think of a situation where swapping two variables (<code>a, b = b, a</code>) would be useful in a real program?</li>
       </ul>
 
+      <!-- Summary -->
+      <h3>Chapter Summary</h3>
+      <p>In this chapter, you have learned the fundamentals of how programs store and manage information. Here is a recap of the key points:</p>
+      <ul>
+        <li><strong>Variables</strong> are named containers that store data in your program's memory. You create them using the assignment operator (<code>=</code>).</li>
+        <li>Python has <strong>four main data types</strong>: strings (<code>str</code>) for text, integers (<code>int</code>) for whole numbers, floats (<code>float</code>) for decimal numbers, and booleans (<code>bool</code>) for True/False values.</li>
+        <li>You can check a variable's type using the <code>type()</code> function and convert between types using <code>str()</code>, <code>int()</code>, <code>float()</code>, and <code>bool()</code>.</li>
+        <li><strong>Augmented assignment operators</strong> like <code>+=</code>, <code>-=</code>, and <code>*=</code> provide shortcuts for updating variable values.</li>
+        <li>Python is <strong>dynamically typed</strong>, meaning you do not need to declare a variable's type &mdash; Python works it out from the value you assign.</li>
+        <li><strong>Constants</strong> are written in UPPER_CASE by convention to show their values should not change.</li>
+        <li>Good variable names use <strong>snake_case</strong>, are descriptive, and follow Python's naming rules (no spaces, no starting with numbers, no reserved keywords).</li>
+        <li>When joining strings and numbers with <code>+</code>, you must convert numbers to strings first using <code>str()</code>.</li>
+      </ul>
+
+      <!-- Exam-Style Questions -->
+      <h3>Exam-Style Questions</h3>
+      <p>Test your understanding with these questions, similar to what you might see in a GCSE Computer Science exam:</p>
+
+      <div class="exercise">
+        <div class="exercise-title">Question 1 (2 marks)</div>
+        <p>Define the term <strong>"variable"</strong> in programming.</p>
+        <div class="hint">
+          <div class="hint-title">Reveal model answer</div>
+          <div class="hint-content">A variable is a named location in memory (1 mark) that stores a value which can be changed during the execution of a program (1 mark).</div>
+        </div>
+      </div>
+
+      <div class="exercise">
+        <div class="exercise-title">Question 2 (4 marks)</div>
+        <p>Name the four main data types in Python and give an example of each.</p>
+        <div class="hint">
+          <div class="hint-title">Reveal model answer</div>
+          <div class="hint-content">
+            <strong>String (str)</strong> &mdash; e.g. <code>"Hello"</code> (1 mark)<br />
+            <strong>Integer (int)</strong> &mdash; e.g. <code>42</code> (1 mark)<br />
+            <strong>Float (float)</strong> &mdash; e.g. <code>3.14</code> (1 mark)<br />
+            <strong>Boolean (bool)</strong> &mdash; e.g. <code>True</code> (1 mark)
+          </div>
+        </div>
+      </div>
+
+      <div class="exercise">
+        <div class="exercise-title">Question 3 (2 marks)</div>
+        <p>Explain why type conversion (casting) is sometimes necessary when writing a Python program. Give an example in your answer.</p>
+        <div class="hint">
+          <div class="hint-title">Reveal model answer</div>
+          <div class="hint-content">Type conversion is necessary because different data types cannot always be used together directly (1 mark). For example, when joining a string and an integer using concatenation, the integer must first be converted to a string using <code>str()</code>, otherwise Python will produce a <code>TypeError</code> (1 mark). Example: <code>"Age: " + str(15)</code>.</div>
+        </div>
+      </div>
+
+      <!-- External Resources -->
       <div class="extra-resources">
-        <h3>Extra Practice</h3>
-        <p>Deepen your understanding of variables and data types:</p>
+        <h3>Extra Resources</h3>
+        <p>Deepen your understanding of variables and data types with these trusted resources:</p>
         <ul>
+          <li><a href="https://www.bbc.co.uk/bitesize/examspecs/zdqy7nb" target="_blank" rel="noopener">BBC Bitesize: Edexcel GCSE Computer Science</a> &mdash; Comprehensive revision for programming concepts including variables and data types</li>
+          <li><a href="https://www.w3schools.com/python/python_variables.asp" target="_blank" rel="noopener">W3Schools: Python Variables</a> &mdash; Interactive tutorials and examples for creating and using variables</li>
+          <li><a href="https://www.w3schools.com/python/python_datatypes.asp" target="_blank" rel="noopener">W3Schools: Python Data Types</a> &mdash; A complete guide to all of Python's built-in data types with try-it-yourself editors</li>
           <li><a href="https://hvgcsecs.cshub.org.je/topics/topic6.html" target="_blank" rel="noopener">GCSE Topic 6: Programming Fundamentals</a> &mdash; Variables, constants, operators and data types with interactive code editors</li>
           <li><a href="https://hvgcsecs.cshub.org.je/activities/index.html" target="_blank" rel="noopener">Revision Activities</a> &mdash; Memory match and category sort games for programming vocabulary</li>
         </ul>

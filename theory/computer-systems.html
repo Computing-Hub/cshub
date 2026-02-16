@@ -8,6 +8,53 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="../css/style.css" />
+  <style>
+    .did-you-know {
+      background: linear-gradient(135deg, #e8f4fd, #d1ecf9);
+      border: 2px solid #4cc9f0;
+      border-radius: var(--radius-md);
+      padding: var(--space-lg);
+      margin: var(--space-md) 0;
+    }
+    .did-you-know strong:first-child {
+      display: block;
+      margin-bottom: var(--space-xs);
+      color: #0077b6;
+    }
+    .case-study {
+      background: linear-gradient(135deg, #f3e8ff, #ede5ff);
+      border: 2px solid #7209b7;
+      border-radius: var(--radius-md);
+      padding: var(--space-lg);
+      margin: var(--space-md) 0;
+    }
+    .case-study strong:first-child {
+      display: block;
+      margin-bottom: var(--space-xs);
+      color: #7209b7;
+    }
+    .exam-tip {
+      background: linear-gradient(135deg, #e6f9f1, #d0f0e0);
+      border: 2px solid #06d6a0;
+      border-radius: var(--radius-md);
+      padding: var(--space-lg);
+      margin: var(--space-md) 0;
+    }
+    .exam-tip strong:first-child {
+      display: block;
+      margin-bottom: var(--space-xs);
+      color: #06a080;
+    }
+    .vocab-table th {
+      background: linear-gradient(135deg, #4361ee, #4cc9f0);
+      color: #fff;
+      font-weight: 700;
+    }
+    .vocab-table td:first-child {
+      font-weight: 700;
+      white-space: nowrap;
+    }
+  </style>
 </head>
 <body>
 
@@ -31,8 +78,10 @@
       <p><strong>This topic covers:</strong></p>
       <ul>
         <li>The CPU and how it executes instructions (the fetch-decode-execute cycle)</li>
+        <li>The system bus: data bus, address bus, and control bus</li>
         <li>Memory: RAM, ROM, and virtual memory</li>
-        <li>Secondary storage: hard drives, SSDs, and optical media</li>
+        <li>Secondary storage: hard drives, SSDs, optical media, and USB flash drives</li>
+        <li>Embedded systems: dedicated computers inside everyday devices</li>
         <li>System software: operating systems and utility programs</li>
         <li>Programming languages: high-level vs low-level, compilers vs interpreters</li>
       </ul>
@@ -87,6 +136,92 @@
         This cycle repeats continuously until the program ends or the computer is turned off.
       </div>
 
+      <h3>The FDE Cycle: A Detailed Walkthrough</h3>
+      <p>Let us trace through a specific example. Imagine the CPU needs to execute the instruction <strong>&ldquo;LOAD the value stored at memory address 100 into the Accumulator&rdquo;</strong>. Here is exactly what happens at each stage:</p>
+
+      <h4>Stage 1: Fetch</h4>
+      <ol>
+        <li>The <strong>Program Counter (PC)</strong> holds the address of the next instruction &mdash; let us say it currently holds address <strong>42</strong>.</li>
+        <li>The address in the PC (42) is copied into the <strong>Memory Address Register (MAR)</strong>.</li>
+        <li>The CPU sends this address along the <strong>address bus</strong> to memory, and a &ldquo;read&rdquo; signal is sent along the <strong>control bus</strong>.</li>
+        <li>The instruction stored at address 42 (e.g. <code>LOAD 100</code>) is sent back along the <strong>data bus</strong> into the <strong>Memory Data Register (MDR)</strong>.</li>
+        <li>The <strong>PC is incremented</strong> to 43, so it now points to the next instruction.</li>
+      </ol>
+
+      <h4>Stage 2: Decode</h4>
+      <ol>
+        <li>The instruction in the MDR (<code>LOAD 100</code>) is passed to the <strong>Control Unit</strong>.</li>
+        <li>The CU decodes it and determines: &ldquo;This is a LOAD instruction. I need to read the data from memory address 100 and place it into the Accumulator.&rdquo;</li>
+      </ol>
+
+      <h4>Stage 3: Execute</h4>
+      <ol>
+        <li>The address <strong>100</strong> is placed into the <strong>MAR</strong>.</li>
+        <li>A &ldquo;read&rdquo; signal is sent along the control bus. The value at address 100 travels along the data bus into the <strong>MDR</strong>.</li>
+        <li>The value from the MDR is copied into the <strong>Accumulator (ACC)</strong>.</li>
+        <li>The instruction is complete. The CPU loops back to the Fetch stage and reads the instruction at address 43.</li>
+      </ol>
+
+      <p>Now imagine the next instruction is <code>ADD 101</code> (add the value at address 101 to the accumulator). The same three stages repeat: fetch the instruction, decode it, then execute it by reading address 101 and sending both values to the ALU, which adds them and stores the result in the ACC.</p>
+
+      <div class="did-you-know">
+        <strong>Did You Know?</strong>
+        The first electronic general-purpose computer, <strong>ENIAC</strong> (1945), weighed 30 tonnes and filled an entire room. It had less processing power than a modern pocket calculator. Today, the CPU in your smartphone can perform billions of calculations per second and fits on a chip smaller than your thumbnail.
+      </div>
+
+      <h3>The System Bus</h3>
+      <p>The CPU, memory, and other components communicate using a set of wires called the <strong>system bus</strong>. It has three parts:</p>
+
+      <table>
+        <thead>
+          <tr><th>Bus</th><th>What It Carries</th><th>Direction</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Address Bus</strong></td>
+            <td>The address of the memory location or I/O device being accessed</td>
+            <td>One-way: CPU &rarr; memory/devices</td>
+          </tr>
+          <tr>
+            <td><strong>Data Bus</strong></td>
+            <td>The actual data or instructions being transferred</td>
+            <td>Two-way: CPU &harr; memory/devices</td>
+          </tr>
+          <tr>
+            <td><strong>Control Bus</strong></td>
+            <td>Control signals (e.g. read, write, clock pulse, interrupt)</td>
+            <td>Two-way: CPU &harr; memory/devices</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p>The <strong>width</strong> of the address bus determines how many memory locations the CPU can address (e.g. a 32-bit address bus can access 2<sup>32</sup> = roughly 4 billion addresses). The width of the data bus determines how much data can be transferred in a single operation.</p>
+
+      <h3>Von Neumann Architecture</h3>
+      <p>Most modern computers follow the <strong>Von Neumann architecture</strong>, proposed by mathematician John von Neumann in 1945. The key idea is that <strong>both instructions and data are stored together in the same memory</strong>. The architecture consists of:</p>
+
+      <ul>
+        <li>A <strong>CPU</strong> containing the ALU, CU, and registers</li>
+        <li><strong>Main memory</strong> (RAM/ROM) that stores both programs and data</li>
+        <li>A <strong>system bus</strong> (address bus, data bus, control bus) connecting the CPU to memory and I/O devices</li>
+        <li><strong>Input/Output (I/O) devices</strong> for interacting with the outside world</li>
+      </ul>
+
+      <div class="key-concept">
+        <strong>Von Neumann Architecture &mdash; Simplified Diagram Description</strong>
+        Imagine the following layout:
+        <br /><br />
+        At the centre is the <strong>CPU</strong>, which contains the <strong>CU</strong> (Control Unit), the <strong>ALU</strong> (Arithmetic Logic Unit), and <strong>Registers</strong> (PC, MAR, MDR, ACC).
+        <br /><br />
+        To the right of the CPU is <strong>Main Memory</strong> (RAM and ROM), storing both programs and data.
+        <br /><br />
+        Below the CPU are <strong>Input Devices</strong> (e.g. keyboard, mouse) on the left and <strong>Output Devices</strong> (e.g. monitor, printer) on the right.
+        <br /><br />
+        All components are connected by three buses running between them: the <strong>Address Bus</strong>, the <strong>Data Bus</strong>, and the <strong>Control Bus</strong> &mdash; together forming the <strong>System Bus</strong>.
+        <br /><br />
+        The crucial feature: instructions and data share the same memory and the same bus, meaning the CPU cannot fetch an instruction and read data at the exact same time (this is known as the &ldquo;Von Neumann bottleneck&rdquo;).
+      </div>
+
       <h3>What Makes a CPU Faster?</h3>
       <table>
         <thead>
@@ -113,6 +248,11 @@
 
       <div class="warning">
         <strong>Common Mistake:</strong> Students often say &ldquo;more cores always makes a computer faster.&rdquo; This is not always true. Software must be designed to use multiple cores (parallelisation). A single-threaded program running on 8 cores will not be faster than on 1 core &mdash; it can only use one at a time.
+      </div>
+
+      <div class="did-you-know">
+        <strong>Did You Know?</strong>
+        Modern CPUs contain <strong>billions of transistors</strong>, each one smaller than a virus. The Apple M2 chip, for example, has over 20 billion transistors on a piece of silicon roughly the size of a postage stamp. Each transistor acts as a tiny electronic switch that can be either on (1) or off (0), forming the basis of all digital computing.
       </div>
     </section>
 
@@ -153,7 +293,7 @@
 
       <!-- SECONDARY STORAGE -->
       <h3>Secondary Storage</h3>
-      <p>Secondary storage keeps data <strong>permanently</strong>, even when the computer is switched off. There are three main types:</p>
+      <p>Secondary storage keeps data <strong>permanently</strong>, even when the computer is switched off. There are several types:</p>
 
       <h4>Magnetic Storage (HDD &mdash; Hard Disk Drive)</h4>
       <ul>
@@ -182,6 +322,16 @@
         <li>Becoming less common as streaming and USB drives replace them</li>
       </ul>
 
+      <h4>USB Flash Drives</h4>
+      <ul>
+        <li>Use <strong>flash memory</strong> (same technology as SSDs) in a small, portable stick</li>
+        <li>Plug into a USB port &mdash; no external power supply needed</li>
+        <li>Typical capacities: 8 GB &ndash; 256 GB (some up to 1 TB or more)</li>
+        <li>Very <strong>portable</strong> and convenient for transferring files between computers</li>
+        <li>Slower than a full SSD, small enough to lose easily, limited write cycles</li>
+        <li>Good for: carrying documents and presentations, quick file transfers, small backups</li>
+      </ul>
+
       <h4>Cloud Storage</h4>
       <ul>
         <li>Data is stored on <strong>remote servers</strong> accessed via the internet</li>
@@ -193,16 +343,99 @@
 
       <table>
         <thead>
-          <tr><th>Feature</th><th>HDD</th><th>SSD</th><th>Optical</th></tr>
+          <tr><th>Feature</th><th>HDD</th><th>SSD</th><th>Optical</th><th>USB Flash</th></tr>
         </thead>
         <tbody>
-          <tr><td>Speed</td><td>Moderate</td><td>Fast</td><td>Slow</td></tr>
-          <tr><td>Capacity</td><td>Very high</td><td>High</td><td>Low</td></tr>
-          <tr><td>Cost per GB</td><td>Low</td><td>Medium</td><td>Very low</td></tr>
-          <tr><td>Durability</td><td>Fragile (moving parts)</td><td>Robust</td><td>Easily scratched</td></tr>
-          <tr><td>Portability</td><td>Moderate</td><td>High</td><td>High</td></tr>
+          <tr><td>Speed</td><td>Moderate</td><td>Fast</td><td>Slow</td><td>Moderate</td></tr>
+          <tr><td>Capacity</td><td>Very high</td><td>High</td><td>Low</td><td>Moderate</td></tr>
+          <tr><td>Cost per GB</td><td>Low</td><td>Medium</td><td>Very low</td><td>Medium-High</td></tr>
+          <tr><td>Durability</td><td>Fragile (moving parts)</td><td>Robust</td><td>Easily scratched</td><td>Robust (but easy to lose)</td></tr>
+          <tr><td>Portability</td><td>Moderate</td><td>High</td><td>High</td><td>Very high</td></tr>
         </tbody>
       </table>
+
+      <h4>Storage Capacity in Real-World Terms</h4>
+      <p>It can be hard to visualise what storage sizes actually mean. Here are some rough comparisons using everyday files:</p>
+      <table>
+        <thead>
+          <tr><th>Storage</th><th>Photos (12 MP)</th><th>Songs (MP3)</th><th>HD Films (1080p)</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>1 GB</strong></td><td>~250 photos</td><td>~250 songs</td><td>Less than 1 film</td></tr>
+          <tr><td><strong>32 GB</strong> (USB stick)</td><td>~8,000 photos</td><td>~8,000 songs</td><td>~8 films</td></tr>
+          <tr><td><strong>256 GB</strong> (SSD)</td><td>~64,000 photos</td><td>~64,000 songs</td><td>~64 films</td></tr>
+          <tr><td><strong>1 TB</strong> (HDD)</td><td>~250,000 photos</td><td>~250,000 songs</td><td>~250 films</td></tr>
+          <tr><td><strong>4 TB</strong> (large HDD)</td><td>~1,000,000 photos</td><td>~1,000,000 songs</td><td>~1,000 films</td></tr>
+        </tbody>
+      </table>
+
+      <h4>When Should You Use Each Type of Storage?</h4>
+      <table>
+        <thead>
+          <tr><th>Scenario</th><th>Best Choice</th><th>Why</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>A student needs to carry homework between home and school</td>
+            <td>USB flash drive</td>
+            <td>Small, portable, cheap, and easy to plug in anywhere</td>
+          </tr>
+          <tr>
+            <td>A school needs fast-booting computers for everyday use</td>
+            <td>SSD</td>
+            <td>Very fast read/write speeds mean the operating system and applications load quickly</td>
+          </tr>
+          <tr>
+            <td>A business needs to archive 10 years of records cheaply</td>
+            <td>HDD (or cloud storage)</td>
+            <td>HDDs offer very high capacity at low cost per GB; cloud offers off-site backup</td>
+          </tr>
+          <tr>
+            <td>A musician wants to distribute a demo album to fans</td>
+            <td>Optical disc (CD) or cloud</td>
+            <td>CDs are cheap to produce in bulk; cloud links are free to share</td>
+          </tr>
+          <tr>
+            <td>A photographer needs to back up 500 GB of RAW images on the go</td>
+            <td>Portable SSD</td>
+            <td>Fast transfer speeds, durable (no moving parts), compact enough for a camera bag</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- EMBEDDED SYSTEMS -->
+      <h3>Embedded Systems</h3>
+      <p>An <strong>embedded system</strong> is a dedicated computer system designed to perform one specific function (or a small set of functions) within a larger mechanical or electrical device. Unlike the general-purpose computer on your desk, an embedded system is built into the product and usually cannot be reprogrammed by the user.</p>
+
+      <p><strong>Examples of embedded systems:</strong></p>
+      <ul>
+        <li><strong>Washing machines</strong> &mdash; a microcontroller runs the wash cycle, controls water temperature, spins the drum at the right speed, and displays the remaining time</li>
+        <li><strong>Traffic lights</strong> &mdash; an embedded system manages the timing of light changes and responds to sensors detecting waiting vehicles or pedestrians</li>
+        <li><strong>Microwaves</strong> &mdash; a small processor controls the power level, timer, turntable motor, and safety interlocks</li>
+        <li><strong>Car engine management systems</strong> &mdash; constantly monitor sensors (temperature, oxygen levels, throttle position) and adjust fuel injection, ignition timing, and emissions in real time</li>
+        <li><strong>Smart thermostats</strong> &mdash; monitor room temperature using sensors, learn your schedule, and control the heating/cooling system automatically (e.g. Hive, Nest)</li>
+      </ul>
+
+      <h4>Embedded Systems vs General-Purpose Computers</h4>
+      <table>
+        <thead>
+          <tr><th>Feature</th><th>Embedded System</th><th>General-Purpose Computer</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Purpose</td><td>Single dedicated task</td><td>Many different tasks</td></tr>
+          <tr><td>User interface</td><td>Simple or none (buttons, small screen)</td><td>Full GUI, keyboard, mouse, monitor</td></tr>
+          <tr><td>Operating system</td><td>Minimal or none (firmware)</td><td>Full OS (Windows, macOS, Linux)</td></tr>
+          <tr><td>Reprogrammable?</td><td>Usually not by the user</td><td>Yes &mdash; install any software</td></tr>
+          <tr><td>Processing power</td><td>Low (only what is needed)</td><td>High (to handle many tasks)</td></tr>
+          <tr><td>Cost</td><td>Very low per unit</td><td>Higher</td></tr>
+          <tr><td>Examples</td><td>Washing machine, traffic light, fitness tracker</td><td>Laptop, desktop PC, tablet</td></tr>
+        </tbody>
+      </table>
+
+      <div class="key-concept">
+        <strong>Key Concept: Embedded Systems</strong>
+        Embedded systems are everywhere. There are far more embedded processors in the world than general-purpose computers. Your home alone might contain dozens: in the fridge, the boiler, the TV remote, the smoke alarm, and even in your toothbrush if it is electric. They are designed to be cheap, reliable, and energy-efficient because they only need to do one job well.
+      </div>
 
       <!-- OPERATING SYSTEMS -->
       <h3>Operating Systems</h3>
@@ -276,6 +509,121 @@
 
       <div class="warning">
         <strong>Common Mistake:</strong> Students sometimes say &ldquo;Python is compiled&rdquo; or &ldquo;C++ is interpreted.&rdquo; While some languages can technically use both methods, in exams you should say Python is <strong>interpreted</strong> and C/C++ are <strong>compiled</strong>. Also, do not confuse translation methods with the language itself &mdash; a compiler/interpreter is a separate piece of software, not a feature of the language.
+      </div>
+    </section>
+
+    <!-- ==================== CASE STUDIES ==================== -->
+    <section class="explore">
+      <span class="section-label">Explore</span>
+      <h2>Real-World Case Studies</h2>
+
+      <div class="case-study">
+        <strong>Case Study 1: How a Smartphone Uses All the Components</strong>
+        <p>A modern smartphone is a remarkable example of computer systems working together:</p>
+        <ul>
+          <li><strong>CPU</strong> &mdash; A multi-core processor (e.g. Apple A17, Snapdragon 8 Gen 3) handles everything from running apps to rendering graphics. It uses the FDE cycle billions of times per second.</li>
+          <li><strong>RAM</strong> &mdash; Typically 6&ndash;12 GB. Keeps your currently open apps in memory so you can switch between them instantly. When you close an app, its data is cleared from RAM.</li>
+          <li><strong>Storage</strong> &mdash; 64 GB to 1 TB of flash storage (similar technology to SSDs) stores your photos, apps, music, and the operating system itself.</li>
+          <li><strong>Operating System</strong> &mdash; iOS or Android manages all the hardware, handles multitasking (switching between apps), manages touch input, and provides the app store for installing software.</li>
+          <li><strong>Sensors</strong> &mdash; Accelerometer (detects movement/orientation), GPS (location), gyroscope (rotation), proximity sensor (detects when the phone is near your ear), fingerprint sensor, and camera sensors &mdash; all controlled by embedded systems within the phone.</li>
+          <li><strong>Embedded systems</strong> &mdash; The phone contains many embedded processors: one manages the touchscreen, another handles the Bluetooth chip, another runs the camera&rsquo;s image processing, and the baseband processor manages mobile network connections.</li>
+        </ul>
+      </div>
+
+      <div class="case-study">
+        <strong>Case Study 2: Games Console vs PC</strong>
+        <p>A games console (like a PlayStation 5 or Xbox Series X) and a gaming PC both play games, but they are designed very differently:</p>
+        <ul>
+          <li><strong>Hardware</strong> &mdash; A console uses <strong>custom-designed hardware</strong>. Every PS5 has the exact same CPU, GPU, RAM, and SSD. This means game developers know exactly what hardware their game will run on and can optimise perfectly for it. A PC, on the other hand, can have thousands of different hardware combinations.</li>
+          <li><strong>Operating system</strong> &mdash; Consoles run a <strong>stripped-down, optimised OS</strong> that dedicates almost all system resources to the game. A gaming PC runs a full operating system (Windows) with background processes, updates, and other software competing for resources.</li>
+          <li><strong>Performance</strong> &mdash; Because console hardware is fixed and the OS is lean, a console can often deliver a smooth gaming experience with hardware that would be considered mid-range in a PC. However, PCs can be upgraded with more powerful components over time.</li>
+          <li><strong>Flexibility</strong> &mdash; A PC is a general-purpose computer: you can browse the web, write documents, develop software, and play games. A console is more like a specialised system &mdash; its primary function is gaming and media playback.</li>
+        </ul>
+      </div>
+
+      <div class="case-study">
+        <strong>Case Study 3: Moore&rsquo;s Law &mdash; The Incredible Shrinking Transistor</strong>
+        <p>In 1965, Gordon Moore (co-founder of Intel) observed that the number of transistors on a microchip was <strong>doubling approximately every two years</strong>, while the cost per transistor was halving. This observation became known as <strong>Moore&rsquo;s Law</strong>.</p>
+        <ul>
+          <li><strong>1971</strong> &mdash; The Intel 4004 (the first commercial microprocessor) had <strong>2,300 transistors</strong>.</li>
+          <li><strong>1989</strong> &mdash; The Intel 486 had <strong>1.2 million transistors</strong>.</li>
+          <li><strong>2005</strong> &mdash; Dual-core processors arrived with hundreds of millions of transistors.</li>
+          <li><strong>2020s</strong> &mdash; Modern chips like the Apple M2 Ultra contain over <strong>130 billion transistors</strong>.</li>
+        </ul>
+        <p>However, Moore&rsquo;s Law is <strong>slowing down</strong>. Transistors are now so small (just a few nanometres &mdash; smaller than a strand of DNA) that we are approaching the physical limits of silicon. Engineers face challenges with heat dissipation, quantum effects, and the sheer difficulty of manufacturing at such tiny scales. The industry is exploring new approaches including 3D chip stacking, new materials, and even quantum computing to continue improving performance.</p>
+      </div>
+
+      <div class="did-you-know">
+        <strong>Did You Know?</strong>
+        The Apollo 11 guidance computer that helped land humans on the Moon in 1969 had just <strong>74 KB of memory</strong> and ran at 0.043 MHz. That is less memory than a single email attachment today, and millions of times slower than the phone in your pocket. Yet it successfully navigated a spacecraft 384,000 km to the Moon and back.
+      </div>
+    </section>
+
+    <!-- ==================== KEY VOCABULARY ==================== -->
+    <section class="understand">
+      <span class="section-label">Understand</span>
+      <h2>Key Vocabulary</h2>
+      <p>Make sure you know all of these terms. They frequently appear in exam questions.</p>
+
+      <table class="vocab-table">
+        <thead>
+          <tr><th>Term</th><th>Definition</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>CPU</td><td>Central Processing Unit &mdash; the &ldquo;brain&rdquo; of the computer that processes instructions and performs calculations.</td></tr>
+          <tr><td>ALU</td><td>Arithmetic Logic Unit &mdash; the part of the CPU that performs arithmetic (add, subtract, etc.) and logic (comparisons, AND/OR/NOT) operations.</td></tr>
+          <tr><td>CU</td><td>Control Unit &mdash; the part of the CPU that fetches, decodes, and coordinates the execution of instructions.</td></tr>
+          <tr><td>Register</td><td>A tiny, ultra-fast storage location inside the CPU used to hold data or instructions the CPU is currently processing.</td></tr>
+          <tr><td>PC</td><td>Program Counter &mdash; a register that holds the memory address of the next instruction to be fetched.</td></tr>
+          <tr><td>MAR</td><td>Memory Address Register &mdash; holds the address of the memory location currently being read from or written to.</td></tr>
+          <tr><td>MDR</td><td>Memory Data Register &mdash; holds the data that has been fetched from memory or is about to be written to memory.</td></tr>
+          <tr><td>ACC</td><td>Accumulator &mdash; a register that holds the result of the most recent calculation performed by the ALU.</td></tr>
+          <tr><td>Cache</td><td>A small amount of very fast memory inside or near the CPU that stores frequently accessed data and instructions.</td></tr>
+          <tr><td>Clock Speed</td><td>The number of FDE cycles the CPU can perform per second, measured in gigahertz (GHz).</td></tr>
+          <tr><td>Core</td><td>An independent processing unit within the CPU. Multiple cores allow parallel processing of tasks.</td></tr>
+          <tr><td>FDE Cycle</td><td>Fetch-Decode-Execute cycle &mdash; the three-stage process the CPU repeats to carry out each instruction.</td></tr>
+          <tr><td>RAM</td><td>Random Access Memory &mdash; volatile, read/write memory that stores currently running programs and data.</td></tr>
+          <tr><td>ROM</td><td>Read-Only Memory &mdash; non-volatile memory that stores permanent boot-up instructions (BIOS/UEFI).</td></tr>
+          <tr><td>Virtual Memory</td><td>A section of the hard drive/SSD used as temporary extra RAM when physical RAM is full.</td></tr>
+          <tr><td>HDD</td><td>Hard Disk Drive &mdash; magnetic secondary storage using spinning platters. High capacity, low cost, but slower and fragile.</td></tr>
+          <tr><td>SSD</td><td>Solid State Drive &mdash; flash-based secondary storage with no moving parts. Fast, durable, but more expensive per GB.</td></tr>
+          <tr><td>Optical</td><td>Storage media (CD, DVD, Blu-ray) that use a laser to read and write data. Low capacity but cheap and portable.</td></tr>
+          <tr><td>Embedded System</td><td>A dedicated computer system built into a larger device to perform a specific function (e.g. washing machine controller).</td></tr>
+          <tr><td>Operating System</td><td>System software that manages hardware resources, provides a user interface, and runs application software (e.g. Windows, Android).</td></tr>
+          <tr><td>Utility Software</td><td>System software that performs maintenance tasks such as antivirus scanning, defragmentation, encryption, and backup.</td></tr>
+          <tr><td>Compiler</td><td>A translator that converts the entire high-level source code into machine code in one go, producing a standalone executable.</td></tr>
+          <tr><td>Interpreter</td><td>A translator that converts and executes high-level source code one line at a time. Requires the interpreter to be present each time.</td></tr>
+          <tr><td>High-Level Language</td><td>A programming language close to human language (e.g. Python, Java). Portable and easy to read, but must be translated.</td></tr>
+          <tr><td>Low-Level Language</td><td>A programming language close to machine code (assembly language or binary). Hard to read but fast and hardware-specific.</td></tr>
+          <tr><td>Machine Code</td><td>Binary instructions (0s and 1s) that the CPU can execute directly. The lowest level of programming language.</td></tr>
+          <tr><td>Assembly Language</td><td>A low-level language using short mnemonics (e.g. LDA, ADD, STO) that map directly to machine code instructions. Translated by an assembler.</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- ==================== EXAM TIPS ==================== -->
+    <section class="explore">
+      <span class="section-label">Explore</span>
+      <h2>Exam Tips</h2>
+
+      <div class="exam-tip">
+        <strong>Exam Tip: Registers and the FDE Cycle</strong>
+        <p>Know your registers and what each one stores. Be able to name the <strong>PC</strong>, <strong>MAR</strong>, <strong>MDR</strong>, and <strong>ACC</strong> and explain each one&rsquo;s role. In the exam, you may be asked to trace through the FDE cycle for a given instruction &mdash; practise writing out each step, naming the registers and buses used at each point. Use the walkthrough example in this topic as a model answer.</p>
+      </div>
+
+      <div class="exam-tip">
+        <strong>Exam Tip: Comparing Storage Types</strong>
+        <p>When comparing storage types (HDD vs SSD vs optical vs USB), always structure your answer around specific advantages and disadvantages: <strong>speed</strong>, <strong>capacity</strong>, <strong>cost</strong>, <strong>durability</strong>, and <strong>portability</strong>. If the question gives a scenario (e.g. &ldquo;a photographer who travels frequently&rdquo;), link your answer directly to the needs of that person. Do not just list generic facts &mdash; <strong>explain why</strong> a particular storage type suits the scenario.</p>
+      </div>
+
+      <div class="exam-tip">
+        <strong>Exam Tip: Always Give Examples</strong>
+        <p>Whenever possible, support your answers with <strong>specific examples</strong>. Instead of writing &ldquo;an embedded system is in a household device,&rdquo; write &ldquo;an embedded system is used in a washing machine to control the wash cycle, water temperature, and spin speed.&rdquo; Specific examples demonstrate deeper understanding and earn more marks.</p>
+      </div>
+
+      <div class="exam-tip">
+        <strong>Exam Tip: Compilers vs Interpreters</strong>
+        <p>This is one of the most commonly examined topics. Remember the key trade-off: a <strong>compiler</strong> is slow to translate but produces fast-running code; an <strong>interpreter</strong> is quick to start running but slower overall because it translates every time. Be able to name an example of each (e.g. C is compiled, Python is interpreted).</p>
       </div>
     </section>
 
@@ -354,6 +702,41 @@
           <p><strong>Answer:</strong> A <strong>compiler</strong> translates the entire source code into machine code all at once, producing a standalone executable file. <strong>Advantage:</strong> The compiled program runs faster because it does not need translating again each time. An <strong>interpreter</strong> translates and executes the code one line at a time. <strong>Advantage:</strong> It stops at the first error and tells you exactly where it is, making it easier to find and fix bugs during development.</p>
         </div>
       </div>
+
+      <div class="hint">
+        <div class="hint-title">Q11: What is an embedded system? Give two examples.</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> An embedded system is a <strong>dedicated computer system</strong> designed to perform a specific function within a larger device. It is usually built into the product and cannot be reprogrammed by the user. <strong>Example 1:</strong> A washing machine uses an embedded system to control the wash cycle, water temperature, and drum speed. <strong>Example 2:</strong> A car engine management system uses an embedded processor to monitor sensors and adjust fuel injection and ignition timing in real time.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q12: Describe the role of each of the three buses in the Von Neumann architecture.</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> <strong>Address bus</strong> &mdash; carries the memory address of the location being read from or written to. It is one-directional (CPU to memory). <strong>Data bus</strong> &mdash; carries the actual data or instructions being transferred between the CPU and memory (or I/O devices). It is bidirectional. <strong>Control bus</strong> &mdash; carries control signals such as read/write commands, clock pulses, and interrupt requests. It is bidirectional and coordinates the timing and actions of all components.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q13: A school needs to buy new computers. Recommend whether they should have HDDs or SSDs. Justify your answer.</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> The school should choose <strong>SSDs</strong>. <strong>Justification:</strong> (1) SSDs are much <strong>faster</strong>, so the computers will boot up quickly and applications will load without delay &mdash; this is important in a school where lesson time is limited. (2) SSDs have <strong>no moving parts</strong>, making them more durable &mdash; school computers are often handled roughly by students, so durability matters. (3) SSDs are <strong>quieter</strong> and produce less heat, creating a better classroom environment. The higher cost per GB is acceptable because school computers typically do not need huge storage capacities &mdash; most student work can be saved on the school network or cloud storage.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q14: Explain why Python programs run slower than equivalent C programs.</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> Python is an <strong>interpreted</strong> language, meaning the Python interpreter translates and executes the code <strong>one line at a time</strong>, every time the program is run. This repeated translation adds overhead. C is a <strong>compiled</strong> language &mdash; the C compiler translates the entire source code into machine code <strong>once</strong>, producing a standalone executable that the CPU runs directly without any further translation. Because the compiled C program is already in machine code, it executes much faster. Additionally, C gives programmers more direct control over memory and hardware, allowing further optimisation.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q15: Describe what happens during the fetch stage of the FDE cycle, naming the registers used.</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> During the fetch stage: (1) The address of the next instruction is held in the <strong>Program Counter (PC)</strong>. (2) This address is copied from the PC into the <strong>Memory Address Register (MAR)</strong>. (3) The address is sent along the <strong>address bus</strong> to main memory, and a read signal is sent along the <strong>control bus</strong>. (4) The instruction stored at that memory address is retrieved and sent along the <strong>data bus</strong> into the <strong>Memory Data Register (MDR)</strong>. (5) The <strong>PC is incremented</strong> by one so that it now points to the next instruction in sequence.</p>
+        </div>
+      </div>
     </section>
 
     <!-- ==================== REFLECT ==================== -->
@@ -375,6 +758,8 @@
       <div class="extra-resources">
         <h3>Further Reading</h3>
         <ul>
+          <li><a href="https://www.bbc.co.uk/bitesize/examspecs/zdqy7nb" target="_blank" rel="noopener">BBC Bitesize &mdash; Edexcel GCSE Computer Science</a> &mdash; Comprehensive revision covering all topics in the Edexcel specification</li>
+          <li><a href="https://isaaccomputerscience.org/topics/computer_systems" target="_blank" rel="noopener">Isaac Computer Science &mdash; Computer Systems</a> &mdash; In-depth explanations of CPU architecture, memory, and storage with interactive diagrams</li>
           <li><a href="https://hvgcsecs.cshub.org.je/topics/topic3.html" target="_blank" rel="noopener">GCSE Topic 3: Computer Systems</a> &mdash; Full Edexcel specification coverage with diagrams and interactive examples</li>
           <li><a href="https://hvgcsecs.cshub.org.je/activities/index.html" target="_blank" rel="noopener">Revision Activities</a> &mdash; Memory match and connection wall games for computer systems</li>
         </ul>
@@ -394,6 +779,15 @@
     <p>Python Fundamentals &mdash; A KS4 Learning Platform</p>
     <p>Computer Systems &mdash; GCSE Computer Science Theory</p>
   </footer>
+
+  <script>
+    document.querySelectorAll('.hint-title').forEach(function (title) {
+      title.addEventListener('click', function () {
+        var content = this.nextElementSibling;
+        content.classList.toggle('visible');
+      });
+    });
+  </script>
 
 </body>
 </html>

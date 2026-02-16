@@ -4,6 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Chapter 1: What is Programming? - Python Fundamentals</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="../css/style.css" />
   <script src="https://cdn.jsdelivr.net/pyodide/v0.24.0/full/pyodide.js"></script>
 </head>
@@ -36,6 +39,8 @@
         <li>Use the <code>print()</code> function to display text and numbers on screen</li>
         <li>Understand that computers follow instructions step by step, from top to bottom</li>
         <li>Use Python as a calculator to perform basic arithmetic</li>
+        <li>Combine text and numbers in your output using multiple arguments</li>
+        <li>Recognise and fix common beginner mistakes in Python code</li>
       </ul>
     </section>
 
@@ -122,6 +127,103 @@ print(7 + 3 * 2)</code></pre>
         <strong>Try This:</strong> Use Python to calculate how many hours there are in a year (<code>365 * 24</code>). What about how many minutes? Can you work out your age in days? Try using brackets to change the order of operations: compare <code>print(7 + 3 * 2)</code> with <code>print((7 + 3) * 2)</code>.
       </div>
 
+      <!-- Example 4 -->
+      <h3>Example 4: String Repetition</h3>
+      <p>Here&rsquo;s a fun trick &mdash; you can use the <code>*</code> symbol to <strong>repeat text</strong>. When you multiply a string by a number, Python repeats that text the given number of times. This is called <strong>string repetition</strong>, and it&rsquo;s surprisingly useful for creating patterns and formatting your output.</p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Python Code</span>
+          <div>
+            <button class="copy-button">Copy Code</button>
+            <button class="run-button">Run Code</button>
+          </div>
+        </div>
+        <pre><code contenteditable="true"># Repeat text with *
+print("Ha" * 3)
+
+# Create a divider line
+print("-" * 30)
+
+# Make a simple border
+print("*" * 20)
+print("*  Hello, World!  *")
+print("*" * 20)</code></pre>
+        <div class="output-box empty">(click "Run Code" to see output)</div>
+      </div>
+
+      <p>Notice how <code>"Ha" * 3</code> produces <code>HaHaHa</code> &mdash; it repeats the string three times in a row. This is very different from multiplying numbers! When Python sees a string on one side and a number on the other, it knows you want repetition rather than arithmetic.</p>
+
+      <div class="try-this">
+        <strong>Try This:</strong> Can you create a longer border using <code>"=-" * 15</code>? What happens if you try <code>"Hello " * 5</code> (notice the space after &ldquo;Hello&rdquo;)? Experiment with repeating different characters to create interesting patterns.
+      </div>
+
+      <!-- Example 5 -->
+      <h3>Example 5: Escape Characters</h3>
+      <p>What if you want your text to appear on multiple lines from a single <code>print()</code> statement? Or what if you want to add a tab space? Python uses special codes called <strong>escape characters</strong> for this. They all start with a backslash (<code>\</code>).</p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Python Code</span>
+          <div>
+            <button class="copy-button">Copy Code</button>
+            <button class="run-button">Run Code</button>
+          </div>
+        </div>
+        <pre><code contenteditable="true"># \n creates a new line
+print("Line one\nLine two\nLine three")
+
+# \t creates a tab (indent)
+print("Name:\tAlex")
+print("Age:\t15")
+print("Subject:\tComputer Science")
+
+# Combine both!
+print("\n--- Report Card ---")
+print("Maths:\t\tA")
+print("English:\tB")
+print("Science:\tA*")</code></pre>
+        <div class="output-box empty">(click "Run Code" to see output)</div>
+      </div>
+
+      <p>The <code>\n</code> escape character creates a <strong>new line</strong> &mdash; it&rsquo;s like pressing Enter inside your string. The <code>\t</code> escape character inserts a <strong>tab</strong>, which is useful for lining things up neatly in columns. These are called &ldquo;escape&rdquo; characters because the backslash tells Python to <em>escape</em> from treating the next letter as a normal character.</p>
+
+      <div class="try-this">
+        <strong>Try This:</strong> Create a small table of your favourite things using <code>\t</code> to align the columns. Can you use <code>\n</code> to print your full address on separate lines using just one <code>print()</code> statement?
+      </div>
+
+      <!-- Example 6 -->
+      <h3>Example 6: Multiple Arguments in print()</h3>
+      <p>So far, we&rsquo;ve put one thing inside the <code>print()</code> brackets each time. But you can actually give <code>print()</code> <strong>multiple arguments</strong> by separating them with commas. Python will print them all on the same line with a space between each one. This is incredibly handy for mixing text and numbers together.</p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Python Code</span>
+          <div>
+            <button class="copy-button">Copy Code</button>
+            <button class="run-button">Run Code</button>
+          </div>
+        </div>
+        <pre><code contenteditable="true"># Mixing text and numbers
+print("Score:", 100)
+
+# Combining text with a calculation
+print("Hours in a week:", 7 * 24)
+
+# Multiple items separated by commas
+print("My name is", "Alex", "and I am", 15, "years old")
+
+# Useful for showing results
+print("Half of 99 is", 99 / 2)</code></pre>
+        <div class="output-box empty">(click "Run Code" to see output)</div>
+      </div>
+
+      <p>When you separate items with commas inside <code>print()</code>, Python automatically puts a space between each item. Notice that you <strong>don&rsquo;t</strong> need quotation marks around numbers &mdash; only around text. This makes it easy to combine descriptive labels with calculated results in your output.</p>
+
+      <div class="try-this">
+        <strong>Try This:</strong> Use commas to print a sentence about yourself that includes your name, age, and a calculation (like how many months old you are). What happens if you write <code>print("2 + 2 =", 2 + 2)</code>?
+      </div>
+
     </section>
 
     <!-- ==================== UNDERSTAND ==================== -->
@@ -144,8 +246,15 @@ print(7 + 3 * 2)</code></pre>
         <li>It can do almost anything: websites, games, data science, artificial intelligence, and more</li>
       </ul>
 
+      <div class="key-concept">
+        <strong>Did You Know? &mdash; Why is it Called &ldquo;Python&rdquo;?</strong>
+        When Guido van Rossum started creating Python in the late 1980s, he was reading scripts from <em>Monty Python&rsquo;s Flying Circus</em>, the famous British comedy show. He wanted a name that was short, unique, and slightly mysterious &mdash; so he chose &ldquo;Python.&rdquo; This is why you will often see silly references to spam, eggs, and parrots in Python tutorials and documentation. The snake logo came later and stuck, but the true origin is comedy, not reptiles!
+      </div>
+
       <h3>How Does <code>print()</code> Work?</h3>
       <p><code>print()</code> is a <strong>function</strong> built into Python. A function is like a mini-program that performs a specific job. When you write <code>print("Hello")</code>, you are <em>calling</em> the print function and giving it the text <code>"Hello"</code> to display. The text inside the brackets is called an <strong>argument</strong> &mdash; it&rsquo;s the data you&rsquo;re handing to the function so it knows what to do.</p>
+
+      <p>You can think of <code>print()</code> as a loudspeaker for your program. Without it, your code might be doing calculations and processing data behind the scenes, but you won&rsquo;t see any of it. The <code>print()</code> function is what makes the invisible visible &mdash; it takes whatever you give it and displays it on the screen for you to read.</p>
 
       <div class="key-concept">
         <strong>Key Concept: Sequential Execution</strong>
@@ -160,7 +269,93 @@ print(7 + 3 * 2)</code></pre>
       </ul>
       <p>Quotation marks tell Python &ldquo;this is just text, don&rsquo;t try to do anything clever with it.&rdquo; Without them, Python treats the content as code to be evaluated.</p>
 
-      <h3>Common Misconceptions</h3>
+      <div class="key-concept">
+        <strong>Did You Know? &mdash; The First Computer Program</strong>
+        The very first computer program was written by <strong>Ada Lovelace</strong> in 1843 &mdash; more than 100 years before modern computers existed! Ada wrote detailed instructions for Charles Babbage&rsquo;s Analytical Engine, a mechanical computing machine that was never fully built. She is widely regarded as the world&rsquo;s first computer programmer, and every year in October, <em>Ada Lovelace Day</em> celebrates the contributions of women in science, technology, engineering, and mathematics.
+      </div>
+
+      <div class="key-concept">
+        <strong>Did You Know? &mdash; The &ldquo;Hello, World!&rdquo; Tradition</strong>
+        The tradition of writing &ldquo;Hello, World!&rdquo; as your first program dates back to <strong>1978</strong>, when Brian Kernighan used it in his book about the C programming language. Since then, nearly every programming textbook and tutorial in the world has started the same way. It has become a universal rite of passage for new programmers &mdash; so by running that first example above, you have officially joined a tradition that is almost 50 years old!
+      </div>
+
+      <!-- Real World Applications -->
+      <h3>Where is Python Used in the Real World?</h3>
+
+      <p>You might be wondering: &ldquo;This is interesting, but what can Python actually <em>do</em> in the real world?&rdquo; The answer is: an enormous amount. Python is one of the most widely used programming languages on the planet, and it powers some of the technology you use every single day.</p>
+
+      <p><strong>Web Development:</strong> Some of the world&rsquo;s biggest websites are built using Python. <strong>Instagram</strong>, the photo-sharing app used by over a billion people, runs its entire back-end on Python. <strong>YouTube</strong> also uses Python extensively to serve videos to millions of viewers every hour. Python&rsquo;s web frameworks, such as Django and Flask, allow developers to build powerful websites quickly and reliably.</p>
+
+      <p><strong>Data Science and Artificial Intelligence:</strong> Python is the language of choice for data scientists and AI researchers worldwide. When <strong>Netflix</strong> recommends a film it thinks you will enjoy, that recommendation system is built with Python. Hospitals and research laboratories use Python to analyse medical data and identify patterns that help doctors diagnose diseases earlier. Machine learning &mdash; the technology behind voice assistants like Siri and Alexa &mdash; is predominantly developed in Python.</p>
+
+      <p><strong>Games:</strong> While most big-budget games are built in languages like C++, Python plays a significant role in the gaming world. <strong>Minecraft</strong> supports Python-based modding through various community tools, allowing players to write code that changes how the game works. The strategy game <strong>Civilisation IV</strong> used Python for much of its game logic and modding system. Python is also widely used for creating game prototypes and smaller indie games.</p>
+
+      <p><strong>Space Exploration:</strong> This is where things get really exciting. <strong>NASA</strong> uses Python for everything from mission planning to analysing data sent back from Mars rovers. <strong>SpaceX</strong> uses Python in its flight software testing processes. The first-ever image of a black hole, captured in 2019, was processed using Python code. When you learn Python, you are learning the same language that helps humanity explore the universe.</p>
+
+      <p><strong>Education:</strong> Python is now the <strong>most taught first programming language</strong> at universities worldwide. It is used in GCSE and A-Level Computer Science courses across the UK, and it is the recommended language for many exam boards including OCR, AQA, and Edexcel. Its clear, readable syntax makes it the ideal language for learning the fundamentals of programming before moving on to other languages.</p>
+
+      <!-- Worked Example -->
+      <h3>Worked Example: Building a Greeting Card</h3>
+      <p>Let&rsquo;s walk through building a small program step by step. We want to create a simple greeting card that displays a bordered message with some personalisation and a fun calculation. This will combine everything you have learned so far: <code>print()</code>, strings, comments, arithmetic, and multiple arguments.</p>
+
+      <p><strong>Step 1:</strong> Start with a comment describing what the program does. Comments make your code easier to understand for anyone reading it &mdash; including your future self!</p>
+
+      <p><strong>Step 2:</strong> Create a decorative border using string repetition.</p>
+
+      <p><strong>Step 3:</strong> Print the greeting message using plain text strings.</p>
+
+      <p><strong>Step 4:</strong> Add a fun fact using a calculation with multiple arguments in <code>print()</code>.</p>
+
+      <p><strong>Step 5:</strong> Close with another border line to complete the card.</p>
+
+      <p>Here is the finished program. Read through each line and make sure you understand what it does before you run it:</p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Python Code</span>
+          <div>
+            <button class="copy-button">Copy Code</button>
+            <button class="run-button">Run Code</button>
+          </div>
+        </div>
+        <pre><code contenteditable="true"># Greeting Card Program
+# This program displays a personalised greeting card
+
+# Step 2: Top border
+print("=" * 35)
+
+# Step 3: Greeting messages
+print("   Happy Birthday, Alex!")
+print("   Wishing you a fantastic day!")
+print()
+
+# Step 4: Fun facts with calculations
+print("   Fun fact: you are now", 15 * 365, "days old!")
+print("   That's about", 15 * 365 * 24, "hours!")
+print()
+
+# Step 5: Closing message and bottom border
+print("   From your friends in Python class")
+print("=" * 35)</code></pre>
+        <div class="output-box empty">(click "Run Code" to see output)</div>
+      </div>
+
+      <p>Let&rsquo;s break down what each part does:</p>
+      <ul>
+        <li><strong>Lines 1&ndash;2:</strong> Comments explaining the purpose of the program. Python ignores these entirely.</li>
+        <li><strong>Line 5:</strong> <code>"=" * 35</code> repeats the equals sign 35 times to create a decorative border line.</li>
+        <li><strong>Lines 8&ndash;9:</strong> Simple <code>print()</code> statements displaying text strings. The spaces at the start add indentation for visual appeal.</li>
+        <li><strong>Line 10:</strong> <code>print()</code> with empty brackets prints a blank line, adding spacing.</li>
+        <li><strong>Lines 13&ndash;14:</strong> These combine text and arithmetic using commas. Python calculates <code>15 * 365</code> and <code>15 * 365 * 24</code> and displays the results alongside the text.</li>
+        <li><strong>Line 18:</strong> Another repeated string to close the border at the bottom of the card.</li>
+      </ul>
+
+      <div class="try-this">
+        <strong>Try This:</strong> Personalise this greeting card! Change the name, the age, and the message. Can you add more lines to the card? Try changing the border character from <code>=</code> to something else, like <code>*</code> or <code>#</code>.
+      </div>
+
+      <!-- Common Mistakes -->
+      <h3>Common Mistakes</h3>
       <div class="warning">
         <strong>Watch out:</strong> Many people think computers are &ldquo;smart&rdquo; or can &ldquo;figure things out.&rdquo; They can&rsquo;t. A computer is incredibly fast but has <strong>zero common sense</strong>. It follows your instructions blindly and precisely. If you tell it to do something silly, it will do it without question. If you forget a step, it won&rsquo;t fill in the gap for you. Every time your program does something unexpected, it&rsquo;s almost always because the instructions weren&rsquo;t quite right &mdash; and that&rsquo;s completely normal! Finding and fixing those mistakes is a huge part of programming, and it&rsquo;s called <strong>debugging</strong>.
       </div>
@@ -168,6 +363,117 @@ print(7 + 3 * 2)</code></pre>
       <div class="warning">
         <strong>Watch out:</strong> Spelling and punctuation matter in Python. Writing <code>Print("Hello")</code> with a capital P will cause an error &mdash; Python is <strong>case-sensitive</strong>, so <code>print</code> and <code>Print</code> are completely different words to it. Always use lowercase <code>print</code>.
       </div>
+
+      <p>Here are some of the most common mistakes that beginners make. Learning to spot these early will save you a lot of frustration!</p>
+
+      <p><strong>Mistake 1: Forgetting quotation marks around text</strong></p>
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Python Code</span>
+          <div>
+            <button class="copy-button">Copy Code</button>
+            <button class="run-button">Run Code</button>
+          </div>
+        </div>
+        <pre><code contenteditable="true"># This will cause an error!
+print(Hello)</code></pre>
+        <div class="output-box empty">(click "Run Code" to see output)</div>
+      </div>
+      <p>Without quotation marks, Python thinks <code>Hello</code> is the name of a variable or function, not a piece of text. Since nothing called <code>Hello</code> has been defined, Python raises a <code>NameError</code>. The fix is simple &mdash; add the quotation marks: <code>print("Hello")</code>.</p>
+
+      <p><strong>Mistake 2: Mismatched quotation marks</strong></p>
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Python Code</span>
+          <div>
+            <button class="copy-button">Copy Code</button>
+            <button class="run-button">Run Code</button>
+          </div>
+        </div>
+        <pre><code contenteditable="true"># This will cause an error!
+print("Hello')</code></pre>
+        <div class="output-box empty">(click "Run Code" to see output)</div>
+      </div>
+      <p>You started with a double quotation mark (<code>"</code>) but ended with a single one (<code>'</code>). Python requires you to use the <strong>same type of quotation mark</strong> at both ends. Either <code>"Hello"</code> or <code>'Hello'</code> will work, but you must be consistent within each string.</p>
+
+      <p><strong>Mistake 3: Missing brackets (parentheses)</strong></p>
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Python Code</span>
+          <div>
+            <button class="copy-button">Copy Code</button>
+            <button class="run-button">Run Code</button>
+          </div>
+        </div>
+        <pre><code contenteditable="true"># This will cause an error!
+print "Hello"</code></pre>
+        <div class="output-box empty">(click "Run Code" to see output)</div>
+      </div>
+      <p>In Python 3 (the version we are using), <code>print()</code> is a <strong>function</strong>, and functions always need brackets around their arguments. Writing <code>print "Hello"</code> without brackets was valid in an older version of Python (Python 2), but it causes a <code>SyntaxError</code> in Python 3. Always include the brackets: <code>print("Hello")</code>.</p>
+
+    </section>
+
+    <!-- ==================== KEY VOCABULARY ==================== -->
+    <section class="understand">
+      <span class="section-label">Understand</span>
+      <h2>Key Vocabulary</h2>
+
+      <p>Here are the important terms introduced in this chapter. Make sure you understand each one &mdash; they will appear again and again throughout the course.</p>
+
+      <table>
+        <tr>
+          <th>Term</th>
+          <th>Definition</th>
+        </tr>
+        <tr>
+          <td><strong>Program</strong></td>
+          <td>A set of instructions that a computer follows in order to complete a task or solve a problem.</td>
+        </tr>
+        <tr>
+          <td><strong>Programming Language</strong></td>
+          <td>A formal set of rules and vocabulary used to write instructions that a computer can understand and execute.</td>
+        </tr>
+        <tr>
+          <td><strong>Python</strong></td>
+          <td>A popular, high-level programming language known for its readability and versatility. Created by Guido van Rossum in 1991.</td>
+        </tr>
+        <tr>
+          <td><strong>print()</strong></td>
+          <td>A built-in Python function that displays text, numbers, or other data on the screen.</td>
+        </tr>
+        <tr>
+          <td><strong>String</strong></td>
+          <td>A piece of text in Python, written inside quotation marks. For example, <code>"Hello"</code> is a string.</td>
+        </tr>
+        <tr>
+          <td><strong>Argument</strong></td>
+          <td>A value passed to a function inside its brackets. In <code>print("Hello")</code>, the string <code>"Hello"</code> is the argument.</td>
+        </tr>
+        <tr>
+          <td><strong>Comment</strong></td>
+          <td>A note in your code that Python ignores, written after a <code>#</code> symbol. Used to explain code to human readers.</td>
+        </tr>
+        <tr>
+          <td><strong>Syntax</strong></td>
+          <td>The rules that define how Python code must be written. Like grammar in English, syntax errors occur when these rules are broken.</td>
+        </tr>
+        <tr>
+          <td><strong>Bug</strong></td>
+          <td>An error or mistake in a program that causes it to behave unexpectedly or produce incorrect results.</td>
+        </tr>
+        <tr>
+          <td><strong>Debugging</strong></td>
+          <td>The process of finding and fixing bugs in a program. A core skill for every programmer.</td>
+        </tr>
+        <tr>
+          <td><strong>Sequential Execution</strong></td>
+          <td>The way Python runs code from top to bottom, one line at a time, in the exact order it is written.</td>
+        </tr>
+        <tr>
+          <td><strong>Function</strong></td>
+          <td>A reusable block of code that performs a specific task. <code>print()</code> is an example of a built-in function.</td>
+        </tr>
+      </table>
     </section>
 
     <!-- ==================== PRACTICE ==================== -->
@@ -298,6 +604,109 @@ print("  > ^ <  ")
         </div>
       </div>
 
+      <!-- Exercise 4: Partially Guided -->
+      <div class="exercise">
+        <div class="exercise-title">Exercise 4: Python Calculator Challenge</div>
+        <div class="exercise-difficulty difficulty-2">Partially Guided</div>
+        <p>Use Python as a calculator to answer some real-world maths questions. For each question, write a <code>print()</code> statement that includes a label (text) and the calculation. We have started the first one for you.</p>
+
+        <div class="pseudocode">
+          <div class="pseudocode-label">Pseudocode:</div>
+          STEP 1: Complete the first calculation (seconds in a day)<br />
+          STEP 2: Work out how many days old you are (your age in years &times; 365)<br />
+          STEP 3: Convert your height from centimetres to millimetres (multiply by 10)<br />
+          STEP 4: Add a bonus calculation of your own choosing<br />
+          STEP 5: Run the code and check the answers make sense
+        </div>
+
+        <div class="code-block">
+          <div class="code-block-header">
+            <span class="code-block-label">Your Code</span>
+            <div>
+              <button class="copy-button">Copy Code</button>
+              <button class="run-button">Run Code</button>
+            </div>
+          </div>
+          <pre><code contenteditable="true"># Real-world Python calculations
+
+# How many seconds are in a day?
+# (Hint: 60 seconds x 60 minutes x 24 hours)
+print("Seconds in a day:", 60 * 60 * 24)
+
+# How many days old are you?
+# Replace __ with your age
+print("I am approximately ____ days old")
+
+# What is your height in millimetres?
+# Replace __ with your height in cm
+print("My height in mm is ____")
+
+# Bonus: add your own real-world calculation!
+</code></pre>
+          <div class="output-box empty">(click "Run Code" to see output)</div>
+        </div>
+
+        <div class="hint">
+          <div class="hint-title">Need a hint?</div>
+          <div class="hint-content">
+            <p>For the &ldquo;days old&rdquo; question, use commas to mix text and a calculation. For example, if you are 15 years old:</p>
+            <p><code>print("I am approximately", 15 * 365, "days old")</code></p>
+            <p>For the height question, if you are 165 cm tall:</p>
+            <p><code>print("My height in mm is", 165 * 10)</code></p>
+            <p>For your bonus calculation, try something like: How many lessons do you have in a school year? How many steps do you walk in a week? How many slices of toast have you eaten in your life?</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Exercise 5: Open-Ended -->
+      <div class="exercise">
+        <div class="exercise-title">Exercise 5: Create a Menu Display</div>
+        <div class="exercise-difficulty difficulty-3">Open-Ended</div>
+        <p>Use <code>print()</code> to create a menu for a restaurant or caf&eacute;. Your menu should include a title, at least <strong>5 items with prices</strong>, and some formatting to make it look professional. You can use string repetition for borders, <code>\t</code> for alignment, and blank lines for spacing.</p>
+
+        <div class="pseudocode">
+          <div class="pseudocode-label">Pseudocode:</div>
+          STEP 1: Print a decorative border or title for your restaurant<br />
+          STEP 2: Print at least 5 menu items, each with a name and price<br />
+          STEP 3: Use \t (tab) or spaces to align prices neatly<br />
+          STEP 4: Add section headings (e.g. Starters, Mains, Desserts)<br />
+          STEP 5: Close with a border and a message (e.g. &ldquo;Thank you for visiting!&rdquo;)
+        </div>
+
+        <div class="code-block">
+          <div class="code-block-header">
+            <span class="code-block-label">Your Code</span>
+            <div>
+              <button class="copy-button">Copy Code</button>
+              <button class="run-button">Run Code</button>
+            </div>
+          </div>
+          <pre><code contenteditable="true"># Create your restaurant or cafe menu here
+# Use borders, tabs, and spacing to make it look great!
+
+print("=" * 30)
+print("   Welcome to ____")
+print("=" * 30)
+
+# Add your menu items below
+
+</code></pre>
+          <div class="output-box empty">(click "Run Code" to see output)</div>
+        </div>
+
+        <div class="hint">
+          <div class="hint-title">Need a hint?</div>
+          <div class="hint-content">
+            <p>Here is an example of how you might format part of a menu:</p>
+            <p><code>print("--- Drinks ---")</code></p>
+            <p><code>print("Tea\t\t£1.50")</code></p>
+            <p><code>print("Coffee\t\t£2.00")</code></p>
+            <p><code>print("Hot Chocolate\t£2.50")</code></p>
+            <p>The <code>\t</code> characters create tab spaces, which help line up the prices. Use <code>"=" * 30</code> or <code>"-" * 30</code> to create neat divider lines. Think about what kind of restaurant you want &mdash; a pizza place, a sushi bar, a cake shop &mdash; and have fun designing the menu!</p>
+          </div>
+        </div>
+      </div>
+
     </section>
 
     <!-- ==================== REFLECT ==================== -->
@@ -315,13 +724,68 @@ print("  > ^ <  ")
         <li>What surprised you most about writing your first Python programs?</li>
       </ul>
 
+      <!-- Chapter Summary -->
+      <div class="key-concept">
+        <strong>Chapter Summary</strong>
+        In this chapter, you have learnt the following key ideas:
+        <ul>
+          <li><strong>Programming</strong> is giving a computer a precise set of instructions to complete a task.</li>
+          <li><strong>Python</strong> is a popular, beginner-friendly programming language used by professionals worldwide.</li>
+          <li>The <strong><code>print()</code></strong> function displays text and numbers on the screen. Text must be placed inside quotation marks (making it a <strong>string</strong>).</li>
+          <li>Python executes code from top to bottom in order &mdash; this is called <strong>sequential execution</strong>.</li>
+          <li>Python can perform <strong>arithmetic</strong> and follows the standard order of operations (BIDMAS/BODMAS).</li>
+          <li><strong>Comments</strong> (lines starting with <code>#</code>) are notes for humans that Python ignores. They help make your code readable and understandable.</li>
+        </ul>
+      </div>
+
+      <!-- Exam-Style Questions -->
+      <h3>Exam-Style Questions</h3>
+      <p>Test your understanding with these exam-style questions. Try to write your answer before clicking to reveal the mark scheme.</p>
+
+      <div class="hint">
+        <div class="hint-title">Q1: What is meant by the term &ldquo;programming language&rdquo;? (2 marks)</div>
+        <div class="hint-content">
+          <p><strong>Mark scheme:</strong></p>
+          <ul>
+            <li>A programming language is a formal set of rules/vocabulary (1 mark) used to write instructions that a computer can understand and execute (1 mark).</li>
+          </ul>
+          <p><strong>Example answer:</strong> A programming language is a set of rules and keywords that allows a human to write instructions in a structured way that a computer can interpret and carry out.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q2: Explain what &ldquo;sequential execution&rdquo; means in the context of a Python program. (2 marks)</div>
+        <div class="hint-content">
+          <p><strong>Mark scheme:</strong></p>
+          <ul>
+            <li>Sequential execution means that the computer runs each line of code one at a time (1 mark), from top to bottom in the order they are written (1 mark).</li>
+          </ul>
+          <p><strong>Example answer:</strong> Sequential execution means that Python processes instructions one line at a time, starting from the first line and working its way down to the last line, executing each instruction in the exact order it appears in the code.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q3: What is the purpose of the <code>print()</code> function in Python? (1 mark)</div>
+        <div class="hint-content">
+          <p><strong>Mark scheme:</strong></p>
+          <ul>
+            <li>The <code>print()</code> function outputs/displays data (text, numbers, or other values) to the screen (1 mark).</li>
+          </ul>
+          <p><strong>Example answer:</strong> The <code>print()</code> function is used to display information on the screen so the user can see the output of the program.</p>
+        </div>
+      </div>
+
+      <!-- Extra Resources -->
       <div class="extra-resources">
-        <h3>Extra Practice</h3>
-        <p>Want to explore programming in a different way? Try these interactive tools:</p>
+        <h3>Extra Resources</h3>
+        <p>Want to explore programming further? Try these trusted resources:</p>
         <ul>
           <li><a href="https://hvgcse.cshub.org.je/hvide.html" target="_blank" rel="noopener">Python Block Editor</a> &mdash; Build Python programs by dragging and dropping visual blocks</li>
           <li><a href="https://hvgcse.cshub.org.je/ProgrammingMindmap.html" target="_blank" rel="noopener">Programming Mindmap</a> &mdash; See how all programming concepts connect together</li>
           <li><a href="https://hvgcsecs.cshub.org.je/topics/topic1.html" target="_blank" rel="noopener">GCSE Topic 1: Computational Thinking</a> &mdash; Algorithms, pseudocode, and flowcharts with runnable Python examples</li>
+          <li><a href="https://www.bbc.co.uk/bitesize/examspecs/zdqy7nb" target="_blank" rel="noopener">BBC Bitesize: Edexcel Computer Science</a> &mdash; Revision notes and quizzes aligned with the Edexcel GCSE specification</li>
+          <li><a href="https://www.w3schools.com/python/python_intro.asp" target="_blank" rel="noopener">W3Schools: Python Introduction</a> &mdash; Interactive tutorials and examples you can edit and run online</li>
+          <li><a href="https://docs.python.org/3/tutorial/" target="_blank" rel="noopener">Python.org Official Tutorial</a> &mdash; The official Python tutorial, straight from the people who make the language</li>
         </ul>
       </div>
 

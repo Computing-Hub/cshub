@@ -4,19 +4,36 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Chapter 8: Dictionaries - Python Fundamentals</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="../css/style.css" />
   <script src="https://cdn.jsdelivr.net/pyodide/v0.24.0/full/pyodide.js"></script>
+  <style>
+    .did-you-know { background: linear-gradient(135deg, #e8f4fd, #d1ecf9); border: 2px solid #4cc9f0; border-radius: var(--radius-md); padding: var(--space-lg); margin: var(--space-md) 0; }
+    .did-you-know strong:first-child { display: block; margin-bottom: var(--space-xs); color: #0077b6; }
+    .real-world { background: linear-gradient(135deg, #f3e8ff, #ede5ff); border: 2px solid #7209b7; border-radius: var(--radius-md); padding: var(--space-lg); margin: var(--space-md) 0; }
+    .real-world strong:first-child { display: block; margin-bottom: var(--space-xs); color: #7209b7; }
+    .vocab-table th { background: linear-gradient(135deg, #4361ee, #4cc9f0); color: #fff; }
+    .exam-questions { background: var(--color-white); border: 2px solid #f77f00; border-radius: var(--radius-lg); padding: var(--space-xl); margin: var(--space-lg) 0; }
+    .exam-questions h3 { margin-top: 0; color: #f77f00; }
+    .exam-question { margin-bottom: var(--space-lg); padding-bottom: var(--space-md); border-bottom: 1px solid #e0e0e0; }
+    .exam-question:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
+    .marks { display: inline-block; background: var(--gradient-orange); color: #fff; font-size: 0.75rem; font-weight: 800; padding: var(--space-xs) var(--space-sm); border-radius: 50px; margin-left: var(--space-sm); }
+    .summary-box { background: linear-gradient(135deg, #e6f9f1, #d0f0e0); border: 2px solid var(--color-explore-border); border-radius: var(--radius-lg); padding: var(--space-xl); margin: var(--space-lg) 0; }
+    .summary-box h3 { margin-top: 0; color: var(--color-explore-border); }
+    .worked-example { background: var(--color-white); border: 3px solid #4361ee; border-radius: var(--radius-lg); padding: var(--space-xl); margin: var(--space-lg) 0; }
+    .worked-example h3 { margin-top: 0; color: #4361ee; }
+    .worked-example-step { margin-bottom: var(--space-md); padding-left: var(--space-lg); border-left: 3px solid #4361ee; }
+  </style>
 </head>
 <body>
-
   <header class="site-header">
     <p><a href="../index.html">&larr; Back to Course</a></p>
     <h1>Chapter 8: Dictionaries</h1>
     <p class="subtitle">Pair keys with values to organise data the way real applications do</p>
   </header>
-
   <main>
-
     <!-- ==================== THE IDEA ==================== -->
     <section class="idea">
       <span class="section-label">The Idea</span>
@@ -40,9 +57,11 @@
         <li>Access values by their key</li>
         <li>Add, update, and delete items in a dictionary</li>
         <li>Loop through dictionaries to process all their data</li>
+        <li>Work with nested dictionaries and lists inside dictionaries</li>
+        <li>Build dictionaries dynamically using loops</li>
+        <li>Understand how dictionaries relate to GCSE &ldquo;records&rdquo; and real-world data formats like JSON</li>
       </ul>
     </section>
-
     <!-- ==================== EXPLORE ==================== -->
     <section class="explore">
       <span class="section-label">Explore</span>
@@ -78,7 +97,6 @@ print(student["year"])</code></pre>
       <div class="try-this">
         <strong>Try This:</strong> Add a new key-value pair to the dictionary, such as <code>"favourite_subject": "Computer Science"</code>. Can you print just the favourite subject? Try changing Alice&rsquo;s age to 16 and run the code again.
       </div>
-
       <!-- Example 2 -->
       <h3>Example 2: Modifying a Dictionary</h3>
       <p>Dictionaries are <strong>mutable</strong> &mdash; you can change them after they&rsquo;ve been created. You can add new key-value pairs, update existing values, and delete entries you no longer need.</p>
@@ -114,7 +132,6 @@ print("After removing year:", student)</code></pre>
       <div class="try-this">
         <strong>Try This:</strong> Add a key called <code>"email"</code> with any email address as the value. Then update the student&rsquo;s name to <code>"Alice Smith"</code>. What happens if you try to delete a key that doesn&rsquo;t exist, like <code>del student["height"]</code>?
       </div>
-
       <!-- Example 3 -->
       <h3>Example 3: Looping Through a Dictionary</h3>
       <p>Just like lists, you can loop through dictionaries. The most useful approach is to loop through both the keys <em>and</em> the values at the same time using the <code>.items()</code> method.</p>
@@ -150,9 +167,134 @@ print("Values:", list(student.values()))</code></pre>
       <div class="try-this">
         <strong>Try This:</strong> Create a dictionary of your friends&rsquo; favourite colours (e.g. <code>{"Ravi": "blue", "Fatima": "green"}</code>) and use a loop to print a sentence for each one, like <code>"Ravi's favourite colour is blue."</code>. Can you count how many entries are in the dictionary using <code>len()</code>?
       </div>
+      <!-- Example 4 -->
+      <h3>Example 4: Nested Dictionaries</h3>
+      <p>A dictionary can contain <strong>other dictionaries</strong> as its values. This is called <strong>nesting</strong>, and it is incredibly useful for organising complex, structured data &mdash; like a school database where each year group has its own set of details.</p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Python Code</span>
+          <div>
+            <button class="copy-button">Copy Code</button>
+            <button class="run-button">Run Code</button>
+          </div>
+        </div>
+        <pre><code contenteditable="true"># A dictionary of dictionaries — each year group has student details
+school = {
+    "Year10": {"name": "Alice", "age": 15, "form": "10B"},
+    "Year11": {"name": "Bob", "age": 16, "form": "11A"},
+    "Year12": {"name": "Charlie", "age": 17, "form": "12C"}
+}
+
+# Access the whole Year10 dictionary
+print("Year 10 record:", school["Year10"])
+
+# Access a specific value inside a nested dictionary
+print("Year 11 student:", school["Year11"]["name"])
+print("Year 12 form group:", school["Year12"]["form"])
+
+# Loop through all year groups
+print("\n--- All Students ---")
+for year, details in school.items():
+    print(f"{year}: {details['name']} (Age {details['age']}, Form {details['form']})")</code></pre>
+        <div class="output-box empty">(click "Run Code" to see output)</div>
+      </div>
+
+      <p>To access data inside a nested dictionary, you chain square brackets: <code>school["Year11"]["name"]</code> first looks up the <code>"Year11"</code> key (which gives you a dictionary), then looks up <code>"name"</code> inside that dictionary. Think of it as opening one box to find another box inside.</p>
+
+      <div class="try-this">
+        <strong>Try This:</strong> Add a <code>"Year13"</code> entry with your own name, age, and form group. Can you update Bob&rsquo;s age to 17? Try printing just the names of all students using a loop.
+      </div>
+      <!-- Example 5 -->
+      <h3>Example 5: Dictionary with List Values</h3>
+      <p>Dictionary values don&rsquo;t have to be single items &mdash; they can be <strong>lists</strong>. This is perfect when you need to store <strong>multiple values for a single key</strong>, such as a student&rsquo;s test scores across several assessments.</p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Python Code</span>
+          <div>
+            <button class="copy-button">Copy Code</button>
+            <button class="run-button">Run Code</button>
+          </div>
+        </div>
+        <pre><code contenteditable="true"># Each subject maps to a list of test scores
+subjects = {
+    "Maths": [85, 90, 78],
+    "English": [72, 88, 91],
+    "Science": [95, 82, 88]
+}
+
+# Access all Maths scores
+print("Maths scores:", subjects["Maths"])
+
+# Access a specific score (first English test)
+print("First English test:", subjects["English"][0])
+
+# Add a new score to Science
+subjects["Science"].append(90)
+print("Updated Science scores:", subjects["Science"])
+
+# Calculate averages for each subject
+print("\n--- Subject Averages ---")
+for subject, scores in subjects.items():
+    average = sum(scores) / len(scores)
+    print(f"{subject}: {average:.1f}%")</code></pre>
+        <div class="output-box empty">(click "Run Code" to see output)</div>
+      </div>
+
+      <p>Because the values are lists, you can use all the list operations you already know &mdash; <code>.append()</code>, indexing with <code>[0]</code>, <code>len()</code>, <code>sum()</code>, and so on. The combination of dictionaries and lists is one of the most powerful patterns in Python.</p>
+
+      <div class="try-this">
+        <strong>Try This:</strong> Add a new subject called <code>"Computing"</code> with three test scores of your choice. Can you find which subject has the highest average? Try using <code>max()</code> on the averages.
+      </div>
+      <!-- Example 6 -->
+      <h3>Example 6: Building a Dictionary with a Loop</h3>
+      <p>You don&rsquo;t always have to type out every key-value pair by hand. You can <strong>build a dictionary dynamically</strong> using a loop &mdash; this is essential when working with data from files, user input, or calculations.</p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Python Code</span>
+          <div>
+            <button class="copy-button">Copy Code</button>
+            <button class="run-button">Run Code</button>
+          </div>
+        </div>
+        <pre><code contenteditable="true"># Build a dictionary of squares using a loop
+squares = {}
+for number in range(1, 11):
+    squares[number] = number ** 2
+
+print("Squares:", squares)
+print("7 squared is:", squares[7])
+
+# Build a dictionary from two lists using zip()
+names = ["Alice", "Bob", "Charlie", "Diana"]
+scores = [85, 92, 78, 95]
+
+student_scores = {}
+for name, score in zip(names, scores):
+    student_scores[name] = score
+
+print("\nStudent Scores:", student_scores)
+
+# Find the top student
+top_student = max(student_scores, key=student_scores.get)
+print(f"Top student: {top_student} with {student_scores[top_student]}%")</code></pre>
+        <div class="output-box empty">(click "Run Code" to see output)</div>
+      </div>
+
+      <p>The pattern is simple: start with an empty dictionary <code>{}</code>, then inside a loop, assign values using <code>dictionary[key] = value</code>. The <code>zip()</code> function is particularly handy &mdash; it pairs up items from two lists so you can loop through them together.</p>
+
+      <div class="try-this">
+        <strong>Try This:</strong> Build a dictionary that maps each letter in the word <code>"hello"</code> to how many times it appears. (Hint: loop through the letters and use <code>.get()</code> to handle letters you haven&rsquo;t seen yet.) Can you extend it to work with any word the user types?
+      </div>
+
+      <div class="did-you-know">
+        <strong>Did You Know?</strong>
+        Dictionaries in Python use a clever data structure called a <strong>hash table</strong> internally. This means looking up a value by its key is <em>nearly instant</em>, no matter how big the dictionary is. A dictionary with 10 items and one with 10 million items both find a key in roughly the same amount of time. That is why dictionaries are the go-to choice for fast lookups.
+      </div>
 
     </section>
-
     <!-- ==================== UNDERSTAND ==================== -->
     <section class="understand">
       <span class="section-label">Understand</span>
@@ -227,6 +369,16 @@ print(f"There are {len(capitals)} countries in the dictionary.")</code></pre>
           <td>Checks whether a key exists</td>
           <td><code>"name" in student</code></td>
         </tr>
+        <tr>
+          <td><code>del dict[key]</code></td>
+          <td>Removes a key-value pair</td>
+          <td><code>del student["age"]</code></td>
+        </tr>
+        <tr>
+          <td><code>len(dict)</code></td>
+          <td>Returns the number of key-value pairs</td>
+          <td><code>len(student)</code></td>
+        </tr>
       </table>
 
       <div class="key-concept">
@@ -241,16 +393,269 @@ print(f"There are {len(capitals)} countries in the dictionary.")</code></pre>
         <li>Use a <strong>dictionary</strong> when each item has a <em>label</em> or <em>name</em> and you want to look things up by that label (e.g. a student&rsquo;s details, a set of configuration settings).</li>
       </ul>
 
-      <h3>Common Misconceptions</h3>
+      <!-- ==================== RECORDS (GCSE) ==================== -->
+      <h3>Records (GCSE Terminology)</h3>
+      <p>In GCSE Computer Science exams, you will often see the term <strong>record</strong>. A record is a collection of <strong>related fields</strong> &mdash; for example, a single student&rsquo;s name, age, and year group together form one record. In Python, a <strong>dictionary is the natural way to represent a record</strong>, because each field has a name (the key) and a value.</p>
+
+      <p>A <strong>list of dictionaries</strong> can represent a whole <strong>database table</strong>, where each dictionary is one record:</p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Python Code</span>
+          <div>
+            <button class="copy-button">Copy Code</button>
+            <button class="run-button">Run Code</button>
+          </div>
+        </div>
+        <pre><code contenteditable="true"># A list of records (like a database table)
+students = [
+    {"name": "Alice", "age": 15, "year": 10, "grade": "A"},
+    {"name": "Bob", "age": 16, "year": 11, "grade": "B"},
+    {"name": "Charlie", "age": 15, "year": 10, "grade": "A*"},
+    {"name": "Diana", "age": 16, "year": 11, "grade": "C"}
+]
+
+# Print all records
+print("--- Student Database ---")
+for student in students:
+    print(f"{student['name']}, Year {student['year']}: Grade {student['grade']}")
+
+# Search for a specific record
+print("\n--- Search: Year 10 Students ---")
+for student in students:
+    if student["year"] == 10:
+        print(f"  {student['name']} (Grade {student['grade']})")</code></pre>
+        <div class="output-box empty">(click "Run Code" to see output)</div>
+      </div>
+
+      <div class="key-concept">
+        <strong>Key Concept: Records in Exams</strong>
+        When an exam question says &ldquo;store the data as records&rdquo;, think dictionaries. Each record has <strong>fields</strong> (the keys) and <strong>field values</strong> (the values). A collection of records is a <strong>file</strong> or <strong>table</strong> &mdash; in Python, that is simply a list of dictionaries. This maps directly to how real databases store information.
+      </div>
+
+      <h3>Common Mistakes</h3>
+      <div class="warning">
+        <strong>Watch out &mdash; KeyError from non-existent keys:</strong> If you write <code>student["height"]</code> and the key <code>"height"</code> does not exist, Python will crash with a <code>KeyError</code>. Always use <code>.get("height", default_value)</code> or check with <code>if "height" in student:</code> first. This is the single most common dictionary error.
+      </div>
+
+      <div class="warning">
+        <strong>Watch out &mdash; Confusing <code>{}</code> (empty dict) with <code>set()</code>:</strong> Don&rsquo;t confuse curly braces for dictionaries <code>{"key": "value"}</code> with curly braces for sets <code>{1, 2, 3}</code>. If there are colons inside, it&rsquo;s a dictionary. If there are just values with no colons, it&rsquo;s a set. An empty pair of curly braces <code>{}</code> creates an <em>empty dictionary</em>, not an empty set. To create an empty set, you must write <code>set()</code>.
+      </div>
+
+      <div class="warning">
+        <strong>Watch out &mdash; Using lists as keys:</strong> Dictionary keys must be <strong>immutable</strong> (unchangeable). If you try to use a list as a key &mdash; for example, <code>my_dict[[1, 2]] = "value"</code> &mdash; Python will raise a <code>TypeError: unhashable type: 'list'</code>. Use a tuple instead: <code>my_dict[(1, 2)] = "value"</code>.
+      </div>
+
+      <div class="warning">
+        <strong>Watch out &mdash; Keys must be unique:</strong> If you define a dictionary with duplicate keys, Python will <em>silently</em> keep only the last value. For example, <code>{"a": 1, "a": 2}</code> results in <code>{"a": 2}</code> &mdash; the first value is lost without any error message. Always make sure your keys are unique.
+      </div>
+
       <div class="warning">
         <strong>Watch out:</strong> In older versions of Python (before 3.7), dictionaries did <em>not</em> remember the order you added items. Since Python 3.7, dictionaries <strong>do</strong> preserve insertion order. The code on this platform uses a modern version of Python, so your dictionaries will always keep items in the order you put them in. However, you should never rely on position to access dictionary data &mdash; always use the key.
       </div>
 
-      <div class="warning">
-        <strong>Watch out:</strong> Don&rsquo;t confuse curly braces for dictionaries <code>{"key": "value"}</code> with curly braces for sets <code>{1, 2, 3}</code>. If there are colons inside, it&rsquo;s a dictionary. If there are just values with no colons, it&rsquo;s a set. An empty pair of curly braces <code>{}</code> creates an <em>empty dictionary</em>, not an empty set.
+      <div class="did-you-know">
+        <strong>Did You Know?</strong>
+        <strong>JSON</strong> (JavaScript Object Notation) is the most common data format on the internet. When your browser fetches data from a web API &mdash; such as weather data, social media posts, or online shop products &mdash; it almost always arrives as JSON. And JSON is <em>basically a dictionary</em>. In fact, Python can convert a JSON string into a dictionary with a single line of code: <code>import json; data = json.loads(json_string)</code>. If you understand dictionaries, you already understand the structure of most data on the web.
+      </div>
+
+      <div class="did-you-know">
+        <strong>Did You Know?</strong>
+        Most programming languages have a data structure similar to Python&rsquo;s dictionary, but they call it by different names. In <strong>Java</strong>, it is called a <strong>Map</strong>. In <strong>JavaScript</strong>, ordinary <strong>objects</strong> work like dictionaries. In <strong>Ruby</strong>, they are called <strong>hashes</strong>. In <strong>C#</strong>, they are called <strong>Dictionaries</strong> (just like Python!). The concept of mapping keys to values is universal across programming.
       </div>
     </section>
+    <!-- ==================== REAL WORLD APPLICATIONS ==================== -->
+    <section class="explore">
+      <span class="section-label">Real World</span>
+      <h2>Where Are Dictionaries Used in the Real World?</h2>
 
+      <p>Dictionaries are not just a classroom concept &mdash; they are used everywhere in professional software development. Here are some of the most important real-world applications:</p>
+
+      <div class="real-world">
+        <strong>JSON Data and Web APIs</strong>
+        When you use an app on your phone &mdash; checking the weather, browsing social media, or ordering food &mdash; the app sends a request to a server, which sends back data in <strong>JSON format</strong>. JSON looks almost identical to a Python dictionary. For example, a weather API might return:
+        <br /><code>{"city": "London", "temperature": 14, "condition": "Cloudy", "humidity": 72}</code>
+        <br />Python can read this directly into a dictionary, making it easy to extract the data you need.
+      </div>
+
+      <div class="real-world">
+        <strong>Game Character Stats</strong>
+        In video games, each character&rsquo;s stats are often stored as dictionaries. A role-playing game character might look like:
+        <br /><code>{"health": 100, "attack": 25, "defence": 15, "speed": 30, "level": 5}</code>
+        <br />When the character levels up, the game updates the values. When the character takes damage, the <code>"health"</code> value is reduced. Dictionaries make it easy to manage complex game state.
+      </div>
+
+      <div class="real-world">
+        <strong>Configuration Files and Settings</strong>
+        Applications store their settings as key-value pairs. Your text editor, your operating system, and even this learning platform all use configuration data structured like a dictionary:
+        <br /><code>{"theme": "dark", "font_size": 14, "auto_save": True, "language": "en-GB"}</code>
+        <br />When you change a setting, the application updates the corresponding value and saves it to a file.
+      </div>
+
+      <div class="real-world">
+        <strong>Databases</strong>
+        Every record in a database is essentially a dictionary. When you retrieve a row from a database table, each column name becomes a key and each cell becomes a value. A list of dictionaries is the Python equivalent of a database table &mdash; and this is exactly how many web frameworks (like Django and Flask) handle database queries.
+      </div>
+
+      <div class="real-world">
+        <strong>Translation Apps</strong>
+        Translation applications map words from one language to another. A simple English-to-French translator might use:
+        <br /><code>{"hello": "bonjour", "goodbye": "au revoir", "please": "s'il vous pla&icirc;t", "thank you": "merci"}</code>
+        <br />The user types a word (the key), and the app looks up the translation (the value). This is dictionary lookup in its most literal form.
+      </div>
+    </section>
+    <!-- ==================== KEY VOCABULARY ==================== -->
+    <section class="understand">
+      <span class="section-label">Vocabulary</span>
+      <h2>Key Vocabulary</h2>
+
+      <p>Make sure you understand each of these terms. They will appear in lessons, homework, and exam questions.</p>
+
+      <table class="vocab-table">
+        <tr>
+          <th>Term</th>
+          <th>Definition</th>
+        </tr>
+        <tr>
+          <td><strong>Dictionary</strong></td>
+          <td>A Python data structure that stores data as key-value pairs, enclosed in curly braces <code>{}</code>.</td>
+        </tr>
+        <tr>
+          <td><strong>Key</strong></td>
+          <td>The unique identifier used to look up a value in a dictionary. Keys must be immutable (e.g. strings, numbers, tuples).</td>
+        </tr>
+        <tr>
+          <td><strong>Value</strong></td>
+          <td>The data associated with a key. Values can be any data type, including lists, other dictionaries, or a mix.</td>
+        </tr>
+        <tr>
+          <td><strong>Key-Value Pair</strong></td>
+          <td>A single entry in a dictionary, written as <code>key: value</code>. For example, <code>"name": "Alice"</code>.</td>
+        </tr>
+        <tr>
+          <td><strong>Mutable</strong></td>
+          <td>Something that can be changed after it is created. Dictionaries are mutable &mdash; you can add, update, and delete entries.</td>
+        </tr>
+        <tr>
+          <td><strong>Hash Table</strong></td>
+          <td>The internal data structure Python uses to implement dictionaries. It allows near-instant lookups regardless of dictionary size.</td>
+        </tr>
+        <tr>
+          <td><strong>Mapping</strong></td>
+          <td>The concept of associating one value (a key) with another value. A dictionary is Python&rsquo;s built-in mapping type.</td>
+        </tr>
+        <tr>
+          <td><strong><code>.get()</code></strong></td>
+          <td>A dictionary method that safely retrieves a value by key, returning a default value if the key does not exist (instead of raising a <code>KeyError</code>).</td>
+        </tr>
+        <tr>
+          <td><strong><code>.keys()</code></strong></td>
+          <td>A dictionary method that returns all the keys in the dictionary.</td>
+        </tr>
+        <tr>
+          <td><strong><code>.values()</code></strong></td>
+          <td>A dictionary method that returns all the values in the dictionary.</td>
+        </tr>
+        <tr>
+          <td><strong><code>.items()</code></strong></td>
+          <td>A dictionary method that returns all key-value pairs as tuples, commonly used in <code>for</code> loops.</td>
+        </tr>
+        <tr>
+          <td><strong><code>del</code></strong></td>
+          <td>A Python keyword used to delete a key-value pair from a dictionary, e.g. <code>del my_dict["key"]</code>.</td>
+        </tr>
+        <tr>
+          <td><strong>Nested Dictionary</strong></td>
+          <td>A dictionary that contains other dictionaries as values, allowing multi-level data structures.</td>
+        </tr>
+        <tr>
+          <td><strong>JSON</strong></td>
+          <td>JavaScript Object Notation &mdash; a text-based data format used across the internet that is structurally similar to a Python dictionary.</td>
+        </tr>
+      </table>
+    </section>
+    <!-- ==================== WORKED EXAMPLE ==================== -->
+    <section class="practice">
+      <span class="section-label">Worked Example</span>
+      <h2>Worked Example: Building a Student Gradebook</h2>
+
+      <div class="worked-example">
+        <h3>The Problem</h3>
+        <p>A teacher wants to track test scores for their class. For each student, they need to store multiple test scores, calculate each student&rsquo;s average, find the student with the highest average, and display a formatted report. Let&rsquo;s build this step by step.</p>
+
+        <h4>Step 1: Create the Gradebook</h4>
+        <div class="worked-example-step">
+          <p>We create a dictionary where each key is a student&rsquo;s name and each value is a list of their test scores.</p>
+        </div>
+        <h4>Step 2: Calculate Averages</h4>
+        <div class="worked-example-step">
+          <p>We loop through the dictionary and calculate the average for each student using <code>sum()</code> and <code>len()</code>.</p>
+        </div>
+        <h4>Step 3: Find the Top Student</h4>
+        <div class="worked-example-step">
+          <p>We track the highest average as we loop, storing the name of the best-performing student.</p>
+        </div>
+        <h4>Step 4: Display the Report</h4>
+        <div class="worked-example-step">
+          <p>We format the output neatly so the teacher can read it at a glance.</p>
+        </div>
+        <h4>Complete Solution</h4>
+        <div class="code-block">
+          <div class="code-block-header">
+            <span class="code-block-label">Python Code</span>
+            <div>
+              <button class="copy-button">Copy Code</button>
+              <button class="run-button">Run Code</button>
+            </div>
+          </div>
+          <pre><code contenteditable="true"># Step 1: Create the gradebook
+gradebook = {
+    "Alice": [85, 92, 78, 95],
+    "Bob": [72, 68, 80, 75],
+    "Charlie": [90, 95, 88, 92],
+    "Diana": [65, 70, 72, 68],
+    "Ethan": [88, 84, 90, 86]
+}
+
+# Step 2 & 3: Calculate averages and find the top student
+print("=" * 40)
+print("       STUDENT GRADEBOOK REPORT")
+print("=" * 40)
+print(f"{'Student':<12} {'Scores':<20} {'Average':>7}")
+print("-" * 40)
+
+top_student = ""
+top_average = 0
+
+for student, scores in gradebook.items():
+    average = sum(scores) / len(scores)
+    scores_str = ", ".join(str(s) for s in scores)
+    print(f"{student:<12} {scores_str:<20} {average:>7.1f}%")
+
+    # Track the highest average
+    if average > top_average:
+        top_average = average
+        top_student = student
+
+# Step 4: Display summary
+print("-" * 40)
+print(f"\nTotal students: {len(gradebook)}")
+print(f"Top student: {top_student} with an average of {top_average:.1f}%")
+
+# Calculate class average
+all_averages = []
+for scores in gradebook.values():
+    all_averages.append(sum(scores) / len(scores))
+class_average = sum(all_averages) / len(all_averages)
+print(f"Class average: {class_average:.1f}%")</code></pre>
+          <div class="output-box empty">(click "Run Code" to see output)</div>
+        </div>
+
+        <div class="try-this">
+          <strong>Try This:</strong> Add two more students to the gradebook. Can you also find the student with the <em>lowest</em> average? Try adding a feature that prints a warning for any student whose average is below 70%.
+        </div>
+      </div>
+    </section>
     <!-- ==================== PRACTICE ==================== -->
     <section class="practice">
       <span class="section-label">Practice</span>
@@ -293,7 +698,6 @@ print(f"Age: {pet['____']}")</code></pre>
           <div class="hint-content">Replace the blanks with real values and key names. For example: <code>pet = {"name": "Buddy", "species": "dog", "age": 4}</code>. Then in the print statements, use the matching key names: <code>pet["name"]</code>, <code>pet["species"]</code>, and <code>pet["age"]</code>. Remember that the age should be a number (no quotation marks), but the name and species are strings (with quotation marks).</div>
         </div>
       </div>
-
       <!-- Exercise 2: Partially Guided -->
       <div class="exercise">
         <div class="exercise-title">Exercise 2: Phone Book</div>
@@ -344,7 +748,6 @@ print("Phone book:", phone_book)
           </div>
         </div>
       </div>
-
       <!-- Exercise 3: Open-Ended -->
       <div class="exercise">
         <div class="exercise-title">Exercise 3: Mini Database</div>
@@ -392,9 +795,214 @@ print("Phone book:", phone_book)
           </div>
         </div>
       </div>
+      <!-- Exercise 4: Word Frequency Counter -->
+      <div class="exercise">
+        <div class="exercise-title">Exercise 4: Word Frequency Counter</div>
+        <div class="exercise-difficulty difficulty-2">Partially Guided</div>
+        <p>Given a sentence, count how many times each word appears using a dictionary. This is a classic programming problem and a brilliant example of building a dictionary dynamically.</p>
+
+        <div class="pseudocode">
+          <div class="pseudocode-label">Pseudocode:</div>
+          STEP 1: Start with a sentence stored in a variable<br />
+          STEP 2: Convert the sentence to lowercase (so "The" and "the" count as the same word)<br />
+          STEP 3: Split the sentence into a list of individual words using <strong>.split()</strong><br />
+          STEP 4: Create an empty dictionary called <strong>word_counts</strong><br />
+          STEP 5: Loop through each word in the list<br />
+          &nbsp;&nbsp;&nbsp;&nbsp;IF the word is already in the dictionary, add 1 to its count<br />
+          &nbsp;&nbsp;&nbsp;&nbsp;ELSE add the word with a count of 1<br />
+          STEP 6: Print each word and its count
+        </div>
+
+        <div class="code-block">
+          <div class="code-block-header">
+            <span class="code-block-label">Your Code</span>
+            <div>
+              <button class="copy-button">Copy Code</button>
+              <button class="run-button">Run Code</button>
+            </div>
+          </div>
+          <pre><code contenteditable="true"># Word Frequency Counter
+sentence = "the cat sat on the mat and the cat sat on the hat"
+
+# Convert to lowercase and split into words
+words = sentence.lower().split()
+
+# Count each word
+word_counts = {}
+for word in words:
+    # Use .get() to handle words not yet in the dictionary
+    word_counts[word] = word_counts.get(word, 0) + 1
+
+# Display the results
+print("--- Word Frequencies ---")
+for word, count in word_counts.items():
+    print(f"  '{word}' appears {count} time(s)")
+
+# Find the most common word
+most_common = max(word_counts, key=word_counts.get)
+print(f"\nMost common word: '{most_common}' ({word_counts[most_common]} times)")</code></pre>
+          <div class="output-box empty">(click "Run Code" to see output)</div>
+        </div>
+
+        <div class="hint">
+          <div class="hint-title">Need a hint?</div>
+          <div class="hint-content">
+            <p>The key technique here is <code>word_counts.get(word, 0) + 1</code>. The <code>.get(word, 0)</code> part returns the current count for that word, or <code>0</code> if the word hasn&rsquo;t been seen yet. Then we add <code>1</code> and store it back.</p>
+            <p>Try it with your own sentence. What happens with punctuation? Can you strip out full stops and commas before counting? (Hint: try <code>sentence.replace(".", "").replace(",", "")</code> before splitting.)</p>
+          </div>
+        </div>
+      </div>
+      <!-- Exercise 5: Country Quiz Database -->
+      <div class="exercise">
+        <div class="exercise-title">Exercise 5: Country Quiz Database</div>
+        <div class="exercise-difficulty difficulty-3">Open-Ended</div>
+        <p>Build a geography quiz using nested dictionaries. Store information about at least four countries (capital, population, continent), then create a quiz that asks the user questions and checks their answers.</p>
+
+        <div class="pseudocode">
+          <div class="pseudocode-label">Pseudocode:</div>
+          STEP 1: Create a nested dictionary where each key is a country name and each value is a dictionary with "capital", "population", and "continent"<br />
+          STEP 2: Display all countries in the database<br />
+          STEP 3: For each country, ask the user to name the capital<br />
+          STEP 4: Check if the answer matches the stored capital<br />
+          STEP 5: Keep a score and display the final result
+        </div>
+
+        <div class="code-block">
+          <div class="code-block-header">
+            <span class="code-block-label">Your Code</span>
+            <div>
+              <button class="copy-button">Copy Code</button>
+              <button class="run-button">Run Code</button>
+            </div>
+          </div>
+          <pre><code contenteditable="true"># Country Quiz Database
+countries = {
+    "France": {"capital": "Paris", "population": 67000000, "continent": "Europe"},
+    "Japan": {"capital": "Tokyo", "population": 125000000, "continent": "Asia"},
+    "Brazil": {"capital": "Brasilia", "population": 214000000, "continent": "South America"},
+    "Kenya": {"capital": "Nairobi", "population": 54000000, "continent": "Africa"},
+    "Australia": {"capital": "Canberra", "population": 26000000, "continent": "Oceania"}
+}
+
+# Display all countries
+print("=== Country Database ===")
+for country, info in countries.items():
+    pop_millions = info['population'] / 1000000
+    print(f"{country} ({info['continent']}): Capital = {info['capital']}, Pop = {pop_millions:.0f}M")
+
+# Quiz section (without input - using a pre-set answer list for demo)
+print("\n=== Capital City Quiz ===")
+# Try changing these answers to test different results!
+test_answers = ["Paris", "Tokyo", "Rio", "Nairobi", "Sydney"]
+
+score = 0
+for i, (country, info) in enumerate(countries.items()):
+    answer = test_answers[i]
+    correct = info["capital"]
+    if answer.lower() == correct.lower():
+        print(f"  {country}: '{answer}' - Correct!")
+        score += 1
+    else:
+        print(f"  {country}: '{answer}' - Wrong! The answer is {correct}.")
+
+print(f"\nYour score: {score}/{len(countries)}")</code></pre>
+          <div class="output-box empty">(click "Run Code" to see output)</div>
+        </div>
+
+        <div class="hint">
+          <div class="hint-title">Need a hint?</div>
+          <div class="hint-content">
+            <p>The quiz uses nested dictionaries: <code>countries["France"]["capital"]</code> gives you <code>"Paris"</code>. To make the quiz interactive, you would normally use <code>input()</code> to ask the user for answers. In this demo, we use a pre-set list of answers so you can see how the checking logic works.</p>
+            <p>Challenge: Add more countries. Can you add a second round that asks about continents instead of capitals? Can you randomise the order of questions?</p>
+          </div>
+        </div>
+      </div>
 
     </section>
+    <!-- ==================== SUMMARY ==================== -->
+    <section class="understand">
+      <span class="section-label">Summary</span>
+      <h2>Chapter Summary</h2>
 
+      <div class="summary-box">
+        <h3>What You Have Learnt</h3>
+        <ul>
+          <li><strong>Dictionaries</strong> store data as <strong>key-value pairs</strong> using curly braces <code>{}</code> and colons <code>:</code>.</li>
+          <li>You <strong>access values</strong> by their key using square brackets: <code>my_dict["key"]</code>.</li>
+          <li>Use <code>.get(key, default)</code> for <strong>safe access</strong> that avoids <code>KeyError</code> crashes.</li>
+          <li>Dictionaries are <strong>mutable</strong>: you can add, update, and delete entries after creation.</li>
+          <li>The methods <code>.keys()</code>, <code>.values()</code>, and <code>.items()</code> let you <strong>loop through</strong> dictionaries.</li>
+          <li><strong>Nested dictionaries</strong> (dictionaries inside dictionaries) let you represent complex, structured data.</li>
+          <li>Dictionary values can be <strong>lists</strong>, letting you store multiple values per key.</li>
+          <li>You can <strong>build dictionaries dynamically</strong> using loops.</li>
+          <li>In GCSE terms, a dictionary represents a <strong>record</strong>, and a list of dictionaries represents a <strong>database table</strong>.</li>
+          <li>Dictionaries are the backbone of <strong>JSON</strong>, the most common data format on the web.</li>
+        </ul>
+      </div>
+    </section>
+    <!-- ==================== EXAM-STYLE QUESTIONS ==================== -->
+    <section class="practice">
+      <span class="section-label">Exam Prep</span>
+      <h2>Exam-Style Questions</h2>
+
+      <p>Practise answering these questions as you would in an exam. Try writing your answers on paper before looking at the hints.</p>
+
+      <div class="exam-questions">
+        <h3>Test Your Knowledge</h3>
+
+        <div class="exam-question">
+          <p><strong>Question 1:</strong> What is a key-value pair? Give an example. <span class="marks">2 marks</span></p>
+          <div class="hint">
+            <div class="hint-title">Show model answer</div>
+            <div class="hint-content">
+              <p><strong>A key-value pair</strong> is a single entry in a dictionary where a unique key is associated with (mapped to) a value. <em>(1 mark)</em></p>
+              <p><strong>Example:</strong> In <code>{"name": "Alice"}</code>, the key is <code>"name"</code> and the value is <code>"Alice"</code>. <em>(1 mark)</em></p>
+            </div>
+          </div>
+        </div>
+
+        <div class="exam-question">
+          <p><strong>Question 2:</strong> Explain one advantage of using a dictionary over a list for storing student records. <span class="marks">2 marks</span></p>
+          <div class="hint">
+            <div class="hint-title">Show model answer</div>
+            <div class="hint-content">
+              <p>A dictionary allows you to access data by a <strong>meaningful key name</strong> (such as <code>"name"</code> or <code>"grade"</code>) rather than having to remember a numerical index position. <em>(1 mark)</em></p>
+              <p>This makes the code more <strong>readable and less error-prone</strong>, because <code>student["name"]</code> is clearer and more self-documenting than <code>student[0]</code>. <em>(1 mark)</em></p>
+            </div>
+          </div>
+        </div>
+
+        <div class="exam-question">
+          <p><strong>Question 3:</strong> Write Python code to create a dictionary of 3 products with prices, then use a loop to display each product and its price. <span class="marks">4 marks</span></p>
+          <div class="hint">
+            <div class="hint-title">Show model answer</div>
+            <div class="hint-content">
+              <p><strong>Creating the dictionary (2 marks):</strong></p>
+              <p><code>products = {"Bread": 1.20, "Milk": 0.95, "Eggs": 2.50}</code></p>
+              <p><strong>Looping and displaying (2 marks):</strong></p>
+              <p><code>for product, price in products.items():</code><br />
+              <code>&nbsp;&nbsp;&nbsp;&nbsp;print(f"{product}: &pound;{price:.2f}")</code></p>
+              <p><em>Award 1 mark for a correctly structured dictionary with 3 items, 1 mark for correct data types (strings for names, floats/numbers for prices), 1 mark for a correct for loop using .items(), and 1 mark for correct output using both variables.</em></p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Try Question 3 Here</span>
+          <div>
+            <button class="copy-button">Copy Code</button>
+            <button class="run-button">Run Code</button>
+          </div>
+        </div>
+        <pre><code contenteditable="true"># Write your answer to Question 3 here
+
+
+</code></pre>
+        <div class="output-box empty">(click "Run Code" to see output)</div>
+      </div>
+    </section>
     <!-- ==================== REFLECT ==================== -->
     <section class="reflect">
       <span class="section-label">Reflect</span>
@@ -408,15 +1016,19 @@ print("Phone book:", phone_book)
         <li>Can you think of three real-world examples where data is organised as key-value pairs?</li>
         <li>What happens if you try to add a key that already exists in a dictionary? Why might this be useful?</li>
         <li>Why must dictionary keys be immutable? What problems could arise if you were allowed to use a list as a key?</li>
+        <li>How would you represent a school timetable using nested dictionaries? What would the keys and values be?</li>
+        <li>Why are dictionaries so widely used in web development and APIs?</li>
       </ul>
 
       <h3>Connection to the Capstone</h3>
-      <p>Dictionaries are one of the most powerful tools in Python. In the <strong>capstone project</strong> (Chapter 11), you will build a complete quiz game &mdash; and the quiz game will store its questions and answers in a dictionary. Each question (the key) will be paired with its correct answer (the value), making it easy to check whether the player got it right.</p>
+      <p>Dictionaries are one of the most powerful tools in Python. In the <strong>capstone project</strong> (Chapter 11), you will build a complete quiz game &mdash; and the quiz game will store its questions and answers in a dictionary. Each question (the key) will be paired with its correct answer (the value), making it easy to check whether the player got it right. You will also use nested dictionaries to store additional information like difficulty levels and categories.</p>
 
       <div class="extra-resources">
-        <h3>Extra Practice</h3>
-        <p>Explore more with dictionaries and data structures:</p>
+        <h3>External Resources</h3>
+        <p>Explore more about dictionaries and data structures:</p>
         <ul>
+          <li><a href="https://www.bbc.co.uk/bitesize/examspecs/zdqy7nb" target="_blank" rel="noopener">BBC Bitesize Edexcel Computer Science</a> &mdash; GCSE-level revision on data structures, algorithms, and programming concepts</li>
+          <li><a href="https://www.w3schools.com/python/python_dictionaries.asp" target="_blank" rel="noopener">W3Schools Python Dictionaries</a> &mdash; Interactive tutorials and reference for all dictionary methods</li>
           <li><a href="https://hvgcsecs.cshub.org.je/topics/topic6.html" target="_blank" rel="noopener">GCSE Topic 6: Data Types &amp; File Handling</a> &mdash; Arrays, file processing, and authentication systems with interactive code editors</li>
           <li><a href="https://hvgcse.cshub.org.je/File_Processing_Builder.html" target="_blank" rel="noopener">File Processing Builder</a> &mdash; Build file handling programs step by step</li>
         </ul>
@@ -425,7 +1037,6 @@ print("Phone book:", phone_book)
       <h3>What&rsquo;s Next?</h3>
       <p>You now know how to store and organise data using both lists and dictionaries. But so far, you haven&rsquo;t done much with the text (strings) inside them. In <strong>Chapter 9: String Manipulation</strong>, you&rsquo;ll learn how to slice, search, format, and transform text &mdash; skills that are essential for building real-world programs that work with names, messages, and user input.</p>
     </section>
-
     <!-- ==================== NAVIGATION ==================== -->
     <nav class="chapter-nav">
       <a href="07-lists.html">&larr; Previous: Chapter 7: Lists</a>

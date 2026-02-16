@@ -4,8 +4,104 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Chapter 9: String Manipulation - Python Fundamentals</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="../css/style.css" />
   <script src="https://cdn.jsdelivr.net/pyodide/v0.24.0/full/pyodide.js"></script>
+  <style>
+    /* Additional styles for new section types */
+    .did-you-know {
+      background: linear-gradient(135deg, #e8f4fd, #d1ecf9);
+      border: 2px solid #4cc9f0;
+      border-radius: 12px;
+      padding: 1.25rem;
+      margin: 1rem 0;
+    }
+    .did-you-know strong:first-child {
+      color: #0077b6;
+      display: block;
+      margin-bottom: 0.25rem;
+    }
+    .vocab-table th {
+      background: linear-gradient(135deg, #4361ee, #4cc9f0);
+      color: #fff;
+      font-weight: 700;
+    }
+    .worked-example {
+      background: linear-gradient(135deg, #f3e8ff, #ede5ff);
+      border: 2px solid #7209b7;
+      border-radius: 16px;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+    }
+    .worked-example h3 {
+      color: #7209b7;
+      margin-top: 0;
+    }
+    .worked-example-step {
+      background: rgba(255,255,255,0.6);
+      border-left: 4px solid #7209b7;
+      border-radius: 8px;
+      padding: 1rem;
+      margin: 0.75rem 0;
+    }
+    .real-world-applications {
+      background: linear-gradient(135deg, #e6f9f1, #d0f0e0);
+      border: 2px solid #06d6a0;
+      border-radius: 16px;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+    }
+    .real-world-applications h3 {
+      color: #06d6a0;
+      margin-top: 0;
+    }
+    .exam-questions {
+      background: linear-gradient(135deg, #fff4e6, #ffe8cc);
+      border: 2px solid #f77f00;
+      border-radius: 16px;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+    }
+    .exam-questions h3 {
+      color: #f77f00;
+      margin-top: 0;
+    }
+    .exam-question {
+      background: rgba(255,255,255,0.6);
+      border-radius: 8px;
+      padding: 1rem;
+      margin: 0.75rem 0;
+    }
+    .exam-question .marks {
+      font-weight: 700;
+      color: #f77f00;
+      float: right;
+    }
+    .common-mistakes {
+      background: linear-gradient(135deg, #fff5f5, #ffe0e0);
+      border: 2px solid #e63946;
+      border-radius: 16px;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+    }
+    .common-mistakes h3 {
+      color: #e63946;
+      margin-top: 0;
+    }
+    .summary-box {
+      background: linear-gradient(135deg, #eef0ff, #e0e4ff);
+      border: 2px solid #4361ee;
+      border-radius: 16px;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+    }
+    .summary-box h3 {
+      color: #4361ee;
+      margin-top: 0;
+    }
+  </style>
 </head>
 <body>
 
@@ -39,7 +135,11 @@
         <li>Use indexing and slicing to extract characters and sections from a string</li>
         <li>Use built-in string methods to transform and inspect text</li>
         <li>Search within strings to find characters, words, and patterns</li>
+        <li>Split strings into lists and join lists back into strings</li>
+        <li>Traverse strings character by character using loops</li>
+        <li>Understand ASCII and Unicode character encoding</li>
         <li>Format and combine text for clear, readable output</li>
+        <li>Build practical programs like email validators and ciphers</li>
       </ul>
     </section>
 
@@ -158,6 +258,180 @@ print("fox" not in sentence)     # False</code></pre>
 
       <div class="try-this">
         <strong>Try This:</strong> Try checking if your name contains certain letters using <code>in</code>. What does <code>"12.5".isdigit()</code> return, and why? Test <code>"HELLO".isupper()</code> and <code>"hello".islower()</code>. Can you think of a real situation where <code>.endswith()</code> would be useful?
+      </div>
+
+      <!-- Example 4 -->
+      <h3>Example 4: The split() and join() Methods</h3>
+      <p>Two of the most powerful string methods are <code>.split()</code> and <code>.join()</code>. The <code>.split()</code> method breaks a string into a <strong>list of smaller strings</strong> at a specified separator (called a <strong>delimiter</strong>). The <code>.join()</code> method does the opposite &mdash; it takes a list of strings and glues them back together. These are essential for working with structured data like CSV files:</p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Python Code</span>
+          <div>
+            <button class="copy-button">Copy Code</button>
+            <button class="run-button">Run Code</button>
+          </div>
+        </div>
+        <pre><code contenteditable="true"># Splitting a sentence into words (splits on spaces by default)
+sentence = "Python is a powerful language"
+words = sentence.split()
+print(words)
+print("There are", len(words), "words")
+
+# Splitting CSV-like data on commas
+csv_line = "Alice,17,Computer Science,A*"
+fields = csv_line.split(",")
+print(fields)
+print("Name:", fields[0])
+print("Age:", fields[1])
+print("Subject:", fields[2])
+print("Grade:", fields[3])
+
+# Joining a list back into a string
+rejoined = " - ".join(fields)
+print(rejoined)
+
+# Practical: reformat comma-separated data as tab-separated
+tab_separated = "\t".join(fields)
+print(tab_separated)</code></pre>
+        <div class="output-box empty">(click "Run Code" to see output)</div>
+      </div>
+
+      <p>The <code>.split()</code> method is your go-to tool for breaking structured text into usable pieces. When called with no argument, it splits on whitespace (spaces, tabs, newlines). When you pass a delimiter like <code>","</code>, it splits on that exact character. The <code>.join()</code> method works the other way round &mdash; the string you call it on becomes the separator between each item in the list.</p>
+
+      <div class="try-this">
+        <strong>Try This:</strong> Try splitting the string <code>"red;green;blue;yellow"</code> on the semicolon character. What happens if you split <code>"Hello"</code> on the empty string <code>list("Hello")</code>? Use <code>", ".join(["apples", "bananas", "cherries"])</code> to create a neat comma-separated list.
+      </div>
+
+      <!-- Example 5 -->
+      <h3>Example 5: String Traversal with Loops</h3>
+      <p>Because strings are sequences, you can <strong>traverse</strong> (loop through) them character by character using a <code>for</code> loop. This is incredibly useful when you need to examine or transform individual characters &mdash; for example, building up a new modified string one piece at a time:</p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Python Code</span>
+          <div>
+            <button class="copy-button">Copy Code</button>
+            <button class="run-button">Run Code</button>
+          </div>
+        </div>
+        <pre><code contenteditable="true"># Simple traversal: print each character
+word = "Python"
+for char in word:
+    print(char, end=" ")
+print()  # New line
+
+# Building a new string: remove all vowels
+original = "String Manipulation"
+result = ""
+for char in original:
+    if char.lower() not in "aeiou":
+        result = result + char
+print("Without vowels:", result)
+
+# Building a new string: add a dash between each character
+spaced = ""
+for i in range(len(original)):
+    spaced = spaced + original[i]
+    if i < len(original) - 1:
+        spaced = spaced + "-"
+print("Dashed:", spaced)
+
+# Count different character types
+text = "Hello World 123!"
+letters = 0
+digits = 0
+spaces = 0
+other = 0
+for char in text:
+    if char.isalpha():
+        letters += 1
+    elif char.isdigit():
+        digits += 1
+    elif char == " ":
+        spaces += 1
+    else:
+        other += 1
+print(f"Letters: {letters}, Digits: {digits}, Spaces: {spaces}, Other: {other}")</code></pre>
+        <div class="output-box empty">(click "Run Code" to see output)</div>
+      </div>
+
+      <p>The key technique here is <strong>building up a new string</strong>. Because strings are immutable (you cannot change them in place), we start with an empty string <code>""</code> and add characters to it one at a time using concatenation (<code>+</code>). This pattern &mdash; loop, check, build &mdash; is one of the most common in all of programming.</p>
+
+      <div class="try-this">
+        <strong>Try This:</strong> Write a loop that takes a string and builds a new version where every other character is uppercase. For example, <code>"hello"</code> becomes <code>"hElLo"</code>. Hint: use <code>range(len(text))</code> and check whether the index is odd or even with <code>i % 2</code>.
+      </div>
+
+      <!-- Example 6 -->
+      <h3>Example 6: Practical &mdash; Email Validator</h3>
+      <p>Let us put several string techniques together to build a practical <strong>email address validator</strong>. A valid email needs certain features: it must contain an <code>@</code> symbol, have text before and after the <code>@</code>, and end with a recognised domain. This is the kind of validation that happens every time you sign up for a website:</p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Python Code</span>
+          <div>
+            <button class="copy-button">Copy Code</button>
+            <button class="run-button">Run Code</button>
+          </div>
+        </div>
+        <pre><code contenteditable="true">def validate_email(email):
+    """Check if an email address is valid."""
+    # Remove any accidental whitespace
+    email = email.strip()
+
+    # Check 1: Must contain exactly one @ symbol
+    if email.count("@") != 1:
+        return "Invalid: must contain exactly one @ symbol"
+
+    # Check 2: Split into local part and domain
+    parts = email.split("@")
+    local = parts[0]
+    domain = parts[1]
+
+    # Check 3: Local part must not be empty
+    if len(local) == 0:
+        return "Invalid: nothing before the @ symbol"
+
+    # Check 4: Domain must not be empty
+    if len(domain) == 0:
+        return "Invalid: nothing after the @ symbol"
+
+    # Check 5: Domain must contain a dot
+    if "." not in domain:
+        return "Invalid: domain must contain a dot (e.g. .com, .co.uk)"
+
+    # Check 6: Must end with a valid domain extension
+    valid_endings = [".com", ".org", ".co.uk", ".net", ".edu", ".ac.uk"]
+    has_valid_ending = False
+    for ending in valid_endings:
+        if email.endswith(ending):
+            has_valid_ending = True
+    if not has_valid_ending:
+        return "Invalid: unrecognised domain extension"
+
+    return "Valid email address"
+
+# Test with different email addresses
+test_emails = [
+    "student@school.co.uk",
+    "alice@gmail.com",
+    "missing-at-sign.com",
+    "@nodomain.com",
+    "user@",
+    "double@@at.com",
+    "bob@website.xyz"
+]
+
+for email in test_emails:
+    result = validate_email(email)
+    print(f"{email:30s} -> {result}")</code></pre>
+        <div class="output-box empty">(click "Run Code" to see output)</div>
+      </div>
+
+      <p>This example combines many of the skills from this chapter: <code>.strip()</code> to clean input, <code>.count()</code> to check for the right number of <code>@</code> symbols, <code>.split()</code> to separate the parts, <code>len()</code> to check for empty sections, <code>in</code> to check for a dot, and <code>.endswith()</code> to validate the domain. Real-world email validation is even more complex, but this covers the essentials.</p>
+
+      <div class="try-this">
+        <strong>Try This:</strong> Add your own email address to the test list. Can you add an extra check that the local part (before the @) contains only letters, numbers, dots, and underscores? Try adding a check that the email does not contain any spaces.
       </div>
 
     </section>
@@ -317,6 +591,16 @@ print(greeting)        # Now "HELLO"</code></pre>
           <td><code>"hello".find("ll")</code> &rarr; <code>2</code></td>
         </tr>
         <tr>
+          <td><code>.split(sep)</code></td>
+          <td>Splits the string into a list at each <em>sep</em></td>
+          <td><code>"a,b,c".split(",")</code> &rarr; <code>["a","b","c"]</code></td>
+        </tr>
+        <tr>
+          <td><code>.join(list)</code></td>
+          <td>Joins a list of strings using the string as separator</td>
+          <td><code>"-".join(["a","b"])</code> &rarr; <code>"a-b"</code></td>
+        </tr>
+        <tr>
           <td><code>.startswith(s)</code></td>
           <td>Checks if the string begins with <em>s</em></td>
           <td><code>"hello".startswith("he")</code> &rarr; <code>True</code></td>
@@ -338,6 +622,104 @@ print(greeting)        # Now "HELLO"</code></pre>
         </tr>
       </table>
 
+      <div class="did-you-know">
+        <strong>Did You Know?</strong>
+        The most commonly used string method in real-world Python code is <code>.strip()</code>. Almost every program that reads user input or data from a file uses it to remove accidental whitespace. When a user types <code>"  hello  "</code> into a form, <code>.strip()</code> cleans it up to just <code>"hello"</code>. There are also <code>.lstrip()</code> and <code>.rstrip()</code> for removing whitespace from only the left or right side.
+      </div>
+
+      <!-- ==================== ASCII AND CHARACTER CODES ==================== -->
+      <h3>ASCII and Character Codes</h3>
+      <p>Computers do not actually store letters &mdash; they store <strong>numbers</strong>. Every character you see on screen has a corresponding numeric code. The original system for this is called <strong>ASCII</strong> (American Standard Code for Information Interchange), which assigns a number from 0 to 127 to each character. For example:</p>
+
+      <table>
+        <tr>
+          <th>Character</th>
+          <th>ASCII Code</th>
+          <th>Character</th>
+          <th>ASCII Code</th>
+        </tr>
+        <tr>
+          <td><code>A</code></td>
+          <td>65</td>
+          <td><code>a</code></td>
+          <td>97</td>
+        </tr>
+        <tr>
+          <td><code>B</code></td>
+          <td>66</td>
+          <td><code>b</code></td>
+          <td>98</td>
+        </tr>
+        <tr>
+          <td><code>Z</code></td>
+          <td>90</td>
+          <td><code>z</code></td>
+          <td>122</td>
+        </tr>
+        <tr>
+          <td><code>0</code></td>
+          <td>48</td>
+          <td><code>9</code></td>
+          <td>57</td>
+        </tr>
+        <tr>
+          <td><code>(space)</code></td>
+          <td>32</td>
+          <td><code>!</code></td>
+          <td>33</td>
+        </tr>
+      </table>
+
+      <p>Python gives you two built-in functions to work with character codes:</p>
+      <ul>
+        <li><code>ord(character)</code> &mdash; returns the numeric code for a character. For example, <code>ord("A")</code> returns <code>65</code>.</li>
+        <li><code>chr(number)</code> &mdash; returns the character for a numeric code. For example, <code>chr(65)</code> returns <code>"A"</code>.</li>
+      </ul>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Python Code</span>
+          <div>
+            <button class="copy-button">Copy Code</button>
+            <button class="run-button">Run Code</button>
+          </div>
+        </div>
+        <pre><code contenteditable="true"># Convert characters to their ASCII codes
+print("A =", ord("A"))
+print("a =", ord("a"))
+print("0 =", ord("0"))
+print("! =", ord("!"))
+
+# Convert ASCII codes back to characters
+print("65 =", chr(65))
+print("97 =", chr(97))
+print("48 =", chr(48))
+
+# This is why alphabetical sorting works!
+# 'A' (65) < 'B' (66) < 'C' (67) ...
+print("Is 'A' less than 'B'?", "A" < "B")    # True
+print("Is 'a' less than 'Z'?", "a" < "Z")    # False! (97 > 90)
+
+# Print the entire uppercase alphabet using chr()
+alphabet = ""
+for code in range(65, 91):
+    alphabet += chr(code)
+print("Alphabet:", alphabet)</code></pre>
+        <div class="output-box empty">(click "Run Code" to see output)</div>
+      </div>
+
+      <p>Understanding character codes explains why <strong>string comparison works alphabetically</strong>. When Python compares <code>"apple" &lt; "banana"</code>, it compares the ASCII codes character by character. Since <code>ord("a")</code> is 97 and <code>ord("b")</code> is 98, <code>"apple"</code> comes first. However, be careful: uppercase letters (65&ndash;90) have <em>lower</em> codes than lowercase letters (97&ndash;122), so <code>"Z" &lt; "a"</code> is <code>True</code>! This is why you often need to convert to the same case before comparing.</p>
+
+      <div class="did-you-know">
+        <strong>Did You Know?</strong>
+        ASCII (American Standard Code for Information Interchange) was created in the 1960s and only covers 128 characters &mdash; basically just English letters, digits, and punctuation. Modern Python uses <strong>Unicode</strong>, which can represent over 149,000 characters from every writing system in the world, including Chinese, Arabic, Hindi, and even emoji! That is why <code>ord("&#128013;")</code> returns 128013 and <code>len("Hello &#127758;")</code> counts the globe emoji as a single character. Unicode is a superset of ASCII &mdash; the first 128 Unicode codes are identical to ASCII.
+      </div>
+
+      <div class="did-you-know">
+        <strong>Did You Know?</strong>
+        Strings in Python are stored as Unicode, meaning they can represent every character in every language. A Python string can contain English, Japanese, Arabic, and emoji all at once: <code>"Hello &#12371;&#12435;&#12395;&#12385;&#12399; &#1605;&#1585;&#1581;&#1576;&#1575; &#128075;"</code> is a perfectly valid Python string. Each character has a unique code point &mdash; <code>ord("A")</code> returns 65, but <code>ord("&#12371;")</code> returns 12371!
+      </div>
+
       <div class="warning">
         <strong>Watch out:</strong> A very common misconception is thinking that <code>.replace()</code> changes the original string. It does <strong>not</strong>. For example, after running <code>name = "Alice"</code> followed by <code>name.replace("A", "a")</code>, the variable <code>name</code> is still <code>"Alice"</code>. You must write <code>name = name.replace("A", "a")</code> to save the change.
       </div>
@@ -345,6 +727,244 @@ print(greeting)        # Now "HELLO"</code></pre>
       <div class="warning">
         <strong>Watch out:</strong> Remember that string indexing starts at <strong>0</strong>, not 1. The first character of <code>"Hello"</code> is <code>"Hello"[0]</code>, which is <code>"H"</code>. Trying to access an index beyond the length of the string (e.g. <code>"Hello"[10]</code>) will cause an <code>IndexError</code>.
       </div>
+    </section>
+
+    <!-- ==================== WORKED EXAMPLE ==================== -->
+    <section class="understand">
+      <span class="section-label">Understand</span>
+      <h2>Worked Example: Building a Caesar Cipher</h2>
+
+      <div class="worked-example">
+        <h3>The Problem</h3>
+        <p>A <strong>Caesar cipher</strong> is one of the oldest encryption techniques, supposedly used by Julius Caesar to send secret messages. It works by <strong>shifting</strong> each letter in the message by a fixed number of positions in the alphabet. For example, with a shift of 3:</p>
+        <ul>
+          <li><code>A</code> becomes <code>D</code></li>
+          <li><code>B</code> becomes <code>E</code></li>
+          <li><code>X</code> becomes <code>A</code> (it wraps around!)</li>
+          <li><code>Z</code> becomes <code>C</code></li>
+        </ul>
+        <p>This is a <strong>classic GCSE exam question</strong>. Let us build it step by step using <code>ord()</code>, <code>chr()</code>, and modular arithmetic.</p>
+
+        <div class="worked-example-step">
+          <strong>Step 1: Understand the character codes</strong>
+          <p>Uppercase letters run from <code>ord("A") = 65</code> to <code>ord("Z") = 90</code>. To shift a letter, we need to convert it to a number (0&ndash;25), add the shift, wrap around using the modulo operator (<code>%</code>), and convert back to a letter.</p>
+        </div>
+
+        <div class="worked-example-step">
+          <strong>Step 2: Work through an example by hand</strong>
+          <p>To encrypt the letter <code>"H"</code> with a shift of 3:</p>
+          <ul>
+            <li>Get the ASCII code: <code>ord("H") = 72</code></li>
+            <li>Subtract 65 to get a position (0&ndash;25): <code>72 - 65 = 7</code></li>
+            <li>Add the shift: <code>7 + 3 = 10</code></li>
+            <li>Use modulo to wrap around: <code>10 % 26 = 10</code></li>
+            <li>Add 65 back to get the ASCII code: <code>10 + 65 = 75</code></li>
+            <li>Convert back to a character: <code>chr(75) = "K"</code></li>
+          </ul>
+          <p>So <code>"H"</code> becomes <code>"K"</code>.</p>
+        </div>
+
+        <div class="worked-example-step">
+          <strong>Step 3: Handle wrapping around the alphabet</strong>
+          <p>The modulo operator (<code>%</code>) is the key to wrapping. For example, <code>"Y"</code> with a shift of 3:</p>
+          <ul>
+            <li>Position: <code>ord("Y") - 65 = 24</code></li>
+            <li>Shifted: <code>24 + 3 = 27</code></li>
+            <li>Wrapped: <code>27 % 26 = 1</code></li>
+            <li>Result: <code>chr(1 + 65) = "B"</code></li>
+          </ul>
+          <p>Without the modulo, we would get code 92 which is not a letter!</p>
+        </div>
+
+        <div class="worked-example-step">
+          <strong>Step 4: Write the complete solution</strong>
+          <p>We loop through each character, shift letters, and leave non-letter characters (spaces, punctuation) unchanged.</p>
+        </div>
+      </div>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Python Code</span>
+          <div>
+            <button class="copy-button">Copy Code</button>
+            <button class="run-button">Run Code</button>
+          </div>
+        </div>
+        <pre><code contenteditable="true">def caesar_cipher(message, shift):
+    """Encrypt a message using a Caesar cipher."""
+    result = ""
+
+    for char in message:
+        if char.isalpha():
+            # Determine if uppercase or lowercase
+            if char.isupper():
+                base = ord("A")
+            else:
+                base = ord("a")
+
+            # Shift the character
+            position = ord(char) - base         # 0-25
+            shifted = (position + shift) % 26   # Wrap around
+            new_char = chr(shifted + base)       # Back to a letter
+            result += new_char
+        else:
+            # Keep spaces, punctuation, digits unchanged
+            result += char
+
+    return result
+
+# Encrypt a message with a shift of 3
+original = "HELLO WORLD"
+encrypted = caesar_cipher(original, 3)
+print("Original: ", original)
+print("Encrypted:", encrypted)
+
+# Decrypt by shifting in the opposite direction
+decrypted = caesar_cipher(encrypted, -3)
+print("Decrypted:", decrypted)
+
+# Try with mixed case and punctuation
+secret = "Attack at dawn!"
+coded = caesar_cipher(secret, 5)
+print("\nOriginal: ", secret)
+print("Encrypted:", coded)
+print("Decrypted:", caesar_cipher(coded, -5))</code></pre>
+        <div class="output-box empty">(click "Run Code" to see output)</div>
+      </div>
+
+      <div class="key-concept">
+        <strong>Key Concept: Modular Arithmetic</strong>
+        The modulo operator (<code>%</code>) gives you the remainder after division. <code>27 % 26 = 1</code> because 27 divided by 26 leaves a remainder of 1. This is perfect for &ldquo;wrapping around&rdquo; &mdash; when you go past Z, you loop back to A. You will encounter modular arithmetic in many computing contexts, including hash functions, clock arithmetic, and cryptography.
+      </div>
+
+    </section>
+
+    <!-- ==================== REAL WORLD APPLICATIONS ==================== -->
+    <section class="understand">
+      <span class="section-label">Understand</span>
+      <h2>Real-World Applications</h2>
+
+      <div class="real-world-applications">
+        <h3>Where Is String Manipulation Used?</h3>
+
+        <h4>Data Cleaning</h4>
+        <p>When organisations collect data from forms, surveys, or imports, it is often messy. Names might be typed as <code>"  jOHN sMITH  "</code> instead of <code>"John Smith"</code>. Data cleaning scripts use <code>.strip()</code> to remove extra whitespace, <code>.title()</code> or <code>.capitalize()</code> to fix capitalisation, and <code>.replace()</code> to standardise formats. Databases with millions of records rely on these operations to keep data consistent.</p>
+
+        <h4>Natural Language Processing (NLP)</h4>
+        <p>NLP is the field of computer science that teaches computers to understand human language. Applications like voice assistants (Siri, Alexa), translation services, and chatbots all start by breaking text into words using <code>.split()</code>, converting to lowercase with <code>.lower()</code>, and removing punctuation. Sentiment analysis programs use these techniques to determine whether a product review is positive or negative by checking for key words.</p>
+
+        <h4>Cybersecurity</h4>
+        <p>One of the most common attacks on websites is <strong>injection</strong> &mdash; where an attacker types malicious code into a form field hoping it will be executed. String validation is the first line of defence. Checking that usernames contain only safe characters, that inputs do not contain <code>&lt;script&gt;</code> tags, and that data matches expected patterns (using methods like <code>.isalnum()</code>, <code>.find()</code>, and <code>in</code>) helps prevent these attacks.</p>
+
+        <h4>File Processing</h4>
+        <p>Programs that read data files &mdash; especially CSV (Comma-Separated Values) files &mdash; rely heavily on <code>.split(",")</code> to break each line into fields, <code>.strip()</code> to clean up whitespace, and type conversion to turn string values into numbers. Scientific research, business reporting, and government statistics all depend on these string-processing techniques.</p>
+
+        <h4>Search Engines</h4>
+        <p>When you type a query into Google, the search engine <strong>tokenises</strong> your input &mdash; splitting it into individual words using <code>.split()</code>, converting to lowercase, removing common words like &ldquo;the&rdquo; and &ldquo;is&rdquo; (called <strong>stop words</strong>), and sometimes <strong>stemming</strong> words (reducing &ldquo;running&rdquo;, &ldquo;runs&rdquo;, and &ldquo;ran&rdquo; to the root word &ldquo;run&rdquo;). All of this is fundamentally string manipulation.</p>
+      </div>
+    </section>
+
+    <!-- ==================== COMMON MISTAKES ==================== -->
+    <section class="understand">
+      <span class="section-label">Understand</span>
+      <h2>Common Mistakes to Avoid</h2>
+
+      <div class="common-mistakes">
+        <h3>Watch Out for These Pitfalls</h3>
+
+        <h4>1. Forgetting that strings are immutable</h4>
+        <p>This is the number one mistake beginners make. String methods return <strong>new</strong> strings &mdash; they do not change the original. If you write <code>name.upper()</code> without saving the result, nothing changes:</p>
+        <p><code>name = "alice"</code><br />
+        <code>name.upper()&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# This does NOTHING to name!</code><br />
+        <code>name = name.upper()&nbsp;&nbsp;# This is correct</code></p>
+
+        <h4>2. Off-by-one errors in slicing</h4>
+        <p>Remember that the <strong>stop</strong> index in a slice is <em>not included</em>. If you want characters at indices 0, 1, 2, 3, and 4, you write <code>text[0:5]</code>, not <code>text[0:4]</code>. A useful rule: the number of characters in a slice is <code>stop - start</code>.</p>
+
+        <h4>3. Case sensitivity when comparing strings</h4>
+        <p>In Python, <code>"Hello"</code> and <code>"hello"</code> are <strong>not</strong> the same string. If you are comparing user input, always convert both sides to the same case first:</p>
+        <p><code>if user_input.lower() == "yes":&nbsp;&nbsp;# Handles "Yes", "YES", "yes", etc.</code></p>
+
+        <h4>4. Confusing .find() returning -1 with an error</h4>
+        <p>When <code>.find()</code> cannot locate the substring, it returns <code>-1</code> &mdash; it does <strong>not</strong> raise an error. This can cause bugs if you use the result as an index without checking. Always test the return value:</p>
+        <p><code>pos = text.find("hello")</code><br />
+        <code>if pos != -1:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# Found it!</code><br />
+        <code>&nbsp;&nbsp;&nbsp;&nbsp;print("Found at index", pos)</code></p>
+        <p>If you want Python to raise an error when the substring is not found, use <code>.index()</code> instead of <code>.find()</code>.</p>
+      </div>
+    </section>
+
+    <!-- ==================== KEY VOCABULARY ==================== -->
+    <section class="understand">
+      <span class="section-label">Understand</span>
+      <h2>Key Vocabulary</h2>
+
+      <table class="vocab-table">
+        <tr>
+          <th>Term</th>
+          <th>Definition</th>
+        </tr>
+        <tr>
+          <td><strong>String</strong></td>
+          <td>A sequence of characters (text data), written in quotes in Python. For example, <code>"Hello"</code>.</td>
+        </tr>
+        <tr>
+          <td><strong>Character</strong></td>
+          <td>A single letter, digit, symbol, or space. In Python, a character is simply a string of length 1.</td>
+        </tr>
+        <tr>
+          <td><strong>Index</strong></td>
+          <td>The position number of a character within a string. Python uses zero-based indexing (the first character is at index 0).</td>
+        </tr>
+        <tr>
+          <td><strong>Slice</strong></td>
+          <td>A portion of a string extracted using the <code>[start:stop:step]</code> syntax.</td>
+        </tr>
+        <tr>
+          <td><strong>Substring</strong></td>
+          <td>A smaller string that appears within a larger string. For example, <code>"ell"</code> is a substring of <code>"Hello"</code>.</td>
+        </tr>
+        <tr>
+          <td><strong>Immutable</strong></td>
+          <td>Cannot be changed after creation. Strings in Python are immutable &mdash; methods return new strings rather than modifying the original.</td>
+        </tr>
+        <tr>
+          <td><strong>Concatenation</strong></td>
+          <td>Joining two or more strings together using the <code>+</code> operator. For example, <code>"Hello" + " " + "World"</code>.</td>
+        </tr>
+        <tr>
+          <td><strong>Method</strong></td>
+          <td>A function that belongs to an object, called using dot notation. For example, <code>"hello".upper()</code> calls the <code>upper</code> method on the string.</td>
+        </tr>
+        <tr>
+          <td><strong>Traverse</strong></td>
+          <td>To iterate (loop) through a sequence one element at a time. For example, <code>for char in "hello":</code> traverses each character.</td>
+        </tr>
+        <tr>
+          <td><strong>ASCII</strong></td>
+          <td>American Standard Code for Information Interchange &mdash; a system that assigns a numeric code (0&ndash;127) to each character. <code>ord("A")</code> returns 65.</td>
+        </tr>
+        <tr>
+          <td><strong>Unicode</strong></td>
+          <td>A modern character encoding standard that covers over 149,000 characters from all the world's writing systems. Python uses Unicode internally.</td>
+        </tr>
+        <tr>
+          <td><strong>Delimiter</strong></td>
+          <td>A character or string used to separate pieces of data. In CSV files, the delimiter is a comma. In <code>.split(",")</code>, the comma is the delimiter.</td>
+        </tr>
+        <tr>
+          <td><strong>split()</strong></td>
+          <td>A string method that breaks a string into a list of substrings at each occurrence of a delimiter.</td>
+        </tr>
+        <tr>
+          <td><strong>join()</strong></td>
+          <td>A string method that concatenates a list of strings, inserting the string between each element.</td>
+        </tr>
+        <tr>
+          <td><strong>strip()</strong></td>
+          <td>A string method that removes leading and trailing whitespace (or specified characters) from a string.</td>
+        </tr>
+      </table>
     </section>
 
     <!-- ==================== PRACTICE ==================== -->
@@ -516,6 +1136,167 @@ sentence = "Python Is Super Cool"
         </div>
       </div>
 
+      <!-- Exercise 4: Palindrome Checker -->
+      <div class="exercise">
+        <div class="exercise-title">Exercise 4: Palindrome Checker</div>
+        <div class="exercise-difficulty difficulty-2">Partially Guided</div>
+        <p>A <strong>palindrome</strong> is a word or phrase that reads the same forwards and backwards. For example, &ldquo;racecar&rdquo;, &ldquo;madam&rdquo;, and &ldquo;level&rdquo; are all palindromes. Write a program that checks whether a word is a palindrome.</p>
+
+        <div class="pseudocode">
+          <div class="pseudocode-label">Pseudocode:</div>
+          STEP 1: Store a word in a variable<br />
+          STEP 2: Convert the word to lowercase (so &ldquo;Racecar&rdquo; and &ldquo;racecar&rdquo; both work)<br />
+          STEP 3: Reverse the lowercase word using slicing<br />
+          STEP 4: Compare the lowercase word to its reverse<br />
+          STEP 5: If they are the same, print that it is a palindrome<br />
+          STEP 6: Otherwise, print that it is not a palindrome
+        </div>
+
+        <div class="code-block">
+          <div class="code-block-header">
+            <span class="code-block-label">Your Code</span>
+            <div>
+              <button class="copy-button">Copy Code</button>
+              <button class="run-button">Run Code</button>
+            </div>
+          </div>
+          <pre><code contenteditable="true"># Palindrome Checker
+word = "Racecar"
+
+# Step 1: Convert to lowercase
+word_lower = word.lower()
+
+# Step 2: Reverse the string (use slicing!)
+reversed_word = ____  # Replace ____ with the reversed version
+
+# Step 3: Compare and print the result
+if word_lower == reversed_word:
+    print(f"'{word}' is a palindrome!")
+else:
+    print(f"'{word}' is NOT a palindrome.")
+
+# Bonus: Test with several words
+test_words = ["madam", "python", "level", "hello", "kayak"]
+for w in test_words:
+    if w == w[::-1]:
+        print(f"  {w} -> palindrome")
+    else:
+        print(f"  {w} -> not a palindrome")</code></pre>
+          <div class="output-box empty">(click "Run Code" to see output)</div>
+        </div>
+
+        <div class="hint">
+          <div class="hint-title">Need a hint?</div>
+          <div class="hint-content">
+            <p>Replace <code>____</code> with <code>word_lower[::-1]</code>. This uses Python&rsquo;s slice syntax with a step of -1 to reverse the string.</p>
+            <p><strong>Challenge extension:</strong> Can you make the palindrome checker work for phrases too? For example, &ldquo;A man a plan a canal Panama&rdquo; is a palindrome if you ignore spaces and capitalisation. Hint: use <code>.replace(" ", "")</code> to remove spaces before checking.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Exercise 5: Password Strength Checker -->
+      <div class="exercise">
+        <div class="exercise-title">Exercise 5: Password Strength Checker</div>
+        <div class="exercise-difficulty difficulty-3">Open-Ended</div>
+        <p>Write a program that checks the <strong>strength</strong> of a password. A strong password should meet all of the following criteria:</p>
+        <ul>
+          <li>At least <strong>8 characters</strong> long</li>
+          <li>Contains at least one <strong>uppercase</strong> letter</li>
+          <li>Contains at least one <strong>lowercase</strong> letter</li>
+          <li>Contains at least one <strong>digit</strong></li>
+          <li>Contains at least one <strong>special character</strong> (e.g. <code>!@#$%^&amp;*</code>)</li>
+        </ul>
+
+        <div class="pseudocode">
+          <div class="pseudocode-label">Pseudocode:</div>
+          STEP 1: Store a password in a variable<br />
+          STEP 2: Create boolean variables for each check, initially set to False<br />
+          STEP 3: Check the length is at least 8<br />
+          STEP 4: Loop through each character in the password<br />
+          STEP 5: For each character, check if it is uppercase, lowercase, a digit, or special<br />
+          STEP 6: After the loop, report which criteria are met and which are missing<br />
+          STEP 7: If all criteria are met, print that the password is strong
+        </div>
+
+        <div class="code-block">
+          <div class="code-block-header">
+            <span class="code-block-label">Your Code</span>
+            <div>
+              <button class="copy-button">Copy Code</button>
+              <button class="run-button">Run Code</button>
+            </div>
+          </div>
+          <pre><code contenteditable="true"># Password Strength Checker
+password = "MyP@ssw0rd"
+
+# Define the special characters to check for
+special_chars = "!@#$%^&*()-_=+[]{}|;:',.<>?/"
+
+# Track which criteria are met
+has_length = len(password) >= 8
+has_upper = False
+has_lower = False
+has_digit = False
+has_special = False
+
+# Loop through each character and check
+for char in password:
+    # Add your checks here
+    pass
+
+# Report results
+print(f"Password: {password}")
+print(f"  Length >= 8:      {has_length}")
+print(f"  Has uppercase:    {has_upper}")
+print(f"  Has lowercase:    {has_lower}")
+print(f"  Has digit:        {has_digit}")
+print(f"  Has special char: {has_special}")
+
+if has_length and has_upper and has_lower and has_digit and has_special:
+    print("\nPassword is STRONG!")
+else:
+    print("\nPassword is WEAK. Please fix the issues above.")</code></pre>
+          <div class="output-box empty">(click "Run Code" to see output)</div>
+        </div>
+
+        <div class="hint">
+          <div class="hint-title">Need a hint?</div>
+          <div class="hint-content">
+            <p>Replace the <code>pass</code> line inside the loop with checks for each character type:</p>
+            <p><code>if char.isupper():</code><br />
+            <code>&nbsp;&nbsp;&nbsp;&nbsp;has_upper = True</code><br />
+            <code>elif char.islower():</code><br />
+            <code>&nbsp;&nbsp;&nbsp;&nbsp;has_lower = True</code><br />
+            <code>elif char.isdigit():</code><br />
+            <code>&nbsp;&nbsp;&nbsp;&nbsp;has_digit = True</code><br />
+            <code>elif char in special_chars:</code><br />
+            <code>&nbsp;&nbsp;&nbsp;&nbsp;has_special = True</code></p>
+            <p>Test with passwords like <code>"hello"</code> (too weak), <code>"Hello123"</code> (missing special character), and <code>"MyP@ssw0rd"</code> (strong).</p>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ==================== SUMMARY ==================== -->
+    <section class="understand">
+      <span class="section-label">Understand</span>
+      <h2>Chapter Summary</h2>
+
+      <div class="summary-box">
+        <h3>What You Have Learnt</h3>
+        <ul>
+          <li><strong>Strings are sequences</strong> of characters, accessed by index starting from 0. Negative indices count from the end.</li>
+          <li><strong>Slicing</strong> uses the syntax <code>[start:stop:step]</code> to extract portions of a string. The stop index is not included.</li>
+          <li><strong>Strings are immutable</strong> &mdash; methods like <code>.upper()</code>, <code>.replace()</code>, and <code>.strip()</code> return new strings; they never modify the original.</li>
+          <li><strong>String methods</strong> let you change case (<code>.upper()</code>, <code>.lower()</code>, <code>.title()</code>), search (<code>.find()</code>, <code>.count()</code>, <code>in</code>), check properties (<code>.isdigit()</code>, <code>.isalpha()</code>, <code>.startswith()</code>), and clean text (<code>.strip()</code>, <code>.replace()</code>).</li>
+          <li><strong>split() and join()</strong> convert between strings and lists &mdash; essential for processing structured data like CSV.</li>
+          <li><strong>String traversal</strong> using <code>for char in string:</code> lets you examine or transform each character individually.</li>
+          <li><strong>ASCII and Unicode</strong> assign numeric codes to characters. The <code>ord()</code> and <code>chr()</code> functions convert between characters and their codes.</li>
+          <li><strong>The Caesar cipher</strong> demonstrates how <code>ord()</code>, <code>chr()</code>, and modular arithmetic can be used for encryption &mdash; a classic GCSE topic.</li>
+          <li><strong>Practical applications</strong> include email validation, password checking, data cleaning, and text analysis.</li>
+        </ul>
+      </div>
     </section>
 
     <!-- ==================== REFLECT ==================== -->
@@ -523,7 +1304,7 @@ sentence = "Python Is Super Cool"
       <span class="section-label">Reflect</span>
       <h2>Think About It</h2>
 
-      <p>Take a moment to think about what you&rsquo;ve learnt in this chapter. Try to answer these questions in your head or discuss them with a classmate:</p>
+      <p>Take a moment to think about what you have learnt in this chapter. Try to answer these questions in your head or discuss them with a classmate:</p>
 
       <ul>
         <li>Why does Python start counting string indices at 0 instead of 1? Can you think of any advantages this might have?</li>
@@ -531,19 +1312,68 @@ sentence = "Python Is Super Cool"
         <li>If you wanted to check whether a user&rsquo;s input was a valid email address, which string methods might you use? (Think about what an email address looks like.)</li>
         <li>Why is it useful to convert a string to lowercase before searching for something inside it?</li>
         <li>Can you think of a real-world app or website that must use string manipulation behind the scenes? What might it be doing with the text?</li>
+        <li>How does knowing about ASCII codes help you understand why <code>"apple" &lt; "banana"</code> is <code>True</code> in Python?</li>
+        <li>Why is the modulo operator (<code>%</code>) essential for making the Caesar cipher work correctly?</li>
       </ul>
 
+      <!-- ==================== EXAM-STYLE QUESTIONS ==================== -->
+      <div class="exam-questions">
+        <h3>Exam-Style Questions</h3>
+        <p>Practise answering these questions as you would in a GCSE Computer Science exam.</p>
+
+        <div class="exam-question">
+          <span class="marks">[2 marks]</span>
+          <p><strong>Question 1:</strong> What does it mean for strings to be &lsquo;immutable&rsquo; in Python? Give an example to illustrate your answer.</p>
+        </div>
+
+        <div class="exam-question">
+          <span class="marks">[2 marks]</span>
+          <p><strong>Question 2:</strong> Explain the difference between <code>.find()</code> and the <code>in</code> keyword when searching for text within a string. When might you choose one over the other?</p>
+        </div>
+
+        <div class="exam-question">
+          <span class="marks">[4 marks]</span>
+          <p><strong>Question 3:</strong> Write a Python function called <code>count_types</code> that takes a string as a parameter and returns the number of uppercase letters, lowercase letters, and digits it contains. For example, <code>count_types("Hello World 123")</code> should print: <code>Uppercase: 2, Lowercase: 8, Digits: 3</code>.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Exam question model answers</div>
+        <div class="hint-content">
+          <p><strong>Question 1 (2 marks):</strong> Immutable means the string cannot be changed after it has been created (1 mark). For example, calling <code>name.upper()</code> does not change <code>name</code> &mdash; it returns a new string, so you must write <code>name = name.upper()</code> to store the result (1 mark).</p>
+
+          <p><strong>Question 2 (2 marks):</strong> The <code>in</code> keyword returns <code>True</code> or <code>False</code> to indicate whether the substring exists (1 mark). The <code>.find()</code> method returns the index (position) where the substring was found, or <code>-1</code> if it was not found (1 mark). You would use <code>in</code> when you only need to know if the text is present, and <code>.find()</code> when you need to know <em>where</em> it is.</p>
+
+          <p><strong>Question 3 (4 marks):</strong></p>
+          <p><code>def count_types(text):</code> (1 mark for function definition with parameter)<br />
+          <code>&nbsp;&nbsp;&nbsp;&nbsp;upper = 0</code><br />
+          <code>&nbsp;&nbsp;&nbsp;&nbsp;lower = 0</code><br />
+          <code>&nbsp;&nbsp;&nbsp;&nbsp;digits = 0</code> (1 mark for initialising counters)<br />
+          <code>&nbsp;&nbsp;&nbsp;&nbsp;for char in text:</code> (1 mark for loop and correct checks)<br />
+          <code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if char.isupper():</code><br />
+          <code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;upper += 1</code><br />
+          <code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;elif char.islower():</code><br />
+          <code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lower += 1</code><br />
+          <code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;elif char.isdigit():</code><br />
+          <code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;digits += 1</code><br />
+          <code>&nbsp;&nbsp;&nbsp;&nbsp;print(f"Uppercase: {upper}, Lowercase: {lower}, Digits: {digits}")</code> (1 mark for correct output)</p>
+        </div>
+      </div>
+
       <div class="extra-resources">
-        <h3>Extra Practice</h3>
+        <h3>Extra Resources</h3>
         <p>Keep practising your string skills:</p>
         <ul>
           <li><a href="https://hvgcsecs.cshub.org.je/topics/topic6.html" target="_blank" rel="noopener">GCSE Topic 6: Data Types</a> &mdash; String operations, concatenation, slicing, and traversal with interactive code editors</li>
           <li><a href="https://hvgcse.cshub.org.je/Python_Error_Spotter.html" target="_blank" rel="noopener">Python Error Spotter</a> &mdash; Spot errors in Python code including common string mistakes</li>
+          <li><a href="https://www.bbc.co.uk/bitesize/examspecs/zdqy7nb" target="_blank" rel="noopener">BBC Bitesize Edexcel Computer Science</a> &mdash; Comprehensive GCSE revision including string handling and data types</li>
+          <li><a href="https://www.w3schools.com/python/python_strings.asp" target="_blank" rel="noopener">W3Schools Python Strings</a> &mdash; Interactive tutorials covering all the basics of Python strings</li>
+          <li><a href="https://www.w3schools.com/python/python_string_methods.asp" target="_blank" rel="noopener">W3Schools Python String Methods</a> &mdash; A complete reference of every Python string method with examples</li>
         </ul>
       </div>
 
       <h3>What&rsquo;s Next?</h3>
-      <p>No matter how carefully you write your code, things can go wrong: a user might type a word when you expected a number, a file might not exist, or a calculation might try to divide by zero. In <strong>Chapter 10: Error Handling</strong>, you&rsquo;ll learn how to anticipate these problems and handle them gracefully using <code>try</code> and <code>except</code> blocks &mdash; so your programs don&rsquo;t just crash but instead respond helpfully when something unexpected happens.</p>
+      <p>No matter how carefully you write your code, things can go wrong: a user might type a word when you expected a number, a file might not exist, or a calculation might try to divide by zero. In <strong>Chapter 10: Error Handling</strong>, you will learn how to anticipate these problems and handle them gracefully using <code>try</code> and <code>except</code> blocks &mdash; so your programs do not just crash but instead respond helpfully when something unexpected happens.</p>
     </section>
 
     <!-- ==================== NAVIGATION ==================== -->

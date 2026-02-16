@@ -4,6 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Chapter 5: Loops - Python Fundamentals</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="../css/style.css" />
   <script src="https://cdn.jsdelivr.net/pyodide/v0.24.0/full/pyodide.js"></script>
 </head>
@@ -28,12 +31,19 @@
 
       <p>You already experience loops every day without thinking about it. A music playlist on repeat plays each song one after another, then starts again. A factory assembly line performs the same steps on every item. Your daily routine &mdash; wake up, brush teeth, eat breakfast &mdash; repeats every single morning. Programming loops work in exactly the same way.</p>
 
+      <p>Loops are one of the most <strong>fundamental concepts</strong> in all of computer science. Almost every useful program ever written contains at least one loop. Without loops, computers would be little more than expensive calculators &mdash; unable to process large amounts of data, unable to keep games running, and unable to display your social media feed.</p>
+
       <p><strong>By the end of this chapter, you will be able to:</strong></p>
       <ul>
         <li>Use <code>for</code> loops with <code>range()</code> to repeat actions a set number of times</li>
+        <li>Use <code>for</code> loops to iterate through lists and strings</li>
         <li>Use <code>while</code> loops to repeat actions based on a condition</li>
+        <li>Explain the difference between <strong>count-controlled</strong> and <strong>condition-controlled</strong> loops</li>
+        <li>Use the <strong>accumulator pattern</strong> to build up totals and results</li>
+        <li>Write <strong>nested loops</strong> (loops inside loops)</li>
         <li>Avoid infinite loops and understand why they happen</li>
         <li>Use <code>break</code> and <code>continue</code> to control the flow of a loop</li>
+        <li>Complete a <strong>trace table</strong> to track variables through a loop</li>
       </ul>
     </section>
 
@@ -41,6 +51,8 @@
     <section class="explore">
       <span class="section-label">Explore</span>
       <h2>See It in Action</h2>
+
+      <p>The best way to understand loops is to run some code and experiment. Try each example below, then change the values to see what happens. Do not be afraid to break things &mdash; that is how you learn!</p>
 
       <h3>Example 1: For Loop with <code>range()</code></h3>
       <p>This program counts from 1 to 5 and prints each number. The <code>for</code> loop automatically moves through each value in the range.</p>
@@ -111,6 +123,121 @@ print("Blast off!")</code></pre>
       <div class="try-this">
         <strong>Try This:</strong> Change the starting number to 10 for a longer countdown. What would happen if you removed the line <code>countdown = countdown - 1</code>? (Think about it &mdash; but be careful running it!)
       </div>
+
+      <h3>Example 4: Nested Loops &mdash; Multiplication Table</h3>
+      <p>You can put a loop <em>inside</em> another loop. This is called a <strong>nested loop</strong>. The inner loop runs completely for every single iteration of the outer loop. Here we use two <code>for</code> loops to build a 5&times;5 multiplication table.</p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Python Code</span>
+          <div>
+            <button class="copy-button">Copy Code</button>
+            <button class="run-button">Run Code</button>
+          </div>
+        </div>
+        <pre><code contenteditable="true"># Multiplication table using nested loops
+for row in range(1, 6):
+    line = ""
+    for col in range(1, 6):
+        result = row * col
+        line = line + str(result) + "\t"
+    print(line)</code></pre>
+        <div class="output-box empty">(click "Run Code" to see output)</div>
+      </div>
+
+      <div class="try-this">
+        <strong>Try This:</strong> Change both <code>range(1, 6)</code> to <code>range(1, 13)</code> to build a full 12&times;12 times table. Can you add a header row showing the column numbers?
+      </div>
+
+      <h3>Example 5: Looping Through Strings</h3>
+      <p>In Python, a string is a <strong>sequence of characters</strong>. That means you can loop through each character one at a time, just like you loop through items in a list. This is incredibly useful for tasks like checking passwords, counting letters, or encoding messages.</p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Python Code</span>
+          <div>
+            <button class="copy-button">Copy Code</button>
+            <button class="run-button">Run Code</button>
+          </div>
+        </div>
+        <pre><code contenteditable="true"># Looping through each character in a word
+word = "Python"
+
+for letter in word:
+    print(letter, "- ASCII code:", ord(letter))</code></pre>
+        <div class="output-box empty">(click "Run Code" to see output)</div>
+      </div>
+
+      <div class="try-this">
+        <strong>Try This:</strong> Change the word to your own name. Can you modify the program to count how many vowels are in the word? (Hint: check if <code>letter.lower() in "aeiou"</code>.)
+      </div>
+
+      <h3>Example 6: The Accumulator Pattern</h3>
+      <p>One of the most common loop patterns is the <strong>accumulator</strong> &mdash; you start with a value (usually 0) and <em>build it up</em> each time around the loop. Legend has it that the mathematician Carl Friedrich Gauss calculated the sum of 1 to 100 in his head as a child. Let us get Python to do it for us.</p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Python Code</span>
+          <div>
+            <button class="copy-button">Copy Code</button>
+            <button class="run-button">Run Code</button>
+          </div>
+        </div>
+        <pre><code contenteditable="true"># Accumulator pattern: sum of 1 to 100
+total = 0
+
+for number in range(1, 101):
+    total = total + number
+
+print("The sum of 1 to 100 is:", total)</code></pre>
+        <div class="output-box empty">(click "Run Code" to see output)</div>
+      </div>
+
+      <div class="try-this">
+        <strong>Try This:</strong> Gauss found the answer was 5050 &mdash; does your program agree? Now try calculating the sum of 1 to 1000. Can you modify it to only add up the <em>even</em> numbers?
+      </div>
+
+      <h3>Example 7: While Loop with Validation</h3>
+      <p>A very common use of <code>while</code> loops is <strong>input validation</strong> &mdash; repeating a question until the user gives an acceptable answer. This simulates a password check with a maximum of 3 attempts. (Since we cannot use <code>input()</code> in the browser, we simulate the attempts with a list.)</p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Python Code</span>
+          <div>
+            <button class="copy-button">Copy Code</button>
+            <button class="run-button">Run Code</button>
+          </div>
+        </div>
+        <pre><code contenteditable="true"># Password check with maximum 3 attempts
+password = "secret123"
+attempts = 0
+max_attempts = 3
+logged_in = False
+
+# Simulating user guesses (in a real program, you would use input())
+guesses = ["hello", "password", "secret123"]
+
+while attempts < max_attempts and not logged_in:
+    guess = guesses[attempts]
+    attempts = attempts + 1
+    print("Attempt " + str(attempts) + ": Entered '" + guess + "'")
+
+    if guess == password:
+        logged_in = True
+        print("Access granted!")
+    else:
+        remaining = max_attempts - attempts
+        if remaining > 0:
+            print("Wrong password. " + str(remaining) + " attempts remaining.\n")
+
+if not logged_in:
+    print("Account locked. Too many failed attempts.")</code></pre>
+        <div class="output-box empty">(click "Run Code" to see output)</div>
+      </div>
+
+      <div class="try-this">
+        <strong>Try This:</strong> Change the guesses list so that the correct password is entered on the first attempt. What happens if none of the guesses are correct? Try changing <code>max_attempts</code> to 5 and adding more guesses.
+      </div>
     </section>
 
     <!-- ==================== UNDERSTAND ==================== -->
@@ -141,6 +268,8 @@ for letter in "Python":
         <div class="output-box empty">(click "Run Code" to see output)</div>
       </div>
 
+      <p>Each time around the loop is called an <strong>iteration</strong>. The loop variable (like <code>item</code> or <code>letter</code>) automatically takes on the next value in the sequence with each iteration. You do not need to update it yourself &mdash; Python handles that for you.</p>
+
       <h3>The <code>range()</code> Function</h3>
       <p>The <code>range()</code> function generates a sequence of numbers. It is one of the most useful tools for <code>for</code> loops. There are three ways to use it:</p>
 
@@ -168,18 +297,94 @@ for letter in "Python":
             <td>0, 2, 4, 6, 8</td>
             <td>Start at 0, stop before 10, step by 2</td>
           </tr>
+          <tr>
+            <td><code>range(10, 0, -1)</code></td>
+            <td>10, 9, 8, 7, 6, 5, 4, 3, 2, 1</td>
+            <td>Count backwards from 10 to 1</td>
+          </tr>
         </tbody>
       </table>
 
       <p>Notice that <code>range()</code> always <strong>stops before</strong> the end number. This catches many beginners out &mdash; if you want to count from 1 to 10, you need <code>range(1, 11)</code>, not <code>range(1, 10)</code>.</p>
 
+      <div class="key-concept">
+        <strong>Did You Know?</strong>
+        The <code>range()</code> function does not actually create a list of numbers in memory. Instead, it generates each number <em>on demand</em> as the loop needs it. This is called <strong>lazy evaluation</strong>, and it makes <code>range()</code> incredibly memory-efficient. You could write <code>range(1, 1000000000)</code> and Python would not try to store a billion numbers in memory &mdash; it would just produce them one at a time.
+      </div>
+
       <h3>While Loops: Repeat While a Condition is True</h3>
       <p>A <code>while</code> loop keeps repeating as long as its condition remains <code>True</code>. You must make sure the condition eventually becomes <code>False</code>, or the loop will never stop.</p>
 
-      <div class="key-concept">
-        <strong>Key Concept:</strong>
-        Use a <code>for</code> loop when you <strong>know how many times</strong> you want to repeat something. Use a <code>while</code> loop when you <strong>do not know</strong> how many times &mdash; you just want to keep going until a condition changes.
+      <p>The basic structure is:</p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Python Code</span>
+          <div>
+            <button class="copy-button">Copy Code</button>
+            <button class="run-button">Run Code</button>
+          </div>
+        </div>
+        <pre><code contenteditable="true"># Structure of a while loop
+count = 1
+
+while count <= 5:
+    print("Count is:", count)
+    count = count + 1
+
+print("Loop finished!")</code></pre>
+        <div class="output-box empty">(click "Run Code" to see output)</div>
       </div>
+
+      <p>Notice the three essential parts of a <code>while</code> loop:</p>
+      <ol>
+        <li><strong>Initialise</strong> the variable before the loop (<code>count = 1</code>)</li>
+        <li><strong>Test</strong> the condition at the start of each iteration (<code>while count &lt;= 5</code>)</li>
+        <li><strong>Update</strong> the variable inside the loop (<code>count = count + 1</code>)</li>
+      </ol>
+      <p>If you forget step 3, you will create an infinite loop!</p>
+
+      <!-- ==================== COUNT vs CONDITION CONTROLLED ==================== -->
+      <h3>Count-Controlled vs Condition-Controlled Loops</h3>
+      <p>This is <strong>essential exam terminology</strong> that you absolutely must know for your GCSE. Exam boards use these terms frequently, so make sure you understand the difference.</p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Type</th>
+            <th>Python Keyword</th>
+            <th>When to Use</th>
+            <th>Example Scenario</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Count-controlled loop</strong></td>
+            <td><code>for</code></td>
+            <td>When you <strong>know in advance</strong> how many times the loop should run</td>
+            <td>Print the 7 times table (exactly 12 iterations)</td>
+          </tr>
+          <tr>
+            <td><strong>Condition-controlled loop</strong></td>
+            <td><code>while</code></td>
+            <td>When you <strong>do not know</strong> how many times it will run &mdash; it depends on a condition</td>
+            <td>Keep asking for a password until the user gets it right</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="key-concept">
+        <strong>Key Concept &mdash; Exam Terminology:</strong>
+        A <strong>count-controlled loop</strong> (<code>for</code>) repeats a fixed number of times. A <strong>condition-controlled loop</strong> (<code>while</code>) repeats until a condition becomes <code>False</code>. In your exam, use these precise terms. If a question says "use a count-controlled loop", it means use a <code>for</code> loop. If it says "use a condition-controlled loop", it means use a <code>while</code> loop.
+      </div>
+
+      <p>Here is an easy way to decide which to use:</p>
+      <ul>
+        <li><strong>"Do this 10 times"</strong> &rarr; You know the number &rarr; <code>for</code> loop (count-controlled)</li>
+        <li><strong>"Keep going until the user says stop"</strong> &rarr; You do not know when &rarr; <code>while</code> loop (condition-controlled)</li>
+        <li><strong>"Process every item in this list"</strong> &rarr; You know the items &rarr; <code>for</code> loop (count-controlled)</li>
+        <li><strong>"Keep guessing until correct"</strong> &rarr; Could be 1 guess or 100 &rarr; <code>while</code> loop (condition-controlled)</li>
+      </ul>
 
       <h3><code>break</code> and <code>continue</code>: Controlling Loop Flow</h3>
       <p>Sometimes you need to exit a loop early or skip certain steps. Python gives you two keywords for this:</p>
@@ -213,12 +418,348 @@ for i in range(1, 6):
         <div class="output-box empty">(click "Run Code" to see output)</div>
       </div>
 
-      <h3>Common Misconceptions</h3>
-      <p>One of the most common mistakes when learning loops is accidentally creating an <strong>infinite loop</strong> &mdash; a loop that never stops. This usually happens with <code>while</code> loops when you forget to update the variable that controls the condition.</p>
+      <p>Think of <code>break</code> as an emergency exit &mdash; you leave the entire loop immediately. Think of <code>continue</code> as skipping a song on a playlist &mdash; you move to the next one without finishing the current one.</p>
+
+      <!-- ==================== TRACE TABLE ==================== -->
+      <h3>Trace Tables: Following a Loop Step by Step</h3>
+      <p>A <strong>trace table</strong> is a technique for tracking the values of variables as a program runs, line by line. They are <strong>essential for your GCSE exam</strong> &mdash; you will almost certainly be asked to complete one. Trace tables are particularly useful for understanding loops because they show you exactly what happens at each iteration.</p>
+
+      <p>Consider this simple <code>while</code> loop:</p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Python Code</span>
+          <div>
+            <button class="copy-button">Copy Code</button>
+            <button class="run-button">Run Code</button>
+          </div>
+        </div>
+        <pre><code contenteditable="true"># Simple doubling program
+x = 1
+count = 0
+
+while x < 20:
+    x = x * 2
+    count = count + 1
+    print("Iteration", count, "- x =", x)</code></pre>
+        <div class="output-box empty">(click "Run Code" to see output)</div>
+      </div>
+
+      <p>Here is the trace table for this program:</p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Iteration</th>
+            <th><code>x</code> (start)</th>
+            <th><code>x &lt; 20</code>?</th>
+            <th><code>x</code> (after <code>x = x * 2</code>)</th>
+            <th><code>count</code></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>&mdash;</td>
+            <td>1</td>
+            <td>&mdash;</td>
+            <td>&mdash;</td>
+            <td>0</td>
+          </tr>
+          <tr>
+            <td>1</td>
+            <td>1</td>
+            <td>True</td>
+            <td>2</td>
+            <td>1</td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td>2</td>
+            <td>True</td>
+            <td>4</td>
+            <td>2</td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td>4</td>
+            <td>True</td>
+            <td>8</td>
+            <td>3</td>
+          </tr>
+          <tr>
+            <td>4</td>
+            <td>8</td>
+            <td>True</td>
+            <td>16</td>
+            <td>4</td>
+          </tr>
+          <tr>
+            <td>5</td>
+            <td>16</td>
+            <td>True</td>
+            <td>32</td>
+            <td>5</td>
+          </tr>
+          <tr>
+            <td>&mdash;</td>
+            <td>32</td>
+            <td>False</td>
+            <td>&mdash;</td>
+            <td>&mdash;</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p>On iteration 5, <code>x</code> becomes 32. When the loop checks the condition again, <code>32 &lt; 20</code> is <code>False</code>, so the loop stops. The final value of <code>x</code> is 32 and <code>count</code> is 5.</p>
+
+      <div class="key-concept">
+        <strong>Exam Tip:</strong>
+        When filling in a trace table, always write down the initial values <em>before</em> the loop starts. Then work through each iteration carefully, updating one variable at a time. Pay close attention to the order of operations &mdash; the condition is checked at the <em>start</em> of each iteration, not the end.
+      </div>
+
+      <!-- ==================== WORKED EXAMPLE ==================== -->
+      <h3>Worked Example: Finding the Average</h3>
+      <p>Let us work through a complete example step by step. We want to calculate the <strong>average</strong> of a list of test scores using a <code>for</code> loop and the accumulator pattern.</p>
+
+      <p><strong>The problem:</strong> A teacher has five test scores: 72, 85, 90, 68, and 95. Calculate the average score.</p>
+
+      <p><strong>Step 1:</strong> Store the scores in a list and set up an accumulator variable.</p>
+      <p><strong>Step 2:</strong> Loop through each score, adding it to the total.</p>
+      <p><strong>Step 3:</strong> Divide the total by the number of scores.</p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Python Code</span>
+          <div>
+            <button class="copy-button">Copy Code</button>
+            <button class="run-button">Run Code</button>
+          </div>
+        </div>
+        <pre><code contenteditable="true"># Worked Example: Finding the average test score
+scores = [72, 85, 90, 68, 95]
+total = 0
+
+for score in scores:
+    total = total + score
+    print("Added " + str(score) + " - running total: " + str(total))
+
+average = total / len(scores)
+print("\nTotal: " + str(total))
+print("Number of scores: " + str(len(scores)))
+print("Average: " + str(average))</code></pre>
+        <div class="output-box empty">(click "Run Code" to see output)</div>
+      </div>
+
+      <p><strong>Trace table for this program:</strong></p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Iteration</th>
+            <th><code>score</code></th>
+            <th><code>total</code> (before)</th>
+            <th><code>total</code> (after)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>&mdash;</td>
+            <td>&mdash;</td>
+            <td>0</td>
+            <td>&mdash;</td>
+          </tr>
+          <tr>
+            <td>1</td>
+            <td>72</td>
+            <td>0</td>
+            <td>72</td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td>85</td>
+            <td>72</td>
+            <td>157</td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td>90</td>
+            <td>157</td>
+            <td>247</td>
+          </tr>
+          <tr>
+            <td>4</td>
+            <td>68</td>
+            <td>247</td>
+            <td>315</td>
+          </tr>
+          <tr>
+            <td>5</td>
+            <td>95</td>
+            <td>315</td>
+            <td>410</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p>After the loop, <code>total</code> is 410. Dividing by 5 (the number of scores) gives us an average of <strong>82.0</strong>.</p>
+
+      <!-- ==================== COMMON MISTAKES ==================== -->
+      <h3>Common Mistakes</h3>
+
+      <div class="warning">
+        <strong>Watch out &mdash; Off-by-One Errors!</strong> The most common loop mistake is the <strong>off-by-one error</strong>. Remember that <code>range(1, 10)</code> produces 1 to 9, <em>not</em> 1 to 10. If you want to include 10, you need <code>range(1, 11)</code>. This is the single most frequent bug that students encounter with loops.
+      </div>
 
       <div class="warning">
         <strong>Watch out &mdash; Infinite Loops!</strong> If you write a <code>while</code> loop, always make sure the condition will eventually become <code>False</code>. For example, if your condition checks <code>while count &lt; 10</code>, you must increase <code>count</code> inside the loop. If you forget, the loop will run forever and your program will freeze. If this happens in the browser, you may need to refresh the page.
       </div>
+
+      <p>Here is a summary of the most common loop mistakes and how to avoid them:</p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Mistake</th>
+            <th>What Goes Wrong</th>
+            <th>How to Fix It</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Off-by-one with <code>range()</code></td>
+            <td><code>range(1, 10)</code> produces 1&ndash;9, not 1&ndash;10</td>
+            <td>Use <code>range(1, 11)</code> to include 10</td>
+          </tr>
+          <tr>
+            <td>Infinite <code>while</code> loop</td>
+            <td>Forgetting to update the counter variable</td>
+            <td>Always change the variable inside the loop</td>
+          </tr>
+          <tr>
+            <td>Modifying a list while looping</td>
+            <td>Removing items from a list mid-loop causes skipped items</td>
+            <td>Loop over a copy of the list, or build a new list</td>
+          </tr>
+          <tr>
+            <td>Using <code>while</code> when <code>for</code> is better</td>
+            <td>More code, more chance of bugs</td>
+            <td>If you know the number of iterations, use <code>for</code></td>
+          </tr>
+          <tr>
+            <td>Forgetting the colon</td>
+            <td><code>for i in range(5)</code> causes a <code>SyntaxError</code></td>
+            <td>Always end <code>for</code> and <code>while</code> lines with <code>:</code></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="key-concept">
+        <strong>Did You Know?</strong>
+        The concept of a loop was one of Ada Lovelace's key insights when she wrote the first algorithm in 1843 &mdash; over 100 years before electronic computers existed! She realised that Charles Babbage's Analytical Engine could repeat a set of instructions, making it fundamentally different from a simple calculator. This insight is one of the reasons she is often called the world's first computer programmer.
+      </div>
+    </section>
+
+    <!-- ==================== REAL WORLD APPLICATIONS ==================== -->
+    <section class="idea">
+      <span class="section-label">The Idea</span>
+      <h2>Real-World Applications</h2>
+
+      <p>Loops are not just a classroom exercise &mdash; they are at the heart of almost every piece of technology you use. Here are some real-world examples of loops in action:</p>
+
+      <h3>Music Players</h3>
+      <p>When you press play on Spotify or Apple Music, a loop iterates through your playlist, playing each song one after another. The "repeat" button is literally a loop &mdash; when the playlist ends, the loop starts again from the beginning. Even the progress bar is updated by a loop that runs many times per second.</p>
+
+      <h3>Search Engines</h3>
+      <p>When you search on Google, a loop runs through <em>billions</em> of indexed web pages to find ones that match your query. These loops are so heavily optimised that they return results in under a second. Without loops, you would have to check each web page manually &mdash; which would take several lifetimes.</p>
+
+      <h3>Video Games</h3>
+      <p>Every video game runs on something called the <strong>game loop</strong>. This is a <code>while</code> loop that repeats for as long as the game is running. Each time around the loop (called a <strong>frame</strong>), the game checks for player input, updates the positions of characters and objects, checks for collisions, and draws everything on screen. A game running at 60 frames per second (fps) is executing this loop <strong>60 times every second</strong>.</p>
+
+      <h3>Social Media Feeds</h3>
+      <p>When you scroll through TikTok, Instagram, or YouTube, a loop iterates through a list of posts and renders each one on your screen. As you scroll further, the app fetches more posts and the loop continues. The "infinite scroll" effect is, appropriately enough, powered by a loop.</p>
+
+      <h3>Scientific Computing</h3>
+      <p>Scientists use loops to run simulations &mdash; modelling weather patterns, protein folding, galaxy formation, and more. These simulations can involve loops that run <em>millions or even billions</em> of times. Climate models, for example, divide the atmosphere into a grid and loop through every single cell to calculate temperature, pressure, and wind at each point.</p>
+
+      <div class="key-concept">
+        <strong>Did You Know?</strong>
+        The fastest supercomputers in the world can execute loops at a staggering rate. The Frontier supercomputer at Oak Ridge National Laboratory can perform over one <em>quintillion</em> (1,000,000,000,000,000,000) calculations per second. That means a loop body could theoretically execute billions of times in the blink of an eye.
+      </div>
+    </section>
+
+    <!-- ==================== KEY VOCABULARY ==================== -->
+    <section class="understand">
+      <span class="section-label">Understand</span>
+      <h2>Key Vocabulary</h2>
+
+      <p>Make sure you understand all of these terms. They come up frequently in exams and in discussions about programming.</p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Term</th>
+            <th>Definition</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Iteration</strong></td>
+            <td>The process of repeating a set of instructions. Also refers to a single pass through a loop.</td>
+          </tr>
+          <tr>
+            <td><strong>For Loop</strong></td>
+            <td>A count-controlled loop that repeats for each item in a sequence (e.g., a range or list).</td>
+          </tr>
+          <tr>
+            <td><strong>While Loop</strong></td>
+            <td>A condition-controlled loop that repeats as long as a given condition is <code>True</code>.</td>
+          </tr>
+          <tr>
+            <td><strong>Counter</strong></td>
+            <td>A variable used to keep track of how many times a loop has run.</td>
+          </tr>
+          <tr>
+            <td><strong>Accumulator</strong></td>
+            <td>A variable that builds up a value (e.g., a running total) across multiple iterations of a loop.</td>
+          </tr>
+          <tr>
+            <td><strong><code>range()</code></strong></td>
+            <td>A built-in Python function that generates a sequence of numbers for use in a <code>for</code> loop.</td>
+          </tr>
+          <tr>
+            <td><strong>Infinite Loop</strong></td>
+            <td>A loop that never stops because its condition never becomes <code>False</code>. Usually a bug.</td>
+          </tr>
+          <tr>
+            <td><strong><code>break</code></strong></td>
+            <td>A keyword that immediately exits the current loop.</td>
+          </tr>
+          <tr>
+            <td><strong><code>continue</code></strong></td>
+            <td>A keyword that skips the rest of the current iteration and moves to the next one.</td>
+          </tr>
+          <tr>
+            <td><strong>Nested Loop</strong></td>
+            <td>A loop inside another loop. The inner loop runs completely for each iteration of the outer loop.</td>
+          </tr>
+          <tr>
+            <td><strong>Count-Controlled Loop</strong></td>
+            <td>A loop that runs a predetermined number of times. In Python, this is a <code>for</code> loop.</td>
+          </tr>
+          <tr>
+            <td><strong>Condition-Controlled Loop</strong></td>
+            <td>A loop that runs until a condition changes. In Python, this is a <code>while</code> loop.</td>
+          </tr>
+          <tr>
+            <td><strong>Iterate</strong></td>
+            <td>To go through items one at a time. "Iterating through a list" means visiting each item in turn.</td>
+          </tr>
+          <tr>
+            <td><strong>Sequence</strong></td>
+            <td>An ordered collection of items that can be looped through, such as a list, string, or range.</td>
+          </tr>
+        </tbody>
+      </table>
     </section>
 
     <!-- ==================== PRACTICE ==================== -->
@@ -334,6 +875,255 @@ for number in range(1, 21):
         </div>
       </div>
 
+      <!-- Exercise 4: Partially Guided -->
+      <div class="exercise">
+        <div class="exercise-title">Exercise 4: FizzBuzz</div>
+        <div class="exercise-difficulty difficulty-2">Partially Guided</div>
+        <p>FizzBuzz is a classic programming challenge used in coding interviews around the world. Loop through the numbers 1 to 30. For each number:</p>
+        <ul>
+          <li>If the number is divisible by <strong>both 3 and 5</strong>, print <code>"FizzBuzz"</code></li>
+          <li>If the number is divisible by <strong>3 only</strong>, print <code>"Fizz"</code></li>
+          <li>If the number is divisible by <strong>5 only</strong>, print <code>"Buzz"</code></li>
+          <li>Otherwise, print the number itself</li>
+        </ul>
+
+        <div class="pseudocode">
+          <div class="pseudocode-label">Pseudocode:</div>
+          FOR each number from 1 to 30:<br />
+          &nbsp;&nbsp;IF number is divisible by 3 AND divisible by 5:<br />
+          &nbsp;&nbsp;&nbsp;&nbsp;PRINT "FizzBuzz"<br />
+          &nbsp;&nbsp;ELSE IF number is divisible by 3:<br />
+          &nbsp;&nbsp;&nbsp;&nbsp;PRINT "Fizz"<br />
+          &nbsp;&nbsp;ELSE IF number is divisible by 5:<br />
+          &nbsp;&nbsp;&nbsp;&nbsp;PRINT "Buzz"<br />
+          &nbsp;&nbsp;ELSE:<br />
+          &nbsp;&nbsp;&nbsp;&nbsp;PRINT the number
+        </div>
+
+        <div class="code-block">
+          <div class="code-block-header">
+            <span class="code-block-label">Your Code</span>
+            <div>
+              <button class="copy-button">Copy Code</button>
+              <button class="run-button">Run Code</button>
+            </div>
+          </div>
+          <pre><code contenteditable="true"># Exercise 4: FizzBuzz
+for number in range(1, 31):
+    # Check divisibility and print the right output
+    # Remember: check for BOTH 3 and 5 first!
+    pass  # Replace this with your code</code></pre>
+          <div class="output-box empty">(click "Run Code" to see output)</div>
+        </div>
+
+        <div class="hint">
+          <div class="hint-title">Need a hint?</div>
+          <div class="hint-content">
+            <p>Use the modulo operator <code>%</code> to check divisibility. <code>number % 3 == 0</code> means divisible by 3, and <code>number % 5 == 0</code> means divisible by 5. <strong>Important:</strong> you must check for "both 3 and 5" <em>first</em> (using <code>and</code>), before checking for 3 or 5 individually. If you check for 3 first, numbers like 15 will print "Fizz" instead of "FizzBuzz".</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Exercise 5: Open-Ended -->
+      <div class="exercise">
+        <div class="exercise-title">Exercise 5: Number Guessing Game</div>
+        <div class="exercise-difficulty difficulty-3">Open-Ended</div>
+        <p>Create a number guessing game using a <code>while</code> loop. The program should have a secret number (set by you), and the player tries to guess it. After each guess, give a hint: "Too high!" or "Too low!". When they guess correctly, tell them how many attempts it took.</p>
+        <p>Since we cannot use <code>input()</code> in the browser, simulate the guesses using a list (just like Example 7). Set the secret number to 7 and create a list of guesses that eventually reaches 7.</p>
+
+        <div class="code-block">
+          <div class="code-block-header">
+            <span class="code-block-label">Your Code</span>
+            <div>
+              <button class="copy-button">Copy Code</button>
+              <button class="run-button">Run Code</button>
+            </div>
+          </div>
+          <pre><code contenteditable="true"># Exercise 5: Number Guessing Game
+secret = 7
+guesses = [3, 9, 5, 7]  # Simulated guesses
+attempt = 0
+found = False
+
+# Use a while loop to check each guess
+# Give "Too high!" or "Too low!" hints
+# When correct, print a congratulations message with the number of attempts
+
+# Your code here
+</code></pre>
+          <div class="output-box empty">(click "Run Code" to see output)</div>
+        </div>
+
+        <div class="hint">
+          <div class="hint-title">Need a hint?</div>
+          <div class="hint-content">
+            <p>Use <code>while attempt &lt; len(guesses) and not found:</code> as your loop condition. Inside the loop, get the current guess with <code>guesses[attempt]</code>, then use <code>if</code>/<code>elif</code>/<code>else</code> to check if it is too high, too low, or correct. Do not forget to increase <code>attempt</code> each time! When the guess is correct, set <code>found = True</code> and print a message.</p>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ==================== SUMMARY ==================== -->
+    <section class="understand">
+      <span class="section-label">Understand</span>
+      <h2>Chapter Summary</h2>
+
+      <p>Here is what you have learned in this chapter:</p>
+
+      <ul>
+        <li>A <strong>loop</strong> repeats a block of code multiple times, saving you from writing the same instructions over and over.</li>
+        <li>A <strong><code>for</code> loop</strong> (count-controlled) is used when you know how many times you want to repeat &mdash; it iterates through a sequence like a <code>range()</code>, list, or string.</li>
+        <li>A <strong><code>while</code> loop</strong> (condition-controlled) is used when you do not know how many times to repeat &mdash; it keeps going as long as a condition is <code>True</code>.</li>
+        <li>The <strong><code>range()</code></strong> function generates sequences of numbers and is memory-efficient thanks to lazy evaluation.</li>
+        <li>The <strong>accumulator pattern</strong> lets you build up a total or result across iterations of a loop.</li>
+        <li><strong>Nested loops</strong> place one loop inside another &mdash; the inner loop runs completely for each iteration of the outer loop.</li>
+        <li><strong><code>break</code></strong> exits a loop immediately; <strong><code>continue</code></strong> skips to the next iteration.</li>
+        <li>A <strong>trace table</strong> helps you track variable values through each iteration of a loop &mdash; an essential exam skill.</li>
+        <li>The most common mistakes are <strong>off-by-one errors</strong> with <code>range()</code> and <strong>infinite loops</strong> from forgetting to update a counter.</li>
+      </ul>
+    </section>
+
+    <!-- ==================== EXAM-STYLE QUESTIONS ==================== -->
+    <section class="practice">
+      <span class="section-label">Practice</span>
+      <h2>Exam-Style Questions</h2>
+
+      <p>These questions are written in the style you might see in your GCSE Computer Science exam. Try to answer them on paper before checking the hints.</p>
+
+      <!-- Exam Question 1 -->
+      <div class="exercise">
+        <div class="exercise-title">Question 1 (4 marks)</div>
+        <div class="exercise-difficulty difficulty-2">Written Answer</div>
+        <p>Explain the difference between a count-controlled loop and a condition-controlled loop. Give an example of when you would use each.</p>
+
+        <div class="hint">
+          <div class="hint-title">Guidance</div>
+          <div class="hint-content">
+            <p><strong>Count-controlled loop (1 mark):</strong> A loop that repeats a set number of times. In Python, this is a <code>for</code> loop. <strong>(1 mark for example):</strong> Printing a times table from 1 to 12 &mdash; you know you need exactly 12 iterations.</p>
+            <p><strong>Condition-controlled loop (1 mark):</strong> A loop that repeats until a condition becomes False. In Python, this is a <code>while</code> loop. <strong>(1 mark for example):</strong> Asking the user for a password until they enter the correct one &mdash; you do not know how many attempts it will take.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Exam Question 2 -->
+      <div class="exercise">
+        <div class="exercise-title">Question 2 (3 marks)</div>
+        <div class="exercise-difficulty difficulty-2">Trace Table</div>
+        <p>Complete the trace table for the following code:</p>
+
+        <div class="code-block">
+          <div class="code-block-header">
+            <span class="code-block-label">Python Code</span>
+            <div>
+              <button class="copy-button">Copy Code</button>
+              <button class="run-button">Run Code</button>
+            </div>
+          </div>
+          <pre><code contenteditable="true">x = 10
+total = 0
+
+while x > 0:
+    total = total + x
+    x = x - 3
+
+print(total)</code></pre>
+          <div class="output-box empty">(click "Run Code" to see output)</div>
+        </div>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Iteration</th>
+              <th><code>x</code> (start)</th>
+              <th><code>x &gt; 0</code>?</th>
+              <th><code>total</code></th>
+              <th><code>x</code> (end)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>&mdash;</td>
+              <td>10</td>
+              <td>&mdash;</td>
+              <td>0</td>
+              <td>&mdash;</td>
+            </tr>
+            <tr>
+              <td>1</td>
+              <td>?</td>
+              <td>?</td>
+              <td>?</td>
+              <td>?</td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td>?</td>
+              <td>?</td>
+              <td>?</td>
+              <td>?</td>
+            </tr>
+            <tr>
+              <td>3</td>
+              <td>?</td>
+              <td>?</td>
+              <td>?</td>
+              <td>?</td>
+            </tr>
+            <tr>
+              <td>4</td>
+              <td>?</td>
+              <td>?</td>
+              <td>?</td>
+              <td>?</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <p>What value is printed at the end?</p>
+
+        <div class="hint">
+          <div class="hint-title">Guidance</div>
+          <div class="hint-content">
+            <p><strong>Iteration 1:</strong> x=10, 10&gt;0 is True, total=0+10=10, x=10-3=7</p>
+            <p><strong>Iteration 2:</strong> x=7, 7&gt;0 is True, total=10+7=17, x=7-3=4</p>
+            <p><strong>Iteration 3:</strong> x=4, 4&gt;0 is True, total=17+4=21, x=4-3=1</p>
+            <p><strong>Iteration 4:</strong> x=1, 1&gt;0 is True, total=21+1=22, x=1-3=-2</p>
+            <p>Now x=-2, and -2&gt;0 is False, so the loop ends. The program prints <strong>22</strong>.</p>
+            <p><em>(1 mark for each correctly completed row, up to 3 marks.)</em></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Exam Question 3 -->
+      <div class="exercise">
+        <div class="exercise-title">Question 3 (2 marks)</div>
+        <div class="exercise-difficulty difficulty-1">Short Answer</div>
+        <p>A student writes the following code, expecting it to print the numbers 1 to 10:</p>
+
+        <div class="code-block">
+          <div class="code-block-header">
+            <span class="code-block-label">Python Code</span>
+            <div>
+              <button class="copy-button">Copy Code</button>
+              <button class="run-button">Run Code</button>
+            </div>
+          </div>
+          <pre><code contenteditable="true">for i in range(1, 10):
+    print(i)</code></pre>
+          <div class="output-box empty">(click "Run Code" to see output)</div>
+        </div>
+
+        <p>Explain why this does not produce the expected output and how to fix it.</p>
+
+        <div class="hint">
+          <div class="hint-title">Guidance</div>
+          <div class="hint-content">
+            <p><strong>(1 mark):</strong> The <code>range()</code> function stops <em>before</em> the second number, so <code>range(1, 10)</code> only produces the numbers 1 to 9. The number 10 is not included.</p>
+            <p><strong>(1 mark):</strong> To fix this, change the code to <code>range(1, 11)</code> so that the range includes 10.</p>
+          </div>
+        </div>
+      </div>
     </section>
 
     <!-- ==================== REFLECT ==================== -->
@@ -344,15 +1134,20 @@ for number in range(1, 21):
         <li>When would you choose a <code>for</code> loop over a <code>while</code> loop? Can you think of a situation where only a <code>while</code> loop would work well?</li>
         <li>Why does <code>range(1, 5)</code> only produce four numbers (1, 2, 3, 4) and not five? Why do you think Python was designed this way?</li>
         <li>What would happen if you put a loop inside another loop? Where might that be useful?</li>
+        <li>Can you think of three everyday activities that involve loops? What would the "condition" be for each one to stop?</li>
+        <li>In a game loop running at 60fps, roughly how many loop iterations happen in a 10-minute gaming session?</li>
       </ul>
 
       <div class="extra-resources">
-        <h3>Extra Practice</h3>
-        <p>Test your loop skills with these interactive challenges:</p>
+        <h3>Extra Practice &amp; Resources</h3>
+        <p>Test your loop skills with these interactive challenges and external resources:</p>
         <ul>
           <li><a href="https://hvgcse.cshub.org.je/Program_Builder.html" target="_blank" rel="noopener">Program Builder</a> &mdash; Drag and drop code blocks into the right order to build working programs</li>
           <li><a href="https://hvgcse.cshub.org.je/Python_Code_Fixer.html" target="_blank" rel="noopener">Python Code Fixer</a> &mdash; Find and fix bugs in Python programs that use loops</li>
           <li><a href="https://hvgcsecs.cshub.org.je/topics/topic6.html" target="_blank" rel="noopener">GCSE Topic 6: Control Flow</a> &mdash; For loops, while loops, and nested structures with code editors</li>
+          <li><a href="https://www.bbc.co.uk/bitesize/examspecs/zdqy7nb" target="_blank" rel="noopener">BBC Bitesize Edexcel CS</a> &mdash; Comprehensive revision materials for Edexcel GCSE Computer Science</li>
+          <li><a href="https://www.w3schools.com/python/python_for_loops.asp" target="_blank" rel="noopener">W3Schools: Python For Loops</a> &mdash; Interactive tutorials and examples for for loops</li>
+          <li><a href="https://www.w3schools.com/python/python_while_loops.asp" target="_blank" rel="noopener">W3Schools: Python While Loops</a> &mdash; Interactive tutorials and examples for while loops</li>
         </ul>
       </div>
 

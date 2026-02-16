@@ -4,6 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Chapter 6: Functions - Python Fundamentals</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="../css/style.css" />
   <script src="https://cdn.jsdelivr.net/pyodide/v0.24.0/full/pyodide.js"></script>
 </head>
@@ -15,43 +18,42 @@
     <h1>Chapter 6: Functions</h1>
     <p class="subtitle">Organise your code into reusable blocks &mdash; write once, use many times</p>
   </header>
-
   <main>
-
     <!-- ==================== THE IDEA ==================== -->
     <section class="idea">
       <span class="section-label">The Idea</span>
       <h2>Why Functions?</h2>
-
       <p>You already use functions every day &mdash; <code>print()</code> is a function! So is <code>input()</code>, <code>len()</code>, and <code>range()</code>. But what if you could create your <em>own</em> functions that do exactly what you need?</p>
-
       <p><strong>Functions are reusable blocks of code with a name.</strong> You define them once, and then you can <em>call</em> (run) them whenever you like &mdash; as many times as you want.</p>
-
       <div class="key-concept">
         <strong>Real-world analogy</strong>
         Think of a recipe. You write it down once, and then every time you want that dish, you follow the same steps. You do not rewrite the recipe each time &mdash; you just say &ldquo;make the pasta bake&rdquo; and follow the instructions you already have. A function works in exactly the same way: you <em>define</em> it once, then <em>call</em> it whenever you want that piece of code to run.
       </div>
-
       <h3>What you will learn</h3>
       <ul>
         <li>How to <strong>define</strong> your own functions using <code>def</code></li>
         <li>How to use <strong>parameters and arguments</strong> to pass information into a function</li>
+        <li>How to use <strong>default parameters</strong> to make arguments optional</li>
         <li>How to use <strong>return values</strong> to get information back out</li>
+        <li>How to return <strong>multiple values</strong> from a single function</li>
         <li>How <strong>scope</strong> affects where variables can be used</li>
+        <li>The difference between <strong>functions</strong> and <strong>procedures</strong> (important for GCSE exams!)</li>
+        <li>How to build functions that <strong>call other functions</strong></li>
       </ul>
+      <div class="key-concept">
+        <strong>Did you know?</strong>
+        The concept of functions in programming was inspired by functions in mathematics. In maths, you write f(x) = x&sup2; to define a rule that takes an input and produces an output. Programming functions work the same way &mdash; they take inputs (parameters), do something with them, and can give back an output (return value). The idea dates back to the 1950s, when early programmers realised they were writing the same blocks of code over and over again.
+      </div>
     </section>
 
     <!-- ==================== EXPLORE ==================== -->
     <section class="explore">
       <span class="section-label">Explore</span>
       <h2>See Functions in Action</h2>
-
       <p>Work through each example below. Read the code, run it, then try the suggestions underneath.</p>
-
       <!-- Example 1: Defining and Calling -->
       <h3>Example 1 &mdash; Defining and Calling a Function</h3>
       <p>The simplest possible function: it takes no information in and just does one thing.</p>
-
       <div class="code-block">
         <div class="code-block-header">
           <span class="code-block-label">Python Code</span>
@@ -66,7 +68,6 @@
 greet()</code></pre>
         <div class="output-box empty">(click "Run Code" to see output)</div>
       </div>
-
       <div class="try-this">
         <strong>Try this:</strong>
         <ul>
@@ -75,11 +76,9 @@ greet()</code></pre>
           <li>What happens if you remove the line <code>greet()</code> and only keep the <code>def</code> block? Why?</li>
         </ul>
       </div>
-
       <!-- Example 2: Parameters -->
       <h3>Example 2 &mdash; Parameters</h3>
       <p>Functions become much more useful when you can pass information into them. The values inside the brackets are called <strong>parameters</strong>.</p>
-
       <div class="code-block">
         <div class="code-block-header">
           <span class="code-block-label">Python Code</span>
@@ -96,7 +95,6 @@ greet("Bob")
 greet("Charlie")</code></pre>
         <div class="output-box empty">(click "Run Code" to see output)</div>
       </div>
-
       <div class="try-this">
         <strong>Try this:</strong>
         <ul>
@@ -105,11 +103,9 @@ greet("Charlie")</code></pre>
           <li>What error do you get if you call <code>greet()</code> without any argument? Read the error message carefully.</li>
         </ul>
       </div>
-
       <!-- Example 3: Return Values -->
       <h3>Example 3 &mdash; Return Values</h3>
       <p>Sometimes you want a function to <em>give a value back</em> rather than just printing something. That is what <code>return</code> does.</p>
-
       <div class="code-block">
         <div class="code-block-header">
           <span class="code-block-label">Python Code</span>
@@ -125,7 +121,6 @@ result = add(3, 4)
 print(result)</code></pre>
         <div class="output-box empty">(click "Run Code" to see output)</div>
       </div>
-
       <div class="try-this">
         <strong>Try this:</strong>
         <ul>
@@ -134,16 +129,111 @@ print(result)</code></pre>
           <li>Try using the return value directly in a print: <code>print(add(10, 20))</code>.</li>
         </ul>
       </div>
+      <!-- Example 4: Default Parameters -->
+      <h3>Example 4 &mdash; Default Parameters</h3>
+      <p>Sometimes you want a parameter to have a <strong>default value</strong> &mdash; a fallback that is used when no argument is provided. You do this by using <code>=</code> in the parameter list.</p>
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Python Code</span>
+          <div>
+            <button class="copy-button">Copy Code</button>
+            <button class="run-button">Run Code</button>
+          </div>
+        </div>
+        <pre><code contenteditable="true">def greet(name, greeting="Hello"):
+    print(f"{greeting}, {name}!")
+
+# Calling with both arguments
+greet("Alice", "Good morning")
+
+# Calling with only one argument - uses the default
+greet("Bob")
+
+# Calling with a different greeting
+greet("Charlie", "Hey there")</code></pre>
+        <div class="output-box empty">(click "Run Code" to see output)</div>
+      </div>
+      <div class="try-this">
+        <strong>Try this:</strong>
+        <ul>
+          <li>Change the default greeting to something else, like <code>"Hi"</code> or <code>"Welcome"</code>.</li>
+          <li>Add a third parameter with a default value, such as <code>punctuation="!"</code>, and use it in the f-string.</li>
+          <li>What happens if you put the default parameter <em>before</em> the non-default one? Try <code>def greet(greeting="Hello", name):</code> and see what Python says.</li>
+        </ul>
+      </div>
+      <!-- Example 5: Multiple Return Values -->
+      <h3>Example 5 &mdash; Multiple Return Values</h3>
+      <p>A function can return <strong>more than one value</strong> at once by separating the values with commas. Python packs them into a <strong>tuple</strong>, and you can unpack them into separate variables.</p>
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Python Code</span>
+          <div>
+            <button class="copy-button">Copy Code</button>
+            <button class="run-button">Run Code</button>
+          </div>
+        </div>
+        <pre><code contenteditable="true">def min_max(numbers):
+    return min(numbers), max(numbers)
+
+lowest, highest = min_max([4, 7, 1, 9, 3])
+print(f"Lowest: {lowest}")
+print(f"Highest: {highest}")
+
+# You can also capture both values in one variable
+result = min_max([10, 20, 5, 15])
+print(f"Result as a tuple: {result}")</code></pre>
+        <div class="output-box empty">(click "Run Code" to see output)</div>
+      </div>
+      <div class="try-this">
+        <strong>Try this:</strong>
+        <ul>
+          <li>Modify the function to also return the <em>sum</em> of the numbers: <code>return min(numbers), max(numbers), sum(numbers)</code>. Remember to unpack into three variables!</li>
+          <li>Write a function called <code>name_parts</code> that takes a full name like <code>"Alice Smith"</code>, splits it, and returns the first name and surname separately.</li>
+        </ul>
+      </div>
+      <!-- Example 6: Functions Calling Other Functions -->
+      <h3>Example 6 &mdash; Functions Calling Other Functions</h3>
+      <p>One of the most powerful ideas in programming: you can build bigger functions out of smaller ones. This is called <strong>composition</strong> or <strong>decomposition</strong> &mdash; breaking a problem into smaller, manageable parts.</p>
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Python Code</span>
+          <div>
+            <button class="copy-button">Copy Code</button>
+            <button class="run-button">Run Code</button>
+          </div>
+        </div>
+        <pre><code contenteditable="true">def capitalise_word(word):
+    """Return the word with the first letter capitalised."""
+    return word[0].upper() + word[1:].lower()
+
+def format_name(first, last):
+    """Format a full name with proper capitalisation."""
+    return capitalise_word(first) + " " + capitalise_word(last)
+
+# Test it out
+name = format_name("aLiCe", "sMiTH")
+print(name)
+
+name2 = format_name("BOB", "jones")
+print(name2)</code></pre>
+        <div class="output-box empty">(click "Run Code" to see output)</div>
+      </div>
+      <div class="try-this">
+        <strong>Try this:</strong>
+        <ul>
+          <li>Add a <code>format_email</code> function that calls <code>format_name</code> and creates an email like <code>"Alice Smith &lt;alice.smith@example.com&gt;"</code>.</li>
+          <li>What would happen if <code>capitalise_word</code> was defined <em>after</em> <code>format_name</code> but <em>before</em> the function calls? Try it!</li>
+          <li>Write a <code>format_initials</code> function that takes a first and last name and returns just the initials, e.g. <code>"A.S."</code>.</li>
+        </ul>
+      </div>
     </section>
 
     <!-- ==================== UNDERSTAND ==================== -->
     <section class="understand">
       <span class="section-label">Understand</span>
       <h2>How Functions Work</h2>
-
       <h3>The anatomy of a function</h3>
       <p>Every function definition has the same structure:</p>
-
       <div class="code-block">
         <div class="code-block-header">
           <span class="code-block-label">Python Code</span>
@@ -159,7 +249,6 @@ print(result)</code></pre>
 say_hello("Priya")</code></pre>
         <div class="output-box empty">(click "Run Code" to see output)</div>
       </div>
-
       <ul>
         <li><code>def</code> &mdash; the keyword that tells Python you are <strong>defining</strong> a function</li>
         <li><code>say_hello</code> &mdash; the <strong>function name</strong> (you choose this; use snake_case)</li>
@@ -167,61 +256,30 @@ say_hello("Priya")</code></pre>
         <li><code>:</code> &mdash; the <strong>colon</strong> marks the start of the function body</li>
         <li>The <strong>indented lines</strong> underneath are the <strong>body</strong> &mdash; the code that runs when the function is called</li>
       </ul>
-
       <h3>Parameters vs arguments</h3>
       <p>These two words are often mixed up, but there is a simple difference:</p>
       <table>
         <thead>
-          <tr>
-            <th>Term</th>
-            <th>Where?</th>
-            <th>Example</th>
-          </tr>
+          <tr><th>Term</th><th>Where?</th><th>Example</th></tr>
         </thead>
         <tbody>
-          <tr>
-            <td><strong>Parameter</strong></td>
-            <td>In the function <em>definition</em></td>
-            <td><code>def greet(<strong>name</strong>):</code></td>
-          </tr>
-          <tr>
-            <td><strong>Argument</strong></td>
-            <td>In the function <em>call</em></td>
-            <td><code>greet(<strong>"Alice"</strong>)</code></td>
-          </tr>
+          <tr><td><strong>Parameter</strong></td><td>In the function <em>definition</em></td><td><code>def greet(<strong>name</strong>):</code></td></tr>
+          <tr><td><strong>Argument</strong></td><td>In the function <em>call</em></td><td><code>greet(<strong>"Alice"</strong>)</code></td></tr>
         </tbody>
       </table>
       <p>Think of the parameter as a label on an empty box. The argument is what you put inside that box when you use the function.</p>
-
       <h3><code>return</code> vs <code>print</code></h3>
       <p>This is one of the most important distinctions to understand:</p>
       <table>
         <thead>
-          <tr>
-            <th></th>
-            <th><code>return</code></th>
-            <th><code>print</code></th>
-          </tr>
+          <tr><th></th><th><code>return</code></th><th><code>print</code></th></tr>
         </thead>
         <tbody>
-          <tr>
-            <td><strong>What it does</strong></td>
-            <td>Gives a value <em>back</em> to the code that called the function</td>
-            <td>Displays text on the screen</td>
-          </tr>
-          <tr>
-            <td><strong>Can you store the result?</strong></td>
-            <td>Yes &mdash; <code>x = add(3, 4)</code></td>
-            <td>No &mdash; <code>x = print("hi")</code> stores <code>None</code></td>
-          </tr>
-          <tr>
-            <td><strong>When to use</strong></td>
-            <td>When you need to use the result later</td>
-            <td>When you just want to show something to the user</td>
-          </tr>
+          <tr><td><strong>What it does</strong></td><td>Gives a value <em>back</em> to the code that called the function</td><td>Displays text on the screen</td></tr>
+          <tr><td><strong>Can you store the result?</strong></td><td>Yes &mdash; <code>x = add(3, 4)</code></td><td>No &mdash; <code>x = print("hi")</code> stores <code>None</code></td></tr>
+          <tr><td><strong>When to use</strong></td><td>When you need to use the result later</td><td>When you just want to show something to the user</td></tr>
         </tbody>
       </table>
-
       <div class="code-block">
         <div class="code-block-header">
           <span class="code-block-label">Python Code</span>
@@ -244,25 +302,70 @@ print(f"result1 = {result1}")
 print(f"result2 = {result2}")</code></pre>
         <div class="output-box empty">(click "Run Code" to see output)</div>
       </div>
+      <!-- ==================== PROCEDURES vs FUNCTIONS ==================== -->
+      <h3>Procedures vs Functions &mdash; a GCSE distinction</h3>
+      <p>In your GCSE exam, you need to know the difference between a <strong>function</strong> and a <strong>procedure</strong>. This catches many students out, so pay close attention:</p>
+      <table>
+        <thead>
+          <tr><th></th><th>Function</th><th>Procedure</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>Does it return a value?</strong></td><td>Yes &mdash; uses <code>return</code></td><td>No &mdash; just performs an action</td></tr>
+          <tr><td><strong>Python example</strong></td><td><code>len("hello")</code> returns <code>5</code></td><td><code>print("hello")</code> displays text but returns <code>None</code></td></tr>
+          <tr><td><strong>Can you store the result?</strong></td><td>Yes &mdash; <code>x = len("hello")</code></td><td>No useful result to store</td></tr>
+          <tr><td><strong>Python keyword</strong></td><td><code>def</code></td><td><code>def</code> (same keyword!)</td></tr>
+        </tbody>
+      </table>
+      <p>In Python, both functions and procedures are created with <code>def</code>. Python does not have a separate keyword for procedures. However, in the exam, if a subroutine does <strong>not</strong> return a value, you should call it a <strong>procedure</strong>. If it <strong>does</strong> return a value, call it a <strong>function</strong>.</p>
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Python Code</span>
+          <div>
+            <button class="copy-button">Copy Code</button>
+            <button class="run-button">Run Code</button>
+          </div>
+        </div>
+        <pre><code contenteditable="true"># This is a PROCEDURE - it does something but returns nothing
+def display_welcome(name):
+    print(f"Welcome, {name}!")
+    print("Enjoy your visit.")
 
+# This is a FUNCTION - it returns a value
+def calculate_area(length, width):
+    return length * width
+
+# Procedure - just displays output
+display_welcome("Priya")
+
+# Function - we can store and use the result
+area = calculate_area(5, 3)
+print(f"The area is {area} square units")</code></pre>
+        <div class="output-box empty">(click "Run Code" to see output)</div>
+      </div>
+      <div class="warning">
+        <strong>Exam tip: Know the vocabulary</strong>
+        <p>Both functions and procedures are types of <strong>subroutine</strong> (also called <strong>subprogram</strong>). A subroutine is simply a named block of code that can be called from elsewhere in the program. In the GCSE mark scheme, &ldquo;subroutine&rdquo; is the umbrella term, and &ldquo;function&rdquo; and &ldquo;procedure&rdquo; are the two specific types.</p>
+      </div>
       <h3>Why functions matter</h3>
       <ul>
         <li><strong>Reusability</strong> &mdash; Write code once, use it as many times as you need</li>
         <li><strong>Readability</strong> &mdash; A well-named function makes your program easier to understand</li>
         <li><strong>Organisation</strong> &mdash; Break a big problem into smaller, manageable pieces</li>
         <li><strong>Testing</strong> &mdash; Smaller blocks of code are easier to check and fix</li>
+        <li><strong>Decomposition</strong> &mdash; This is a key computational thinking skill tested in your GCSE</li>
       </ul>
-
+      <div class="key-concept">
+        <strong>Did you know? &mdash; Python has over 70 built-in functions</strong>
+        You have already used several of Python&rsquo;s built-in functions: <code>print()</code>, <code>input()</code>, <code>len()</code>, <code>range()</code>, <code>type()</code>, <code>int()</code>, <code>str()</code>, <code>float()</code>. But there are over 70 built-in functions in total! Others include <code>abs()</code> (absolute value), <code>round()</code>, <code>sorted()</code>, <code>max()</code>, <code>min()</code>, and <code>sum()</code>. You do not need to memorise them all &mdash; but knowing they exist will save you writing code from scratch.
+      </div>
       <div class="key-concept">
         <strong>Key concept: Functions must be defined before they are called</strong>
         Python reads your code from top to bottom. If you try to call a function <em>above</em> the line where it is defined, you will get a <code>NameError</code>. Always put your function definitions at the top of your program.
       </div>
-
       <div class="warning">
         <strong>Common misconception: Defining is not calling</strong>
         <p>A very common mistake is to write a function with <code>def</code> but then forget to actually <em>call</em> it. Just defining a function does not run the code inside it &mdash; you must call it by writing the function name followed by parentheses, e.g. <code>greet()</code>.</p>
       </div>
-
       <div class="code-block">
         <div class="code-block-header">
           <span class="code-block-label">Python Code</span>
@@ -279,10 +382,8 @@ def say_goodbye():
 # say_goodbye()</code></pre>
         <div class="output-box empty">(click "Run Code" to see output)</div>
       </div>
-
       <h3>Scope &mdash; where variables live</h3>
       <p>Variables created <em>inside</em> a function only exist inside that function. This is called <strong>local scope</strong>. Variables created <em>outside</em> any function are in the <strong>global scope</strong> and can be seen everywhere.</p>
-
       <div class="code-block">
         <div class="code-block-header">
           <span class="code-block-label">Python Code</span>
@@ -301,6 +402,221 @@ my_function()
 # print(secret)</code></pre>
         <div class="output-box empty">(click "Run Code" to see output)</div>
       </div>
+      <p>Here is a more detailed example showing how local and global scope interact:</p>
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Python Code</span>
+          <div>
+            <button class="copy-button">Copy Code</button>
+            <button class="run-button">Run Code</button>
+          </div>
+        </div>
+        <pre><code contenteditable="true"># Global variable - accessible everywhere
+school_name = "Greenfield Academy"
+
+def print_student_info(student):
+    # Local variable - only exists inside this function
+    message = f"{student} attends {school_name}"
+    print(message)
+
+print_student_info("Amara")
+print_student_info("James")
+
+# We can access school_name here (it is global)
+print(f"School: {school_name}")
+
+# But we CANNOT access 'message' here (it is local)
+# Uncomment the next line to see the error:
+# print(message)</code></pre>
+        <div class="output-box empty">(click "Run Code" to see output)</div>
+      </div>
+      <div class="key-concept">
+        <strong>Did you know? &mdash; The DRY Principle</strong>
+        Professional programmers follow a principle called <strong>DRY</strong> &mdash; <strong>Don&rsquo;t Repeat Yourself</strong>. If you find yourself writing the same (or very similar) code more than once, that is a sign you should put it in a function. Functions are the main tool for achieving DRY code. The opposite of DRY is sometimes jokingly called <strong>WET</strong> &mdash; &ldquo;Write Everything Twice&rdquo; or &ldquo;We Enjoy Typing&rdquo;!
+      </div>
+      <!-- ==================== COMMON MISTAKES ==================== -->
+      <h3>Common Mistakes</h3>
+      <p>Watch out for these pitfalls. Every one of them trips up beginners (and even experienced programmers sometimes!):</p>
+      <table>
+        <thead>
+          <tr><th>Mistake</th><th>What goes wrong</th><th>How to fix it</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>Defining but never calling</strong></td><td>The function exists but the code inside it never runs.</td><td>Add a function call: <code>my_function()</code></td></tr>
+          <tr><td><strong>Calling before defining</strong></td><td><code>NameError: name 'my_func' is not defined</code></td><td>Move the function definition <em>above</em> the call.</td></tr>
+          <tr><td><strong>Confusing <code>return</code> with <code>print</code></strong></td><td>You try to store the result but get <code>None</code>.</td><td>Use <code>return</code> inside the function instead of <code>print</code>.</td></tr>
+          <tr><td><strong>Wrong number of arguments</strong></td><td><code>TypeError: greet() takes 1 positional argument but 2 were given</code></td><td>Check how many parameters the function expects and pass exactly that many arguments.</td></tr>
+          <tr><td><strong>Indentation errors in the body</strong></td><td><code>IndentationError: expected an indented block</code></td><td>Everything inside the function must be indented by exactly one level (4 spaces is standard).</td></tr>
+          <tr><td><strong>Accessing a local variable outside the function</strong></td><td><code>NameError: name 'x' is not defined</code></td><td>Either <code>return</code> the value and store it, or define the variable outside the function.</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- ==================== KEY VOCABULARY ==================== -->
+    <section class="idea">
+      <span class="section-label">Key Vocabulary</span>
+      <h2>Words You Need to Know</h2>
+      <p>These terms come up frequently in GCSE exams. Make sure you can define each one confidently.</p>
+      <table>
+        <thead>
+          <tr><th>Term</th><th>Definition</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>Function</strong></td><td>A named block of reusable code that <em>returns</em> a value.</td></tr>
+          <tr><td><strong>Procedure</strong></td><td>A named block of reusable code that performs an action but does <em>not</em> return a value.</td></tr>
+          <tr><td><strong>Subroutine / Subprogram</strong></td><td>A general term for any named block of code (covers both functions and procedures).</td></tr>
+          <tr><td><strong>Define</strong></td><td>To create a function using the <code>def</code> keyword. This tells Python what the function should do.</td></tr>
+          <tr><td><strong>Call</strong></td><td>To run (execute) a function by writing its name followed by parentheses, e.g. <code>greet()</code>.</td></tr>
+          <tr><td><strong>Parameter</strong></td><td>A variable in the function <em>definition</em> that acts as a placeholder for data. E.g. <code>name</code> in <code>def greet(name):</code></td></tr>
+          <tr><td><strong>Argument</strong></td><td>The actual value passed to a function when it is <em>called</em>. E.g. <code>"Alice"</code> in <code>greet("Alice")</code></td></tr>
+          <tr><td><strong>Return Value</strong></td><td>The value that a function sends back to the code that called it, using the <code>return</code> keyword.</td></tr>
+          <tr><td><strong>Local Variable</strong></td><td>A variable created inside a function. It can only be used within that function.</td></tr>
+          <tr><td><strong>Global Variable</strong></td><td>A variable created outside any function. It can be accessed from anywhere in the program.</td></tr>
+          <tr><td><strong>Scope</strong></td><td>The area of a program where a variable is accessible. Local scope = inside a function; global scope = everywhere.</td></tr>
+          <tr><td><strong>Built-in Function</strong></td><td>A function that comes with Python and is always available, like <code>print()</code>, <code>len()</code>, and <code>input()</code>.</td></tr>
+          <tr><td><strong>User-Defined Function</strong></td><td>A function that you write yourself using <code>def</code>.</td></tr>
+          <tr><td><strong>Decomposition</strong></td><td>Breaking a large problem down into smaller, more manageable sub-problems &mdash; often implemented as separate functions.</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- ==================== REAL WORLD APPLICATIONS ==================== -->
+    <section class="explore">
+      <span class="section-label">Real World</span>
+      <h2>Functions in the Real World</h2>
+      <p>Functions are not just a school exercise &mdash; they are the foundation of how professional software is built. Here is how they are used in the real world:</p>
+      <h3>Libraries and Modules</h3>
+      <p>Python&rsquo;s power comes from <strong>thousands of pre-built functions</strong> organised into libraries (also called modules). Instead of writing everything from scratch, you can import a library and use the functions someone else has already written and tested.</p>
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Python Code</span>
+          <div>
+            <button class="copy-button">Copy Code</button>
+            <button class="run-button">Run Code</button>
+          </div>
+        </div>
+        <pre><code contenteditable="true">import random
+import math
+
+# random.randint() - someone else wrote this function for us!
+dice_roll = random.randint(1, 6)
+print(f"You rolled a {dice_roll}")
+
+# math.sqrt() - a pre-built function for square roots
+result = math.sqrt(144)
+print(f"The square root of 144 is {result}")
+
+# math.pi - a pre-defined constant
+circumference = 2 * math.pi * 5
+print(f"Circumference of a circle with radius 5: {circumference:.2f}")</code></pre>
+        <div class="output-box empty">(click "Run Code" to see output)</div>
+      </div>
+      <h3>APIs &mdash; Functions that talk to the internet</h3>
+      <p>An <strong>API</strong> (Application Programming Interface) is essentially a set of functions that lets your program communicate with other services. When an app shows you the weather forecast, it is calling a function that fetches data from a weather service. When you post on social media, the app calls functions in the platform&rsquo;s API. The world of software runs on functions talking to other functions!</p>
+      <h3>Testing &mdash; Functions make code testable</h3>
+      <p>Because each function does one specific job, you can <strong>test each function independently</strong>. Professional developers write &ldquo;unit tests&rdquo; &mdash; small checks that make sure each function works correctly. If a function is well-written, you can test it by giving it known inputs and checking the outputs, without worrying about the rest of the program.</p>
+      <h3>Team work &mdash; Functions enable collaboration</h3>
+      <p>In a professional software team, different developers can work on different functions at the same time. As long as everyone agrees on the function names, parameters, and return values, each team member can write and test their functions independently. The functions are then combined to create the full program. This is only possible because functions have clear inputs and outputs.</p>
+    </section>
+
+    <!-- ==================== WORKED EXAMPLE ==================== -->
+    <section class="understand">
+      <span class="section-label">Worked Example</span>
+      <h2>Building a Password Strength Checker</h2>
+      <p>Let us work through a complete example step by step. We will write a function that checks how strong a password is &mdash; this is the kind of thing you see on websites every day when you create an account.</p>
+      <h3>The Problem</h3>
+      <p>Write a function called <code>check_password_strength</code> that takes a password string and returns a strength rating: <code>"Weak"</code>, <code>"Medium"</code>, or <code>"Strong"</code>. The rules are:</p>
+      <ul>
+        <li>The password must be <strong>at least 8 characters</strong> long</li>
+        <li>It should contain at least one <strong>uppercase</strong> letter</li>
+        <li>It should contain at least one <strong>lowercase</strong> letter</li>
+        <li>It should contain at least one <strong>digit</strong></li>
+      </ul>
+      <p>Scoring: each rule the password passes earns one point. 0&ndash;1 points = &ldquo;Weak&rdquo;, 2&ndash;3 points = &ldquo;Medium&rdquo;, 4 points = &ldquo;Strong&rdquo;.</p>
+      <h3>Step 1: Plan the logic</h3>
+      <p>Before writing any code, let us plan:</p>
+      <ol>
+        <li>Take the password as a parameter</li>
+        <li>Start a score counter at 0</li>
+        <li>Check each rule &mdash; if the rule is met, add 1 to the score</li>
+        <li>Based on the score, decide the rating</li>
+        <li>Return the rating</li>
+      </ol>
+      <h3>Step 2: Write the code</h3>
+      <p>For the character checks, we loop through each character and use Python&rsquo;s built-in string methods: <code>.isupper()</code>, <code>.islower()</code>, and <code>.isdigit()</code>.</p>
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Python Code</span>
+          <div>
+            <button class="copy-button">Copy Code</button>
+            <button class="run-button">Run Code</button>
+          </div>
+        </div>
+        <pre><code contenteditable="true">def check_password_strength(password):
+    score = 0
+
+    # Rule 1: At least 8 characters long
+    if len(password) >= 8:
+        score = score + 1
+
+    # Rule 2: Contains at least one uppercase letter
+    has_upper = False
+    for char in password:
+        if char.isupper():
+            has_upper = True
+    if has_upper:
+        score = score + 1
+
+    # Rule 3: Contains at least one lowercase letter
+    has_lower = False
+    for char in password:
+        if char.islower():
+            has_lower = True
+    if has_lower:
+        score = score + 1
+
+    # Rule 4: Contains at least one digit
+    has_digit = False
+    for char in password:
+        if char.isdigit():
+            has_digit = True
+    if has_digit:
+        score = score + 1
+
+    # Decide the rating based on the score
+    if score <= 1:
+        return "Weak"
+    elif score <= 3:
+        return "Medium"
+    else:
+        return "Strong"
+
+
+# Test with different passwords
+test_passwords = ["cat", "password", "Hello123", "MyP4ssw0rd"]
+
+for pwd in test_passwords:
+    result = check_password_strength(pwd)
+    print(f"'{pwd}' -> {result}")</code></pre>
+        <div class="output-box empty">(click "Run Code" to see output)</div>
+      </div>
+      <h3>Step 3: Trace through an example</h3>
+      <p>Let us trace what happens when we call <code>check_password_strength("Hello123")</code>:</p>
+      <ol>
+        <li><code>score</code> starts at <code>0</code></li>
+        <li>Length check: <code>len("Hello123")</code> is <code>8</code>, which is &ge; 8, so <code>score</code> becomes <code>1</code></li>
+        <li>Uppercase check: <code>"H"</code> is uppercase, so <code>has_upper = True</code>, <code>score</code> becomes <code>2</code></li>
+        <li>Lowercase check: <code>"e"</code>, <code>"l"</code>, <code>"l"</code>, <code>"o"</code> are lowercase, so <code>has_lower = True</code>, <code>score</code> becomes <code>3</code></li>
+        <li>Digit check: <code>"1"</code>, <code>"2"</code>, <code>"3"</code> are digits, so <code>has_digit = True</code>, <code>score</code> becomes <code>4</code></li>
+        <li>Score is 4, so the function returns <code>"Strong"</code></li>
+      </ol>
+      <div class="try-this">
+        <strong>Try this:</strong>
+        <ul>
+          <li>Add a fifth rule: the password must contain at least one special character (like <code>!</code>, <code>@</code>, <code>#</code>). Adjust the scoring thresholds accordingly.</li>
+          <li>Modify the function to return the score as well as the rating, using multiple return values.</li>
+        </ul>
+      </div>
     </section>
 
     <!-- ==================== PRACTICE ==================== -->
@@ -308,14 +624,12 @@ my_function()
       <span class="section-label">Practice</span>
       <h2>Your Turn</h2>
       <p>Work through these exercises in order. Each one builds on the skills from the last.</p>
-
       <!-- Exercise 1 -->
       <div class="exercise">
         <h3 class="exercise-title">Exercise 1 &mdash; Personalised Greeting</h3>
         <span class="exercise-difficulty difficulty-1">Guided</span>
         <p>Write a function called <code>personalised_greeting</code> that takes a person's <code>name</code> as a parameter and prints a friendly, personalised greeting.</p>
         <p>For example, calling <code>personalised_greeting("Amara")</code> should print something like <code>Hi Amara, welcome to Python!</code></p>
-
         <div class="pseudocode">
           <div class="pseudocode-label">Pseudocode</div>
           <p>DEFINE function personalised_greeting that takes name<br />
@@ -323,7 +637,6 @@ my_function()
           END function<br /><br />
           CALL personalised_greeting with a name</p>
         </div>
-
         <div class="code-block">
           <div class="code-block-header">
             <span class="code-block-label">Python Code</span>
@@ -344,14 +657,12 @@ personalised_greeting("Amara")
 personalised_greeting("James")</code></pre>
           <div class="output-box empty">(click "Run Code" to see output)</div>
         </div>
-
         <div class="hint">
           <div class="hint-title">Hint 1</div>
           <div class="hint-content">
             <p>Replace <code>pass</code> with a <code>print()</code> statement. Use an f-string to include the <code>name</code> parameter in the message: <code>print(f"Hi {name}, welcome to Python!")</code></p>
           </div>
         </div>
-
         <div class="hint">
           <div class="hint-title">Hint 2 &mdash; Full Solution</div>
           <div class="hint-content">
@@ -360,13 +671,11 @@ personalised_greeting("James")</code></pre>
           </div>
         </div>
       </div>
-
       <!-- Exercise 2 -->
       <div class="exercise">
         <h3 class="exercise-title">Exercise 2 &mdash; Area of a Rectangle</h3>
         <span class="exercise-difficulty difficulty-2">Partially Guided</span>
         <p>Write a function called <code>rectangle_area</code> that takes two parameters &mdash; <code>length</code> and <code>width</code> &mdash; and <strong>returns</strong> the area (length &times; width). Then call it and print the result.</p>
-
         <div class="pseudocode">
           <div class="pseudocode-label">Pseudocode</div>
           <p>DEFINE function rectangle_area that takes length and width<br />
@@ -376,7 +685,6 @@ personalised_greeting("James")</code></pre>
           STORE the result of calling rectangle_area with two numbers<br />
           PRINT the result</p>
         </div>
-
         <div class="code-block">
           <div class="code-block-header">
             <span class="code-block-label">Python Code</span>
@@ -395,21 +703,18 @@ area = rectangle_area(5, 3)
 print(f"The area is {area}")</code></pre>
           <div class="output-box empty">(click "Run Code" to see output)</div>
         </div>
-
         <div class="hint">
           <div class="hint-title">Hint 1</div>
           <div class="hint-content">
             <p>Start with <code>def rectangle_area(length, width):</code> and use <code>return</code> (not <code>print</code>) to send the result back.</p>
           </div>
         </div>
-
         <div class="hint">
           <div class="hint-title">Hint 2</div>
           <div class="hint-content">
             <p>Inside the function, calculate <code>area = length * width</code> and then <code>return area</code>. You can also write it in one line: <code>return length * width</code>.</p>
           </div>
         </div>
-
         <div class="hint">
           <div class="hint-title">Hint 3 &mdash; Full Solution</div>
           <div class="hint-content">
@@ -418,14 +723,12 @@ print(f"The area is {area}")</code></pre>
           </div>
         </div>
       </div>
-
       <!-- Exercise 3 -->
       <div class="exercise">
         <h3 class="exercise-title">Exercise 3 &mdash; Mini Calculator</h3>
         <span class="exercise-difficulty difficulty-3">Open-Ended</span>
         <p>Create a mini calculator by writing <strong>four separate functions</strong>: <code>add</code>, <code>subtract</code>, <code>multiply</code>, and <code>divide</code>. Each function should take two numbers as parameters and <strong>return</strong> the result.</p>
         <p>Then test each function by printing its output. For the <code>divide</code> function, think about what should happen if someone tries to divide by zero.</p>
-
         <div class="pseudocode">
           <div class="pseudocode-label">Pseudocode</div>
           <p>DEFINE function add that takes a and b<br />
@@ -445,7 +748,6 @@ print(f"The area is {area}")</code></pre>
           END function<br /><br />
           CALL each function and PRINT the results</p>
         </div>
-
         <div class="code-block">
           <div class="code-block-header">
             <span class="code-block-label">Python Code</span>
@@ -467,21 +769,18 @@ print(f"10 / 3 = {divide(10, 3)}")
 print(f"10 / 0 = {divide(10, 0)}")</code></pre>
           <div class="output-box empty">(click "Run Code" to see output)</div>
         </div>
-
         <div class="hint">
           <div class="hint-title">Hint 1</div>
           <div class="hint-content">
             <p>Each function follows the same pattern. For example: <code>def add(a, b):</code> followed by <code>return a + b</code>. Write all four using the correct operator (<code>+</code>, <code>-</code>, <code>*</code>, <code>/</code>).</p>
           </div>
         </div>
-
         <div class="hint">
           <div class="hint-title">Hint 2</div>
           <div class="hint-content">
             <p>For the <code>divide</code> function, use an <code>if</code> statement to check whether <code>b == 0</code> before dividing. If it is zero, return the string <code>"Error: cannot divide by zero"</code> instead.</p>
           </div>
         </div>
-
         <div class="hint">
           <div class="hint-title">Hint 3 &mdash; Full Solution</div>
           <div class="hint-content">
@@ -500,65 +799,235 @@ print(f"10 / 0 = {divide(10, 0)}")</code></pre>
           </div>
         </div>
       </div>
+      <!-- Exercise 4 -->
+      <div class="exercise">
+        <h3 class="exercise-title">Exercise 4 &mdash; Temperature Converter Functions</h3>
+        <span class="exercise-difficulty difficulty-2">Partially Guided</span>
+        <p>Write two functions:</p>
+        <ul>
+          <li><code>celsius_to_fahrenheit(celsius)</code> &mdash; takes a temperature in Celsius and returns the equivalent in Fahrenheit</li>
+          <li><code>fahrenheit_to_celsius(fahrenheit)</code> &mdash; takes a temperature in Fahrenheit and returns the equivalent in Celsius</li>
+        </ul>
+        <p>The formulae are:</p>
+        <ul>
+          <li>Fahrenheit = (Celsius &times; 9/5) + 32</li>
+          <li>Celsius = (Fahrenheit &minus; 32) &times; 5/9</li>
+        </ul>
+        <div class="pseudocode">
+          <div class="pseudocode-label">Pseudocode</div>
+          <p>DEFINE function celsius_to_fahrenheit that takes celsius<br />
+          &nbsp;&nbsp;&nbsp;&nbsp;CALCULATE fahrenheit as (celsius * 9/5) + 32<br />
+          &nbsp;&nbsp;&nbsp;&nbsp;RETURN fahrenheit<br />
+          END function<br /><br />
+          DEFINE function fahrenheit_to_celsius that takes fahrenheit<br />
+          &nbsp;&nbsp;&nbsp;&nbsp;CALCULATE celsius as (fahrenheit - 32) * 5/9<br />
+          &nbsp;&nbsp;&nbsp;&nbsp;RETURN celsius<br />
+          END function<br /><br />
+          TEST both functions with known values</p>
+        </div>
+        <div class="code-block">
+          <div class="code-block-header">
+            <span class="code-block-label">Python Code</span>
+            <div>
+              <button class="copy-button">Copy Code</button>
+              <button class="run-button">Run Code</button>
+            </div>
+          </div>
+          <pre><code contenteditable="true"># Exercise 4: Temperature Converter Functions
+# Write your two functions below
+
+
+
+# Test your functions
+print(f"0°C = {celsius_to_fahrenheit(0)}°F")       # Should be 32.0
+print(f"100°C = {celsius_to_fahrenheit(100)}°F")    # Should be 212.0
+print(f"32°F = {fahrenheit_to_celsius(32)}°C")      # Should be 0.0
+print(f"212°F = {fahrenheit_to_celsius(212)}°C")    # Should be 100.0
+
+# Bonus: convert and convert back - should get the original!
+original = 25
+converted = celsius_to_fahrenheit(original)
+back_again = fahrenheit_to_celsius(converted)
+print(f"{original}°C -> {converted}°F -> {back_again}°C")</code></pre>
+          <div class="output-box empty">(click "Run Code" to see output)</div>
+        </div>
+        <div class="hint">
+          <div class="hint-title">Hint 1</div>
+          <div class="hint-content">
+            <p>Each function is short &mdash; just one calculation and a return. For example: <code>def celsius_to_fahrenheit(celsius):</code> followed by <code>return (celsius * 9/5) + 32</code>.</p>
+          </div>
+        </div>
+        <div class="hint">
+          <div class="hint-title">Hint 2 &mdash; Full Solution</div>
+          <div class="hint-content">
+            <p>
+              <code>def celsius_to_fahrenheit(celsius):</code><br />
+              <code>&nbsp;&nbsp;&nbsp;&nbsp;return (celsius * 9/5) + 32</code><br /><br />
+              <code>def fahrenheit_to_celsius(fahrenheit):</code><br />
+              <code>&nbsp;&nbsp;&nbsp;&nbsp;return (fahrenheit - 32) * 5/9</code>
+            </p>
+          </div>
+        </div>
+      </div>
+      <!-- Exercise 5 -->
+      <div class="exercise">
+        <h3 class="exercise-title">Exercise 5 &mdash; Shape Calculator Library</h3>
+        <span class="exercise-difficulty difficulty-3">Open-Ended</span>
+        <p>Create a library of shape calculation functions. Write the following four functions, each one taking the appropriate measurements as parameters and returning the result:</p>
+        <ul>
+          <li><code>area_of_circle(radius)</code> &mdash; returns &pi; &times; radius&sup2; (use <code>3.14159</code> for &pi;, or <code>import math</code> and use <code>math.pi</code>)</li>
+          <li><code>area_of_triangle(base, height)</code> &mdash; returns 0.5 &times; base &times; height</li>
+          <li><code>perimeter_of_rectangle(length, width)</code> &mdash; returns 2 &times; (length + width)</li>
+          <li><code>volume_of_cube(side)</code> &mdash; returns side&sup3;</li>
+        </ul>
+        <p>Test each function and print the results with appropriate labels. Try to round results to 2 decimal places using the <code>round()</code> function.</p>
+        <div class="code-block">
+          <div class="code-block-header">
+            <span class="code-block-label">Python Code</span>
+            <div>
+              <button class="copy-button">Copy Code</button>
+              <button class="run-button">Run Code</button>
+            </div>
+          </div>
+          <pre><code contenteditable="true"># Exercise 5: Shape Calculator Library
+import math
+
+# Write your four functions below
+
+
+
+# Test your functions
+print(f"Area of circle (radius 5): {round(area_of_circle(5), 2)}")
+print(f"Area of triangle (base 10, height 6): {area_of_triangle(10, 6)}")
+print(f"Perimeter of rectangle (4 x 7): {perimeter_of_rectangle(4, 7)}")
+print(f"Volume of cube (side 3): {volume_of_cube(3)}")</code></pre>
+          <div class="output-box empty">(click "Run Code" to see output)</div>
+        </div>
+        <div class="hint">
+          <div class="hint-title">Hint 1</div>
+          <div class="hint-content">
+            <p>Each function is a single calculation. For the circle area, use <code>math.pi * radius ** 2</code>. For the cube volume, use <code>side ** 3</code> (the <code>**</code> operator means &ldquo;to the power of&rdquo;).</p>
+          </div>
+        </div>
+        <div class="hint">
+          <div class="hint-title">Hint 2 &mdash; Full Solution</div>
+          <div class="hint-content">
+            <p>
+              <code>def area_of_circle(radius):</code><br />
+              <code>&nbsp;&nbsp;&nbsp;&nbsp;return math.pi * radius ** 2</code><br /><br />
+              <code>def area_of_triangle(base, height):</code><br />
+              <code>&nbsp;&nbsp;&nbsp;&nbsp;return 0.5 * base * height</code><br /><br />
+              <code>def perimeter_of_rectangle(length, width):</code><br />
+              <code>&nbsp;&nbsp;&nbsp;&nbsp;return 2 * (length + width)</code><br /><br />
+              <code>def volume_of_cube(side):</code><br />
+              <code>&nbsp;&nbsp;&nbsp;&nbsp;return side ** 3</code>
+            </p>
+          </div>
+        </div>
+      </div>
     </section>
 
     <!-- ==================== REFLECT ==================== -->
     <section class="reflect">
       <span class="section-label">Reflect</span>
       <h2>Check Your Understanding</h2>
-
       <p>Before moving on, see if you can answer these questions. Think about each one before revealing the answer.</p>
-
       <div class="hint">
         <div class="hint-title">1. What keyword do you use to create a new function in Python?</div>
         <div class="hint-content">
           <p>The <code>def</code> keyword, followed by the function name, parentheses (with any parameters), and a colon. For example: <code>def my_function():</code></p>
         </div>
       </div>
-
       <div class="hint">
         <div class="hint-title">2. What is the difference between a parameter and an argument?</div>
         <div class="hint-content">
           <p>A <strong>parameter</strong> is the variable name in the function definition (e.g. <code>name</code> in <code>def greet(name):</code>). An <strong>argument</strong> is the actual value you pass when calling the function (e.g. <code>"Alice"</code> in <code>greet("Alice")</code>).</p>
         </div>
       </div>
-
       <div class="hint">
         <div class="hint-title">3. What is the difference between <code>return</code> and <code>print</code>?</div>
         <div class="hint-content">
           <p><code>return</code> sends a value back to the code that called the function, so you can store it in a variable or use it in further calculations. <code>print</code> simply displays text on the screen but does not give any usable value back &mdash; if you try to store the result of <code>print()</code>, you get <code>None</code>.</p>
         </div>
       </div>
-
       <div class="hint">
         <div class="hint-title">4. Why might you get a <code>NameError</code> when calling a function?</div>
         <div class="hint-content">
           <p>Two common reasons: (1) you tried to call the function <em>before</em> it was defined &mdash; Python reads top to bottom, so the definition must come first; (2) you misspelt the function name when calling it.</p>
         </div>
       </div>
-
       <div class="hint">
         <div class="hint-title">5. What happens if you define a function but never call it?</div>
         <div class="hint-content">
           <p>Nothing! The code inside the function will never run. Defining a function only tells Python what it <em>should</em> do &mdash; you must actually call it (e.g. <code>greet()</code>) for the code to execute.</p>
         </div>
       </div>
-
+      <div class="hint">
+        <div class="hint-title">6. What is the difference between a function and a procedure?</div>
+        <div class="hint-content">
+          <p>A <strong>function</strong> returns a value (using <code>return</code>), whereas a <strong>procedure</strong> performs an action but does not return a value. In Python, both are created using <code>def</code>, but the distinction matters in GCSE exams. Example of a function: <code>def add(a, b): return a + b</code>. Example of a procedure: <code>def say_hello(): print("Hello")</code>.</p>
+        </div>
+      </div>
+      <div class="hint">
+        <div class="hint-title">7. What is a default parameter, and when is it useful?</div>
+        <div class="hint-content">
+          <p>A default parameter is a parameter that has a pre-set value, so the caller does not have to provide it every time. You set it with <code>=</code> in the definition, e.g. <code>def greet(name, greeting="Hello"):</code>. It is useful when a parameter usually has the same value, but you want the option to change it sometimes.</p>
+        </div>
+      </div>
+      <!-- ==================== SUMMARY ==================== -->
+      <h3>Summary</h3>
+      <p>Here is everything you have learned in this chapter at a glance:</p>
+      <ul>
+        <li>A <strong>function</strong> is a reusable, named block of code. You <strong>define</strong> it with <code>def</code> and <strong>call</strong> it with its name followed by parentheses.</li>
+        <li><strong>Parameters</strong> are the variables listed in the function definition; <strong>arguments</strong> are the values you pass when calling the function.</li>
+        <li>You can set <strong>default parameters</strong> so that arguments become optional.</li>
+        <li><code>return</code> sends a value back to the caller; <code>print</code> just displays it on screen.</li>
+        <li>A function can <strong>return multiple values</strong> as a tuple.</li>
+        <li>Functions can <strong>call other functions</strong> &mdash; this is how we break problems into smaller pieces (decomposition).</li>
+        <li>A <strong>procedure</strong> is a subroutine that does not return a value; a <strong>function</strong> does return a value. In Python both use <code>def</code>.</li>
+        <li>Variables created inside a function have <strong>local scope</strong> &mdash; they cannot be accessed from outside the function.</li>
+        <li>Variables created outside any function have <strong>global scope</strong> &mdash; they can be accessed anywhere.</li>
+        <li>Following the <strong>DRY principle</strong> (Don&rsquo;t Repeat Yourself) means using functions to avoid duplicating code.</li>
+      </ul>
+      <!-- ==================== EXAM-STYLE QUESTIONS ==================== -->
+      <h3>Exam-Style Questions</h3>
+      <p>Practise answering these in full sentences, as you would in a GCSE exam. Click to reveal a model answer.</p>
+      <div class="hint">
+        <div class="hint-title">Q1. Explain the difference between a function and a procedure. (2 marks)</div>
+        <div class="hint-content">
+          <p><strong>Model answer:</strong> A function is a subroutine that <strong>returns a value</strong> (1 mark) to the part of the program that called it. A procedure is a subroutine that <strong>performs an action but does not return a value</strong> (1 mark). For example, <code>len("hello")</code> is a function because it returns <code>5</code>, while <code>print("hello")</code> is a procedure because it displays text but returns <code>None</code>.</p>
+        </div>
+      </div>
+      <div class="hint">
+        <div class="hint-title">Q2. What is meant by the &lsquo;scope&rsquo; of a variable? Explain the difference between a local variable and a global variable. (3 marks)</div>
+        <div class="hint-content">
+          <p><strong>Model answer:</strong> The <strong>scope</strong> of a variable refers to the part of the program where that variable can be accessed or used (1 mark). A <strong>local variable</strong> is declared inside a function and can only be used within that function (1 mark). A <strong>global variable</strong> is declared outside of any function and can be accessed from anywhere in the program (1 mark).</p>
+        </div>
+      </div>
+      <div class="hint">
+        <div class="hint-title">Q3. A student defines: <code>def add(a, b): print(a + b)</code> and then writes <code>result = add(3, 4)</code>. They are surprised that <code>result</code> contains <code>None</code>. Explain why this happens and fix the code. (3 marks)</div>
+        <div class="hint-content">
+          <p><strong>Model answer:</strong> The function uses <code>print()</code>, which displays the sum on the screen but does <strong>not</strong> return a value (1 mark). When a function does not explicitly use <code>return</code>, Python automatically returns <code>None</code> (1 mark). To fix the code, replace <code>print(a + b)</code> with <code>return a + b</code> so that the calculated value is sent back to the caller and stored in <code>result</code> (1 mark).</p>
+          <p>Fixed code: <code>def add(a, b): return a + b</code></p>
+        </div>
+      </div>
+      <!-- ==================== EXTERNAL RESOURCES ==================== -->
       <div class="extra-resources">
-        <h3>Extra Practice</h3>
-        <p>Explore functions and subprograms further:</p>
+        <h3>Extra Resources</h3>
+        <p>Explore functions and subprograms further with these trusted resources:</p>
         <ul>
+          <li><a href="https://www.bbc.co.uk/bitesize/examspecs/zdqy7nb" target="_blank" rel="noopener">BBC Bitesize &mdash; Edexcel Computer Science</a> &mdash; GCSE revision covering subroutines, functions, and procedures</li>
+          <li><a href="https://www.w3schools.com/python/python_functions.asp" target="_blank" rel="noopener">W3Schools &mdash; Python Functions</a> &mdash; Clear tutorials and interactive examples for Python functions</li>
+          <li><a href="https://docs.python.org/3/tutorial/controlflow.html#defining-functions" target="_blank" rel="noopener">Python.org &mdash; Defining Functions</a> &mdash; The official Python tutorial on defining and using functions</li>
           <li><a href="https://hvgcsecs.cshub.org.je/topics/topic6.html" target="_blank" rel="noopener">GCSE Topic 6: Subprograms</a> &mdash; Functions, procedures, parameters, return values, and scope with interactive code editors</li>
           <li><a href="https://hvgcse.cshub.org.je/Program_Builder.html" target="_blank" rel="noopener">Program Builder</a> &mdash; Build complete programs step by step with drag-and-drop</li>
         </ul>
       </div>
-
       <div class="key-concept">
         <strong>Coming up next &mdash; Chapter 7: Lists</strong>
         Now that you can organise code into functions, it is time to learn how to organise <em>data</em>. In the next chapter, you will discover <strong>lists</strong> &mdash; a way to store collections of items in a single variable. You will learn to add, remove, search, and sort items in a list.
       </div>
     </section>
-
   </main>
 
   <!-- ==================== NAVIGATION ==================== -->
@@ -573,7 +1042,6 @@ print(f"10 / 0 = {divide(10, 0)}")</code></pre>
     <p>Python Fundamentals &mdash; A KS4 Learning Platform</p>
     <p>Built with <a href="https://pyodide.org/">Pyodide</a> &mdash; Python runs in your browser</p>
   </footer>
-
   <script src="../js/pyodide-runner.js"></script>
 </body>
 </html>

@@ -4,6 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Chapter 4: If Statements - Python Fundamentals</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="../css/style.css" />
   <script src="https://cdn.jsdelivr.net/pyodide/v0.24.0/full/pyodide.js"></script>
 </head>
@@ -22,11 +25,8 @@
     <section class="idea">
       <span class="section-label">The Idea</span>
       <h2>Why Do Programs Need to Make Decisions?</h2>
-
       <p>Every day you make decisions. <em>"If it's raining, take an umbrella. Otherwise, wear sunglasses."</em> You check a condition (is it raining?) and then choose what to do based on the answer. Programs can make decisions too &mdash; and they do it millions of times a second.</p>
-
-      <p><strong>Conditional logic</strong> is how programs respond differently to different situations. Without it, a program would do exactly the same thing every single time, no matter what. That would be pretty useless!</p>
-
+      <p><strong>Conditional logic</strong> (also called <strong>selection</strong>) is how programs respond differently to different situations. Without it, a program would do exactly the same thing every single time, no matter what. That would be pretty useless!</p>
       <p>Think about how many things rely on decisions in the real world:</p>
       <ul>
         <li><strong>Traffic lights</strong> &mdash; if the timer has finished, change from green to amber to red.</li>
@@ -34,8 +34,7 @@
         <li><strong>Game logic</strong> &mdash; if the player's health reaches zero, the game is over.</li>
         <li><strong>Weather apps</strong> &mdash; if the temperature drops below zero, display a frost warning.</li>
       </ul>
-
-      <p>All of these use <strong>if statements</strong> &mdash; the most fundamental way a program makes choices.</p>
+      <p>All of these use <strong>if statements</strong> &mdash; the most fundamental way a program makes choices. In your GCSE exam, this concept is called <strong>selection</strong>, and it is one of the three basic programming constructs (along with sequence and iteration).</p>
 
       <h3>What You Will Learn</h3>
       <ul>
@@ -43,6 +42,8 @@
         <li>How to use <strong>comparison operators</strong> to compare values</li>
         <li>How to build <strong>boolean expressions</strong> that evaluate to <code>True</code> or <code>False</code></li>
         <li>How to combine conditions using <strong>logical operators</strong> (<code>and</code>, <code>or</code>, <code>not</code>)</li>
+        <li>How to <strong>nest</strong> if statements inside each other for more complex decisions</li>
+        <li>How to use <strong>truth tables</strong> to reason about combined conditions</li>
       </ul>
     </section>
 
@@ -50,13 +51,11 @@
     <section class="explore">
       <span class="section-label">Explore</span>
       <h2>See If Statements in Action</h2>
-
       <p>The best way to understand if statements is to run some code and experiment with the values. Try each example below, then change the values to see different outcomes.</p>
 
       <!-- Example 1: Simple If -->
       <h3>Example 1: A Simple If Statement</h3>
       <p>This program checks whether someone is old enough to drive. If the condition is <code>True</code>, the indented line runs. If it is <code>False</code>, the indented line is skipped entirely.</p>
-
       <div class="code-block">
         <div class="code-block-header">
           <span class="code-block-label">Python Code</span>
@@ -73,7 +72,6 @@ if age >= 16:
 print("Thanks for checking.")</code></pre>
         <div class="output-box empty">(click "Run Code" to see output)</div>
       </div>
-
       <div class="try-this">
         <strong>Try this:</strong> Change <code>age</code> to <code>14</code> and run the code again. What happens to the first message? Why does the second message still appear?
       </div>
@@ -81,7 +79,6 @@ print("Thanks for checking.")</code></pre>
       <!-- Example 2: If/Else -->
       <h3>Example 2: If / Else</h3>
       <p>Sometimes you want to do one thing when the condition is true and <em>something else</em> when it is false. That is where <code>else</code> comes in &mdash; it catches everything that does not match the <code>if</code>.</p>
-
       <div class="code-block">
         <div class="code-block-header">
           <span class="code-block-label">Python Code</span>
@@ -100,7 +97,6 @@ else:
     print("Better grab a jacket.")</code></pre>
         <div class="output-box empty">(click "Run Code" to see output)</div>
       </div>
-
       <div class="try-this">
         <strong>Try this:</strong> Change <code>temperature</code> to <code>10</code> to see the else branch. What about <code>20</code> exactly &mdash; which branch runs and why?
       </div>
@@ -108,7 +104,6 @@ else:
       <!-- Example 3: If/Elif/Else -->
       <h3>Example 3: If / Elif / Else &mdash; Multiple Conditions</h3>
       <p>When there are more than two possible outcomes, use <code>elif</code> (short for "else if") to check additional conditions. Python works through them from top to bottom and runs the <strong>first</strong> one that is true.</p>
-
       <div class="code-block">
         <div class="code-block-header">
           <span class="code-block-label">Python Code</span>
@@ -132,9 +127,103 @@ print("Your score is " + str(score))
 print("Your grade is " + grade)</code></pre>
         <div class="output-box empty">(click "Run Code" to see output)</div>
       </div>
-
       <div class="try-this">
         <strong>Try this:</strong> Try scores of <code>95</code>, <code>70</code>, <code>55</code>, and <code>30</code>. Does each give the grade you expect? What happens if you set the score to exactly <code>90</code>?
+      </div>
+
+      <!-- Example 4: Nested If Statements -->
+      <h3>Example 4: Nested If Statements</h3>
+      <p>Sometimes one decision leads to another. You might need to check a second condition <em>only if</em> the first one is already true. This is called <strong>nesting</strong> &mdash; placing an if statement inside another if statement. Notice how the inner if is indented further than the outer one.</p>
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Python Code</span>
+          <div>
+            <button class="copy-button">Copy Code</button>
+            <button class="run-button">Run Code</button>
+          </div>
+        </div>
+        <pre><code contenteditable="true">age = 15
+has_ticket = True
+
+if age >= 12:
+    print("You are old enough for the film.")
+    if has_ticket:
+        print("Enjoy the movie!")
+    else:
+        print("You need to buy a ticket first.")
+else:
+    print("Sorry, this film is for ages 12 and over.")</code></pre>
+        <div class="output-box empty">(click "Run Code" to see output)</div>
+      </div>
+      <div class="try-this">
+        <strong>Try this:</strong> Change <code>age</code> to <code>10</code> &mdash; does Python even check the ticket? Now set <code>age</code> back to <code>15</code> but change <code>has_ticket</code> to <code>False</code>. Can you see how the nested structure works?
+      </div>
+
+      <!-- Example 5: Logical Operators in Action -->
+      <h3>Example 5: Logical Operators in Action</h3>
+      <p>Real-world programs often need to check <em>multiple</em> conditions at once. A login system needs the username <strong>and</strong> the password to both be correct. Here we use <code>and</code> to combine conditions into a single, powerful check.</p>
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Python Code</span>
+          <div>
+            <button class="copy-button">Copy Code</button>
+            <button class="run-button">Run Code</button>
+          </div>
+        </div>
+        <pre><code contenteditable="true"># A simple login system
+correct_username = "admin"
+correct_password = "python123"
+
+entered_username = "admin"
+entered_password = "python123"
+
+if entered_username == correct_username and entered_password == correct_password:
+    print("Login successful! Welcome back.")
+elif entered_username != correct_username and entered_password != correct_password:
+    print("Both username and password are wrong.")
+elif entered_username != correct_username:
+    print("Username is incorrect.")
+else:
+    print("Password is incorrect.")</code></pre>
+        <div class="output-box empty">(click "Run Code" to see output)</div>
+      </div>
+      <div class="try-this">
+        <strong>Try this:</strong> Change <code>entered_username</code> to <code>"user"</code> and run it. Then change only the password to <code>"wrong"</code>. Can you get all four different messages to appear?
+      </div>
+
+      <!-- Example 6: String Comparisons -->
+      <h3>Example 6: String Comparisons</h3>
+      <p>If statements work brilliantly with strings (text), not just numbers. You can check passwords, menu choices, and user responses. One important thing: Python is <strong>case-sensitive</strong>, so <code>"Yes"</code> and <code>"yes"</code> are different. You can use <code>.lower()</code> to handle this.</p>
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Python Code</span>
+          <div>
+            <button class="copy-button">Copy Code</button>
+            <button class="run-button">Run Code</button>
+          </div>
+        </div>
+        <pre><code contenteditable="true"># A restaurant ordering system
+print("=== Python Cafe ===")
+print("Menu: pizza, salad, soup")
+print()
+
+choice = "Pizza"
+
+# Convert to lowercase so "Pizza", "PIZZA", "pizza" all work
+choice_lower = choice.lower()
+
+if choice_lower == "pizza":
+    print("Great choice! One pizza coming up. That's £8.50.")
+elif choice_lower == "salad":
+    print("A healthy option! One salad on the way. That's £6.00.")
+elif choice_lower == "soup":
+    print("Perfect for today's weather! One soup. That's £4.50.")
+else:
+    print("Sorry, we don't have '" + choice + "' on the menu.")</code></pre>
+        <div class="output-box empty">(click "Run Code" to see output)</div>
+      </div>
+      <div class="try-this">
+        <strong>Try this:</strong> Change <code>choice</code> to <code>"SALAD"</code> or <code>"Soup"</code> &mdash; does it still work? What happens if you type <code>"burger"</code>? Try removing the <code>.lower()</code> call and using <code>"Pizza"</code> with a capital P &mdash; what goes wrong?
       </div>
     </section>
 
@@ -149,7 +238,6 @@ print("Your grade is " + grade)</code></pre>
         <li>If the condition is <code>True</code>, the indented block of code runs.</li>
         <li>If the condition is <code>False</code>, the indented block is skipped.</li>
       </ul>
-
       <div class="code-block">
         <div class="code-block-header">
           <span class="code-block-label">Python Code</span>
@@ -167,65 +255,28 @@ print(6 <= 6)     # True</code></pre>
       </div>
 
       <h3>Comparison Operators</h3>
-      <p>These operators compare two values and return <code>True</code> or <code>False</code>:</p>
-
+      <p>These operators compare two values and return <code>True</code> or <code>False</code>. In your GCSE, these are also called <strong>relational operators</strong>:</p>
       <table>
         <thead>
-          <tr>
-            <th>Operator</th>
-            <th>Meaning</th>
-            <th>Example</th>
-            <th>Result</th>
-          </tr>
+          <tr><th>Operator</th><th>Meaning</th><th>Example</th><th>Result</th></tr>
         </thead>
         <tbody>
-          <tr>
-            <td><code>==</code></td>
-            <td>Equal to</td>
-            <td><code>5 == 5</code></td>
-            <td><code>True</code></td>
-          </tr>
-          <tr>
-            <td><code>!=</code></td>
-            <td>Not equal to</td>
-            <td><code>5 != 3</code></td>
-            <td><code>True</code></td>
-          </tr>
-          <tr>
-            <td><code>&lt;</code></td>
-            <td>Less than</td>
-            <td><code>3 &lt; 7</code></td>
-            <td><code>True</code></td>
-          </tr>
-          <tr>
-            <td><code>&gt;</code></td>
-            <td>Greater than</td>
-            <td><code>10 &gt; 20</code></td>
-            <td><code>False</code></td>
-          </tr>
-          <tr>
-            <td><code>&lt;=</code></td>
-            <td>Less than or equal to</td>
-            <td><code>5 &lt;= 5</code></td>
-            <td><code>True</code></td>
-          </tr>
-          <tr>
-            <td><code>&gt;=</code></td>
-            <td>Greater than or equal to</td>
-            <td><code>4 &gt;= 9</code></td>
-            <td><code>False</code></td>
-          </tr>
+          <tr><td><code>==</code></td><td>Equal to</td><td><code>5 == 5</code></td><td><code>True</code></td></tr>
+          <tr><td><code>!=</code></td><td>Not equal to</td><td><code>5 != 3</code></td><td><code>True</code></td></tr>
+          <tr><td><code>&lt;</code></td><td>Less than</td><td><code>3 &lt; 7</code></td><td><code>True</code></td></tr>
+          <tr><td><code>&gt;</code></td><td>Greater than</td><td><code>10 &gt; 20</code></td><td><code>False</code></td></tr>
+          <tr><td><code>&lt;=</code></td><td>Less than or equal to</td><td><code>5 &lt;= 5</code></td><td><code>True</code></td></tr>
+          <tr><td><code>&gt;=</code></td><td>Greater than or equal to</td><td><code>4 &gt;= 9</code></td><td><code>False</code></td></tr>
         </tbody>
       </table>
 
       <h3>Logical Operators: Combining Conditions</h3>
       <p>Sometimes one condition is not enough. You can combine conditions using <code>and</code>, <code>or</code>, and <code>not</code>:</p>
       <ul>
-        <li><code>and</code> &mdash; <strong>both</strong> conditions must be true. <em>Example: "If it is Saturday <strong>and</strong> it is sunny, go to the park."</em></li>
-        <li><code>or</code> &mdash; <strong>at least one</strong> condition must be true. <em>Example: "If it is Saturday <strong>or</strong> Sunday, have a lie-in."</em></li>
-        <li><code>not</code> &mdash; <strong>flips</strong> the result. <em>Example: "If it is <strong>not</strong> raining, walk to school."</em></li>
+        <li><code>and</code> &mdash; <strong>both</strong> conditions must be true. <em>"If it is Saturday <strong>and</strong> it is sunny, go to the park."</em></li>
+        <li><code>or</code> &mdash; <strong>at least one</strong> condition must be true. <em>"If it is Saturday <strong>or</strong> Sunday, have a lie-in."</em></li>
+        <li><code>not</code> &mdash; <strong>flips</strong> the result. <em>"If it is <strong>not</strong> raining, walk to school."</em></li>
       </ul>
-
       <div class="code-block">
         <div class="code-block-header">
           <span class="code-block-label">Python Code</span>
@@ -246,14 +297,76 @@ else:
         <div class="output-box empty">(click "Run Code" to see output)</div>
       </div>
 
-      <h3>Indentation Matters!</h3>
-      <p>Unlike many other programming languages, Python uses <strong>indentation</strong> (spaces at the start of a line) to define which lines belong to an if block. Every line inside the block must be indented by the same amount &mdash; typically <strong>four spaces</strong>.</p>
+      <!-- Truth Tables -->
+      <h3>Truth Tables</h3>
+      <p>A <strong>truth table</strong> shows every possible combination of inputs for a logical operator and what the result will be. These are essential for your GCSE &mdash; you need to be able to read and create them. Think of <code>A</code> and <code>B</code> as two conditions.</p>
 
-      <div class="key-concept">
-        <strong>Key Concept: The colon and indentation are essential</strong>
-        Every <code>if</code>, <code>elif</code>, and <code>else</code> line must end with a <strong>colon <code>:</code></strong>. The code that belongs to that branch must be <strong>indented</strong> on the next line. If you forget the colon or the indentation, Python will give you a syntax error.
+      <h4>AND Truth Table</h4>
+      <p>With <code>and</code>, the result is <code>True</code> only when <strong>both</strong> inputs are <code>True</code>:</p>
+      <table>
+        <thead><tr><th>A</th><th>B</th><th>A and B</th></tr></thead>
+        <tbody>
+          <tr><td><code>True</code></td><td><code>True</code></td><td><code>True</code></td></tr>
+          <tr><td><code>True</code></td><td><code>False</code></td><td><code>False</code></td></tr>
+          <tr><td><code>False</code></td><td><code>True</code></td><td><code>False</code></td></tr>
+          <tr><td><code>False</code></td><td><code>False</code></td><td><code>False</code></td></tr>
+        </tbody>
+      </table>
+
+      <h4>OR Truth Table</h4>
+      <p>With <code>or</code>, the result is <code>True</code> when <strong>at least one</strong> input is <code>True</code>:</p>
+      <table>
+        <thead><tr><th>A</th><th>B</th><th>A or B</th></tr></thead>
+        <tbody>
+          <tr><td><code>True</code></td><td><code>True</code></td><td><code>True</code></td></tr>
+          <tr><td><code>True</code></td><td><code>False</code></td><td><code>True</code></td></tr>
+          <tr><td><code>False</code></td><td><code>True</code></td><td><code>True</code></td></tr>
+          <tr><td><code>False</code></td><td><code>False</code></td><td><code>False</code></td></tr>
+        </tbody>
+      </table>
+
+      <h4>NOT Truth Table</h4>
+      <p>With <code>not</code>, the result is simply the <strong>opposite</strong> of the input:</p>
+      <table>
+        <thead><tr><th>A</th><th>not A</th></tr></thead>
+        <tbody>
+          <tr><td><code>True</code></td><td><code>False</code></td></tr>
+          <tr><td><code>False</code></td><td><code>True</code></td></tr>
+        </tbody>
+      </table>
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Python Code</span>
+          <div>
+            <button class="copy-button">Copy Code</button>
+            <button class="run-button">Run Code</button>
+          </div>
+        </div>
+        <pre><code contenteditable="true"># Verify the truth tables yourself!
+print("--- AND ---")
+print(True and True)    # True
+print(True and False)   # False
+print(False and True)   # False
+print(False and False)  # False
+
+print("--- OR ---")
+print(True or True)     # True
+print(True or False)    # True
+print(False or True)    # True
+print(False or False)   # False
+
+print("--- NOT ---")
+print(not True)         # False
+print(not False)        # True</code></pre>
+        <div class="output-box empty">(click "Run Code" to see output)</div>
       </div>
 
+      <h3>Indentation Matters!</h3>
+      <p>Unlike many other programming languages, Python uses <strong>indentation</strong> (spaces at the start of a line) to define which lines belong to an if block. Every line inside the block must be indented by the same amount &mdash; typically <strong>four spaces</strong>.</p>
+      <div class="key-concept">
+        <strong>Key Concept: The colon and indentation are essential</strong>
+        Every <code>if</code>, <code>elif</code>, and <code>else</code> line must end with a <strong>colon <code>:</code></strong>. The code that belongs to that branch must be <strong>indented</strong> on the next line. If you forget either, Python will give you a syntax error.
+      </div>
       <div class="code-block">
         <div class="code-block-header">
           <span class="code-block-label">Python Code</span>
@@ -274,16 +387,14 @@ print("Have a good day!")  # This always runs (not indented)</code></pre>
       </div>
 
       <h3>Common Misconception: = vs ==</h3>
-
       <div class="warning">
         <strong>Watch out!</strong> A very common mistake is confusing <code>=</code> and <code>==</code>.
         <ul>
           <li><code>=</code> is <strong>assignment</strong> &mdash; it stores a value in a variable. Example: <code>name = "Alice"</code></li>
           <li><code>==</code> is <strong>comparison</strong> &mdash; it checks whether two values are equal. Example: <code>if name == "Alice":</code></li>
         </ul>
-        <p>If you accidentally write <code>if age = 18:</code> instead of <code>if age == 18:</code>, Python will give you a <strong>SyntaxError</strong>. If you see this error, check your equals signs!</p>
+        <p>If you accidentally write <code>if age = 18:</code> instead of <code>if age == 18:</code>, Python will give you a <strong>SyntaxError</strong>.</p>
       </div>
-
       <div class="code-block">
         <div class="code-block-header">
           <span class="code-block-label">Python Code</span>
@@ -301,6 +412,126 @@ else:
     print("That's a nice colour too.")</code></pre>
         <div class="output-box empty">(click "Run Code" to see output)</div>
       </div>
+
+      <!-- Did You Know boxes -->
+      <div class="key-concept">
+        <strong>Did You Know? &mdash; elif is not universal</strong>
+        Python's <code>elif</code> is short for "else if", but different languages spell it differently. JavaScript and C++ use <code>else if</code> (two words), Ruby uses <code>elsif</code>, and PHP uses <code>elseif</code>. They all do the same thing &mdash; but Python's version is the shortest to type!
+      </div>
+      <div class="key-concept">
+        <strong>Did You Know? &mdash; Chained comparisons</strong>
+        In Python, you can chain comparisons like maths. Instead of writing <code>if age &gt; 0 and age &lt; 18:</code>, you can write <code>if 0 &lt; age &lt; 18:</code>. This is valid Python and means "age is between 0 and 18". Most other languages do not allow this &mdash; it is one of Python's neat tricks!
+      </div>
+      <div class="key-concept">
+        <strong>Did You Know? &mdash; George Boole and Boolean logic</strong>
+        The <code>True</code>/<code>False</code> values we use in programming are called <strong>booleans</strong>, named after the English mathematician <strong>George Boole</strong> (1815&ndash;1864). In 1854, Boole published <em>The Laws of Thought</em>, which laid the foundations for the true/false logic that powers every computer today. Every time you write an if statement, you are using Boole's algebra!
+      </div>
+
+      <!-- Selection in the Real World -->
+      <h3>Selection in the Real World</h3>
+      <p>Selection is not just a classroom concept &mdash; it is everywhere in the software you use every day:</p>
+      <ul>
+        <li><strong>Login systems:</strong> If the username <code>and</code> password both match the stored values, grant access. Otherwise, show an error. This is a classic use of the <code>and</code> operator.</li>
+        <li><strong>E-commerce:</strong> If the basket total is greater than &pound;50, apply free delivery. Online shops use selection to calculate discounts and promotional offers.</li>
+        <li><strong>Games:</strong> If <code>player_health &lt;= 0</code>, trigger "game over". Games use thousands of if statements to manage health, scores, and level progression.</li>
+        <li><strong>Smart homes:</strong> If the temperature is below 18&deg;C <code>and</code> the time is after 6pm, turn on the heating. Smart thermostats like Nest use selection logic constantly.</li>
+        <li><strong>Social media:</strong> If a user's age is less than 13, block account creation. This is required by law under rules like COPPA (Children's Online Privacy Protection Act).</li>
+      </ul>
+
+      <!-- Key Vocabulary Table -->
+      <h3>Key Vocabulary</h3>
+      <p>Make sure you understand these key terms &mdash; they will appear in your GCSE exam:</p>
+      <table>
+        <thead><tr><th>Term</th><th>Definition</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Selection</strong></td><td>A programming construct where the program chooses which path to follow based on a condition.</td></tr>
+          <tr><td><strong>Condition</strong></td><td>An expression that evaluates to <code>True</code> or <code>False</code>. For example, <code>age &gt;= 18</code>.</td></tr>
+          <tr><td><strong>Boolean</strong></td><td>A data type with only two possible values: <code>True</code> or <code>False</code>. Named after George Boole.</td></tr>
+          <tr><td><strong>Comparison Operator</strong></td><td>An operator that compares two values and returns a boolean. Also called a <strong>relational operator</strong>. Examples: <code>==</code>, <code>!=</code>, <code>&lt;</code>, <code>&gt;</code>.</td></tr>
+          <tr><td><strong>Relational Operator</strong></td><td>Another name for a comparison operator. Used in the OCR and Edexcel specifications.</td></tr>
+          <tr><td><strong>Logical Operator</strong></td><td>An operator that combines or modifies boolean values: <code>and</code>, <code>or</code>, <code>not</code>.</td></tr>
+          <tr><td><strong>if</strong></td><td>A keyword that starts a conditional block. The code inside runs only if the condition is <code>True</code>.</td></tr>
+          <tr><td><strong>elif</strong></td><td>Short for "else if". Checks an additional condition when the previous one was <code>False</code>.</td></tr>
+          <tr><td><strong>else</strong></td><td>A catch-all block that runs when none of the preceding conditions were <code>True</code>. Must come last.</td></tr>
+          <tr><td><strong>Indentation</strong></td><td>The spaces at the start of a line that tell Python which block a line belongs to. Typically four spaces.</td></tr>
+          <tr><td><strong>Nested Selection</strong></td><td>An if statement placed inside another if statement. Used when a second decision depends on the first.</td></tr>
+          <tr><td><strong>Truth Table</strong></td><td>A table showing all possible input combinations for a logical expression and their resulting output.</td></tr>
+        </tbody>
+      </table>
+
+      <!-- Worked Example -->
+      <h3>Worked Example: Building a Grade Calculator</h3>
+      <p>Let us walk through a complete example step by step. We need a program that takes a student's score (0&ndash;100) and gives them a grade:</p>
+      <ul>
+        <li><strong>A*</strong> &mdash; 90 and above</li>
+        <li><strong>A</strong> &mdash; 80 to 89</li>
+        <li><strong>B</strong> &mdash; 70 to 79</li>
+        <li><strong>C</strong> &mdash; 60 to 69</li>
+        <li><strong>D</strong> &mdash; 50 to 59</li>
+        <li><strong>U</strong> &mdash; below 50 (ungraded)</li>
+      </ul>
+      <p><strong>Step 1: Think about the order.</strong> We start with the highest grade and work downwards. Because Python stops at the first true condition, we only need to check the lower boundary of each grade.</p>
+      <p><strong>Step 2: Handle invalid input.</strong> What if someone enters 105 or -3? A good program checks for this.</p>
+      <p><strong>Step 3: Add a motivational message.</strong> We can use another if/elif/else to print encouragement based on the grade.</p>
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Python Code</span>
+          <div>
+            <button class="copy-button">Copy Code</button>
+            <button class="run-button">Run Code</button>
+          </div>
+        </div>
+        <pre><code contenteditable="true"># Worked Example: Grade Calculator
+score = 73
+
+# Step 2: Check for invalid input first
+if score < 0 or score > 100:
+    print("Error: Score must be between 0 and 100.")
+else:
+    # Step 1: Determine the grade (highest boundary first)
+    if score >= 90:
+        grade = "A*"
+    elif score >= 80:
+        grade = "A"
+    elif score >= 70:
+        grade = "B"
+    elif score >= 60:
+        grade = "C"
+    elif score >= 50:
+        grade = "D"
+    else:
+        grade = "U"
+
+    print("Score: " + str(score) + "/100")
+    print("Grade: " + grade)
+
+    # Step 3: Motivational message
+    if grade == "A*" or grade == "A":
+        print("Outstanding work! Keep it up!")
+    elif grade == "B" or grade == "C":
+        print("Good effort. A bit more revision could push you higher!")
+    elif grade == "D":
+        print("You passed, but there is room for improvement.")
+    else:
+        print("Don't give up! Let's work on the areas you found tricky.")</code></pre>
+        <div class="output-box empty">(click "Run Code" to see output)</div>
+      </div>
+      <div class="try-this">
+        <strong>Try this:</strong> Test with scores of <code>95</code>, <code>82</code>, <code>73</code>, <code>55</code>, <code>40</code>, and <code>105</code>. Does every score give the correct grade? What grade does <code>90</code> get? What about <code>89</code>?
+      </div>
+
+      <!-- Common Mistakes Expanded -->
+      <h3>Common Mistakes to Avoid</h3>
+      <div class="warning">
+        <strong>The Top 5 If Statement Mistakes</strong>
+        <ol>
+          <li><strong>Using <code>=</code> instead of <code>==</code> in conditions.</strong> Remember: <code>=</code> assigns, <code>==</code> compares. Writing <code>if score = 90:</code> causes a <code>SyntaxError</code>.</li>
+          <li><strong>Forgetting the colon <code>:</code> after if/elif/else.</strong> Every condition line must end with a colon. Missing it causes a <code>SyntaxError</code>.</li>
+          <li><strong>Wrong indentation (or mixing tabs and spaces).</strong> All lines inside an if block must be indented the same amount. Mixing tabs and spaces causes an <code>IndentationError</code>. Stick to <strong>four spaces</strong> always.</li>
+          <li><strong>The order of elif matters.</strong> Python runs the <strong>first</strong> true condition. If you put <code>score &gt;= 50</code> before <code>score &gt;= 90</code>, a score of 95 would match the wrong branch. Always put the most specific conditions first.</li>
+          <li><strong>Using <code>elif</code> after <code>else</code>.</strong> The <code>else</code> block must always be the <strong>last</strong> branch. You cannot write <code>elif</code> after <code>else</code> &mdash; Python will give you a <code>SyntaxError</code>.</li>
+        </ol>
+      </div>
     </section>
 
     <!-- ============ PRACTICE ============ -->
@@ -314,7 +545,6 @@ else:
         <h3 class="exercise-title">Exercise 1: Positive, Negative, or Zero?</h3>
         <span class="exercise-difficulty difficulty-1">Guided</span>
         <p>Write a program that checks whether a number is <strong>positive</strong>, <strong>negative</strong>, or <strong>zero</strong>, and prints an appropriate message for each case.</p>
-
         <div class="pseudocode">
           <div class="pseudocode-label">Pseudocode</div>
           <p>
@@ -327,7 +557,6 @@ else:
             &nbsp;&nbsp;&nbsp;&nbsp;PRINT "The number is zero"<br />
           </p>
         </div>
-
         <div class="code-block">
           <div class="code-block-header">
             <span class="code-block-label">Python Code</span>
@@ -348,7 +577,6 @@ else:
 print("The number you checked was " + str(number))</code></pre>
           <div class="output-box empty">(click "Run Code" to see output)</div>
         </div>
-
         <div class="hint">
           <div class="hint-title">Hint</div>
           <div class="hint-content">
@@ -367,25 +595,20 @@ print("The number you checked was " + str(number))</code></pre>
           <li><strong>Adults</strong> (12 to 64): &pound;10.00</li>
           <li><strong>Seniors</strong> (65 and over): &pound;7.00</li>
         </ul>
-        <p>Write a program that sets an age and prints the correct ticket price. The starter code below has some gaps for you to fill in.</p>
-
+        <p>The starter code below has some gaps for you to fill in.</p>
         <div class="pseudocode">
           <div class="pseudocode-label">Pseudocode</div>
           <p>
             SET age TO a value<br />
             IF age is less than 12 THEN<br />
-            &nbsp;&nbsp;&nbsp;&nbsp;SET price TO 5.00<br />
-            &nbsp;&nbsp;&nbsp;&nbsp;SET ticket_type TO "Child"<br />
+            &nbsp;&nbsp;&nbsp;&nbsp;SET price TO 5.00, SET ticket_type TO "Child"<br />
             ELSE IF age is greater than or equal to 65 THEN<br />
-            &nbsp;&nbsp;&nbsp;&nbsp;SET price TO 7.00<br />
-            &nbsp;&nbsp;&nbsp;&nbsp;SET ticket_type TO "Senior"<br />
+            &nbsp;&nbsp;&nbsp;&nbsp;SET price TO 7.00, SET ticket_type TO "Senior"<br />
             ELSE<br />
-            &nbsp;&nbsp;&nbsp;&nbsp;SET price TO 10.00<br />
-            &nbsp;&nbsp;&nbsp;&nbsp;SET ticket_type TO "Adult"<br />
+            &nbsp;&nbsp;&nbsp;&nbsp;SET price TO 10.00, SET ticket_type TO "Adult"<br />
             PRINT ticket_type and price<br />
           </p>
         </div>
-
         <div class="code-block">
           <div class="code-block-header">
             <span class="code-block-label">Python Code</span>
@@ -411,11 +634,10 @@ else:
 print(ticket_type + " ticket: £" + str(price) + "0")</code></pre>
           <div class="output-box empty">(click "Run Code" to see output)</div>
         </div>
-
         <div class="hint">
           <div class="hint-title">Hint</div>
           <div class="hint-content">
-            <p>Replace each <code>...</code> with the correct value. For seniors, the price is <code>7.00</code> and the ticket type is <code>"Senior"</code>. For adults, the price is <code>10.00</code> and the ticket type is <code>"Adult"</code>. Test with ages like <code>8</code>, <code>35</code>, and <code>70</code> to check all three branches.</p>
+            <p>Replace each <code>...</code> with the correct value. For seniors, the price is <code>7.00</code> and the ticket type is <code>"Senior"</code>. For adults, the price is <code>10.00</code> and the ticket type is <code>"Adult"</code>. Test with ages <code>8</code>, <code>35</code>, and <code>70</code>.</p>
           </div>
         </div>
       </div>
@@ -424,9 +646,7 @@ print(ticket_type + " ticket: £" + str(price) + "0")</code></pre>
       <div class="exercise">
         <h3 class="exercise-title">Exercise 3: Decision Game</h3>
         <span class="exercise-difficulty difficulty-3">Open-Ended</span>
-        <p>Create a simple text-based decision game or quiz question. The player's choice should lead to different outcomes. Use variables, if/elif/else, and print statements to tell a short story.</p>
-        <p>Here is an idea to get you started: the player finds a locked door with three coloured keys. Each key leads to a different room with a different outcome.</p>
-
+        <p>Create a simple text-based decision game. The player's choice should lead to different outcomes. Use variables, if/elif/else, and print statements to tell a short story.</p>
         <div class="pseudocode">
           <div class="pseudocode-label">Pseudocode</div>
           <p>
@@ -442,7 +662,6 @@ print(ticket_type + " ticket: £" + str(price) + "0")</code></pre>
             &nbsp;&nbsp;&nbsp;&nbsp;PRINT "Invalid choice"<br />
           </p>
         </div>
-
         <div class="code-block">
           <div class="code-block-header">
             <span class="code-block-label">Python Code</span>
@@ -474,36 +693,193 @@ else:
     print("That key doesn't exist! Try red, blue, or green.")</code></pre>
           <div class="output-box empty">(click "Run Code" to see output)</div>
         </div>
-
         <div class="hint">
           <div class="hint-title">Hint</div>
           <div class="hint-content">
-            <p>This exercise is open-ended &mdash; be creative! Here are some ideas to extend it:</p>
+            <p>This exercise is open-ended &mdash; be creative! Ideas to extend it:</p>
             <ul>
-              <li>Add more choices or a second decision after the first one.</li>
-              <li>Use <code>and</code> or <code>or</code> to combine conditions (e.g., <code>if choice == "red" or choice == "Red":</code>).</li>
-              <li>Add a scoring system using a variable like <code>points = 0</code>.</li>
-              <li>Turn it into a quiz: set the correct answer and check the player's response.</li>
+              <li>Add a second decision after the first one.</li>
+              <li>Use <code>or</code> to accept different capitalizations (e.g., <code>if choice == "red" or choice == "Red":</code>).</li>
+              <li>Add a scoring system with a <code>points</code> variable.</li>
             </ul>
           </div>
         </div>
       </div>
 
+      <!-- Exercise 4 -->
+      <div class="exercise">
+        <h3 class="exercise-title">Exercise 4: Login System</h3>
+        <span class="exercise-difficulty difficulty-2">Partially Guided</span>
+        <p>Write a login system that checks a username <strong>and</strong> a password. Give <strong>specific</strong> error messages:</p>
+        <ul>
+          <li>Both correct: <code>"Access granted. Welcome!"</code></li>
+          <li>Both wrong: <code>"Error: Username and password are both incorrect."</code></li>
+          <li>Only username wrong: <code>"Error: Username not recognised."</code></li>
+          <li>Only password wrong: <code>"Error: Incorrect password."</code></li>
+        </ul>
+        <div class="pseudocode">
+          <div class="pseudocode-label">Pseudocode</div>
+          <p>
+            SET correct_user TO "student", SET correct_pass TO "gcse2025"<br />
+            SET entered_user TO a value, SET entered_pass TO a value<br />
+            IF entered_user equals correct_user AND entered_pass equals correct_pass THEN<br />
+            &nbsp;&nbsp;&nbsp;&nbsp;PRINT "Access granted. Welcome!"<br />
+            ELSE IF both are wrong THEN<br />
+            &nbsp;&nbsp;&nbsp;&nbsp;PRINT "Error: Username and password are both incorrect."<br />
+            ELSE IF entered_user is wrong THEN<br />
+            &nbsp;&nbsp;&nbsp;&nbsp;PRINT "Error: Username not recognised."<br />
+            ELSE<br />
+            &nbsp;&nbsp;&nbsp;&nbsp;PRINT "Error: Incorrect password."<br />
+          </p>
+        </div>
+        <div class="code-block">
+          <div class="code-block-header">
+            <span class="code-block-label">Python Code</span>
+            <div>
+              <button class="copy-button">Copy Code</button>
+              <button class="run-button">Run Code</button>
+            </div>
+          </div>
+          <pre><code contenteditable="true"># Login System
+correct_user = "student"
+correct_pass = "gcse2025"
+
+# Change these to test different combinations
+entered_user = "student"
+entered_pass = "gcse2025"
+
+# Complete the if/elif/else block below
+if entered_user == correct_user and entered_pass == correct_pass:
+    print("Access granted. Welcome!")
+elif entered_user != correct_user and entered_pass != correct_pass:
+    # What message should go here?
+    print(...)
+elif entered_user != correct_user:
+    # What message should go here?
+    print(...)
+else:
+    # What message should go here?
+    print(...)</code></pre>
+          <div class="output-box empty">(click "Run Code" to see output)</div>
+        </div>
+        <div class="hint">
+          <div class="hint-title">Hint</div>
+          <div class="hint-content">
+            <p>Replace each <code>...</code> with the correct error message string. Think about what must be true for each branch:</p>
+            <ul>
+              <li>Second branch: both are wrong &rarr; <code>"Error: Username and password are both incorrect."</code></li>
+              <li>Third branch: only username is wrong &rarr; <code>"Error: Username not recognised."</code></li>
+              <li>Else: username is correct but password is wrong &rarr; <code>"Error: Incorrect password."</code></li>
+            </ul>
+            <p>Test all four combinations!</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Exercise 5 -->
+      <div class="exercise">
+        <h3 class="exercise-title">Exercise 5: Adventure Game Extended</h3>
+        <span class="exercise-difficulty difficulty-3">Open-Ended</span>
+        <p>Create a text adventure with <strong>at least 3 decision points</strong>, using <strong>nested if statements</strong> and at least one <strong>logical operator</strong>. The player explores a castle &mdash; they need a key <strong>and</strong> a torch to succeed, and can go left <strong>or</strong> right.</p>
+        <div class="pseudocode">
+          <div class="pseudocode-label">Pseudocode</div>
+          <p>
+            SET has_torch TO False, SET has_key TO False<br />
+            PRINT "You enter a dark castle..."<br />
+            SET room1_choice TO "left" or "right"<br />
+            IF room1_choice is "left" THEN<br />
+            &nbsp;&nbsp;&nbsp;&nbsp;PRINT "You find a torch!", SET has_torch TO True<br />
+            ELSE IF room1_choice is "right" THEN<br />
+            &nbsp;&nbsp;&nbsp;&nbsp;PRINT "You find a golden key!", SET has_key TO True<br />
+            SET room2_choice TO "chest" or "door"<br />
+            IF room2_choice is "chest" AND has_key THEN<br />
+            &nbsp;&nbsp;&nbsp;&nbsp;PRINT "You unlock the chest and find treasure!"<br />
+            ELSE IF room2_choice is "door" AND has_torch THEN<br />
+            &nbsp;&nbsp;&nbsp;&nbsp;PRINT "You light your way through the dark passage!"<br />
+            ELSE<br />
+            &nbsp;&nbsp;&nbsp;&nbsp;PRINT "You don't have the right item..."<br />
+          </p>
+        </div>
+        <div class="code-block">
+          <div class="code-block-header">
+            <span class="code-block-label">Python Code</span>
+            <div>
+              <button class="copy-button">Copy Code</button>
+              <button class="run-button">Run Code</button>
+            </div>
+          </div>
+          <pre><code contenteditable="true"># Adventure Game - Expand this!
+print("=== The Mysterious Castle ===")
+print()
+
+has_torch = False
+has_key = False
+
+# Decision 1: Which way do you go?
+room1_choice = "left"   # Try "left" or "right"
+
+print("You enter the castle and reach a fork in the corridor.")
+if room1_choice == "left":
+    print("You go left and find a dusty old torch on the wall.")
+    print("You take it! This could be useful.")
+    has_torch = True
+elif room1_choice == "right":
+    print("You go right and discover a golden key on the ground.")
+    print("You pick it up! It might unlock something.")
+    has_key = True
+else:
+    print("You stand still, unsure what to do...")
+
+print()
+
+# Decision 2: What do you interact with?
+room2_choice = "chest"   # Try "chest" or "door"
+
+print("You enter a large hall. There is a locked chest and a dark doorway.")
+if room2_choice == "chest" and has_key:
+    print("You use the golden key to unlock the chest.")
+    print("Inside you find a pile of gold coins! You win!")
+elif room2_choice == "chest" and not has_key:
+    print("The chest is locked. If only you had a key...")
+elif room2_choice == "door" and has_torch:
+    print("You light the torch and walk through the dark passage.")
+    print("It leads to a secret garden outside the castle! Freedom!")
+elif room2_choice == "door" and not has_torch:
+    print("It's too dark to see anything. You trip and fall!")
+else:
+    print("You are unsure what to do next.")
+
+# Challenge: Add a third decision point below!</code></pre>
+          <div class="output-box empty">(click "Run Code" to see output)</div>
+        </div>
+        <div class="hint">
+          <div class="hint-title">Hint</div>
+          <div class="hint-content">
+            <p>Ideas to extend the adventure:</p>
+            <ul>
+              <li>Add a third room with a new decision (fight a dragon or sneak past?).</li>
+              <li>Add a <code>health</code> variable and check <code>if health &lt;= 0:</code> for game over.</li>
+              <li>Use <code>and</code> to require two items for the final challenge.</li>
+              <li>Add a scoring system and print the total at the end.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
     </section>
 
     <!-- ============ REFLECT ============ -->
     <section class="reflect">
       <span class="section-label">Reflect</span>
       <h2>Check Your Understanding</h2>
-
       <p>Before moving on, think about these questions. You do not need to write code &mdash; just think through your answers.</p>
-
       <ol>
         <li>What is the difference between <code>=</code> and <code>==</code> in Python?</li>
         <li>What happens if none of the <code>if</code> or <code>elif</code> conditions are true and there is no <code>else</code>?</li>
         <li>Can you have an <code>elif</code> without an <code>if</code>? Why or why not?</li>
         <li>Why does Python use indentation instead of curly braces like some other languages?</li>
         <li>If you write <code>if x > 5 and x < 10:</code>, what range of numbers would make this condition true?</li>
+        <li>What is the difference between <code>and</code> and <code>or</code>? Give a real-world example of each.</li>
+        <li>Why is it important to put the most specific <code>elif</code> conditions first?</li>
       </ol>
 
       <div class="key-concept">
@@ -515,15 +891,122 @@ else:
           <li>Comparison operators (<code>==</code>, <code>!=</code>, <code>&lt;</code>, <code>&gt;</code>, <code>&lt;=</code>, <code>&gt;=</code>) return <code>True</code> or <code>False</code>.</li>
           <li>Logical operators (<code>and</code>, <code>or</code>, <code>not</code>) let you combine conditions.</li>
           <li>The colon <code>:</code> and correct <strong>indentation</strong> are essential in Python.</li>
+          <li><strong>Nested if statements</strong> allow decisions within decisions.</li>
+          <li><strong>Truth tables</strong> show all possible outcomes for logical operators.</li>
         </ul>
       </div>
 
+      <!-- Summary -->
+      <h3>Chapter Summary</h3>
+      <p>In this chapter, you learned how to make your programs <strong>choose</strong> between different paths using <strong>selection</strong>. Here is a quick recap:</p>
+      <ul>
+        <li>An <code>if</code> statement checks a condition and runs a block of code only if it is <code>True</code>.</li>
+        <li><code>elif</code> lets you check additional conditions. You can have as many as you need.</li>
+        <li><code>else</code> is the safety net &mdash; it runs when nothing else matched. It must come last.</li>
+        <li><strong>Comparison operators</strong> (<code>==</code>, <code>!=</code>, <code>&lt;</code>, <code>&gt;</code>, <code>&lt;=</code>, <code>&gt;=</code>) compare values and return a boolean.</li>
+        <li><strong>Logical operators</strong> (<code>and</code>, <code>or</code>, <code>not</code>) combine or invert conditions.</li>
+        <li><strong>Truth tables</strong> show all possible outcomes for <code>and</code>, <code>or</code>, and <code>not</code>.</li>
+        <li><strong>Nested if statements</strong> handle situations where one decision depends on another.</li>
+        <li><strong>Indentation</strong> defines which lines belong to which block &mdash; it is not optional in Python.</li>
+      </ul>
+
+      <!-- Exam-Style Questions -->
+      <h3>Exam-Style Questions</h3>
+      <p>These questions are similar to what you might see in your GCSE Computer Science exam. Try to answer on paper before revealing the answer.</p>
+
+      <!-- Exam Question 1 -->
+      <div class="exercise">
+        <h3 class="exercise-title">Question 1 (2 marks)</h3>
+        <p>Describe the purpose of an <code>elif</code> statement in Python.</p>
+        <div class="hint">
+          <div class="hint-title">Reveal Answer</div>
+          <div class="hint-content">
+            <p><strong>Mark scheme:</strong></p>
+            <ul>
+              <li>An <code>elif</code> statement allows the program to check an additional/alternative condition <strong>(1 mark)</strong></li>
+              <li>...if the previous <code>if</code> (or <code>elif</code>) condition was <code>False</code> / not met. <strong>(1 mark)</strong></li>
+            </ul>
+            <p><strong>Example answer:</strong> An <code>elif</code> (short for "else if") is used to check another condition when the preceding <code>if</code> or <code>elif</code> condition evaluated to <code>False</code>. This allows a program to choose between more than two possible outcomes.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Exam Question 2 -->
+      <div class="exercise">
+        <h3 class="exercise-title">Question 2 (2 marks)</h3>
+        <p>Complete the truth table for the <code>AND</code> operator:</p>
+        <table>
+          <thead><tr><th>A</th><th>B</th><th>A AND B</th></tr></thead>
+          <tbody>
+            <tr><td><code>True</code></td><td><code>True</code></td><td>?</td></tr>
+            <tr><td><code>True</code></td><td><code>False</code></td><td>?</td></tr>
+            <tr><td><code>False</code></td><td><code>True</code></td><td>?</td></tr>
+            <tr><td><code>False</code></td><td><code>False</code></td><td>?</td></tr>
+          </tbody>
+        </table>
+        <div class="hint">
+          <div class="hint-title">Reveal Answer</div>
+          <div class="hint-content">
+            <p><strong>Mark scheme:</strong> All four correct = 2 marks. Two or three correct = 1 mark.</p>
+            <table>
+              <thead><tr><th>A</th><th>B</th><th>A AND B</th></tr></thead>
+              <tbody>
+                <tr><td><code>True</code></td><td><code>True</code></td><td><code>True</code></td></tr>
+                <tr><td><code>True</code></td><td><code>False</code></td><td><code>False</code></td></tr>
+                <tr><td><code>False</code></td><td><code>True</code></td><td><code>False</code></td></tr>
+                <tr><td><code>False</code></td><td><code>False</code></td><td><code>False</code></td></tr>
+              </tbody>
+            </table>
+            <p>Remember: with <code>AND</code>, the result is only <code>True</code> when <strong>both</strong> inputs are <code>True</code>.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Exam Question 3 -->
+      <div class="exercise">
+        <h3 class="exercise-title">Question 3 (3 marks)</h3>
+        <p>A student writes a program to check if a number is between 1 and 100 (inclusive). They write:</p>
+        <div class="code-block">
+          <div class="code-block-header">
+            <span class="code-block-label">Python Code</span>
+            <div>
+              <button class="copy-button">Copy Code</button>
+              <button class="run-button">Run Code</button>
+            </div>
+          </div>
+          <pre><code contenteditable="true">number = 500
+
+if number > 1 or number < 100:
+    print("The number is between 1 and 100")
+else:
+    print("The number is NOT between 1 and 100")</code></pre>
+          <div class="output-box empty">(click "Run Code" to see output)</div>
+        </div>
+        <p>Explain why this does <strong>not</strong> work correctly and write the corrected code.</p>
+        <div class="hint">
+          <div class="hint-title">Reveal Answer</div>
+          <div class="hint-content">
+            <p><strong>Mark scheme:</strong></p>
+            <ul>
+              <li>The student used <code>or</code> instead of <code>and</code>. <strong>(1 mark)</strong></li>
+              <li>With <code>or</code>, the condition is true if <em>either</em> part is true. Since 500 is greater than 1, the first part is <code>True</code>, making the whole condition <code>True</code> even though 500 is not between 1 and 100. <strong>(1 mark)</strong></li>
+              <li>Corrected code: <code>if number &gt;= 1 and number &lt;= 100:</code> <strong>(1 mark)</strong></li>
+            </ul>
+            <p><strong>Example answer:</strong> The student used <code>or</code> but should have used <code>and</code>. With <code>or</code>, the condition is <code>True</code> when at least one part is true. The number 500 is greater than 1, so the first part is <code>True</code>, and the whole condition becomes <code>True</code>. The corrected condition is: <code>if number &gt;= 1 and number &lt;= 100:</code>. This ensures <strong>both</strong> conditions must be true.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- External Resources -->
       <div class="extra-resources">
-        <h3>Extra Practice</h3>
+        <h3>Extra Resources</h3>
         <p>Sharpen your selection skills with these resources:</p>
         <ul>
           <li><a href="https://hvgcsecs.cshub.org.je/topics/topic6.html" target="_blank" rel="noopener">GCSE Topic 6: Control Flow</a> &mdash; Selection and iteration with interactive Python code editors and challenges</li>
           <li><a href="https://hvgcse.cshub.org.je/Program_Builder.html" target="_blank" rel="noopener">Program Builder</a> &mdash; Drag-and-drop code construction challenges</li>
+          <li><a href="https://www.bbc.co.uk/bitesize/examspecs/zdqy7nb" target="_blank" rel="noopener">BBC Bitesize Edexcel Computer Science</a> &mdash; Selection revision notes and exam practice</li>
+          <li><a href="https://www.w3schools.com/python/python_conditions.asp" target="_blank" rel="noopener">W3Schools: Python If...Else</a> &mdash; Interactive examples and exercises on conditional statements</li>
+          <li><a href="https://www.w3schools.com/python/python_operators.asp" target="_blank" rel="noopener">W3Schools: Python Operators</a> &mdash; Full reference for comparison and logical operators</li>
         </ul>
       </div>
 

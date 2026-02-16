@@ -4,6 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Chapter 10: Error Handling - Python Fundamentals</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="../css/style.css" />
   <script src="https://cdn.jsdelivr.net/pyodide/v0.24.0/full/pyodide.js"></script>
 </head>
@@ -21,22 +24,97 @@
     <section class="idea">
       <span class="section-label">The Idea</span>
       <h2>Expect the Unexpected</h2>
-
       <p>Every programmer makes mistakes. The difference between a beginner and an expert? <strong>Experts plan for errors.</strong></p>
-
       <p>Think about it: what happens if a user types their name when your program is asking for a number? What if you try to open a file that doesn&rsquo;t exist? What if your code tries to divide by zero? Without error handling, your program would simply <strong>crash</strong> &mdash; it stops running and shows an angry red message. That&rsquo;s a terrible experience for the person using your program.</p>
-
       <p>Errors aren&rsquo;t failures &mdash; they&rsquo;re <strong>information</strong>. When something goes wrong, Python tells you <em>exactly</em> what happened and where it happened. Once you learn to read error messages, they become your best friend for debugging. And once you learn to <em>handle</em> errors, you can write programs that recover gracefully instead of crashing.</p>
-
       <p>You see error handling everywhere in the real world. When a website says <strong>&ldquo;Are you sure you want to delete this?&rdquo;</strong>, that&rsquo;s handling a potential mistake before it happens. When a form highlights a field in red and says <strong>&ldquo;Please enter a valid email address&rdquo;</strong>, that&rsquo;s catching bad input. When your phone says <strong>&ldquo;No internet connection &mdash; try again later&rdquo;</strong> instead of just freezing, that&rsquo;s graceful error handling. Professional software is full of it.</p>
-
       <p><strong>By the end of this chapter, you will be able to:</strong></p>
       <ul>
         <li>Understand the most common types of Python errors and what causes them</li>
+        <li>Distinguish between syntax errors, runtime errors, and logic errors</li>
         <li>Use <code>try</code> and <code>except</code> to catch errors and keep your program running</li>
         <li>Handle specific error types differently depending on what went wrong</li>
         <li>Use the <code>finally</code> block to run clean-up code no matter what happens</li>
+        <li>Raise your own errors for custom validation</li>
+        <li>Understand the role of test data in building robust programs</li>
       </ul>
+    </section>
+
+    <!-- ==================== THREE TYPES OF ERRORS ==================== -->
+    <section class="understand">
+      <span class="section-label">Understand</span>
+      <h2>Three Types of Errors (GCSE Essential)</h2>
+      <p>In your GCSE exam, you <strong>must</strong> know the three categories of programming error. Understanding these is fundamental to writing reliable software and debugging effectively.</p>
+
+      <h3>1. Syntax Errors</h3>
+      <p>A <strong>syntax error</strong> occurs when your code breaks Python&rsquo;s grammar rules. Python cannot understand the instruction, so it refuses to run the program at all. Syntax errors are detected <strong>before</strong> the program runs.</p>
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Python Code</span>
+          <div>
+            <button class="copy-button">Copy Code</button>
+            <button class="run-button">Run Code</button>
+          </div>
+        </div>
+        <pre><code contenteditable="true"># Syntax Error - missing closing bracket
+print("Hello world"</code></pre>
+        <div class="output-box empty">(click "Run Code" to see output)</div>
+      </div>
+      <p><strong>How to identify:</strong> Python says <code>SyntaxError</code> and points to the line where it got confused. Common causes: missing colons, brackets, quotation marks, or incorrect indentation.</p>
+      <p><strong>How to fix:</strong> Read the error message carefully. Check the line number it points to and the line <em>above</em> it &mdash; sometimes the real mistake is on the previous line.</p>
+
+      <h3>2. Runtime Errors</h3>
+      <p>A <strong>runtime error</strong> (also called an <strong>exception</strong>) occurs when the code is valid Python but something goes wrong <em>while the program is running</em>. The syntax is correct, but the operation is impossible.</p>
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Python Code</span>
+          <div>
+            <button class="copy-button">Copy Code</button>
+            <button class="run-button">Run Code</button>
+          </div>
+        </div>
+        <pre><code contenteditable="true"># Runtime Error - valid syntax, but crashes during execution
+number = 10
+result = number / 0  # ZeroDivisionError!
+print(result)</code></pre>
+        <div class="output-box empty">(click "Run Code" to see output)</div>
+      </div>
+      <p><strong>How to identify:</strong> The program starts running but crashes partway through. Python shows the error type (e.g. <code>ZeroDivisionError</code>) and a description.</p>
+      <p><strong>How to fix:</strong> Use <code>try/except</code> blocks to catch the error gracefully, or add validation checks <em>before</em> the risky operation.</p>
+
+      <h3>3. Logic Errors</h3>
+      <p>A <strong>logic error</strong> is the trickiest type. The program runs without crashing but produces the <strong>wrong result</strong>. Python does not report any error because the code is technically valid &mdash; it just does not do what you intended.</p>
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Python Code</span>
+          <div>
+            <button class="copy-button">Copy Code</button>
+            <button class="run-button">Run Code</button>
+          </div>
+        </div>
+        <pre><code contenteditable="true"># Logic Error - runs fine but gives the WRONG answer!
+score1 = 80
+score2 = 70
+score3 = 90
+
+# Bug: division happens before addition (operator precedence!)
+average = score1 + score2 + score3 / 3
+print("Average:", average)  # Prints 180.0 instead of 80.0!
+
+# Correct version:
+correct_average = (score1 + score2 + score3) / 3
+print("Correct average:", correct_average)</code></pre>
+        <div class="output-box empty">(click "Run Code" to see output)</div>
+      </div>
+      <p><strong>How to identify:</strong> Logic errors are the <strong>hardest to find</strong> because Python gives no error message. You only notice them when you test your program and the output is not what you expected. This is why <strong>testing</strong> is so important.</p>
+      <p><strong>How to fix:</strong> Trace through your code line by line, checking the value of each variable. Use <code>print()</code> statements to display intermediate values. Compare expected output with actual output using test data.</p>
+
+      <div class="key-concept">
+        <strong>Key Concept: The Three Error Types at a Glance</strong>
+        <strong>Syntax Error</strong> = Python cannot understand your code (detected before running).<br />
+        <strong>Runtime Error</strong> = Code is valid but crashes during execution (detected while running).<br />
+        <strong>Logic Error</strong> = Code runs without crashing but produces wrong results (detected by testing).
+      </div>
     </section>
 
     <!-- ==================== EXPLORE ==================== -->
@@ -46,66 +124,48 @@
 
       <!-- Example 1 -->
       <h3>Example 1: Common Errors</h3>
-      <p>Before we learn how to handle errors, let&rsquo;s see what they actually look like. Python has many different error types, and each one tells you something specific about what went wrong. Run each of these examples one at a time to see the error messages Python produces. <strong>Don&rsquo;t worry &mdash; errors won&rsquo;t break anything!</strong></p>
-
+      <p>Let&rsquo;s see what errors look like. Python has many different error types, each telling you something specific about what went wrong. <strong>Don&rsquo;t worry &mdash; errors won&rsquo;t break anything!</strong></p>
       <div class="code-block">
         <div class="code-block-header">
           <span class="code-block-label">Python Code</span>
-          <div>
-            <button class="copy-button">Copy Code</button>
-            <button class="run-button">Run Code</button>
-          </div>
+          <div><button class="copy-button">Copy Code</button><button class="run-button">Run Code</button></div>
         </div>
         <pre><code contenteditable="true"># NameError - using a variable that doesn't exist
 print(my_score)</code></pre>
         <div class="output-box empty">(click "Run Code" to see output)</div>
       </div>
-
       <div class="code-block">
         <div class="code-block-header">
           <span class="code-block-label">Python Code</span>
-          <div>
-            <button class="copy-button">Copy Code</button>
-            <button class="run-button">Run Code</button>
-          </div>
+          <div><button class="copy-button">Copy Code</button><button class="run-button">Run Code</button></div>
         </div>
         <pre><code contenteditable="true"># TypeError - trying to add a string and a number
 result = "Age: " + 15
 print(result)</code></pre>
         <div class="output-box empty">(click "Run Code" to see output)</div>
       </div>
-
       <div class="code-block">
         <div class="code-block-header">
           <span class="code-block-label">Python Code</span>
-          <div>
-            <button class="copy-button">Copy Code</button>
-            <button class="run-button">Run Code</button>
-          </div>
+          <div><button class="copy-button">Copy Code</button><button class="run-button">Run Code</button></div>
         </div>
         <pre><code contenteditable="true"># ZeroDivisionError - dividing by zero
 answer = 100 / 0
 print(answer)</code></pre>
         <div class="output-box empty">(click "Run Code" to see output)</div>
       </div>
-
-      <p>Each error message has two important parts: the <strong>error type</strong> (like <code>NameError</code> or <code>ZeroDivisionError</code>) and a <strong>description</strong> that explains what went wrong. Learning to read these messages is one of the most useful skills in programming.</p>
-
+      <p>Each error message has two important parts: the <strong>error type</strong> (like <code>NameError</code>) and a <strong>description</strong> that explains what went wrong.</p>
       <div class="try-this">
-        <strong>Try This:</strong> Edit the code above to cause different errors. What happens if you try <code>print("hello" * "world")</code>? What about <code>int("abc")</code>? Read the error messages carefully &mdash; can you understand what Python is telling you?
+        <strong>Try This:</strong> Edit the code above to cause different errors. What happens if you try <code>print("hello" * "world")</code>? What about <code>int("abc")</code>? Read the error messages carefully.
       </div>
 
       <!-- Example 2 -->
       <h3>Example 2: Try/Except to the Rescue</h3>
-      <p>Now for the good part &mdash; we can <strong>catch</strong> errors before they crash our program using <code>try</code> and <code>except</code>. You put the &ldquo;risky&rdquo; code inside a <code>try</code> block, and if an error occurs, Python jumps to the <code>except</code> block instead of crashing.</p>
-
+      <p>We can <strong>catch</strong> errors before they crash our program using <code>try</code> and <code>except</code>. Put the &ldquo;risky&rdquo; code inside a <code>try</code> block, and if an error occurs, Python jumps to the <code>except</code> block instead of crashing.</p>
       <div class="code-block">
         <div class="code-block-header">
           <span class="code-block-label">Python Code</span>
-          <div>
-            <button class="copy-button">Copy Code</button>
-            <button class="run-button">Run Code</button>
-          </div>
+          <div><button class="copy-button">Copy Code</button><button class="run-button">Run Code</button></div>
         </div>
         <pre><code contenteditable="true"># Without try/except, this would crash!
 try:
@@ -116,16 +176,11 @@ except ZeroDivisionError:
 print("Program keeps running!")</code></pre>
         <div class="output-box empty">(click "Run Code" to see output)</div>
       </div>
-
-      <p>Notice how the program <strong>doesn&rsquo;t crash</strong>. When Python hits the error inside the <code>try</code> block, it jumps straight to the <code>except</code> block and runs that code instead. Then it carries on with the rest of the program as normal. The line <code>"Program keeps running!"</code> still prints &mdash; without <code>try/except</code>, it never would.</p>
-
+      <p>The program <strong>doesn&rsquo;t crash</strong>. When Python hits the error inside the <code>try</code> block, it jumps to the <code>except</code> block. Then it carries on as normal.</p>
       <div class="code-block">
         <div class="code-block-header">
           <span class="code-block-label">Python Code</span>
-          <div>
-            <button class="copy-button">Copy Code</button>
-            <button class="run-button">Run Code</button>
-          </div>
+          <div><button class="copy-button">Copy Code</button><button class="run-button">Run Code</button></div>
         </div>
         <pre><code contenteditable="true"># A practical example: safely converting user input
 user_input = "hello"  # Imagine the user typed this
@@ -138,22 +193,17 @@ except ValueError:
     print("You typed:", user_input)</code></pre>
         <div class="output-box empty">(click "Run Code" to see output)</div>
       </div>
-
       <div class="try-this">
-        <strong>Try This:</strong> Change <code>user_input</code> to <code>"42"</code> and run the code again. What happens when the conversion <em>succeeds</em>? The <code>except</code> block is simply skipped. Try other values like <code>"3.14"</code> or <code>""</code> (an empty string) to see what happens.
+        <strong>Try This:</strong> Change <code>user_input</code> to <code>"42"</code> and run again. What happens when the conversion <em>succeeds</em>? Try <code>"3.14"</code> or <code>""</code> too.
       </div>
 
       <!-- Example 3 -->
       <h3>Example 3: Multiple Except Blocks and Finally</h3>
-      <p>Sometimes different things can go wrong in the same piece of code. You can use <strong>multiple <code>except</code> blocks</strong> to handle each type of error differently. You can also add a <code>finally</code> block that <strong>always runs</strong>, whether an error occurred or not.</p>
-
+      <p>You can use <strong>multiple <code>except</code> blocks</strong> to handle each type of error differently, and a <code>finally</code> block that <strong>always runs</strong>.</p>
       <div class="code-block">
         <div class="code-block-header">
           <span class="code-block-label">Python Code</span>
-          <div>
-            <button class="copy-button">Copy Code</button>
-            <button class="run-button">Run Code</button>
-          </div>
+          <div><button class="copy-button">Copy Code</button><button class="run-button">Run Code</button></div>
         </div>
         <pre><code contenteditable="true"># Handling different errors differently
 def divide(a, b):
@@ -167,26 +217,110 @@ def divide(a, b):
     finally:
         print("--- Calculation attempt finished ---")
 
-# Test with different inputs
 print("Test 1: Normal division")
 divide(10, 3)
-
 print()
 print("Test 2: Division by zero")
 divide(10, 0)
-
 print()
 print("Test 3: Wrong type")
 divide("ten", 2)</code></pre>
         <div class="output-box empty">(click "Run Code" to see output)</div>
       </div>
-
-      <p>Look at the output carefully. The <code>finally</code> block runs <strong>every single time</strong> &mdash; after a successful division, after a <code>ZeroDivisionError</code>, and after a <code>TypeError</code>. This makes <code>finally</code> perfect for clean-up tasks that must happen no matter what, like closing a file or saving progress.</p>
-
+      <p>The <code>finally</code> block runs <strong>every single time</strong>, making it perfect for clean-up tasks like closing a file or saving progress.</p>
       <div class="try-this">
-        <strong>Try This:</strong> Add another test call: <code>divide(10, "two")</code>. Which except block catches it? Now try calling <code>divide()</code> with no arguments at all &mdash; what error do you get? Could you add another <code>except</code> block to handle it?
+        <strong>Try This:</strong> Add another test: <code>divide(10, "two")</code>. Which except block catches it? Try <code>divide()</code> with no arguments &mdash; what error do you get?
       </div>
 
+      <!-- Example 4 -->
+      <h3>Example 4: Input Validation Loop</h3>
+      <p>In real programs, when a user enters invalid input, you <strong>ask them again</strong>. This uses a <code>while</code> loop with <code>try/except</code>. Since we cannot use <code>input()</code> in the browser, we simulate attempts with a list.</p>
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Python Code</span>
+          <div><button class="copy-button">Copy Code</button><button class="run-button">Run Code</button></div>
+        </div>
+        <pre><code contenteditable="true"># Simulating an input validation loop
+user_attempts = ["abc", "twelve", "3.5", "7"]
+attempt_index = 0
+valid_number = None
+
+while valid_number is None:
+    user_input = user_attempts[attempt_index]
+    print(f"User types: '{user_input}'")
+    attempt_index += 1
+    try:
+        valid_number = int(user_input)
+        print(f"Valid! The number is {valid_number}")
+    except ValueError:
+        print("That's not a whole number. Please try again.\n")
+
+print(f"\nSuccessfully got a valid number after {attempt_index} attempt(s).")</code></pre>
+        <div class="output-box empty">(click "Run Code" to see output)</div>
+      </div>
+      <p>The loop keeps running until a valid integer is entered. Each time the conversion fails, the <code>except</code> block catches the error and the loop goes around again.</p>
+      <div class="try-this">
+        <strong>Try This:</strong> Change the list so the <em>first</em> value is valid (e.g. <code>["42", "abc"]</code>). What if <em>none</em> are valid &mdash; what would happen?
+      </div>
+
+      <!-- Example 5 -->
+      <h3>Example 5: Accessing the Error Message</h3>
+      <p>You can capture the error object using <code>as</code> and display its message. This is incredibly useful for debugging.</p>
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Python Code</span>
+          <div><button class="copy-button">Copy Code</button><button class="run-button">Run Code</button></div>
+        </div>
+        <pre><code contenteditable="true"># Capturing the error message with 'as'
+test_values = ["42", "hello", "3.14", "", "99"]
+
+for value in test_values:
+    try:
+        number = int(value)
+        print(f"'{value}' converted to {number}")
+    except ValueError as e:
+        print(f"'{value}' failed: {e}")
+
+print("\nAll values processed!")</code></pre>
+        <div class="output-box empty">(click "Run Code" to see output)</div>
+      </div>
+      <p>The <code>as e</code> part captures the error into a variable. When you print <code>e</code>, Python shows the detailed error message, telling you exactly what caused the problem.</p>
+      <div class="try-this">
+        <strong>Try This:</strong> Try <code>as e</code> with other error types. Create a list and access <code>my_list[99]</code> inside a <code>try</code> block, catching <code>IndexError as e</code>. What message does it give?
+      </div>
+
+      <!-- Example 6 -->
+      <h3>Example 6: Raising Your Own Errors</h3>
+      <p>You can <strong>create and raise your own errors</strong> using the <code>raise</code> keyword. This is useful for custom validation &mdash; when the value is technically the right type but does not meet your program&rsquo;s rules.</p>
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Python Code</span>
+          <div><button class="copy-button">Copy Code</button><button class="run-button">Run Code</button></div>
+        </div>
+        <pre><code contenteditable="true"># Raising your own errors for custom validation
+def set_age(age):
+    if not isinstance(age, int):
+        raise TypeError("Age must be a whole number")
+    if age < 0:
+        raise ValueError("Age must be positive")
+    if age > 150:
+        raise ValueError("Age cannot be greater than 150")
+    print(f"Age set to {age}")
+
+# Test with various inputs
+test_ages = [25, -3, 200, "twenty", 0, 150]
+
+for age in test_ages:
+    try:
+        set_age(age)
+    except (ValueError, TypeError) as e:
+        print(f"Invalid age '{age}': {e}")</code></pre>
+        <div class="output-box empty">(click "Run Code" to see output)</div>
+      </div>
+      <p>The <code>raise</code> keyword throws an error on purpose with a custom message. This is <strong>defensive programming</strong> &mdash; checking for invalid data <em>before</em> it causes problems deeper in your code.</p>
+      <div class="try-this">
+        <strong>Try This:</strong> Modify <code>set_age</code> to also reject ages that are not whole numbers (e.g. <code>25.5</code>). Add <code>25.5</code> to the test list.
+      </div>
     </section>
 
     <!-- ==================== UNDERSTAND ==================== -->
@@ -194,72 +328,33 @@ divide("ten", 2)</code></pre>
       <span class="section-label">Understand</span>
       <h2>How Does It Work?</h2>
 
-      <h3>Types of Errors</h3>
-      <p>Python has many built-in error types (officially called <strong>exceptions</strong>). Here are the ones you&rsquo;ll encounter most often:</p>
-
+      <h3>Common Exception Types</h3>
+      <p>Python has many built-in error types (officially called <strong>exceptions</strong>). Here are the most common:</p>
       <table>
         <thead>
-          <tr>
-            <th>Error Type</th>
-            <th>What Causes It</th>
-            <th>Example</th>
-          </tr>
+          <tr><th>Error Type</th><th>What Causes It</th><th>Example</th></tr>
         </thead>
         <tbody>
-          <tr>
-            <td><code>SyntaxError</code></td>
-            <td>Your code breaks Python&rsquo;s grammar rules</td>
-            <td><code>print("hello"</code> &mdash; missing closing bracket</td>
-          </tr>
-          <tr>
-            <td><code>NameError</code></td>
-            <td>You used a variable that doesn&rsquo;t exist</td>
-            <td><code>print(score)</code> when <code>score</code> was never created</td>
-          </tr>
-          <tr>
-            <td><code>TypeError</code></td>
-            <td>You used the wrong type of data</td>
-            <td><code>"hello" + 5</code> &mdash; can&rsquo;t add a string and an integer</td>
-          </tr>
-          <tr>
-            <td><code>ValueError</code></td>
-            <td>Right type, but the value doesn&rsquo;t make sense</td>
-            <td><code>int("abc")</code> &mdash; can&rsquo;t convert letters to a number</td>
-          </tr>
-          <tr>
-            <td><code>ZeroDivisionError</code></td>
-            <td>You tried to divide by zero</td>
-            <td><code>10 / 0</code></td>
-          </tr>
-          <tr>
-            <td><code>IndexError</code></td>
-            <td>You tried to access a list index that doesn&rsquo;t exist</td>
-            <td><code>my_list[99]</code> when the list only has 3 items</td>
-          </tr>
-          <tr>
-            <td><code>KeyError</code></td>
-            <td>You tried to access a dictionary key that doesn&rsquo;t exist</td>
-            <td><code>my_dict["age"]</code> when there is no <code>"age"</code> key</td>
-          </tr>
+          <tr><td><code>SyntaxError</code></td><td>Code breaks Python&rsquo;s grammar rules</td><td><code>print("hello"</code> &mdash; missing bracket</td></tr>
+          <tr><td><code>NameError</code></td><td>Variable doesn&rsquo;t exist</td><td><code>print(score)</code> when <code>score</code> was never created</td></tr>
+          <tr><td><code>TypeError</code></td><td>Wrong type of data</td><td><code>"hello" + 5</code></td></tr>
+          <tr><td><code>ValueError</code></td><td>Right type, wrong value</td><td><code>int("abc")</code></td></tr>
+          <tr><td><code>ZeroDivisionError</code></td><td>Dividing by zero</td><td><code>10 / 0</code></td></tr>
+          <tr><td><code>IndexError</code></td><td>List index doesn&rsquo;t exist</td><td><code>my_list[99]</code> when list has 3 items</td></tr>
+          <tr><td><code>KeyError</code></td><td>Dictionary key doesn&rsquo;t exist</td><td><code>my_dict["age"]</code> when no <code>"age"</code> key</td></tr>
         </tbody>
       </table>
-
-      <p><strong>Important note:</strong> <code>SyntaxError</code> is different from the others. It means your code is incorrectly written and Python can&rsquo;t even <em>start</em> running it. You <strong>cannot</strong> catch a <code>SyntaxError</code> with <code>try/except</code> because the error happens before your code runs. The only fix for a <code>SyntaxError</code> is to correct the code itself.</p>
+      <p><strong>Important:</strong> <code>SyntaxError</code> is different &mdash; Python can&rsquo;t even <em>start</em> running the code. You <strong>cannot</strong> catch it with <code>try/except</code>.</p>
 
       <h3>The Try/Except Structure</h3>
-      <p>Here is the general pattern for handling errors in Python:</p>
-
       <div class="code-block">
         <div class="code-block-header">
           <span class="code-block-label">Python Code</span>
-          <div>
-            <button class="copy-button">Copy Code</button>
-          </div>
+          <div><button class="copy-button">Copy Code</button></div>
         </div>
         <pre><code contenteditable="true"># The basic structure
 try:
     # Code that might cause an error
-    # (the "risky" code goes here)
     pass
 except SomeErrorType:
     # What to do if that specific error happens
@@ -268,29 +363,22 @@ except AnotherErrorType:
     # What to do if a different error happens
     pass
 finally:
-    # Code that ALWAYS runs, error or not
-    # (optional - you don't always need this)
+    # Code that ALWAYS runs, error or not (optional)
     pass</code></pre>
       </div>
-
-      <p>Here&rsquo;s how Python executes this:</p>
+      <p>How Python executes this:</p>
       <ol>
         <li>Python tries to run the code inside the <code>try</code> block</li>
-        <li>If <strong>no error</strong> occurs, it skips all the <code>except</code> blocks and runs the <code>finally</code> block (if there is one)</li>
-        <li>If <strong>an error occurs</strong>, Python stops the <code>try</code> block immediately, finds the matching <code>except</code> block, runs it, then runs the <code>finally</code> block</li>
-        <li>If an error occurs but <strong>no matching <code>except</code></strong> is found, the program crashes as normal (the <code>finally</code> block still runs first)</li>
+        <li>If <strong>no error</strong> occurs, it skips all <code>except</code> blocks and runs <code>finally</code></li>
+        <li>If <strong>an error occurs</strong>, Python stops the <code>try</code> block, finds the matching <code>except</code>, runs it, then runs <code>finally</code></li>
+        <li>If no matching <code>except</code> is found, the program crashes (but <code>finally</code> still runs first)</li>
       </ol>
 
-      <h3>Catching Specific Errors vs General Except</h3>
-      <p>You can write a &ldquo;catch-all&rdquo; except block that catches <em>any</em> error:</p>
-
+      <h3>Catching Specific vs General Errors</h3>
       <div class="code-block">
         <div class="code-block-header">
           <span class="code-block-label">Python Code</span>
-          <div>
-            <button class="copy-button">Copy Code</button>
-            <button class="run-button">Run Code</button>
-          </div>
+          <div><button class="copy-button">Copy Code</button><button class="run-button">Run Code</button></div>
         </div>
         <pre><code contenteditable="true"># Catching ANY error (use with caution!)
 try:
@@ -305,14 +393,13 @@ except ZeroDivisionError:
     print("Can't divide by zero!")</code></pre>
         <div class="output-box empty">(click "Run Code" to see output)</div>
       </div>
-
       <div class="key-concept">
         <strong>Key Concept: Always Catch Specific Errors When Possible</strong>
-        A bare <code>except:</code> (without naming an error type) will catch <em>every</em> error, including ones you didn&rsquo;t expect. This sounds helpful, but it&rsquo;s actually dangerous because it can <strong>hide bugs</strong> in your code. If you catch everything, you might never notice that your code has a logic error. Always name the specific error types you expect, like <code>except ValueError:</code> or <code>except ZeroDivisionError:</code>. This way, unexpected errors still show up and you can fix them.
+        A bare <code>except:</code> catches <em>every</em> error, including ones you didn&rsquo;t expect. This can <strong>hide bugs</strong>. Always name the specific error types you expect, like <code>except ValueError:</code>. Unexpected errors should still show up so you can fix them.
       </div>
 
       <h3>The Finally Block</h3>
-      <p>The <code>finally</code> block is optional, but when you use it, it <strong>always runs</strong> &mdash; whether the <code>try</code> block succeeded, whether an error was caught, or even if an error was <em>not</em> caught. This makes it ideal for clean-up tasks:</p>
+      <p>The <code>finally</code> block <strong>always runs</strong> &mdash; whether the <code>try</code> succeeded, an error was caught, or even if an error was <em>not</em> caught. Ideal for:</p>
       <ul>
         <li>Closing a file that was opened</li>
         <li>Saving data before the program ends</li>
@@ -322,12 +409,173 @@ except ZeroDivisionError:
 
       <h3>Common Misconceptions</h3>
       <div class="warning">
-        <strong>Watch out:</strong> Some learners think that wrapping everything in <code>try/except</code> is always a good idea. It isn&rsquo;t. Using <code>try/except</code> wisely means catching errors you <em>expect</em> and know how to recover from &mdash; like a user typing letters when you need a number. Don&rsquo;t catch everything blindly, because you&rsquo;ll hide real bugs. If your code has a <code>NameError</code> because you misspelt a variable, you <em>want</em> to see that error so you can fix it &mdash; not sweep it under the carpet!
+        <strong>Watch out:</strong> Wrapping everything in <code>try/except</code> is <strong>not</strong> always a good idea. Catch errors you <em>expect</em> and know how to recover from. If your code has a <code>NameError</code> because you misspelt a variable, you <em>want</em> to see that error so you can fix it &mdash; not sweep it under the carpet!
       </div>
-
       <div class="warning">
-        <strong>Watch out:</strong> Remember that <code>SyntaxError</code> cannot be caught with <code>try/except</code>. If Python can&rsquo;t understand your code at all, it never gets as far as running the <code>try</code> block. The fix for a <code>SyntaxError</code> is always to correct the code itself &mdash; check for missing colons, brackets, or quotation marks.
+        <strong>Watch out:</strong> <code>SyntaxError</code> cannot be caught with <code>try/except</code>. If Python can&rsquo;t understand your code at all, it never gets as far as running the <code>try</code> block. The fix is always to correct the code itself.
       </div>
+    </section>
+
+    <!-- ==================== TEST DATA ==================== -->
+    <section class="understand">
+      <span class="section-label">Understand</span>
+      <h2>Test Data (GCSE Essential)</h2>
+      <p>Once you have written a program, how do you know it works? You <strong>test</strong> it. Professional developers use three types of <strong>test data</strong> to make sure their programs handle every situation.</p>
+
+      <h3>The Three Types of Test Data</h3>
+      <table>
+        <thead>
+          <tr><th>Type</th><th>Description</th><th>Purpose</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>Normal data</strong></td><td>Typical, expected values that should be accepted</td><td>Check the program works for everyday inputs</td></tr>
+          <tr><td><strong>Boundary data</strong></td><td>Values at the very edges of the valid range</td><td>Check limits are enforced correctly (off-by-one errors are common!)</td></tr>
+          <tr><td><strong>Erroneous data</strong></td><td>Invalid values &mdash; wrong type or out-of-range</td><td>Check the program handles bad input gracefully</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Example: Test Data for &ldquo;Age&rdquo; Input (valid range 0&ndash;120)</h3>
+      <table>
+        <thead>
+          <tr><th>Test Data</th><th>Type</th><th>Expected Outcome</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>25</code></td><td>Normal</td><td>Accepted &mdash; typical age</td></tr>
+          <tr><td><code>65</code></td><td>Normal</td><td>Accepted &mdash; another typical value</td></tr>
+          <tr><td><code>0</code></td><td>Boundary</td><td>Accepted &mdash; minimum valid age</td></tr>
+          <tr><td><code>120</code></td><td>Boundary</td><td>Accepted &mdash; maximum valid age</td></tr>
+          <tr><td><code>-1</code></td><td>Boundary (erroneous side)</td><td>Rejected &mdash; just below minimum</td></tr>
+          <tr><td><code>121</code></td><td>Boundary (erroneous side)</td><td>Rejected &mdash; just above maximum</td></tr>
+          <tr><td><code>"abc"</code></td><td>Erroneous</td><td>Rejected &mdash; not a number</td></tr>
+          <tr><td><code>-50</code></td><td>Erroneous</td><td>Rejected &mdash; well below range</td></tr>
+          <tr><td><code>999</code></td><td>Erroneous</td><td>Rejected &mdash; well above range</td></tr>
+        </tbody>
+      </table>
+      <div class="key-concept">
+        <strong>Key Concept: Why Boundary Testing Matters</strong>
+        Many bugs hide at the edges. A classic mistake is using <code>&lt;</code> instead of <code>&lt;=</code>, meaning a value of exactly 120 would be rejected when it should be accepted. Boundary testing catches these &ldquo;off-by-one&rdquo; errors. Always test values at and around the limits.
+      </div>
+    </section>
+
+    <!-- ==================== WORKED EXAMPLE ==================== -->
+    <section class="explore">
+      <span class="section-label">Explore</span>
+      <h2>Worked Example: Building Robust Input Validation</h2>
+      <p>Let&rsquo;s build a function that validates a test score. The score must be an integer between 0 and 100 (inclusive). We then test it with normal, boundary, and erroneous data.</p>
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Python Code</span>
+          <div><button class="copy-button">Copy Code</button><button class="run-button">Run Code</button></div>
+        </div>
+        <pre><code contenteditable="true">def validate_score(value):
+    """Validate that a test score is an integer between 0 and 100."""
+    try:
+        score = int(value)
+    except (ValueError, TypeError):
+        return f"REJECTED '{value}': not a valid whole number"
+    if score < 0:
+        return f"REJECTED {score}: score cannot be negative"
+    if score > 100:
+        return f"REJECTED {score}: score cannot exceed 100"
+    return f"ACCEPTED: {score} is a valid score"
+
+# --- Normal test data ---
+print("=== Normal Data ===")
+print(validate_score(55))
+print(validate_score(73))
+
+# --- Boundary test data ---
+print("\n=== Boundary Data ===")
+print(validate_score(0))     # Lower boundary
+print(validate_score(100))   # Upper boundary
+print(validate_score(-1))    # Just below
+print(validate_score(101))   # Just above
+
+# --- Erroneous test data ---
+print("\n=== Erroneous Data ===")
+print(validate_score("abc"))
+print(validate_score(""))
+print(validate_score(-500))
+print(validate_score(999))</code></pre>
+        <div class="output-box empty">(click "Run Code" to see output)</div>
+      </div>
+      <p>The function handles every type of bad input without crashing. The <code>try/except</code> catches values that cannot be converted, while <code>if</code> statements catch out-of-range values. This is <strong>defensive programming</strong> in action.</p>
+      <div class="try-this">
+        <strong>Try This:</strong> Add a counter that tracks how many values were accepted vs rejected. Can you also label each test as normal, boundary, or erroneous?
+      </div>
+    </section>
+
+    <!-- ==================== REAL WORLD APPLICATIONS ==================== -->
+    <section class="idea">
+      <span class="section-label">The Idea</span>
+      <h2>Real-World Applications</h2>
+      <p>Error handling is not just an exam topic &mdash; it is a critical part of every piece of software you use daily.</p>
+
+      <h3>ATM Machines</h3>
+      <p>When you use a cash machine, error handling runs constantly behind the scenes. Wrong PIN? The machine asks you to try again. Insufficient funds? It says so politely. Card expired? It detects this and refuses the transaction. Every scenario is handled by <code>try/except</code>-style logic &mdash; the ATM never crashes.</p>
+
+      <h3>Web Servers</h3>
+      <p>Every time you visit a website, a web server processes your request. A non-existent URL returns a <strong>404 Not Found</strong> error page. A server-side bug returns a <strong>500 Internal Server Error</strong>. These are error handling in action &mdash; the server responds gracefully rather than crashing entirely.</p>
+
+      <h3>Video Games</h3>
+      <p>Imagine loading a corrupted save file. A well-written game tells you the file is damaged and offers to start a new game, rather than crashing to the desktop. Games handle controller disconnections, network drops, and invalid inputs &mdash; all without crashing.</p>
+
+      <h3>Medical Software</h3>
+      <p>Software in hospitals <strong>must never crash</strong> &mdash; lives depend on it. Heart monitors, ventilators, and medication systems all use extensive error handling so that if a sensor fails or data is corrupted, the system continues operating safely and alerts medical staff.</p>
+
+      <h3>Space Software</h3>
+      <p>NASA&rsquo;s Mars rovers operate millions of miles from the nearest engineer. A signal takes up to 24 minutes to reach Mars, so the rover must handle errors <strong>autonomously</strong>. If a wheel gets stuck or a sensor malfunctions, the software catches the error, enters safe mode, and attempts recovery on its own.</p>
+    </section>
+
+    <!-- ==================== DID YOU KNOW ==================== -->
+    <section class="idea">
+      <span class="section-label">The Idea</span>
+      <h2>Did You Know?</h2>
+
+      <div class="key-concept">
+        <strong>The Ariane 5 Disaster (1996)</strong>
+        The European Space Agency&rsquo;s Ariane 5 rocket exploded 37 seconds after launch because of an <strong>unhandled integer overflow error</strong>. A 64-bit number was converted to a 16-bit integer, but the value was too large. The software had no error handling for this case, so it crashed, sent garbage data to the navigation system, and the rocket veered off course and self-destructed. Cost: approximately <strong>&pound;290 million</strong>. One missing error handler destroyed an entire rocket.
+      </div>
+      <div class="key-concept">
+        <strong>The First Computer &ldquo;Bug&rdquo; (1947)</strong>
+        The term &ldquo;bug&rdquo; was popularised when engineers working on the Harvard Mark II computer found an actual <strong>moth</strong> trapped in one of the machine&rsquo;s electrical relays. Grace Hopper taped the moth into the logbook with the note &ldquo;First actual case of bug being found.&rdquo; The moth is still preserved in the Smithsonian Institution. Today we use &ldquo;bug&rdquo; to mean any program error, and &ldquo;debugging&rdquo; to mean the process of fixing them.
+      </div>
+      <div class="key-concept">
+        <strong>Python&rsquo;s Exception Hierarchy</strong>
+        All of Python&rsquo;s exceptions are organised in a <strong>class hierarchy</strong> (a family tree). At the top is <code>BaseException</code>. Below that is <code>Exception</code>, the parent of <code>ValueError</code>, <code>TypeError</code>, <code>KeyError</code>, <code>IndexError</code>, and many more. This is why catching <code>Exception</code> handles multiple error types at once &mdash; though it is usually better to catch specific ones.
+      </div>
+    </section>
+
+    <!-- ==================== KEY VOCABULARY ==================== -->
+    <section class="understand">
+      <span class="section-label">Understand</span>
+      <h2>Key Vocabulary</h2>
+      <table>
+        <thead>
+          <tr><th>Term</th><th>Definition</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>Error</strong></td><td>A problem in a program that prevents it from working correctly</td></tr>
+          <tr><td><strong>Exception</strong></td><td>A runtime error that can be caught and handled using <code>try/except</code></td></tr>
+          <tr><td><strong>Bug</strong></td><td>An error or flaw in a program that causes unexpected behaviour</td></tr>
+          <tr><td><strong>Debugging</strong></td><td>The process of finding and fixing bugs in a program</td></tr>
+          <tr><td><strong>Syntax Error</strong></td><td>An error caused by breaking the language&rsquo;s grammar rules; detected before running</td></tr>
+          <tr><td><strong>Runtime Error</strong></td><td>An error that occurs while the program is running, causing it to crash</td></tr>
+          <tr><td><strong>Logic Error</strong></td><td>An error where the program runs but produces the wrong result</td></tr>
+          <tr><td><code>try</code></td><td>A block of code that might cause an error; Python will attempt to run it</td></tr>
+          <tr><td><code>except</code></td><td>A block that runs if a specific error occurs inside the <code>try</code> block</td></tr>
+          <tr><td><code>finally</code></td><td>A block that always runs, regardless of whether an error occurred</td></tr>
+          <tr><td><code>raise</code></td><td>A keyword used to deliberately trigger an error with a custom message</td></tr>
+          <tr><td><code>ValueError</code></td><td>Raised when a value is the right type but inappropriate (e.g. <code>int("abc")</code>)</td></tr>
+          <tr><td><code>TypeError</code></td><td>Raised when an operation is applied to the wrong type (e.g. <code>"hello" + 5</code>)</td></tr>
+          <tr><td><code>ZeroDivisionError</code></td><td>Raised when dividing by zero</td></tr>
+          <tr><td><code>IndexError</code></td><td>Raised when accessing a list index that does not exist</td></tr>
+          <tr><td><code>KeyError</code></td><td>Raised when accessing a dictionary key that does not exist</td></tr>
+          <tr><td><code>NameError</code></td><td>Raised when using a variable that has not been defined</td></tr>
+          <tr><td><strong>Validation</strong></td><td>Checking that data meets certain rules before accepting it</td></tr>
+          <tr><td><strong>Robustness</strong></td><td>A program&rsquo;s ability to handle unexpected inputs and errors without crashing</td></tr>
+        </tbody>
+      </table>
     </section>
 
     <!-- ==================== PRACTICE ==================== -->
@@ -339,24 +587,18 @@ except ZeroDivisionError:
       <div class="exercise">
         <div class="exercise-title">Exercise 1: Safe Division</div>
         <div class="exercise-difficulty difficulty-1">Guided</div>
-        <p>Write a program that divides two numbers safely. If the user tries to divide by zero, the program should print a friendly error message instead of crashing. Complete the code below by filling in the blanks.</p>
-
+        <p>Write a program that divides two numbers safely. If the user tries to divide by zero, print a friendly error message instead of crashing. Fill in the blanks.</p>
         <div class="pseudocode">
           <div class="pseudocode-label">Pseudocode:</div>
           STEP 1: Set the numerator to 20 and the denominator to 0<br />
           STEP 2: Inside a try block, divide the numerator by the denominator<br />
           STEP 3: Print the result if the division succeeds<br />
-          STEP 4: In the except block, catch ZeroDivisionError and print a helpful message<br />
-          STEP 5: Test with different values for the denominator
+          STEP 4: In the except block, catch ZeroDivisionError and print a helpful message
         </div>
-
         <div class="code-block">
           <div class="code-block-header">
             <span class="code-block-label">Your Code</span>
-            <div>
-              <button class="copy-button">Copy Code</button>
-              <button class="run-button">Run Code</button>
-            </div>
+            <div><button class="copy-button">Copy Code</button><button class="run-button">Run Code</button></div>
           </div>
           <pre><code contenteditable="true">numerator = 20
 denominator = 0
@@ -370,17 +612,16 @@ except ____:
 print("Program finished safely.")</code></pre>
           <div class="output-box empty">(click "Run Code" to see output)</div>
         </div>
-
         <div class="hint">
           <div class="hint-title">Need a hint?</div>
           <div class="hint-content">
             <p>Fill in the three blanks:</p>
             <ul>
-              <li>The first blank should be <code>denominator</code> &mdash; we want to divide by the denominator variable</li>
-              <li>The second blank should be <code>result</code> &mdash; we want to print the answer we calculated</li>
-              <li>The third blank should be <code>ZeroDivisionError</code> &mdash; that&rsquo;s the specific error type for dividing by zero</li>
+              <li>First blank: <code>denominator</code></li>
+              <li>Second blank: <code>result</code></li>
+              <li>Third blank: <code>ZeroDivisionError</code></li>
             </ul>
-            <p>Once it works with <code>denominator = 0</code>, change it to <code>denominator = 4</code> and run again to see the successful result.</p>
+            <p>Once it works, change <code>denominator</code> to <code>4</code> and run again to see the successful result.</p>
           </div>
         </div>
       </div>
@@ -389,25 +630,19 @@ print("Program finished safely.")</code></pre>
       <div class="exercise">
         <div class="exercise-title">Exercise 2: Number Converter</div>
         <div class="exercise-difficulty difficulty-2">Partially Guided</div>
-        <p>Write a program that tries to convert a list of strings into integers. Some of the strings are valid numbers and some are not. Your program should convert the valid ones and print a helpful message for the invalid ones, without crashing.</p>
-
+        <p>Write a program that tries to convert a list of strings into integers. Convert valid ones and print a helpful message for invalid ones, without crashing.</p>
         <div class="pseudocode">
           <div class="pseudocode-label">Pseudocode:</div>
           STEP 1: Create a list of strings: ["10", "hello", "42", "3.5", "seven", "99"]<br />
-          STEP 2: Loop through each item in the list<br />
-          STEP 3: Inside a try block, convert the item to an integer using int()<br />
-          STEP 4: If it works, print the converted number<br />
-          STEP 5: If a ValueError occurs, print which value could not be converted<br />
-          STEP 6: After the loop, print how the program completed without crashing
+          STEP 2: Loop through each item<br />
+          STEP 3: Inside a try block, convert using int()<br />
+          STEP 4: If it works, print the number and increment the count<br />
+          STEP 5: If ValueError occurs, print which value could not be converted
         </div>
-
         <div class="code-block">
           <div class="code-block-header">
             <span class="code-block-label">Your Code</span>
-            <div>
-              <button class="copy-button">Copy Code</button>
-              <button class="run-button">Run Code</button>
-            </div>
+            <div><button class="copy-button">Copy Code</button><button class="run-button">Run Code</button></div>
           </div>
           <pre><code contenteditable="true"># Number converter - handle invalid conversions gracefully
 values = ["10", "hello", "42", "3.5", "seven", "99"]
@@ -420,18 +655,12 @@ for item in values:
 print("Done! Successfully converted", converted_count, "values.")</code></pre>
           <div class="output-box empty">(click "Run Code" to see output)</div>
         </div>
-
         <div class="hint">
           <div class="hint-title">Need a hint?</div>
           <div class="hint-content">
-            <p>Replace <code>pass</code> with a <code>try/except</code> block inside the loop. Here is the structure:</p>
-            <p><code>try:</code></p>
-            <p>&nbsp;&nbsp;&nbsp;&nbsp;<code>number = int(item)</code></p>
-            <p>&nbsp;&nbsp;&nbsp;&nbsp;<code>print("Converted:", number)</code></p>
-            <p>&nbsp;&nbsp;&nbsp;&nbsp;<code>converted_count += 1</code></p>
-            <p><code>except ValueError:</code></p>
-            <p>&nbsp;&nbsp;&nbsp;&nbsp;<code>print("Cannot convert '" + item + "' to a whole number")</code></p>
-            <p>Remember to update <code>converted_count</code> only when the conversion succeeds (inside the <code>try</code> block, after the conversion). Note that <code>"3.5"</code> will also cause a <code>ValueError</code> because <code>int()</code> cannot directly convert a decimal string &mdash; only <code>float()</code> can do that.</p>
+            <p>Replace <code>pass</code> with:</p>
+            <p><code>try:</code><br />&nbsp;&nbsp;&nbsp;&nbsp;<code>number = int(item)</code><br />&nbsp;&nbsp;&nbsp;&nbsp;<code>print("Converted:", number)</code><br />&nbsp;&nbsp;&nbsp;&nbsp;<code>converted_count += 1</code><br /><code>except ValueError:</code><br />&nbsp;&nbsp;&nbsp;&nbsp;<code>print("Cannot convert '" + item + "' to a whole number")</code></p>
+            <p>Note that <code>"3.5"</code> will also cause a <code>ValueError</code> because <code>int()</code> cannot directly convert a decimal string.</p>
           </div>
         </div>
       </div>
@@ -440,86 +669,214 @@ print("Done! Successfully converted", converted_count, "values.")</code></pre>
       <div class="exercise">
         <div class="exercise-title">Exercise 3: Robust Calculator</div>
         <div class="exercise-difficulty difficulty-3">Open-Ended</div>
-        <p>Create a calculator program that handles <strong>all possible errors</strong> gracefully. The calculator should take two numbers and an operator, perform the calculation, and handle every error that could occur &mdash; invalid numbers, division by zero, and unsupported operators. Use multiple <code>except</code> blocks and a <code>finally</code> block.</p>
-
+        <p>Create a calculator that handles <strong>all possible errors</strong>: invalid numbers, division by zero, and unsupported operators. Use multiple <code>except</code> blocks and a <code>finally</code> block.</p>
         <div class="pseudocode">
           <div class="pseudocode-label">Pseudocode:</div>
-          STEP 1: Set two number variables (as strings, to simulate user input) and an operator<br />
-          STEP 2: Inside a try block:<br />
-          &nbsp;&nbsp;&mdash; Convert both strings to numbers (float)<br />
-          &nbsp;&nbsp;&mdash; Use if/elif to check the operator (+, -, *, /)<br />
-          &nbsp;&nbsp;&mdash; If the operator is not recognised, print an error message<br />
-          &nbsp;&nbsp;&mdash; Print the result<br />
-          STEP 3: Add except blocks for ValueError (bad numbers) and ZeroDivisionError<br />
-          STEP 4: Add a finally block that prints "Calculation complete"<br />
-          STEP 5: Test with different inputs: valid numbers, invalid strings, division by zero, unknown operators
+          STEP 1: Set two number variables (as strings) and an operator<br />
+          STEP 2: Try to convert both to float, then use if/elif for +, -, *, /<br />
+          STEP 3: Add except blocks for ValueError and ZeroDivisionError<br />
+          STEP 4: Add a finally block that prints "Calculation complete"
         </div>
-
         <div class="code-block">
           <div class="code-block-header">
             <span class="code-block-label">Your Code</span>
-            <div>
-              <button class="copy-button">Copy Code</button>
-              <button class="run-button">Run Code</button>
-            </div>
+            <div><button class="copy-button">Copy Code</button><button class="run-button">Run Code</button></div>
           </div>
           <pre><code contenteditable="true"># Robust calculator - handle every possible error!
-# Change these values to test different scenarios
 num1_text = "10"
 num2_text = "3"
 operator = "+"
 
 # Write your try/except/finally code below
 
-
 </code></pre>
           <div class="output-box empty">(click "Run Code" to see output)</div>
         </div>
-
         <div class="hint">
           <div class="hint-title">Need a hint?</div>
           <div class="hint-content">
-            <p>Here is a structure to get you started:</p>
-            <p><code>try:</code></p>
-            <p>&nbsp;&nbsp;&nbsp;&nbsp;<code>num1 = float(num1_text)</code></p>
-            <p>&nbsp;&nbsp;&nbsp;&nbsp;<code>num2 = float(num2_text)</code></p>
-            <p>&nbsp;&nbsp;&nbsp;&nbsp;Then use <code>if operator == "+":</code> and <code>elif</code> for each operator (<code>-</code>, <code>*</code>, <code>/</code>). In the <code>else</code> clause, print that the operator is not recognised.</p>
-            <p><code>except ValueError:</code></p>
-            <p>&nbsp;&nbsp;&nbsp;&nbsp;<code>print("Error: Please enter valid numbers.")</code></p>
-            <p><code>except ZeroDivisionError:</code></p>
-            <p>&nbsp;&nbsp;&nbsp;&nbsp;<code>print("Error: Cannot divide by zero.")</code></p>
-            <p><code>finally:</code></p>
-            <p>&nbsp;&nbsp;&nbsp;&nbsp;<code>print("Calculation complete.")</code></p>
-            <p>To test thoroughly, try these combinations: <code>"10"</code> and <code>"3"</code> with <code>"+"</code> (should work), <code>"abc"</code> and <code>"3"</code> (should trigger ValueError), <code>"10"</code> and <code>"0"</code> with <code>"/"</code> (should trigger ZeroDivisionError), and <code>"10"</code> and <code>"3"</code> with <code>"%"</code> (should show unknown operator).</p>
+            <p><code>try:</code><br />&nbsp;&nbsp;&nbsp;&nbsp;<code>num1 = float(num1_text)</code><br />&nbsp;&nbsp;&nbsp;&nbsp;<code>num2 = float(num2_text)</code><br />&nbsp;&nbsp;&nbsp;&nbsp;Then use <code>if operator == "+":</code> and <code>elif</code> for each. In the <code>else</code> clause, print unknown operator.</p>
+            <p><code>except ValueError:</code> &rarr; bad numbers<br /><code>except ZeroDivisionError:</code> &rarr; division by zero<br /><code>finally:</code> &rarr; "Calculation complete."</p>
           </div>
         </div>
       </div>
 
+      <!-- Exercise 4: List Safe Access -->
+      <div class="exercise">
+        <div class="exercise-title">Exercise 4: List Safe Access</div>
+        <div class="exercise-difficulty difficulty-2">Partially Guided</div>
+        <p>Write a function <code>safe_get(my_list, index)</code> that returns the item at the given index, or <code>"Index out of range"</code> if the index does not exist.</p>
+        <div class="pseudocode">
+          <div class="pseudocode-label">Pseudocode:</div>
+          STEP 1: Define safe_get with parameters my_list and index<br />
+          STEP 2: Try to return my_list[index]<br />
+          STEP 3: Catch IndexError and return "Index out of range"<br />
+          STEP 4: Also catch TypeError for non-integer indices
+        </div>
+        <div class="code-block">
+          <div class="code-block-header">
+            <span class="code-block-label">Your Code</span>
+            <div><button class="copy-button">Copy Code</button><button class="run-button">Run Code</button></div>
+          </div>
+          <pre><code contenteditable="true"># Safe list access - never crash on a bad index!
+def safe_get(my_list, index):
+    # Add your try/except code here
+    pass
+
+# Test your function
+fruits = ["apple", "banana", "cherry"]
+
+print(safe_get(fruits, 0))    # Should print: apple
+print(safe_get(fruits, 2))    # Should print: cherry
+print(safe_get(fruits, 10))   # Should print: Index out of range
+print(safe_get(fruits, -1))   # Should print: cherry (negative indexing)
+print(safe_get(fruits, 99))   # Should print: Index out of range</code></pre>
+          <div class="output-box empty">(click "Run Code" to see output)</div>
+        </div>
+        <div class="hint">
+          <div class="hint-title">Need a hint?</div>
+          <div class="hint-content">
+            <p>Replace <code>pass</code> with:</p>
+            <p><code>try:</code><br />&nbsp;&nbsp;&nbsp;&nbsp;<code>return my_list[index]</code><br /><code>except IndexError:</code><br />&nbsp;&nbsp;&nbsp;&nbsp;<code>return "Index out of range"</code><br /><code>except TypeError:</code><br />&nbsp;&nbsp;&nbsp;&nbsp;<code>return "Index must be a whole number"</code></p>
+            <p>Remember: negative indices are valid in Python &mdash; <code>my_list[-1]</code> returns the last item.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Exercise 5: Data Validator -->
+      <div class="exercise">
+        <div class="exercise-title">Exercise 5: Data Validator</div>
+        <div class="exercise-difficulty difficulty-3">Open-Ended</div>
+        <p>Write a function that validates a dictionary of student data: <code>name</code> (non-empty string), <code>age</code> (integer 11&ndash;18), <code>score</code> (number 0&ndash;100). Return a list of error messages &mdash; empty means valid.</p>
+        <div class="pseudocode">
+          <div class="pseudocode-label">Pseudocode:</div>
+          STEP 1: Define validate_student taking a dictionary<br />
+          STEP 2: Create an empty errors list<br />
+          STEP 3: Check "name" exists, is a string, and is not empty<br />
+          STEP 4: Check "age" exists, is an int, and is between 11 and 18<br />
+          STEP 5: Check "score" exists, is a number, and is between 0 and 100<br />
+          STEP 6: Return the errors list
+        </div>
+        <div class="code-block">
+          <div class="code-block-header">
+            <span class="code-block-label">Your Code</span>
+            <div><button class="copy-button">Copy Code</button><button class="run-button">Run Code</button></div>
+          </div>
+          <pre><code contenteditable="true"># Student data validator
+def validate_student(student):
+    errors = []
+    # Add your validation code here
+    return errors
+
+# Test with valid data
+student1 = {"name": "Alice", "age": 15, "score": 87}
+result1 = validate_student(student1)
+print("Student 1:", result1 if result1 else "All valid!")
+
+# Test with invalid data
+student2 = {"name": "", "age": 25, "score": -10}
+result2 = validate_student(student2)
+print("Student 2:", result2)
+
+# Test with missing fields
+student3 = {"name": "Bob"}
+result3 = validate_student(student3)
+print("Student 3:", result3)
+
+# Test with wrong types
+student4 = {"name": 123, "age": "fifteen", "score": "A+"}
+result4 = validate_student(student4)
+print("Student 4:", result4)</code></pre>
+          <div class="output-box empty">(click "Run Code" to see output)</div>
+        </div>
+        <div class="hint">
+          <div class="hint-title">Need a hint?</div>
+          <div class="hint-content">
+            <p>For each field, check: (1) does it exist? (2) is it the right type? (3) is the value valid?</p>
+            <p><code>if "name" not in student:</code><br />&nbsp;&nbsp;&nbsp;&nbsp;<code>errors.append("Missing 'name' field")</code><br /><code>elif not isinstance(student["name"], str):</code><br />&nbsp;&nbsp;&nbsp;&nbsp;<code>errors.append("Name must be a string")</code><br /><code>elif student["name"] == "":</code><br />&nbsp;&nbsp;&nbsp;&nbsp;<code>errors.append("Name cannot be empty")</code></p>
+            <p>Follow a similar pattern for <code>age</code> (int, 11&ndash;18) and <code>score</code> (int or float, 0&ndash;100).</p>
+          </div>
+        </div>
+      </div>
     </section>
 
     <!-- ==================== REFLECT ==================== -->
     <section class="reflect">
       <span class="section-label">Reflect</span>
       <h2>Think About It</h2>
-
-      <p>Take a moment to think about what you&rsquo;ve learnt in this chapter. Try to answer these questions in your head or discuss them with a classmate:</p>
-
+      <p>Take a moment to think about what you&rsquo;ve learnt. Try to answer these questions in your head or discuss them with a classmate:</p>
       <ul>
-        <li>Why is it better to catch <em>specific</em> error types (like <code>ValueError</code>) rather than using a bare <code>except:</code> that catches everything?</li>
-        <li>Can you think of three situations in your own programs where error handling would be useful? (Hint: think about any time your program takes input or works with data that could be unexpected.)</li>
-        <li>What is the difference between a <code>SyntaxError</code> and a <code>ValueError</code>? Why can&rsquo;t you catch a <code>SyntaxError</code> with <code>try/except</code>?</li>
-        <li>When would you use a <code>finally</code> block? Why might it be important to run certain code regardless of whether an error occurred?</li>
-        <li>A classmate says &ldquo;I just put all my code inside one big <code>try/except</code> block so it never crashes.&rdquo; What would you say to them? What are the risks of this approach?</li>
+        <li>Why is it better to catch <em>specific</em> error types rather than using a bare <code>except:</code>?</li>
+        <li>Can you think of three situations where error handling would be useful in your own programs?</li>
+        <li>What is the difference between a <code>SyntaxError</code> and a <code>ValueError</code>? Why can&rsquo;t you catch a <code>SyntaxError</code>?</li>
+        <li>When would you use a <code>finally</code> block? Why might it be important?</li>
+        <li>A classmate says &ldquo;I just put all my code in one big <code>try/except</code> so it never crashes.&rdquo; What are the risks?</li>
+        <li>Why are logic errors the hardest type to find and fix?</li>
+        <li>Why do you need all three types of test data (normal, boundary, erroneous)?</li>
       </ul>
 
+      <!-- ==================== SUMMARY ==================== -->
+      <h2>Summary</h2>
+      <ul>
+        <li><strong>Three types of errors:</strong> Syntax (detected before running), runtime (crash during execution), logic (wrong results, no crash)</li>
+        <li><strong>Error handling:</strong> <code>try</code> contains risky code; <code>except</code> catches specific errors; <code>finally</code> always runs</li>
+        <li><strong>Common exceptions:</strong> <code>ValueError</code>, <code>TypeError</code>, <code>ZeroDivisionError</code>, <code>IndexError</code>, <code>KeyError</code>, <code>NameError</code></li>
+        <li><strong>Accessing error messages:</strong> Use <code>except ErrorType as e:</code> to capture the description</li>
+        <li><strong>Raising errors:</strong> Use <code>raise</code> to create custom errors for validation</li>
+        <li><strong>Test data:</strong> Normal, boundary, and erroneous data should all be used</li>
+        <li><strong>Defensive programming:</strong> Anticipating what could go wrong and handling it</li>
+        <li><strong>Robustness:</strong> Handling unexpected inputs gracefully without crashing</li>
+      </ul>
+
+      <!-- ==================== EXAM-STYLE QUESTIONS ==================== -->
+      <h2>Exam-Style Questions</h2>
+      <div class="exercise">
+        <div class="exercise-title">Question 1 (6 marks)</div>
+        <p>Describe the difference between a syntax error, a runtime error, and a logic error. Give an example of each.</p>
+        <div class="hint">
+          <div class="hint-title">Show suggested answer</div>
+          <div class="hint-content">
+            <p><strong>Syntax error (2 marks):</strong> Occurs when code breaks the language&rsquo;s grammar rules. Detected <em>before</em> running. Example: <code>print("hello"</code> &mdash; missing closing bracket.</p>
+            <p><strong>Runtime error (2 marks):</strong> Code is valid but crashes during execution. Example: <code>10 / 0</code> causes <code>ZeroDivisionError</code>.</p>
+            <p><strong>Logic error (2 marks):</strong> Program runs without crashing but gives wrong results. Example: <code>score1 + score2 + score3 / 3</code> instead of <code>(score1 + score2 + score3) / 3</code>.</p>
+          </div>
+        </div>
+      </div>
+      <div class="exercise">
+        <div class="exercise-title">Question 2 (3 marks)</div>
+        <p>Explain what is meant by &ldquo;defensive programming&rdquo; and give one technique used to implement it.</p>
+        <div class="hint">
+          <div class="hint-title">Show suggested answer</div>
+          <div class="hint-content">
+            <p><strong>Definition (2 marks):</strong> Defensive programming is writing code that anticipates and handles potential errors or invalid inputs, ensuring the program fails gracefully rather than crashing.</p>
+            <p><strong>Technique (1 mark):</strong> <strong>Input validation</strong> &mdash; checking that user input meets requirements before processing it. Also acceptable: using <code>try/except</code> blocks.</p>
+          </div>
+        </div>
+      </div>
+      <div class="exercise">
+        <div class="exercise-title">Question 3 (3 marks)</div>
+        <p>A program asks the user for their age (valid range: 0&ndash;120). Describe three pieces of test data you would use and explain why each is important.</p>
+        <div class="hint">
+          <div class="hint-title">Show suggested answer</div>
+          <div class="hint-content">
+            <p><strong>Normal data (1 mark):</strong> e.g. <code>25</code> &mdash; a typical age. Tests the program works for standard inputs.</p>
+            <p><strong>Boundary data (1 mark):</strong> e.g. <code>0</code> or <code>120</code> &mdash; at the valid range edge. Catches off-by-one errors.</p>
+            <p><strong>Erroneous data (1 mark):</strong> e.g. <code>"abc"</code> or <code>-5</code> &mdash; invalid input. Tests graceful handling without crashing.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ==================== EXTERNAL RESOURCES ==================== -->
       <div class="extra-resources">
-        <h3>Extra Practice</h3>
-        <p>Put your error-handling skills to the test:</p>
+        <h3>Extra Practice &amp; Resources</h3>
         <ul>
           <li><a href="https://hvgcse.cshub.org.je/Python_Error_Spotter.html" target="_blank" rel="noopener">Python Error Spotter</a> &mdash; 20 questions on spotting syntax, logic, runtime and indentation errors</li>
           <li><a href="https://hvgcse.cshub.org.je/Python_Code_Fixer.html" target="_blank" rel="noopener">Python Code Fixer</a> &mdash; Fix 30 bugs across 3 real Python programs</li>
           <li><a href="https://hvgcse.cshub.org.je/CS_Escape_Room.html" target="_blank" rel="noopener">CS Escape Room</a> &mdash; Solve computing puzzles under a 50-minute timer</li>
-          <li><a href="https://hvgcsecs.cshub.org.je/topics/topic6.html" target="_blank" rel="noopener">GCSE Topic 6: Testing &amp; Debugging</a> &mdash; Error types, test data, trace tables, and validation with code editors</li>
+          <li><a href="https://hvgcsecs.cshub.org.je/topics/topic6.html" target="_blank" rel="noopener">GCSE Topic 6: Testing &amp; Debugging</a> &mdash; Error types, test data, trace tables, and validation</li>
+          <li><a href="https://www.bbc.co.uk/bitesize/examspecs/zdqy7nb" target="_blank" rel="noopener">BBC Bitesize Edexcel Computer Science</a> &mdash; GCSE revision for programming, data, and computational thinking</li>
+          <li><a href="https://www.w3schools.com/python/python_try_except.asp" target="_blank" rel="noopener">W3Schools: Python Try Except</a> &mdash; Interactive tutorial on error handling in Python</li>
+          <li><a href="https://isaaccomputerscience.org/topics/testing" target="_blank" rel="noopener">Isaac Computer Science: Testing</a> &mdash; In-depth material on testing strategies and test data</li>
         </ul>
       </div>
 

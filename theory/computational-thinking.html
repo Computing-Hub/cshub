@@ -37,6 +37,11 @@
       </ul>
 
       <p>These skills are at the heart of GCSE Computer Science, and they will help you in every other subject too. Let&rsquo;s explore each one.</p>
+
+      <div class="key-concept">
+        <strong>Did You Know?</strong>
+        The word &ldquo;algorithm&rdquo; comes from the name of the 9th century Persian mathematician <strong>Muhammad ibn Musa al-Khwarizmi</strong>. He wrote a hugely influential book on mathematics, and the Latin translation of his name &mdash; <em>Algoritmi</em> &mdash; eventually became the word we use today. So every time you write an algorithm, you are honouring over 1,000 years of mathematical history!
+      </div>
     </section>
 
     <!-- ==================== EXPLORE ==================== -->
@@ -59,6 +64,67 @@
       <div class="key-concept">
         <strong>Key Concept: Decomposition</strong>
         Decomposition means breaking a complex problem into smaller sub-problems that are easier to understand, solve, and test individually. In programming, this often means splitting a large program into separate functions or modules.
+      </div>
+
+      <h4>Decomposition in Programming: School Registration System</h4>
+      <p>Let&rsquo;s see how decomposition works for a real programming project. Suppose you are asked to build a <strong>School Registration System</strong>. That is a large, complex task, but using decomposition we can break it into four main modules:</p>
+
+      <table>
+        <thead>
+          <tr><th>Module</th><th>Sub-tasks</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>1. Login Module</strong></td>
+            <td>
+              <ul>
+                <li>Display a login form (username and password fields)</li>
+                <li>Validate credentials against stored data</li>
+                <li>Handle incorrect login attempts (lock after 3 failures)</li>
+                <li>Redirect to the correct dashboard (teacher vs. student)</li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <td><strong>2. Student Database</strong></td>
+            <td>
+              <ul>
+                <li>Store student details (name, form group, date of birth)</li>
+                <li>Allow staff to add, edit, and remove student records</li>
+                <li>Search for a student by name or student ID</li>
+                <li>Export data in a suitable format (e.g. CSV)</li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <td><strong>3. Attendance Tracker</strong></td>
+            <td>
+              <ul>
+                <li>Record whether each student is present, absent, or late</li>
+                <li>Calculate attendance percentages per student</li>
+                <li>Flag students whose attendance drops below 90%</li>
+                <li>Display a weekly and termly attendance summary</li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <td><strong>4. Report Generator</strong></td>
+            <td>
+              <ul>
+                <li>Generate individual student attendance reports</li>
+                <li>Produce a whole-class summary report</li>
+                <li>Create printable letters for parents of students with low attendance</li>
+                <li>Display charts or graphs of attendance trends</li>
+              </ul>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p>Notice how each module is a self-contained problem. A programmer could work on the Login Module without needing to understand the Report Generator in detail. This is the power of decomposition &mdash; it makes large projects manageable and allows teams to work on different parts simultaneously.</p>
+
+      <div class="try-this">
+        <strong>Think About It:</strong> Can you think of any additional modules the School Registration System might need? What about a timetable module or a parent communication module? Try decomposing one of those into sub-tasks.
       </div>
 
       <h3>Pattern Recognition: Spotting What&rsquo;s the Same</h3>
@@ -140,6 +206,107 @@ OUTPUT largest</code></pre>
       <div class="key-concept">
         <strong>Key Concept: Pseudocode</strong>
         Pseudocode is not a real programming language &mdash; there is no single &ldquo;correct&rdquo; way to write it. The aim is to clearly communicate the logic of an algorithm in a way that any programmer could understand and convert into actual code. Common keywords include: INPUT, OUTPUT, IF...THEN...ELSE, FOR, WHILE, SET, and REPEAT...UNTIL.
+      </div>
+
+      <!-- MORE PSEUDOCODE EXAMPLES -->
+      <h4>More Pseudocode Examples</h4>
+
+      <p>Here are three more practical algorithms written in pseudocode. Practise reading through each one and tracing the logic step by step.</p>
+
+      <p><strong>Example 1: Password Validation</strong></p>
+      <p>This algorithm checks whether a password meets three rules: it must be at least 8 characters long, contain at least one uppercase letter, and contain at least one digit.</p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Pseudocode &mdash; Password Validation</span>
+        </div>
+        <pre><code>INPUT password
+SET hasUpper TO FALSE
+SET hasDigit TO FALSE
+
+IF LENGTH(password) < 8 THEN
+    OUTPUT "Password must be at least 8 characters long"
+    STOP
+ENDIF
+
+FOR EACH character IN password
+    IF character is an uppercase letter THEN
+        SET hasUpper TO TRUE
+    ENDIF
+    IF character is a digit THEN
+        SET hasDigit TO TRUE
+    ENDIF
+ENDFOR
+
+IF hasUpper == TRUE AND hasDigit == TRUE THEN
+    OUTPUT "Password accepted"
+ELSE
+    IF hasUpper == FALSE THEN
+        OUTPUT "Password must contain at least one uppercase letter"
+    ENDIF
+    IF hasDigit == FALSE THEN
+        OUTPUT "Password must contain at least one digit"
+    ENDIF
+ENDIF</code></pre>
+      </div>
+
+      <p><strong>Example 2: Shopping Total Calculator with Discount</strong></p>
+      <p>This algorithm calculates the total cost of items in a shopping basket and applies a 10% discount if the total exceeds &pound;50.</p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Pseudocode &mdash; Shopping Calculator</span>
+        </div>
+        <pre><code>SET total TO 0
+SET itemCount TO 0
+
+REPEAT
+    OUTPUT "Enter item price (or 0 to finish):"
+    INPUT price
+    IF price != 0 THEN
+        SET total TO total + price
+        SET itemCount TO itemCount + 1
+    ENDIF
+UNTIL price == 0
+
+OUTPUT "Items purchased: " + itemCount
+OUTPUT "Subtotal: £" + total
+
+IF total > 50 THEN
+    SET discount TO total * 0.10
+    SET total TO total - discount
+    OUTPUT "10% discount applied: -£" + discount
+ENDIF
+
+OUTPUT "Total to pay: £" + total</code></pre>
+      </div>
+
+      <p><strong>Example 3: Temperature Converter</strong></p>
+      <p>This algorithm lets the user choose a conversion direction and then converts between Celsius and Fahrenheit.</p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Pseudocode &mdash; Temperature Converter</span>
+        </div>
+        <pre><code>OUTPUT "Temperature Converter"
+OUTPUT "1. Celsius to Fahrenheit"
+OUTPUT "2. Fahrenheit to Celsius"
+OUTPUT "Enter your choice (1 or 2):"
+INPUT choice
+
+IF choice == 1 THEN
+    OUTPUT "Enter temperature in Celsius:"
+    INPUT celsius
+    SET fahrenheit TO (celsius * 9 / 5) + 32
+    OUTPUT celsius + "°C = " + fahrenheit + "°F"
+ELSEIF choice == 2 THEN
+    OUTPUT "Enter temperature in Fahrenheit:"
+    INPUT fahrenheit
+    SET celsius TO (fahrenheit - 32) * 5 / 9
+    OUTPUT fahrenheit + "°F = " + celsius + "°C"
+ELSE
+    OUTPUT "Invalid choice. Please enter 1 or 2."
+ENDIF</code></pre>
       </div>
 
       <!-- FLOWCHARTS -->
@@ -311,7 +478,7 @@ OUTPUT "Item not found"</code></pre>
 
       <!-- SORTING ALGORITHMS -->
       <h3>Sorting Algorithms</h3>
-      <p>Sorting means arranging data into a particular order (usually ascending or descending). You need to know two sorting algorithms:</p>
+      <p>Sorting means arranging data into a particular order (usually ascending or descending). You need to know these sorting algorithms:</p>
 
       <h4>Bubble Sort</h4>
       <p>Imagine you have a hand of playing cards that are all jumbled up. You compare the first two cards &mdash; if the first is bigger than the second, you swap them. Then you compare the second and third, and swap if needed. You keep going through the entire hand, and the largest card &ldquo;bubbles&rdquo; to the end. You repeat the whole process until no more swaps are needed.</p>
@@ -353,6 +520,52 @@ UNTIL swapped == FALSE</code></pre>
 
       <p><strong>Pros:</strong> Simple to understand and code. Detects if the list is already sorted (no swaps = stop early).</p>
       <p><strong>Cons:</strong> Very slow for large lists. Makes many unnecessary comparisons.</p>
+
+      <h4>Insertion Sort</h4>
+      <p>Think about how you sort a hand of playing cards. You pick up one card at a time and slide it into the correct position among the cards you have already sorted. That&rsquo;s <strong>insertion sort</strong>.</p>
+
+      <ul>
+        <li>Start with the <strong>second item</strong> in the list (the first item is already &ldquo;sorted&rdquo; by itself)</li>
+        <li>Compare it with items to its left</li>
+        <li><strong>Shift</strong> larger items one place to the right to make room</li>
+        <li><strong>Insert</strong> the current item into its correct position</li>
+        <li>Repeat for every remaining item in the list</li>
+      </ul>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Pseudocode &mdash; Insertion Sort</span>
+        </div>
+        <pre><code>FOR i = 1 TO LENGTH(list) - 1
+    SET current TO list[i]
+    SET j TO i - 1
+    WHILE j >= 0 AND list[j] > current
+        SET list[j + 1] TO list[j]
+        SET j TO j - 1
+    ENDWHILE
+    SET list[j + 1] TO current
+ENDFOR</code></pre>
+      </div>
+
+      <p><strong>Example walkthrough:</strong> Sorting [5, 3, 8, 1]</p>
+      <table>
+        <thead>
+          <tr><th>Step</th><th>Current Item</th><th>Action</th><th>List After Step</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>1</td><td>3</td><td>3 &lt; 5, so shift 5 right and insert 3 before it</td><td>[<strong>3</strong>, 5, 8, 1]</td></tr>
+          <tr><td>2</td><td>8</td><td>8 &gt; 5, so no shift needed &mdash; stays in place</td><td>[3, 5, <strong>8</strong>, 1]</td></tr>
+          <tr><td>3</td><td>1</td><td>1 &lt; 8, shift 8 right; 1 &lt; 5, shift 5 right; 1 &lt; 3, shift 3 right; insert 1 at start</td><td>[<strong>1</strong>, 3, 5, 8]</td></tr>
+        </tbody>
+      </table>
+
+      <p><strong>Pros:</strong> Simple to understand. Very efficient for small lists or lists that are already nearly sorted. Uses very little extra memory.</p>
+      <p><strong>Cons:</strong> Slow for large, unsorted lists (similar to bubble sort).</p>
+
+      <div class="key-concept">
+        <strong>Insertion Sort vs. Bubble Sort</strong>
+        Both insertion sort and bubble sort are slow on large data sets, but insertion sort is generally faster in practice because it makes fewer comparisons and swaps, especially when the data is already partially sorted. If a list is nearly sorted, insertion sort can finish very quickly, whereas bubble sort still needs to make full passes through the data.
+      </div>
 
       <h4>Merge Sort</h4>
       <p>Merge sort uses a &ldquo;divide and conquer&rdquo; approach. Imagine you have a messy pile of exam papers to sort alphabetically. Instead of sorting the whole pile at once, you split it in half, then split those halves in half again, and keep going until you have piles of just one paper each (which are already &ldquo;sorted&rdquo;). Then you <strong>merge</strong> the piles back together in the right order.</p>
@@ -411,8 +624,117 @@ ENDFUNCTION</code></pre>
 
       <div class="key-concept">
         <strong>Key Concept: Comparing Sorts</strong>
-        <strong>Bubble sort</strong> is simple but slow &mdash; best for small or nearly-sorted lists. <strong>Merge sort</strong> is faster for large data sets but uses more memory. In exams, you may be asked to trace through each algorithm step by step, so practise with small lists until you are confident.
+        <strong>Bubble sort</strong> is simple but slow &mdash; best for small or nearly-sorted lists. <strong>Insertion sort</strong> is also simple and performs well on small or nearly-sorted data, often better than bubble sort. <strong>Merge sort</strong> is faster for large data sets but uses more memory. In exams, you may be asked to trace through each algorithm step by step, so practise with small lists until you are confident.
       </div>
+
+      <!-- EFFICIENCY AND BIG O -->
+      <h3>Efficiency and Big O Notation</h3>
+      <p>When there are several algorithms that solve the same problem, how do we decide which one is &ldquo;better&rdquo;? We look at <strong>efficiency</strong> &mdash; how quickly an algorithm runs as the amount of data grows. In computer science, we describe this using <strong>Big O notation</strong>.</p>
+
+      <p>Big O notation is a simple way of saying: &ldquo;In the worst case, roughly how many steps does this algorithm need as the data gets bigger?&rdquo; We use the letter <strong>n</strong> to stand for the number of items in the data set.</p>
+
+      <table>
+        <thead>
+          <tr><th>Big O</th><th>Name</th><th>What It Means</th><th>Example Algorithm</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>O(1)</strong></td>
+            <td>Constant</td>
+            <td>The same number of steps regardless of data size</td>
+            <td>Accessing an item in a list by its index</td>
+          </tr>
+          <tr>
+            <td><strong>O(log n)</strong></td>
+            <td>Logarithmic</td>
+            <td>Halves the data each step &mdash; very fast even for huge data sets</td>
+            <td>Binary search</td>
+          </tr>
+          <tr>
+            <td><strong>O(n)</strong></td>
+            <td>Linear</td>
+            <td>Checks each item once &mdash; double the data means double the time</td>
+            <td>Linear search</td>
+          </tr>
+          <tr>
+            <td><strong>O(n log n)</strong></td>
+            <td>Linearithmic</td>
+            <td>Faster than quadratic but slower than linear &mdash; efficient sorting</td>
+            <td>Merge sort</td>
+          </tr>
+          <tr>
+            <td><strong>O(n&sup2;)</strong></td>
+            <td>Quadratic</td>
+            <td>Compares every pair &mdash; double the data means four times the time</td>
+            <td>Bubble sort, insertion sort</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p><strong>What does this look like in practice?</strong> Imagine you have a list of 1,000 items:</p>
+      <ul>
+        <li><strong>Linear search O(n):</strong> Up to 1,000 comparisons in the worst case</li>
+        <li><strong>Binary search O(log n):</strong> Up to about 10 comparisons (since 2<sup>10</sup> = 1,024)</li>
+        <li><strong>Bubble sort O(n&sup2;):</strong> Up to roughly 1,000,000 comparisons in the worst case</li>
+        <li><strong>Merge sort O(n log n):</strong> Up to roughly 10,000 comparisons</li>
+      </ul>
+
+      <p>You can see that the choice of algorithm makes an enormous difference. For large data sets, an O(n&sup2;) algorithm can be hundreds of times slower than an O(n log n) one.</p>
+
+      <div class="key-concept">
+        <strong>Did You Know?</strong>
+        The most efficient general-purpose sorting algorithms &mdash; including merge sort and similar approaches &mdash; run in <strong>O(n log n)</strong> time. It has been mathematically proven that no comparison-based sorting algorithm can do better than this in the worst case. So O(n log n) is effectively the speed limit for sorting!
+      </div>
+
+      <div class="warning">
+        <strong>Exam Tip:</strong> You do not need to memorise complex mathematics for Big O at GCSE level. Just remember: <strong>O(1)</strong> is the fastest, <strong>O(log n)</strong> is very fast, <strong>O(n)</strong> is fair, <strong>O(n log n)</strong> is good for sorting, and <strong>O(n&sup2;)</strong> is slow for large data. Be able to say which algorithms belong to which category and explain <em>why</em> one is faster than another.
+      </div>
+    </section>
+
+    <!-- ==================== REAL WORLD CASE STUDIES ==================== -->
+    <section class="explore">
+      <span class="section-label">Real World</span>
+      <h2>Case Studies: Algorithms in the Real World</h2>
+
+      <p>Computational thinking and algorithms are not just exam topics &mdash; they power the technology you use every day. Here are three real-world examples.</p>
+
+      <h3>Case Study 1: How Google Search Ranks Pages</h3>
+      <p>When you type a query into Google, it does not simply search the entire internet in that moment. Google has already used <strong>web crawling algorithms</strong> to visit billions of pages and build a massive index &mdash; like the index at the back of a textbook, but unimaginably larger.</p>
+      <p>When you search, Google&rsquo;s <strong>ranking algorithm</strong> (originally called PageRank, named after co-founder Larry Page) uses <strong>pattern recognition</strong> to decide which pages are most relevant. It considers hundreds of factors, including:</p>
+      <ul>
+        <li>How many other websites link to a page (more links = more trustworthy)</li>
+        <li>How closely the page content matches your search terms</li>
+        <li>How recently the page was updated</li>
+        <li>How quickly the page loads</li>
+      </ul>
+      <p>The results are sorted by relevance using complex sorting algorithms, and the whole process takes less than a second. This is a powerful example of <strong>algorithmic thinking</strong> at massive scale.</p>
+
+      <div class="key-concept">
+        <strong>Did You Know?</strong>
+        Google processes over <strong>8.5 billion searches per day</strong>. Each single search involves running complex algorithms across billions of web pages &mdash; and the results appear in under one second. That is the power of efficient algorithms combined with powerful hardware.
+      </div>
+
+      <h3>Case Study 2: How GPS Navigation Finds Your Route</h3>
+      <p>When you ask your phone for directions, the GPS app uses <strong>decomposition</strong> to break the route-finding problem into smaller steps:</p>
+      <ol>
+        <li><strong>Determine your current location</strong> using satellite signals (GPS coordinates)</li>
+        <li><strong>Identify the destination</strong> from the address you entered</li>
+        <li><strong>Build a graph</strong> of the road network &mdash; each junction is a node, each road is a connection with a &ldquo;weight&rdquo; (distance or travel time)</li>
+        <li><strong>Run a shortest-path algorithm</strong> (such as Dijkstra&rsquo;s algorithm) to find the quickest route</li>
+        <li><strong>Adjust in real time</strong> if traffic data changes</li>
+      </ol>
+      <p>This is decomposition in action &mdash; the huge problem of &ldquo;get me from A to B&rdquo; is broken into clearly defined sub-problems, each solved by a specific algorithm.</p>
+
+      <h3>Case Study 3: How Netflix Recommends Shows</h3>
+      <p>Netflix uses <strong>pattern recognition</strong> to suggest what you might want to watch next. Its recommendation algorithm analyses:</p>
+      <ul>
+        <li>What you have watched and how much of each show you finished</li>
+        <li>What you have rated highly</li>
+        <li>What similar users (people with viewing habits like yours) have enjoyed</li>
+        <li>The genre, actors, directors, and themes of shows you like</li>
+      </ul>
+      <p>The algorithm spots <strong>patterns</strong> across millions of users. If people who watched Show A and Show B also tended to watch Show C, then Netflix will recommend Show C to you after you watch A and B. This is essentially pattern recognition applied to enormous data sets.</p>
+      <p><strong>Abstraction</strong> also plays a role &mdash; the algorithm does not care about every detail of a show. It abstracts each show down to a set of key features (genre, mood, pace, cast) that can be compared mathematically.</p>
     </section>
 
     <!-- ==================== PRACTICE ==================== -->
@@ -495,6 +817,181 @@ ENDFUNCTION</code></pre>
           <p><strong>Pass 4:</strong> No swaps &rarr; sorted! <strong>Final list: [1, 2, 4, 7]</strong></p>
         </div>
       </div>
+
+      <div class="hint">
+        <div class="hint-title">Q11: Trace through a binary search for the value 7 in the sorted list [1, 3, 5, 7, 9, 11, 13]. Show each step.</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong></p>
+          <p><strong>Step 1:</strong> low = 0, high = 6, mid = (0 + 6) DIV 2 = 3. list[3] = <strong>7</strong>.</p>
+          <p>7 == 7, so the item is <strong>found at position 3</strong>.</p>
+          <p>Binary search found it in just <strong>1 comparison</strong>. A linear search starting from position 0 would have needed 4 comparisons (checking 1, 3, 5, then 7).</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q12: Write pseudocode for a program that finds the average of numbers in a list.</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong></p>
+          <div class="code-block">
+            <div class="code-block-header">
+              <span class="code-block-label">Pseudocode</span>
+            </div>
+            <pre><code>INPUT numbers (a list of values)
+SET total TO 0
+SET count TO LENGTH(numbers)
+
+FOR EACH number IN numbers
+    SET total TO total + number
+ENDFOR
+
+SET average TO total / count
+OUTPUT "The average is: " + average</code></pre>
+          </div>
+          <p>The key steps are: (1) add up all the values using a loop, (2) divide the total by the number of items. Remember to use a variable to accumulate the running total.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q13: Give one advantage and one disadvantage of merge sort compared to bubble sort.</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong></p>
+          <p><strong>Advantage:</strong> Merge sort is significantly faster for large data sets. It runs in O(n log n) time, whereas bubble sort runs in O(n&sup2;) time. For example, on a list of 10,000 items, merge sort might need roughly 130,000 steps while bubble sort could need up to 100,000,000 steps.</p>
+          <p><strong>Disadvantage:</strong> Merge sort uses more memory than bubble sort because it creates new sub-lists at each stage of the divide step. Bubble sort sorts the list &ldquo;in place&rdquo; without needing significant extra memory.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q14: Describe a flowchart for a program that checks if a number is even or odd.</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> The flowchart would contain the following steps:</p>
+          <ol>
+            <li><strong>Oval (Terminator):</strong> START</li>
+            <li><strong>Parallelogram (Input):</strong> INPUT number</li>
+            <li><strong>Diamond (Decision):</strong> Is number MOD 2 == 0?</li>
+            <li><strong>Yes path &rarr; Parallelogram (Output):</strong> OUTPUT &ldquo;The number is even&rdquo;</li>
+            <li><strong>No path &rarr; Parallelogram (Output):</strong> OUTPUT &ldquo;The number is odd&rdquo;</li>
+            <li>Both paths lead to &rarr; <strong>Oval (Terminator):</strong> STOP</li>
+          </ol>
+          <p>Remember: the decision diamond must have two labelled exits (Yes/No), and input/output boxes must be parallelograms, not rectangles.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q15: A school needs a system to track student attendance. Describe how you would decompose this problem. (4 marks)</div>
+        <div class="hint-content">
+          <p><strong>Answer (4 marks &mdash; one mark per well-described sub-problem):</strong></p>
+          <p><strong>1. Data input:</strong> A module to record each student&rsquo;s attendance &mdash; allowing a teacher to mark students as present, absent, or late for each lesson or registration period.</p>
+          <p><strong>2. Data storage:</strong> A database or file system to store student details (name, form group, student ID) and their attendance records over time.</p>
+          <p><strong>3. Calculations and analysis:</strong> A module that calculates attendance percentages for each student and identifies those below a threshold (e.g. below 90%), flagging them for follow-up.</p>
+          <p><strong>4. Reporting and output:</strong> A module that generates reports &mdash; such as weekly summaries, individual student reports, and letters to parents &mdash; and displays them on screen or as printable documents.</p>
+          <p><em>Top tip:</em> In a 4-mark question, aim for four distinct, clearly explained sub-problems. Do not just list them &mdash; briefly explain what each one does.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== KEY VOCABULARY ==================== -->
+    <section class="understand">
+      <span class="section-label">Reference</span>
+      <h2>Key Vocabulary</h2>
+      <p>Make sure you understand and can define all of these terms. They appear frequently in GCSE exam questions.</p>
+
+      <table>
+        <thead>
+          <tr><th>Term</th><th>Definition</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Algorithm</strong></td>
+            <td>A step-by-step set of instructions for solving a problem or completing a task. It must be precise, ordered, and finite.</td>
+          </tr>
+          <tr>
+            <td><strong>Pseudocode</strong></td>
+            <td>A way of writing an algorithm in structured English that resembles code but is not tied to any programming language.</td>
+          </tr>
+          <tr>
+            <td><strong>Flowchart</strong></td>
+            <td>A visual diagram that represents an algorithm using standard shapes (ovals, rectangles, diamonds, parallelograms) connected by arrows.</td>
+          </tr>
+          <tr>
+            <td><strong>Decomposition</strong></td>
+            <td>Breaking a complex problem into smaller, more manageable sub-problems that can be solved individually.</td>
+          </tr>
+          <tr>
+            <td><strong>Abstraction</strong></td>
+            <td>Removing unnecessary detail to focus on the essential information needed to solve a problem.</td>
+          </tr>
+          <tr>
+            <td><strong>Pattern Recognition</strong></td>
+            <td>Identifying similarities, trends, or repeated elements within or across problems.</td>
+          </tr>
+          <tr>
+            <td><strong>Sequence</strong></td>
+            <td>A programming construct where instructions are executed one after another in order.</td>
+          </tr>
+          <tr>
+            <td><strong>Selection</strong></td>
+            <td>A programming construct where a decision is made based on a condition (e.g. IF...THEN...ELSE).</td>
+          </tr>
+          <tr>
+            <td><strong>Iteration</strong></td>
+            <td>A programming construct where instructions are repeated, either a set number of times (FOR) or until a condition is met (WHILE).</td>
+          </tr>
+          <tr>
+            <td><strong>Linear Search</strong></td>
+            <td>A search algorithm that checks each item in a list one by one from start to end. Works on unsorted data. Efficiency: O(n).</td>
+          </tr>
+          <tr>
+            <td><strong>Binary Search</strong></td>
+            <td>A search algorithm that repeatedly halves a sorted list to find an item. Much faster than linear search. Efficiency: O(log n).</td>
+          </tr>
+          <tr>
+            <td><strong>Bubble Sort</strong></td>
+            <td>A sorting algorithm that repeatedly compares adjacent pairs and swaps them if they are in the wrong order. Simple but slow. Efficiency: O(n&sup2;).</td>
+          </tr>
+          <tr>
+            <td><strong>Merge Sort</strong></td>
+            <td>A sorting algorithm that divides a list in half repeatedly, then merges the halves back in order. Fast but uses extra memory. Efficiency: O(n log n).</td>
+          </tr>
+          <tr>
+            <td><strong>Efficiency</strong></td>
+            <td>A measure of how well an algorithm performs, usually described in terms of time (speed) and space (memory usage) as the input size grows.</td>
+          </tr>
+          <tr>
+            <td><strong>Divide and Conquer</strong></td>
+            <td>An approach that breaks a problem into smaller sub-problems, solves each one, and combines the results. Used by merge sort and binary search.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- ==================== EXAM TIPS ==================== -->
+    <section class="explore">
+      <span class="section-label">Exam Skills</span>
+      <h2>Exam Tips: Answering Algorithm Questions</h2>
+
+      <p>Algorithm questions are some of the most common &mdash; and most valuable &mdash; in GCSE Computer Science exams. Here are practical tips to help you pick up every available mark.</p>
+
+      <h3>1. Trace Tables: Show Your Working</h3>
+      <p>When asked to trace through an algorithm, <strong>always use a trace table</strong>. Write a column for each variable and a row for each step. This makes your working clear to the examiner, and even if your final answer is wrong, you can still pick up method marks for correct intermediate steps.</p>
+
+      <h3>2. Use Correct Pseudocode Keywords</h3>
+      <p>If the question asks you to write pseudocode, use the standard keywords: <strong>IF...THEN...ELSE...ENDIF</strong>, <strong>FOR...ENDFOR</strong>, <strong>WHILE...ENDWHILE</strong>, <strong>REPEAT...UNTIL</strong>, <strong>INPUT</strong>, <strong>OUTPUT</strong>, <strong>SET...TO</strong>. Avoid writing in Python or any specific language unless the question asks for it.</p>
+
+      <h3>3. Always State Advantages AND Disadvantages</h3>
+      <p>When a question asks you to <strong>compare</strong> two algorithms (e.g. bubble sort vs. merge sort, or linear search vs. binary search), make sure you mention at least one advantage and one disadvantage of each. A one-sided answer will only score half marks at most.</p>
+
+      <h3>4. Read the Data Carefully</h3>
+      <p>Pay attention to whether data is sorted or unsorted. If a question gives you an unsorted list and asks which search algorithm to use, the answer is <strong>linear search</strong> &mdash; binary search cannot be used on unsorted data. If the data is sorted, mention that binary search would be more efficient.</p>
+
+      <h3>5. Decomposition Questions: Be Specific</h3>
+      <p>When asked to &ldquo;decompose&rdquo; a problem, do not just list vague sub-tasks. For each sub-problem, briefly explain <strong>what it does</strong> and <strong>why it is needed</strong>. If the question is worth 4 marks, aim for four distinct, well-explained sub-problems.</p>
+
+      <h3>6. Flowchart Questions: Use the Right Shapes</h3>
+      <p>If you are asked to draw a flowchart, use the correct shapes. Using a rectangle where a diamond should be &mdash; or forgetting parallelograms for input/output &mdash; will cost you marks, even if the logic is correct.</p>
+
+      <div class="warning">
+        <strong>Top Exam Tip:</strong> If you are running out of time and cannot finish a trace table, at least write down your final answer with a brief explanation. You may still get the mark for the correct answer, and partial working often picks up method marks. Never leave an algorithm question blank.
+      </div>
     </section>
 
     <!-- ==================== REFLECT ==================== -->
@@ -522,8 +1019,11 @@ ENDFUNCTION</code></pre>
       <p>The more you practise this way of thinking, the more natural it becomes. And when you start writing code, you will find that the hardest part is not the programming language itself &mdash; it is <strong>thinking through the problem clearly</strong>. Get that right, and the code almost writes itself.</p>
 
       <div class="extra-resources">
-        <h3>Further Reading</h3>
+        <h3>Further Reading &amp; External Resources</h3>
         <ul>
+          <li><a href="https://www.bbc.co.uk/bitesize/examspecs/zdqy7nb" target="_blank" rel="noopener">BBC Bitesize &mdash; Edexcel GCSE Computer Science</a> &mdash; Comprehensive coverage of all Edexcel GCSE CS topics including algorithms and computational thinking</li>
+          <li><a href="https://isaaccomputerscience.org/topics/searching_and_sorting" target="_blank" rel="noopener">Isaac Computer Science &mdash; Searching and Sorting Algorithms</a> &mdash; Excellent interactive explanations of searching and sorting with step-by-step animations</li>
+          <li><a href="https://www.w3schools.com/dsa/" target="_blank" rel="noopener">W3Schools &mdash; Data Structures and Algorithms</a> &mdash; Beginner-friendly tutorials on algorithms with try-it-yourself examples</li>
           <li><a href="https://hvgcsecs.cshub.org.je/topics/topic1.html" target="_blank" rel="noopener">GCSE Topic 1: Computational Thinking &amp; Algorithms</a> &mdash; Full Edexcel specification coverage with interactive examples</li>
           <li><a href="https://hvgcse.cshub.org.je/CS_Escape_Room.html" target="_blank" rel="noopener">Computer Science Escape Room</a> &mdash; Test your computational thinking with interactive puzzles</li>
         </ul>
@@ -533,7 +1033,6 @@ ENDFUNCTION</code></pre>
     <!-- ==================== NAVIGATION ==================== -->
     <nav class="chapter-nav">
       <a href="../index.html">&larr; Course Home</a>
-      <a href="../index.html">Course Home</a>
       <a href="data-representation.html">Next: Data Representation &rarr;</a>
     </nav>
 

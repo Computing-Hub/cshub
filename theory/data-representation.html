@@ -8,6 +8,62 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="../css/style.css" />
+  <style>
+    .did-you-know {
+      background: linear-gradient(135deg, #e8f4fd, #d1ecf9);
+      border: 2px solid #0dcaf0;
+      border-radius: var(--radius-md);
+      padding: var(--space-lg);
+      margin: var(--space-md) 0;
+    }
+    .did-you-know strong:first-child {
+      color: #0a7c9f;
+      display: block;
+      margin-bottom: var(--space-xs);
+    }
+    .exam-tip {
+      background: linear-gradient(135deg, #f3e8ff, #ede5ff);
+      border: 2px solid #7209b7;
+      border-radius: var(--radius-md);
+      padding: var(--space-lg);
+      margin: var(--space-md) 0;
+    }
+    .exam-tip strong:first-child {
+      color: #7209b7;
+      display: block;
+      margin-bottom: var(--space-xs);
+    }
+    .vocab-table td:first-child {
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    .colour-swatch {
+      display: inline-block;
+      width: 1.2em;
+      height: 1.2em;
+      vertical-align: middle;
+      border-radius: 3px;
+      border: 1px solid #ccc;
+      margin-right: 0.3em;
+    }
+    .case-study {
+      background: var(--color-white);
+      border: 2px solid #6c757d;
+      border-radius: var(--radius-md);
+      padding: var(--space-lg);
+      margin: var(--space-md) 0;
+    }
+    .case-study strong:first-child {
+      color: #495057;
+      display: block;
+      margin-bottom: var(--space-xs);
+    }
+    .shift-diagram {
+      font-family: var(--font-code);
+      font-size: 0.95rem;
+      line-height: 1.8;
+    }
+  </style>
 </head>
 <body>
 
@@ -57,7 +113,10 @@
         </tbody>
       </table>
 
-      <p><strong>Example: Convert binary 11010110 to denary.</strong></p>
+      <!-- BINARY TO DENARY: Worked Example 1 -->
+      <h4>Binary to Denary Conversions</h4>
+
+      <p><strong>Example 1: Convert binary 11010110 to denary.</strong></p>
       <table>
         <thead>
           <tr><th>128</th><th>64</th><th>32</th><th>16</th><th>8</th><th>4</th><th>2</th><th>1</th></tr>
@@ -66,10 +125,47 @@
           <tr><td>1</td><td>1</td><td>0</td><td>1</td><td>0</td><td>1</td><td>1</td><td>0</td></tr>
         </tbody>
       </table>
-      <p>128 + 64 + 16 + 4 + 2 = <strong>214</strong></p>
+      <p>Add together the place values where there is a 1: 128 + 64 + 16 + 4 + 2 = <strong>214</strong></p>
 
-      <p><strong>Example: Convert denary 75 to binary.</strong></p>
-      <p>Start with the largest place value that fits: 64 fits into 75 (75 &minus; 64 = 11). 32 is too big. 8 fits (11 &minus; 8 = 3). 4 is too big. 2 fits (3 &minus; 2 = 1). 1 fits (1 &minus; 1 = 0).</p>
+      <!-- BINARY TO DENARY: Worked Example 2 -->
+      <p><strong>Example 2: Convert binary 10011101 to denary.</strong></p>
+      <table>
+        <thead>
+          <tr><th>128</th><th>64</th><th>32</th><th>16</th><th>8</th><th>4</th><th>2</th><th>1</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>1</td><td>0</td><td>0</td><td>1</td><td>1</td><td>1</td><td>0</td><td>1</td></tr>
+        </tbody>
+      </table>
+      <p>128 + 16 + 8 + 4 + 1 = <strong>157</strong></p>
+
+      <!-- BINARY TO DENARY: Worked Example 3 -->
+      <p><strong>Example 3: Convert binary 01100100 to denary.</strong></p>
+      <table>
+        <thead>
+          <tr><th>128</th><th>64</th><th>32</th><th>16</th><th>8</th><th>4</th><th>2</th><th>1</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>0</td><td>1</td><td>1</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td></tr>
+        </tbody>
+      </table>
+      <p>64 + 32 + 4 = <strong>100</strong></p>
+
+      <!-- DENARY TO BINARY: Worked Examples -->
+      <h4>Denary to Binary Conversions</h4>
+
+      <p><strong>Example 1: Convert denary 75 to binary.</strong></p>
+      <p>Start with the largest place value that fits and work down:</p>
+      <ol>
+        <li>128? No (128 &gt; 75). Write <strong>0</strong>.</li>
+        <li>64? Yes (75 &minus; 64 = 11 remaining). Write <strong>1</strong>.</li>
+        <li>32? No (32 &gt; 11). Write <strong>0</strong>.</li>
+        <li>16? No (16 &gt; 11). Write <strong>0</strong>.</li>
+        <li>8? Yes (11 &minus; 8 = 3 remaining). Write <strong>1</strong>.</li>
+        <li>4? No (4 &gt; 3). Write <strong>0</strong>.</li>
+        <li>2? Yes (3 &minus; 2 = 1 remaining). Write <strong>1</strong>.</li>
+        <li>1? Yes (1 &minus; 1 = 0 remaining). Write <strong>1</strong>.</li>
+      </ol>
       <table>
         <thead>
           <tr><th>128</th><th>64</th><th>32</th><th>16</th><th>8</th><th>4</th><th>2</th><th>1</th></tr>
@@ -79,6 +175,48 @@
         </tbody>
       </table>
       <p>75 in binary = <strong>01001011</strong></p>
+
+      <p><strong>Example 2: Convert denary 193 to binary.</strong></p>
+      <ol>
+        <li>128? Yes (193 &minus; 128 = 65 remaining). Write <strong>1</strong>.</li>
+        <li>64? Yes (65 &minus; 64 = 1 remaining). Write <strong>1</strong>.</li>
+        <li>32? No. Write <strong>0</strong>.</li>
+        <li>16? No. Write <strong>0</strong>.</li>
+        <li>8? No. Write <strong>0</strong>.</li>
+        <li>4? No. Write <strong>0</strong>.</li>
+        <li>2? No. Write <strong>0</strong>.</li>
+        <li>1? Yes (1 &minus; 1 = 0 remaining). Write <strong>1</strong>.</li>
+      </ol>
+      <table>
+        <thead>
+          <tr><th>128</th><th>64</th><th>32</th><th>16</th><th>8</th><th>4</th><th>2</th><th>1</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>1</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td></tr>
+        </tbody>
+      </table>
+      <p>193 in binary = <strong>11000001</strong></p>
+
+      <p><strong>Example 3: Convert denary 42 to binary.</strong></p>
+      <ol>
+        <li>128? No. Write <strong>0</strong>.</li>
+        <li>64? No. Write <strong>0</strong>.</li>
+        <li>32? Yes (42 &minus; 32 = 10 remaining). Write <strong>1</strong>.</li>
+        <li>16? No. Write <strong>0</strong>.</li>
+        <li>8? Yes (10 &minus; 8 = 2 remaining). Write <strong>1</strong>.</li>
+        <li>4? No. Write <strong>0</strong>.</li>
+        <li>2? Yes (2 &minus; 2 = 0 remaining). Write <strong>1</strong>.</li>
+        <li>1? No. Write <strong>0</strong>.</li>
+      </ol>
+      <table>
+        <thead>
+          <tr><th>128</th><th>64</th><th>32</th><th>16</th><th>8</th><th>4</th><th>2</th><th>1</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>0</td><td>0</td><td>1</td><td>0</td><td>1</td><td>0</td><td>1</td><td>0</td></tr>
+        </tbody>
+      </table>
+      <p>42 in binary = <strong>00101010</strong></p>
 
       <h3>Hexadecimal (Base 16)</h3>
       <p>Hexadecimal (hex for short) uses <strong>16 digits</strong>: 0&ndash;9 and then A&ndash;F (where A=10, B=11, C=12, D=13, E=14, F=15). It is used as a shorthand for binary because one hex digit represents exactly 4 binary digits (a nibble).</p>
@@ -107,10 +245,39 @@
         </tbody>
       </table>
 
-      <p><strong>Why use hex?</strong> Binary numbers get very long very quickly. The byte 11010110 is much easier to read and remember as <strong>D6</strong> in hex. Hex is commonly used for colour codes in web design (e.g. #FF5733), memory addresses, MAC addresses, and error codes.</p>
+      <p><strong>Why use hex?</strong> Binary numbers get very long very quickly. The byte 11010110 is much easier to read and remember as <strong>D6</strong> in hex. Hex is commonly used for colour codes in web design, memory addresses, MAC addresses, and error codes.</p>
+
+      <h4>Hex Colour Codes in Web Design</h4>
+      <p>In HTML and CSS, colours are written as a <strong>#</strong> followed by six hex digits. The six digits are split into three pairs: <strong>Red</strong>, <strong>Green</strong>, <strong>Blue</strong> (RGB). Each pair ranges from 00 (none of that colour) to FF (maximum of that colour, which is 255 in denary).</p>
+
+      <table>
+        <thead>
+          <tr><th>Hex Code</th><th>Red</th><th>Green</th><th>Blue</th><th>Colour</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>#FF0000</td><td>FF (255)</td><td>00 (0)</td><td>00 (0)</td><td><span class="colour-swatch" style="background:#FF0000;"></span> Pure Red</td></tr>
+          <tr><td>#00FF00</td><td>00 (0)</td><td>FF (255)</td><td>00 (0)</td><td><span class="colour-swatch" style="background:#00FF00;"></span> Pure Green</td></tr>
+          <tr><td>#0000FF</td><td>00 (0)</td><td>00 (0)</td><td>FF (255)</td><td><span class="colour-swatch" style="background:#0000FF;"></span> Pure Blue</td></tr>
+          <tr><td>#FFFFFF</td><td>FF (255)</td><td>FF (255)</td><td>FF (255)</td><td><span class="colour-swatch" style="background:#FFFFFF;"></span> White</td></tr>
+          <tr><td>#000000</td><td>00 (0)</td><td>00 (0)</td><td>00 (0)</td><td><span class="colour-swatch" style="background:#000000;"></span> Black</td></tr>
+          <tr><td>#FF5733</td><td>FF (255)</td><td>57 (87)</td><td>33 (51)</td><td><span class="colour-swatch" style="background:#FF5733;"></span> Warm Orange-Red</td></tr>
+        </tbody>
+      </table>
+
+      <h4>Hex Memory Addresses</h4>
+      <p>When a computer stores data in RAM, each byte is given a unique <strong>memory address</strong>. These addresses are written in hexadecimal because hex is far more compact than binary. For example, the memory address <strong>0x7FFF5A2C</strong> in binary would be <strong>01111111111111110101101000101100</strong> &mdash; 32 digits long! The hex version is only 8 digits and much easier for programmers to work with.</p>
+
+      <h4>More Hex Conversions</h4>
+      <p><strong>Hex to Binary:</strong> Convert hex <strong>A7</strong> to binary. Take each hex digit and replace it with its 4-bit binary equivalent: A = 1010, 7 = 0111. Answer: <strong>10100111</strong>.</p>
+
+      <p><strong>Hex to Denary:</strong> Convert hex <strong>2F</strong> to denary. Multiply each digit by its place value: 2 &times; 16 + F(15) &times; 1 = 32 + 15 = <strong>47</strong>.</p>
+
+      <p><strong>Hex to Denary:</strong> Convert hex <strong>B8</strong> to denary. B(11) &times; 16 + 8 &times; 1 = 176 + 8 = <strong>184</strong>.</p>
+
+      <p><strong>Binary to Hex:</strong> Convert binary <strong>10110011</strong> to hex. Split into nibbles: 1011 = B, 0011 = 3. Answer: <strong>B3</strong>.</p>
 
       <div class="try-this">
-        <strong>Quick Conversions to Try:</strong> Convert binary 10110011 to hex (split into nibbles: 1011 0011 = B3). Convert hex A7 to binary (A = 1010, 7 = 0111 = 10100111). Convert hex 2F to denary (2 &times; 16 + 15 = 47).
+        <strong>Quick Conversions to Try:</strong> Convert binary 11110001 to hex (split into nibbles: 1111 0001 = F1). Convert hex C4 to binary (C = 1100, 4 = 0100 = 11000100). Convert hex 5E to denary (5 &times; 16 + 14 = 94).
       </div>
     </section>
 
@@ -130,10 +297,10 @@
         <li>1 + 1 + 1 = 11 (that is 1, carry 1)</li>
       </ul>
 
-      <p><strong>Example: 01101011 + 00110101</strong></p>
+      <p><strong>Example 1: 01101011 + 00110101</strong></p>
       <div class="code-block">
         <div class="code-block-header">
-          <span class="code-block-label">Binary Addition</span>
+          <span class="code-block-label">Binary Addition &mdash; Example 1</span>
         </div>
         <pre><code>  Carry:  1 1 1 1 1
           0 1 1 0 1 0 1 1   (107)
@@ -141,24 +308,109 @@
         -----------------
           1 0 1 0 0 0 0 0   (160)</code></pre>
       </div>
+      <p>Working from right to left: 1+1=10 (write 0 carry 1), 1+0+1=10 (write 0 carry 1), 0+1+1=10 (write 0 carry 1), 1+0+1=10 (write 0 carry 1), 0+1+1=10 (write 0 carry 1), 1+1=10 (write 0 carry 1), 1+0=1, 0+0+1=1. Result: <strong>10100000</strong> (160).</p>
+
+      <p><strong>Example 2: 00101100 + 01001110</strong></p>
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Binary Addition &mdash; Example 2</span>
+        </div>
+        <pre><code>  Carry:    1 1 1
+          0 0 1 0 1 1 0 0   ( 44)
+        + 0 1 0 0 1 1 1 0   ( 78)
+        -----------------
+          0 1 1 1 1 0 1 0   (122)</code></pre>
+      </div>
+      <p>Check: 44 + 78 = 122. The result fits in 8 bits, so no overflow.</p>
+
+      <p><strong>Example 3: 11001000 + 01100101 (Overflow!)</strong></p>
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Binary Addition &mdash; Overflow Example</span>
+        </div>
+        <pre><code>  Carry: 1 1 1
+          1 1 0 0 1 0 0 0   (200)
+        + 0 1 1 0 0 1 0 1   (101)
+        -----------------
+        1 0 0 1 0 1 1 0 1   (301 - but this needs 9 bits!)
+
+  In 8 bits we can only store: 00101101 = 45 (WRONG!)
+  The 9th bit is lost &mdash; this is an OVERFLOW ERROR.</code></pre>
+      </div>
 
       <div class="warning">
-        <strong>Watch Out &mdash; Overflow:</strong> If the result of a binary addition does not fit in the available number of bits, an <strong>overflow error</strong> occurs. For example, with 8 bits the largest number is 11111111 (255). Adding 200 + 100 = 300 would cause an overflow because 300 cannot be stored in 8 bits.
+        <strong>Watch Out &mdash; Overflow:</strong> If the result of a binary addition does not fit in the available number of bits, an <strong>overflow error</strong> occurs. With 8 bits the largest unsigned number is 11111111 (255). Adding 200 + 101 = 301 causes an overflow because 301 cannot be stored in 8 bits. The computer discards the 9th bit, leaving an incorrect answer of 45. This type of error can cause serious bugs in software.
       </div>
 
       <!-- BINARY SHIFTS -->
-      <h3>Binary Shifts</h3>
-      <p>A <strong>binary shift</strong> moves all the bits left or right by a given number of places:</p>
+      <h3>Logical Binary Shifts</h3>
+      <p>A <strong>logical binary shift</strong> moves all the bits left or right by a given number of places:</p>
       <ul>
-        <li><strong>Left shift</strong> by 1 = multiply by 2 (e.g. 00001010 &rarr; 00010100, i.e. 10 &rarr; 20)</li>
-        <li><strong>Right shift</strong> by 1 = integer divide by 2 (e.g. 00010100 &rarr; 00001010, i.e. 20 &rarr; 10)</li>
+        <li><strong>Left shift</strong> by 1 = multiply by 2</li>
+        <li><strong>Right shift</strong> by 1 = integer divide by 2</li>
         <li>Shift by 2 places = multiply or divide by 4. Shift by 3 = multiply or divide by 8.</li>
       </ul>
       <p>Bits that &ldquo;fall off&rdquo; the end are lost, and the empty spaces are filled with 0s.</p>
 
+      <p><strong>Example 1: Left shift by 1</strong></p>
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Left Shift by 1</span>
+        </div>
+        <pre><code>  Before:  0 0 0 0 1 0 1 0   (10)
+                 &larr;&larr;&larr;&larr;&larr;&larr;&larr;     all bits move left
+  After:   0 0 0 1 0 1 0 0   (20)
+                           ^
+                       filled with 0
+
+  10 &times; 2 = 20  &#10004;</code></pre>
+      </div>
+
+      <p><strong>Example 2: Left shift by 2</strong></p>
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Left Shift by 2</span>
+        </div>
+        <pre><code>  Before:  0 0 0 0 0 1 1 0   (6)
+               &larr;&larr;&larr;&larr;&larr;&larr;         all bits move left by 2
+  After:   0 0 0 1 1 0 0 0   (24)
+                         ^ ^
+                     filled with 0s
+
+  6 &times; 4 = 24  &#10004;</code></pre>
+      </div>
+
+      <p><strong>Example 3: Right shift by 1</strong></p>
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Right Shift by 1</span>
+        </div>
+        <pre><code>  Before:  0 0 0 1 0 1 0 0   (20)
+             &rarr;&rarr;&rarr;&rarr;&rarr;&rarr;&rarr;         all bits move right
+  After:   0 0 0 0 1 0 1 0   (10)
+           ^
+       filled with 0
+
+  20 &divide; 2 = 10  &#10004;</code></pre>
+      </div>
+
+      <p><strong>Example 4: Right shift by 3</strong></p>
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Right Shift by 3</span>
+        </div>
+        <pre><code>  Before:  0 1 1 0 1 0 0 0   (104)
+           &rarr;&rarr;&rarr;&rarr;&rarr;               all bits move right by 3
+  After:   0 0 0 0 1 1 0 1   (13)
+           ^ ^ ^                    last 3 bits (000) fall off
+       filled with 0s
+
+  104 &divide; 8 = 13  &#10004;</code></pre>
+      </div>
+
       <div class="key-concept">
         <strong>Key Concept: Shifts and Multiplication</strong>
-        A left shift by <em>n</em> positions multiplies the number by 2<sup>n</sup>. A right shift by <em>n</em> positions performs an integer division by 2<sup>n</sup>. Shifts are faster for a computer to perform than multiplication, which is why they are used in low-level programming.
+        A left shift by <em>n</em> positions multiplies the number by 2<sup>n</sup>. A right shift by <em>n</em> positions performs an integer division by 2<sup>n</sup>. Shifts are faster for a computer to perform than multiplication, which is why they are used in low-level programming. Be careful: bits that shift off the end are <strong>permanently lost</strong>, which can lead to data loss.
       </div>
 
       <!-- NEGATIVE NUMBERS -->
@@ -195,17 +447,34 @@
         <li>Only covers English characters &mdash; no accents, no Chinese, no Arabic, no emojis</li>
       </ul>
 
+      <p><strong>Partial ASCII Table:</strong></p>
+      <table>
+        <thead>
+          <tr><th>Characters</th><th>ASCII Codes (Denary)</th><th>Description</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>0 &ndash; 9</td><td>48 &ndash; 57</td><td>Digit characters (0=48, 1=49, ... 9=57)</td></tr>
+          <tr><td>A &ndash; Z</td><td>65 &ndash; 90</td><td>Uppercase letters (A=65, B=66, ... Z=90)</td></tr>
+          <tr><td>a &ndash; z</td><td>97 &ndash; 122</td><td>Lowercase letters (a=97, b=98, ... z=122)</td></tr>
+          <tr><td>Space</td><td>32</td><td>The space character</td></tr>
+        </tbody>
+      </table>
+
+      <p><strong>How ASCII allows alphabetical sorting:</strong> Because the letters A&ndash;Z are stored as the numbers 65&ndash;90 in order, a computer can sort words alphabetically simply by comparing the numerical ASCII values of each character. For example, &ldquo;Apple&rdquo; (A=65) comes before &ldquo;Banana&rdquo; (B=66) because 65 &lt; 66. Similarly, uppercase letters (65&ndash;90) have lower values than lowercase letters (97&ndash;122), which is why some sorting algorithms place &ldquo;Zebra&rdquo; before &ldquo;apple&rdquo; unless case is handled separately.</p>
+
       <h4>Unicode</h4>
       <ul>
         <li>Uses <strong>up to 32 bits</strong> per character</li>
-        <li>Can represent <strong>over 143,000 characters</strong> from every writing system in the world</li>
+        <li>Can represent <strong>over 149,000 characters</strong> from every writing system in the world</li>
         <li>Includes all ASCII characters (so it is backwards compatible) plus accented letters, Chinese, Arabic, Japanese, emojis, mathematical symbols, and much more</li>
         <li>The most common encoding is <strong>UTF-8</strong>, which uses 1&ndash;4 bytes per character</li>
       </ul>
 
+      <p><strong>How Unicode extends ASCII with emojis:</strong> The first 128 Unicode characters are identical to ASCII, so old ASCII text works perfectly in Unicode. Beyond that, Unicode adds thousands of characters. Emojis are stored as Unicode code points &mdash; for example, the &ldquo;smiling face&rdquo; emoji is U+1F600, which requires 4 bytes in UTF-8 encoding. The &ldquo;thumbs up&rdquo; is U+1F44D, and the Union Jack flag is made from two code points: U+1F1EC and U+1F1E7. This is why emojis sometimes look different on different devices &mdash; each manufacturer designs their own images for the same code point.</p>
+
       <div class="key-concept">
         <strong>Key Concept: ASCII vs Unicode</strong>
-        ASCII is simpler and uses less storage, but only supports English characters. Unicode supports every language and symbol but uses more storage. Modern systems almost always use Unicode (UTF-8) so that text in any language can be displayed correctly.
+        ASCII is simpler and uses less storage, but only supports English characters. Unicode supports every language and symbol but uses more storage. Modern systems almost always use Unicode (UTF-8) so that text in any language can be displayed correctly. UTF-8 is clever: it uses just 1 byte for standard English characters (same as ASCII) and up to 4 bytes for less common characters, keeping file sizes efficient.
       </div>
 
       <!-- IMAGE REPRESENTATION -->
@@ -239,6 +508,11 @@
         Example: 30 seconds of CD quality stereo audio = 44,100 &times; 16 &times; 30 &times; 2 = 42,336,000 bits &asymp; <strong>5.04 MB</strong> (uncompressed).
       </div>
 
+      <div class="did-you-know">
+        <strong>Did You Know?</strong>
+        CD quality audio was designed around the <strong>Nyquist theorem</strong> &mdash; to accurately capture a sound wave, you must sample at <strong>at least twice</strong> the highest frequency. Humans can hear up to about 20 kHz, so engineers chose a sample rate of 44.1 kHz (just over 2 &times; 20 kHz) to capture the full range of human hearing.
+      </div>
+
       <!-- COMPRESSION -->
       <h3>Compression</h3>
       <p>Uncompressed files are often huge. <strong>Compression</strong> reduces the file size so files take up less storage space and are faster to transmit. There are two types:</p>
@@ -262,6 +536,99 @@
 
       <div class="warning">
         <strong>Common Mistake:</strong> Students often say lossy compression &ldquo;loses quality.&rdquo; Be more precise: lossy compression <strong>permanently removes data</strong> that cannot be recovered. Each time you re-save a JPEG, it loses more data. Lossless compression reduces file size without any loss of data at all.
+      </div>
+    </section>
+
+    <!-- ==================== REAL WORLD CASE STUDIES ==================== -->
+    <section class="explore">
+      <span class="section-label">Explore</span>
+      <h2>Real World Case Studies</h2>
+
+      <div class="case-study">
+        <strong>Case Study 1: How Spotify Compresses Audio for Streaming</strong>
+        <p>Spotify uses <strong>lossy compression</strong> (the Ogg Vorbis and AAC formats) to stream music efficiently over the internet. A 3-minute uncompressed CD-quality song would be roughly 30 MB. Using lossy compression, Spotify reduces this to approximately <strong>3.5 MB at normal quality</strong> (96&ndash;160 kbps) or around <strong>7 MB at &ldquo;very high&rdquo; quality</strong> (320 kbps). The compression works by removing frequencies that most humans cannot easily perceive &mdash; for instance, very quiet sounds masked by louder ones, or frequencies at the extreme edges of human hearing. This means Spotify can store millions of songs on its servers and users can stream them without using enormous amounts of mobile data, with most listeners unable to tell the difference from the original recording.</p>
+      </div>
+
+      <div class="case-study">
+        <strong>Case Study 2: Medical Images and Lossless Compression</strong>
+        <p>In hospitals, X-rays, CT scans, and MRI images must be stored with <strong>absolute precision</strong>. Even the smallest loss of detail could mean a doctor misses a fracture, tumour, or other critical finding. For this reason, medical imaging uses <strong>lossless compression</strong> formats such as DICOM with lossless JPEG 2000. A single high-resolution CT scan can produce over <strong>1,000 image slices</strong>, each around 0.5 MB uncompressed. Lossless compression typically reduces this by around 50&ndash;70%, saving significant storage space whilst guaranteeing that when the image is opened again, it is <strong>bit-for-bit identical</strong> to the original. This is a perfect example of why lossless compression exists &mdash; some situations simply cannot tolerate any data loss.</p>
+      </div>
+
+      <div class="case-study">
+        <strong>Case Study 3: How Colour Depth Affects Smartphone Photos</strong>
+        <p>Modern smartphone cameras typically capture images at <strong>24-bit colour depth</strong> (8 bits per channel for red, green, and blue), giving over 16.7 million possible colours per pixel. Some flagship phones now support <strong>30-bit or even 48-bit colour</strong> (known as &ldquo;HDR&rdquo; or &ldquo;Deep Colour&rdquo;), which can represent over a billion colours. The difference is most visible in <strong>gradient areas</strong> like sunsets or skies &mdash; with only 8 bits per channel, you sometimes see visible &ldquo;banding&rdquo; where colours step rather than blend smoothly. A higher colour depth eliminates this banding but dramatically increases file size. A 12-megapixel photo at 24-bit colour is roughly 36 MB uncompressed, but at 48-bit colour depth it doubles to 72 MB &mdash; which is why phones always apply compression before saving.</p>
+      </div>
+
+      <div class="did-you-know">
+        <strong>Did You Know?</strong>
+        The first ever digital image was created in 1957 by Russell Kirsch at the US National Bureau of Standards. It was a 176 &times; 176 pixel scan of a photograph of his baby son &mdash; just 30,976 pixels in total. Today, a standard smartphone photo contains over <strong>12 million pixels</strong>.
+      </div>
+
+      <div class="did-you-know">
+        <strong>Did You Know?</strong>
+        A single 4K movie (3840 &times; 2160) running at 24 frames per second with 24-bit colour would be over <strong>7 TB uncompressed</strong> for a 2-hour film! That is roughly 7,000 GB. This is why video compression is so essential &mdash; without it, streaming services like Netflix and YouTube simply could not exist. Modern video codecs like H.265 can compress this down to about 5&ndash;15 GB.
+      </div>
+    </section>
+
+    <!-- ==================== KEY VOCABULARY ==================== -->
+    <section class="idea">
+      <span class="section-label">The Idea</span>
+      <h2>Key Vocabulary</h2>
+      <p>Make sure you know all of these terms for your exam:</p>
+
+      <table class="vocab-table">
+        <thead>
+          <tr><th>Term</th><th>Definition</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Bit</td><td>The smallest unit of data &mdash; a single 0 or 1 (binary digit).</td></tr>
+          <tr><td>Byte</td><td>A group of 8 bits. Can represent values from 0 to 255.</td></tr>
+          <tr><td>Nibble</td><td>A group of 4 bits (half a byte). Equivalent to one hexadecimal digit.</td></tr>
+          <tr><td>Binary</td><td>Base-2 number system using only the digits 0 and 1.</td></tr>
+          <tr><td>Denary</td><td>Base-10 number system (also called decimal) using digits 0&ndash;9. The system humans use daily.</td></tr>
+          <tr><td>Hexadecimal</td><td>Base-16 number system using digits 0&ndash;9 and letters A&ndash;F. Used as shorthand for binary.</td></tr>
+          <tr><td>ASCII</td><td>American Standard Code for Information Interchange &mdash; a 7-bit character encoding representing 128 characters.</td></tr>
+          <tr><td>Unicode</td><td>A universal character encoding standard that covers over 149,000 characters from all writing systems worldwide.</td></tr>
+          <tr><td>UTF-8</td><td>The most common Unicode encoding. Uses 1&ndash;4 bytes per character and is backwards compatible with ASCII.</td></tr>
+          <tr><td>Pixel</td><td>Picture element &mdash; the smallest individual square of colour in a digital image.</td></tr>
+          <tr><td>Resolution</td><td>The total number of pixels in an image, usually expressed as width &times; height (e.g. 1920 &times; 1080).</td></tr>
+          <tr><td>Colour Depth</td><td>The number of bits used to represent the colour of each pixel. More bits = more possible colours.</td></tr>
+          <tr><td>Sample Rate</td><td>The number of audio samples taken per second, measured in Hertz (Hz).</td></tr>
+          <tr><td>Bit Depth</td><td>The number of bits used to store each audio sample. More bits = more precise amplitude values.</td></tr>
+          <tr><td>Lossy</td><td>A type of compression that permanently removes data to reduce file size. The original cannot be perfectly restored.</td></tr>
+          <tr><td>Lossless</td><td>A type of compression that reduces file size without losing any data. The original can be perfectly reconstructed.</td></tr>
+          <tr><td>Compression</td><td>The process of reducing file size for more efficient storage and transmission.</td></tr>
+          <tr><td>Overflow</td><td>An error that occurs when a calculation produces a result too large to be stored in the available number of bits.</td></tr>
+          <tr><td>Two&rsquo;s Complement</td><td>A method of representing negative numbers in binary. The most significant bit represents a negative place value.</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- ==================== EXAM TIPS ==================== -->
+    <section class="understand">
+      <span class="section-label">Understand</span>
+      <h2>Exam Tips</h2>
+
+      <div class="exam-tip">
+        <strong>Exam Tip 1: Always Show Your Working</strong>
+        Even if you get the final answer wrong, you can pick up method marks by showing each step clearly. For binary-to-denary conversions, write out the place value table. For binary addition, show the carry row. For file size calculations, write the formula first, then substitute in the values.
+      </div>
+
+      <div class="exam-tip">
+        <strong>Exam Tip 2: Memorise the Formulas</strong>
+        <strong>Image file size</strong> = width &times; height &times; colour depth.<br />
+        <strong>Sound file size</strong> = sample rate &times; bit depth &times; duration (&times; number of channels).<br />
+        These formulas appear in almost every exam paper. Remember to convert your answer into sensible units (bits &rarr; bytes &rarr; KB &rarr; MB) by dividing by 8, then by 1,000 (or 1,024).
+      </div>
+
+      <div class="exam-tip">
+        <strong>Exam Tip 3: Lossy vs Lossless &mdash; Be Precise</strong>
+        Do not just say &ldquo;lossy is worse quality.&rdquo; Say: lossy compression <strong>permanently removes data</strong> that is deemed less important, and the original <strong>cannot be perfectly reconstructed</strong>. For lossless, say: the file size is reduced but <strong>no data is lost</strong> and the original can be <strong>perfectly restored</strong>. Use specific file format examples (JPEG/MP3 for lossy; PNG/FLAC for lossless).
+      </div>
+
+      <div class="exam-tip">
+        <strong>Exam Tip 4: Converting Between Number Systems</strong>
+        You must be fluent at converting between <strong>binary</strong>, <strong>denary</strong>, and <strong>hexadecimal</strong> in all directions. The fastest route between hex and binary is to convert each hex digit to/from its 4-bit nibble individually. To go between hex and denary, either go via binary or use place values (first digit &times; 16, second digit &times; 1 for two-digit hex).
       </div>
     </section>
 
@@ -340,6 +707,53 @@
           <p><strong>Answer:</strong> Start with +20 in binary: <strong>00010100</strong>. Flip all bits (one&rsquo;s complement): 11101011. Add 1: <strong>11101100</strong>. Check: &minus;128 + 64 + 32 + 8 + 4 = &minus;128 + 108 = &minus;20. Correct!</p>
         </div>
       </div>
+
+      <div class="hint">
+        <div class="hint-title">Q11: Convert the hex value #4A to binary and denary.</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong><br />
+          <strong>To binary:</strong> 4 = 0100, A = 1010. So #4A in binary = <strong>01001010</strong>.<br />
+          <strong>To denary:</strong> 4 &times; 16 + 10 &times; 1 = 64 + 10 = <strong>74</strong>.<br />
+          Check: 01001010 = 64 + 8 + 2 = 74. Correct!</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q12: An image is 1920 &times; 1080 with 32-bit colour. Calculate the uncompressed file size in megabytes.</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong><br />
+          File size = width &times; height &times; colour depth<br />
+          = 1,920 &times; 1,080 &times; 32 = 66,355,200 bits<br />
+          Divide by 8 = 8,294,400 bytes<br />
+          Divide by 1,000,000 = <strong>8.29 MB</strong> (or divide by 1,048,576 &asymp; 7.91 MiB).<br />
+          This is the uncompressed size &mdash; in practice, compression would reduce this significantly.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q13: Explain why increasing the sample rate of an audio recording improves quality but increases file size.</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> The sample rate determines how many &ldquo;snapshots&rdquo; of the sound wave are taken per second. A higher sample rate captures <strong>more points on the wave</strong>, so the digital version more closely matches the original analogue sound &mdash; this is why quality improves. However, each additional sample requires storage (bit depth &times; 1 for each sample), so <strong>more samples per second means more data per second</strong>. For example, doubling the sample rate from 22,050 Hz to 44,100 Hz doubles the number of samples and therefore <strong>doubles the file size</strong> (assuming the same bit depth and duration).</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q14: What is an overflow error? Give an example with 8-bit binary.</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> An <strong>overflow error</strong> occurs when a calculation produces a result that is <strong>too large to be stored</strong> in the available number of bits. With 8-bit unsigned binary, the maximum value is 11111111 = 255. If we try to add 11010000 (208) + 00110010 (50), the correct answer is 258. However, 258 requires 9 bits (100000010) and the 9th bit is lost, leaving <strong>00000010</strong> (2) &mdash; a completely incorrect result. This is the overflow error.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q15: A website uses #336699 as a background colour. Convert each pair to denary and describe the colour.</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong><br />
+          <strong>Red:</strong> 33 hex = 3 &times; 16 + 3 = <strong>51</strong> (low red)<br />
+          <strong>Green:</strong> 66 hex = 6 &times; 16 + 6 = <strong>102</strong> (medium green)<br />
+          <strong>Blue:</strong> 99 hex = 9 &times; 16 + 9 = <strong>153</strong> (high blue)<br />
+          The colour <span class="colour-swatch" style="background:#336699;"></span> has a low amount of red, a moderate amount of green, and a high amount of blue. This produces a <strong>steel blue / muted dark blue</strong> colour, commonly used for professional website designs.</p>
+        </div>
+      </div>
     </section>
 
     <!-- ==================== REFLECT ==================== -->
@@ -361,6 +775,8 @@
       <div class="extra-resources">
         <h3>Further Reading</h3>
         <ul>
+          <li><a href="https://www.bbc.co.uk/bitesize/examspecs/zdqy7nb" target="_blank" rel="noopener">BBC Bitesize &mdash; Edexcel GCSE Computer Science</a> &mdash; Comprehensive coverage of all data representation topics with interactive activities</li>
+          <li><a href="https://isaaccomputerscience.org/topics/data_representation" target="_blank" rel="noopener">Isaac Computer Science &mdash; Data Representation</a> &mdash; In-depth explanations with worked examples and self-assessment questions</li>
           <li><a href="https://hvgcsecs.cshub.org.je/topics/topic2.html" target="_blank" rel="noopener">GCSE Topic 2: Data Representation</a> &mdash; Full Edexcel specification coverage with interactive binary tools</li>
           <li><a href="https://hvgcsecs.cshub.org.je/activities/index.html" target="_blank" rel="noopener">Revision Activities</a> &mdash; Memory match games and connection walls for data representation</li>
         </ul>

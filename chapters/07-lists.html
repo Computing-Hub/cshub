@@ -4,6 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Chapter 7: Lists - Python Fundamentals</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="../css/style.css" />
   <script src="https://cdn.jsdelivr.net/pyodide/v0.24.0/full/pyodide.js"></script>
 </head>
@@ -24,6 +27,17 @@
       <p>What if you need to store not just one name, but a whole class register? You could create 30 separate variables &mdash; <code>student1</code>, <code>student2</code>, <code>student3</code>&hellip; &mdash; or you could use a <strong>list</strong>.</p>
       <p>A list lets you store <strong>multiple items in a single variable</strong>, kept in order. Think of it like a numbered container where each slot holds one piece of data. This is one of the most important ideas in programming: almost every real application works with collections of data, not just single values.</p>
       <p>You already use lists every day without thinking about it: shopping lists, music playlists, leaderboards in games, a register of names, or even the apps on your phone&rsquo;s home screen. In Python, a <strong>list</strong> works in exactly the same way &mdash; it stores items in a particular order, and you can add, remove, or change them whenever you like.</p>
+
+      <h3>Real-World Applications</h3>
+      <p>Lists are everywhere in the software you use every day:</p>
+      <ul>
+        <li><strong>Spotify</strong> &mdash; A playlist is a list of songs. When you add a track, reorder your queue, or shuffle, the app is manipulating a list behind the scenes.</li>
+        <li><strong>Instagram</strong> &mdash; Your feed is a list of posts, loaded in order. As you scroll, the app fetches more items and appends them to the list.</li>
+        <li><strong>Games</strong> &mdash; Inventory systems store items in lists. When you pick up a sword or use a health potion, the game adds to or removes from your inventory list.</li>
+        <li><strong>E-commerce (Amazon, ASOS)</strong> &mdash; Your shopping basket is a list of products. Adding an item calls <code>append()</code>; removing one calls <code>remove()</code> &mdash; exactly the same operations you will learn in this chapter.</li>
+        <li><strong>Databases</strong> &mdash; When a website queries its database (e.g. &ldquo;find all orders from today&rdquo;), the results come back as a list of records that the program then loops through and displays.</li>
+      </ul>
+
       <p><strong>By the end of this chapter, you will be able to:</strong></p>
       <ul>
         <li>Create lists that hold multiple items</li>
@@ -31,6 +45,10 @@
         <li>Add and remove items from a list</li>
         <li>Loop through a list to process every item</li>
         <li>Use <code>len()</code> to find out how many items a list contains</li>
+        <li>Slice lists to extract portions of data</li>
+        <li>Sort lists in ascending and descending order</li>
+        <li>Create and access 2D lists (lists of lists)</li>
+        <li>Understand the difference between the terms &ldquo;list&rdquo; and &ldquo;array&rdquo; for your GCSE exam</li>
       </ul>
     </section>
 
@@ -141,6 +159,137 @@ print("Average:", average)</code></pre>
       <div class="try-this">
         <strong>Try This:</strong> Change the scores to your own test marks from this term. Add more items to the list and see how the average updates automatically.
       </div>
+
+      <h3>Example 4: List Slicing</h3>
+      <p><strong>Slicing</strong> lets you extract a portion of a list without changing the original. The syntax is <code>list[start:stop]</code>, where <code>start</code> is included and <code>stop</code> is excluded. You can also add a <code>step</code> value: <code>list[start:stop:step]</code>.</p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Python Code</span>
+          <div>
+            <button class="copy-button">Copy Code</button>
+            <button class="run-button">Run Code</button>
+          </div>
+        </div>
+        <pre><code contenteditable="true"># A list of days
+days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
+
+# Slice from index 1 up to (not including) index 3
+print(days[1:3])       # ["Tue", "Wed"]
+
+# Slice from the start up to index 2
+print(days[:2])        # ["Mon", "Tue"]
+
+# Slice from index 4 to the end
+print(days[4:])        # ["Fri", "Sat", "Sun"]
+
+# Every second item (step of 2)
+print(days[::2])       # ["Mon", "Wed", "Fri", "Sun"]
+
+# Reverse the entire list using a step of -1
+print(days[::-1])      # ["Sun", "Sat", "Fri", ...]
+
+# Get the weekdays only (first 5)
+weekdays = days[:5]
+print("Weekdays:", weekdays)
+
+# Get the weekend only (last 2)
+weekend = days[5:]
+print("Weekend:", weekend)</code></pre>
+        <div class="output-box empty">(click "Run Code" to see output)</div>
+      </div>
+
+      <div class="try-this">
+        <strong>Try This:</strong> What does <code>days[1:6:2]</code> produce? Predict the answer first, then run the code to check. Can you write a slice that returns only <code>["Wed", "Thu", "Fri"]</code>?
+      </div>
+
+      <h3>Example 5: Sorting Lists</h3>
+      <p>Python makes it easy to sort lists into order. The <code>.sort()</code> method changes the list <strong>in place</strong> (it modifies the original), while the <code>sorted()</code> function returns a <strong>new</strong> sorted list and leaves the original unchanged.</p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Python Code</span>
+          <div>
+            <button class="copy-button">Copy Code</button>
+            <button class="run-button">Run Code</button>
+          </div>
+        </div>
+        <pre><code contenteditable="true"># Sorting numbers
+scores = [45, 82, 67, 91, 73]
+print("Original:", scores)
+
+# Sort ascending (modifies the list)
+scores.sort()
+print("Ascending:", scores)
+
+# Sort descending
+scores.sort(reverse=True)
+print("Descending:", scores)
+
+# Using sorted() to create a NEW sorted list
+names = ["Charlie", "Alice", "Eve", "Bob", "Diana"]
+print("\nOriginal names:", names)
+
+alphabetical = sorted(names)
+print("Sorted copy:", alphabetical)
+print("Original unchanged:", names)
+
+# Sort the original in place
+names.sort()
+print("Now sorted in place:", names)</code></pre>
+        <div class="output-box empty">(click "Run Code" to see output)</div>
+      </div>
+
+      <div class="try-this">
+        <strong>Try This:</strong> What happens if you try to sort a list that contains both strings and numbers, like <code>["apple", 3, "banana"]</code>? Try it and see what error you get. Why do you think this happens?
+      </div>
+
+      <h3>Example 6: 2D Lists (Lists of Lists)</h3>
+      <p>A <strong>2D list</strong> is a list where each item is itself a list. This is perfect for representing grids, tables, or matrices. Think of a spreadsheet: each row is a list, and the whole spreadsheet is a list of rows.</p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Python Code</span>
+          <div>
+            <button class="copy-button">Copy Code</button>
+            <button class="run-button">Run Code</button>
+          </div>
+        </div>
+        <pre><code contenteditable="true"># A 3x3 grid stored as a 2D list
+# Each inner list is one row
+grid = [
+    [1, 2, 3],
+    [4, 5, 6],
+    [7, 8, 9]
+]
+
+# Access a whole row (the second row, index 1)
+print("Row 1:", grid[1])         # [4, 5, 6]
+
+# Access a single cell: grid[row][column]
+print("Row 0, Col 1:", grid[0][1])  # 2
+print("Row 2, Col 2:", grid[2][2])  # 9
+
+# A more practical example: student marks
+# Each row = [Name, Maths, English, Science]
+students = [
+    ["Alice", 85, 92, 78],
+    ["Bob", 91, 67, 83],
+    ["Charlie", 76, 88, 95]
+]
+
+# Print each student's details
+print("\nStudent Report:")
+for student in students:
+    name = student[0]
+    avg = (student[1] + student[2] + student[3]) / 3
+    print(f"  {name}: average = {avg:.1f}")</code></pre>
+        <div class="output-box empty">(click "Run Code" to see output)</div>
+      </div>
+
+      <div class="try-this">
+        <strong>Try This:</strong> Add a fourth student to the <code>students</code> list with your own name and three marks. Run the code again to see them appear in the report. Can you also print the student with the highest average?
+      </div>
     </section>
 
     <!-- ==================== UNDERSTAND ==================== -->
@@ -154,6 +303,11 @@ print("Average:", average)</code></pre>
       <p>Lists can hold strings, integers, floats, booleans &mdash; even a mixture of types &mdash; although in practice you will usually store items of the same type in a single list.</p>
       <pre><code># A list with mixed types (valid, but uncommon)
 mixed = ["Alice", 16, True, 9.5]</code></pre>
+
+      <div class="key-concept">
+        <strong>Did You Know?</strong>
+        Python lists can hold <strong>any mix of data types</strong> in the same list. This is different from arrays in languages like C or Java, where every element must be the same type. In Python, you could store a string, an integer, a boolean, and even another list all inside one list. This flexibility is one of the reasons Python is so popular for beginners and professionals alike.
+      </div>
 
       <h3>Indexing: It Starts at 0</h3>
       <p>Every item in a list has a position number called its <strong>index</strong>. The crucial thing to remember is that indexing starts at <strong>0</strong>, not 1.</p>
@@ -215,13 +369,38 @@ print(fruits[-2])   # banana  (second-to-last)</code></pre>
         </tr>
         <tr>
           <td><code>sort()</code></td>
-          <td>Sorts the list in ascending order</td>
+          <td>Sorts the list in ascending order (in place)</td>
           <td><code>fruits.sort()</code></td>
+        </tr>
+        <tr>
+          <td><code>sorted(list)</code></td>
+          <td>Returns a new sorted list (original unchanged)</td>
+          <td><code>new = sorted(fruits)</code></td>
+        </tr>
+        <tr>
+          <td><code>reverse()</code></td>
+          <td>Reverses the list in place</td>
+          <td><code>fruits.reverse()</code></td>
+        </tr>
+        <tr>
+          <td><code>index(item)</code></td>
+          <td>Returns the index of the first occurrence</td>
+          <td><code>pos = fruits.index("kiwi")</code></td>
+        </tr>
+        <tr>
+          <td><code>count(item)</code></td>
+          <td>Counts how many times an item appears</td>
+          <td><code>n = fruits.count("apple")</code></td>
         </tr>
         <tr>
           <td><code>len(list)</code></td>
           <td>Returns the number of items in the list</td>
           <td><code>print(len(fruits))</code></td>
+        </tr>
+        <tr>
+          <td><code>in</code></td>
+          <td>Checks if an item exists in the list</td>
+          <td><code>if "kiwi" in fruits:</code></td>
         </tr>
       </table>
 
@@ -229,15 +408,239 @@ print(fruits[-2])   # banana  (second-to-last)</code></pre>
       <p>Using a <code>for</code> loop with a list is one of the most common patterns in Python. The loop variable takes the value of each item in turn:</p>
       <pre><code>for item in my_list:
     print(item)</code></pre>
+      <p>If you also need the index number alongside the item, you can use <code>enumerate()</code>:</p>
+      <pre><code>for index, item in enumerate(my_list):
+    print(index, item)</code></pre>
       <p>This links directly to what you learnt in <strong>Chapter 5: Loops</strong>. The <code>for</code> loop is the natural partner of a list.</p>
 
-      <h3>Common Misconceptions</h3>
+      <h3>Slicing in Detail</h3>
+      <p>List slicing uses the syntax <code>list[start:stop:step]</code>. All three values are optional:</p>
+      <table>
+        <tr>
+          <th>Slice</th>
+          <th>Meaning</th>
+          <th>Example (<code>nums = [10, 20, 30, 40, 50]</code>)</th>
+          <th>Result</th>
+        </tr>
+        <tr>
+          <td><code>nums[1:3]</code></td>
+          <td>From index 1 up to (not including) 3</td>
+          <td>Items at index 1 and 2</td>
+          <td><code>[20, 30]</code></td>
+        </tr>
+        <tr>
+          <td><code>nums[:2]</code></td>
+          <td>From the start up to index 2</td>
+          <td>First two items</td>
+          <td><code>[10, 20]</code></td>
+        </tr>
+        <tr>
+          <td><code>nums[3:]</code></td>
+          <td>From index 3 to the end</td>
+          <td>Last two items</td>
+          <td><code>[40, 50]</code></td>
+        </tr>
+        <tr>
+          <td><code>nums[::2]</code></td>
+          <td>Every second item</td>
+          <td>Items at index 0, 2, 4</td>
+          <td><code>[10, 30, 50]</code></td>
+        </tr>
+        <tr>
+          <td><code>nums[::-1]</code></td>
+          <td>All items in reverse order</td>
+          <td>Reversed list</td>
+          <td><code>[50, 40, 30, 20, 10]</code></td>
+        </tr>
+      </table>
+      <p>Slicing always creates a <strong>new list</strong> &mdash; it never changes the original.</p>
+
+      <!-- ==================== ARRAYS vs LISTS ==================== -->
+      <h3>Arrays vs Lists &mdash; What the GCSE Exam Expects</h3>
+      <p>In your GCSE Computer Science exam, the term <strong>&ldquo;array&rdquo;</strong> is used rather than &ldquo;list&rdquo;. It is important to understand that <strong>in Python, a list is the same concept as an array</strong>. Python does not have a separate built-in &ldquo;array&rdquo; data type in the way that languages like C or Java do &mdash; instead, Python uses lists to do the same job.</p>
+
+      <div class="key-concept">
+        <strong>Did You Know?</strong>
+        The GCSE exam board (Edexcel, AQA, OCR) uses the term <strong>&ldquo;array&rdquo;</strong>, but Python uses the term <strong>&ldquo;list&rdquo;</strong>. They are the <strong>same concept</strong>. If an exam question says &ldquo;declare an array called <code>names</code>&rdquo;, you should write <code>names = []</code> in Python. Whenever you see &ldquo;array&rdquo; in an exam, just think &ldquo;list&rdquo;.
+      </div>
+
+      <h4>1D Arrays (One-Dimensional)</h4>
+      <p>A <strong>1D array</strong> is a single row of items &mdash; what we have been calling a list so far:</p>
+      <pre><code># A 1D array of names
+names = ["Alice", "Bob", "Charlie", "Diana"]</code></pre>
+      <p>This stores one sequence of items in a straight line. You access items with a single index: <code>names[2]</code> returns <code>"Charlie"</code>.</p>
+
+      <h4>2D Arrays (Two-Dimensional)</h4>
+      <p>A <strong>2D array</strong> stores data in <strong>rows and columns</strong>, like a table or spreadsheet. In Python, you create this as a <strong>list of lists</strong> &mdash; each inner list is one row:</p>
+      <pre><code># A 2D array: 3 rows, 4 columns
+# Each row = [Name, Maths, English, Science]
+marks = [
+    ["Alice", 85, 92, 78],
+    ["Bob", 91, 67, 83],
+    ["Charlie", 76, 88, 95]
+]</code></pre>
+      <p>You access items using <strong>double indexing</strong>: <code>marks[row][column]</code>. For example:</p>
+      <ul>
+        <li><code>marks[0][0]</code> &rarr; <code>"Alice"</code> (row 0, column 0)</li>
+        <li><code>marks[1][2]</code> &rarr; <code>67</code> (row 1, column 2 &mdash; Bob&rsquo;s English mark)</li>
+        <li><code>marks[2][3]</code> &rarr; <code>95</code> (row 2, column 3 &mdash; Charlie&rsquo;s Science mark)</li>
+      </ul>
+      <p>When the exam asks you to &ldquo;use a 2D array&rdquo;, this is how you do it in Python.</p>
+
+      <div class="key-concept">
+        <strong>Did You Know?</strong>
+        Python&rsquo;s built-in sort algorithm is called <strong>Timsort</strong>, and it was invented by Tim Peters in 2002. It was specifically designed for Python and is named after him. Timsort is so efficient that it was later adopted by Java, Android, and many other platforms. When you call <code>.sort()</code> or <code>sorted()</code>, Timsort is running behind the scenes.
+      </div>
+
+      <!-- ==================== KEY VOCABULARY ==================== -->
+      <h3>Key Vocabulary</h3>
+      <p>These are the key terms you need to know for this topic. Make sure you can define each one:</p>
+
+      <table>
+        <tr>
+          <th>Term</th>
+          <th>Definition</th>
+        </tr>
+        <tr>
+          <td><strong>List</strong></td>
+          <td>An ordered, mutable collection of items stored in a single variable. Created with square brackets <code>[]</code>.</td>
+        </tr>
+        <tr>
+          <td><strong>Array</strong></td>
+          <td>The term used in GCSE exams for a list. In Python, arrays and lists are the same thing.</td>
+        </tr>
+        <tr>
+          <td><strong>Index</strong></td>
+          <td>The position number of an item in a list, starting from 0.</td>
+        </tr>
+        <tr>
+          <td><strong>Element / Item</strong></td>
+          <td>A single value stored inside a list. For example, in <code>["a", "b"]</code>, <code>"a"</code> is an element.</td>
+        </tr>
+        <tr>
+          <td><strong>Mutable</strong></td>
+          <td>Can be changed after creation. Lists are mutable; strings are not.</td>
+        </tr>
+        <tr>
+          <td><strong>Append</strong></td>
+          <td>Add an item to the end of a list using <code>.append()</code>.</td>
+        </tr>
+        <tr>
+          <td><strong>Insert</strong></td>
+          <td>Add an item at a specific index position using <code>.insert(index, item)</code>.</td>
+        </tr>
+        <tr>
+          <td><strong>Remove</strong></td>
+          <td>Delete an item by its value using <code>.remove(value)</code>.</td>
+        </tr>
+        <tr>
+          <td><strong>Pop</strong></td>
+          <td>Remove and return an item by its index using <code>.pop(index)</code>. Defaults to the last item.</td>
+        </tr>
+        <tr>
+          <td><strong>Sort</strong></td>
+          <td>Rearrange items into order. <code>.sort()</code> modifies the list; <code>sorted()</code> creates a new one.</td>
+        </tr>
+        <tr>
+          <td><strong>Slice</strong></td>
+          <td>Extract a portion of a list using <code>list[start:stop:step]</code> syntax.</td>
+        </tr>
+        <tr>
+          <td><strong>len()</strong></td>
+          <td>A built-in function that returns the number of items in a list.</td>
+        </tr>
+        <tr>
+          <td><strong>Iterate / Traverse</strong></td>
+          <td>Go through every item in a list one at a time, usually with a <code>for</code> loop.</td>
+        </tr>
+        <tr>
+          <td><strong>2D Array</strong></td>
+          <td>An array with rows and columns &mdash; in Python, a list of lists.</td>
+        </tr>
+        <tr>
+          <td><strong>Nested List</strong></td>
+          <td>A list contained inside another list. Used to create 2D structures.</td>
+        </tr>
+      </table>
+
+      <h3>Common Mistakes</h3>
       <div class="warning">
-        <strong>Watch out:</strong> The most common mistake with lists is forgetting that the first index is <strong>0</strong>, not 1. If your list has 5 items, the valid indices are 0, 1, 2, 3, and 4. Trying to access index 5 will cause an <code>IndexError</code>.
+        <strong>Watch out &mdash; Off-by-one error:</strong> The most common mistake with lists is forgetting that the first index is <strong>0</strong>, not 1. If your list has 5 items, the valid indices are 0, 1, 2, 3, and 4. Trying to access <code>list[len(list)]</code> will cause an <code>IndexError</code> because the last valid index is <code>len(list) - 1</code>. For example, if <code>scores = [10, 20, 30]</code>, then <code>scores[3]</code> crashes, but <code>scores[2]</code> gives you <code>30</code>.
       </div>
       <div class="warning">
-        <strong>Watch out:</strong> <code>remove()</code> deletes by <strong>value</strong>, not by position. If you write <code>my_list.remove(3)</code>, Python removes the item whose value is <code>3</code>, not the item at index 3. To remove by position, use <code>pop(index)</code>.
+        <strong>Watch out &mdash; Modifying a list while looping:</strong> If you remove items from a list while looping through it with a <code>for</code> loop, Python can skip items or crash. This is because the indices shift when an item is removed. Instead, create a new list with only the items you want to keep, or loop through a copy of the list.
       </div>
+      <div class="warning">
+        <strong>Watch out &mdash; <code>remove()</code> vs <code>pop()</code>:</strong> <code>remove()</code> deletes by <strong>value</strong>, not by position. If you write <code>my_list.remove(3)</code>, Python removes the item whose value is <code>3</code>, not the item at index 3. To remove by position, use <code>pop(index)</code>. Getting these mixed up is a very common mistake.
+      </div>
+      <div class="warning">
+        <strong>Watch out &mdash; <code>.sort()</code> returns None:</strong> A common mistake is writing <code>sorted_list = my_list.sort()</code>. The <code>.sort()</code> method modifies the list in place and returns <code>None</code>, so <code>sorted_list</code> would be <code>None</code>, not a sorted list. If you want a new sorted list, use <code>sorted_list = sorted(my_list)</code> instead.
+      </div>
+    </section>
+
+    <!-- ==================== WORKED EXAMPLE ==================== -->
+    <section class="understand">
+      <span class="section-label">Worked Example</span>
+      <h2>Worked Example: Building a Class Register</h2>
+      <p>Let&rsquo;s work through a complete example step by step. We will build a class register program that demonstrates many of the list operations you have learnt.</p>
+      <p><strong>Scenario:</strong> You are a form tutor. You need to create a register of student names, handle a late arrival, remove a student who has left the school, sort the register alphabetically, check if a specific student is in your class, and count the total number of students.</p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Python Code &mdash; Worked Example</span>
+          <div>
+            <button class="copy-button">Copy Code</button>
+            <button class="run-button">Run Code</button>
+          </div>
+        </div>
+        <pre><code contenteditable="true"># WORKED EXAMPLE: Class Register
+# =================================
+
+# Step 1: Create the initial register
+register = ["Emily", "James", "Priya", "Oliver", "Fatima"]
+print("Initial register:", register)
+print("Number of students:", len(register))
+
+# Step 2: A late student arrives - add them to the end
+register.append("Liam")
+print("\nAfter Liam arrives late:", register)
+
+# Step 3: Oliver has left the school - remove him
+register.remove("Oliver")
+print("After Oliver leaves:", register)
+
+# Step 4: Sort the register alphabetically
+register.sort()
+print("\nSorted alphabetically:", register)
+
+# Step 5: Check if a specific student is in the class
+search_name = "Priya"
+if search_name in register:
+    position = register.index(search_name)
+    print(f"\n{search_name} is in the register at position {position}")
+else:
+    print(f"\n{search_name} is NOT in the register")
+
+# Step 6: Count total students
+print(f"\nTotal students in class: {len(register)}")
+
+# Bonus: Print a numbered register
+print("\n--- Final Register ---")
+for i in range(len(register)):
+    print(f"  {i + 1}. {register[i]}")</code></pre>
+        <div class="output-box empty">(click "Run Code" to see output)</div>
+      </div>
+
+      <p><strong>Key points from this example:</strong></p>
+      <ul>
+        <li><code>append()</code> adds the late student to the end of the list.</li>
+        <li><code>remove()</code> finds and deletes a student by their name (value).</li>
+        <li><code>sort()</code> puts the names in alphabetical (A-Z) order.</li>
+        <li>The <code>in</code> keyword checks whether a name exists in the list.</li>
+        <li><code>index()</code> tells us the position of a name in the sorted list.</li>
+        <li><code>len()</code> gives the total count at any point.</li>
+        <li>We use <code>range(len(register))</code> to loop with a counter, so we can print numbered lines.</li>
+      </ul>
     </section>
 
     <!-- ==================== PRACTICE ==================== -->
@@ -371,6 +774,96 @@ print("Updated to-do list:", tasks)
         </div>
       </div>
 
+      <!-- Exercise 4: Partially Guided -->
+      <div class="exercise">
+        <div class="exercise-title">Exercise 4: Top 5 Leaderboard</div>
+        <div class="exercise-difficulty difficulty-2">Partially Guided</div>
+        <p>You are building a game leaderboard. Store player scores in a list, sort them in descending order (highest first), display only the top 5, then add a new score and re-sort the leaderboard.</p>
+
+        <div class="pseudocode">
+          <div class="pseudocode-label">Pseudocode:</div>
+          STEP 1: Create a list called <strong>scores</strong> with at least 8 integer scores<br />
+          STEP 2: Sort the scores in <strong>descending</strong> order (highest first)<br />
+          STEP 3: Use <strong>slicing</strong> to get only the top 5 scores<br />
+          STEP 4: Print the top 5 leaderboard with numbered positions<br />
+          STEP 5: A new player scores 88 &mdash; <strong>append</strong> it to the full list<br />
+          STEP 6: Re-sort in descending order and display the <strong>new</strong> top 5
+        </div>
+
+        <div class="code-block">
+          <div class="code-block-header">
+            <span class="code-block-label">Your Code</span>
+            <div>
+              <button class="copy-button">Copy Code</button>
+              <button class="run-button">Run Code</button>
+            </div>
+          </div>
+          <pre><code contenteditable="true"># Exercise 4 - Top 5 Leaderboard
+
+# Step 1: Create a list of scores
+scores = [72, 95, 43, 88, 61, 100, 55, 79]
+
+# Step 2: Sort descending (highest first)
+
+# Step 3: Slice the top 5
+
+# Step 4: Print the top 5 with positions
+print("=== LEADERBOARD ===")
+
+# Step 5: Add a new score of 88
+
+# Step 6: Re-sort and display new top 5
+print("\n=== UPDATED LEADERBOARD ===")
+</code></pre>
+          <div class="output-box empty">(click "Run Code" to see output)</div>
+        </div>
+
+        <div class="hint">
+          <div class="hint-title">Need a hint?</div>
+          <div class="hint-content">To sort descending, use <code>scores.sort(reverse=True)</code>. To get the top 5, use a slice: <code>top_five = scores[:5]</code>. To print numbered positions, loop with <code>for i in range(len(top_five))</code> and print <code>f"{i + 1}. {top_five[i]}"</code>. After appending 88, just sort and slice again.</div>
+        </div>
+      </div>
+
+      <!-- Exercise 5: Open-Ended -->
+      <div class="exercise">
+        <div class="exercise-title">Exercise 5: Lottery Number Generator</div>
+        <div class="exercise-difficulty difficulty-3">Open-Ended</div>
+        <p>Write a program that generates 6 random lottery numbers between 1 and 59 (no duplicates), sorts them in ascending order, and displays them in a formatted way. You will need the <code>random</code> module.</p>
+
+        <div class="pseudocode">
+          <div class="pseudocode-label">Pseudocode:</div>
+          STEP 1: Import the <code>random</code> module<br />
+          STEP 2: Create an <strong>empty list</strong> called <strong>numbers</strong><br />
+          STEP 3: Use a <strong>while loop</strong> to keep generating random numbers until you have 6 unique ones<br />
+          STEP 4: Inside the loop, generate a random number between 1 and 59 using <code>random.randint(1, 59)</code><br />
+          STEP 5: Only <strong>append</strong> the number if it is <strong>not already in</strong> the list<br />
+          STEP 6: <strong>Sort</strong> the list in ascending order<br />
+          STEP 7: Print the lottery numbers in a clear format
+        </div>
+
+        <div class="code-block">
+          <div class="code-block-header">
+            <span class="code-block-label">Your Code</span>
+            <div>
+              <button class="copy-button">Copy Code</button>
+              <button class="run-button">Run Code</button>
+            </div>
+          </div>
+          <pre><code contenteditable="true"># Exercise 5 - Lottery Number Generator
+# Generate 6 unique random numbers between 1 and 59
+import random
+
+# Your code here
+</code></pre>
+          <div class="output-box empty">(click "Run Code" to see output)</div>
+        </div>
+
+        <div class="hint">
+          <div class="hint-title">Need a hint?</div>
+          <div class="hint-content">Start with <code>numbers = []</code>. Use <code>while len(numbers) &lt; 6:</code> to keep looping. Generate a number with <code>num = random.randint(1, 59)</code>. Check <code>if num not in numbers:</code> before appending. After the loop, call <code>numbers.sort()</code>. For a shortcut, you could also try <code>random.sample(range(1, 60), 6)</code> which picks 6 unique values in one line.</div>
+        </div>
+      </div>
+
     </section>
 
     <!-- ==================== REFLECT ==================== -->
@@ -382,12 +875,77 @@ print("Updated to-do list:", tasks)
         <li>If you had a list of 100 student names, how would a loop be better than accessing each one individually?</li>
         <li>What is the difference between <code>remove()</code> and <code>pop()</code>? When would you use each one?</li>
         <li>Can you think of three examples from real life where data is naturally stored as a list?</li>
+        <li>What is the difference between <code>.sort()</code> and <code>sorted()</code>? When might you prefer one over the other?</li>
+        <li>When would you use a 2D list instead of a 1D list? Think of an example from a real application.</li>
       </ul>
 
+      <!-- ==================== SUMMARY ==================== -->
+      <h3>Chapter Summary</h3>
+      <p>In this chapter, you have learnt:</p>
+      <ul>
+        <li>A <strong>list</strong> stores multiple items in a single variable, in order, using square brackets.</li>
+        <li><strong>Indexing</strong> starts at 0. The last item is at index <code>len(list) - 1</code>, or you can use <code>-1</code>.</li>
+        <li>Lists are <strong>mutable</strong> &mdash; you can add (<code>append</code>, <code>insert</code>), remove (<code>remove</code>, <code>pop</code>), and change items after creation.</li>
+        <li>A <code>for</code> loop is the natural way to <strong>iterate</strong> (traverse) through every item in a list.</li>
+        <li><strong>Slicing</strong> with <code>list[start:stop:step]</code> lets you extract portions of a list without changing the original.</li>
+        <li><code>.sort()</code> sorts a list <strong>in place</strong> (and returns <code>None</code>); <code>sorted()</code> returns a <strong>new</strong> sorted list.</li>
+        <li>A <strong>2D list</strong> (list of lists) represents rows and columns, accessed with double indexing: <code>grid[row][col]</code>.</li>
+        <li>In GCSE exams, the term <strong>&ldquo;array&rdquo;</strong> means the same thing as a Python list. A <strong>1D array</strong> is a single list; a <strong>2D array</strong> is a list of lists.</li>
+      </ul>
+
+      <!-- ==================== EXAM-STYLE QUESTIONS ==================== -->
+      <h3>Exam-Style Questions</h3>
+      <p>Practise answering these in full sentences, as you would in a GCSE exam:</p>
+
+      <div class="exercise">
+        <div class="exercise-title">Question 1 (2 marks)</div>
+        <p><strong>What is meant by the term &ldquo;array&rdquo; (list) in programming?</strong></p>
+        <p><em>Give a definition and state one feature of an array.</em></p>
+        <div class="hint">
+          <div class="hint-title">Reveal model answer</div>
+          <div class="hint-content">
+            <p>An array (or list) is a data structure that stores <strong>multiple values</strong> in a single variable (1 mark). The values are stored in an <strong>ordered sequence</strong> and each item can be accessed by its index position (1 mark).</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="exercise">
+        <div class="exercise-title">Question 2 (4 marks)</div>
+        <p><strong>Explain the difference between a 1D array and a 2D array. Give an example of when each would be used.</strong></p>
+        <div class="hint">
+          <div class="hint-title">Reveal model answer</div>
+          <div class="hint-content">
+            <p>A <strong>1D array</strong> stores data in a single row/sequence (1 mark). For example, storing a list of student names: <code>["Alice", "Bob", "Charlie"]</code> (1 mark).</p>
+            <p>A <strong>2D array</strong> stores data in rows and columns, like a table (1 mark). For example, storing student names alongside their marks in different subjects, where each row contains a name and multiple scores (1 mark).</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="exercise">
+        <div class="exercise-title">Question 3 (3 marks)</div>
+        <p><strong>A list contains: <code>scores = [45, 82, 67, 91, 73]</code></strong></p>
+        <p>Write Python code to:</p>
+        <p>(a) Add the value 88 to the end of the list. (1 mark)</p>
+        <p>(b) Remove the value 45 from the list. (1 mark)</p>
+        <p>(c) Print the highest score. (1 mark)</p>
+        <div class="hint">
+          <div class="hint-title">Reveal model answer</div>
+          <div class="hint-content">
+            <p>(a) <code>scores.append(88)</code></p>
+            <p>(b) <code>scores.remove(45)</code></p>
+            <p>(c) <code>print(max(scores))</code></p>
+            <p><em>Alternative for (c): sort the list and print the last element, or use a loop to find the maximum.</em></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ==================== EXTERNAL RESOURCES ==================== -->
       <div class="extra-resources">
-        <h3>Extra Practice</h3>
-        <p>Practise working with lists and arrays in these interactive games:</p>
+        <h3>Extra Resources</h3>
+        <p>Deepen your understanding with these trusted resources:</p>
         <ul>
+          <li><a href="https://www.bbc.co.uk/bitesize/examspecs/zdqy7nb" target="_blank" rel="noopener">BBC Bitesize &mdash; Edexcel GCSE Computer Science</a> &mdash; Revision notes covering arrays, data types, and programming concepts</li>
+          <li><a href="https://www.w3schools.com/python/python_lists.asp" target="_blank" rel="noopener">W3Schools &mdash; Python Lists</a> &mdash; Interactive reference with try-it-yourself examples for every list method</li>
           <li><a href="https://hvgcse.cshub.org.je/array-learning-game.html" target="_blank" rel="noopener">Array Learning Game</a> &mdash; Interactive 1D and 2D array challenges with drag-and-drop</li>
           <li><a href="https://hvgcse.cshub.org.je/Array_Search_Builder.html" target="_blank" rel="noopener">Array Search Builder</a> &mdash; Build array searching programs step by step</li>
           <li><a href="https://hvgcsecs.cshub.org.je/topics/topic6.html" target="_blank" rel="noopener">GCSE Topic 6: Data Types</a> &mdash; Arrays, lists, and 2D arrays with interactive code editors</li>
