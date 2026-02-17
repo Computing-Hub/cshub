@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Programming Constructs - Python Fundamentals</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/style.css" />
+</head>
+<body>
+
+  <header class="site-header">
+    <p><a href="../index.html">&larr; Back to Course</a></p>
+    <h1>The Three Programming Constructs</h1>
+    <p class="subtitle">Sequence, selection, and iteration &mdash; the three building blocks behind every program ever written</p>
+  </header>
+
+  <main>
+
+    <!-- ==================== THE IDEA ==================== -->
+    <section class="idea">
+      <span class="section-label">The Idea</span>
+      <h2>Three Building Blocks, Infinite Possibilities</h2>
+
+      <p>Every algorithm, no matter how complex, is built from just <strong>three basic building blocks</strong>. Whether it is a simple calculator, a video game, or the software that lands a spacecraft on Mars &mdash; it all comes down to these three programming constructs:</p>
+
+      <ul>
+        <li><strong>Sequence</strong> &mdash; Instructions executed one after another, in order</li>
+        <li><strong>Selection</strong> &mdash; Making a decision based on a condition (choosing a path)</li>
+        <li><strong>Iteration</strong> &mdash; Repeating instructions (looping)</li>
+      </ul>
+
+      <p>Understanding these three constructs is fundamental to computer science. Once you can identify and use them, you can design any algorithm and write any program.</p>
+
+      <div class="key-concept">
+        <strong>Key Concept: The Three Constructs</strong>
+        <strong>Sequence</strong> = instructions in order. <strong>Selection</strong> = making a choice (IF/ELSE). <strong>Iteration</strong> = repeating instructions (FOR/WHILE). Every program ever written uses some combination of these three constructs. Learn them well!
+      </div>
+    </section>
+
+    <!-- ==================== EXPLORE ==================== -->
+    <section class="explore">
+      <span class="section-label">Explore</span>
+      <h2>The Constructs in Everyday Life</h2>
+
+      <p>You use these three constructs in daily life without even realising it:</p>
+
+      <h3>Sequence in Real Life</h3>
+      <p>When you make toast in the morning, you follow a sequence: get the bread, put it in the toaster, press the lever, wait, take the toast out, spread butter. The order matters &mdash; you cannot spread butter before toasting!</p>
+
+      <h3>Selection in Real Life</h3>
+      <p>When you get dressed, you make decisions: <em>Is it raining? If yes, take an umbrella. If no, leave it at home.</em> You are choosing a path based on a condition &mdash; that is selection.</p>
+
+      <h3>Iteration in Real Life</h3>
+      <p>When you practise penalty kicks, you repeat the same action over and over: place the ball, run up, kick, retrieve the ball, repeat. You might stop after 20 kicks (count-controlled) or keep going until you score 10 goals (condition-controlled). Both are iteration.</p>
+
+      <div class="try-this">
+        <strong>Think About It:</strong> Can you identify sequence, selection, and iteration in your morning routine? When do you do things in order? When do you make choices? What do you repeat?
+      </div>
+    </section>
+
+    <!-- ==================== UNDERSTAND ==================== -->
+    <section class="understand">
+      <span class="section-label">Understand</span>
+      <h2>The Three Constructs in Detail</h2>
+
+      <h3>1. Sequence</h3>
+      <p>Instructions are executed <strong>one after another</strong>, in the order they are written &mdash; like following a recipe from top to bottom. This is the simplest construct. Every program uses sequence as its foundation.</p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Pseudocode &mdash; Sequence</span>
+        </div>
+        <pre><code>INPUT radius
+SET area TO 3.14 * radius * radius
+OUTPUT area</code></pre>
+      </div>
+
+      <p>In this example, the three instructions always run in exactly this order: first the input, then the calculation, then the output. Swapping the order would produce incorrect results or errors.</p>
+
+      <h3>2. Selection (Decisions)</h3>
+      <p>The program makes a <strong>decision</strong> based on a condition. If the condition is true, one path is followed; if false, a different path is taken. This is like a fork in the road.</p>
+
+      <p>There are several types of selection:</p>
+
+      <h4>IF...THEN...ELSE</h4>
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Pseudocode &mdash; IF/ELSE</span>
+        </div>
+        <pre><code>INPUT age
+IF age >= 18 THEN
+    OUTPUT "You can vote"
+ELSE
+    OUTPUT "You cannot vote yet"
+ENDIF</code></pre>
+      </div>
+
+      <h4>IF...ELSEIF...ELSE (Multiple Conditions)</h4>
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Pseudocode &mdash; Multiple Conditions</span>
+        </div>
+        <pre><code>INPUT score
+IF score >= 70 THEN
+    OUTPUT "Distinction"
+ELSEIF score >= 50 THEN
+    OUTPUT "Pass"
+ELSE
+    OUTPUT "Fail"
+ENDIF</code></pre>
+      </div>
+
+      <p>The program checks each condition in order. As soon as one is true, it runs that block and skips the rest. If none are true, the ELSE block runs.</p>
+
+      <div class="key-concept">
+        <strong>Nested Selection</strong>
+        You can put an IF statement <em>inside</em> another IF statement. This is called <strong>nested selection</strong>. It allows you to check multiple layers of conditions, like: <em>Is the user logged in? If yes, are they an admin?</em>
+      </div>
+
+      <h3>3. Iteration (Loops)</h3>
+      <p>A section of code is <strong>repeated</strong> either a set number of times or until a condition is met. This saves you from writing the same instructions over and over again.</p>
+
+      <p>There are three main types of iteration:</p>
+
+      <h4>FOR Loop (Count-Controlled)</h4>
+      <p>Repeats a set number of times. Use this when you <strong>know in advance</strong> how many times to loop.</p>
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Pseudocode &mdash; FOR Loop</span>
+        </div>
+        <pre><code>FOR i = 1 TO 5
+    OUTPUT "Hello " + i
+ENDFOR</code></pre>
+      </div>
+      <p>This outputs &ldquo;Hello 1&rdquo;, &ldquo;Hello 2&rdquo;, &ldquo;Hello 3&rdquo;, &ldquo;Hello 4&rdquo;, &ldquo;Hello 5&rdquo;.</p>
+
+      <h4>WHILE Loop (Condition-Controlled &mdash; Pre-Check)</h4>
+      <p>Checks the condition <strong>before</strong> each iteration. If the condition is false at the start, the loop body may never execute.</p>
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Pseudocode &mdash; WHILE Loop</span>
+        </div>
+        <pre><code>SET count TO 1
+WHILE count <= 10
+    OUTPUT count
+    SET count TO count + 1
+ENDWHILE</code></pre>
+      </div>
+
+      <h4>REPEAT...UNTIL Loop (Condition-Controlled &mdash; Post-Check)</h4>
+      <p>Checks the condition <strong>after</strong> each iteration. The loop body always executes <strong>at least once</strong>.</p>
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Pseudocode &mdash; REPEAT...UNTIL</span>
+        </div>
+        <pre><code>REPEAT
+    OUTPUT "Enter password:"
+    INPUT password
+UNTIL password == "secret123"
+OUTPUT "Access granted"</code></pre>
+      </div>
+
+      <div class="key-concept">
+        <strong>WHILE vs. REPEAT...UNTIL</strong>
+        The key difference is <strong>when the condition is checked</strong>. A WHILE loop checks <em>before</em> running the code (so it might run zero times). A REPEAT...UNTIL loop checks <em>after</em> running the code (so it always runs at least once). In the password example above, REPEAT...UNTIL is better because you need to ask for the password at least once before checking it.
+      </div>
+
+      <h3>Combining the Three Constructs</h3>
+      <p>Real programs combine all three constructs together. Here is an example that uses sequence, selection, and iteration:</p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Pseudocode &mdash; All Three Constructs</span>
+        </div>
+        <pre><code>SET total TO 0                        // Sequence
+SET count TO 0                        // Sequence
+
+REPEAT                                // Iteration
+    OUTPUT "Enter a mark (or -1 to finish):"
+    INPUT mark                        // Sequence
+    IF mark != -1 THEN                // Selection
+        SET total TO total + mark     // Sequence
+        SET count TO count + 1        // Sequence
+    ENDIF
+UNTIL mark == -1                      // Iteration condition
+
+IF count > 0 THEN                     // Selection
+    SET average TO total / count      // Sequence
+    OUTPUT "Average mark: " + average
+ELSE
+    OUTPUT "No marks entered"
+ENDIF</code></pre>
+      </div>
+
+      <p>This algorithm repeatedly asks for marks (iteration), decides whether to add them (selection), and performs calculations in order (sequence). All three constructs working together.</p>
+    </section>
+
+    <!-- ==================== PRACTICE ==================== -->
+    <section class="practice">
+      <span class="section-label">Practice</span>
+      <h2>Test Yourself</h2>
+      <p>Click on each question to reveal the answer. Try to answer in your head first!</p>
+
+      <div class="hint">
+        <div class="hint-title">Q1: Name the three programming constructs and give one example of each.</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> <strong>Sequence</strong> &mdash; instructions run in order, e.g. calculating the area of a rectangle (length * width). <strong>Selection</strong> &mdash; a decision is made, e.g. IF age >= 17 THEN &ldquo;can learn to drive.&rdquo; <strong>Iteration</strong> &mdash; instructions repeat, e.g. a WHILE loop that keeps asking for a password until the correct one is entered.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q2: What is the difference between a WHILE loop and a REPEAT...UNTIL loop?</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> A <strong>WHILE</strong> loop checks its condition <strong>before</strong> each iteration, so the loop body might never execute if the condition is false from the start. A <strong>REPEAT...UNTIL</strong> loop checks its condition <strong>after</strong> each iteration, so the loop body always executes <strong>at least once</strong>. Use REPEAT...UNTIL when you need the code to run at least once (e.g. asking for user input).</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q3: When would you use a FOR loop instead of a WHILE loop?</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> Use a <strong>FOR</strong> loop when you know <strong>in advance</strong> how many times you want to repeat (e.g. &ldquo;print the times table for 1 to 12&rdquo;). Use a <strong>WHILE</strong> loop when the number of repetitions depends on a condition that might change during the loop (e.g. &ldquo;keep asking until the user types &lsquo;quit&rsquo;&rdquo;).</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q4: What is nested selection? Give an example.</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> Nested selection is an IF statement placed <strong>inside</strong> another IF statement. For example:</p>
+          <div class="code-block">
+            <div class="code-block-header">
+              <span class="code-block-label">Pseudocode</span>
+            </div>
+            <pre><code>IF loggedIn == TRUE THEN
+    IF role == "admin" THEN
+        OUTPUT "Welcome, admin"
+    ELSE
+        OUTPUT "Welcome, user"
+    ENDIF
+ELSE
+    OUTPUT "Please log in"
+ENDIF</code></pre>
+          </div>
+          <p>The inner IF only runs if the outer IF condition is true. This allows multi-layered decision making.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q5: Identify the constructs used in this pseudocode: a program that asks for 5 numbers and outputs whether each is positive or negative.</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> This program uses all three constructs: <strong>Sequence</strong> &mdash; the INPUT and OUTPUT statements run in order within each iteration. <strong>Iteration</strong> &mdash; a FOR loop repeating 5 times. <strong>Selection</strong> &mdash; an IF/ELSE deciding whether each number is positive or negative.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q6: Write pseudocode for a program that counts down from 10 to 1 and then outputs &ldquo;Blast off!&rdquo;</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong></p>
+          <div class="code-block">
+            <div class="code-block-header">
+              <span class="code-block-label">Pseudocode</span>
+            </div>
+            <pre><code>SET count TO 10
+WHILE count >= 1
+    OUTPUT count
+    SET count TO count - 1
+ENDWHILE
+OUTPUT "Blast off!"</code></pre>
+          </div>
+          <p>This uses <strong>sequence</strong> (OUTPUT then decrement) within <strong>iteration</strong> (WHILE loop). You could also use a FOR loop counting from 10 down to 1.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q7: Why can&rsquo;t every program be written using only sequence?</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> Sequence alone only allows instructions to run in a fixed order &mdash; it cannot make decisions or repeat actions. Without <strong>selection</strong>, a program cannot respond differently to different inputs. Without <strong>iteration</strong>, any repeated task would need to be written out individually, making programs enormously long and inflexible. The three constructs together give programs the flexibility to handle any situation.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== KEY VOCABULARY ==================== -->
+    <section class="understand">
+      <span class="section-label">Reference</span>
+      <h2>Key Vocabulary</h2>
+      <p>Make sure you understand and can define all of these terms.</p>
+
+      <table>
+        <thead>
+          <tr><th>Term</th><th>Definition</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Sequence</strong></td>
+            <td>A programming construct where instructions are executed one after another in order.</td>
+          </tr>
+          <tr>
+            <td><strong>Selection</strong></td>
+            <td>A programming construct where a decision is made based on a condition (e.g. IF...THEN...ELSE).</td>
+          </tr>
+          <tr>
+            <td><strong>Iteration</strong></td>
+            <td>A programming construct where instructions are repeated, either a set number of times (FOR) or until a condition is met (WHILE/REPEAT...UNTIL).</td>
+          </tr>
+          <tr>
+            <td><strong>Condition</strong></td>
+            <td>An expression that evaluates to TRUE or FALSE, used to control selection and iteration (e.g. age >= 18, password == &ldquo;correct&rdquo;).</td>
+          </tr>
+          <tr>
+            <td><strong>Count-Controlled Loop</strong></td>
+            <td>A loop that repeats a specific number of times (FOR loop). The number of iterations is known before the loop starts.</td>
+          </tr>
+          <tr>
+            <td><strong>Condition-Controlled Loop</strong></td>
+            <td>A loop that repeats until a condition is met (WHILE or REPEAT...UNTIL). The number of iterations is not known in advance.</td>
+          </tr>
+          <tr>
+            <td><strong>Nested Selection</strong></td>
+            <td>An IF statement placed inside another IF statement, allowing multi-layered decision making.</td>
+          </tr>
+          <tr>
+            <td><strong>Nested Iteration</strong></td>
+            <td>A loop placed inside another loop, often used for processing two-dimensional data (e.g. rows and columns).</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- ==================== EXAM TIPS ==================== -->
+    <section class="explore">
+      <span class="section-label">Exam Skills</span>
+      <h2>Exam Tips: Programming Construct Questions</h2>
+
+      <h3>1. Identify All Three Constructs</h3>
+      <p>A common exam question gives you a piece of pseudocode and asks you to identify the constructs used. Look for: statements running in order (sequence), IF/ELSE blocks (selection), and FOR/WHILE/REPEAT blocks (iteration). Make sure to give a specific example from the code for each one.</p>
+
+      <h3>2. Choose the Right Loop Type</h3>
+      <p>If the question says &ldquo;repeat 10 times&rdquo; &rarr; use a <strong>FOR</strong> loop. If it says &ldquo;repeat until the user enters &lsquo;quit&rsquo;&rdquo; &rarr; use a <strong>WHILE</strong> or <strong>REPEAT...UNTIL</strong> loop. If the action must happen at least once &rarr; prefer <strong>REPEAT...UNTIL</strong>.</p>
+
+      <h3>3. Trace Through Carefully</h3>
+      <p>When tracing code with loops and selection, go through <strong>one iteration at a time</strong>. Update each variable in your trace table before moving to the next step. Do not skip ahead or try to do multiple iterations in your head at once.</p>
+
+      <h3>4. Watch for Off-by-One Errors</h3>
+      <p>A very common mistake is getting the loop boundaries wrong. <code>FOR i = 0 TO 4</code> runs 5 times (0, 1, 2, 3, 4), not 4. Always count carefully and check whether the boundary values are included.</p>
+
+      <div class="warning">
+        <strong>Top Exam Tip:</strong> If a question asks you to &ldquo;explain the purpose&rdquo; of a construct in a program, do not just name it. Say what it <strong>does</strong> in context. For example: &ldquo;The WHILE loop (iteration) repeatedly asks the user for a password until they enter the correct one, preventing unauthorised access.&rdquo;
+      </div>
+    </section>
+
+    <!-- ==================== REFLECT ==================== -->
+    <section class="reflect">
+      <span class="section-label">Reflect</span>
+      <h2>Think About It</h2>
+
+      <p>The three programming constructs are the grammar of programming. Just as every English sentence uses nouns, verbs, and connectives, every program uses sequence, selection, and iteration.</p>
+
+      <p>Think about these connections:</p>
+      <ul>
+        <li><strong>Recipes</strong> use sequence (follow steps in order), selection (if the mixture is too thick, add more milk), and iteration (stir for 5 minutes)</li>
+        <li><strong>Board games</strong> use sequence (take turns in order), selection (if you land on a special square, follow its rule), and iteration (keep playing until someone wins)</li>
+        <li><strong>School timetables</strong> use sequence (lessons in order), selection (if it is Wednesday, you have PE), and iteration (the same timetable repeats each week)</li>
+      </ul>
+
+      <p>Once you start seeing these patterns everywhere, you will find it much easier to design algorithms and write code. The three constructs are your toolkit &mdash; master them, and you can build anything.</p>
+    </section>
+
+    <!-- ==================== NAVIGATION ==================== -->
+    <nav class="chapter-nav">
+      <a href="pseudocode-flowcharts.html">&larr; Previous: Pseudocode &amp; Flowcharts</a>
+      <a href="../index.html">Course Home</a>
+      <a href="search-sort-algorithms.html">Next: Search &amp; Sort Algorithms &rarr;</a>
+    </nav>
+
+  </main>
+
+  <footer class="site-footer">
+    <p>Python Fundamentals &mdash; A KS4 Learning Platform</p>
+    <p>Programming Constructs &mdash; GCSE Computer Science Theory</p>
+  </footer>
+
+</body>
+</html>

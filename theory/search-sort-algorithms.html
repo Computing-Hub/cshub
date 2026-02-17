@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Search &amp; Sort Algorithms - Python Fundamentals</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/style.css" />
+</head>
+<body>
+
+  <header class="site-header">
+    <p><a href="../index.html">&larr; Back to Course</a></p>
+    <h1>Search &amp; Sort Algorithms</h1>
+    <p class="subtitle">Linear search, binary search, bubble sort, insertion sort, merge sort &mdash; and how to compare their efficiency</p>
+  </header>
+
+  <main>
+
+    <!-- ==================== THE IDEA ==================== -->
+    <section class="idea">
+      <span class="section-label">The Idea</span>
+      <h2>Why Searching and Sorting Matter</h2>
+
+      <p>Two of the most common tasks in computing are <strong>searching</strong> (finding a specific item in a collection of data) and <strong>sorting</strong> (arranging data into a particular order). These operations happen billions of times every day &mdash; every Google search, every online shopping filter, every playlist sorted by artist name.</p>
+
+      <p>There are different algorithms for searching and sorting, and they are not all equally good. Some are simple but slow. Others are clever and fast, but more complex. Understanding the strengths and weaknesses of each algorithm is a key part of GCSE Computer Science.</p>
+
+      <p>In this topic, you will learn:</p>
+      <ul>
+        <li><strong>Two searching algorithms:</strong> Linear search and binary search</li>
+        <li><strong>Three sorting algorithms:</strong> Bubble sort, insertion sort, and merge sort</li>
+        <li><strong>How to compare them</strong> using Big O notation</li>
+      </ul>
+
+      <div class="key-concept">
+        <strong>Key Concept</strong>
+        An efficient algorithm uses fewer steps to get the same result. When data sets are small, the difference barely matters. But when you are dealing with thousands or millions of items, choosing the right algorithm can mean the difference between a result in one second and a result that takes hours.
+      </div>
+    </section>
+
+    <!-- ==================== EXPLORE ==================== -->
+    <section class="explore">
+      <span class="section-label">Explore</span>
+      <h2>Searching and Sorting in Everyday Life</h2>
+
+      <h3>Searching: Finding What You Need</h3>
+      <p>Imagine you have lost your phone somewhere in your bedroom. You could search in two ways:</p>
+      <ul>
+        <li><strong>Linear search:</strong> Check every single object, one at a time, starting from one corner and working across the room. You will definitely find it, but it might take a while.</li>
+        <li><strong>Binary search:</strong> If your bedroom was somehow organised alphabetically (A-side to Z-side!), you could jump to the middle and quickly narrow down which half your phone is in. Much faster &mdash; but it only works if things are already organised.</li>
+      </ul>
+
+      <h3>Sorting: Getting Things in Order</h3>
+      <p>Think about sorting a hand of playing cards:</p>
+      <ul>
+        <li><strong>Bubble sort:</strong> Compare pairs of adjacent cards and swap if they are in the wrong order. Keep going through the whole hand until no more swaps are needed.</li>
+        <li><strong>Insertion sort:</strong> Pick up one card at a time and slide it into the correct position among the cards you have already sorted.</li>
+        <li><strong>Merge sort:</strong> Split your hand in half, split those halves in half, keep going until you have individual cards, then merge them back together in order.</li>
+      </ul>
+
+      <div class="try-this">
+        <strong>Think About It:</strong> Which method do you naturally use when sorting a hand of cards? Most people use insertion sort without realising it! Try using bubble sort next time and see how it feels different.
+      </div>
+    </section>
+
+    <!-- ==================== UNDERSTAND ==================== -->
+    <section class="understand">
+      <span class="section-label">Understand</span>
+      <h2>Algorithms in Detail</h2>
+
+      <!-- SEARCHING ALGORITHMS -->
+      <h3>Searching Algorithms</h3>
+      <p>A <strong>searching algorithm</strong> finds a specific item within a collection of data. You need to know two:</p>
+
+      <h4>Linear Search</h4>
+      <ul>
+        <li>Start at the <strong>first item</strong> in the list</li>
+        <li>Compare it to the item you are looking for</li>
+        <li>If it matches, you are done</li>
+        <li>If not, move to the <strong>next item</strong></li>
+        <li>Repeat until you find it or reach the end of the list</li>
+      </ul>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Pseudocode &mdash; Linear Search</span>
+        </div>
+        <pre><code>INPUT searchItem
+FOR i = 0 TO LENGTH(list) - 1
+    IF list[i] == searchItem THEN
+        OUTPUT "Found at position " + i
+        STOP
+    ENDIF
+ENDFOR
+OUTPUT "Item not found"</code></pre>
+      </div>
+
+      <p><strong>Pros:</strong> Works on any list (sorted or unsorted). Simple to understand and implement.</p>
+      <p><strong>Cons:</strong> Slow for large lists &mdash; in the worst case, you check every single item.</p>
+
+      <h4>Binary Search</h4>
+      <p>Binary search is much faster, but the list <strong>must be sorted</strong> first. It works by repeatedly halving the data:</p>
+
+      <ul>
+        <li>The list <strong>must be sorted</strong> first</li>
+        <li>Look at the <strong>middle item</strong></li>
+        <li>If it matches, you are done</li>
+        <li>If your target is smaller, discard the right half</li>
+        <li>If your target is larger, discard the left half</li>
+        <li>Repeat on the remaining half until found or nothing left</li>
+      </ul>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Pseudocode &mdash; Binary Search</span>
+        </div>
+        <pre><code>INPUT searchItem
+SET low TO 0
+SET high TO LENGTH(list) - 1
+WHILE low <= high
+    SET mid TO (low + high) DIV 2
+    IF list[mid] == searchItem THEN
+        OUTPUT "Found at position " + mid
+        STOP
+    ELSEIF list[mid] < searchItem THEN
+        SET low TO mid + 1
+    ELSE
+        SET high TO mid - 1
+    ENDIF
+ENDWHILE
+OUTPUT "Item not found"</code></pre>
+      </div>
+
+      <p><strong>Pros:</strong> Very fast, even with huge lists. Each step eliminates half the remaining data.</p>
+      <p><strong>Cons:</strong> Only works on <strong>sorted</strong> data. Slightly more complex to implement.</p>
+
+      <div class="warning">
+        <strong>Common Mistake:</strong> Students often forget that binary search <strong>requires a sorted list</strong>. If the data is not sorted, binary search will not work correctly. If asked which search to use on unsorted data, the answer is always linear search.
+      </div>
+
+      <!-- SORTING ALGORITHMS -->
+      <h3>Sorting Algorithms</h3>
+      <p>Sorting means arranging data into a particular order (usually ascending or descending). You need to know these sorting algorithms:</p>
+
+      <h4>Bubble Sort</h4>
+      <ul>
+        <li>Compare each pair of <strong>adjacent items</strong></li>
+        <li>If they are in the wrong order, <strong>swap them</strong></li>
+        <li>Repeat the entire pass through the list</li>
+        <li>Stop when a complete pass is made with <strong>no swaps</strong></li>
+      </ul>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Pseudocode &mdash; Bubble Sort</span>
+        </div>
+        <pre><code>REPEAT
+    SET swapped TO FALSE
+    FOR i = 0 TO LENGTH(list) - 2
+        IF list[i] > list[i + 1] THEN
+            SWAP list[i] AND list[i + 1]
+            SET swapped TO TRUE
+        ENDIF
+    ENDFOR
+UNTIL swapped == FALSE</code></pre>
+      </div>
+
+      <p><strong>Example walkthrough:</strong> Sorting [5, 3, 8, 1]</p>
+      <table>
+        <thead>
+          <tr><th>Pass</th><th>Comparisons &amp; Swaps</th><th>List After Pass</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>1</td><td>5&gt;3 swap, 5&lt;8 no swap, 8&gt;1 swap</td><td>[3, 5, 1, 8]</td></tr>
+          <tr><td>2</td><td>3&lt;5 no swap, 5&gt;1 swap, 5&lt;8 no swap</td><td>[3, 1, 5, 8]</td></tr>
+          <tr><td>3</td><td>3&gt;1 swap, 3&lt;5 no swap, 5&lt;8 no swap</td><td>[1, 3, 5, 8]</td></tr>
+          <tr><td>4</td><td>No swaps needed &mdash; DONE</td><td>[1, 3, 5, 8]</td></tr>
+        </tbody>
+      </table>
+
+      <p><strong>Pros:</strong> Simple to understand and code. Detects if the list is already sorted (no swaps = stop early).</p>
+      <p><strong>Cons:</strong> Very slow for large lists. Makes many unnecessary comparisons.</p>
+
+      <h4>Insertion Sort</h4>
+      <p>Think about how you sort a hand of playing cards. You pick up one card at a time and slide it into the correct position among the cards you have already sorted.</p>
+
+      <ul>
+        <li>Start with the <strong>second item</strong> in the list (the first item is already &ldquo;sorted&rdquo; by itself)</li>
+        <li>Compare it with items to its left</li>
+        <li><strong>Shift</strong> larger items one place to the right to make room</li>
+        <li><strong>Insert</strong> the current item into its correct position</li>
+        <li>Repeat for every remaining item in the list</li>
+      </ul>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Pseudocode &mdash; Insertion Sort</span>
+        </div>
+        <pre><code>FOR i = 1 TO LENGTH(list) - 1
+    SET current TO list[i]
+    SET j TO i - 1
+    WHILE j >= 0 AND list[j] > current
+        SET list[j + 1] TO list[j]
+        SET j TO j - 1
+    ENDWHILE
+    SET list[j + 1] TO current
+ENDFOR</code></pre>
+      </div>
+
+      <p><strong>Example walkthrough:</strong> Sorting [5, 3, 8, 1]</p>
+      <table>
+        <thead>
+          <tr><th>Step</th><th>Current Item</th><th>Action</th><th>List After Step</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>1</td><td>3</td><td>3 &lt; 5, so shift 5 right and insert 3 before it</td><td>[<strong>3</strong>, 5, 8, 1]</td></tr>
+          <tr><td>2</td><td>8</td><td>8 &gt; 5, so no shift needed &mdash; stays in place</td><td>[3, 5, <strong>8</strong>, 1]</td></tr>
+          <tr><td>3</td><td>1</td><td>1 &lt; 8, shift 8 right; 1 &lt; 5, shift 5 right; 1 &lt; 3, shift 3 right; insert 1 at start</td><td>[<strong>1</strong>, 3, 5, 8]</td></tr>
+        </tbody>
+      </table>
+
+      <p><strong>Pros:</strong> Simple to understand. Very efficient for small lists or lists that are already nearly sorted. Uses very little extra memory.</p>
+      <p><strong>Cons:</strong> Slow for large, unsorted lists (similar to bubble sort).</p>
+
+      <div class="key-concept">
+        <strong>Insertion Sort vs. Bubble Sort</strong>
+        Both insertion sort and bubble sort are slow on large data sets, but insertion sort is generally faster in practice because it makes fewer comparisons and swaps, especially when the data is already partially sorted. If a list is nearly sorted, insertion sort can finish very quickly, whereas bubble sort still needs to make full passes through the data.
+      </div>
+
+      <h4>Merge Sort</h4>
+      <p>Merge sort uses a &ldquo;divide and conquer&rdquo; approach. Instead of sorting the whole list at once, you split it in half, then split those halves in half again, and keep going until you have sub-lists of just one item each (which are already &ldquo;sorted&rdquo;). Then you <strong>merge</strong> them back together in the right order.</p>
+
+      <ul>
+        <li><strong>Divide:</strong> Split the list in half, repeatedly, until each sub-list has just one item</li>
+        <li><strong>Conquer:</strong> Merge pairs of sub-lists back together in sorted order</li>
+        <li>Keep merging until you have one fully sorted list</li>
+      </ul>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Pseudocode &mdash; Merge Sort</span>
+        </div>
+        <pre><code>FUNCTION mergeSort(list)
+    IF LENGTH(list) <= 1 THEN
+        RETURN list
+    ENDIF
+    SET mid TO LENGTH(list) DIV 2
+    SET left TO mergeSort(list[0 TO mid - 1])
+    SET right TO mergeSort(list[mid TO end])
+    RETURN merge(left, right)
+ENDFUNCTION
+
+FUNCTION merge(left, right)
+    SET result TO empty list
+    WHILE left is not empty AND right is not empty
+        IF left[0] <= right[0] THEN
+            APPEND left[0] TO result
+            REMOVE first item from left
+        ELSE
+            APPEND right[0] TO result
+            REMOVE first item from right
+        ENDIF
+    ENDWHILE
+    APPEND remaining items to result
+    RETURN result
+ENDFUNCTION</code></pre>
+      </div>
+
+      <p><strong>Example walkthrough:</strong> Sorting [6, 3, 8, 1]</p>
+      <table>
+        <thead>
+          <tr><th>Step</th><th>Action</th><th>Result</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Split</td><td>[6, 3, 8, 1] &rarr; [6, 3] and [8, 1]</td><td>Two halves</td></tr>
+          <tr><td>Split again</td><td>[6, 3] &rarr; [6] and [3]; [8, 1] &rarr; [8] and [1]</td><td>Four singles</td></tr>
+          <tr><td>Merge</td><td>[6] + [3] &rarr; [3, 6]; [8] + [1] &rarr; [1, 8]</td><td>Two sorted pairs</td></tr>
+          <tr><td>Merge</td><td>[3, 6] + [1, 8] &rarr; [1, 3, 6, 8]</td><td>Fully sorted</td></tr>
+        </tbody>
+      </table>
+
+      <p><strong>Pros:</strong> Much faster than bubble sort for large lists. Consistent performance regardless of how the data starts.</p>
+      <p><strong>Cons:</strong> Uses more memory (needs extra space for the sub-lists). More complex to code.</p>
+
+      <div class="key-concept">
+        <strong>Key Concept: Comparing Sorts</strong>
+        <strong>Bubble sort</strong> is simple but slow &mdash; best for small or nearly-sorted lists. <strong>Insertion sort</strong> is also simple and performs well on small or nearly-sorted data, often better than bubble sort. <strong>Merge sort</strong> is faster for large data sets but uses more memory. In exams, you may be asked to trace through each algorithm step by step, so practise with small lists until you are confident.
+      </div>
+
+      <!-- EFFICIENCY AND BIG O -->
+      <h3>Efficiency and Big O Notation</h3>
+      <p>When there are several algorithms that solve the same problem, how do we decide which one is &ldquo;better&rdquo;? We look at <strong>efficiency</strong> &mdash; how quickly an algorithm runs as the amount of data grows. In computer science, we describe this using <strong>Big O notation</strong>.</p>
+
+      <p>Big O notation is a simple way of saying: &ldquo;In the worst case, roughly how many steps does this algorithm need as the data gets bigger?&rdquo; We use the letter <strong>n</strong> to stand for the number of items in the data set.</p>
+
+      <table>
+        <thead>
+          <tr><th>Big O</th><th>Name</th><th>What It Means</th><th>Example Algorithm</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>O(1)</strong></td>
+            <td>Constant</td>
+            <td>The same number of steps regardless of data size</td>
+            <td>Accessing an item in a list by its index</td>
+          </tr>
+          <tr>
+            <td><strong>O(log n)</strong></td>
+            <td>Logarithmic</td>
+            <td>Halves the data each step &mdash; very fast even for huge data sets</td>
+            <td>Binary search</td>
+          </tr>
+          <tr>
+            <td><strong>O(n)</strong></td>
+            <td>Linear</td>
+            <td>Checks each item once &mdash; double the data means double the time</td>
+            <td>Linear search</td>
+          </tr>
+          <tr>
+            <td><strong>O(n log n)</strong></td>
+            <td>Linearithmic</td>
+            <td>Faster than quadratic but slower than linear &mdash; efficient sorting</td>
+            <td>Merge sort</td>
+          </tr>
+          <tr>
+            <td><strong>O(n&sup2;)</strong></td>
+            <td>Quadratic</td>
+            <td>Compares every pair &mdash; double the data means four times the time</td>
+            <td>Bubble sort, insertion sort</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p><strong>What does this look like in practice?</strong> Imagine you have a list of 1,000 items:</p>
+      <ul>
+        <li><strong>Linear search O(n):</strong> Up to 1,000 comparisons in the worst case</li>
+        <li><strong>Binary search O(log n):</strong> Up to about 10 comparisons (since 2<sup>10</sup> = 1,024)</li>
+        <li><strong>Bubble sort O(n&sup2;):</strong> Up to roughly 1,000,000 comparisons in the worst case</li>
+        <li><strong>Merge sort O(n log n):</strong> Up to roughly 10,000 comparisons</li>
+      </ul>
+
+      <p>You can see that the choice of algorithm makes an enormous difference. For large data sets, an O(n&sup2;) algorithm can be hundreds of times slower than an O(n log n) one.</p>
+
+      <div class="key-concept">
+        <strong>Did You Know?</strong>
+        The most efficient general-purpose sorting algorithms &mdash; including merge sort and similar approaches &mdash; run in <strong>O(n log n)</strong> time. It has been mathematically proven that no comparison-based sorting algorithm can do better than this in the worst case. So O(n log n) is effectively the speed limit for sorting!
+      </div>
+
+      <div class="warning">
+        <strong>Exam Tip:</strong> You do not need to memorise complex mathematics for Big O at GCSE level. Just remember: <strong>O(1)</strong> is the fastest, <strong>O(log n)</strong> is very fast, <strong>O(n)</strong> is fair, <strong>O(n log n)</strong> is good for sorting, and <strong>O(n&sup2;)</strong> is slow for large data. Be able to say which algorithms belong to which category and explain <em>why</em> one is faster than another.
+      </div>
+    </section>
+
+    <!-- ==================== PRACTICE ==================== -->
+    <section class="practice">
+      <span class="section-label">Practice</span>
+      <h2>Test Yourself</h2>
+      <p>Click on each question to reveal the answer. Try to answer in your head first!</p>
+
+      <div class="hint">
+        <div class="hint-title">Q1: What is the main requirement for binary search that is not needed for linear search?</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> Binary search requires the data to be <strong>sorted</strong> before it can work. Linear search can work on any list, whether sorted or unsorted. This is the most important distinction between the two algorithms.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q2: A list contains 1,000 items. In the worst case, how many comparisons would a linear search need? How many would a binary search need?</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> Linear search: up to <strong>1,000 comparisons</strong> (checking every single item). Binary search: up to approximately <strong>10 comparisons</strong> (since 2<sup>10</sup> = 1,024, and each step halves the data). This shows how dramatically more efficient binary search is for large data sets.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q3: In bubble sort, how do you know the algorithm has finished?</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> Bubble sort is complete when a full pass through the list is made with <strong>no swaps</strong>. This means every adjacent pair is already in the correct order, so the list must be fully sorted.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q4: What approach does merge sort use, and what does this mean?</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> Merge sort uses a <strong>divide and conquer</strong> approach. This means it repeatedly <strong>divides</strong> the problem in half (splitting the list into smaller sub-lists) until the sub-problems are trivially small, then <strong>conquers</strong> by merging the solved sub-problems back together in the correct order.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q5: Trace through a bubble sort of the list [4, 2, 7, 1]. Show the list after each pass.</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong></p>
+          <p><strong>Original:</strong> [4, 2, 7, 1]</p>
+          <p><strong>Pass 1:</strong> Compare 4,2 &rarr; swap &rarr; [2, 4, 7, 1]. Compare 4,7 &rarr; no swap. Compare 7,1 &rarr; swap &rarr; [2, 4, 1, 7].</p>
+          <p><strong>Pass 2:</strong> Compare 2,4 &rarr; no swap. Compare 4,1 &rarr; swap &rarr; [2, 1, 4, 7]. Compare 4,7 &rarr; no swap.</p>
+          <p><strong>Pass 3:</strong> Compare 2,1 &rarr; swap &rarr; [1, 2, 4, 7]. Compare 2,4 &rarr; no swap. Compare 4,7 &rarr; no swap.</p>
+          <p><strong>Pass 4:</strong> No swaps &rarr; sorted! <strong>Final list: [1, 2, 4, 7]</strong></p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q6: Trace through a binary search for the value 7 in the sorted list [1, 3, 5, 7, 9, 11, 13]. Show each step.</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong></p>
+          <p><strong>Step 1:</strong> low = 0, high = 6, mid = (0 + 6) DIV 2 = 3. list[3] = <strong>7</strong>.</p>
+          <p>7 == 7, so the item is <strong>found at position 3</strong>.</p>
+          <p>Binary search found it in just <strong>1 comparison</strong>. A linear search starting from position 0 would have needed 4 comparisons (checking 1, 3, 5, then 7).</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q7: Give one advantage and one disadvantage of merge sort compared to bubble sort.</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong></p>
+          <p><strong>Advantage:</strong> Merge sort is significantly faster for large data sets. It runs in O(n log n) time, whereas bubble sort runs in O(n&sup2;) time. For example, on a list of 10,000 items, merge sort might need roughly 130,000 steps while bubble sort could need up to 100,000,000 steps.</p>
+          <p><strong>Disadvantage:</strong> Merge sort uses more memory than bubble sort because it creates new sub-lists at each stage of the divide step. Bubble sort sorts the list &ldquo;in place&rdquo; without needing significant extra memory.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q8: What is the Big O efficiency of each algorithm you have studied?</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong></p>
+          <ul>
+            <li><strong>Linear search:</strong> O(n) &mdash; checks each item once</li>
+            <li><strong>Binary search:</strong> O(log n) &mdash; halves the data each step</li>
+            <li><strong>Bubble sort:</strong> O(n&sup2;) &mdash; compares all pairs in each pass</li>
+            <li><strong>Insertion sort:</strong> O(n&sup2;) &mdash; shifts items for each insertion</li>
+            <li><strong>Merge sort:</strong> O(n log n) &mdash; divides and merges efficiently</li>
+          </ul>
+          <p>Remember: lower Big O = faster algorithm for large data sets.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== KEY VOCABULARY ==================== -->
+    <section class="understand">
+      <span class="section-label">Reference</span>
+      <h2>Key Vocabulary</h2>
+      <p>Make sure you understand and can define all of these terms.</p>
+
+      <table>
+        <thead>
+          <tr><th>Term</th><th>Definition</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Linear Search</strong></td>
+            <td>A search algorithm that checks each item in a list one by one from start to end. Works on unsorted data. Efficiency: O(n).</td>
+          </tr>
+          <tr>
+            <td><strong>Binary Search</strong></td>
+            <td>A search algorithm that repeatedly halves a sorted list to find an item. Much faster than linear search. Efficiency: O(log n).</td>
+          </tr>
+          <tr>
+            <td><strong>Bubble Sort</strong></td>
+            <td>A sorting algorithm that repeatedly compares adjacent pairs and swaps them if they are in the wrong order. Simple but slow. Efficiency: O(n&sup2;).</td>
+          </tr>
+          <tr>
+            <td><strong>Insertion Sort</strong></td>
+            <td>A sorting algorithm that builds a sorted list one item at a time by inserting each new item into its correct position. Efficiency: O(n&sup2;).</td>
+          </tr>
+          <tr>
+            <td><strong>Merge Sort</strong></td>
+            <td>A sorting algorithm that divides a list in half repeatedly, then merges the halves back in order. Fast but uses extra memory. Efficiency: O(n log n).</td>
+          </tr>
+          <tr>
+            <td><strong>Efficiency</strong></td>
+            <td>A measure of how well an algorithm performs, usually described in terms of time (speed) and space (memory usage) as the input size grows.</td>
+          </tr>
+          <tr>
+            <td><strong>Big O Notation</strong></td>
+            <td>A mathematical notation that describes the worst-case efficiency of an algorithm as the input size grows. E.g. O(n), O(log n), O(n&sup2;).</td>
+          </tr>
+          <tr>
+            <td><strong>Divide and Conquer</strong></td>
+            <td>An approach that breaks a problem into smaller sub-problems, solves each one, and combines the results. Used by merge sort and binary search.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- ==================== EXAM TIPS ==================== -->
+    <section class="explore">
+      <span class="section-label">Exam Skills</span>
+      <h2>Exam Tips: Search &amp; Sort Questions</h2>
+
+      <h3>1. Trace Tables: Show Your Working</h3>
+      <p>When asked to trace through an algorithm, <strong>always use a trace table</strong>. Write a column for each variable and a row for each step. This makes your working clear to the examiner, and even if your final answer is wrong, you can still pick up method marks for correct intermediate steps.</p>
+
+      <h3>2. Always State Advantages AND Disadvantages</h3>
+      <p>When a question asks you to <strong>compare</strong> two algorithms (e.g. bubble sort vs. merge sort, or linear search vs. binary search), make sure you mention at least one advantage and one disadvantage of each. A one-sided answer will only score half marks at most.</p>
+
+      <h3>3. Read the Data Carefully</h3>
+      <p>Pay attention to whether data is sorted or unsorted. If a question gives you an unsorted list and asks which search algorithm to use, the answer is <strong>linear search</strong> &mdash; binary search cannot be used on unsorted data. If the data is sorted, mention that binary search would be more efficient.</p>
+
+      <h3>4. Know Your Big O Categories</h3>
+      <p>You should be able to state the Big O efficiency of every search and sort algorithm you have studied and explain why one is faster than another. Practice sentences like: &ldquo;Binary search is O(log n) because it halves the remaining data with each comparison, whereas linear search is O(n) because it checks each item one at a time.&rdquo;</p>
+
+      <div class="warning">
+        <strong>Top Exam Tip:</strong> If you are running out of time and cannot finish a trace table, at least write down your final answer with a brief explanation. You may still get the mark for the correct answer, and partial working often picks up method marks. Never leave an algorithm question blank.
+      </div>
+    </section>
+
+    <!-- ==================== REFLECT ==================== -->
+    <section class="reflect">
+      <span class="section-label">Reflect</span>
+      <h2>Think About It</h2>
+
+      <p>Search and sort algorithms are not just exam topics &mdash; they are the backbone of the technology you use every day:</p>
+
+      <ul>
+        <li><strong>Google</strong> sorts billions of web pages by relevance in under a second</li>
+        <li><strong>Spotify</strong> searches through millions of songs to find your request</li>
+        <li><strong>Amazon</strong> sorts products by price, rating, or relevance when you browse</li>
+        <li><strong>Your phone&rsquo;s contacts</strong> are kept in sorted order so you can find names quickly</li>
+      </ul>
+
+      <p>The algorithms you have learned in this topic are the foundations that make all of this possible. As data sets get larger and larger in the modern world, the choice of algorithm becomes more and more important.</p>
+
+      <div class="extra-resources">
+        <h3>Further Reading &amp; External Resources</h3>
+        <ul>
+          <li><a href="https://isaaccomputerscience.org/topics/searching_and_sorting" target="_blank" rel="noopener">Isaac Computer Science &mdash; Searching and Sorting Algorithms</a> &mdash; Excellent interactive explanations with step-by-step animations</li>
+          <li><a href="https://www.w3schools.com/dsa/" target="_blank" rel="noopener">W3Schools &mdash; Data Structures and Algorithms</a> &mdash; Beginner-friendly tutorials with try-it-yourself examples</li>
+          <li><a href="https://www.bbc.co.uk/bitesize/examspecs/zdqy7nb" target="_blank" rel="noopener">BBC Bitesize &mdash; Edexcel GCSE Computer Science</a> &mdash; Comprehensive coverage of all GCSE algorithm topics</li>
+          <li><a href="https://hvgcsecs.cshub.org.je/topics/topic1.html" target="_blank" rel="noopener">GCSE Topic 1: Computational Thinking &amp; Algorithms</a> &mdash; Full Edexcel specification coverage</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ==================== NAVIGATION ==================== -->
+    <nav class="chapter-nav">
+      <a href="programming-constructs.html">&larr; Previous: Programming Constructs</a>
+      <a href="../index.html">Course Home</a>
+      <a href="data-representation.html">Next: Data Representation &rarr;</a>
+    </nav>
+
+  </main>
+
+  <footer class="site-footer">
+    <p>Python Fundamentals &mdash; A KS4 Learning Platform</p>
+    <p>Search &amp; Sort Algorithms &mdash; GCSE Computer Science Theory</p>
+  </footer>
+
+</body>
+</html>

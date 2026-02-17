@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pseudocode &amp; Flowcharts - Python Fundamentals</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/style.css" />
+</head>
+<body>
+
+  <header class="site-header">
+    <p><a href="../index.html">&larr; Back to Course</a></p>
+    <h1>Pseudocode &amp; Flowcharts</h1>
+    <p class="subtitle">Learn to represent algorithms using structured English and visual diagrams</p>
+  </header>
+
+  <main>
+
+    <!-- ==================== THE IDEA ==================== -->
+    <section class="idea">
+      <span class="section-label">The Idea</span>
+      <h2>Representing Algorithms</h2>
+
+      <p>Once you have used computational thinking to plan a solution, you need a way to <strong>write it down</strong> clearly before turning it into code. There are two main ways to represent an algorithm:</p>
+
+      <ul>
+        <li><strong>Pseudocode</strong> &mdash; A structured, text-based way of describing the steps, using English words that resemble programming keywords</li>
+        <li><strong>Flowcharts</strong> &mdash; A visual diagram that shows the steps and decisions using standard shapes connected by arrows</li>
+      </ul>
+
+      <p>Both methods let you plan your logic without worrying about the syntax rules of any particular programming language. They are essential skills for GCSE Computer Science &mdash; you will be asked to read, write, and trace through both pseudocode and flowcharts in the exam.</p>
+
+      <div class="key-concept">
+        <strong>Why Not Just Write Code?</strong>
+        Planning with pseudocode or flowcharts first helps you focus on the <strong>logic</strong> of your solution. If you jump straight into code, you often get distracted by syntax errors and miss logical mistakes. Professional programmers almost always plan before coding &mdash; and so should you.
+      </div>
+    </section>
+
+    <!-- ==================== EXPLORE ==================== -->
+    <section class="explore">
+      <span class="section-label">Explore</span>
+      <h2>Pseudocode in Action</h2>
+
+      <p><strong>Pseudocode</strong> is a way of writing an algorithm using structured English that looks a bit like programming code, but is not written in any specific language. It lets you plan your logic without worrying about syntax rules.</p>
+
+      <p>Here is a simple example &mdash; an algorithm to check if a student has passed an exam:</p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Pseudocode</span>
+        </div>
+        <pre><code>INPUT score
+IF score >= 50 THEN
+    OUTPUT "Pass"
+ELSE
+    OUTPUT "Fail"
+ENDIF</code></pre>
+      </div>
+
+      <p>And a slightly more complex example &mdash; finding the largest number in a list:</p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Pseudocode</span>
+        </div>
+        <pre><code>INPUT numbers (a list of values)
+SET largest TO numbers[0]
+FOR EACH number IN numbers
+    IF number > largest THEN
+        SET largest TO number
+    ENDIF
+ENDFOR
+OUTPUT largest</code></pre>
+      </div>
+
+      <div class="key-concept">
+        <strong>Key Concept: Pseudocode</strong>
+        Pseudocode is not a real programming language &mdash; there is no single &ldquo;correct&rdquo; way to write it. The aim is to clearly communicate the logic of an algorithm in a way that any programmer could understand and convert into actual code. Common keywords include: INPUT, OUTPUT, IF...THEN...ELSE, FOR, WHILE, SET, and REPEAT...UNTIL.
+      </div>
+
+      <h3>Flowcharts at a Glance</h3>
+      <p>A <strong>flowchart</strong> is a visual diagram that shows the steps of an algorithm using standard symbols connected by arrows. They make it easy to see the flow of logic at a glance &mdash; especially for algorithms that involve decisions and loops.</p>
+
+      <p>Here is the same pass/fail algorithm as a description of its flowchart:</p>
+      <ol>
+        <li><strong>Oval:</strong> START</li>
+        <li><strong>Parallelogram:</strong> INPUT score</li>
+        <li><strong>Diamond:</strong> Is score >= 50?</li>
+        <li><strong>Yes path &rarr; Parallelogram:</strong> OUTPUT &ldquo;Pass&rdquo;</li>
+        <li><strong>No path &rarr; Parallelogram:</strong> OUTPUT &ldquo;Fail&rdquo;</li>
+        <li>Both paths lead to &rarr; <strong>Oval:</strong> STOP</li>
+      </ol>
+
+      <p>Notice how the diamond shape creates two paths &mdash; one for Yes and one for No. This is how flowcharts show <strong>selection</strong> (decisions).</p>
+    </section>
+
+    <!-- ==================== UNDERSTAND ==================== -->
+    <section class="understand">
+      <span class="section-label">Understand</span>
+      <h2>Pseudocode &amp; Flowcharts in Detail</h2>
+
+      <!-- PSEUDOCODE EXAMPLES -->
+      <h3>Pseudocode Examples</h3>
+
+      <p>Here are three practical algorithms written in pseudocode. Practise reading through each one and tracing the logic step by step.</p>
+
+      <p><strong>Example 1: Password Validation</strong></p>
+      <p>This algorithm checks whether a password meets three rules: it must be at least 8 characters long, contain at least one uppercase letter, and contain at least one digit.</p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Pseudocode &mdash; Password Validation</span>
+        </div>
+        <pre><code>INPUT password
+SET hasUpper TO FALSE
+SET hasDigit TO FALSE
+
+IF LENGTH(password) < 8 THEN
+    OUTPUT "Password must be at least 8 characters long"
+    STOP
+ENDIF
+
+FOR EACH character IN password
+    IF character is an uppercase letter THEN
+        SET hasUpper TO TRUE
+    ENDIF
+    IF character is a digit THEN
+        SET hasDigit TO TRUE
+    ENDIF
+ENDFOR
+
+IF hasUpper == TRUE AND hasDigit == TRUE THEN
+    OUTPUT "Password accepted"
+ELSE
+    IF hasUpper == FALSE THEN
+        OUTPUT "Password must contain at least one uppercase letter"
+    ENDIF
+    IF hasDigit == FALSE THEN
+        OUTPUT "Password must contain at least one digit"
+    ENDIF
+ENDIF</code></pre>
+      </div>
+
+      <p><strong>Example 2: Shopping Total Calculator with Discount</strong></p>
+      <p>This algorithm calculates the total cost of items in a shopping basket and applies a 10% discount if the total exceeds &pound;50.</p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Pseudocode &mdash; Shopping Calculator</span>
+        </div>
+        <pre><code>SET total TO 0
+SET itemCount TO 0
+
+REPEAT
+    OUTPUT "Enter item price (or 0 to finish):"
+    INPUT price
+    IF price != 0 THEN
+        SET total TO total + price
+        SET itemCount TO itemCount + 1
+    ENDIF
+UNTIL price == 0
+
+OUTPUT "Items purchased: " + itemCount
+OUTPUT "Subtotal: £" + total
+
+IF total > 50 THEN
+    SET discount TO total * 0.10
+    SET total TO total - discount
+    OUTPUT "10% discount applied: -£" + discount
+ENDIF
+
+OUTPUT "Total to pay: £" + total</code></pre>
+      </div>
+
+      <p><strong>Example 3: Temperature Converter</strong></p>
+      <p>This algorithm lets the user choose a conversion direction and then converts between Celsius and Fahrenheit.</p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Pseudocode &mdash; Temperature Converter</span>
+        </div>
+        <pre><code>OUTPUT "Temperature Converter"
+OUTPUT "1. Celsius to Fahrenheit"
+OUTPUT "2. Fahrenheit to Celsius"
+OUTPUT "Enter your choice (1 or 2):"
+INPUT choice
+
+IF choice == 1 THEN
+    OUTPUT "Enter temperature in Celsius:"
+    INPUT celsius
+    SET fahrenheit TO (celsius * 9 / 5) + 32
+    OUTPUT celsius + "°C = " + fahrenheit + "°F"
+ELSEIF choice == 2 THEN
+    OUTPUT "Enter temperature in Fahrenheit:"
+    INPUT fahrenheit
+    SET celsius TO (fahrenheit - 32) * 5 / 9
+    OUTPUT fahrenheit + "°F = " + celsius + "°C"
+ELSE
+    OUTPUT "Invalid choice. Please enter 1 or 2."
+ENDIF</code></pre>
+      </div>
+
+      <!-- FLOWCHARTS -->
+      <h3>Flowchart Symbols</h3>
+      <p>You must know these four key flowchart symbols for the exam:</p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Shape</th>
+            <th>Name</th>
+            <th>What It Means</th>
+            <th>Example</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Oval (rounded rectangle)</td>
+            <td>Terminator</td>
+            <td>Start or End of the algorithm</td>
+            <td>START / STOP</td>
+          </tr>
+          <tr>
+            <td>Rectangle</td>
+            <td>Process</td>
+            <td>An action or calculation</td>
+            <td>total = price * quantity</td>
+          </tr>
+          <tr>
+            <td>Diamond</td>
+            <td>Decision</td>
+            <td>A Yes/No question (selection)</td>
+            <td>Is score >= 50?</td>
+          </tr>
+          <tr>
+            <td>Parallelogram</td>
+            <td>Input/Output</td>
+            <td>Data going in or results coming out</td>
+            <td>INPUT name / OUTPUT result</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p>Arrows connect the symbols and show which step comes next. Decision diamonds always have two paths coming out: one for &ldquo;Yes&rdquo; and one for &ldquo;No.&rdquo;</p>
+
+      <div class="warning">
+        <strong>Common Mistake:</strong> Students often forget to use the correct shapes in flowcharts. Remember &mdash; rectangles are for processes, diamonds are for decisions, and parallelograms are for input/output. Using the wrong shape will lose you marks in the exam.
+      </div>
+    </section>
+
+    <!-- ==================== PRACTICE ==================== -->
+    <section class="practice">
+      <span class="section-label">Practice</span>
+      <h2>Test Yourself</h2>
+      <p>Click on each question to reveal the answer. Try to answer in your head first!</p>
+
+      <div class="hint">
+        <div class="hint-title">Q1: What is the difference between pseudocode and actual programming code?</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> Pseudocode is written in structured English and is not tied to any specific programming language. It cannot be executed by a computer. Its purpose is to plan and communicate the logic of an algorithm in a way that any programmer can understand, regardless of which language they use.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q2: In a flowchart, what shape represents a decision?</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> A <strong>diamond</strong> shape represents a decision (a Yes/No question). It always has two paths coming out of it &mdash; one for Yes (true) and one for No (false). Other shapes: oval = start/end, rectangle = process, parallelogram = input/output.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q3: List the common pseudocode keywords you should use in the exam.</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> The standard keywords are: <strong>INPUT</strong>, <strong>OUTPUT</strong>, <strong>IF...THEN...ELSE...ENDIF</strong>, <strong>FOR...ENDFOR</strong>, <strong>WHILE...ENDWHILE</strong>, <strong>REPEAT...UNTIL</strong>, <strong>SET...TO</strong>, and <strong>STOP</strong>. Using these consistently shows the examiner that you understand pseudocode conventions.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q4: Write pseudocode for a program that finds the average of numbers in a list.</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong></p>
+          <div class="code-block">
+            <div class="code-block-header">
+              <span class="code-block-label">Pseudocode</span>
+            </div>
+            <pre><code>INPUT numbers (a list of values)
+SET total TO 0
+SET count TO LENGTH(numbers)
+
+FOR EACH number IN numbers
+    SET total TO total + number
+ENDFOR
+
+SET average TO total / count
+OUTPUT "The average is: " + average</code></pre>
+          </div>
+          <p>The key steps are: (1) add up all the values using a loop, (2) divide the total by the number of items. Remember to use a variable to accumulate the running total.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q5: Name the four flowchart symbols and state what each one represents.</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> (1) <strong>Oval (Terminator)</strong> &mdash; marks the START or STOP of an algorithm. (2) <strong>Rectangle (Process)</strong> &mdash; represents an action or calculation. (3) <strong>Diamond (Decision)</strong> &mdash; represents a Yes/No question that creates two paths. (4) <strong>Parallelogram (Input/Output)</strong> &mdash; represents data going in or results coming out.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q6: Describe a flowchart for a program that checks if a number is even or odd.</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> The flowchart would contain the following steps:</p>
+          <ol>
+            <li><strong>Oval (Terminator):</strong> START</li>
+            <li><strong>Parallelogram (Input):</strong> INPUT number</li>
+            <li><strong>Diamond (Decision):</strong> Is number MOD 2 == 0?</li>
+            <li><strong>Yes path &rarr; Parallelogram (Output):</strong> OUTPUT &ldquo;The number is even&rdquo;</li>
+            <li><strong>No path &rarr; Parallelogram (Output):</strong> OUTPUT &ldquo;The number is odd&rdquo;</li>
+            <li>Both paths lead to &rarr; <strong>Oval (Terminator):</strong> STOP</li>
+          </ol>
+          <p>Remember: the decision diamond must have two labelled exits (Yes/No), and input/output boxes must be parallelograms, not rectangles.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q7: What is wrong with using Python syntax in a pseudocode answer?</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> Pseudocode should be language-independent. If the question asks for pseudocode and you write <code>print()</code> instead of <code>OUTPUT</code>, or <code>input()</code> instead of <code>INPUT</code>, the examiner may not award full marks. Pseudocode should use the standard keywords (IF, THEN, ELSE, FOR, WHILE, etc.) rather than any specific programming language&rsquo;s syntax.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== KEY VOCABULARY ==================== -->
+    <section class="understand">
+      <span class="section-label">Reference</span>
+      <h2>Key Vocabulary</h2>
+      <p>Make sure you understand and can define all of these terms.</p>
+
+      <table>
+        <thead>
+          <tr><th>Term</th><th>Definition</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Algorithm</strong></td>
+            <td>A step-by-step set of instructions for solving a problem or completing a task. It must be precise, ordered, and finite.</td>
+          </tr>
+          <tr>
+            <td><strong>Pseudocode</strong></td>
+            <td>A way of writing an algorithm in structured English that resembles code but is not tied to any programming language.</td>
+          </tr>
+          <tr>
+            <td><strong>Flowchart</strong></td>
+            <td>A visual diagram that represents an algorithm using standard shapes (ovals, rectangles, diamonds, parallelograms) connected by arrows.</td>
+          </tr>
+          <tr>
+            <td><strong>Terminator</strong></td>
+            <td>An oval shape in a flowchart that marks the START or STOP of an algorithm.</td>
+          </tr>
+          <tr>
+            <td><strong>Process</strong></td>
+            <td>A rectangle shape in a flowchart that represents an action or calculation being performed.</td>
+          </tr>
+          <tr>
+            <td><strong>Decision</strong></td>
+            <td>A diamond shape in a flowchart that represents a Yes/No question, creating two possible paths.</td>
+          </tr>
+          <tr>
+            <td><strong>Input/Output</strong></td>
+            <td>A parallelogram shape in a flowchart that represents data being entered or results being displayed.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- ==================== EXAM TIPS ==================== -->
+    <section class="explore">
+      <span class="section-label">Exam Skills</span>
+      <h2>Exam Tips: Pseudocode &amp; Flowchart Questions</h2>
+
+      <h3>1. Trace Tables: Show Your Working</h3>
+      <p>When asked to trace through an algorithm, <strong>always use a trace table</strong>. Write a column for each variable and a row for each step. This makes your working clear to the examiner, and even if your final answer is wrong, you can still pick up method marks for correct intermediate steps.</p>
+
+      <h3>2. Use Correct Pseudocode Keywords</h3>
+      <p>If the question asks you to write pseudocode, use the standard keywords: <strong>IF...THEN...ELSE...ENDIF</strong>, <strong>FOR...ENDFOR</strong>, <strong>WHILE...ENDWHILE</strong>, <strong>REPEAT...UNTIL</strong>, <strong>INPUT</strong>, <strong>OUTPUT</strong>, <strong>SET...TO</strong>. Avoid writing in Python or any specific language unless the question asks for it.</p>
+
+      <h3>3. Flowchart Questions: Use the Right Shapes</h3>
+      <p>If you are asked to draw a flowchart, use the correct shapes. Using a rectangle where a diamond should be &mdash; or forgetting parallelograms for input/output &mdash; will cost you marks, even if the logic is correct.</p>
+
+      <h3>4. Check Your Logic Flows</h3>
+      <p>When drawing flowcharts, make sure all paths eventually lead to the STOP terminator. Decision diamonds must have exactly two exits labelled &ldquo;Yes&rdquo; and &ldquo;No.&rdquo; Loops should have a clear path back to an earlier step.</p>
+
+      <div class="warning">
+        <strong>Top Exam Tip:</strong> If you are running out of time and cannot finish a trace table, at least write down your final answer with a brief explanation. You may still get the mark for the correct answer, and partial working often picks up method marks. Never leave an algorithm question blank.
+      </div>
+    </section>
+
+    <!-- ==================== REFLECT ==================== -->
+    <section class="reflect">
+      <span class="section-label">Reflect</span>
+      <h2>Think About It</h2>
+
+      <p>Pseudocode and flowcharts are not just exam skills &mdash; they are tools that professional developers use every day. Before writing a single line of code, programmers often sketch out the logic on paper or a whiteboard.</p>
+
+      <p>Think about when each representation is most useful:</p>
+      <ul>
+        <li><strong>Pseudocode</strong> is great for linear processes and when you need to show detailed logic, variable names, and calculations</li>
+        <li><strong>Flowcharts</strong> are great for visualising decision-making and loops &mdash; you can see at a glance where the program branches</li>
+      </ul>
+
+      <p>Next time you have a programming challenge, try writing the pseudocode or drawing a flowchart <em>before</em> you touch the keyboard. You will be surprised how much easier the coding becomes when the logic is already clear in your head.</p>
+
+      <div class="extra-resources">
+        <h3>Further Reading &amp; External Resources</h3>
+        <ul>
+          <li><a href="https://www.bbc.co.uk/bitesize/examspecs/zdqy7nb" target="_blank" rel="noopener">BBC Bitesize &mdash; Edexcel GCSE Computer Science</a> &mdash; Comprehensive coverage of pseudocode and flowcharts</li>
+          <li><a href="https://isaaccomputerscience.org/topics/programming_concepts" target="_blank" rel="noopener">Isaac Computer Science &mdash; Programming Concepts</a> &mdash; Interactive explanations of pseudocode conventions</li>
+          <li><a href="https://www.w3schools.com/dsa/" target="_blank" rel="noopener">W3Schools &mdash; Data Structures and Algorithms</a> &mdash; Beginner-friendly tutorials with try-it-yourself examples</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ==================== NAVIGATION ==================== -->
+    <nav class="chapter-nav">
+      <a href="computational-thinking.html">&larr; Previous: Computational Thinking</a>
+      <a href="../index.html">Course Home</a>
+      <a href="programming-constructs.html">Next: Programming Constructs &rarr;</a>
+    </nav>
+
+  </main>
+
+  <footer class="site-footer">
+    <p>Python Fundamentals &mdash; A KS4 Learning Platform</p>
+    <p>Pseudocode &amp; Flowcharts &mdash; GCSE Computer Science Theory</p>
+  </footer>
+
+</body>
+</html>
