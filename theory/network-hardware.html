@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Network Hardware - Python Fundamentals</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/style.css" />
+</head>
+<body>
+
+  <header class="site-header">
+    <p><a href="../index.html">&larr; Back to Course</a></p>
+    <h1>Network Hardware</h1>
+    <p class="subtitle">Routers, switches, NICs, and WAPs &mdash; the physical building blocks of every network</p>
+  </header>
+
+  <main>
+
+    <!-- ==================== THE IDEA ==================== -->
+    <section class="idea">
+      <span class="section-label">The Idea</span>
+      <h2>Why Does Network Hardware Matter?</h2>
+
+      <p>Every time you load a webpage, send a message, or stream a video, your data passes through several pieces of specialised hardware. Without these devices, there would be no network &mdash; just isolated computers sitting on desks. Network hardware provides the physical infrastructure that makes digital communication possible.</p>
+
+      <p>Each device in a network has a specific role. Some connect individual devices to the network. Some connect devices to each other within a building. Some connect entire networks to the wider internet. Understanding what each device does, how it works, and where it fits in the network is essential for GCSE Computer Science.</p>
+
+      <p><strong>In this topic you will learn about:</strong></p>
+      <ul>
+        <li><strong>Network Interface Cards (NICs)</strong> &mdash; the component inside your device that connects it to the network</li>
+        <li><strong>Switches</strong> &mdash; intelligent devices that connect computers within a LAN</li>
+        <li><strong>Hubs</strong> &mdash; older, simpler devices that have been replaced by switches</li>
+        <li><strong>Routers</strong> &mdash; the gateway between your local network and the internet</li>
+        <li><strong>Wireless Access Points (WAPs)</strong> &mdash; devices that provide Wi-Fi connectivity</li>
+        <li><strong>Transmission media</strong> &mdash; copper cable, fibre optic, and wireless</li>
+      </ul>
+
+      <div class="key-concept">
+        <strong>Key Concept: Network Hardware</strong>
+        Network hardware refers to the physical devices that enable computers and other devices to communicate over a network. Each device has a distinct purpose: NICs connect individual devices, switches connect devices within a LAN, routers connect different networks together, and WAPs provide wireless access. Without these devices, no network communication would be possible.
+      </div>
+    </section>
+
+    <!-- ==================== EXPLORE: NIC ==================== -->
+    <section class="explore">
+      <span class="section-label">Explore</span>
+      <h2>Network Interface Card (NIC)</h2>
+
+      <p>A <strong>Network Interface Card (NIC)</strong> is a hardware component that allows a device to connect to a network. Every device that communicates on a network &mdash; laptops, desktops, servers, printers, smart TVs &mdash; must have a NIC. Without one, the device simply cannot send or receive data across a network.</p>
+
+      <p>The NIC sits between the device and the network. It takes the digital data from the computer and <strong>converts it into signals</strong> that can be transmitted over the network medium (electrical signals for copper cables, light pulses for fibre optic, or radio waves for wireless). It also receives incoming signals from the network and converts them back into digital data that the computer can process.</p>
+
+      <h3>Types of NIC</h3>
+      <ul>
+        <li><strong>Wired NIC (Ethernet NIC):</strong> Connects to the network using a physical cable. The connection port is typically an <strong>RJ45 socket</strong>, which accepts a standard Ethernet cable (such as Cat5e or Cat6). Wired NICs provide fast, stable, and reliable connections. They are commonly found on the back of desktop computers and on docking stations for laptops.</li>
+        <li><strong>Wireless NIC (Wi-Fi NIC):</strong> Connects to the network using <strong>radio waves</strong> instead of a cable. It includes a small <strong>Wi-Fi antenna</strong> (often internal) that communicates with a wireless access point or router. Wireless NICs are built into virtually all modern laptops, tablets, and smartphones. They provide convenience and mobility but can be affected by interference and distance from the access point.</li>
+      </ul>
+
+      <h3>MAC Address</h3>
+      <p>Every NIC has a <strong>unique MAC (Media Access Control) address</strong> burned into it during manufacturing. This is a 48-bit address, typically written as six pairs of hexadecimal digits separated by colons, such as <code>3A:1B:7C:4D:9E:2F</code>. The MAC address uniquely identifies the NIC (and therefore the device) on a local network. Switches use MAC addresses to direct data to the correct device.</p>
+
+      <p>Most modern devices have NICs <strong>built into the motherboard</strong>. Laptops typically have both a wireless NIC (for Wi-Fi) and sometimes a wired Ethernet port. Older devices or specialist equipment may use an add-in NIC card that slots into the motherboard.</p>
+
+      <div class="key-concept">
+        <strong>Key Concept: NIC</strong>
+        A Network Interface Card is the hardware that connects a device to a network. It converts data into signals for transmission and has a unique MAC address. Wired NICs use an RJ45 Ethernet port; wireless NICs use a Wi-Fi antenna and radio waves. Every networked device must have at least one NIC.
+      </div>
+
+      <div class="warning">
+        <strong>Common Mistake:</strong> Students sometimes confuse MAC addresses with IP addresses. A <strong>MAC address</strong> is a permanent, hardware-based address burned into the NIC &mdash; it identifies the device on a <em>local</em> network and does not change. An <strong>IP address</strong> is a logical address assigned by software (often by a router using DHCP) &mdash; it can change and is used to identify a device across <em>different</em> networks (including the internet). Both are needed for network communication, but they serve different purposes.
+      </div>
+    </section>
+
+    <!-- ==================== EXPLORE: SWITCH ==================== -->
+    <section class="explore">
+      <span class="section-label">Explore</span>
+      <h2>Switch</h2>
+
+      <p>A <strong>switch</strong> is a network device that connects multiple devices within a <strong>Local Area Network (LAN)</strong>. It is one of the most important pieces of hardware in any modern network. When a device sends data, the switch receives it and forwards it <strong>only to the intended recipient</strong> &mdash; not to every device on the network. This is called <strong>intelligent forwarding</strong>.</p>
+
+      <h3>How a Switch Works</h3>
+      <p>A switch operates using <strong>MAC addresses</strong>. It maintains a <strong>MAC address table</strong> (also called a CAM table) that maps each port on the switch to the MAC address of the device connected to that port. When data arrives at the switch:</p>
+      <ol>
+        <li>The switch reads the <strong>destination MAC address</strong> in the data frame.</li>
+        <li>It looks up this MAC address in its MAC address table.</li>
+        <li>It forwards the data <strong>only out of the port</strong> where the destination device is connected.</li>
+        <li>No other device on the network sees this data.</li>
+      </ol>
+
+      <p>If the switch does not yet know which port the destination device is on (for example, when the network first starts up), it will temporarily broadcast the data to all ports. Once the destination device responds, the switch learns its MAC address and port, and adds this to its table for future use.</p>
+
+      <h3>Key Features of a Switch</h3>
+      <ul>
+        <li><strong>Intelligent forwarding:</strong> Data is sent only to the intended device, not broadcast to all.</li>
+        <li><strong>MAC address table:</strong> The switch learns and stores which device is on which port.</li>
+        <li><strong>Full-duplex communication:</strong> Devices can send and receive data simultaneously, doubling effective bandwidth.</li>
+        <li><strong>No collisions:</strong> Because each port has its own dedicated link, data collisions are eliminated.</li>
+        <li><strong>Better security:</strong> Data is not visible to devices other than the intended recipient.</li>
+        <li><strong>Faster and more efficient:</strong> Much better performance than a hub, especially as the number of devices grows.</li>
+      </ul>
+
+      <div class="key-concept">
+        <strong>Key Concept: Switch</strong>
+        A switch connects devices within a LAN and uses MAC addresses to forward data only to the intended device. It maintains a MAC address table, supports full-duplex communication, and eliminates collisions. Switches have almost entirely replaced hubs in modern networks because they are faster, more efficient, and more secure.
+      </div>
+    </section>
+
+    <!-- ==================== EXPLORE: HUB ==================== -->
+    <section class="understand">
+      <span class="section-label">Understand</span>
+      <h2>Hub (for Comparison)</h2>
+
+      <p>A <strong>hub</strong> is an older, simpler network device that also connects multiple devices within a LAN. However, unlike a switch, a hub is a <strong>&ldquo;dumb&rdquo; device</strong> &mdash; it has no intelligence about where data should go. When a hub receives data from one device, it <strong>broadcasts that data to ALL connected devices</strong>, regardless of which device the data is actually intended for. Every device receives every piece of data, and only the intended recipient processes it; all other devices must ignore it.</p>
+
+      <h3>Problems with Hubs</h3>
+      <ul>
+        <li><strong>Broadcasting wastes bandwidth:</strong> Data is sent to every device even if only one device needs it. This floods the network with unnecessary traffic.</li>
+        <li><strong>Half-duplex only:</strong> Devices can either send OR receive data at any given moment, but not both at the same time. This halves the effective bandwidth compared to a switch.</li>
+        <li><strong>Collisions:</strong> Because all devices share the same bandwidth, two devices transmitting at the same time cause a <strong>data collision</strong>. Collisions corrupt the data, and both devices must wait and retransmit, slowing the network down.</li>
+        <li><strong>Security risk:</strong> Because all data is broadcast to all devices, any device can potentially intercept data not intended for it.</li>
+        <li><strong>No MAC address table:</strong> A hub does not learn or store any information about which device is connected to which port. It treats all ports the same.</li>
+      </ul>
+
+      <p>Hubs have been <strong>largely replaced by switches</strong> in modern networks. Switches are now inexpensive and provide vastly better performance, security, and efficiency. You are unlikely to encounter a hub in a modern network, but you must understand the comparison for your GCSE exam.</p>
+
+      <div class="warning">
+        <strong>Exam Warning: Switch vs Hub</strong>
+        This is a very common exam question. Always be clear about the difference: a <strong>switch</strong> uses MAC addresses to send data only to the intended device (intelligent forwarding, full-duplex, no collisions). A <strong>hub</strong> broadcasts data to all devices (no intelligence, half-duplex, causes collisions). If the question asks about connecting devices in a LAN, the answer is almost always a switch, not a hub.
+      </div>
+    </section>
+
+    <!-- ==================== EXPLORE: ROUTER ==================== -->
+    <section class="explore">
+      <span class="section-label">Explore</span>
+      <h2>Router</h2>
+
+      <p>A <strong>router</strong> is the device that connects <strong>different networks together</strong>. Most commonly, a router connects your Local Area Network (LAN) at home or school to the internet (a Wide Area Network). It is the <strong>gateway</strong> between your local network and the outside world.</p>
+
+      <p>While a switch connects devices <em>within</em> a single network, a router connects <em>separate</em> networks and directs data between them. This is a fundamental distinction.</p>
+
+      <h3>How a Router Works</h3>
+      <p>A router operates using <strong>IP addresses</strong> (not MAC addresses like a switch). When data needs to travel between networks, the router:</p>
+      <ol>
+        <li>Receives an incoming <strong>packet</strong> of data.</li>
+        <li>Reads the <strong>destination IP address</strong> in the packet header.</li>
+        <li>Consults its <strong>routing table</strong> to determine the best path to forward the packet towards its destination.</li>
+        <li>Forwards the packet to the next router or network along the route.</li>
+      </ol>
+
+      <h3>Key Functions of a Router</h3>
+      <ul>
+        <li><strong>Routing packets between networks:</strong> The primary function &mdash; directing data from one network to another based on IP addresses.</li>
+        <li><strong>Maintaining routing tables:</strong> The router stores information about available network paths, which it uses to make forwarding decisions. Routing tables can be updated dynamically as network conditions change.</li>
+        <li><strong>Assigning IP addresses (DHCP):</strong> Most home and office routers include a built-in <strong>DHCP server</strong> (Dynamic Host Configuration Protocol) that automatically assigns IP addresses to devices when they connect to the network.</li>
+        <li><strong>Network Address Translation (NAT):</strong> The router translates between the <strong>private IP addresses</strong> used inside your LAN and the single <strong>public IP address</strong> used on the internet. This allows many devices to share one public IP address and also hides internal devices from the internet for security.</li>
+        <li><strong>Built-in firewall:</strong> Many routers include a basic firewall that filters incoming and outgoing traffic, blocking potentially dangerous connections and protecting the local network from external threats.</li>
+        <li><strong>Gateway function:</strong> The router acts as the <strong>default gateway</strong> for all devices on the LAN. When a device wants to communicate with something outside the local network, it sends data to the router, which handles the onward delivery.</li>
+      </ul>
+
+      <div class="key-concept">
+        <strong>Key Concept: Router</strong>
+        A router connects different networks together (e.g. your LAN to the internet). It uses IP addresses and routing tables to direct packets along the best path. It also typically provides DHCP (automatic IP address assignment), NAT (sharing one public IP), and firewall protection. The router is the &ldquo;gateway&rdquo; between your local network and the internet.
+      </div>
+
+      <div class="key-concept">
+        <strong>Exam Tip: Switch vs Router</strong>
+        Students often confuse switches and routers. Remember: a <strong>switch</strong> connects devices within the <em>same</em> network (LAN) using <em>MAC</em> addresses. A <strong>router</strong> connects <em>different</em> networks together using <em>IP</em> addresses. A switch works at the data link layer; a router works at the network layer. Both are essential, but they do very different jobs.
+      </div>
+    </section>
+
+    <!-- ==================== EXPLORE: WAP ==================== -->
+    <section class="explore">
+      <span class="section-label">Explore</span>
+      <h2>Wireless Access Point (WAP)</h2>
+
+      <p>A <strong>Wireless Access Point (WAP)</strong> is a device that provides <strong>wireless connectivity</strong> to a wired network. It acts as a bridge between wired and wireless devices, converting the wired Ethernet signal into a <strong>Wi-Fi (wireless) signal</strong> using <strong>radio waves</strong>. This allows devices like laptops, tablets, and smartphones to connect to the network without needing a physical cable.</p>
+
+      <h3>How a WAP Works</h3>
+      <p>A WAP is typically connected to a switch or router by an Ethernet cable. It receives data from the wired network and transmits it wirelessly to nearby devices. It also receives wireless transmissions from devices and forwards them onto the wired network. In this way, wireless devices become part of the same LAN as the wired devices.</p>
+
+      <h3>Key Features of a WAP</h3>
+      <ul>
+        <li><strong>SSID (Service Set Identifier):</strong> The WAP broadcasts a <strong>network name</strong> (SSID) that devices can see when scanning for available Wi-Fi networks. Users select the SSID to connect.</li>
+        <li><strong>Encryption:</strong> Modern WAPs support <strong>WPA2</strong> and <strong>WPA3</strong> encryption standards, which protect wireless data from being intercepted by encrypting all transmissions between the device and the WAP.</li>
+        <li><strong>Range:</strong> A typical WAP has an indoor range of approximately <strong>30 to 50 metres</strong>, though this varies depending on walls, interference, and the specific equipment. Multiple WAPs can be deployed to cover larger areas.</li>
+        <li><strong>Radio waves:</strong> WAPs use radio frequencies (typically 2.4 GHz and/or 5 GHz bands) to communicate wirelessly with devices.</li>
+        <li><strong>Multiple connections:</strong> A single WAP can support many wireless devices simultaneously, though performance may decrease as more devices connect.</li>
+      </ul>
+
+      <p><strong>Note:</strong> Many home &ldquo;routers&rdquo; are actually combination devices that include a router, switch, WAP, and DHCP server all in one box. In an exam, treat these as separate concepts &mdash; a WAP specifically provides the wireless connectivity component.</p>
+
+      <div class="key-concept">
+        <strong>Key Concept: WAP</strong>
+        A Wireless Access Point converts a wired network signal into a wireless (Wi-Fi) signal using radio waves. It has an SSID (network name), supports WPA2/WPA3 encryption, and typically has a range of 30&ndash;50 metres indoors. A WAP allows wireless devices to join a wired LAN without needing a cable.
+      </div>
+    </section>
+
+    <!-- ==================== EXPLORE: TRANSMISSION MEDIA ==================== -->
+    <section class="explore">
+      <span class="section-label">Explore</span>
+      <h2>Transmission Media</h2>
+
+      <p>Network data must travel from one device to another, and it needs a <strong>medium</strong> (a physical channel) to do so. The three main types of transmission media are <strong>copper cable</strong>, <strong>fibre optic cable</strong>, and <strong>wireless</strong>. Each has distinct characteristics that make it suitable for different situations.</p>
+
+      <h3>Copper Cable (Ethernet / Cat5e / Cat6)</h3>
+      <p>Copper Ethernet cable is the most common type of wired network cabling. The standard varieties used in modern networks are <strong>Cat5e</strong> (Category 5 enhanced) and <strong>Cat6</strong> (Category 6). These cables contain twisted pairs of copper wires that carry electrical signals representing data.</p>
+      <ul>
+        <li><strong>Cost:</strong> Relatively cheap &mdash; the most affordable cabling option</li>
+        <li><strong>Speed:</strong> Cat5e supports up to 1 Gbps; Cat6 supports up to 10 Gbps over short distances</li>
+        <li><strong>Maximum distance:</strong> Approximately <strong>100 metres</strong> before the signal degrades too much (attenuation)</li>
+        <li><strong>Interference:</strong> <strong>Susceptible to electromagnetic interference (EMI)</strong> from nearby electrical equipment, which can corrupt data</li>
+        <li><strong>Connector:</strong> Uses the <strong>RJ45</strong> connector</li>
+        <li><strong>Use case:</strong> Standard LAN cabling in offices, schools, and homes</li>
+      </ul>
+
+      <h3>Fibre Optic Cable</h3>
+      <p>Fibre optic cable transmits data as <strong>pulses of light</strong> through thin strands of glass or plastic. It is the fastest and most reliable transmission medium available.</p>
+      <ul>
+        <li><strong>Cost:</strong> <strong>Expensive</strong> &mdash; both the cable and the specialist connectors/equipment cost more than copper</li>
+        <li><strong>Speed:</strong> Extremely fast &mdash; can carry data at speeds of tens or even hundreds of Gbps</li>
+        <li><strong>Maximum distance:</strong> Can transmit data over <strong>very long distances</strong> (kilometres) without significant signal loss</li>
+        <li><strong>Interference:</strong> <strong>Not susceptible to electromagnetic interference</strong> because it uses light, not electrical signals</li>
+        <li><strong>Use case:</strong> Internet backbone connections, connections between buildings, high-speed data centres, broadband connections to homes (FTTP &mdash; Fibre to the Premises)</li>
+      </ul>
+
+      <h3>Wireless (Wi-Fi / Radio Waves)</h3>
+      <p>Wireless transmission uses <strong>radio waves</strong> to send data through the air. No physical cable is needed between the device and the access point.</p>
+      <ul>
+        <li><strong>Cost:</strong> No cabling costs, but WAP hardware is needed</li>
+        <li><strong>Speed:</strong> <strong>Generally slower</strong> than wired connections, though modern Wi-Fi standards (Wi-Fi 6) are closing the gap</li>
+        <li><strong>Range:</strong> <strong>Limited range</strong> &mdash; typically 30&ndash;50 metres indoors, reduced by walls and obstacles</li>
+        <li><strong>Interference:</strong> <strong>Susceptible to interference</strong> from other wireless devices, microwaves, walls, and physical obstacles</li>
+        <li><strong>Convenience:</strong> Very convenient &mdash; no cables, full mobility for users</li>
+        <li><strong>Security:</strong> Data transmitted through the air can potentially be intercepted, making encryption (WPA2/WPA3) essential</li>
+        <li><strong>Use case:</strong> Mobile devices, areas where cabling is impractical, home and public Wi-Fi networks</li>
+      </ul>
+
+      <h3>Transmission Media Comparison</h3>
+      <table>
+        <thead>
+          <tr><th>Feature</th><th>Copper (Ethernet)</th><th>Fibre Optic</th><th>Wireless</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>Speed</strong></td><td>Up to 10 Gbps (Cat6)</td><td>Very high (100+ Gbps)</td><td>Moderate (varies by standard)</td></tr>
+          <tr><td><strong>Distance</strong></td><td>Up to 100m</td><td>Many kilometres</td><td>30&ndash;50m indoors</td></tr>
+          <tr><td><strong>Cost</strong></td><td>Low</td><td>High</td><td>No cable cost; WAP needed</td></tr>
+          <tr><td><strong>Interference</strong></td><td>Susceptible to EMI</td><td>Not affected</td><td>Susceptible to interference</td></tr>
+          <tr><td><strong>Physical medium</strong></td><td>Copper wire (electrical signals)</td><td>Glass/plastic (light pulses)</td><td>Air (radio waves)</td></tr>
+          <tr><td><strong>Security</strong></td><td>Relatively secure (physical access needed)</td><td>Very secure (hard to tap)</td><td>Less secure (signals travel through air)</td></tr>
+          <tr><td><strong>Typical use</strong></td><td>LAN connections within buildings</td><td>Backbone, between buildings, broadband</td><td>Mobile devices, convenience</td></tr>
+        </tbody>
+      </table>
+
+      <div class="key-concept">
+        <strong>Exam Tip: Choosing Transmission Media</strong>
+        If an exam question asks you to recommend a transmission medium, consider the scenario: need long distance and high speed? <strong>Fibre optic</strong>. Need to connect devices cheaply within one room? <strong>Copper Ethernet</strong>. Need mobility or cannot run cables? <strong>Wireless</strong>. Always justify your answer by referring to the specific advantages and limitations of the medium you choose.
+      </div>
+    </section>
+
+    <!-- ==================== UNDERSTAND: COMPARISON TABLE ==================== -->
+    <section class="understand">
+      <span class="section-label">Understand</span>
+      <h2>Network Hardware Comparison</h2>
+
+      <p>This table provides a side-by-side comparison of all the key network hardware devices. It is an excellent revision tool for the exam.</p>
+
+      <table>
+        <thead>
+          <tr><th>Device</th><th>Purpose</th><th>Uses Which Addresses</th><th>OSI Layer</th><th>Key Feature</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>NIC</strong></td>
+            <td>Connects a single device to a network</td>
+            <td>Has a unique MAC address</td>
+            <td>Layer 2 (Data Link)</td>
+            <td>Converts data into transmittable signals; every networked device needs one</td>
+          </tr>
+          <tr>
+            <td><strong>Switch</strong></td>
+            <td>Connects devices within a LAN</td>
+            <td>MAC addresses</td>
+            <td>Layer 2 (Data Link)</td>
+            <td>Intelligent forwarding &mdash; sends data only to intended device</td>
+          </tr>
+          <tr>
+            <td><strong>Hub</strong></td>
+            <td>Connects devices within a LAN (obsolete)</td>
+            <td>None (broadcasts blindly)</td>
+            <td>Layer 1 (Physical)</td>
+            <td>Broadcasts to all devices; no intelligence; causes collisions</td>
+          </tr>
+          <tr>
+            <td><strong>Router</strong></td>
+            <td>Connects different networks together</td>
+            <td>IP addresses</td>
+            <td>Layer 3 (Network)</td>
+            <td>Routes packets between networks; provides DHCP, NAT, firewall</td>
+          </tr>
+          <tr>
+            <td><strong>WAP</strong></td>
+            <td>Provides wireless access to a wired network</td>
+            <td>MAC addresses (for connected devices)</td>
+            <td>Layer 2 (Data Link)</td>
+            <td>Converts wired signal to Wi-Fi using radio waves; has SSID</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="warning">
+        <strong>Common Mistake:</strong> Students sometimes say a router &ldquo;connects devices in a LAN.&rdquo; This is wrong &mdash; that is a switch&rsquo;s job. A router connects <em>different networks</em> together. Yes, home &ldquo;routers&rdquo; often include a built-in switch and WAP, but the routing function specifically refers to directing traffic between separate networks using IP addresses.
+      </div>
+
+      <div class="key-concept">
+        <strong>Exam Tip: Address Types</strong>
+        A quick way to remember: <strong>Switches use MAC addresses</strong> (layer 2, within a LAN). <strong>Routers use IP addresses</strong> (layer 3, between networks). <strong>Hubs use no addresses</strong> (layer 1, they just blindly copy signals). If an exam question asks which address a device uses, this distinction will earn you marks.
+      </div>
+    </section>
+
+    <!-- ==================== INTERACTIVE EXERCISES ==================== -->
+    <section class="explore">
+      <span class="section-label">Interactive</span>
+      <h2>Test Your Knowledge</h2>
+
+      <p>Try these interactive exercises to check your understanding of network hardware. Read each question carefully and select the correct answer.</p>
+
+      <!-- Exercise 1: Name That Device -->
+      <div class="interactive-exercise" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 2rem; border-radius: 12px; color: white; margin: 1.5rem 0;">
+        <h4 style="margin-top: 0;">Exercise 1: Name That Device</h4>
+        <p>Read the description or scenario below and pick the correct network hardware device.</p>
+        <div id="ntdScenario" style="background: rgba(255,255,255,0.15); padding: 1.2rem; border-radius: 8px; margin: 1rem 0; font-size: 1.1rem; line-height: 1.6;"></div>
+        <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; margin-top: 1rem;">
+          <button style="background: white; color: #667eea; border: none; padding: 0.5rem 1.5rem; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 1rem;" onclick="ntdCheck('NIC')">NIC</button>
+          <button style="background: white; color: #667eea; border: none; padding: 0.5rem 1.5rem; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 1rem;" onclick="ntdCheck('Switch')">Switch</button>
+          <button style="background: white; color: #667eea; border: none; padding: 0.5rem 1.5rem; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 1rem;" onclick="ntdCheck('Hub')">Hub</button>
+          <button style="background: white; color: #667eea; border: none; padding: 0.5rem 1.5rem; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 1rem;" onclick="ntdCheck('Router')">Router</button>
+          <button style="background: white; color: #667eea; border: none; padding: 0.5rem 1.5rem; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 1rem;" onclick="ntdCheck('WAP')">WAP</button>
+          <button style="background: rgba(255,255,255,0.2); color: white; border: 2px solid rgba(255,255,255,0.4); padding: 0.5rem 1.5rem; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 1rem;" onclick="ntdNext()">Skip / Next</button>
+        </div>
+        <div id="ntdFeedback" style="margin-top: 1rem; font-weight: 600; min-height: 1.5rem;"></div>
+        <div style="margin-top: 0.5rem; font-size: 0.95rem; opacity: 0.9;">Score: <span id="ntdCorrect">0</span> / <span id="ntdTotal">0</span></div>
+      </div>
+
+      <script>
+      (function() {
+        var scenarios = [
+          { text: "A school wants to allow students' laptops and phones to connect to the network without cables. Which device would provide this wireless connectivity?", answer: "WAP", explanation: "A Wireless Access Point (WAP) converts a wired network signal into Wi-Fi, allowing wireless devices to connect." },
+          { text: "A company has 50 computers in their office that need to be connected together so they can share files and printers on the same local network. Which device connects them?", answer: "Switch", explanation: "A switch connects multiple devices within a LAN and uses MAC addresses to forward data intelligently to the intended device." },
+          { text: "A home user wants their LAN to connect to the internet so they can browse websites and send emails. Which device acts as the gateway between their network and the internet?", answer: "Router", explanation: "A router connects different networks together -- in this case, the home LAN to the internet. It uses IP addresses to route packets." },
+          { text: "A technician is building a new desktop computer and needs to add a component so the computer can connect to the office Ethernet network. What hardware component does the computer need?", answer: "NIC", explanation: "A Network Interface Card (NIC) is the hardware component that enables a device to connect to a network. A wired NIC with an RJ45 Ethernet port is needed here." },
+          { text: "An old network device receives data from one computer and copies it to ALL other connected computers, even though the data was only meant for one specific device. What is this device?", answer: "Hub", explanation: "A hub is a 'dumb' device that broadcasts all data to every connected device. It has no intelligence to direct data to specific recipients." },
+          { text: "A device in the server room reads the destination MAC address in each data frame and forwards it only through the correct port. What device is this?", answer: "Switch", explanation: "A switch uses its MAC address table to forward data only to the port where the destination device is connected -- this is intelligent forwarding." },
+          { text: "This device assigns IP addresses to devices automatically when they connect to the network using DHCP.", answer: "Router", explanation: "Routers typically include a built-in DHCP server that automatically assigns IP addresses to devices joining the network." },
+          { text: "Every device on the network has one of these, and each one has a unique MAC address burned into it during manufacturing.", answer: "NIC", explanation: "Every NIC has a unique MAC address assigned during manufacturing. Without a NIC, a device cannot connect to any network." },
+          { text: "A university library needs to extend Wi-Fi coverage to a new study area. The study area already has Ethernet ports in the wall. What device should be installed?", answer: "WAP", explanation: "A WAP connects to the existing wired network via Ethernet and broadcasts a Wi-Fi signal, extending wireless coverage to the new area." },
+          { text: "This device performs Network Address Translation (NAT), allowing multiple devices on a private network to share a single public IP address for internet access.", answer: "Router", explanation: "NAT is a key function of a router. It translates between private LAN IP addresses and the single public IP address used on the internet." },
+          { text: "A device in an older network causes data collisions because it operates in half-duplex mode and sends all traffic to every port.", answer: "Hub", explanation: "Hubs operate in half-duplex and broadcast all data to all ports, causing collisions when multiple devices transmit simultaneously." },
+          { text: "This hardware component converts digital data from your computer into electrical signals that can travel through an Ethernet cable.", answer: "NIC", explanation: "The NIC converts data into signals suitable for the transmission medium -- electrical signals for copper cables, radio waves for wireless." },
+          { text: "A business has offices in London and Manchester, each with their own LAN. They need a device at each location to connect the two networks together over the internet.", answer: "Router", explanation: "Routers connect different networks together. Each office needs a router to connect its LAN to the wider internet, enabling communication between the two sites." },
+          { text: "This device has an SSID that users can see when they scan for available networks on their phone.", answer: "WAP", explanation: "A WAP broadcasts an SSID (Service Set Identifier) -- the network name that appears when you scan for Wi-Fi networks on a device." },
+          { text: "This device maintains a routing table that helps it determine the best path for packets to take across multiple networks.", answer: "Router", explanation: "Routers maintain routing tables containing information about available network paths, using them to make optimal forwarding decisions for each packet." }
+        ];
+
+        var currentIdx = -1;
+        var correct = 0;
+        var total = 0;
+        var used = [];
+        var answered = false;
+
+        function pick() {
+          if (used.length >= scenarios.length) { used = []; }
+          var idx;
+          do { idx = Math.floor(Math.random() * scenarios.length); } while (used.indexOf(idx) !== -1);
+          used.push(idx);
+          currentIdx = idx;
+          answered = false;
+          document.getElementById('ntdScenario').textContent = scenarios[idx].text;
+          document.getElementById('ntdFeedback').innerHTML = '';
+        }
+
+        window.ntdCheck = function(answer) {
+          if (currentIdx < 0 || answered) return;
+          answered = true;
+          total++;
+          var s = scenarios[currentIdx];
+          var fb = document.getElementById('ntdFeedback');
+          if (answer === s.answer) {
+            correct++;
+            fb.innerHTML = '<span style="color:#a0ffb0;">Correct!</span> ' + s.explanation;
+          } else {
+            fb.innerHTML = '<span style="color:#ffb0b0;">Not quite.</span> The answer is <strong>' + s.answer + '</strong>. ' + s.explanation;
+          }
+          document.getElementById('ntdCorrect').textContent = correct;
+          document.getElementById('ntdTotal').textContent = total;
+          setTimeout(pick, 3500);
+        };
+
+        window.ntdNext = function() {
+          pick();
+        };
+
+        pick();
+      })();
+      </script>
+
+      <!-- Exercise 2: Hardware Features Matcher -->
+      <div class="interactive-exercise" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 2rem; border-radius: 12px; color: white; margin: 1.5rem 0;">
+        <h4 style="margin-top: 0;">Exercise 2: Hardware Features Matcher</h4>
+        <p>Read the feature or fact below and pick which network hardware device it belongs to.</p>
+        <div id="hfmFact" style="background: rgba(255,255,255,0.15); padding: 1.2rem; border-radius: 8px; margin: 1rem 0; font-size: 1.1rem; line-height: 1.6;"></div>
+        <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; margin-top: 1rem;">
+          <button style="background: white; color: #667eea; border: none; padding: 0.5rem 1.5rem; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 1rem;" onclick="hfmCheck('NIC')">NIC</button>
+          <button style="background: white; color: #667eea; border: none; padding: 0.5rem 1.5rem; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 1rem;" onclick="hfmCheck('Switch')">Switch</button>
+          <button style="background: white; color: #667eea; border: none; padding: 0.5rem 1.5rem; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 1rem;" onclick="hfmCheck('Hub')">Hub</button>
+          <button style="background: white; color: #667eea; border: none; padding: 0.5rem 1.5rem; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 1rem;" onclick="hfmCheck('Router')">Router</button>
+          <button style="background: white; color: #667eea; border: none; padding: 0.5rem 1.5rem; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 1rem;" onclick="hfmCheck('WAP')">WAP</button>
+          <button style="background: rgba(255,255,255,0.2); color: white; border: 2px solid rgba(255,255,255,0.4); padding: 0.5rem 1.5rem; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 1rem;" onclick="hfmNext()">Skip / Next</button>
+        </div>
+        <div id="hfmFeedback" style="margin-top: 1rem; font-weight: 600; min-height: 1.5rem;"></div>
+        <div style="margin-top: 0.5rem; font-size: 0.95rem; opacity: 0.9;">Score: <span id="hfmCorrect">0</span> / <span id="hfmTotal">0</span></div>
+      </div>
+
+      <script>
+      (function() {
+        var facts = [
+          { text: "Maintains a MAC address table to track which device is connected to which port.", answer: "Switch", explanation: "A switch builds and maintains a MAC address table (CAM table) that maps ports to MAC addresses for intelligent forwarding." },
+          { text: "Operates in half-duplex mode only, meaning devices cannot send and receive simultaneously.", answer: "Hub", explanation: "Hubs only support half-duplex communication, which halves effective bandwidth and contributes to collisions." },
+          { text: "Has a unique 48-bit hardware address burned in during manufacturing.", answer: "NIC", explanation: "Every NIC has a unique MAC address (48-bit) assigned permanently at the factory. This identifies the device on the local network." },
+          { text: "Uses IP addresses and routing tables to forward packets between different networks.", answer: "Router", explanation: "Routers operate at Layer 3 (Network) and use IP addresses and routing tables to direct packets between separate networks." },
+          { text: "Broadcasts an SSID so that nearby devices can discover and connect to the network wirelessly.", answer: "WAP", explanation: "A WAP broadcasts its SSID (Service Set Identifier) -- the Wi-Fi network name that appears on your device's network list." },
+          { text: "Supports full-duplex communication, allowing devices to send and receive data at the same time.", answer: "Switch", explanation: "Switches support full-duplex on each port, effectively doubling bandwidth and eliminating collisions." },
+          { text: "Provides DHCP to automatically assign IP addresses to devices joining the network.", answer: "Router", explanation: "Most routers include a built-in DHCP server that hands out IP addresses automatically to connected devices." },
+          { text: "Converts data from the computer into electrical signals for copper cable or radio waves for wireless transmission.", answer: "NIC", explanation: "The NIC handles signal conversion -- turning digital data into the appropriate signal type for the transmission medium." },
+          { text: "Broadcasts all received data to every connected port, regardless of the intended destination.", answer: "Hub", explanation: "A hub has no intelligence -- it simply copies incoming data to all ports, wasting bandwidth and creating security risks." },
+          { text: "Performs NAT, allowing many private IP addresses to share a single public IP address.", answer: "Router", explanation: "Network Address Translation (NAT) is a router function that maps multiple private LAN addresses to one public internet address." },
+          { text: "Supports WPA2 and WPA3 encryption to protect wireless data transmissions.", answer: "WAP", explanation: "WAPs implement wireless encryption standards like WPA2 and WPA3 to secure data sent over radio waves." },
+          { text: "Often includes a built-in firewall to filter incoming and outgoing network traffic.", answer: "Router", explanation: "Many routers include basic firewall functionality, blocking potentially harmful traffic from reaching the local network." },
+          { text: "Uses the RJ45 connector to plug into an Ethernet cable for a wired network connection.", answer: "NIC", explanation: "A wired NIC uses an RJ45 socket to connect to standard Ethernet cables (Cat5e/Cat6) for network access." },
+          { text: "Acts as the default gateway for all devices on the LAN when they want to access the internet.", answer: "Router", explanation: "The router is the default gateway -- the exit point for all traffic leaving the local network and heading to the internet." },
+          { text: "This device is considered 'dumb' because it has no ability to learn or make forwarding decisions.", answer: "Hub", explanation: "Hubs are 'dumb' devices with no intelligence. They cannot read addresses or make decisions about where to send data." },
+          { text: "Typically has a range of 30 to 50 metres indoors and uses radio waves at 2.4 GHz or 5 GHz.", answer: "WAP", explanation: "WAPs communicate using radio waves on the 2.4 GHz and/or 5 GHz frequency bands, with a typical indoor range of 30-50 metres." },
+          { text: "A wired version has an Ethernet port while a wireless version has a Wi-Fi antenna built in.", answer: "NIC", explanation: "NICs come in wired (Ethernet port with RJ45) and wireless (Wi-Fi antenna) variants, both enabling network connectivity." },
+          { text: "Eliminates data collisions because each port has its own dedicated collision domain.", answer: "Switch", explanation: "Switches create a separate collision domain for each port, meaning devices on different ports cannot cause collisions with each other." },
+          { text: "Converts a wired Ethernet connection into a wireless Wi-Fi signal.", answer: "WAP", explanation: "A WAP bridges wired and wireless networks by taking the Ethernet signal and broadcasting it as Wi-Fi via radio waves." },
+          { text: "Causes collisions when two devices try to transmit at the same time because all devices share bandwidth.", answer: "Hub", explanation: "All devices connected to a hub share the same collision domain and bandwidth. Simultaneous transmissions cause data collisions." }
+        ];
+
+        var currentIdx = -1;
+        var correct = 0;
+        var total = 0;
+        var used = [];
+        var answered = false;
+
+        function pick() {
+          if (used.length >= facts.length) { used = []; }
+          var idx;
+          do { idx = Math.floor(Math.random() * facts.length); } while (used.indexOf(idx) !== -1);
+          used.push(idx);
+          currentIdx = idx;
+          answered = false;
+          document.getElementById('hfmFact').textContent = facts[idx].text;
+          document.getElementById('hfmFeedback').innerHTML = '';
+        }
+
+        window.hfmCheck = function(answer) {
+          if (currentIdx < 0 || answered) return;
+          answered = true;
+          total++;
+          var f = facts[currentIdx];
+          var fb = document.getElementById('hfmFeedback');
+          if (answer === f.answer) {
+            correct++;
+            fb.innerHTML = '<span style="color:#a0ffb0;">Correct!</span> ' + f.explanation;
+          } else {
+            fb.innerHTML = '<span style="color:#ffb0b0;">Not quite.</span> The answer is <strong>' + f.answer + '</strong>. ' + f.explanation;
+          }
+          document.getElementById('hfmCorrect').textContent = correct;
+          document.getElementById('hfmTotal').textContent = total;
+          setTimeout(pick, 3500);
+        };
+
+        window.hfmNext = function() {
+          pick();
+        };
+
+        pick();
+      })();
+      </script>
+
+      <!-- Exercise 3: Transmission Media Picker -->
+      <div class="interactive-exercise" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 2rem; border-radius: 12px; color: white; margin: 1.5rem 0;">
+        <h4 style="margin-top: 0;">Exercise 3: Transmission Media Picker</h4>
+        <p>Read the scenario below and choose the most suitable transmission medium.</p>
+        <div id="tmpScenario" style="background: rgba(255,255,255,0.15); padding: 1.2rem; border-radius: 8px; margin: 1rem 0; font-size: 1.1rem; line-height: 1.6;"></div>
+        <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; margin-top: 1rem;">
+          <button style="background: white; color: #667eea; border: none; padding: 0.5rem 1.5rem; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 1rem;" onclick="tmpCheck('Copper')">Copper Cable</button>
+          <button style="background: white; color: #667eea; border: none; padding: 0.5rem 1.5rem; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 1rem;" onclick="tmpCheck('Fibre')">Fibre Optic</button>
+          <button style="background: white; color: #667eea; border: none; padding: 0.5rem 1.5rem; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 1rem;" onclick="tmpCheck('Wireless')">Wireless</button>
+          <button style="background: rgba(255,255,255,0.2); color: white; border: 2px solid rgba(255,255,255,0.4); padding: 0.5rem 1.5rem; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 1rem;" onclick="tmpNext()">Skip / Next</button>
+        </div>
+        <div id="tmpFeedback" style="margin-top: 1rem; font-weight: 600; min-height: 1.5rem;"></div>
+        <div style="margin-top: 0.5rem; font-size: 0.95rem; opacity: 0.9;">Score: <span id="tmpCorrect">0</span> / <span id="tmpTotal">0</span></div>
+      </div>
+
+      <script>
+      (function() {
+        var scenarios = [
+          { text: "An internet service provider needs to connect two cities 80 kilometres apart with the fastest possible link.", answer: "Fibre", explanation: "Fibre optic is the best choice for long-distance, high-speed connections. It can span many kilometres without signal loss." },
+          { text: "A school IT technician needs to connect 20 desktop computers in a classroom to the switch in a network cabinet 15 metres away. Budget is limited.", answer: "Copper", explanation: "Copper Ethernet cable (Cat5e/Cat6) is cheap, supports good speeds, and 15m is well within the 100m limit -- ideal for in-classroom connections." },
+          { text: "Students need to connect their tablets and phones to the school network while moving between classrooms.", answer: "Wireless", explanation: "Wireless (Wi-Fi) is the only option that provides connectivity without cables, giving students the mobility they need between rooms." },
+          { text: "A data centre needs to connect server racks with very high bandwidth and zero electromagnetic interference from nearby power equipment.", answer: "Fibre", explanation: "Fibre optic is immune to electromagnetic interference and provides extremely high bandwidth -- perfect for data centre environments with lots of electrical equipment." },
+          { text: "A small office needs to connect a printer to the network switch that is 3 metres away. The setup must be quick and inexpensive.", answer: "Copper", explanation: "A short run of copper Ethernet cable is the cheapest and simplest solution for a nearby wired connection." },
+          { text: "A coffee shop wants to provide internet access to customers without needing to run cables to every table.", answer: "Wireless", explanation: "Wireless (Wi-Fi) allows customers to connect their own devices without any physical cables -- essential for a public venue like a coffee shop." },
+          { text: "Two office buildings 500 metres apart need a high-speed connection. The route passes near an industrial area with heavy electrical machinery.", answer: "Fibre", explanation: "Fibre optic is the best choice: it handles 500m easily (copper maximum is 100m) and is immune to the electromagnetic interference from industrial machinery." },
+          { text: "A home user wants to connect a desktop PC to their router that is in the same room, 5 metres away, for the most reliable connection possible.", answer: "Copper", explanation: "Copper Ethernet provides a reliable, fast, and stable wired connection over a short 5m distance -- more reliable than wireless for a stationary desktop." },
+          { text: "A warehouse needs to connect handheld barcode scanners that workers carry around while walking between shelves.", answer: "Wireless", explanation: "Workers need to move freely around the warehouse, making wireless the only practical option for mobile barcode scanners." }
+        ];
+
+        var currentIdx = -1;
+        var correct = 0;
+        var total = 0;
+        var used = [];
+        var answered = false;
+
+        function pick() {
+          if (used.length >= scenarios.length) { used = []; }
+          var idx;
+          do { idx = Math.floor(Math.random() * scenarios.length); } while (used.indexOf(idx) !== -1);
+          used.push(idx);
+          currentIdx = idx;
+          answered = false;
+          document.getElementById('tmpScenario').textContent = scenarios[idx].text;
+          document.getElementById('tmpFeedback').innerHTML = '';
+        }
+
+        window.tmpCheck = function(answer) {
+          if (currentIdx < 0 || answered) return;
+          answered = true;
+          total++;
+          var s = scenarios[currentIdx];
+          var fb = document.getElementById('tmpFeedback');
+          if (answer === s.answer) {
+            correct++;
+            fb.innerHTML = '<span style="color:#a0ffb0;">Correct!</span> ' + s.explanation;
+          } else {
+            fb.innerHTML = '<span style="color:#ffb0b0;">Not quite.</span> The best answer is <strong>' + s.answer + '</strong>. ' + s.explanation;
+          }
+          document.getElementById('tmpCorrect').textContent = correct;
+          document.getElementById('tmpTotal').textContent = total;
+          setTimeout(pick, 3500);
+        };
+
+        window.tmpNext = function() {
+          pick();
+        };
+
+        pick();
+      })();
+      </script>
+    </section>
+
+    <!-- ==================== PRACTICE ==================== -->
+    <section class="practice">
+      <span class="section-label">Practice</span>
+      <h2>Practice Questions</h2>
+      <p>Click on each question to reveal the answer. Try to answer in your head or on paper first before checking!</p>
+
+      <div class="hint">
+        <div class="hint-title">Q1: What is a Network Interface Card (NIC) and why is it needed?</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> A Network Interface Card (NIC) is a <strong>hardware component that allows a device to connect to a network</strong>. It is needed because it performs the essential task of <strong>converting digital data from the computer into signals</strong> that can be transmitted over the network medium &mdash; electrical signals for copper cables, light pulses for fibre optic, or radio waves for wireless. Without a NIC, a device has no way to send or receive data across a network. Every NIC also has a <strong>unique MAC address</strong> that identifies the device on the local network. NICs come in wired (Ethernet, RJ45) and wireless (Wi-Fi) versions, and are built into most modern devices.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q2: Explain how a switch uses MAC addresses to forward data. Why is this more efficient than a hub?</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> A switch maintains a <strong>MAC address table</strong> that records which MAC address is associated with which physical port. When a data frame arrives, the switch reads the <strong>destination MAC address</strong> and looks it up in its table. It then forwards the frame <strong>only out of the port</strong> where the destination device is connected. This is called <strong>intelligent forwarding</strong>.</p>
+          <p>This is more efficient than a hub because a hub has no MAC address table and simply <strong>broadcasts all data to every connected port</strong>. This wastes bandwidth, creates unnecessary network traffic, and causes <strong>data collisions</strong> when multiple devices transmit simultaneously. A switch eliminates these problems by directing data only where it needs to go, and it supports <strong>full-duplex</strong> communication (simultaneous sending and receiving), whereas a hub only supports <strong>half-duplex</strong>.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q3: State three functions of a router, other than routing packets.</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> Three additional functions of a router are:</p>
+          <p><strong>(1) DHCP (Dynamic Host Configuration Protocol):</strong> The router automatically assigns IP addresses to devices when they connect to the network, so each device gets a unique address without manual configuration.</p>
+          <p><strong>(2) NAT (Network Address Translation):</strong> The router translates between the private IP addresses used on the LAN and the single public IP address used on the internet. This allows many devices to share one public IP address and hides internal devices from the internet.</p>
+          <p><strong>(3) Firewall:</strong> Many routers include a built-in firewall that filters incoming and outgoing traffic, blocking potentially harmful connections and protecting the local network from external threats.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q4: A school wants to allow students to use their own devices (BYOD) on the school network. Explain the role of a WAP in this scenario.</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> A <strong>Wireless Access Point (WAP)</strong> would be essential for the school&rsquo;s BYOD policy. The WAP connects to the school&rsquo;s existing wired network via an Ethernet cable and <strong>converts the wired signal into a wireless Wi-Fi signal</strong> using radio waves. Students&rsquo; laptops, tablets, and phones can then connect to the network wirelessly by selecting the WAP&rsquo;s <strong>SSID</strong> (network name) and entering a password. The WAP should use <strong>WPA2 or WPA3 encryption</strong> to protect data and prevent unauthorised access. Multiple WAPs may be needed to cover the entire school, as each has a range of approximately <strong>30&ndash;50 metres indoors</strong>. This allows students to move freely between classrooms while maintaining network connectivity.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q5: Compare copper Ethernet cable and fibre optic cable. Give two advantages of each.</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong></p>
+          <p><strong>Two advantages of copper Ethernet cable:</strong> (1) It is <strong>significantly cheaper</strong> than fibre optic &mdash; both the cable itself and the connectors/equipment needed are more affordable, making it cost-effective for standard LAN installations. (2) It is <strong>easier to install and terminate</strong> &mdash; standard RJ45 connectors can be crimped onto Cat5e/Cat6 cables without specialist tools, and many IT technicians are trained to work with copper cabling.</p>
+          <p><strong>Two advantages of fibre optic cable:</strong> (1) It is <strong>much faster</strong> and can carry data at speeds of hundreds of Gbps, far exceeding copper&rsquo;s maximum capabilities. (2) It is <strong>not susceptible to electromagnetic interference</strong> because it uses light rather than electrical signals, making it ideal for environments with heavy electrical equipment and for long-distance runs where copper would suffer from signal degradation.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q6: Explain the difference between a switch and a router. State what type of address each uses and what each device connects.</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> A <strong>switch</strong> connects devices <strong>within the same local area network (LAN)</strong>. It operates at <strong>Layer 2 (Data Link)</strong> and uses <strong>MAC addresses</strong> to forward data frames to the correct device. The switch reads the destination MAC address and uses its MAC address table to determine which port to send the data through.</p>
+          <p>A <strong>router</strong> connects <strong>different networks together</strong> (for example, connecting a LAN to the internet). It operates at <strong>Layer 3 (Network)</strong> and uses <strong>IP addresses</strong> to route packets between networks. The router reads the destination IP address and consults its routing table to determine the best path for the packet to reach its destination network.</p>
+          <p>In summary: a switch is for <em>within</em> a network (MAC addresses, Layer 2); a router is for <em>between</em> networks (IP addresses, Layer 3).</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q7: A business has a desktop PC connected by Ethernet cable to a switch, which is connected to a router, which is connected to the internet. Describe the role of each piece of hardware in sending an email from this PC to a recipient on another network.</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong></p>
+          <p><strong>NIC (in the PC):</strong> The PC&rsquo;s NIC converts the email data into electrical signals and transmits them along the Ethernet cable towards the switch. The NIC also adds the PC&rsquo;s MAC address as the source address to the data frame.</p>
+          <p><strong>Switch:</strong> The switch receives the data frame from the PC&rsquo;s port. It reads the destination MAC address (which will be the router&rsquo;s MAC address, since the data is leaving the LAN) and forwards the frame only to the port where the router is connected, using its MAC address table.</p>
+          <p><strong>Router:</strong> The router receives the packet and reads the destination IP address of the email recipient. Since the recipient is on another network, the router consults its routing table to determine the best route. It performs NAT to replace the PC&rsquo;s private IP address with the business&rsquo;s public IP address, then forwards the packet out to the internet towards the recipient&rsquo;s network.</p>
+          <p>Each device has a distinct role: the NIC connects the PC to the network, the switch directs traffic within the LAN, and the router directs traffic between networks.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q8: Explain why a hub is considered a security risk compared to a switch. [4 marks]</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> A hub is a security risk because it <strong>broadcasts all received data to every connected device</strong> on the network (1 mark). This means that any device connected to the hub can <strong>see all the data being transmitted</strong>, even data that was intended for a different device (1 mark). A malicious user could use packet-sniffing software to <strong>intercept sensitive information</strong> such as passwords, emails, or financial data passing through the hub (1 mark). In contrast, a switch <strong>forwards data only to the intended recipient</strong> using its MAC address table, so other devices on the network never see the data. This makes it much harder for an attacker to intercept data on a switched network (1 mark).</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== KEY VOCABULARY ==================== -->
+    <section class="understand">
+      <span class="section-label">Reference</span>
+      <h2>Key Vocabulary</h2>
+      <p>This table summarises the essential terms for this topic. Use it for revision and to check your understanding.</p>
+
+      <table>
+        <thead>
+          <tr><th>Term</th><th>Definition</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>NIC (Network Interface Card)</strong></td><td>Hardware component that enables a device to connect to a network; converts data into transmittable signals</td></tr>
+          <tr><td><strong>MAC address</strong></td><td>A unique 48-bit hardware address permanently assigned to a NIC during manufacturing (e.g. 3A:1B:7C:4D:9E:2F)</td></tr>
+          <tr><td><strong>RJ45</strong></td><td>The standard connector used on Ethernet (copper) network cables, plugging into a wired NIC</td></tr>
+          <tr><td><strong>Switch</strong></td><td>A LAN device that uses MAC addresses and a MAC address table to forward data only to the intended recipient</td></tr>
+          <tr><td><strong>MAC address table</strong></td><td>A table maintained by a switch mapping each port to the MAC address of the device connected to that port</td></tr>
+          <tr><td><strong>Intelligent forwarding</strong></td><td>The ability of a switch to read the destination MAC address and send data only to the correct port</td></tr>
+          <tr><td><strong>Full-duplex</strong></td><td>Communication mode where data can be sent and received simultaneously (used by switches)</td></tr>
+          <tr><td><strong>Half-duplex</strong></td><td>Communication mode where data can only be sent OR received at any one time, not both (used by hubs)</td></tr>
+          <tr><td><strong>Hub</strong></td><td>An obsolete LAN device that broadcasts all received data to every connected port with no intelligence</td></tr>
+          <tr><td><strong>Collision</strong></td><td>When two devices transmit data simultaneously on a shared medium, corrupting both transmissions</td></tr>
+          <tr><td><strong>Router</strong></td><td>A device that connects different networks together, using IP addresses and routing tables to direct packets</td></tr>
+          <tr><td><strong>Routing table</strong></td><td>A table maintained by a router containing information about available network paths for forwarding packets</td></tr>
+          <tr><td><strong>DHCP</strong></td><td>Dynamic Host Configuration Protocol &mdash; automatically assigns IP addresses to devices on a network</td></tr>
+          <tr><td><strong>NAT</strong></td><td>Network Address Translation &mdash; allows multiple private IP addresses to share one public IP address</td></tr>
+          <tr><td><strong>Default gateway</strong></td><td>The router that devices send data to when the destination is outside the local network (usually the router&rsquo;s IP)</td></tr>
+          <tr><td><strong>WAP (Wireless Access Point)</strong></td><td>A device that converts a wired network signal into a Wi-Fi wireless signal using radio waves</td></tr>
+          <tr><td><strong>SSID</strong></td><td>Service Set Identifier &mdash; the broadcast name of a wireless network that devices see when scanning</td></tr>
+          <tr><td><strong>WPA2 / WPA3</strong></td><td>Wi-Fi encryption standards that protect wireless data from interception</td></tr>
+          <tr><td><strong>Copper cable (Cat5e/Cat6)</strong></td><td>Standard Ethernet cabling using twisted copper wires; cheap, up to 100m, susceptible to interference</td></tr>
+          <tr><td><strong>Fibre optic cable</strong></td><td>Cable that transmits data as light pulses through glass/plastic; very fast, long distance, immune to EMI</td></tr>
+          <tr><td><strong>EMI (Electromagnetic Interference)</strong></td><td>Disruption caused by electromagnetic radiation from nearby electrical equipment, affecting copper and wireless signals</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- ==================== EXAM TIPS ==================== -->
+    <section class="understand">
+      <span class="section-label">Exam Tips</span>
+      <h2>How to Succeed in the Exam</h2>
+
+      <div class="key-concept">
+        <strong>Exam Tip: Know Each Device&rsquo;s Purpose</strong>
+        Be absolutely clear about what each device does: NIC connects a single device. Switch connects devices within a LAN. Router connects different networks. WAP provides wireless access. Hub broadcasts everything (obsolete). If asked to describe network hardware, state the purpose, the type of address it uses, and one key feature.
+      </div>
+
+      <div class="key-concept">
+        <strong>Exam Tip: Switch vs Hub is a Favourite Question</strong>
+        Examiners love asking students to compare switches and hubs. Remember the key differences: switch = intelligent forwarding, MAC address table, full-duplex, no collisions. Hub = broadcasts all data, no address table, half-duplex, causes collisions. Always mention at least two differences and explain <em>why</em> one is better than the other.
+      </div>
+
+      <div class="key-concept">
+        <strong>Exam Tip: Switch vs Router &mdash; Know the Difference</strong>
+        Another very common question. Switch = within a LAN, uses MAC addresses, Layer 2. Router = between networks, uses IP addresses, Layer 3. Do not say a switch &ldquo;connects to the internet&rdquo; (that is a router). Do not say a router &ldquo;connects devices in a LAN&rdquo; (that is a switch). Getting this wrong is a common cause of lost marks.
+      </div>
+
+      <div class="key-concept">
+        <strong>Exam Tip: Transmission Media Questions</strong>
+        When asked to recommend a transmission medium for a scenario, always consider: (1) What distance is involved? If over 100m, copper will not work. (2) Is there interference nearby? If so, choose fibre optic. (3) Do users need mobility? If so, choose wireless. (4) What is the budget? Copper is cheapest. Always justify your choice by linking to the scenario.
+      </div>
+
+      <div class="key-concept">
+        <strong>Exam Tip: The &ldquo;Home Router&rdquo; Trap</strong>
+        Home &ldquo;routers&rdquo; are actually combination devices that include a router, switch, WAP, and DHCP server in one box. In an exam, do not describe them as one device &mdash; treat each function separately. If asked &ldquo;what hardware connects a home LAN to the internet?&rdquo; the answer is a <strong>router</strong>. If asked &ldquo;what provides Wi-Fi?&rdquo; the answer is a <strong>WAP</strong>.
+      </div>
+    </section>
+
+    <!-- ==================== REFLECT ==================== -->
+    <section class="reflect">
+      <span class="section-label">Reflect</span>
+      <h2>Network Hardware in Your Daily Life</h2>
+
+      <p>Every time you go online, your data passes through most of the hardware devices covered on this page. Take a moment to think about how they work together in your everyday life:</p>
+
+      <ul>
+        <li><strong>Your device&rsquo;s NIC:</strong> Whether you are on a phone, laptop, or tablet, your device&rsquo;s wireless NIC is constantly communicating with the nearest access point. Its unique MAC address identifies your device on the local network. Without this tiny piece of hardware, your device would be completely disconnected.</li>
+        <li><strong>Your home router:</strong> This is the gateway between your home and the internet. It assigns your device an IP address (DHCP), translates between your private IP and your public IP (NAT), routes your data packets to the correct destination on the internet, and may even protect you from malicious traffic (firewall). All of this happens invisibly, every time you load a webpage.</li>
+        <li><strong>The WAP in your router:</strong> The Wi-Fi signal you connect to is provided by a wireless access point (often built into the router). It broadcasts the SSID you see in your Wi-Fi settings and handles WPA2/WPA3 encryption to protect your data as it travels through the air.</li>
+        <li><strong>Switches in your school:</strong> In the IT rooms, the classroom computers are connected by Ethernet cables to a switch. The switch intelligently directs traffic so that when you access a shared file server, only your data goes to the right place &mdash; not to every other computer in the room.</li>
+        <li><strong>Fibre optic backbone:</strong> When your data leaves your home router, it likely travels along fibre optic cables that connect your neighbourhood to your internet service provider, and from there across the country and the world at the speed of light.</li>
+      </ul>
+
+      <p>Understanding network hardware is not just exam knowledge &mdash; it helps you troubleshoot problems (Is the issue your NIC? The switch? The router? The cable?), make better purchasing decisions (Do you need a new WAP for better Wi-Fi coverage?), and understand the infrastructure that makes our connected world possible.</p>
+
+      <div class="key-concept">
+        <strong>Final Thought</strong>
+        Every piece of network hardware has a specific, well-defined role. NICs connect devices. Switches connect devices within a LAN. Routers connect networks. WAPs provide wireless access. Understanding what each device does &mdash; and just as importantly, what it does <em>not</em> do &mdash; is the foundation of networking knowledge. Master these devices and you will have a solid understanding of how data flows from your fingertips to anywhere in the world.
+      </div>
+    </section>
+
+    <!-- ==================== NAVIGATION ==================== -->
+    <nav class="chapter-nav">
+      <a href="ip-addressing.html">&larr; Previous: IP Addressing &amp; MAC</a>
+      <a href="../index.html">Course Home</a>
+      <a href="network-security.html">Next: Network Security &rarr;</a>
+    </nav>
+
+  </main>
+
+  <footer class="site-footer">
+    <p>Python Fundamentals &mdash; A KS4 Learning Platform</p>
+    <p>Network Hardware &mdash; GCSE Computer Science Theory</p>
+  </footer>
+
+  <!-- Hint toggle script -->
+  <script>
+  (function() {
+    document.querySelectorAll('.hint-title').forEach(function(title) {
+      title.addEventListener('click', function() {
+        var content = this.nextElementSibling;
+        if (content && content.classList.contains('hint-content')) {
+          content.classList.toggle('visible');
+        }
+      });
+    });
+  })();
+  </script>
+
+</body>
+</html>

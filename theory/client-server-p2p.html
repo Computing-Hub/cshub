@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Client-Server vs Peer-to-Peer - Python Fundamentals</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/style.css" />
+</head>
+<body>
+
+  <header class="site-header">
+    <p><a href="../index.html">&larr; Back to Course</a></p>
+    <h1>Client-Server vs Peer-to-Peer</h1>
+    <p class="subtitle">Two fundamentally different ways to organise a network</p>
+  </header>
+
+  <main>
+
+    <!-- ==================== THE IDEA ==================== -->
+    <section class="idea">
+      <span class="section-label">The Idea</span>
+      <h2>How Are Networks Organised?</h2>
+
+      <p>Once you have devices connected together in a network, a crucial question arises: <strong>how do those devices interact with each other?</strong> Who is in charge? Does one powerful computer run everything, or does every device share the workload equally?</p>
+
+      <p>The answer to this question defines the <strong>network model</strong> &mdash; the fundamental architecture that determines how devices communicate, share resources, and are managed. There are two main models you need to know for GCSE Computer Science:</p>
+
+      <ul>
+        <li><strong>Client-Server</strong> &mdash; one or more dedicated, powerful computers (servers) provide services, and all other devices (clients) request those services.</li>
+        <li><strong>Peer-to-Peer (P2P)</strong> &mdash; all devices are equal. There is no dedicated server. Every device can both provide and request resources from any other device on the network.</li>
+      </ul>
+
+      <p>These two models lead to very different networks with different strengths, weaknesses, and use cases. Understanding the differences between them &mdash; and knowing when each model is appropriate &mdash; is a key exam topic.</p>
+
+      <div class="key-concept">
+        <strong>Did You Know?</strong>
+        The original internet (ARPANET) in the 1960s was designed with a <strong>peer-to-peer philosophy</strong> &mdash; every connected computer was equal and could communicate directly with every other. As the internet grew, the <strong>client-server model</strong> became dominant for most services. However, P2P made a dramatic comeback in the early 2000s with file-sharing applications like Napster and BitTorrent, and more recently with blockchain technologies like <strong>Bitcoin</strong>, which relies entirely on a P2P network with no central server.
+      </div>
+    </section>
+
+    <!-- ==================== EXPLORE: CLIENT-SERVER ==================== -->
+    <section class="explore">
+      <span class="section-label">Explore</span>
+      <h2>The Client-Server Model</h2>
+
+      <p>In a <strong>client-server network</strong>, there is a clear division of roles. One or more powerful, dedicated computers called <strong>servers</strong> sit at the centre of the network, providing services and resources. All other devices on the network are called <strong>clients</strong>. Clients send requests to the server, and the server processes those requests and sends back a response.</p>
+
+      <p>Think of it like a restaurant. The <strong>server</strong> is the kitchen &mdash; it prepares and delivers everything. The <strong>clients</strong> are the customers &mdash; they place orders and receive their food. Customers do not cook for themselves or serve each other; everything goes through the kitchen.</p>
+
+      <h3>What Does the Server Do?</h3>
+      <p>A server is a <strong>powerful, dedicated computer</strong> designed to handle many requests simultaneously. It typically has:</p>
+      <ul>
+        <li><strong>High RAM</strong> (e.g. 64 GB, 128 GB, or more) &mdash; to handle many simultaneous connections and processes</li>
+        <li><strong>Fast, multi-core CPU</strong> (e.g. Intel Xeon or AMD EPYC processors) &mdash; to process requests quickly</li>
+        <li><strong>Large storage capacity</strong> (often multiple hard drives in a RAID configuration) &mdash; to store all shared files, databases, and user data</li>
+        <li><strong>Redundant power supplies and cooling</strong> &mdash; to ensure the server runs 24/7 without downtime</li>
+      </ul>
+
+      <p>A server can provide many different types of services:</p>
+      <ul>
+        <li><strong>File server:</strong> Stores and manages shared files. Users save their work to the server rather than their local computer. Example: a school file server where students access their coursework from any PC in the building.</li>
+        <li><strong>Print server:</strong> Manages print jobs from multiple clients and sends them to shared printers. Users on any client computer can send documents to a network printer.</li>
+        <li><strong>Email server:</strong> Sends, receives, and stores email messages. When you send an email, your client (e.g. Outlook or Gmail) communicates with an email server that routes the message to the recipient.</li>
+        <li><strong>Web server:</strong> Hosts websites and web applications. When you type a URL into your browser, your computer (the client) sends a request to a web server, which sends back the web page.</li>
+        <li><strong>Database server:</strong> Stores and manages large databases. Applications on client computers query the database server to retrieve or update data. Example: a hospital patient records system.</li>
+        <li><strong>Authentication server:</strong> Manages user accounts, passwords, and access permissions. When you log in to a school computer, the authentication server checks your username and password.</li>
+      </ul>
+
+      <h3>How the Client-Server Model Works (Step by Step)</h3>
+      <p>Here is what happens when a student at school opens a file from the shared drive:</p>
+      <ol>
+        <li>The student (client) double-clicks a file on the network drive.</li>
+        <li>The client computer sends a <strong>request</strong> to the file server: &ldquo;Please send me the file called homework.docx.&rdquo;</li>
+        <li>The server receives the request, checks the student has permission to access the file, locates it on its hard drive, and sends the file data back to the client as a <strong>response</strong>.</li>
+        <li>The client computer receives the data and opens the file for the student to view and edit.</li>
+        <li>When the student saves the file, the client sends the updated data back to the server for storage.</li>
+      </ol>
+
+      <h3>Real-World Examples of Client-Server Networks</h3>
+      <ul>
+        <li><strong>School network:</strong> A dedicated file server stores student work, an authentication server manages logins, and a print server manages printing. Student computers are clients that access these services.</li>
+        <li><strong>Email (Gmail, Outlook):</strong> Google and Microsoft run massive email servers. Your phone or browser is the client that connects to these servers to send and receive email.</li>
+        <li><strong>Web browsing:</strong> Every website you visit is hosted on a web server. Your browser is the client. When you visit google.com, your browser sends a request to Google&rsquo;s web server, which responds with the search page.</li>
+        <li><strong>Online banking:</strong> Your banking app or browser (client) connects to the bank&rsquo;s secure servers, which store your account details and process transactions.</li>
+        <li><strong>Online gaming (e.g. Fortnite, Minecraft multiplayer servers):</strong> A central game server manages the game world and communicates with all player clients.</li>
+        <li><strong>Streaming services (Netflix, Spotify):</strong> Content is stored on media servers and streamed to your device (the client) on demand.</li>
+      </ul>
+
+      <h3>Advantages of Client-Server</h3>
+      <ul>
+        <li><strong>Centralised security:</strong> The server controls who can access what. User permissions, passwords, and access levels are all managed in one place. This makes it much easier to enforce security policies.</li>
+        <li><strong>Centralised backups:</strong> Because all data is stored on the server, it can be backed up automatically and regularly. If a client computer breaks, no data is lost &mdash; everything is safe on the server.</li>
+        <li><strong>Centralised management:</strong> Software updates, security patches, and settings can be pushed out from the server to all clients. The network administrator can manage everything from one location.</li>
+        <li><strong>User accounts:</strong> Each user has their own account with a username and password, stored on the server. Users can log in to any client computer on the network and access their own files and settings.</li>
+        <li><strong>Performance:</strong> Servers are powerful machines designed to handle large workloads efficiently. They can process requests from hundreds or thousands of clients simultaneously.</li>
+        <li><strong>Scalability:</strong> New client devices can be added to the network easily without reconfiguring every other device. The server handles the complexity.</li>
+      </ul>
+
+      <h3>Disadvantages of Client-Server</h3>
+      <ul>
+        <li><strong>Expensive hardware:</strong> Servers are costly to purchase. A dedicated server with high-end components can cost thousands of pounds. Enterprise-grade servers can cost tens of thousands.</li>
+        <li><strong>Specialist staff:</strong> Someone needs to set up, configure, maintain, and troubleshoot the server. This typically requires a trained network administrator or IT technician, which is an ongoing cost.</li>
+        <li><strong>Single point of failure:</strong> If the server goes down, <strong>all clients lose access</strong> to the services it provides. No server means no shared files, no printing, no email &mdash; potentially bringing the entire organisation to a halt until the server is repaired or replaced.</li>
+        <li><strong>Software licences:</strong> Server operating systems and management software often require expensive licences (e.g. Windows Server, Microsoft Exchange).</li>
+      </ul>
+
+      <div class="key-concept">
+        <strong>Key Concept: Client-Server</strong>
+        In a client-server network, one or more dedicated servers provide services (files, print, email, web, database, authentication) and clients request those services. Servers are powerful machines with high RAM, fast CPUs, and large storage. This model offers centralised security, backups, and management, but the server is expensive, requires specialist staff, and is a single point of failure.
+      </div>
+
+      <div class="warning">
+        <strong>Common Mistake:</strong> Students sometimes write that a client-server network has &ldquo;one server.&rdquo; In reality, many client-server networks have <strong>multiple servers</strong> &mdash; one for files, one for email, one for the database, and so on. Some organisations even have backup servers to avoid a single point of failure. In your exam, say &ldquo;one or more dedicated servers&rdquo; for accuracy.
+      </div>
+    </section>
+
+    <!-- ==================== EXPLORE: PEER-TO-PEER ==================== -->
+    <section class="explore">
+      <span class="section-label">Explore</span>
+      <h2>The Peer-to-Peer (P2P) Model</h2>
+
+      <p>In a <strong>peer-to-peer network</strong>, there is no dedicated server. All devices on the network are <strong>equal</strong> &mdash; each one is called a <strong>peer</strong> (or sometimes a <strong>node</strong>). Every peer can act as both a client <em>and</em> a server. This means any device can share its own files and resources with others, and also access files and resources shared by other peers.</p>
+
+      <p>Think of it like a group of friends sharing food at a picnic. There is no waiter and no kitchen. Everyone brings their own food and shares it directly with each other. Anyone can offer food, and anyone can take food from the shared spread.</p>
+
+      <h3>How P2P Works</h3>
+      <p>In a P2P network:</p>
+      <ul>
+        <li>Each device stores its own files locally.</li>
+        <li>If Device A wants a file that Device B has, it requests it <strong>directly from Device B</strong> &mdash; not from a central server.</li>
+        <li>Any device can share resources (files, printers, an internet connection) with any other device on the network.</li>
+        <li>There is no central point of control, no central file storage, and no central management.</li>
+      </ul>
+
+      <h3>Real-World Examples of P2P Networks</h3>
+      <ul>
+        <li><strong>Small home network:</strong> If you share a folder from your laptop so that your family&rsquo;s desktop computer can access it, you have set up a simple P2P arrangement. Neither computer is a dedicated server &mdash; they are equals sharing resources.</li>
+        <li><strong>BitTorrent (file sharing):</strong> When you download a file using BitTorrent, you are not downloading from one central server. Instead, you download small pieces of the file from <strong>many different peers</strong> simultaneously. Each peer that has part of the file shares it with others. This is why torrents can be very fast &mdash; the more peers sharing, the faster the download.</li>
+        <li><strong>Bitcoin and cryptocurrency:</strong> The Bitcoin network is a massive P2P network. Every node in the network has a copy of the blockchain (a record of all transactions). There is no central bank or server controlling Bitcoin &mdash; transactions are verified and recorded by the network of peers collectively.</li>
+        <li><strong>Skype (original architecture):</strong> The early versions of Skype used P2P technology for voice and video calls. Your call was routed through other Skype users&rsquo; computers rather than a central server.</li>
+        <li><strong>Ad-hoc wireless networks:</strong> Two phones sharing files directly via Wi-Fi Direct or AirDrop operate in a P2P fashion &mdash; neither device acts as a dedicated server.</li>
+      </ul>
+
+      <h3>Advantages of Peer-to-Peer</h3>
+      <ul>
+        <li><strong>Cheap to set up:</strong> No expensive, dedicated server hardware is required. You just connect ordinary computers together. This makes P2P ideal for small networks where budget is limited.</li>
+        <li><strong>Easy to set up:</strong> P2P networks require minimal technical knowledge. Most operating systems (Windows, macOS) have built-in file sharing that allows you to create a P2P network in minutes without specialist staff.</li>
+        <li><strong>No single point of failure:</strong> Because there is no central server, the failure of one device does not bring down the whole network. Other peers can continue communicating and sharing resources. If one peer goes offline, you can still access files stored on other peers.</li>
+        <li><strong>No dependency on a server:</strong> Peers can function independently. If one device breaks, the others are unaffected (apart from losing access to whatever that specific device was sharing).</li>
+        <li><strong>Scalable for sharing:</strong> In P2P file-sharing systems like BitTorrent, performance can actually <strong>improve</strong> as more peers join, because there are more sources to download from.</li>
+      </ul>
+
+      <h3>Disadvantages of Peer-to-Peer</h3>
+      <ul>
+        <li><strong>Less secure:</strong> There is no centralised security management. Each user is responsible for the security of their own device. There are no centrally enforced passwords, access controls, or security policies. This makes P2P networks more vulnerable to unauthorised access and malware.</li>
+        <li><strong>Harder to back up:</strong> Data is spread across many different devices rather than stored centrally. There is no automatic, centralised backup system. If a peer&rsquo;s hard drive fails, any files stored only on that device are lost.</li>
+        <li><strong>Harder to manage:</strong> With no central administration point, managing the network is difficult. Software updates, security patches, and user accounts must be configured on each individual device.</li>
+        <li><strong>Slower as the network grows:</strong> As more peers join a basic P2P network, devices that are sharing files must handle more and more requests. Since these are ordinary computers (not powerful servers), they can become overloaded. Performance degrades because each device is both using resources and providing resources to others.</li>
+        <li><strong>No central user accounts:</strong> Users cannot log in from any device and access their files. Files and settings are tied to individual machines.</li>
+        <li><strong>Availability depends on peers being online:</strong> If the only peer that has a particular file switches off, that file becomes unavailable to everyone else.</li>
+      </ul>
+
+      <div class="key-concept">
+        <strong>Key Concept: Peer-to-Peer</strong>
+        In a P2P network, all devices are equal &mdash; there is no dedicated server. Every peer can share and access resources. P2P is cheap, easy to set up, and has no single point of failure. However, it is less secure, harder to manage and back up, and can become slower as the network grows. Common examples include home file sharing, BitTorrent, and Bitcoin.
+      </div>
+
+      <div class="warning">
+        <strong>Common Mistake:</strong> Students sometimes think P2P networks are always illegal or only used for piracy. This is <strong>incorrect</strong>. P2P is a perfectly legal network architecture. BitTorrent is used legally to distribute Linux operating systems, game updates, and open-source software. Bitcoin&rsquo;s entire financial system runs on P2P. It is the <em>content</em> being shared that may or may not be legal, not the technology itself.
+      </div>
+    </section>
+
+    <!-- ==================== UNDERSTAND ==================== -->
+    <section class="understand">
+      <span class="section-label">Understand</span>
+      <h2>Comparing Client-Server and Peer-to-Peer</h2>
+
+      <h3>Side-by-Side Comparison Table</h3>
+      <p>This table is essential for your GCSE exam. You may be asked to compare the two models across several features. Memorise the key differences.</p>
+
+      <table>
+        <thead>
+          <tr><th>Feature</th><th>Client-Server</th><th>Peer-to-Peer (P2P)</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Cost</strong></td>
+            <td>Expensive &mdash; requires dedicated server hardware and software licences</td>
+            <td>Cheap &mdash; no dedicated server needed; uses ordinary computers</td>
+          </tr>
+          <tr>
+            <td><strong>Security</strong></td>
+            <td>Strong &mdash; centralised user accounts, passwords, permissions, and security policies managed from the server</td>
+            <td>Weak &mdash; no centralised security; each user manages their own device&rsquo;s security independently</td>
+          </tr>
+          <tr>
+            <td><strong>Management</strong></td>
+            <td>Easy to manage centrally &mdash; software updates, backups, and user accounts can be pushed from the server</td>
+            <td>Difficult &mdash; each device must be configured individually; no central administration</td>
+          </tr>
+          <tr>
+            <td><strong>Backups</strong></td>
+            <td>Centralised &mdash; all data is on the server and can be backed up automatically</td>
+            <td>Difficult &mdash; data is spread across many devices; no automatic central backup</td>
+          </tr>
+          <tr>
+            <td><strong>Reliability</strong></td>
+            <td>Server is a single point of failure &mdash; if it crashes, all clients lose access to services</td>
+            <td>No single point of failure &mdash; if one peer goes down, others continue working</td>
+          </tr>
+          <tr>
+            <td><strong>Performance</strong></td>
+            <td>Good &mdash; dedicated servers are powerful and designed to handle many requests</td>
+            <td>Can degrade as the network grows &mdash; ordinary computers must handle both their own work and serve requests from other peers</td>
+          </tr>
+          <tr>
+            <td><strong>Setup difficulty</strong></td>
+            <td>Complex &mdash; requires specialist knowledge to configure servers, user accounts, and permissions</td>
+            <td>Simple &mdash; most operating systems support P2P file sharing out of the box with minimal configuration</td>
+          </tr>
+          <tr>
+            <td><strong>Specialist staff</strong></td>
+            <td>Needed &mdash; a network administrator is required to manage the server and network</td>
+            <td>Not needed &mdash; ordinary users can set up and maintain a P2P network</td>
+          </tr>
+          <tr>
+            <td><strong>Best suited for</strong></td>
+            <td>Large organisations: schools, businesses, banks, hospitals</td>
+            <td>Small networks: homes, small offices, file sharing, cryptocurrency</td>
+          </tr>
+          <tr>
+            <td><strong>Examples</strong></td>
+            <td>School network, email (Gmail), web browsing, online banking, Netflix</td>
+            <td>Home file sharing, BitTorrent, Bitcoin, ad-hoc wireless sharing</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>When to Use Each Model</h3>
+      <p>The right model depends on the <strong>size</strong> of the network, the <strong>budget</strong>, the <strong>security requirements</strong>, and the <strong>management needs</strong> of the organisation.</p>
+
+      <h4>Use Client-Server when:</h4>
+      <ul>
+        <li>The network has many users (e.g. more than 10&ndash;15 devices)</li>
+        <li>Security is important (sensitive data, user accounts, access control)</li>
+        <li>Centralised management and backups are needed</li>
+        <li>Users need to access their files from any computer on the network</li>
+        <li>The organisation can afford server hardware and specialist staff</li>
+        <li>Services like email, databases, or web hosting are required</li>
+      </ul>
+
+      <h4>Use Peer-to-Peer when:</h4>
+      <ul>
+        <li>The network is small (e.g. fewer than 10 devices)</li>
+        <li>Budget is limited and a server cannot be justified</li>
+        <li>Security is not a major concern</li>
+        <li>Users only need to share occasional files or a printer</li>
+        <li>There is no IT staff available to manage a server</li>
+        <li>Decentralisation is needed (e.g. cryptocurrency, distributed file sharing)</li>
+      </ul>
+
+      <div class="key-concept">
+        <strong>Exam Tip: Scenario Questions</strong>
+        In the exam, you may be given a scenario describing an organisation and asked to recommend a network model. Look for clues: <strong>large number of users, security requirements, and centralised management</strong> point to client-server. <strong>Small number of devices, limited budget, and simple sharing needs</strong> point to peer-to-peer. Always justify your recommendation by explaining <em>why</em> it is appropriate.
+      </div>
+
+      <div class="key-concept">
+        <strong>Exam Tip: Use the Correct Terminology</strong>
+        When writing about client-server, use terms like &ldquo;dedicated server,&rdquo; &ldquo;centralised,&rdquo; &ldquo;user accounts,&rdquo; and &ldquo;single point of failure.&rdquo; When writing about P2P, use terms like &ldquo;equal peers,&rdquo; &ldquo;no dedicated server,&rdquo; &ldquo;decentralised,&rdquo; and &ldquo;share and access resources.&rdquo; Precise technical language earns marks.
+      </div>
+
+      <div class="warning">
+        <strong>Common Mistake:</strong> Students sometimes write that P2P &ldquo;has no network&rdquo; or &ldquo;devices are not connected.&rdquo; This is wrong. A P2P network <strong>is still a network</strong> &mdash; the devices are connected and communicate with each other. The difference is that there is no <em>dedicated server</em>, not that there is no connection. Peers are connected and actively share resources with each other.
+      </div>
+
+      <div class="warning">
+        <strong>Common Mistake:</strong> Another frequent error is saying that client-server networks &ldquo;never fail&rdquo; because they have a powerful server. In fact, the server being a <strong>single point of failure</strong> is one of the biggest disadvantages of client-server. If the server goes down, the entire network may be unusable. This is a critical point to remember.
+      </div>
+    </section>
+
+    <!-- ==================== INTERACTIVE EXERCISES ==================== -->
+    <section class="explore">
+      <span class="section-label">Interactive</span>
+      <h2>Test Your Knowledge</h2>
+
+      <p>Try these interactive exercises to check your understanding of client-server and peer-to-peer networks. Read each scenario or statement carefully and select the correct answer.</p>
+
+      <!-- Exercise 1: Client-Server or P2P? Scenario Quiz -->
+      <div class="interactive-exercise" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 2rem; border-radius: 12px; color: white; margin: 1.5rem 0;">
+        <h4>Exercise 1: Client-Server or P2P?</h4>
+        <p>Read the scenario below and decide whether it describes a <strong>Client-Server</strong> or <strong>Peer-to-Peer</strong> network.</p>
+        <div id="csQuizScenario" style="background: rgba(255,255,255,0.15); padding: 1.2rem; border-radius: 8px; margin: 1rem 0; font-size: 1.1rem; line-height: 1.6;"></div>
+        <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; margin-top: 1rem;">
+          <button style="background: white; color: #667eea; border: none; padding: 0.5rem 1.5rem; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 1rem;" onclick="csQuizCheck('Client-Server')">Client-Server</button>
+          <button style="background: white; color: #667eea; border: none; padding: 0.5rem 1.5rem; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 1rem;" onclick="csQuizCheck('Peer-to-Peer')">Peer-to-Peer</button>
+          <button style="background: rgba(255,255,255,0.2); color: white; border: 2px solid rgba(255,255,255,0.4); padding: 0.5rem 1.5rem; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 1rem;" onclick="csQuizNext()">Skip / New Question</button>
+        </div>
+        <div id="csQuizFeedback" style="margin-top: 1rem; font-weight: 600; min-height: 1.5rem;"></div>
+        <div style="margin-top: 0.5rem; font-size: 0.95rem; opacity: 0.9;">Score: <span id="csQuizCorrect">0</span> / <span id="csQuizTotal">0</span></div>
+      </div>
+
+      <script>
+      (function() {
+        var scenarios = [
+          { text: "A school has 300 computers. Students log in with their username and password, and their files are stored centrally so they can access them from any machine.", answer: "Client-Server", explanation: "Centralised logins, user accounts, and central file storage all require a dedicated server -- this is a client-server network." },
+          { text: "Two flatmates share a printer by connecting both their laptops to the same Wi-Fi network. Neither laptop is designated as a server.", answer: "Peer-to-Peer", explanation: "Two equal devices sharing a resource with no dedicated server is a classic P2P setup." },
+          { text: "A bank's 200 branches across the UK all connect to a central database server to access customer account information.", answer: "Client-Server", explanation: "A central database server serving hundreds of client branches is a clear client-server architecture." },
+          { text: "Users around the world download a Linux operating system using BitTorrent, receiving pieces of the file from many different computers simultaneously.", answer: "Peer-to-Peer", explanation: "BitTorrent distributes files across many equal peers with no central server -- this is P2P file sharing." },
+          { text: "When you visit google.com, your web browser sends a request to a powerful computer at Google's data centre, which sends back the web page.", answer: "Client-Server", explanation: "Your browser is the client and Google's data centre is the server. The browser requests, the server responds -- client-server." },
+          { text: "Three friends in a student house share files by enabling file sharing on their laptops. There is no central computer managing the network.", answer: "Peer-to-Peer", explanation: "A small group of equal devices sharing files with no dedicated server is peer-to-peer." },
+          { text: "Bitcoin transactions are verified by thousands of computers around the world. No single organisation controls the network or stores the data centrally.", answer: "Peer-to-Peer", explanation: "Bitcoin is a decentralised P2P network. Every node is equal and there is no central server -- the blockchain is distributed across all peers." },
+          { text: "A hospital stores all patient records on a secure, dedicated computer. Doctors and nurses access these records from workstations throughout the building.", answer: "Client-Server", explanation: "A dedicated computer storing records centrally, accessed by many workstations (clients), is client-server." },
+          { text: "An office has a dedicated email server that manages all incoming and outgoing emails for every employee in the company.", answer: "Client-Server", explanation: "A dedicated email server providing a service to many client computers is client-server." },
+          { text: "A family at home connects a laptop, a tablet, and a phone to their Wi-Fi router and occasionally shares photos between devices without any central storage.", answer: "Peer-to-Peer", explanation: "Devices sharing files directly between each other on a home network with no server is peer-to-peer." },
+          { text: "A streaming service like Netflix stores its entire catalogue of films and series on massive servers in data centres. Your TV or phone requests and receives the video stream.", answer: "Client-Server", explanation: "Netflix's data centres are the servers; your device is the client requesting video streams -- client-server." },
+          { text: "A small charity with 4 computers wants to share a printer. They cannot afford a server or an IT technician, so they simply connect all computers to the same network and share the printer.", answer: "Peer-to-Peer", explanation: "A small, cheap setup with no dedicated server, no IT staff, and simple sharing needs is P2P." },
+          { text: "An online multiplayer game runs on a central game server that all players connect to. The server manages the game world, player positions, and game rules.", answer: "Client-Server", explanation: "A central game server managing everything while players (clients) connect to it is client-server." },
+          { text: "Two smartphones share a video file directly via Wi-Fi Direct, without connecting to any external server or access point.", answer: "Peer-to-Peer", explanation: "Two devices communicating directly as equals without a server is peer-to-peer." }
+        ];
+
+        var currentIdx = -1;
+        var correct = 0;
+        var total = 0;
+        var used = [];
+
+        function pick() {
+          if (used.length >= scenarios.length) { used = []; }
+          var idx;
+          do { idx = Math.floor(Math.random() * scenarios.length); } while (used.indexOf(idx) !== -1);
+          used.push(idx);
+          currentIdx = idx;
+          document.getElementById('csQuizScenario').textContent = scenarios[idx].text;
+          document.getElementById('csQuizFeedback').textContent = '';
+        }
+
+        window.csQuizCheck = function(answer) {
+          if (currentIdx < 0) return;
+          total++;
+          var s = scenarios[currentIdx];
+          var fb = document.getElementById('csQuizFeedback');
+          if (answer === s.answer) {
+            correct++;
+            fb.innerHTML = '<span style="color:#a0ffb0;">Correct!</span> ' + s.explanation;
+          } else {
+            fb.innerHTML = '<span style="color:#ffb0b0;">Not quite.</span> The answer is <strong>' + s.answer + '</strong>. ' + s.explanation;
+          }
+          document.getElementById('csQuizCorrect').textContent = correct;
+          document.getElementById('csQuizTotal').textContent = total;
+          setTimeout(pick, 3000);
+        };
+
+        window.csQuizNext = function() {
+          pick();
+        };
+
+        pick();
+      })();
+      </script>
+
+      <!-- Exercise 2: Advantages Sorter -->
+      <div class="interactive-exercise" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 2rem; border-radius: 12px; color: white; margin: 1.5rem 0;">
+        <h4>Exercise 2: Advantages &amp; Disadvantages Sorter</h4>
+        <p>Read the advantage or disadvantage below and decide whether it applies to <strong>Client-Server</strong> or <strong>Peer-to-Peer</strong>.</p>
+        <div id="advSorterFact" style="background: rgba(255,255,255,0.15); padding: 1.2rem; border-radius: 8px; margin: 1rem 0; font-size: 1.1rem; line-height: 1.6;"></div>
+        <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; margin-top: 1rem;">
+          <button style="background: white; color: #667eea; border: none; padding: 0.5rem 1.5rem; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 1rem;" onclick="advSorterCheck('Client-Server')">Client-Server</button>
+          <button style="background: white; color: #667eea; border: none; padding: 0.5rem 1.5rem; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 1rem;" onclick="advSorterCheck('Peer-to-Peer')">Peer-to-Peer</button>
+          <button style="background: rgba(255,255,255,0.2); color: white; border: 2px solid rgba(255,255,255,0.4); padding: 0.5rem 1.5rem; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 1rem;" onclick="advSorterNext()">Skip / New Fact</button>
+        </div>
+        <div id="advSorterFeedback" style="margin-top: 1rem; font-weight: 600; min-height: 1.5rem;"></div>
+        <div style="margin-top: 0.5rem; font-size: 0.95rem; opacity: 0.9;">Score: <span id="advSorterCorrect">0</span> / <span id="advSorterTotal">0</span></div>
+      </div>
+
+      <script>
+      (function() {
+        var facts = [
+          { text: "Advantage: Centralised backups mean data is safe even if a client machine breaks.", answer: "Client-Server", explanation: "Central backups on the server are a key advantage of client-server networks." },
+          { text: "Advantage: Cheap to set up because no expensive server hardware is needed.", answer: "Peer-to-Peer", explanation: "Not needing a dedicated server makes P2P networks inexpensive to set up." },
+          { text: "Disadvantage: The server is a single point of failure -- if it crashes, all users lose access.", answer: "Client-Server", explanation: "The single point of failure is a well-known disadvantage of the client-server model." },
+          { text: "Advantage: No single point of failure -- if one device goes offline, the rest keep working.", answer: "Peer-to-Peer", explanation: "Resilience to individual device failures is a key advantage of P2P networks." },
+          { text: "Disadvantage: Less secure because there is no centralised security management.", answer: "Peer-to-Peer", explanation: "Without a central server to enforce security policies, P2P networks are harder to secure." },
+          { text: "Advantage: User accounts and permissions are managed centrally from the server.", answer: "Client-Server", explanation: "Centralised user account management is an advantage of client-server networks." },
+          { text: "Disadvantage: Requires specialist IT staff to set up and maintain the server.", answer: "Client-Server", explanation: "The need for trained administrators is a disadvantage and ongoing cost of client-server." },
+          { text: "Advantage: Easy to set up -- most operating systems have built-in file sharing for this model.", answer: "Peer-to-Peer", explanation: "P2P networks are simple to set up without specialist knowledge." },
+          { text: "Disadvantage: Performance degrades as more devices join because ordinary computers handle all requests.", answer: "Peer-to-Peer", explanation: "In P2P, non-dedicated machines get slower under load as the network grows." },
+          { text: "Advantage: Software updates and security patches can be pushed to all clients from one central location.", answer: "Client-Server", explanation: "Centralised management of updates is an advantage of client-server networks." },
+          { text: "Disadvantage: Harder to back up data because it is spread across many different devices.", answer: "Peer-to-Peer", explanation: "Decentralised data storage makes backups difficult in P2P networks." },
+          { text: "Disadvantage: Server hardware is expensive to purchase -- it can cost thousands of pounds.", answer: "Client-Server", explanation: "The high cost of dedicated server hardware is a disadvantage of client-server." },
+          { text: "Advantage: Users can log in to any client computer and access their personal files and settings.", answer: "Client-Server", explanation: "Roaming profiles and centralised file access require a server -- this is client-server." },
+          { text: "Disadvantage: Each device must be configured and updated individually -- there is no central administration.", answer: "Peer-to-Peer", explanation: "Lack of central management makes individual device administration necessary in P2P." },
+          { text: "Advantage: A powerful dedicated machine handles all requests efficiently, supporting hundreds of users.", answer: "Client-Server", explanation: "High performance from dedicated server hardware is an advantage of client-server." },
+          { text: "Advantage: No dependency on a single machine -- the network is resilient and decentralised.", answer: "Peer-to-Peer", explanation: "Decentralisation and no single dependency point is a key P2P advantage." }
+        ];
+
+        var currentIdx = -1;
+        var correct = 0;
+        var total = 0;
+        var used = [];
+
+        function pick() {
+          if (used.length >= facts.length) { used = []; }
+          var idx;
+          do { idx = Math.floor(Math.random() * facts.length); } while (used.indexOf(idx) !== -1);
+          used.push(idx);
+          currentIdx = idx;
+          document.getElementById('advSorterFact').textContent = facts[idx].text;
+          document.getElementById('advSorterFeedback').textContent = '';
+        }
+
+        window.advSorterCheck = function(answer) {
+          if (currentIdx < 0) return;
+          total++;
+          var f = facts[currentIdx];
+          var fb = document.getElementById('advSorterFeedback');
+          if (answer === f.answer) {
+            correct++;
+            fb.innerHTML = '<span style="color:#a0ffb0;">Correct!</span> ' + f.explanation;
+          } else {
+            fb.innerHTML = '<span style="color:#ffb0b0;">Not quite.</span> The answer is <strong>' + f.answer + '</strong>. ' + f.explanation;
+          }
+          document.getElementById('advSorterCorrect').textContent = correct;
+          document.getElementById('advSorterTotal').textContent = total;
+          setTimeout(pick, 3000);
+        };
+
+        window.advSorterNext = function() {
+          pick();
+        };
+
+        pick();
+      })();
+      </script>
+
+    </section>
+
+    <!-- ==================== PRACTICE ==================== -->
+    <section class="practice">
+      <span class="section-label">Practice</span>
+      <h2>Practice Questions</h2>
+      <p>Click on each question to reveal the answer. Try to answer in your head or on paper first before checking!</p>
+
+      <div class="hint">
+        <div class="hint-title">Q1: What is the difference between a client-server and a peer-to-peer network?</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> In a <strong>client-server</strong> network, one or more dedicated servers provide services (such as file storage, email, printing, and authentication) and client devices request those services. The server is a powerful, centralised machine that manages security, backups, and user accounts. In a <strong>peer-to-peer</strong> (P2P) network, there is no dedicated server. All devices are equal and can both share and access resources from each other. Each peer acts as both a client and a server. Client-server is typically used in large organisations where centralised management and security are important, while P2P is suited to small, informal networks where cost and simplicity are priorities.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q2: Give two advantages and two disadvantages of the client-server model.</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> <strong>Advantages:</strong> (1) <strong>Centralised security</strong> &mdash; the server controls user accounts, passwords, and access permissions centrally, making it easier to enforce security policies across the whole network. (2) <strong>Centralised backups</strong> &mdash; because all data is stored on the server, it can be backed up automatically; if a client computer fails, no data is lost. <strong>Disadvantages:</strong> (1) <strong>Expensive</strong> &mdash; dedicated server hardware costs thousands of pounds, and server operating systems and software often require expensive licences. (2) <strong>Single point of failure</strong> &mdash; if the server crashes or goes offline, all client devices lose access to the services it provides, which can bring the entire organisation to a halt.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q3: Explain why a peer-to-peer network might be suitable for a small home network but not for a large school.</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> A P2P network is suitable for a small home network because: there are only a few devices (perhaps 3&ndash;5), so there is no need for a powerful dedicated server; the family likely cannot justify the expense of server hardware and an IT technician; and basic file and printer sharing between a few devices is all that is needed. However, a P2P network would <strong>not</strong> be suitable for a large school because: (1) a school has hundreds of computers and users, requiring centralised user accounts so students can log in to any machine; (2) student work must be backed up centrally to prevent data loss; (3) the school needs strong, centrally managed security to protect sensitive data and control internet access; (4) without a dedicated server, performance would degrade badly with hundreds of devices all making requests of each other. A client-server model is far more appropriate for a school.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q4: A small start-up company has 5 employees and a limited budget. They need to share files and a printer. Would you recommend a client-server or peer-to-peer network? Justify your answer.</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> I would recommend a <strong>peer-to-peer</strong> network. With only 5 employees, the network is small enough that a dedicated server is not necessary. A P2P network would be <strong>much cheaper</strong> because no expensive server hardware or server software licences are needed. It is also <strong>easy to set up</strong> &mdash; modern operating systems like Windows and macOS have built-in file and printer sharing, so the company does not need to hire specialist IT staff. Each employee can share their files and access the shared printer directly. The main trade-off is that security is not centralised and backups would need to be done individually, but for 5 users with a limited budget, P2P is the most cost-effective and practical choice.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q5: Explain how BitTorrent demonstrates the peer-to-peer model in action.</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> BitTorrent is a P2P file-sharing protocol. When a file is shared via BitTorrent, it is split into many small pieces. Instead of downloading the entire file from one central server, a user (peer) downloads different pieces from <strong>many different peers simultaneously</strong>. Each peer that has already downloaded some pieces also <strong>uploads</strong> (shares) those pieces with other peers who need them. This means every device acts as both a client (downloading pieces it needs) and a server (uploading pieces it has). There is no single central server hosting the file. This demonstrates the P2P model because: all devices are equal; there is no dedicated server; resources (file pieces) are shared directly between peers; and the more peers that join, the more sources there are to download from, which can actually make downloads faster.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q6: A hospital needs a network to store patient records, manage appointments, and allow staff to access information from any workstation. Explain why a client-server network is essential for this scenario.</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> A client-server network is essential for a hospital because: (1) <strong>Centralised security</strong> &mdash; patient records contain extremely sensitive personal data protected by law (e.g. the Data Protection Act). A server can enforce strict access controls, ensuring only authorised staff (doctors, nurses) can view specific records. This level of security is impossible to achieve with P2P. (2) <strong>Centralised backups</strong> &mdash; losing patient data could be life-threatening. A server ensures all records are backed up automatically and regularly. (3) <strong>Central data storage</strong> &mdash; doctors and nurses need to access up-to-date patient records from any workstation in the hospital. A central database server makes this possible. (4) <strong>Reliability and performance</strong> &mdash; a hospital has many workstations used by many staff. A powerful dedicated server can handle this demand efficiently. (5) <strong>User accounts</strong> &mdash; staff need individual logins with different access levels (e.g. a receptionist should see appointment data but not detailed medical notes). A client-server setup is the only model that provides the security, reliability, and centralised management a hospital requires.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q7: State what is meant by a &ldquo;single point of failure&rdquo; in the context of client-server networks.</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> A <strong>single point of failure</strong> is a component in a system whose failure causes the entire system to stop working. In a client-server network, the server is the single point of failure. If the server crashes, loses power, or is damaged, <strong>all client devices lose access</strong> to the services it provides &mdash; files cannot be accessed, emails cannot be sent or received, printing may stop, and users may not be able to log in. The entire network effectively becomes unusable until the server is repaired or replaced. This is a significant disadvantage of the client-server model. Some organisations mitigate this risk by using <strong>redundant (backup) servers</strong> that can take over if the main server fails.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q8: Compare client-server and peer-to-peer networks in terms of cost, security, and management. [6-mark style question]</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> <strong>Cost:</strong> Client-server networks are more expensive because they require dedicated server hardware (high RAM, fast CPU, large storage), server operating system licences, and ongoing costs for specialist IT staff to manage the server. Peer-to-peer networks are much cheaper because they use ordinary computers with no dedicated server &mdash; there are no server hardware costs and no specialist staff costs. <strong>Security:</strong> Client-server networks provide stronger security because user accounts, passwords, and access permissions are managed centrally on the server. The administrator can enforce security policies across the entire network from one location. In a P2P network, there is no centralised security &mdash; each user is responsible for their own device&rsquo;s security, making it much harder to enforce consistent policies and more vulnerable to unauthorised access. <strong>Management:</strong> Client-server networks are easier to manage centrally. Software updates, security patches, backups, and user accounts can all be managed from the server, saving time. In a P2P network, each device must be configured, updated, and backed up individually because there is no central administration point &mdash; this becomes increasingly impractical as the network grows. In summary, client-server offers superior security and management at higher cost, while P2P offers simplicity and low cost at the expense of security and central control.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== KEY VOCABULARY ==================== -->
+    <section class="understand">
+      <span class="section-label">Reference</span>
+      <h2>Key Vocabulary</h2>
+      <p>This table summarises the essential terms for this topic. Use it for revision and to check your understanding.</p>
+
+      <table>
+        <thead>
+          <tr><th>Term</th><th>Definition</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>Client</strong></td><td>A device on a network that requests services or resources from a server (e.g. a student&rsquo;s workstation, a web browser, a phone running an email app)</td></tr>
+          <tr><td><strong>Server</strong></td><td>A powerful, dedicated computer that provides services (files, email, web pages, database access, printing, authentication) to client devices on a network</td></tr>
+          <tr><td><strong>Client-Server network</strong></td><td>A network model where dedicated servers provide centralised services and clients request those services</td></tr>
+          <tr><td><strong>Peer-to-Peer (P2P) network</strong></td><td>A network model where all devices are equal (peers) with no dedicated server; each device can both share and access resources</td></tr>
+          <tr><td><strong>Peer / Node</strong></td><td>An individual device in a P2P network that can act as both a client and a server</td></tr>
+          <tr><td><strong>Centralised</strong></td><td>Managed or controlled from a single, central point (e.g. a server managing all user accounts and backups)</td></tr>
+          <tr><td><strong>Decentralised</strong></td><td>Distributed across many points with no single central authority (e.g. a P2P network where data is spread across all peers)</td></tr>
+          <tr><td><strong>Single point of failure</strong></td><td>A component whose failure causes the entire system to stop working; in client-server, the server is the single point of failure</td></tr>
+          <tr><td><strong>File server</strong></td><td>A server that stores and manages shared files, allowing users to save and access documents from any client on the network</td></tr>
+          <tr><td><strong>Web server</strong></td><td>A server that hosts websites and responds to requests from web browsers (clients)</td></tr>
+          <tr><td><strong>Database server</strong></td><td>A server that stores and manages databases, responding to queries from client applications</td></tr>
+          <tr><td><strong>Authentication</strong></td><td>The process of verifying a user&rsquo;s identity, typically by checking a username and password against records stored on a server</td></tr>
+          <tr><td><strong>BitTorrent</strong></td><td>A P2P file-sharing protocol where files are split into pieces and downloaded from many peers simultaneously</td></tr>
+          <tr><td><strong>Blockchain</strong></td><td>A decentralised, distributed ledger used in P2P cryptocurrency networks like Bitcoin to record transactions across many peers</td></tr>
+          <tr><td><strong>Redundancy</strong></td><td>Having backup systems or components (e.g. a backup server) so that if one fails, another can take over</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- ==================== EXAM TIPS ==================== -->
+    <section class="understand">
+      <span class="section-label">Exam Tips</span>
+      <h2>How to Succeed in the Exam</h2>
+
+      <div class="key-concept">
+        <strong>Exam Tip: Know the Key Differences</strong>
+        You must be able to clearly distinguish between client-server and peer-to-peer. The six most important comparison points are: <strong>cost, security, management, backups, reliability (single point of failure), and performance</strong>. If you can confidently discuss all six, you can answer virtually any comparison question on this topic.
+      </div>
+
+      <div class="key-concept">
+        <strong>Exam Tip: Always Give Examples</strong>
+        When describing either model, include real-world examples. For client-server: school networks, email systems, web browsing, online banking. For P2P: home file sharing, BitTorrent, Bitcoin. Examples demonstrate understanding and earn additional marks.
+      </div>
+
+      <div class="key-concept">
+        <strong>Exam Tip: Recommend and Justify</strong>
+        If asked to recommend a network model for a scenario, state your recommendation clearly and then give <strong>at least two reasons why</strong>. For example: &ldquo;I recommend a client-server network because the organisation has 200 employees who need centralised user accounts, and the sensitive customer data requires strong, centrally managed security.&rdquo;
+      </div>
+
+      <div class="key-concept">
+        <strong>Exam Tip: Do Not Confuse Models with Topologies</strong>
+        Client-server and peer-to-peer are <strong>network models</strong> (how devices interact). Star, bus, and mesh are <strong>network topologies</strong> (how devices are physically or logically connected). A client-server network often uses a star topology, but they are different concepts. Do not mix them up.
+      </div>
+    </section>
+
+    <!-- ==================== REFLECT ==================== -->
+    <section class="reflect">
+      <span class="section-label">Reflect</span>
+      <h2>Networks Around You</h2>
+
+      <p>Now that you understand both network models, take a moment to think about how they appear in your daily life:</p>
+
+      <ul>
+        <li><strong>At school:</strong> When you log in to a school computer and access your files, you are using a <strong>client-server</strong> network. The school&rsquo;s server authenticates your login, stores your files, and manages printing. Without that server, you would not be able to log in or access your work from different machines.</li>
+        <li><strong>At home:</strong> If you share files between your phone and your laptop over Wi-Fi, or share a printer between family members&rsquo; devices, you are likely using a <strong>peer-to-peer</strong> arrangement &mdash; no dedicated server, just devices sharing directly.</li>
+        <li><strong>Web browsing and email:</strong> Every website you visit and every email you send uses the <strong>client-server</strong> model. Your device (client) talks to web servers and email servers run by companies like Google, Microsoft, and Amazon.</li>
+        <li><strong>Downloading and streaming:</strong> Some download services use <strong>P2P technology</strong> (like BitTorrent for distributing game updates), while others use <strong>client-server</strong> (like Netflix streaming from its servers to your TV).</li>
+        <li><strong>Cryptocurrency:</strong> If you have ever used or heard about Bitcoin, you have encountered one of the world&rsquo;s largest <strong>P2P networks</strong> &mdash; a decentralised system with no central authority.</li>
+      </ul>
+
+      <p>Most real-world systems use a <strong>combination</strong> of both models. For example, a game might use client-server for matchmaking and account management, but P2P for actual gameplay between two players. Understanding both models &mdash; and their strengths and weaknesses &mdash; gives you the knowledge to evaluate and design networks for different situations.</p>
+
+      <p><strong>Challenge yourself:</strong> Over the next week, every time you use a digital service, ask yourself: is this client-server or peer-to-peer? Think about where the data is stored, whether there is a central server involved, and who controls the system. You will start to see these models everywhere.</p>
+
+      <div class="key-concept">
+        <strong>Final Thought</strong>
+        Neither client-server nor peer-to-peer is inherently &ldquo;better.&rdquo; Each model has clear advantages and disadvantages. The best choice depends on the specific situation &mdash; the number of users, the budget, the security requirements, and the services needed. Being able to analyse a scenario and recommend the right model, with clear justification, is exactly what your GCSE exam is testing.
+      </div>
+    </section>
+
+    <!-- ==================== NAVIGATION ==================== -->
+    <nav class="chapter-nav">
+      <a href="networks.html">&larr; Previous: Types of Networks</a>
+      <a href="../index.html">Course Home</a>
+      <a href="network-topologies.html">Next: Network Topologies &rarr;</a>
+    </nav>
+
+  </main>
+
+  <footer class="site-footer">
+    <p>Python Fundamentals &mdash; A KS4 Learning Platform</p>
+    <p>Client-Server vs Peer-to-Peer &mdash; GCSE Computer Science Theory</p>
+  </footer>
+
+  <!-- Hint toggle script (same pattern as other theory pages) -->
+  <script>
+  (function() {
+    var hints = document.querySelectorAll('.hint-title');
+    for (var i = 0; i < hints.length; i++) {
+      hints[i].addEventListener('click', function() {
+        var content = this.nextElementSibling;
+        if (content.classList.contains('visible')) {
+          content.classList.remove('visible');
+        } else {
+          content.classList.add('visible');
+        }
+      });
+    }
+  })();
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The TCP/IP Model - Python Fundamentals</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/style.css" />
+</head>
+<body>
+
+  <header class="site-header">
+    <p><a href="../index.html">&larr; Back to Course</a></p>
+    <h1>The TCP/IP Model</h1>
+    <p class="subtitle">Four layers that make the internet work &mdash; from application to physical transmission</p>
+  </header>
+
+  <main>
+
+    <!-- ==================== THE IDEA ==================== -->
+    <section class="idea">
+      <span class="section-label">The Idea</span>
+      <h2>Why Do We Use a Layered Model?</h2>
+
+      <p>Every time you open a web page, send an email, or stream a video, your data undertakes an extraordinary journey. It starts as human-readable information on your screen, gets transformed into electrical signals or radio waves, travels through cables, routers, and potentially undersea fibre-optic lines, arrives at a server on the other side of the world, and then makes the return trip &mdash; all in a fraction of a second.</p>
+
+      <p>This process is staggeringly complex. So how do engineers make it manageable? The answer is <strong>layers</strong>. Instead of building one giant, monolithic system that handles everything, network communication is divided into distinct <strong>layers</strong>, each responsible for a specific part of the job. This approach is called a <strong>layered model</strong>.</p>
+
+      <p><strong>A layered model</strong> is a way of organising the functions of a network into separate levels. Each layer has a clearly defined role and communicates only with the layer directly above and below it. Think of it like a factory assembly line: each station does its specific job and passes the product to the next station, without needing to understand how the other stations work.</p>
+
+      <h3>Why Use Layers?</h3>
+      <ul>
+        <li><strong>Abstraction:</strong> Each layer hides its internal complexity from the other layers. A web browser does not need to know how electrical signals travel through copper cables &mdash; it just needs to know how to request a web page. This separation of concerns makes the system far easier to understand and work with.</li>
+        <li><strong>Modularity:</strong> Because each layer is independent, one layer can be changed or upgraded without affecting the others. For example, you can switch from a wired Ethernet connection to Wi-Fi without any changes to your web browser or email client. The physical layer changes; everything above it stays the same.</li>
+        <li><strong>Easier troubleshooting:</strong> When something goes wrong, engineers can isolate the problem to a specific layer. Is it a physical cable issue? A routing problem? A software bug? Layers make it possible to diagnose faults systematically rather than searching through the entire system.</li>
+        <li><strong>Different teams can work on different layers:</strong> Hardware engineers can focus on cables, signals, and network cards. Software developers can focus on protocols and applications. Neither team needs to fully understand the other&rsquo;s work &mdash; they just need to agree on the interface between layers.</li>
+        <li><strong>Hardware independence:</strong> The upper layers (applications and transport) work the same regardless of the underlying hardware. Whether your data travels over copper, fibre optics, Wi-Fi, or a 4G mobile connection, the application layer behaves identically. This is what allows the same web browser to work on a desktop PC, a laptop on Wi-Fi, and a smartphone on mobile data.</li>
+      </ul>
+
+      <div class="key-concept">
+        <strong>Key Concept: Layered Models</strong>
+        A layered model divides network communication into separate levels, each with a specific job. Layers provide abstraction, modularity, easier troubleshooting, team specialisation, and hardware independence. The TCP/IP model is the layered model that underpins the internet.
+      </div>
+
+      <p><strong>In this topic you will learn:</strong></p>
+      <ul>
+        <li>The four layers of the <strong>TCP/IP model</strong> and the role of each layer</li>
+        <li>Key protocols at each layer: HTTP, FTP, SMTP, DNS, TCP, UDP, IP, Ethernet</li>
+        <li>How data is <strong>encapsulated</strong> as it travels down the layers, and <strong>de-encapsulated</strong> as it travels up</li>
+        <li>The difference between <strong>TCP</strong> and <strong>UDP</strong> and when each is used</li>
+        <li>A real-world analogy to help you remember the process</li>
+      </ul>
+
+      <div class="key-concept">
+        <strong>Did You Know?</strong>
+        The TCP/IP model was developed in the 1970s by Vint Cerf and Bob Kahn as part of the US Department of Defense&rsquo;s ARPANET project. It became the standard for internet communication and is still the model that powers the entire internet today. Every device connected to the internet &mdash; from smartphones to supercomputers &mdash; uses TCP/IP.
+      </div>
+    </section>
+
+    <!-- ==================== EXPLORE ==================== -->
+    <section class="explore">
+      <span class="section-label">Explore</span>
+      <h2>The Four Layers of the TCP/IP Model</h2>
+
+      <p>The TCP/IP model divides network communication into <strong>four layers</strong>. Each layer has a specific role and adds its own information to the data as it is prepared for transmission. The layers, from top to bottom, are:</p>
+
+      <table>
+        <thead>
+          <tr><th>Layer Number</th><th>Layer Name</th><th>Role</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>4 (Top)</strong></td><td>Application Layer</td><td>User-facing applications and protocols that format data for the user</td></tr>
+          <tr><td><strong>3</strong></td><td>Transport Layer</td><td>Breaks data into segments, ensures reliable or fast delivery, adds port numbers</td></tr>
+          <tr><td><strong>2</strong></td><td>Internet Layer</td><td>Addresses packets with IP addresses and routes them between networks</td></tr>
+          <tr><td><strong>1 (Bottom)</strong></td><td>Network Access Layer</td><td>Handles physical transmission of data over hardware (cables, Wi-Fi)</td></tr>
+        </tbody>
+      </table>
+
+      <p>Let us examine each layer in detail.</p>
+
+      <!-- Layer 4: Application -->
+      <h3>Layer 4: Application Layer</h3>
+
+      <p>The Application Layer is the <strong>topmost layer</strong> &mdash; the one closest to the user. This is where user-facing applications and network protocols operate. When you type a web address into your browser, compose an email, or download a file, the Application Layer is where that interaction begins.</p>
+
+      <p>The Application Layer is responsible for:</p>
+      <ul>
+        <li><strong>Formatting data</strong> so that the user can read and interact with it (e.g., displaying a web page with text, images, and links)</li>
+        <li><strong>Providing protocols</strong> that define how specific types of data are requested, sent, and received</li>
+        <li><strong>Interfacing with the user</strong> through software applications like web browsers, email clients, and file transfer programs</li>
+      </ul>
+
+      <h4>Key Protocols at the Application Layer</h4>
+      <ul>
+        <li><strong>HTTP / HTTPS</strong> (HyperText Transfer Protocol / Secure) &mdash; Used by web browsers to request and receive web pages. When you visit a website, your browser sends an HTTP request to a web server, which responds with the HTML, CSS, images, and other files that make up the page. HTTPS adds encryption for security.</li>
+        <li><strong>FTP</strong> (File Transfer Protocol) &mdash; Used to transfer files between computers. Often used by web developers to upload website files to a server, or by organisations to share large files.</li>
+        <li><strong>SMTP</strong> (Simple Mail Transfer Protocol) &mdash; Used to <strong>send</strong> emails. When you click &ldquo;Send&rdquo; in your email client, SMTP handles the delivery of that email to the recipient&rsquo;s mail server.</li>
+        <li><strong>IMAP / POP3</strong> &mdash; Used to <strong>receive</strong> and retrieve emails from a mail server. IMAP keeps emails on the server (so you can access them from multiple devices), while POP3 downloads them to one device.</li>
+        <li><strong>DNS</strong> (Domain Name System) &mdash; Translates human-readable domain names (like <code>www.google.com</code>) into IP addresses (like <code>142.250.180.14</code>) so that computers can locate each other on the network.</li>
+      </ul>
+
+      <h4>Examples of Application Layer Software</h4>
+      <ul>
+        <li>Web browsers (Chrome, Firefox, Edge, Safari)</li>
+        <li>Email clients (Outlook, Thunderbird, Gmail web interface)</li>
+        <li>File transfer tools (FileZilla, WinSCP)</li>
+        <li>Messaging applications and video calling software</li>
+      </ul>
+
+      <div class="key-concept">
+        <strong>Key Concept: Application Layer</strong>
+        The Application Layer is where users interact with network services. Protocols like HTTP, FTP, SMTP, and DNS operate here. This layer formats data into a form the user can understand (web pages, emails, files) and passes it down to the Transport Layer for delivery.
+      </div>
+
+      <!-- Layer 3: Transport -->
+      <h3>Layer 3: Transport Layer</h3>
+
+      <p>The Transport Layer sits below the Application Layer and is responsible for <strong>end-to-end communication</strong> between the sending and receiving devices. Its main jobs are to break data into manageable chunks called <strong>segments</strong>, add <strong>port numbers</strong> to identify which application should receive the data, and ensure the data arrives correctly (or quickly, depending on the protocol used).</p>
+
+      <p>The Transport Layer uses two main protocols: <strong>TCP</strong> and <strong>UDP</strong>.</p>
+
+      <h4>TCP &mdash; Transmission Control Protocol</h4>
+      <p>TCP is a <strong>connection-oriented</strong> protocol. Before any data is sent, TCP establishes a connection between the sender and receiver using a process called the <strong>three-way handshake</strong> (SYN &rarr; SYN-ACK &rarr; ACK). This ensures both sides are ready to communicate.</p>
+      <ul>
+        <li><strong>Reliable:</strong> TCP guarantees that all data arrives at the destination. If a segment is lost or corrupted during transmission, TCP detects the error and <strong>retransmits</strong> the missing segment.</li>
+        <li><strong>Error checking:</strong> Each segment includes a checksum that the receiver uses to verify the data has not been corrupted. If it has, the segment is discarded and resent.</li>
+        <li><strong>Ordered delivery:</strong> TCP numbers each segment so the receiver can reassemble them in the correct order, even if they arrive out of sequence.</li>
+        <li><strong>Flow control:</strong> TCP adjusts the rate of data transmission so the sender does not overwhelm a slower receiver.</li>
+        <li><strong>Used for:</strong> Web browsing (HTTP/HTTPS), email (SMTP, IMAP), file transfer (FTP) &mdash; any application where <strong>accuracy is more important than speed</strong>.</li>
+      </ul>
+
+      <h4>UDP &mdash; User Datagram Protocol</h4>
+      <p>UDP is a <strong>connectionless</strong> protocol. It does not establish a connection before sending data &mdash; it simply sends the data and hopes it arrives. There is no handshake, no acknowledgement, and no retransmission.</p>
+      <ul>
+        <li><strong>Faster:</strong> Because UDP skips the connection setup, error checking, and retransmission, it has much less overhead and is significantly faster than TCP.</li>
+        <li><strong>No error correction:</strong> If a packet is lost or corrupted, UDP does not resend it. The data is simply gone.</li>
+        <li><strong>No guaranteed order:</strong> Packets may arrive in any order, and UDP does not reorder them.</li>
+        <li><strong>Used for:</strong> Live video/audio streaming, online gaming, voice calls (VoIP), DNS lookups &mdash; any application where <strong>speed is more important than perfection</strong>. If one video frame is lost during a live stream, it is better to skip it and keep playing than to pause and wait for a retransmission.</li>
+      </ul>
+
+      <div class="key-concept">
+        <strong>Key Concept: Transport Layer</strong>
+        The Transport Layer breaks data into segments, adds port numbers to direct data to the correct application, and manages delivery. TCP provides reliable, ordered, error-checked delivery (used for web, email, files). UDP provides fast, lightweight delivery with no error correction (used for streaming, gaming, voice calls).
+      </div>
+
+      <div class="warning">
+        <strong>Common Mistake:</strong> Students sometimes say &ldquo;UDP has no error checking at all.&rdquo; Technically, UDP does include a basic <strong>checksum</strong> to detect corrupted data, but it does <strong>not</strong> retransmit lost or corrupted packets. The key difference from TCP is that UDP does not guarantee delivery, does not retransmit, and does not ensure correct ordering. In an exam, focus on the fact that UDP sacrifices reliability for speed.
+      </div>
+
+      <!-- Layer 2: Internet -->
+      <h3>Layer 2: Internet Layer (Network Layer)</h3>
+
+      <p>The Internet Layer is responsible for <strong>addressing</strong> and <strong>routing</strong> data packets across networks. This is the layer that makes it possible for data to travel from your device, through multiple intermediate networks and routers, to reach a server on the other side of the world.</p>
+
+      <p>The Internet Layer is responsible for:</p>
+      <ul>
+        <li><strong>Adding IP addresses:</strong> Each packet is given a <strong>source IP address</strong> (where the packet came from) and a <strong>destination IP address</strong> (where it needs to go). These addresses uniquely identify devices on the network.</li>
+        <li><strong>Routing:</strong> Determining the best path for each packet to travel from source to destination. Packets may pass through many different routers and networks on their journey, and the Internet Layer decides the route at each hop.</li>
+        <li><strong>Packet forwarding:</strong> Passing packets from one network to the next until they reach their destination.</li>
+      </ul>
+
+      <h4>The IP Protocol</h4>
+      <p>The main protocol at this layer is <strong>IP</strong> (Internet Protocol). IP is responsible for addressing and routing. There are two versions in use today:</p>
+      <ul>
+        <li><strong>IPv4:</strong> Uses 32-bit addresses written as four numbers separated by dots (e.g., <code>192.168.1.1</code>). Supports about 4.3 billion unique addresses &mdash; which is no longer enough for all devices worldwide.</li>
+        <li><strong>IPv6:</strong> Uses 128-bit addresses written in hexadecimal (e.g., <code>2001:0db8:85a3::8a2e:0370:7334</code>). Supports a virtually unlimited number of addresses to accommodate the growing number of internet-connected devices.</li>
+      </ul>
+
+      <h4>Devices at the Internet Layer</h4>
+      <p><strong>Routers</strong> operate at the Internet Layer. A router examines the destination IP address of each packet and decides which path to forward it along. Routers connect different networks together and are the devices responsible for directing traffic across the internet.</p>
+
+      <div class="key-concept">
+        <strong>Key Concept: Internet Layer</strong>
+        The Internet Layer adds source and destination IP addresses to packets and routes them across networks. The IP protocol handles addressing. Routers operate at this layer, examining IP addresses and forwarding packets along the best route to their destination.
+      </div>
+
+      <!-- Layer 1: Network Access -->
+      <h3>Layer 1: Network Access Layer (Link Layer)</h3>
+
+      <p>The Network Access Layer is the <strong>bottom layer</strong> of the TCP/IP model. It is responsible for the <strong>physical transmission</strong> of data &mdash; actually getting the bits (0s and 1s) from one device to another across a physical medium such as a cable or wireless signal.</p>
+
+      <p>The Network Access Layer is responsible for:</p>
+      <ul>
+        <li><strong>Handling hardware:</strong> This layer deals with the physical components of the network &mdash; Network Interface Cards (NICs), Ethernet cables, fibre-optic cables, Wi-Fi radio signals, and other transmission media.</li>
+        <li><strong>Adding MAC addresses:</strong> Each frame is given a <strong>source MAC address</strong> and a <strong>destination MAC address</strong>. A MAC (Media Access Control) address is a unique hardware identifier burned into every network interface card by the manufacturer. It identifies devices on the <strong>local</strong> network.</li>
+        <li><strong>Converting data to signals:</strong> Data is converted into the appropriate format for the physical medium &mdash; electrical signals for copper cables, light pulses for fibre optics, or radio waves for Wi-Fi.</li>
+        <li><strong>Error detection at the hardware level:</strong> Checking for errors that occur during physical transmission (e.g., signal interference or cable faults).</li>
+      </ul>
+
+      <h4>Technologies and Standards</h4>
+      <ul>
+        <li><strong>Ethernet (IEEE 802.3):</strong> The standard for wired LANs. Defines how data is formatted into frames and transmitted over copper or fibre-optic cables.</li>
+        <li><strong>Wi-Fi (IEEE 802.11):</strong> The standard for wireless LANs. Defines how data is transmitted over radio waves.</li>
+        <li><strong>Network Interface Cards (NICs):</strong> Hardware components (built into computers, phones, and other devices) that provide the physical connection to the network. Every NIC has a unique MAC address.</li>
+      </ul>
+
+      <div class="key-concept">
+        <strong>Key Concept: Network Access Layer</strong>
+        The Network Access Layer handles the physical transmission of data. It deals with hardware (NICs, cables, Wi-Fi), adds MAC addresses to identify devices on the local network, and converts data into signals (electrical, light, or radio) for transmission. Ethernet and Wi-Fi are key standards at this layer.
+      </div>
+    </section>
+
+    <!-- ==================== UNDERSTAND ==================== -->
+    <section class="understand">
+      <span class="section-label">Understand</span>
+      <h2>Encapsulation and De-encapsulation</h2>
+
+      <p>One of the most important concepts in the TCP/IP model is <strong>encapsulation</strong> &mdash; the process by which data is wrapped with additional information (headers) as it passes down through each layer. At the receiving end, the reverse process, <strong>de-encapsulation</strong>, strips away each header as the data passes back up through the layers.</p>
+
+      <h3>How Data Travels Down the Layers (Encapsulation)</h3>
+
+      <p>When you send data (for example, requesting a web page), the data passes through each layer from top to bottom. At each layer, a <strong>header</strong> is added to the front of the data. This header contains the control information that layer needs to do its job. Think of it as putting a letter into a series of envelopes, each one adding a new label.</p>
+
+      <table>
+        <thead>
+          <tr><th>Step</th><th>Layer</th><th>What Happens</th><th>Data Unit Name</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>1</strong></td>
+            <td>Application Layer</td>
+            <td>The application (e.g., web browser) creates the data &mdash; such as an HTTP request for a web page. The application protocol formats this data.</td>
+            <td>Data</td>
+          </tr>
+          <tr>
+            <td><strong>2</strong></td>
+            <td>Transport Layer</td>
+            <td>The data is broken into <strong>segments</strong>. A header is added containing <strong>port numbers</strong> (to identify which application should receive the data), sequence numbers, and error-checking information. TCP or UDP is selected.</td>
+            <td>Segment</td>
+          </tr>
+          <tr>
+            <td><strong>3</strong></td>
+            <td>Internet Layer</td>
+            <td>Each segment is placed into a <strong>packet</strong>. A header is added containing the <strong>source IP address</strong> and <strong>destination IP address</strong>. This tells routers where to send the packet.</td>
+            <td>Packet</td>
+          </tr>
+          <tr>
+            <td><strong>4</strong></td>
+            <td>Network Access Layer</td>
+            <td>Each packet is placed into a <strong>frame</strong>. A header (and trailer) is added containing the <strong>source MAC address</strong> and <strong>destination MAC address</strong>. The frame is then converted into <strong>bits</strong> (electrical signals, light pulses, or radio waves) and transmitted across the physical medium.</td>
+            <td>Frame &rarr; Bits</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="key-concept">
+        <strong>Key Concept: Encapsulation</strong>
+        As data moves down through the TCP/IP layers, each layer adds its own header containing control information. Application &rarr; Data. Transport &rarr; adds port numbers (Segment). Internet &rarr; adds IP addresses (Packet). Network Access &rarr; adds MAC addresses (Frame), then transmits as bits. Each layer wraps the data from the layer above like putting a letter into a new envelope.
+      </div>
+
+      <h3>How Data Travels Up the Layers (De-encapsulation)</h3>
+
+      <p>At the receiving end, the process is reversed. The data arrives as bits at the Network Access Layer and passes <strong>upward</strong> through each layer. At each step, the relevant header is <strong>removed</strong> (stripped off) and the remaining data is passed up to the next layer. By the time the data reaches the Application Layer, all the networking headers have been removed and the original data (e.g., the web page content) is delivered to the user&rsquo;s application.</p>
+
+      <ul>
+        <li><strong>Network Access Layer:</strong> Receives bits, reconstructs the frame, reads and removes the MAC address header, passes the packet up.</li>
+        <li><strong>Internet Layer:</strong> Reads and removes the IP address header, checks the destination IP, passes the segment up.</li>
+        <li><strong>Transport Layer:</strong> Reads and removes the port number header, reassembles segments into the complete data, passes it up.</li>
+        <li><strong>Application Layer:</strong> Receives the original data and presents it to the user (e.g., displays the web page in the browser).</li>
+      </ul>
+
+      <div class="key-concept">
+        <strong>Exam Tip: Encapsulation Diagram</strong>
+        In your exam, you may be asked to describe or draw a diagram showing encapsulation. Remember the order: Data &rarr; Segment &rarr; Packet &rarr; Frame &rarr; Bits. Each step adds a header. A useful mnemonic: <strong>&ldquo;Data Sent Packet Fast, Bits!&rdquo;</strong> (Data, Segment, Packet, Frame, Bits). At the destination, the process reverses: Bits &rarr; Frame &rarr; Packet &rarr; Segment &rarr; Data.
+      </div>
+
+      <h3>TCP vs UDP &mdash; Detailed Comparison</h3>
+
+      <p>Understanding the difference between TCP and UDP is essential for your GCSE exam. This table summarises all the key differences:</p>
+
+      <table>
+        <thead>
+          <tr><th>Feature</th><th>TCP (Transmission Control Protocol)</th><th>UDP (User Datagram Protocol)</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Connection type</strong></td>
+            <td>Connection-oriented &mdash; establishes a connection before sending (three-way handshake)</td>
+            <td>Connectionless &mdash; sends data without establishing a connection first</td>
+          </tr>
+          <tr>
+            <td><strong>Reliability</strong></td>
+            <td>Reliable &mdash; guarantees all data is delivered</td>
+            <td>Unreliable &mdash; no guarantee that data will arrive</td>
+          </tr>
+          <tr>
+            <td><strong>Error checking</strong></td>
+            <td>Yes &mdash; detects errors and retransmits lost or corrupted segments</td>
+            <td>Basic checksum only &mdash; does not retransmit lost data</td>
+          </tr>
+          <tr>
+            <td><strong>Ordering</strong></td>
+            <td>Ordered &mdash; segments are numbered and reassembled in the correct order</td>
+            <td>Unordered &mdash; packets may arrive in any order</td>
+          </tr>
+          <tr>
+            <td><strong>Speed</strong></td>
+            <td>Slower &mdash; the overhead of error checking, acknowledgements, and retransmission adds delay</td>
+            <td>Faster &mdash; minimal overhead means lower latency</td>
+          </tr>
+          <tr>
+            <td><strong>Flow control</strong></td>
+            <td>Yes &mdash; adjusts transmission speed to avoid overwhelming the receiver</td>
+            <td>No &mdash; sends data at whatever rate it chooses</td>
+          </tr>
+          <tr>
+            <td><strong>Use cases</strong></td>
+            <td>Web browsing (HTTP), email (SMTP), file transfer (FTP), loading web pages</td>
+            <td>Live streaming, online gaming, VoIP (voice calls), DNS lookups, video conferencing</td>
+          </tr>
+          <tr>
+            <td><strong>Analogy</strong></td>
+            <td>Sending a recorded delivery letter &mdash; you get confirmation it was received</td>
+            <td>Shouting a message across a room &mdash; fast, but no guarantee it was heard</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="warning">
+        <strong>Common Mistake:</strong> Students sometimes write that UDP is &ldquo;bad&rdquo; or &ldquo;inferior&rdquo; to TCP. This is incorrect. TCP and UDP are designed for <strong>different purposes</strong>. For tasks requiring accuracy (loading a web page, downloading a file), TCP is better. For tasks requiring speed and real-time performance (live streaming, gaming), UDP is better. Neither protocol is universally superior &mdash; the right choice depends on the application.
+      </div>
+
+      <h3>Real-World Analogy: The Postal System</h3>
+
+      <p>A helpful way to understand the TCP/IP model is to compare it to <strong>sending a letter through a postal system</strong>. Imagine a large company where different departments handle each stage of delivering a letter:</p>
+
+      <ul>
+        <li><strong>Application Layer = The Writer:</strong> You write your letter. You decide what to say, format it neatly, and address it to the right person. This is like an application creating the data &mdash; the content is prepared in a form the recipient will understand.</li>
+        <li><strong>Transport Layer = The Office Manager:</strong> The office manager takes your letter and puts it in an internal envelope. They add a reference number (port number) so the recipient knows which department should handle it. If the letter is very long, they might split it into multiple pages, numbering each one (segmentation). They also arrange for a confirmation receipt (TCP) or just drop it in the outbox without tracking (UDP).</li>
+        <li><strong>Internet Layer = The Address Department:</strong> The address department puts the internal envelope into a larger postal envelope. They write the sender&rsquo;s address (source IP) and the recipient&rsquo;s address (destination IP) on the outside. They decide which postal route the letter should take to reach the destination city &mdash; just like a router choosing the best path.</li>
+        <li><strong>Network Access Layer = The Delivery Van:</strong> The delivery van picks up the physical envelope and transports it. The driver only cares about getting the envelope to the next sorting office or the final delivery point. They add a local delivery label (MAC address) for the immediate next stop. This is the physical, hands-on part of the process &mdash; the actual movement of the letter from place to place.</li>
+      </ul>
+
+      <p>At the receiving end, the process is reversed. The delivery van drops off the envelope. The address department checks the address and removes the outer envelope. The office manager checks the reference number and reassembles any multi-page letters. Finally, the letter is delivered to the correct person, who reads the original content.</p>
+
+      <div class="key-concept">
+        <strong>Exam Tip: Use Analogies Carefully</strong>
+        Analogies like the postal system are excellent for helping you understand and remember the TCP/IP model. However, in your exam answers, always use the <strong>correct technical terms</strong> (encapsulation, header, segment, packet, frame, IP address, MAC address, port number). You can mention an analogy briefly to show understanding, but your answer must demonstrate knowledge of the actual networking concepts.
+      </div>
+    </section>
+
+    <!-- ==================== INTERACTIVE EXERCISES ==================== -->
+    <section class="explore">
+      <span class="section-label">Interactive</span>
+      <h2>Test Your Knowledge</h2>
+
+      <p>Try these interactive exercises to check your understanding of the TCP/IP model. Read each question carefully and select the correct answer.</p>
+
+      <!-- Exercise 1: Layer Identifier -->
+      <div class="interactive-exercise" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 2rem; border-radius: 12px; color: white; margin: 1.5rem 0;">
+        <h4>Exercise 1: Layer Identifier</h4>
+        <p>Read the description below and identify which <strong>TCP/IP layer</strong> it refers to.</p>
+        <div id="layerQuizQuestion" style="background: rgba(255,255,255,0.15); padding: 1.2rem; border-radius: 8px; margin: 1rem 0; font-size: 1.1rem; line-height: 1.6;"></div>
+        <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; margin-top: 1rem;">
+          <button style="background: white; color: #667eea; border: none; padding: 0.5rem 1.5rem; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 1rem;" onclick="layerQuizCheck('Application')">Application</button>
+          <button style="background: white; color: #667eea; border: none; padding: 0.5rem 1.5rem; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 1rem;" onclick="layerQuizCheck('Transport')">Transport</button>
+          <button style="background: white; color: #667eea; border: none; padding: 0.5rem 1.5rem; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 1rem;" onclick="layerQuizCheck('Internet')">Internet</button>
+          <button style="background: white; color: #667eea; border: none; padding: 0.5rem 1.5rem; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 1rem;" onclick="layerQuizCheck('Network Access')">Network Access</button>
+          <button style="background: rgba(255,255,255,0.2); color: white; border: 2px solid rgba(255,255,255,0.4); padding: 0.5rem 1.5rem; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 1rem;" onclick="layerQuizNext()">Skip / Next</button>
+        </div>
+        <div id="layerQuizFeedback" style="margin-top: 1rem; font-weight: 600; min-height: 1.5rem;"></div>
+        <div style="margin-top: 0.5rem; font-size: 0.95rem; opacity: 0.9;">Score: <span id="layerQuizCorrect">0</span> / <span id="layerQuizTotal">0</span></div>
+      </div>
+
+      <script>
+      (function() {
+        var questions = [
+          { text: "HTTP and HTTPS protocols operate at this layer to transfer web pages.", answer: "Application", explanation: "HTTP/HTTPS are Application Layer protocols used by web browsers to request and receive web pages." },
+          { text: "This layer adds source and destination IP addresses to packets.", answer: "Internet", explanation: "The Internet Layer adds IP addresses so that routers can direct packets to the correct destination." },
+          { text: "TCP and UDP protocols operate at this layer.", answer: "Transport", explanation: "TCP and UDP are Transport Layer protocols responsible for end-to-end delivery of data segments." },
+          { text: "MAC addresses are added to frames at this layer.", answer: "Network Access", explanation: "The Network Access Layer adds MAC addresses to identify devices on the local network." },
+          { text: "A router examines packet headers and decides the best path at this layer.", answer: "Internet", explanation: "Routers operate at the Internet Layer, reading destination IP addresses to determine routing paths." },
+          { text: "Data is broken into segments and port numbers are added at this layer.", answer: "Transport", explanation: "The Transport Layer breaks data into segments and adds port numbers to direct data to the correct application." },
+          { text: "Ethernet and Wi-Fi standards define how data is transmitted at this layer.", answer: "Network Access", explanation: "Ethernet (wired) and Wi-Fi (wireless) are Network Access Layer technologies for physical data transmission." },
+          { text: "DNS translates domain names into IP addresses at this layer.", answer: "Application", explanation: "DNS is an Application Layer protocol that converts human-readable domain names into IP addresses." },
+          { text: "Network Interface Cards (NICs) and physical cables operate at this layer.", answer: "Network Access", explanation: "NICs and cables are hardware components of the Network Access Layer, handling physical signal transmission." },
+          { text: "This layer ensures reliable delivery by retransmitting lost segments (when using TCP).", answer: "Transport", explanation: "TCP at the Transport Layer provides reliable delivery by detecting and retransmitting lost or corrupted segments." },
+          { text: "FTP is used for transferring files between computers at this layer.", answer: "Application", explanation: "FTP (File Transfer Protocol) is an Application Layer protocol for uploading and downloading files." },
+          { text: "Data is converted into electrical signals, light pulses, or radio waves at this layer.", answer: "Network Access", explanation: "The Network Access Layer converts digital data into physical signals for transmission across cables or wireless." },
+          { text: "SMTP is used to send emails at this layer.", answer: "Application", explanation: "SMTP (Simple Mail Transfer Protocol) is an Application Layer protocol for sending email messages." },
+          { text: "This layer determines the best route for a packet to travel across multiple networks.", answer: "Internet", explanation: "The Internet Layer handles routing, deciding the optimal path for packets to travel between networks." },
+          { text: "This layer uses a three-way handshake (SYN, SYN-ACK, ACK) to establish connections.", answer: "Transport", explanation: "TCP at the Transport Layer uses the three-way handshake to set up a reliable connection before data transfer." },
+          { text: "IPv4 and IPv6 addressing schemes are used at this layer.", answer: "Internet", explanation: "IP (Internet Protocol) addressing -- both IPv4 and IPv6 -- is a function of the Internet Layer." },
+          { text: "A web browser displaying a web page is an example of software operating at this layer.", answer: "Application", explanation: "Web browsers are Application Layer software that use HTTP/HTTPS to request and display web content." },
+          { text: "This layer is responsible for encapsulating packets into frames before physical transmission.", answer: "Network Access", explanation: "The Network Access Layer wraps packets into frames with MAC addresses before converting to physical signals." }
+        ];
+
+        var currentIndex = -1;
+        var correct = 0;
+        var total = 0;
+        var used = [];
+        var answered = false;
+
+        function pick() {
+          if (used.length >= questions.length) { used = []; }
+          var idx;
+          do { idx = Math.floor(Math.random() * questions.length); } while (used.indexOf(idx) !== -1);
+          used.push(idx);
+          currentIndex = idx;
+          answered = false;
+          document.getElementById('layerQuizQuestion').textContent = questions[idx].text;
+          document.getElementById('layerQuizFeedback').textContent = '';
+        }
+
+        window.layerQuizCheck = function(answer) {
+          if (currentIndex < 0 || answered) return;
+          answered = true;
+          total++;
+          var q = questions[currentIndex];
+          var fb = document.getElementById('layerQuizFeedback');
+          if (answer === q.answer) {
+            correct++;
+            fb.innerHTML = '<span style="color:#a0ffb0;">Correct!</span> ' + q.explanation;
+          } else {
+            fb.innerHTML = '<span style="color:#ffb0b0;">Not quite.</span> The answer is <strong>' + q.answer + ' Layer</strong>. ' + q.explanation;
+          }
+          document.getElementById('layerQuizCorrect').textContent = correct;
+          document.getElementById('layerQuizTotal').textContent = total;
+          setTimeout(pick, 3000);
+        };
+
+        window.layerQuizNext = function() {
+          pick();
+        };
+
+        pick();
+      })();
+      </script>
+
+      <!-- Exercise 2: TCP vs UDP -->
+      <div class="interactive-exercise" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 2rem; border-radius: 12px; color: white; margin: 1.5rem 0;">
+        <h4>Exercise 2: TCP vs UDP &mdash; Which Protocol?</h4>
+        <p>Read the scenario below and decide whether <strong>TCP</strong> or <strong>UDP</strong> would be the better protocol to use.</p>
+        <div id="tcpUdpQuestion" style="background: rgba(255,255,255,0.15); padding: 1.2rem; border-radius: 8px; margin: 1rem 0; font-size: 1.1rem; line-height: 1.6;"></div>
+        <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; margin-top: 1rem;">
+          <button style="background: white; color: #667eea; border: none; padding: 0.5rem 1.5rem; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 1rem;" onclick="tcpUdpCheck('TCP')">TCP</button>
+          <button style="background: white; color: #667eea; border: none; padding: 0.5rem 1.5rem; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 1rem;" onclick="tcpUdpCheck('UDP')">UDP</button>
+          <button style="background: rgba(255,255,255,0.2); color: white; border: 2px solid rgba(255,255,255,0.4); padding: 0.5rem 1.5rem; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 1rem;" onclick="tcpUdpNext()">Skip / Next</button>
+        </div>
+        <div id="tcpUdpFeedback" style="margin-top: 1rem; font-weight: 600; min-height: 1.5rem;"></div>
+        <div style="margin-top: 0.5rem; font-size: 0.95rem; opacity: 0.9;">Score: <span id="tcpUdpCorrect">0</span> / <span id="tcpUdpTotal">0</span></div>
+      </div>
+
+      <script>
+      (function() {
+        var scenarios = [
+          { text: "You are downloading a large software update from a website. Every byte of the file must arrive correctly or the software will not work.", answer: "TCP", explanation: "File downloads require complete, accurate delivery. TCP guarantees all data arrives correctly and in order." },
+          { text: "You are watching a live football match being streamed online. A slight drop in quality is acceptable, but buffering and pausing is not.", answer: "UDP", explanation: "Live streaming prioritises speed over perfection. UDP's low latency keeps the stream flowing; a lost frame is skipped rather than causing a pause." },
+          { text: "You are sending an important email to your teacher with a homework attachment.", answer: "TCP", explanation: "Emails must be delivered completely and accurately. TCP (used by SMTP) ensures the message and attachment arrive without errors." },
+          { text: "You are playing an online multiplayer game where reaction time is critical. A tiny amount of lost data is tolerable.", answer: "UDP", explanation: "Online gaming needs minimal latency for real-time responsiveness. UDP is faster; occasional lost packets are less noticeable than lag." },
+          { text: "You are loading a web page that contains text, images, and a login form.", answer: "TCP", explanation: "Web pages must load completely and correctly, especially forms. HTTP/HTTPS uses TCP to ensure all content arrives intact." },
+          { text: "You are making a voice call over the internet (VoIP). Slight audio glitches are better than long pauses.", answer: "UDP", explanation: "Voice calls need real-time delivery. UDP's speed ensures natural conversation flow; a brief audio glitch is preferable to silence while waiting for retransmission." },
+          { text: "You are using FTP to upload your website files to a web server. Every file must be transferred completely.", answer: "TCP", explanation: "FTP uses TCP because file uploads must be complete and error-free. A corrupt or incomplete file would break the website." },
+          { text: "A DNS server is looking up the IP address for a domain name. Speed is important and the request is very small.", answer: "UDP", explanation: "DNS lookups are small, quick queries where speed matters. UDP is used because the request can simply be resent if lost." },
+          { text: "You are video conferencing with classmates for a group project. Real-time interaction is essential.", answer: "UDP", explanation: "Video conferencing needs real-time, low-latency delivery. UDP keeps the video and audio flowing smoothly; minor quality drops are acceptable." },
+          { text: "A bank is processing an online payment transaction. Every piece of data must be transmitted accurately and securely.", answer: "TCP", explanation: "Financial transactions demand absolute reliability and accuracy. TCP ensures all data arrives correctly, with no missing or corrupted information." },
+          { text: "You are downloading a PDF revision guide from your school's website.", answer: "TCP", explanation: "Document downloads must be complete and error-free. TCP guarantees the entire PDF is received correctly so it can be opened and read." },
+          { text: "A smart home security camera is streaming live video to your phone.", answer: "UDP", explanation: "Live video streaming from a security camera prioritises real-time viewing. UDP provides the low latency needed; a dropped frame is less important than a live feed." },
+          { text: "You are transferring your saved game data to a cloud backup service.", answer: "TCP", explanation: "Backup data must be stored completely and accurately. TCP ensures every byte of your save file is uploaded correctly." },
+          { text: "A weather station sends temperature readings every second to a monitoring server. Missing one reading occasionally is acceptable.", answer: "UDP", explanation: "Frequent sensor readings where occasional loss is tolerable suit UDP. The next reading arrives a second later anyway." }
+        ];
+
+        var currentIndex = -1;
+        var correct = 0;
+        var total = 0;
+        var used = [];
+        var answered = false;
+
+        function pick() {
+          if (used.length >= scenarios.length) { used = []; }
+          var idx;
+          do { idx = Math.floor(Math.random() * scenarios.length); } while (used.indexOf(idx) !== -1);
+          used.push(idx);
+          currentIndex = idx;
+          answered = false;
+          document.getElementById('tcpUdpQuestion').textContent = scenarios[idx].text;
+          document.getElementById('tcpUdpFeedback').textContent = '';
+        }
+
+        window.tcpUdpCheck = function(answer) {
+          if (currentIndex < 0 || answered) return;
+          answered = true;
+          total++;
+          var s = scenarios[currentIndex];
+          var fb = document.getElementById('tcpUdpFeedback');
+          if (answer === s.answer) {
+            correct++;
+            fb.innerHTML = '<span style="color:#a0ffb0;">Correct!</span> ' + s.explanation;
+          } else {
+            fb.innerHTML = '<span style="color:#ffb0b0;">Not quite.</span> The answer is <strong>' + s.answer + '</strong>. ' + s.explanation;
+          }
+          document.getElementById('tcpUdpCorrect').textContent = correct;
+          document.getElementById('tcpUdpTotal').textContent = total;
+          setTimeout(pick, 3000);
+        };
+
+        window.tcpUdpNext = function() {
+          pick();
+        };
+
+        pick();
+      })();
+      </script>
+
+      <!-- Exercise 3: Encapsulation Order -->
+      <div class="interactive-exercise" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 2rem; border-radius: 12px; color: white; margin: 1.5rem 0;">
+        <h4>Exercise 3: Encapsulation Challenge</h4>
+        <p>During encapsulation, what information is added at each layer? Match the description to the correct layer.</p>
+        <div id="encapQuestion" style="background: rgba(255,255,255,0.15); padding: 1.2rem; border-radius: 8px; margin: 1rem 0; font-size: 1.1rem; line-height: 1.6;"></div>
+        <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; margin-top: 1rem;">
+          <button style="background: white; color: #667eea; border: none; padding: 0.5rem 1.5rem; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 1rem;" onclick="encapCheck('Application')">Application</button>
+          <button style="background: white; color: #667eea; border: none; padding: 0.5rem 1.5rem; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 1rem;" onclick="encapCheck('Transport')">Transport</button>
+          <button style="background: white; color: #667eea; border: none; padding: 0.5rem 1.5rem; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 1rem;" onclick="encapCheck('Internet')">Internet</button>
+          <button style="background: white; color: #667eea; border: none; padding: 0.5rem 1.5rem; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 1rem;" onclick="encapCheck('Network Access')">Network Access</button>
+          <button style="background: rgba(255,255,255,0.2); color: white; border: 2px solid rgba(255,255,255,0.4); padding: 0.5rem 1.5rem; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 1rem;" onclick="encapNext()">Skip / Next</button>
+        </div>
+        <div id="encapFeedback" style="margin-top: 1rem; font-weight: 600; min-height: 1.5rem;"></div>
+        <div style="margin-top: 0.5rem; font-size: 0.95rem; opacity: 0.9;">Score: <span id="encapCorrect">0</span> / <span id="encapTotal">0</span></div>
+      </div>
+
+      <script>
+      (function() {
+        var questions = [
+          { text: "Port numbers are added to segments at this layer to identify the destination application.", answer: "Transport", explanation: "The Transport Layer adds port numbers so the receiving device knows which application should handle the data." },
+          { text: "Source and destination IP addresses are added to packets at this layer.", answer: "Internet", explanation: "The Internet Layer adds IP addresses so routers can direct packets to the correct destination network." },
+          { text: "Source and destination MAC addresses are added to frames at this layer.", answer: "Network Access", explanation: "The Network Access Layer adds MAC addresses to identify devices on the local network for physical delivery." },
+          { text: "The original data (e.g., an HTTP request) is created and formatted at this layer.", answer: "Application", explanation: "The Application Layer generates the original data using protocols like HTTP, SMTP, or FTP." },
+          { text: "Data is converted into electrical signals, light pulses, or radio waves for physical transmission at this layer.", answer: "Network Access", explanation: "The Network Access Layer handles the physical conversion and transmission of data as signals." },
+          { text: "Sequence numbers are added to segments so they can be reassembled in the correct order.", answer: "Transport", explanation: "TCP at the Transport Layer adds sequence numbers to ensure data is reassembled in the correct order at the destination." },
+          { text: "Routers use the header information added at this layer to forward packets towards the destination.", answer: "Internet", explanation: "Routers read the IP addresses in the Internet Layer header to make forwarding decisions." },
+          { text: "This layer is where encapsulated data units are called 'frames' before being sent as bits.", answer: "Network Access", explanation: "The Network Access Layer creates frames from packets, adding MAC addresses, before transmitting as physical bits." },
+          { text: "Error detection and retransmission of lost segments occurs at this layer (when using TCP).", answer: "Transport", explanation: "TCP at the Transport Layer detects errors via checksums and retransmits any lost or corrupted segments." },
+          { text: "DNS requests to resolve a domain name to an IP address originate at this layer.", answer: "Application", explanation: "DNS is an Application Layer protocol. The request to translate a domain name begins at this layer." }
+        ];
+
+        var currentIndex = -1;
+        var correct = 0;
+        var total = 0;
+        var used = [];
+        var answered = false;
+
+        function pick() {
+          if (used.length >= questions.length) { used = []; }
+          var idx;
+          do { idx = Math.floor(Math.random() * questions.length); } while (used.indexOf(idx) !== -1);
+          used.push(idx);
+          currentIndex = idx;
+          answered = false;
+          document.getElementById('encapQuestion').textContent = questions[idx].text;
+          document.getElementById('encapFeedback').textContent = '';
+        }
+
+        window.encapCheck = function(answer) {
+          if (currentIndex < 0 || answered) return;
+          answered = true;
+          total++;
+          var q = questions[currentIndex];
+          var fb = document.getElementById('encapFeedback');
+          if (answer === q.answer) {
+            correct++;
+            fb.innerHTML = '<span style="color:#a0ffb0;">Correct!</span> ' + q.explanation;
+          } else {
+            fb.innerHTML = '<span style="color:#ffb0b0;">Not quite.</span> The answer is <strong>' + q.answer + ' Layer</strong>. ' + q.explanation;
+          }
+          document.getElementById('encapCorrect').textContent = correct;
+          document.getElementById('encapTotal').textContent = total;
+          setTimeout(pick, 3000);
+        };
+
+        window.encapNext = function() {
+          pick();
+        };
+
+        pick();
+      })();
+      </script>
+
+    </section>
+
+    <!-- ==================== PRACTICE ==================== -->
+    <section class="practice">
+      <span class="section-label">Practice</span>
+      <h2>Practice Questions</h2>
+      <p>Click on each question to reveal the answer. Try to answer in your head or on paper first before checking!</p>
+
+      <div class="hint">
+        <div class="hint-title" onclick="this.nextElementSibling.classList.toggle('visible')">Q1: Name the four layers of the TCP/IP model in order from top to bottom.</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> From top to bottom: (1) <strong>Application Layer</strong>, (2) <strong>Transport Layer</strong>, (3) <strong>Internet Layer</strong>, (4) <strong>Network Access Layer</strong>. The Application Layer is closest to the user, while the Network Access Layer handles physical transmission.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title" onclick="this.nextElementSibling.classList.toggle('visible')">Q2: Explain the role of the Transport Layer in the TCP/IP model.</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> The Transport Layer is responsible for <strong>end-to-end communication</strong> between devices. Its main functions are: (1) <strong>breaking data into segments</strong> for transmission, (2) <strong>adding port numbers</strong> so the receiving device knows which application the data is for, and (3) <strong>managing delivery</strong> &mdash; either reliably using TCP (with error checking, acknowledgements, and retransmission of lost data) or quickly using UDP (without guaranteed delivery). It ensures data from the Application Layer is prepared for transmission across the network.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title" onclick="this.nextElementSibling.classList.toggle('visible')">Q3: State two differences between TCP and UDP.</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> (1) <strong>Reliability:</strong> TCP is <strong>reliable</strong> &mdash; it guarantees that all data arrives at the destination and retransmits lost segments. UDP is <strong>unreliable</strong> &mdash; it does not guarantee delivery and does not retransmit lost data. (2) <strong>Connection:</strong> TCP is <strong>connection-oriented</strong> &mdash; it establishes a connection using a three-way handshake before sending data. UDP is <strong>connectionless</strong> &mdash; it sends data without first establishing a connection. Other valid differences include: TCP is slower due to overhead, UDP is faster; TCP guarantees correct ordering, UDP does not.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title" onclick="this.nextElementSibling.classList.toggle('visible')">Q4: Explain why UDP is preferred over TCP for live video streaming.</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> UDP is preferred for live video streaming because <strong>speed and low latency are more important than perfect accuracy</strong>. During a live stream, if a video frame or audio packet is lost, it is better to <strong>skip it and continue</strong> playing rather than pause the stream to wait for the lost data to be retransmitted (as TCP would do). The viewer would rather see a brief quality drop than experience buffering and freezing. TCP&rsquo;s overhead (connection setup, acknowledgements, retransmission) adds delay that is unacceptable for real-time content. UDP&rsquo;s minimal overhead delivers data with the lowest possible latency.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title" onclick="this.nextElementSibling.classList.toggle('visible')">Q5: Describe the process of encapsulation as data travels through the TCP/IP model.</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> Encapsulation is the process of <strong>adding headers at each layer</strong> as data passes from the Application Layer down to the Network Access Layer. (1) The <strong>Application Layer</strong> creates the original data (e.g., an HTTP request). (2) The <strong>Transport Layer</strong> breaks the data into <strong>segments</strong> and adds a header containing <strong>port numbers</strong> and sequence numbers. (3) The <strong>Internet Layer</strong> places each segment into a <strong>packet</strong> and adds a header containing the <strong>source and destination IP addresses</strong>. (4) The <strong>Network Access Layer</strong> places each packet into a <strong>frame</strong> and adds a header containing the <strong>source and destination MAC addresses</strong>. The frame is then converted into <strong>bits</strong> (electrical signals, light pulses, or radio waves) and transmitted physically. Each layer wraps the data from the layer above with its own header, like putting a letter into progressively larger envelopes.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title" onclick="this.nextElementSibling.classList.toggle('visible')">Q6: What is the purpose of IP addresses and at which layer of the TCP/IP model are they added?</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> IP addresses are added at the <strong>Internet Layer</strong> (Layer 2 of TCP/IP). Their purpose is to <strong>uniquely identify devices on a network</strong> so that data can be routed to the correct destination. Each packet is given a <strong>source IP address</strong> (identifying the sender) and a <strong>destination IP address</strong> (identifying the recipient). <strong>Routers</strong> read these IP addresses to determine the best path to forward each packet through the network. There are two versions: IPv4 (32-bit, e.g., 192.168.1.1) and IPv6 (128-bit, much larger address space for the growing number of devices).</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title" onclick="this.nextElementSibling.classList.toggle('visible')">Q7: Explain two benefits of using a layered model for network communication.</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> (1) <strong>Modularity:</strong> Each layer is independent and can be <strong>changed or upgraded without affecting the other layers</strong>. For example, you can switch from a wired Ethernet connection (Network Access Layer) to Wi-Fi without changing anything in the Application, Transport, or Internet layers. This makes the system flexible and easier to develop. (2) <strong>Easier troubleshooting:</strong> When a network problem occurs, engineers can <strong>isolate the fault to a specific layer</strong> and focus their investigation there. For example, if web pages load but are very slow, the problem likely lies at the Network Access or Internet layer rather than the Application layer. This systematic approach is far more efficient than searching through the entire system.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title" onclick="this.nextElementSibling.classList.toggle('visible')">Q8: A student loads a web page. Describe the journey of the request through all four TCP/IP layers at the student's computer, naming the protocol used at each layer. [6-mark style question]</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> (1) <strong>Application Layer (HTTP/HTTPS):</strong> The student&rsquo;s web browser creates an HTTP (or HTTPS) request for the web page. This request contains the URL and any other necessary information. The application protocol formats the request. (2) <strong>Transport Layer (TCP):</strong> The HTTP request is passed to the Transport Layer, which uses <strong>TCP</strong> (because web pages require reliable, accurate delivery). TCP breaks the data into segments, adds <strong>port numbers</strong> (port 80 for HTTP, port 443 for HTTPS), and sets up a connection with the web server via a three-way handshake. (3) <strong>Internet Layer (IP):</strong> Each segment is placed into a packet. The <strong>IP protocol</strong> adds the student&rsquo;s computer&rsquo;s <strong>source IP address</strong> and the web server&rsquo;s <strong>destination IP address</strong> to the packet header. (4) <strong>Network Access Layer (Ethernet / Wi-Fi):</strong> Each packet is placed into a frame. The <strong>source MAC address</strong> (the student&rsquo;s NIC) and <strong>destination MAC address</strong> (the local router&rsquo;s NIC) are added. The frame is then converted into bits and transmitted as electrical signals (Ethernet), light pulses (fibre), or radio waves (Wi-Fi) across the physical network. The data travels through routers and networks to reach the web server, where the process is reversed (de-encapsulation) to deliver the HTTP request to the server&rsquo;s web application.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== KEY VOCABULARY ==================== -->
+    <section class="understand">
+      <span class="section-label">Reference</span>
+      <h2>Key Vocabulary</h2>
+      <p>This table summarises the essential terms for this topic. Use it for revision and to check your understanding.</p>
+
+      <table>
+        <thead>
+          <tr><th>Term</th><th>Definition</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>TCP/IP Model</strong></td><td>A four-layer model that defines how data is transmitted across the internet, from application to physical transmission</td></tr>
+          <tr><td><strong>Layered Model</strong></td><td>A way of organising network functions into separate levels, each with a specific role, providing modularity, abstraction, and easier troubleshooting</td></tr>
+          <tr><td><strong>Application Layer</strong></td><td>The top layer where user applications and protocols (HTTP, FTP, SMTP, DNS) operate and data is formatted for the user</td></tr>
+          <tr><td><strong>Transport Layer</strong></td><td>The layer responsible for end-to-end delivery, breaking data into segments, adding port numbers, and using TCP or UDP</td></tr>
+          <tr><td><strong>Internet Layer</strong></td><td>The layer that adds IP addresses and routes packets across networks; routers operate here</td></tr>
+          <tr><td><strong>Network Access Layer</strong></td><td>The bottom layer handling physical transmission; adds MAC addresses and converts data to signals via hardware (NICs, cables, Wi-Fi)</td></tr>
+          <tr><td><strong>Encapsulation</strong></td><td>The process of adding headers at each layer as data passes down the TCP/IP model before transmission</td></tr>
+          <tr><td><strong>De-encapsulation</strong></td><td>The reverse process at the receiving end: headers are removed at each layer as data passes up the model</td></tr>
+          <tr><td><strong>TCP</strong></td><td>Transmission Control Protocol &mdash; a reliable, connection-oriented Transport Layer protocol with error checking and retransmission</td></tr>
+          <tr><td><strong>UDP</strong></td><td>User Datagram Protocol &mdash; a fast, connectionless Transport Layer protocol with no guaranteed delivery or retransmission</td></tr>
+          <tr><td><strong>HTTP / HTTPS</strong></td><td>HyperText Transfer Protocol (Secure) &mdash; Application Layer protocol used by web browsers to request and receive web pages</td></tr>
+          <tr><td><strong>FTP</strong></td><td>File Transfer Protocol &mdash; Application Layer protocol for transferring files between computers</td></tr>
+          <tr><td><strong>SMTP</strong></td><td>Simple Mail Transfer Protocol &mdash; Application Layer protocol for sending emails</td></tr>
+          <tr><td><strong>DNS</strong></td><td>Domain Name System &mdash; Application Layer protocol that translates domain names into IP addresses</td></tr>
+          <tr><td><strong>IP Address</strong></td><td>A unique numerical address (IPv4 or IPv6) assigned to a device on a network, used for routing packets at the Internet Layer</td></tr>
+          <tr><td><strong>MAC Address</strong></td><td>Media Access Control address &mdash; a unique hardware identifier assigned to every NIC, used at the Network Access Layer for local delivery</td></tr>
+          <tr><td><strong>Port Number</strong></td><td>A number added by the Transport Layer to identify which application on the receiving device should handle the data (e.g., port 80 for HTTP)</td></tr>
+          <tr><td><strong>Segment</strong></td><td>The data unit at the Transport Layer &mdash; data broken into chunks with port numbers and sequence information added</td></tr>
+          <tr><td><strong>Packet</strong></td><td>The data unit at the Internet Layer &mdash; a segment wrapped with source and destination IP addresses</td></tr>
+          <tr><td><strong>Frame</strong></td><td>The data unit at the Network Access Layer &mdash; a packet wrapped with source and destination MAC addresses</td></tr>
+          <tr><td><strong>Router</strong></td><td>A device that operates at the Internet Layer, reading IP addresses to forward packets along the best route between networks</td></tr>
+          <tr><td><strong>NIC</strong></td><td>Network Interface Card &mdash; hardware that provides the physical connection to a network; every NIC has a unique MAC address</td></tr>
+          <tr><td><strong>Three-way Handshake</strong></td><td>The process TCP uses to establish a connection: SYN &rarr; SYN-ACK &rarr; ACK, ensuring both sender and receiver are ready</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- ==================== EXAM TIPS ==================== -->
+    <section class="understand">
+      <span class="section-label">Exam Tips</span>
+      <h2>How to Succeed in the Exam</h2>
+
+      <div class="key-concept">
+        <strong>Exam Tip: Know the Layers in Order</strong>
+        You must be able to name all four TCP/IP layers in the correct order (Application, Transport, Internet, Network Access) and describe the role of each. A common question is: &ldquo;Describe the function of each layer of the TCP/IP model.&rdquo; Practise writing a one-sentence summary of each layer until you can do it from memory.
+      </div>
+
+      <div class="key-concept">
+        <strong>Exam Tip: Protocols at Each Layer</strong>
+        Make sure you can name at least two protocols at the Application Layer (HTTP, FTP, SMTP, DNS), two protocols at the Transport Layer (TCP, UDP), the main protocol at the Internet Layer (IP), and the standards at the Network Access Layer (Ethernet, Wi-Fi). Being able to place protocols in their correct layer is a frequently tested skill.
+      </div>
+
+      <div class="key-concept">
+        <strong>Exam Tip: TCP vs UDP</strong>
+        Questions comparing TCP and UDP appear very frequently. Memorise at least three differences (connection type, reliability, speed) and be able to give a scenario where each is appropriate. Always explain <em>why</em> a protocol suits a particular scenario &mdash; do not just name it. For example: &ldquo;UDP is used for live streaming because speed is more important than accuracy; if a frame is lost, the stream continues rather than pausing for retransmission.&rdquo;
+      </div>
+
+      <div class="key-concept">
+        <strong>Exam Tip: Encapsulation</strong>
+        You may be asked to describe or draw the encapsulation process. Remember the data unit names at each layer: Data &rarr; Segment &rarr; Packet &rarr; Frame &rarr; Bits. At each layer, state what header information is added: port numbers (Transport), IP addresses (Internet), MAC addresses (Network Access). Show that you understand the concept of wrapping data with additional information at each layer.
+      </div>
+
+      <div class="key-concept">
+        <strong>Exam Tip: Benefits of a Layered Model</strong>
+        If asked why we use a layered model, give at least two benefits and explain each one. The key benefits are: <strong>modularity</strong> (one layer can be changed without affecting others), <strong>easier troubleshooting</strong> (faults can be isolated to a specific layer), <strong>abstraction</strong> (each layer hides its complexity), and <strong>hardware independence</strong> (upper layers work the same regardless of physical connection type). Always give a brief example to illustrate your point.
+      </div>
+    </section>
+
+    <!-- ==================== REFLECT ==================== -->
+    <section class="reflect">
+      <span class="section-label">Reflect</span>
+      <h2>The TCP/IP Model in Your Daily Life</h2>
+
+      <p>Now that you understand the four layers of the TCP/IP model, take a moment to think about how this model is working behind the scenes every time you use the internet:</p>
+
+      <ul>
+        <li><strong>When you search on Google:</strong> Your browser creates an HTTPS request (Application Layer). TCP breaks it into segments and adds port number 443 (Transport Layer). IP adds your computer&rsquo;s IP address and Google&rsquo;s IP address (Internet Layer). Your NIC puts it into a frame with MAC addresses and sends it as Wi-Fi signals to your router (Network Access Layer). The process reverses when Google&rsquo;s response arrives.</li>
+        <li><strong>When you stream music on Spotify:</strong> The initial connection and authentication uses TCP for reliability. But the actual audio streaming likely uses UDP for speed &mdash; a dropped audio sample is barely noticeable, but buffering ruins the experience.</li>
+        <li><strong>When you play an online game:</strong> UDP carries your real-time inputs (character movements, actions) because low latency is critical. Your game client sends dozens of small UDP packets per second. If one is lost, the game interpolates &mdash; it is better to keep playing smoothly than to freeze while waiting for retransmission.</li>
+        <li><strong>When you send a message:</strong> Your message is encapsulated layer by layer at your device, travels through routers (Internet Layer) across potentially multiple networks, and is de-encapsulated layer by layer at the recipient&rsquo;s device. All four layers work together seamlessly.</li>
+      </ul>
+
+      <p>The beauty of the TCP/IP model is that <strong>you never need to think about it</strong> as a user. The layered design means each layer handles its own job invisibly. You just click, type, and stream &mdash; while four layers of networking protocols work silently beneath the surface to make it all possible.</p>
+
+      <p><strong>Challenge yourself:</strong> The next time you use a website, send an email, or stream a video, try to mentally trace the journey of your data through all four TCP/IP layers. Think about which protocols are being used at each layer, what headers are being added, and how the data is physically travelling from your device to its destination. This mental exercise will help you truly understand and remember the model for your exam.</p>
+
+      <div class="key-concept">
+        <strong>Final Thought</strong>
+        The TCP/IP model is not just an exam topic &mdash; it is the real engineering framework that powers the internet you use every day. Understanding these four layers gives you insight into one of the most important technological systems ever created. Every web page, every email, every video call, and every online game depends on these layers working together perfectly, billions of times per second, across the entire world.
+      </div>
+    </section>
+
+    <!-- ==================== NAVIGATION ==================== -->
+    <nav class="chapter-nav">
+      <a href="network-protocols.html">&larr; Previous: Network Protocols</a>
+      <a href="../index.html">Course Home</a>
+      <a href="packet-switching.html">Next: Packet Switching &rarr;</a>
+    </nav>
+
+  </main>
+
+  <footer class="site-footer">
+    <p>Python Fundamentals &mdash; A KS4 Learning Platform</p>
+    <p>The TCP/IP Model &mdash; GCSE Computer Science Theory</p>
+  </footer>
+
+</body>
+</html>

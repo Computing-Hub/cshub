@@ -1,0 +1,974 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Network Security - Python Fundamentals</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/style.css" />
+</head>
+<body>
+
+  <header class="site-header">
+    <p><a href="../index.html">&larr; Back to Course</a></p>
+    <h1>Network Security</h1>
+    <p class="subtitle">Threats, attacks, and how to defend networks from malicious activity</p>
+  </header>
+
+  <main>
+
+    <nav class="chapter-nav">
+      <a href="network-hardware.html">&larr; Previous: Network Hardware</a>
+      <a href="../index.html">Course Home</a>
+      <a href="issues-and-impact.html">Next: Issues &amp; Impact &rarr;</a>
+    </nav>
+
+    <!-- ==================== THE IDEA ==================== -->
+    <section class="idea">
+      <span class="section-label">The Idea</span>
+      <h2>Why Does Network Security Matter?</h2>
+
+      <p>Every time you log into a school system, make an online purchase, or send a private message, data travels across networks. That data &mdash; your passwords, your bank details, your personal photographs, your medical records &mdash; is valuable. To you, it is private. To a cybercriminal, it is a target. <strong>Network security</strong> is the practice of protecting computer networks and the data they carry from unauthorised access, misuse, theft, and damage.</p>
+
+      <p>Without network security, anyone could intercept your emails, steal your identity, drain your bank account, or hold your files for ransom. Businesses could lose trade secrets worth millions of pounds. Hospitals could lose access to patient records in a life-or-death situation. Governments could have classified information leaked to hostile nations.</p>
+
+      <p><strong>In this topic you will learn:</strong></p>
+      <ul>
+        <li>Why network security is essential for individuals, businesses, and society</li>
+        <li>The major types of cyber attack: malware, social engineering, DDoS, SQL injection, brute force, and man-in-the-middle</li>
+        <li>How each attack works and the damage it can cause</li>
+        <li>The prevention methods used to defend networks, including firewalls, encryption, authentication, and more</li>
+        <li>How to match specific threats to the most appropriate prevention methods</li>
+      </ul>
+
+      <div class="key-concept">
+        <strong>Key Concept: Network Security</strong>
+        Network security refers to the policies, practices, hardware, and software used to protect a computer network and its data from unauthorised access, attacks, and damage. It aims to maintain <strong>confidentiality</strong> (only authorised people can access data), <strong>integrity</strong> (data is not tampered with), and <strong>availability</strong> (systems remain accessible to legitimate users).
+      </div>
+
+      <h3>Why Is Security So Important?</h3>
+      <p>There are several critical reasons why organisations and individuals must take network security seriously:</p>
+
+      <ul>
+        <li><strong>Personal data protection:</strong> Networks store and transmit personal information such as names, addresses, dates of birth, passwords, and photographs. If this data is stolen, it can be used for identity theft &mdash; criminals impersonating you to open bank accounts, take out loans, or commit fraud in your name.</li>
+        <li><strong>Financial data protection:</strong> Online banking, credit card transactions, and payment systems all rely on secure networks. A breach can result in direct financial loss &mdash; money stolen from accounts, fraudulent purchases, or businesses losing revenue.</li>
+        <li><strong>Business secrets and intellectual property:</strong> Companies store trade secrets, product designs, customer lists, and strategic plans on their networks. If a competitor or criminal gains access, the business could lose its competitive advantage or suffer reputational damage.</li>
+        <li><strong>Legal requirements:</strong> Laws such as the <strong>General Data Protection Regulation (GDPR)</strong> and the <strong>Data Protection Act 2018</strong> require organisations to protect personal data. Failing to do so can result in enormous fines &mdash; up to 20 million euros or 4% of global annual turnover under GDPR &mdash; as well as legal action from affected individuals.</li>
+        <li><strong>National security:</strong> Government and military networks contain classified information. Breaches can compromise national defence, intelligence operations, and critical infrastructure such as power grids and water systems.</li>
+        <li><strong>Public trust:</strong> When a company suffers a data breach, customers lose trust. This can lead to loss of business, falling share prices, and long-term reputational harm that takes years to recover from.</li>
+      </ul>
+
+      <div class="key-concept">
+        <strong>Exam Tip</strong>
+        When asked &ldquo;Why is network security important?&rdquo; give <strong>specific reasons</strong> with examples. Do not just say &ldquo;to keep data safe.&rdquo; Instead, mention protection of personal data (identity theft), financial data (stolen money), business secrets (competitive advantage), legal obligations (GDPR fines), and maintaining public trust. The more specific your answer, the more marks you will earn.
+      </div>
+    </section>
+
+    <!-- ==================== EXPLORE: TYPES OF ATTACK ==================== -->
+    <section class="explore">
+      <span class="section-label">Explore</span>
+      <h2>Types of Attack</h2>
+
+      <p>Cyber attacks come in many forms. Some target the software on your computer, some exploit human behaviour, and some overwhelm entire servers. Understanding each type of attack is essential for knowing how to defend against it. There are six main categories you need to know for GCSE Computer Science.</p>
+
+      <!-- MALWARE -->
+      <h3>1. Malware</h3>
+      <p><strong>Malware</strong> (short for &ldquo;malicious software&rdquo;) is any software that is intentionally designed to cause damage, steal data, or gain unauthorised access to a system. Malware is an umbrella term that covers several specific types:</p>
+
+      <h4>Viruses</h4>
+      <p>A <strong>virus</strong> is a type of malware that <strong>attaches itself to a legitimate file or program</strong>. It cannot run on its own &mdash; it needs a &ldquo;host&rdquo; file. When the infected file is opened or executed, the virus activates and can <strong>replicate itself</strong> by attaching copies to other files on the same computer or files shared across a network. Viruses can corrupt or delete data, slow down systems, and spread to other computers via email attachments, USB drives, or file downloads.</p>
+
+      <h4>Worms</h4>
+      <p>A <strong>worm</strong> is similar to a virus but with one crucial difference: it does <strong>not need a host file</strong>. A worm is a standalone program that can <strong>self-replicate and spread across networks automatically</strong>, without any human interaction. It exploits vulnerabilities in operating systems or software to move from computer to computer. Worms can consume bandwidth, overload networks, and deliver harmful payloads. Because they spread without needing someone to open a file, worms can infect thousands of machines very rapidly.</p>
+
+      <h4>Trojans</h4>
+      <p>A <strong>Trojan</strong> (named after the Trojan Horse from Greek mythology) is malware that is <strong>disguised as legitimate, useful software</strong>. The user willingly downloads and installs it, thinking it is a game, a utility, or a helpful tool. Once installed, the Trojan performs its hidden malicious purpose &mdash; this might include opening a &ldquo;backdoor&rdquo; for hackers to access the system, stealing data, or installing additional malware. Unlike viruses and worms, Trojans <strong>do not replicate themselves</strong> &mdash; they rely on tricking the user into installing them.</p>
+
+      <h4>Ransomware</h4>
+      <p><strong>Ransomware</strong> is one of the most devastating types of malware. Once it infects a computer, it <strong>encrypts the user&rsquo;s files</strong> (documents, photos, databases &mdash; everything), making them completely inaccessible. The attacker then <strong>demands a ransom payment</strong> (usually in cryptocurrency like Bitcoin, to remain anonymous) in exchange for the decryption key. If the victim does not pay, they may lose their data permanently. Even if they do pay, there is no guarantee the attacker will provide the key.</p>
+
+      <h4>Spyware</h4>
+      <p><strong>Spyware</strong> is malware that secretly <strong>monitors the user&rsquo;s activity</strong> and <strong>steals data</strong> without their knowledge. It can record keystrokes (a &ldquo;keylogger&rdquo;), capture screenshots, track browsing history, and harvest login credentials, credit card numbers, and personal information. Spyware often runs silently in the background, making it difficult for the user to know they are being watched.</p>
+
+      <div class="warning">
+        <strong>Common Mistake:</strong> Students often confuse viruses and worms. Remember the key difference: a <strong>virus</strong> needs a host file (it attaches to a legitimate program and activates when that program runs), while a <strong>worm</strong> is a standalone program that spreads on its own across networks without needing a host. Also remember that <strong>Trojans</strong> do not replicate &mdash; they rely on social engineering to trick users into installing them.
+      </div>
+
+      <!-- SOCIAL ENGINEERING -->
+      <h3>2. Social Engineering</h3>
+      <p><strong>Social engineering</strong> attacks exploit <strong>human behaviour</strong> rather than technical vulnerabilities. Instead of hacking into a system with code, the attacker manipulates people into giving away confidential information or performing actions that compromise security. Social engineering is extremely effective because humans are often the weakest link in any security system.</p>
+
+      <h4>Phishing</h4>
+      <p><strong>Phishing</strong> is the most common form of social engineering. The attacker sends <strong>fake emails or creates fake websites</strong> that closely mimic legitimate organisations (banks, social media platforms, online retailers, HMRC). The messages typically create a sense of urgency: &ldquo;Your account has been compromised &mdash; click here to verify your identity.&rdquo; When the victim clicks the link and enters their login credentials or personal information, that data goes directly to the attacker.</p>
+
+      <h4>Pretexting</h4>
+      <p><strong>Pretexting</strong> involves the attacker <strong>creating a false scenario</strong> (a &ldquo;pretext&rdquo;) to trick the victim into revealing information or granting access. For example, an attacker might phone an employee pretending to be from the IT department: &ldquo;We are performing a security audit and need your password to verify your account.&rdquo; The attacker builds trust through a convincing story and exploits the victim&rsquo;s willingness to be helpful.</p>
+
+      <h4>Baiting</h4>
+      <p><strong>Baiting</strong> exploits human curiosity. The attacker <strong>leaves an infected USB drive</strong> (or other storage device) in a public place &mdash; a car park, a reception area, a coffee shop. The drive might be labelled &ldquo;Confidential&rdquo; or &ldquo;Salary Information&rdquo; to make it irresistible. When a curious person picks it up and plugs it into their computer, malware is automatically installed.</p>
+
+      <h4>Shoulder Surfing</h4>
+      <p><strong>Shoulder surfing</strong> is one of the simplest attacks: the attacker <strong>physically watches someone</strong> as they type a password, enter a PIN at a cash machine, or log into a system. This can be done in person (standing behind someone at an ATM) or remotely using cameras or binoculars. No technical skill is required &mdash; just the ability to look over someone&rsquo;s shoulder.</p>
+
+      <div class="key-concept">
+        <strong>Key Concept: Social Engineering</strong>
+        Social engineering attacks target <strong>people, not technology</strong>. They rely on manipulation, deception, and exploiting trust. The best technical security in the world is useless if an employee gives away their password to a convincing phone caller. This is why staff training is such an important part of network security.
+      </div>
+
+      <!-- DDoS -->
+      <h3>3. DDoS (Distributed Denial of Service)</h3>
+      <p>A <strong>DDoS attack</strong> does not aim to steal data. Instead, its goal is to <strong>make a service unavailable</strong> by overwhelming a server with an enormous volume of traffic. The attacker uses a <strong>botnet</strong> &mdash; a network of thousands or even millions of compromised computers (often infected with malware without their owners&rsquo; knowledge) &mdash; to flood the target server with requests simultaneously.</p>
+
+      <p>The target server becomes so overwhelmed trying to process the flood of fake requests that it <strong>cannot respond to legitimate users</strong>. Websites go offline, online services become unusable, and businesses lose revenue for every minute of downtime. Major companies including Amazon, GitHub, and the BBC have all been targets of DDoS attacks.</p>
+
+      <p>DDoS attacks are particularly difficult to defend against because the traffic comes from <strong>multiple distributed sources</strong> (the botnet), making it hard to distinguish malicious requests from legitimate ones and impossible to block a single attacker&rsquo;s IP address.</p>
+
+      <!-- SQL INJECTION -->
+      <h3>4. SQL Injection</h3>
+      <p><strong>SQL injection</strong> is an attack that targets websites and web applications that use databases. The attacker <strong>enters specially crafted SQL code into web forms</strong> (login boxes, search fields, registration forms) instead of normal input. If the website is poorly coded and does not properly validate or sanitise user input, the SQL code is passed directly to the database server and executed.</p>
+
+      <p>This can allow the attacker to:</p>
+      <ul>
+        <li><strong>Bypass login authentication</strong> (gaining access without a valid password)</li>
+        <li><strong>Read sensitive data</strong> from the database (usernames, passwords, credit card numbers)</li>
+        <li><strong>Modify or delete data</strong> in the database</li>
+        <li><strong>Execute administrative operations</strong> on the database server</li>
+      </ul>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">SQL Injection Example</span>
+        </div>
+        <pre><code>
+  Normal login:
+    Username: john_smith
+    Password: mypassword123
+
+  SQL injection attack:
+    Username: ' OR '1'='1' --
+    Password: anything
+
+  The injected SQL tricks the database into thinking the
+  login is valid, because '1'='1' is always true. The --
+  comments out the rest of the original query.
+        </code></pre>
+      </div>
+
+      <p>SQL injection exploits <strong>poorly written websites</strong> that do not validate user input. Well-coded websites use techniques like <strong>parameterised queries</strong> (also called prepared statements) to ensure user input is treated as data, not as executable SQL code.</p>
+
+      <!-- BRUTE FORCE -->
+      <h3>5. Brute Force Attack</h3>
+      <p>A <strong>brute force attack</strong> is a method of cracking passwords by <strong>systematically trying every possible combination</strong> of characters until the correct password is found. The attacker uses automated software that can test thousands or millions of combinations per second.</p>
+
+      <p>For example, if a password is a 4-digit PIN (0000 to 9999), there are only 10,000 possible combinations &mdash; a computer can try all of them in seconds. However, a long, complex password with uppercase letters, lowercase letters, numbers, and symbols has so many possible combinations that a brute force attack could take years or even centuries to succeed.</p>
+
+      <p>Variations of brute force include <strong>dictionary attacks</strong>, where the software tries common words and known passwords first (e.g., &ldquo;password123&rdquo;, &ldquo;qwerty&rdquo;, &ldquo;letmein&rdquo;), and <strong>credential stuffing</strong>, where stolen username-password pairs from one data breach are tried on other websites (exploiting people who reuse passwords).</p>
+
+      <!-- MAN IN THE MIDDLE -->
+      <h3>6. Man-in-the-Middle (MITM) Attack</h3>
+      <p>In a <strong>man-in-the-middle attack</strong>, the attacker secretly <strong>intercepts communication between two parties</strong> who believe they are communicating directly with each other. The attacker positions themselves between the sender and receiver, eavesdropping on the conversation and potentially altering the messages being exchanged.</p>
+
+      <p>For example, if you connect to an unsecured public Wi-Fi network in a coffee shop, an attacker on the same network could intercept the data passing between your laptop and the Wi-Fi router. They could capture your login credentials, read your emails, or even modify the web pages you see (for example, redirecting you to a fake banking website). The victim has no idea that their communication is being intercepted because everything appears to work normally.</p>
+
+      <div class="key-concept">
+        <strong>Exam Tip</strong>
+        In the exam, you may be given a <strong>scenario</strong> and asked to identify the type of attack. Look for key clues: fake emails = phishing; self-spreading program = worm; disguised software = Trojan; encrypted files with a ransom demand = ransomware; server overwhelmed by traffic = DDoS; code in a web form = SQL injection; trying every password = brute force; intercepted communication = man-in-the-middle. Practise matching scenarios to attack types.
+      </div>
+    </section>
+
+    <!-- ==================== UNDERSTAND: PREVENTION METHODS ==================== -->
+    <section class="understand">
+      <span class="section-label">Understand</span>
+      <h2>Prevention Methods</h2>
+
+      <p>Now that you understand the threats, you need to know how to defend against them. No single method can protect against all attacks &mdash; organisations use a <strong>layered approach</strong> (sometimes called &ldquo;defence in depth&rdquo;) that combines multiple prevention methods to create comprehensive security.</p>
+
+      <!-- FIREWALLS -->
+      <h3>1. Firewalls</h3>
+      <p>A <strong>firewall</strong> is a security system that <strong>monitors and controls incoming and outgoing network traffic</strong> based on a set of predefined security rules. It acts as a barrier between a trusted internal network and untrusted external networks (such as the internet).</p>
+      <ul>
+        <li><strong>Packet filtering:</strong> The firewall examines each packet of data and checks it against a set of rules. It can allow or block packets based on source IP address, destination IP address, port number, and protocol. For example, a rule might block all incoming traffic on port 23 (Telnet) because it is an insecure protocol.</li>
+        <li><strong>Hardware firewalls:</strong> Dedicated physical devices that sit between the internal network and the internet. They protect the entire network and are commonly used by businesses.</li>
+        <li><strong>Software firewalls:</strong> Programs installed on individual computers. Windows and macOS both include built-in software firewalls. They protect the specific device they are installed on.</li>
+      </ul>
+      <p>Firewalls are a first line of defence. They can block many common attacks, but they cannot protect against threats that arrive through legitimate channels (such as a phishing email that passes through the email port).</p>
+
+      <!-- ENCRYPTION -->
+      <h3>2. Encryption</h3>
+      <p><strong>Encryption</strong> is the process of <strong>scrambling data into an unreadable format</strong> (ciphertext) so that only someone with the correct decryption key can convert it back to the original readable form (plaintext). Even if an attacker intercepts encrypted data, they cannot understand it without the key.</p>
+      <ul>
+        <li><strong>Symmetric encryption:</strong> Uses the <strong>same key</strong> for both encryption and decryption. It is fast and efficient but requires both parties to securely share the key beforehand. If the key is intercepted, the encryption is broken. Example: AES (Advanced Encryption Standard).</li>
+        <li><strong>Asymmetric encryption:</strong> Uses a <strong>pair of keys</strong> &mdash; a public key (shared openly) for encryption and a private key (kept secret) for decryption. Anyone can encrypt a message using your public key, but only you can decrypt it with your private key. This solves the key distribution problem but is slower than symmetric encryption. Example: RSA.</li>
+      </ul>
+      <p>Encryption is used everywhere: HTTPS websites (the padlock in your browser), email encryption, Wi-Fi passwords (WPA2/WPA3), VPNs, and encrypted messaging apps like Signal and WhatsApp.</p>
+
+      <!-- AUTHENTICATION -->
+      <h3>3. Authentication</h3>
+      <p><strong>Authentication</strong> is the process of verifying the identity of a user before granting them access to a system. There are several methods:</p>
+      <ul>
+        <li><strong>Passwords:</strong> The most common form of authentication. Strong password rules should require a <strong>minimum length</strong> (at least 8 characters, ideally 12+), a <strong>mix of character types</strong> (uppercase, lowercase, numbers, symbols), <strong>no dictionary words</strong> or easily guessable information (birthdays, pet names), and <strong>regular changes</strong>.</li>
+        <li><strong>Two-factor authentication (2FA):</strong> Requires <strong>two different forms of identification</strong> &mdash; typically something you <strong>know</strong> (password) and something you <strong>have</strong> (a code sent to your phone, or a hardware security key). Even if an attacker steals your password, they cannot access your account without the second factor.</li>
+        <li><strong>Biometrics:</strong> Uses <strong>unique physical characteristics</strong> to verify identity &mdash; fingerprint scanning, facial recognition, iris scanning, or voice recognition. Biometrics are very difficult to forge, but they cannot be changed if compromised (you cannot get a new fingerprint).</li>
+      </ul>
+
+      <!-- ANTI-MALWARE -->
+      <h3>4. Anti-Malware Software</h3>
+      <p><strong>Anti-malware software</strong> (often called antivirus software) protects computers by:</p>
+      <ul>
+        <li><strong>Scanning for known malware signatures:</strong> The software maintains a database of known malware &ldquo;signatures&rdquo; (unique patterns of code). It scans files and programs, comparing them against this database to identify threats.</li>
+        <li><strong>Real-time protection:</strong> Continuously monitors the system for suspicious activity, blocking malware before it can execute.</li>
+        <li><strong>Regular updates:</strong> New malware is created constantly, so the signature database must be <strong>updated regularly</strong> to detect the latest threats. Outdated anti-malware software is significantly less effective.</li>
+      </ul>
+
+      <!-- ACCESS CONTROL -->
+      <h3>5. Access Control</h3>
+      <p><strong>Access control</strong> ensures that users can only access the data and resources they are authorised to use:</p>
+      <ul>
+        <li><strong>User permissions:</strong> Different users are granted different levels of access. An administrator might have full access, while a regular employee can only access files in their department.</li>
+        <li><strong>Principle of least privilege:</strong> Users should be given the <strong>minimum level of access</strong> necessary to perform their job. This limits the damage if their account is compromised.</li>
+        <li><strong>User accounts:</strong> Every user should have their own individual account (not shared accounts). This ensures accountability &mdash; actions can be traced back to a specific person.</li>
+      </ul>
+
+      <!-- PHYSICAL SECURITY -->
+      <h3>6. Physical Security</h3>
+      <p>Network security is not just about software. <strong>Physical security</strong> protects the hardware and infrastructure:</p>
+      <ul>
+        <li><strong>Locked server rooms:</strong> Servers and network equipment should be kept in secure, locked rooms with restricted access (key cards, PIN codes).</li>
+        <li><strong>CCTV:</strong> Security cameras deter unauthorised access and provide evidence if a breach occurs.</li>
+        <li><strong>Security guards:</strong> Human security personnel can verify identities and prevent unauthorised people from entering sensitive areas.</li>
+      </ul>
+
+      <!-- BACKUPS -->
+      <h3>7. Regular Backups</h3>
+      <p><strong>Regular backups</strong> protect against data loss from ransomware, hardware failure, natural disasters, or accidental deletion. If files are encrypted by ransomware, a recent backup allows the organisation to <strong>restore data without paying the ransom</strong>. Backups should be stored in a <strong>separate location</strong> (offsite or in the cloud) so they are not affected by the same incident. Backups should be performed frequently and tested regularly to ensure they work.</p>
+
+      <!-- PENETRATION TESTING -->
+      <h3>8. Penetration Testing</h3>
+      <p><strong>Penetration testing</strong> (pen testing) involves hiring <strong>ethical hackers</strong> (also called &ldquo;white hat&rdquo; hackers) to deliberately attempt to break into an organisation&rsquo;s network. The goal is to <strong>identify vulnerabilities before real attackers find them</strong>. The ethical hackers use the same tools and techniques as malicious hackers, but they have permission and report their findings so the organisation can fix the weaknesses. Penetration testing is a proactive measure &mdash; it finds problems before they are exploited.</p>
+
+      <!-- NETWORK POLICIES -->
+      <h3>9. Network Policies</h3>
+      <p>Technical measures alone are not enough. Organisations need <strong>policies</strong> that define rules and expectations for network use:</p>
+      <ul>
+        <li><strong>Acceptable use policies:</strong> Define what employees can and cannot do on the network (e.g., no personal email on work devices, no downloading unauthorised software).</li>
+        <li><strong>Password policies:</strong> Set rules for password creation (minimum length, complexity requirements, how often passwords must be changed).</li>
+        <li><strong>Training staff:</strong> Regular security awareness training teaches employees to recognise phishing emails, avoid social engineering attacks, and follow security procedures. Humans are often the weakest link, so training is one of the most cost-effective security measures.</li>
+      </ul>
+
+      <div class="warning">
+        <strong>Important:</strong> No single prevention method is sufficient on its own. Organisations must use a <strong>layered approach</strong> that combines multiple methods. A firewall alone will not stop a phishing attack. Encryption alone will not prevent someone from shoulder surfing your password. Anti-malware alone will not stop a brute force attack. The strongest security comes from combining technical measures (firewalls, encryption, anti-malware) with human measures (training, policies) and physical measures (locked rooms, CCTV).
+      </div>
+    </section>
+
+    <!-- ==================== UNDERSTAND: THREAT-PREVENTION MAPPING ==================== -->
+    <section class="understand">
+      <span class="section-label">Understand</span>
+      <h2>Prevention-to-Threat Mapping</h2>
+
+      <p>The table below shows which prevention methods are most effective against each type of threat. Note that multiple prevention methods are usually needed for each threat &mdash; this is the principle of defence in depth.</p>
+
+      <table>
+        <thead>
+          <tr><th>Threat</th><th>Primary Prevention Methods</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Viruses</strong></td>
+            <td>Anti-malware software, regular updates, firewalls, staff training (do not open suspicious attachments), regular backups</td>
+          </tr>
+          <tr>
+            <td><strong>Worms</strong></td>
+            <td>Anti-malware software, firewalls (block suspicious network traffic), keeping software updated (patch vulnerabilities), network monitoring</td>
+          </tr>
+          <tr>
+            <td><strong>Trojans</strong></td>
+            <td>Anti-malware software, staff training (do not install untrusted software), access control (restrict software installation), download policies</td>
+          </tr>
+          <tr>
+            <td><strong>Ransomware</strong></td>
+            <td>Regular backups (most critical), anti-malware software, staff training (recognise phishing), email filtering, keeping software updated</td>
+          </tr>
+          <tr>
+            <td><strong>Spyware</strong></td>
+            <td>Anti-malware software, firewalls, access control, regular system scans, staff training</td>
+          </tr>
+          <tr>
+            <td><strong>Phishing</strong></td>
+            <td>Staff training (most critical), email filtering, two-factor authentication (limits damage if credentials stolen), checking URLs carefully</td>
+          </tr>
+          <tr>
+            <td><strong>Shoulder surfing</strong></td>
+            <td>Physical security (privacy screens, awareness of surroundings), biometric authentication, two-factor authentication</td>
+          </tr>
+          <tr>
+            <td><strong>Baiting</strong></td>
+            <td>Staff training, network policies (no unknown USB devices), disabling autorun on USB ports, physical security</td>
+          </tr>
+          <tr>
+            <td><strong>DDoS</strong></td>
+            <td>Firewalls, traffic monitoring and filtering, using content delivery networks (CDNs), rate limiting, having excess server capacity</td>
+          </tr>
+          <tr>
+            <td><strong>SQL injection</strong></td>
+            <td>Input validation and sanitisation, parameterised queries, penetration testing, keeping web software updated, web application firewalls</td>
+          </tr>
+          <tr>
+            <td><strong>Brute force</strong></td>
+            <td>Strong password policies (long, complex passwords), account lockout after failed attempts, two-factor authentication, CAPTCHA</td>
+          </tr>
+          <tr>
+            <td><strong>Man-in-the-middle</strong></td>
+            <td>Encryption (HTTPS, VPN), avoiding unsecured public Wi-Fi, certificate verification, two-factor authentication</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="key-concept">
+        <strong>Exam Tip</strong>
+        A common exam question gives you a threat and asks you to recommend <strong>two or three</strong> appropriate prevention methods. Always explain <strong>how</strong> each prevention method helps. For example: &ldquo;To prevent ransomware, the organisation should make <strong>regular backups</strong> stored offsite so data can be restored without paying the ransom, use <strong>anti-malware software</strong> to detect and block ransomware before it executes, and provide <strong>staff training</strong> so employees can recognise the phishing emails that often deliver ransomware.&rdquo;
+      </div>
+    </section>
+
+    <!-- ==================== INTERACTIVE EXERCISES ==================== -->
+    <section class="explore">
+      <span class="section-label">Interactive</span>
+      <h2>Test Your Knowledge</h2>
+
+      <p>Try these interactive exercises to check your understanding of network security. Read each scenario carefully and think before you answer.</p>
+
+      <!-- Exercise 1: Threat Identifier -->
+      <div class="interactive-exercise" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 2rem; border-radius: 12px; color: white; margin: 1.5rem 0;">
+        <h4>Exercise 1: Threat Identifier</h4>
+        <p>Read the attack scenario below and identify what type of attack is being described.</p>
+        <div id="threatIdScenario" style="background: rgba(255,255,255,0.15); padding: 1.2rem; border-radius: 8px; margin: 1rem 0; font-size: 1.05rem; line-height: 1.6;"></div>
+        <div id="threatIdOptions" style="display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1rem;"></div>
+        <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; margin-top: 1rem;">
+          <button style="background: rgba(255,255,255,0.2); color: white; border: 2px solid rgba(255,255,255,0.4); padding: 0.5rem 1.5rem; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 1rem;" onclick="threatIdNext()">Skip / Next Scenario</button>
+        </div>
+        <div id="threatIdFeedback" style="margin-top: 1rem; font-weight: 600; min-height: 1.5rem;"></div>
+        <div style="margin-top: 0.5rem; font-size: 0.95rem; opacity: 0.9;">Score: <span id="threatIdCorrect">0</span> / <span id="threatIdTotal">0</span></div>
+      </div>
+
+      <script>
+      (function() {
+        var scenarios = [
+          {
+            text: "Sarah receives an email that appears to be from her bank, asking her to click a link and verify her account details urgently. The email looks professional but the sender address is slightly different from the real bank's address.",
+            answer: "Phishing",
+            explanation: "This is a phishing attack. The attacker has created a fake email mimicking a legitimate bank to trick Sarah into revealing her login credentials. Key clues: fake email from a seemingly legitimate organisation, urgency, and a link to enter personal details."
+          },
+          {
+            text: "An employee downloads what appears to be a free PDF converter tool from an unofficial website. After installation, the software works as expected, but unknown to the employee, it has also installed a hidden backdoor that allows a remote attacker to access the company network.",
+            answer: "Trojan",
+            explanation: "This is a Trojan. The malware was disguised as legitimate software (a PDF converter). The user willingly installed it, not knowing it contained a hidden malicious payload (a backdoor). Trojans do not replicate themselves -- they rely on deception."
+          },
+          {
+            text: "A company's website suddenly becomes extremely slow and then completely unresponsive. Network monitoring shows that the server is receiving millions of requests per second from thousands of different IP addresses around the world.",
+            answer: "DDoS",
+            explanation: "This is a Distributed Denial of Service (DDoS) attack. The server is being overwhelmed with traffic from multiple sources (a botnet). The goal is not to steal data but to make the service unavailable. Key clues: millions of requests, thousands of different IP addresses, server overwhelmed."
+          },
+          {
+            text: "A program has infected one computer on a school network. Without anyone opening files or clicking links, it has automatically spread to 50 other computers on the network within an hour by exploiting a known vulnerability in the operating system.",
+            answer: "Worm",
+            explanation: "This is a worm. It spread automatically across the network without needing a host file or user interaction. It exploited a software vulnerability to self-replicate. Key clues: automatic spread, no user action required, exploits vulnerability, spreads across network."
+          },
+          {
+            text: "A hospital turns on their computers one morning to find that all patient records, appointment schedules, and medical images have been locked. A message on screen demands payment of 5 Bitcoin within 48 hours or the files will be permanently deleted.",
+            answer: "Ransomware",
+            explanation: "This is ransomware. The malware has encrypted the hospital's files and is demanding payment for the decryption key. Key clues: files are locked/encrypted, a ransom demand, payment in cryptocurrency, threat of permanent data loss."
+          },
+          {
+            text: "A hacker enters the text  ' OR '1'='1' --  into the username field of a website's login page. The website's database interprets this as valid SQL code and grants the hacker access to all user accounts without needing a password.",
+            answer: "SQL injection",
+            explanation: "This is an SQL injection attack. The attacker entered SQL code into a web form that was passed directly to the database. The poorly coded website did not validate user input. Key clues: SQL code entered in a form field, database manipulation, bypassing authentication."
+          },
+          {
+            text: "An attacker's software is systematically trying every possible 6-character combination of letters and numbers to crack the password for an administrator account. It has been running for three hours and has already attempted over 2 billion combinations.",
+            answer: "Brute force",
+            explanation: "This is a brute force attack. The attacker is using automated software to try every possible password combination until the correct one is found. Key clues: trying every combination, automated, systematic, large number of attempts."
+          },
+          {
+            text: "A user connects to a free Wi-Fi network at an airport. Unknown to them, an attacker on the same network is intercepting all data between the user's laptop and the Wi-Fi router, capturing their banking login credentials as they check their account.",
+            answer: "Man-in-the-middle",
+            explanation: "This is a man-in-the-middle (MITM) attack. The attacker is positioned between the user and the network, intercepting their communication. Key clues: unsecured Wi-Fi, intercepting data between two parties, the user is unaware."
+          },
+          {
+            text: "Someone in a coffee shop watches a businessman type his laptop password by looking over his shoulder from the next table. They memorise the password and later use it to access his company email remotely.",
+            answer: "Shoulder surfing",
+            explanation: "This is shoulder surfing. The attacker physically observed the victim entering their password. No technology was involved in the attack itself. Key clues: physically watching, observing password entry, public place."
+          },
+          {
+            text: "A USB drive labelled 'Q3 Salary Review - Confidential' is left on a desk in a company reception area. An employee finds it, plugs it into their work computer out of curiosity, and malware is automatically installed.",
+            answer: "Baiting",
+            explanation: "This is baiting. The attacker left an infected USB drive in a location where it would be found, with a tempting label to exploit human curiosity. Key clues: USB drive left in public area, enticing label, malware installed when plugged in."
+          },
+          {
+            text: "After opening an email attachment that appeared to be an invoice, a user notices their computer has become very slow. Investigation reveals that a program is recording every keystroke the user makes and secretly sending the data to an external server.",
+            answer: "Spyware",
+            explanation: "This is spyware (specifically a keylogger). The malware is secretly monitoring user activity and stealing data by recording keystrokes. Key clues: monitoring activity without knowledge, recording keystrokes, sending data to external server."
+          },
+          {
+            text: "A user receives a spreadsheet by email from a colleague. When they open it, the file appears normal, but a hidden program within it activates and begins copying itself into other documents on the computer and on the shared network drive.",
+            answer: "Virus",
+            explanation: "This is a virus. The malware was attached to a legitimate file (the spreadsheet) and activated when the file was opened. It then replicated by attaching itself to other files. Key clues: attached to a host file, activated when file opened, replicates to other files."
+          },
+          {
+            text: "An attacker phones a company's help desk, pretending to be the CEO who is travelling abroad and has been locked out of their email. They urgently request a password reset, and the help desk employee complies without proper verification.",
+            answer: "Pretexting",
+            explanation: "This is pretexting. The attacker created a false scenario (pretending to be the CEO) to manipulate the help desk employee into resetting the password. Key clues: false identity, fabricated story, exploiting authority and urgency, human manipulation."
+          }
+        ];
+
+        var attackTypes = ["Phishing", "Trojan", "DDoS", "Worm", "Ransomware", "SQL injection", "Brute force", "Man-in-the-middle", "Shoulder surfing", "Baiting", "Spyware", "Virus", "Pretexting"];
+        var currentIndex = -1;
+        var correct = 0;
+        var totalAnswered = 0;
+        var used = [];
+        var answered = false;
+
+        function pickScenario() {
+          if (used.length >= scenarios.length) { used = []; }
+          var idx;
+          do { idx = Math.floor(Math.random() * scenarios.length); } while (used.indexOf(idx) !== -1);
+          used.push(idx);
+          currentIndex = idx;
+          answered = false;
+          renderScenario();
+        }
+
+        function renderScenario() {
+          var s = scenarios[currentIndex];
+          document.getElementById('threatIdScenario').innerHTML = '<strong>Scenario:</strong> ' + s.text;
+          var optionsDiv = document.getElementById('threatIdOptions');
+          var html = '';
+          var shuffled = attackTypes.slice().sort(function() { return Math.random() - 0.5; });
+          for (var i = 0; i < shuffled.length; i++) {
+            html += '<button style="background: white; color: #667eea; border: none; padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 0.9rem;" onclick="threatIdCheck(\'' + shuffled[i].replace(/'/g, "\\'") + '\')">' + shuffled[i] + '</button>';
+          }
+          optionsDiv.innerHTML = html;
+          document.getElementById('threatIdFeedback').textContent = '';
+        }
+
+        window.threatIdCheck = function(answer) {
+          if (answered) return;
+          answered = true;
+          totalAnswered++;
+          var s = scenarios[currentIndex];
+          var fb = document.getElementById('threatIdFeedback');
+          if (answer === s.answer) {
+            correct++;
+            fb.innerHTML = '<span style="color:#a0ffb0;">Correct!</span> ' + s.explanation;
+          } else {
+            fb.innerHTML = '<span style="color:#ffb0b0;">Not quite.</span> The correct answer is <strong>' + s.answer + '</strong>. ' + s.explanation;
+          }
+          document.getElementById('threatIdCorrect').textContent = correct;
+          document.getElementById('threatIdTotal').textContent = totalAnswered;
+
+          var btns = document.getElementById('threatIdOptions').querySelectorAll('button');
+          for (var i = 0; i < btns.length; i++) {
+            if (btns[i].textContent === s.answer) {
+              btns[i].style.background = '#a0ffb0';
+              btns[i].style.color = '#1a1a2e';
+            } else if (btns[i].textContent === answer && answer !== s.answer) {
+              btns[i].style.background = '#ffb0b0';
+              btns[i].style.color = '#1a1a2e';
+            }
+            btns[i].style.cursor = 'default';
+          }
+        };
+
+        window.threatIdNext = function() {
+          pickScenario();
+        };
+
+        pickScenario();
+      })();
+      </script>
+
+      <!-- Exercise 2: Match the Prevention -->
+      <div class="interactive-exercise" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 2rem; border-radius: 12px; color: white; margin: 1.5rem 0;">
+        <h4>Exercise 2: Match the Prevention</h4>
+        <p>A threat is shown below. Choose the <strong>most effective primary prevention method</strong> for this specific threat.</p>
+        <div id="matchPrevThreat" style="background: rgba(255,255,255,0.15); padding: 1.2rem; border-radius: 8px; margin: 1rem 0; font-size: 1.05rem; line-height: 1.6;"></div>
+        <div id="matchPrevOptions" style="display: flex; flex-direction: column; gap: 0.5rem; margin-top: 1rem;"></div>
+        <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; margin-top: 1rem;">
+          <button style="background: rgba(255,255,255,0.2); color: white; border: 2px solid rgba(255,255,255,0.4); padding: 0.5rem 1.5rem; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 1rem;" onclick="matchPrevNext()">Skip / Next Threat</button>
+        </div>
+        <div id="matchPrevFeedback" style="margin-top: 1rem; font-weight: 600; min-height: 1.5rem;"></div>
+        <div style="margin-top: 0.5rem; font-size: 0.95rem; opacity: 0.9;">Score: <span id="matchPrevCorrect">0</span> / <span id="matchPrevTotal">0</span></div>
+      </div>
+
+      <script>
+      (function() {
+        var challenges = [
+          {
+            threat: "Ransomware has encrypted all files on a company's server and the attackers are demanding payment.",
+            answer: "Regular backups stored offsite",
+            options: ["Regular backups stored offsite", "Stronger password policy", "CCTV cameras in the server room", "Faster internet connection"],
+            explanation: "Regular offsite backups are the most effective defence against ransomware. If the organisation has recent backups, they can restore their data without paying the ransom."
+          },
+          {
+            threat: "Employees keep falling for phishing emails that appear to come from the company's IT department.",
+            answer: "Security awareness training for staff",
+            options: ["Installing a faster firewall", "Security awareness training for staff", "Encrypting all hard drives", "Increasing server bandwidth"],
+            explanation: "Staff training is the most effective prevention against phishing because phishing exploits human behaviour, not technical vulnerabilities. Trained employees can recognise the signs of phishing and avoid falling for it."
+          },
+          {
+            threat: "An attacker is trying to crack user passwords by systematically testing millions of combinations.",
+            answer: "Strong password policy with account lockout",
+            options: ["Anti-malware software", "Physical locks on server rooms", "Strong password policy with account lockout", "Regular data backups"],
+            explanation: "Strong password policies (long, complex passwords) make brute force attacks take impractically long. Account lockout after a set number of failed attempts blocks the attack entirely."
+          },
+          {
+            threat: "A hacker is intercepting data between employees and the company server on the office Wi-Fi network.",
+            answer: "Encryption (HTTPS/VPN)",
+            options: ["Encryption (HTTPS/VPN)", "Anti-malware software", "Security guards at the entrance", "Regular software backups"],
+            explanation: "Encryption ensures that even if data is intercepted during a man-in-the-middle attack, the attacker cannot read it. HTTPS and VPNs encrypt the communication channel."
+          },
+          {
+            threat: "A company's website has been taken offline by a flood of traffic from thousands of compromised computers worldwide.",
+            answer: "Traffic filtering and rate limiting",
+            options: ["Two-factor authentication", "Traffic filtering and rate limiting", "Stronger user passwords", "Penetration testing"],
+            explanation: "Traffic filtering and rate limiting can help mitigate DDoS attacks by identifying and blocking malicious traffic patterns while allowing legitimate requests through."
+          },
+          {
+            threat: "Attackers are exploiting a web form on the company website to run database commands and steal customer records.",
+            answer: "Input validation and parameterised queries",
+            options: ["Input validation and parameterised queries", "Biometric authentication", "Regular backups", "Physical security measures"],
+            explanation: "SQL injection is prevented by validating and sanitising all user input, and using parameterised queries that treat input as data rather than executable SQL code."
+          },
+          {
+            threat: "Malware has been detected spreading across the network automatically without any user interaction, exploiting a known operating system vulnerability.",
+            answer: "Software updates and patching",
+            options: ["Staff training on phishing", "Software updates and patching", "Stronger password policy", "CCTV surveillance"],
+            explanation: "Worms exploit software vulnerabilities to spread. Keeping operating systems and software up to date with the latest patches closes the vulnerabilities that worms exploit."
+          },
+          {
+            threat: "Unknown USB drives keep appearing in the office and employees have been plugging them into company computers.",
+            answer: "Network policy banning unknown USB devices and staff training",
+            options: ["Network policy banning unknown USB devices and staff training", "Encryption of all emails", "Two-factor authentication", "Regular penetration testing"],
+            explanation: "Baiting attacks are prevented through policies that forbid plugging in unknown devices, combined with training so staff understand the risk. Technical controls can also disable USB autorun."
+          },
+          {
+            threat: "An unauthorised person was seen in the server room accessing network equipment directly.",
+            answer: "Physical security: locked rooms, key cards, CCTV",
+            options: ["Anti-malware software updates", "Physical security: locked rooms, key cards, CCTV", "Stronger encryption protocols", "Regular data backups"],
+            explanation: "Physical security measures such as locked doors, key card access, and CCTV cameras prevent unauthorised physical access to sensitive network equipment."
+          },
+          {
+            threat: "A company wants to find security weaknesses in their network before malicious hackers discover them.",
+            answer: "Penetration testing by ethical hackers",
+            options: ["Installing more firewalls", "Penetration testing by ethical hackers", "Changing all passwords weekly", "Adding biometric scanners"],
+            explanation: "Penetration testing proactively identifies vulnerabilities by having ethical hackers attempt to break into the system using the same techniques as real attackers."
+          }
+        ];
+
+        var currentIndex = -1;
+        var correct = 0;
+        var totalAnswered = 0;
+        var used = [];
+        var answered = false;
+
+        function pickChallenge() {
+          if (used.length >= challenges.length) { used = []; }
+          var idx;
+          do { idx = Math.floor(Math.random() * challenges.length); } while (used.indexOf(idx) !== -1);
+          used.push(idx);
+          currentIndex = idx;
+          answered = false;
+          renderChallenge();
+        }
+
+        function renderChallenge() {
+          var c = challenges[currentIndex];
+          document.getElementById('matchPrevThreat').innerHTML = '<strong>Threat:</strong> ' + c.threat;
+          var optionsDiv = document.getElementById('matchPrevOptions');
+          var html = '';
+          var shuffled = c.options.slice().sort(function() { return Math.random() - 0.5; });
+          for (var i = 0; i < shuffled.length; i++) {
+            html += '<button style="background: white; color: #667eea; border: none; padding: 0.6rem 1.2rem; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 0.95rem; text-align: left; width: 100%;" onclick="matchPrevCheck(\'' + shuffled[i].replace(/'/g, "\\'") + '\')">';
+            html += String.fromCharCode(65 + i) + ') ' + shuffled[i];
+            html += '</button>';
+          }
+          optionsDiv.innerHTML = html;
+          document.getElementById('matchPrevFeedback').textContent = '';
+        }
+
+        window.matchPrevCheck = function(answer) {
+          if (answered) return;
+          answered = true;
+          totalAnswered++;
+          var c = challenges[currentIndex];
+          var fb = document.getElementById('matchPrevFeedback');
+          if (answer === c.answer) {
+            correct++;
+            fb.innerHTML = '<span style="color:#a0ffb0;">Correct!</span> ' + c.explanation;
+          } else {
+            fb.innerHTML = '<span style="color:#ffb0b0;">Not quite.</span> The best answer is <strong>' + c.answer + '</strong>. ' + c.explanation;
+          }
+          document.getElementById('matchPrevCorrect').textContent = correct;
+          document.getElementById('matchPrevTotal').textContent = totalAnswered;
+
+          var btns = document.getElementById('matchPrevOptions').querySelectorAll('button');
+          for (var i = 0; i < btns.length; i++) {
+            var btnText = btns[i].textContent.substring(3);
+            if (btnText === c.answer) {
+              btns[i].style.background = '#a0ffb0';
+              btns[i].style.color = '#1a1a2e';
+            } else if (btnText === answer && answer !== c.answer) {
+              btns[i].style.background = '#ffb0b0';
+              btns[i].style.color = '#1a1a2e';
+            }
+            btns[i].style.cursor = 'default';
+          }
+        };
+
+        window.matchPrevNext = function() {
+          pickChallenge();
+        };
+
+        pickChallenge();
+      })();
+      </script>
+
+      <!-- Exercise 3: Security Term Quiz -->
+      <div class="interactive-exercise" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 2rem; border-radius: 12px; color: white; margin: 1.5rem 0;">
+        <h4>Exercise 3: Security Concepts Quiz</h4>
+        <p>Test your knowledge of network security concepts with these multiple-choice questions.</p>
+        <div id="secQuizQuestion" style="background: rgba(255,255,255,0.15); padding: 1.2rem; border-radius: 8px; margin: 1rem 0; font-size: 1.05rem; line-height: 1.6;"></div>
+        <div id="secQuizOptions" style="display: flex; flex-direction: column; gap: 0.5rem; margin-top: 1rem;"></div>
+        <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; margin-top: 1rem;">
+          <button style="background: rgba(255,255,255,0.2); color: white; border: 2px solid rgba(255,255,255,0.4); padding: 0.5rem 1.5rem; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 1rem;" onclick="secQuizNext()">Skip / Next Question</button>
+        </div>
+        <div id="secQuizFeedback" style="margin-top: 1rem; font-weight: 600; min-height: 1.5rem;"></div>
+        <div style="margin-top: 0.5rem; font-size: 0.95rem; opacity: 0.9;">Score: <span id="secQuizCorrect">0</span> / <span id="secQuizTotal">0</span></div>
+      </div>
+
+      <script>
+      (function() {
+        var questions = [
+          {
+            q: "What is the key difference between a virus and a worm?",
+            options: ["A virus is more dangerous than a worm", "A virus needs a host file; a worm can spread on its own", "A worm only affects mobile devices", "A virus spreads faster than a worm"],
+            answer: 1,
+            explanation: "A virus must attach itself to a legitimate file and activates when that file is opened. A worm is a standalone program that self-replicates and spreads across networks without needing a host file or user interaction."
+          },
+          {
+            q: "What does GDPR require organisations to do?",
+            options: ["Use only wired network connections", "Protect personal data or face significant fines", "Encrypt all files with asymmetric encryption", "Hire ethical hackers every month"],
+            answer: 1,
+            explanation: "The General Data Protection Regulation (GDPR) requires organisations to protect personal data. Failure to comply can result in fines of up to 20 million euros or 4% of global annual turnover."
+          },
+          {
+            q: "In two-factor authentication (2FA), what two things are typically combined?",
+            options: ["Two different passwords", "Something you know and something you have", "A fingerprint and a facial scan", "An email address and a phone number"],
+            answer: 1,
+            explanation: "2FA typically combines something you know (a password) with something you have (a code sent to your phone or a hardware token). This means stealing the password alone is not enough to access the account."
+          },
+          {
+            q: "What is the 'principle of least privilege'?",
+            options: ["Giving administrators all possible access rights", "Users should have the minimum access needed for their job", "Only the CEO should have a network account", "Revoking all access after 30 days"],
+            answer: 1,
+            explanation: "The principle of least privilege means giving users only the minimum level of access they need to perform their work. This limits the damage if their account is compromised."
+          },
+          {
+            q: "Which type of encryption uses a pair of keys (public and private)?",
+            options: ["Symmetric encryption", "Asymmetric encryption", "Hash encryption", "Binary encryption"],
+            answer: 1,
+            explanation: "Asymmetric encryption uses a public key (shared openly) for encryption and a private key (kept secret) for decryption. Symmetric encryption uses the same single key for both encryption and decryption."
+          },
+          {
+            q: "What is a botnet?",
+            options: ["A network of security cameras", "A type of firewall", "A network of compromised computers controlled by an attacker", "A group of ethical hackers"],
+            answer: 2,
+            explanation: "A botnet is a network of computers that have been infected with malware and are controlled by an attacker without their owners' knowledge. Botnets are commonly used to launch DDoS attacks."
+          },
+          {
+            q: "Why must anti-malware software be updated regularly?",
+            options: ["To change its user interface", "Because new malware is constantly being created and the signature database must stay current", "To slow down the computer for security purposes", "To comply with software licensing"],
+            answer: 1,
+            explanation: "New malware is created constantly. Anti-malware software detects threats by comparing files against a database of known malware signatures. Without regular updates, it cannot detect the latest threats."
+          },
+          {
+            q: "What is penetration testing?",
+            options: ["Testing how fast data can penetrate a firewall", "Ethical hackers attempting to break into a system to find vulnerabilities", "Testing the physical strength of server room doors", "Measuring network speed under heavy load"],
+            answer: 1,
+            explanation: "Penetration testing involves authorised ethical hackers using real attack techniques to find security weaknesses before malicious hackers do. The findings are reported so the organisation can fix the vulnerabilities."
+          },
+          {
+            q: "How does a firewall protect a network?",
+            options: ["By encrypting all data on the network", "By monitoring traffic and blocking packets that violate security rules", "By backing up all data automatically", "By training users to avoid phishing"],
+            answer: 1,
+            explanation: "A firewall monitors incoming and outgoing network traffic and applies predefined security rules to allow or block packets based on source/destination IP, port numbers, and protocols."
+          },
+          {
+            q: "What makes SQL injection possible?",
+            options: ["Using strong passwords", "Poorly written websites that do not validate user input", "Connecting to public Wi-Fi", "Using outdated antivirus software"],
+            answer: 1,
+            explanation: "SQL injection exploits websites that do not properly validate or sanitise user input. When user input is passed directly to a database query without checks, attackers can inject SQL code to access or modify the database."
+          }
+        ];
+
+        var currentIndex = -1;
+        var correct = 0;
+        var totalAnswered = 0;
+        var used = [];
+        var answered = false;
+
+        function pickQuestion() {
+          if (used.length >= questions.length) { used = []; }
+          var idx;
+          do { idx = Math.floor(Math.random() * questions.length); } while (used.indexOf(idx) !== -1);
+          used.push(idx);
+          currentIndex = idx;
+          answered = false;
+          renderQuestion();
+        }
+
+        function renderQuestion() {
+          var q = questions[currentIndex];
+          document.getElementById('secQuizQuestion').innerHTML = '<strong>Q:</strong> ' + q.q;
+          var optionsDiv = document.getElementById('secQuizOptions');
+          var html = '';
+          for (var i = 0; i < q.options.length; i++) {
+            html += '<button style="background: white; color: #667eea; border: none; padding: 0.6rem 1.2rem; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 0.95rem; text-align: left;" onclick="secQuizAnswer(' + i + ')">';
+            html += String.fromCharCode(65 + i) + ') ' + q.options[i];
+            html += '</button>';
+          }
+          optionsDiv.innerHTML = html;
+          document.getElementById('secQuizFeedback').textContent = '';
+        }
+
+        window.secQuizAnswer = function(choice) {
+          if (answered) return;
+          answered = true;
+          totalAnswered++;
+          var q = questions[currentIndex];
+          var fb = document.getElementById('secQuizFeedback');
+          if (choice === q.answer) {
+            correct++;
+            fb.innerHTML = '<span style="color:#a0ffb0;">Correct!</span> ' + q.explanation;
+          } else {
+            fb.innerHTML = '<span style="color:#ffb0b0;">Not quite.</span> The correct answer is <strong>' + String.fromCharCode(65 + q.answer) + ') ' + q.options[q.answer] + '</strong>. ' + q.explanation;
+          }
+          document.getElementById('secQuizCorrect').textContent = correct;
+          document.getElementById('secQuizTotal').textContent = totalAnswered;
+
+          var btns = document.getElementById('secQuizOptions').querySelectorAll('button');
+          for (var i = 0; i < btns.length; i++) {
+            if (i === q.answer) {
+              btns[i].style.background = '#a0ffb0';
+              btns[i].style.color = '#1a1a2e';
+            } else if (i === choice && choice !== q.answer) {
+              btns[i].style.background = '#ffb0b0';
+              btns[i].style.color = '#1a1a2e';
+            }
+            btns[i].style.cursor = 'default';
+          }
+          setTimeout(pickQuestion, 3000);
+        };
+
+        window.secQuizNext = function() {
+          pickQuestion();
+        };
+
+        pickQuestion();
+      })();
+      </script>
+    </section>
+
+    <!-- ==================== PRACTICE ==================== -->
+    <section class="practice">
+      <span class="section-label">Practice</span>
+      <h2>Practice Questions</h2>
+      <p>Click on each question to reveal the answer. Try to answer in your head or on paper first before checking!</p>
+
+      <div class="hint">
+        <div class="hint-title">Q1: Define the term &ldquo;malware&rdquo; and name four types of malware.</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> <strong>Malware</strong> (malicious software) is any software that is intentionally designed to cause damage, steal data, or gain unauthorised access to a computer system. Four types of malware are: (1) <strong>Virus</strong> &mdash; attaches to legitimate files and replicates when the file is executed; (2) <strong>Worm</strong> &mdash; a standalone program that self-replicates across networks without needing a host file; (3) <strong>Trojan</strong> &mdash; disguised as legitimate software but contains hidden malicious code; (4) <strong>Ransomware</strong> &mdash; encrypts files and demands payment for the decryption key. (Other valid answers: spyware.)</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q2: Explain how a phishing attack works and describe two ways an organisation can protect against it.</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> In a <strong>phishing attack</strong>, the attacker sends <strong>fake emails or creates fake websites</strong> that mimic legitimate organisations (such as a bank or social media platform). The message typically creates a sense of urgency (e.g., &ldquo;Your account has been suspended&rdquo;) and includes a link. When the victim clicks the link and enters their login credentials or personal information, the data is sent to the attacker. Two protection methods: (1) <strong>Staff training</strong> &mdash; educate employees to recognise signs of phishing (suspicious sender addresses, urgency, spelling errors, unexpected links) and never enter credentials via email links. (2) <strong>Two-factor authentication (2FA)</strong> &mdash; even if credentials are stolen, the attacker cannot access the account without the second factor (e.g., a code sent to the user&rsquo;s phone).</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q3: What is a DDoS attack? Explain how it works and why it is difficult to defend against.</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> A <strong>DDoS (Distributed Denial of Service) attack</strong> aims to make a server or service <strong>unavailable</strong> by flooding it with an enormous volume of traffic. The attacker uses a <strong>botnet</strong> &mdash; a network of thousands of compromised computers infected with malware &mdash; to send millions of requests to the target simultaneously. The server becomes overwhelmed and cannot process legitimate requests, causing the website or service to go offline. DDoS attacks are difficult to defend against because: (1) the traffic comes from <strong>many different IP addresses</strong>, so blocking a single source is ineffective; (2) the malicious traffic can be hard to <strong>distinguish from legitimate traffic</strong>; (3) the sheer <strong>volume of traffic</strong> can exceed the server&rsquo;s capacity even with protective measures in place.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q4: Compare symmetric and asymmetric encryption. Give one advantage and one disadvantage of each.</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> <strong>Symmetric encryption</strong> uses the <strong>same key</strong> for both encryption and decryption. Advantage: it is <strong>fast and efficient</strong>, making it suitable for encrypting large amounts of data. Disadvantage: both parties must <strong>share the key securely</strong> beforehand; if the key is intercepted during transmission, the encryption is broken. <strong>Asymmetric encryption</strong> uses a <strong>pair of keys</strong>: a public key (shared openly) for encryption and a private key (kept secret) for decryption. Advantage: <strong>no need to share a secret key</strong>; anyone can encrypt data with the public key, but only the holder of the private key can decrypt it, solving the key distribution problem. Disadvantage: it is <strong>much slower</strong> than symmetric encryption, making it less practical for encrypting large volumes of data.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q5: Explain how a firewall protects a network. Describe the difference between hardware and software firewalls.</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> A <strong>firewall</strong> protects a network by <strong>monitoring all incoming and outgoing traffic</strong> and applying a set of predefined security rules to determine whether each packet should be <strong>allowed through or blocked</strong>. It acts as a barrier between the trusted internal network and untrusted external networks. It uses <strong>packet filtering</strong> to inspect packets based on source/destination IP addresses, port numbers, and protocols. A <strong>hardware firewall</strong> is a dedicated physical device placed between the network and the internet. It protects the <strong>entire network</strong> and is commonly used in business environments. A <strong>software firewall</strong> is a program installed on an individual computer. It protects only the <strong>specific device</strong> it is installed on. Most operating systems include a built-in software firewall. Organisations typically use both for layered defence.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q6: A school wants to protect against ransomware attacks. Recommend three specific prevention methods and explain how each helps.</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> (1) <strong>Regular backups stored in a separate location</strong> &mdash; if ransomware encrypts the school&rsquo;s files, they can restore all data from a recent backup without paying the ransom. Backups should be stored offsite or in the cloud so they are not encrypted by the same attack. (2) <strong>Anti-malware software with real-time protection</strong> &mdash; this can detect and block ransomware before it executes by scanning files against a database of known malware signatures. The software must be kept up to date to recognise the latest ransomware variants. (3) <strong>Staff training</strong> &mdash; ransomware is often delivered through phishing emails with malicious attachments or links. Training staff to recognise suspicious emails, avoid clicking unknown links, and report potential threats significantly reduces the risk of ransomware infection.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q7: What is SQL injection? Explain how it works and how it can be prevented.</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> <strong>SQL injection</strong> is an attack where an attacker <strong>enters SQL code into a web form</strong> (such as a login box or search field) instead of normal input. If the website does not properly validate the input, the SQL code is passed directly to the database server and executed. This can allow the attacker to bypass login authentication, read sensitive data (usernames, passwords, credit card numbers), modify or delete data, or perform administrative operations on the database. It can be prevented by: (1) <strong>Input validation and sanitisation</strong> &mdash; checking all user input and removing or escaping special characters before it reaches the database; (2) <strong>Parameterised queries (prepared statements)</strong> &mdash; a coding technique that ensures user input is always treated as data, never as executable SQL code; (3) <strong>Penetration testing</strong> &mdash; regularly testing the website for SQL injection vulnerabilities.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q8: Explain the importance of the &ldquo;principle of least privilege&rdquo; in network security, and give an example.</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> The <strong>principle of least privilege</strong> states that users should be given the <strong>minimum level of access</strong> necessary to carry out their job. This is important because it <strong>limits the potential damage</strong> if a user&rsquo;s account is compromised. If an attacker gains control of an account that only has access to one department&rsquo;s files, they cannot access the entire organisation&rsquo;s data. Example: a school receptionist needs access to the student contact database to phone parents, but they do <strong>not</strong> need access to the school&rsquo;s financial records or exam papers. Under the principle of least privilege, their account would only have permission to view the contact database &mdash; not financial or academic systems. If their account were hacked, the attacker could only access contact information, not the school&rsquo;s finances.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q9: Describe what social engineering is and explain why it is effective, even against organisations with strong technical security.</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> <strong>Social engineering</strong> is a type of attack that exploits <strong>human behaviour</strong> rather than technical vulnerabilities. Instead of hacking software, the attacker manipulates, deceives, or tricks people into revealing confidential information or performing actions that compromise security. Types include phishing (fake emails/websites), pretexting (fabricated scenarios), baiting (infected USB drives), and shoulder surfing (watching someone enter a password). Social engineering is effective even against organisations with strong technical security because <strong>humans are often the weakest link</strong>. A firewall cannot prevent an employee from giving their password to a convincing caller. Encryption cannot stop someone from willingly entering their credentials on a fake website. The strongest technical defences are undermined if the people using them can be manipulated. This is why <strong>staff training</strong> is essential.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q10: A business discovers that a man-in-the-middle attack has been intercepting employee communications. Recommend two prevention methods and explain how each would stop this attack.</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> (1) <strong>Encryption using HTTPS and VPN</strong> &mdash; if all communication is encrypted, even if an attacker intercepts the data, they cannot read or understand it. HTTPS encrypts web traffic between the browser and server, while a VPN (Virtual Private Network) creates an encrypted tunnel for all network traffic. The attacker would only see scrambled, unreadable data. (2) <strong>Avoid unsecured public Wi-Fi networks</strong> and use only <strong>trusted, authenticated networks</strong> &mdash; man-in-the-middle attacks commonly occur on public Wi-Fi where the attacker can position themselves between users and the router. A network policy requiring employees to use only the company&rsquo;s secured Wi-Fi or a VPN when working remotely removes the opportunity for the attacker to intercept the connection. Certificate verification (checking that HTTPS certificates are valid) also helps users confirm they are communicating with the genuine server and not an impersonator.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== KEY VOCABULARY ==================== -->
+    <section class="understand">
+      <span class="section-label">Reference</span>
+      <h2>Key Vocabulary</h2>
+      <p>This table summarises the essential terms for this topic. Use it for revision and to check your understanding.</p>
+
+      <table>
+        <thead>
+          <tr><th>Term</th><th>Definition</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>Network security</strong></td><td>Policies, practices, hardware, and software used to protect a network and its data from unauthorised access, attacks, and damage</td></tr>
+          <tr><td><strong>Malware</strong></td><td>Malicious software designed to cause damage, steal data, or gain unauthorised access (includes viruses, worms, Trojans, ransomware, spyware)</td></tr>
+          <tr><td><strong>Virus</strong></td><td>Malware that attaches to a legitimate host file and replicates when the file is executed</td></tr>
+          <tr><td><strong>Worm</strong></td><td>Standalone malware that self-replicates and spreads across networks without needing a host file</td></tr>
+          <tr><td><strong>Trojan</strong></td><td>Malware disguised as legitimate software; does not self-replicate but relies on tricking users into installing it</td></tr>
+          <tr><td><strong>Ransomware</strong></td><td>Malware that encrypts a victim&rsquo;s files and demands payment for the decryption key</td></tr>
+          <tr><td><strong>Spyware</strong></td><td>Malware that secretly monitors user activity and steals data (e.g., keyloggers)</td></tr>
+          <tr><td><strong>Social engineering</strong></td><td>Attacks that exploit human behaviour through manipulation and deception rather than technical vulnerabilities</td></tr>
+          <tr><td><strong>Phishing</strong></td><td>Sending fake emails or creating fake websites to trick victims into revealing login credentials or personal information</td></tr>
+          <tr><td><strong>Pretexting</strong></td><td>Creating a fabricated scenario to trick a victim into revealing information or granting access</td></tr>
+          <tr><td><strong>Baiting</strong></td><td>Leaving infected storage devices (e.g., USB drives) in public places to exploit curiosity</td></tr>
+          <tr><td><strong>Shoulder surfing</strong></td><td>Physically watching someone enter a password or PIN</td></tr>
+          <tr><td><strong>DDoS</strong></td><td>Distributed Denial of Service &mdash; overwhelming a server with traffic from many sources (a botnet) to make it unavailable</td></tr>
+          <tr><td><strong>Botnet</strong></td><td>A network of compromised computers controlled by an attacker, often used to launch DDoS attacks</td></tr>
+          <tr><td><strong>SQL injection</strong></td><td>Entering SQL code into web forms to exploit poorly coded websites and access or modify database contents</td></tr>
+          <tr><td><strong>Brute force attack</strong></td><td>Trying every possible password combination, often using automated software, until the correct one is found</td></tr>
+          <tr><td><strong>Man-in-the-middle</strong></td><td>Intercepting communication between two parties who believe they are communicating directly</td></tr>
+          <tr><td><strong>Firewall</strong></td><td>A security system that monitors network traffic and blocks packets that violate predefined security rules</td></tr>
+          <tr><td><strong>Encryption</strong></td><td>Scrambling data into an unreadable format that can only be decoded with the correct decryption key</td></tr>
+          <tr><td><strong>Symmetric encryption</strong></td><td>Encryption that uses the same key for both encryption and decryption</td></tr>
+          <tr><td><strong>Asymmetric encryption</strong></td><td>Encryption that uses a pair of keys: a public key for encryption and a private key for decryption</td></tr>
+          <tr><td><strong>Authentication</strong></td><td>The process of verifying a user&rsquo;s identity before granting access (passwords, 2FA, biometrics)</td></tr>
+          <tr><td><strong>Two-factor authentication (2FA)</strong></td><td>Requiring two different forms of identification (e.g., password + phone code) for access</td></tr>
+          <tr><td><strong>Biometrics</strong></td><td>Using unique physical characteristics (fingerprint, face, iris) to verify identity</td></tr>
+          <tr><td><strong>Penetration testing</strong></td><td>Authorised ethical hackers attempting to find vulnerabilities in a system before malicious attackers do</td></tr>
+          <tr><td><strong>Principle of least privilege</strong></td><td>Giving users the minimum level of access necessary to perform their role</td></tr>
+          <tr><td><strong>GDPR</strong></td><td>General Data Protection Regulation &mdash; EU/UK law requiring organisations to protect personal data or face significant fines</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- ==================== EXAM TIPS ==================== -->
+    <section class="understand">
+      <span class="section-label">Exam Tips</span>
+      <h2>How to Succeed in the Exam</h2>
+
+      <div class="key-concept">
+        <strong>Exam Tip: Know Your Attack Types</strong>
+        You must be able to <strong>identify</strong> each type of attack from a description and <strong>explain how it works</strong>. For malware types, know the key differences: viruses need a host file, worms spread on their own, Trojans are disguised, ransomware encrypts, and spyware monitors. For social engineering, know the difference between phishing, pretexting, baiting, and shoulder surfing. Examiners love scenario-based questions where you must identify the attack.
+      </div>
+
+      <div class="key-concept">
+        <strong>Exam Tip: Link Threats to Prevention</strong>
+        When recommending prevention methods, always <strong>explain how</strong> the method helps for that <strong>specific</strong> threat. Do not just list prevention methods generically. For example, &ldquo;staff training&rdquo; is a valid prevention for phishing because it teaches employees to recognise fake emails, but it is not the best prevention for a DDoS attack. Match your prevention to the threat.
+      </div>
+
+      <div class="key-concept">
+        <strong>Exam Tip: The Layered Approach</strong>
+        If a question asks how an organisation should protect its network, emphasise the <strong>layered approach</strong> (defence in depth). Mention a combination of <strong>technical</strong> measures (firewalls, encryption, anti-malware), <strong>human</strong> measures (training, policies), and <strong>physical</strong> measures (locked rooms, CCTV). Explaining that no single method is sufficient shows deeper understanding.
+      </div>
+
+      <div class="key-concept">
+        <strong>Exam Tip: Virus vs Worm</strong>
+        This is one of the most commonly confused pairs. Write this in your revision notes: <strong>Virus = needs a host, activates when file opened, replicates to other files. Worm = standalone, spreads automatically across networks, no user action needed.</strong> If the scenario says &ldquo;spread without anyone clicking anything,&rdquo; it is a worm.
+      </div>
+
+      <div class="key-concept">
+        <strong>Exam Tip: GDPR and Legal Requirements</strong>
+        You may be asked about the <strong>legal context</strong> of network security. Know that GDPR and the Data Protection Act 2018 require organisations to protect personal data. Mention specific consequences of non-compliance: fines of up to 20 million euros or 4% of global turnover, legal action from individuals, and reputational damage. This shows you understand the real-world importance of security.
+      </div>
+
+      <div class="key-concept">
+        <strong>Exam Tip: Use Precise Vocabulary</strong>
+        Use the correct technical terms in your answers. Write &ldquo;phishing&rdquo; not &ldquo;fake email attack.&rdquo; Write &ldquo;ransomware&rdquo; not &ldquo;virus that locks files.&rdquo; Write &ldquo;DDoS&rdquo; and explain what the initials stand for. Write &ldquo;principle of least privilege&rdquo; not &ldquo;only giving people some access.&rdquo; Precise vocabulary earns marks.
+      </div>
+    </section>
+
+    <!-- ==================== REFLECT ==================== -->
+    <section class="reflect">
+      <span class="section-label">Reflect</span>
+      <h2>Network Security in the Real World</h2>
+
+      <p>Network security is not an abstract concept confined to textbooks &mdash; it affects your daily life. Consider how the topics you have just studied connect to the real world:</p>
+
+      <ul>
+        <li><strong>Your own devices:</strong> Your phone, laptop, and gaming console are all potential targets. Every app you install, every public Wi-Fi network you connect to, and every link you click carries some level of risk. The security awareness you have gained from this topic can help you protect yourself. Do you use strong, unique passwords? Do you have 2FA enabled on your important accounts? Do you think before clicking links in emails?</li>
+        <li><strong>Schools and workplaces:</strong> Schools handle enormous amounts of sensitive data &mdash; student records, assessment results, safeguarding information. The firewalls, access controls, and network policies your school uses are all examples of the security measures covered in this topic. Teachers are trained to recognise phishing, and your school likely has backup systems in case of ransomware.</li>
+        <li><strong>Major incidents:</strong> In 2017, the WannaCry ransomware attack hit the NHS, locking hospital computers and forcing the cancellation of thousands of appointments and operations. In 2020, a DDoS attack took down large portions of the internet when a major DNS provider was targeted. In 2023, the MOVEit vulnerability led to data breaches affecting millions of people worldwide. These events demonstrate why network security matters at every level.</li>
+        <li><strong>Career opportunities:</strong> Cybersecurity is one of the fastest-growing career fields in the world. There is a global shortage of cybersecurity professionals, meaning excellent job prospects and salaries for those with the right skills. Understanding the fundamentals in this topic is the first step towards a career protecting organisations from cyber threats.</li>
+      </ul>
+
+      <p><strong>Challenge yourself:</strong> Over the next week, pay attention to the security features you encounter in your daily life. How many websites use HTTPS? How many of your accounts have 2FA available? Can you spot any potential phishing emails in your inbox? Have you ever connected to unsecured public Wi-Fi without a VPN? The more aware you are, the safer you will be online.</p>
+
+      <div class="key-concept">
+        <strong>Final Thought</strong>
+        Network security is a constant battle. As defenders develop new protections, attackers develop new methods of attack. No system is ever 100% secure, which is why a layered approach combining technology, training, policies, and physical measures is essential. As you continue your studies in Computer Science, remember that security is not just a topic for an exam &mdash; it is a skill and a mindset that will serve you throughout your life, whether you are protecting your own data or defending an entire organisation.
+      </div>
+    </section>
+
+    <!-- ==================== NAVIGATION ==================== -->
+    <nav class="chapter-nav">
+      <a href="network-hardware.html">&larr; Previous: Network Hardware</a>
+      <a href="../index.html">Course Home</a>
+      <a href="issues-and-impact.html">Next: Issues &amp; Impact &rarr;</a>
+    </nav>
+
+  </main>
+
+  <footer class="site-footer">
+    <p>Python Fundamentals &mdash; A KS4 Learning Platform</p>
+    <p>Network Security &mdash; GCSE Computer Science Theory</p>
+  </footer>
+
+</body>
+</html>

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Networks &amp; the Internet - Python Fundamentals</title>
+  <title>Types of Networks - Python Fundamentals</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
@@ -13,8 +13,8 @@
 
   <header class="site-header">
     <p><a href="../index.html">&larr; Back to Course</a></p>
-    <h1>Networks &amp; the Internet</h1>
-    <p class="subtitle">How billions of devices communicate, share data, and connect the world &mdash; and what happens when you visit a website</p>
+    <h1>Types of Networks</h1>
+    <p class="subtitle">PAN, LAN, and WAN &mdash; how devices connect across different scales</p>
   </header>
 
   <main>
@@ -22,529 +22,522 @@
     <!-- ==================== THE IDEA ==================== -->
     <section class="idea">
       <span class="section-label">The Idea</span>
-      <h2>A World Connected</h2>
+      <h2>Why Do We Need Networks?</h2>
 
-      <p>Right now, as you read this page, data is flying around the world at incredible speed. Your device sent a request across a network, through cables and routers, possibly across an ocean, to a server that sent this webpage back to you &mdash; all in a fraction of a second. How does that actually work?</p>
+      <p>Imagine a world where every computer is completely isolated &mdash; no internet, no email, no shared files, no online gaming. If you wanted to give someone a document, you would have to copy it onto a USB drive and physically hand it over. Every printer would serve only one computer. There would be no Google, no YouTube, no streaming, and no social media.</p>
 
-      <p>A <strong>network</strong> is simply two or more devices connected together so they can communicate and share resources. Your home Wi-Fi is a network. Your school&rsquo;s computers form a network. The <strong>internet</strong> is the biggest network of all &mdash; a global network of networks connecting billions of devices.</p>
+      <p>A <strong>network</strong> is two or more devices connected together so they can communicate and share resources. Networks are the invisible foundation of modern life. Every time you send a message, stream a video, print a document at school, or connect your wireless earbuds to your phone, you are using a network.</p>
 
-      <p>Understanding networks is essential because nearly every modern application relies on them: streaming music, sending messages, playing online games, backing up to the cloud, and even your smart fridge checking the weather.</p>
+      <p>But not all networks are the same. Some are tiny &mdash; just your phone and your earbuds. Some cover a single building. Others span entire continents, linking millions of devices across oceans. Understanding the different <strong>types of networks</strong> and their characteristics is a core part of GCSE Computer Science.</p>
 
       <p><strong>In this topic you will learn:</strong></p>
       <ul>
-        <li>The different types of networks (LAN, WAN, PAN)</li>
-        <li>Client-server and peer-to-peer network models</li>
-        <li>Network topologies (how devices are arranged)</li>
-        <li>Protocols (the rules devices follow to communicate)</li>
-        <li>How data travels across networks (packet switching in detail)</li>
-        <li>Network hardware (routers, switches, NICs, WAPs)</li>
-        <li>Network security, cyber threats, and prevention methods</li>
-        <li>Real-world case studies showing networks in action</li>
+        <li>The three main types of network: <strong>PAN</strong>, <strong>LAN</strong>, and <strong>WAN</strong></li>
+        <li>The key characteristics, examples, and technologies used by each type</li>
+        <li>How to compare LANs and WANs across multiple features</li>
+        <li>The benefits and drawbacks of using networks</li>
+        <li>How to identify the correct network type for a given scenario</li>
       </ul>
 
       <div class="key-concept">
         <strong>Did You Know?</strong>
-        The World Wide Web was invented at CERN by Sir Tim Berners-Lee in 1989. He proposed a system where documents could be linked together using hypertext. The first ever website went live in 1991 and described the World Wide Web project itself. Berners-Lee made his invention freely available to everyone &mdash; he never patented it &mdash; which is why the web grew so rapidly.
+        The very first computer network was called <strong>ARPANET</strong>, created by the US Department of Defense in 1969. It initially connected just four computers at four American universities. Today, the internet connects over <strong>5 billion users</strong> and tens of billions of devices worldwide &mdash; from smartphones and laptops to smart fridges, industrial sensors, and satellites.
       </div>
     </section>
 
     <!-- ==================== EXPLORE ==================== -->
     <section class="explore">
       <span class="section-label">Explore</span>
-      <h2>Types of Networks</h2>
+      <h2>The Three Types of Network</h2>
 
-      <h3>PAN (Personal Area Network)</h3>
-      <p>A PAN covers a <strong>very small area</strong> &mdash; typically within a few metres of a person. It connects personal devices together, usually wirelessly.</p>
-      <ul>
-        <li>Example: Your smartphone connected to your wireless earbuds or smartwatch via Bluetooth</li>
-        <li>Example: A laptop using a wireless mouse and keyboard</li>
-        <li>Very short range (typically under 10 metres), low power consumption</li>
-        <li>Technologies used: Bluetooth, infrared, USB (wired PAN)</li>
-        <li>Most people carry a PAN with them every day without realising it &mdash; your phone, watch, and earbuds form a network in your pocket</li>
-      </ul>
+      <p>Networks are classified by the <strong>geographical area</strong> they cover. There are three main types you need to know for GCSE Computer Science: PAN, LAN, and WAN. Think of them as small, medium, and large.</p>
 
-      <h3>LAN (Local Area Network)</h3>
-      <p>A LAN covers a <strong>small geographical area</strong>, such as a single building, a school, or a home. All the hardware (cables, switches, routers) is typically owned by the organisation or individual.</p>
+      <!-- PAN -->
+      <h3>PAN &mdash; Personal Area Network</h3>
+      <p>A PAN is the <strong>smallest type of network</strong>. It covers a very small area &mdash; typically just a few metres around a single person. A PAN connects your personal devices together so they can communicate and share data.</p>
+
+      <h4>Everyday Examples of PANs</h4>
       <ul>
-        <li>Example: The computers in your school&rsquo;s IT room connected to the school&rsquo;s server</li>
-        <li>Example: A home network with a router, laptop, games console, and smart TV</li>
-        <li>Fast data transfer speeds (up to 1 Gbps or more on modern networks)</li>
-        <li>Relatively cheap to set up and maintain</li>
-        <li>Can use wired connections (Ethernet) or wireless (Wi-Fi), or a combination</li>
+        <li><strong>Smartphone + wireless earbuds:</strong> When you pair your phone with Bluetooth earbuds, you create a PAN. Music data is streamed wirelessly from your phone to your earbuds over a distance of just a metre or two.</li>
+        <li><strong>Laptop + wireless mouse + wireless keyboard:</strong> These devices form a PAN on your desk. The mouse and keyboard send input signals wirelessly to the laptop.</li>
+        <li><strong>Smartwatch + smartphone:</strong> Your smartwatch syncs health data, notifications, and messages with your phone via Bluetooth &mdash; another PAN.</li>
+        <li><strong>Fitness tracker + phone:</strong> A Fitbit or similar device creates a PAN to transfer step counts, heart rate data, and sleep information to an app on your phone.</li>
+        <li><strong>Laptop + phone via USB cable:</strong> Even a wired connection between two personal devices is a PAN. If you plug your phone into your laptop to transfer photos, that is a wired PAN.</li>
       </ul>
 
-      <h3>WAN (Wide Area Network)</h3>
-      <p>A WAN covers a <strong>large geographical area</strong>, connecting LANs across cities, countries, or even continents. The infrastructure is usually owned by telecommunications companies.</p>
+      <h4>Key Characteristics of a PAN</h4>
       <ul>
-        <li>Example: A company with offices in London and Edinburgh connected together</li>
-        <li>Example: A bank with branches across the country sharing a single customer database</li>
-        <li>The <strong>internet</strong> is the largest WAN in the world</li>
-        <li>Slower than a LAN (data has to travel further), more expensive to maintain</li>
-        <li>Uses leased lines, satellite links, or undersea fibre-optic cables</li>
+        <li><strong>Range:</strong> Very short &mdash; typically under <strong>10 metres</strong></li>
+        <li><strong>Power consumption:</strong> Very low &mdash; designed for battery-powered devices</li>
+        <li><strong>Number of devices:</strong> Usually just 2 to 5 personal devices</li>
+        <li><strong>Speed:</strong> Moderate &mdash; Bluetooth 5.0 supports up to about 2 Mbps, which is fine for audio, notifications, and small data transfers</li>
+        <li><strong>Ownership:</strong> Owned and controlled by one individual</li>
+        <li><strong>Cost:</strong> Very low &mdash; no additional infrastructure needed</li>
       </ul>
 
-      <h4>LAN vs WAN Comparison</h4>
-      <table>
-        <thead>
-          <tr><th>Feature</th><th>LAN</th><th>WAN</th></tr>
-        </thead>
-        <tbody>
-          <tr><td><strong>Geographical area</strong></td><td>Small (one building or site)</td><td>Large (cities, countries, worldwide)</td></tr>
-          <tr><td><strong>Speed</strong></td><td>High (100 Mbps to 1+ Gbps)</td><td>Lower (depends on connection type)</td></tr>
-          <tr><td><strong>Ownership</strong></td><td>Owned by the organisation/individual</td><td>Infrastructure leased from telecoms companies</td></tr>
-          <tr><td><strong>Cost</strong></td><td>Cheaper to set up and maintain</td><td>More expensive (leased lines, specialist equipment)</td></tr>
-          <tr><td><strong>Example</strong></td><td>School network, home Wi-Fi</td><td>The internet, a multinational company&rsquo;s network</td></tr>
-          <tr><td><strong>Security</strong></td><td>Easier to secure (physical access controlled)</td><td>Harder to secure (data crosses public infrastructure)</td></tr>
-        </tbody>
-      </table>
-
-      <h3>Client-Server vs Peer-to-Peer Networks</h3>
-      <p>Networks can be organised in two main ways, depending on how resources are shared and managed.</p>
-
-      <h4>Client-Server Network</h4>
-      <p>A <strong>client-server</strong> network has one or more central <strong>servers</strong> that provide services (files, applications, authentication) to <strong>client</strong> devices. Clients send requests; the server processes them and sends back responses. Most school and business networks use this model.</p>
-
-      <h4>Peer-to-Peer (P2P) Network</h4>
-      <p>In a <strong>peer-to-peer</strong> network, there is no central server. Every device has equal status and can act as both a client and a server, sharing resources directly with other devices. Small home networks often work this way.</p>
-
-      <table>
-        <thead>
-          <tr><th>Feature</th><th>Client-Server</th><th>Peer-to-Peer</th></tr>
-        </thead>
-        <tbody>
-          <tr><td><strong>Central control</strong></td><td>Yes &mdash; server manages security, files, and users</td><td>No &mdash; each device manages itself</td></tr>
-          <tr><td><strong>Security</strong></td><td>Strong &mdash; centralised authentication and access control</td><td>Weaker &mdash; each device must be secured individually</td></tr>
-          <tr><td><strong>Backups</strong></td><td>Centralised backups on the server</td><td>Each user must back up their own data</td></tr>
-          <tr><td><strong>Cost</strong></td><td>Expensive &mdash; requires dedicated server hardware and IT staff</td><td>Cheap &mdash; no specialist hardware needed</td></tr>
-          <tr><td><strong>Scalability</strong></td><td>Handles hundreds or thousands of users well</td><td>Becomes difficult to manage with many devices</td></tr>
-          <tr><td><strong>If a device fails</strong></td><td>If the server fails, clients lose access to resources</td><td>Other devices still function independently</td></tr>
-          <tr><td><strong>Example</strong></td><td>School network, company email system, web services</td><td>Home file sharing, BitTorrent, small office network</td></tr>
-        </tbody>
-      </table>
-
-      <h3>Benefits and Drawbacks of Networks</h3>
-      <table>
-        <thead>
-          <tr><th>Benefits</th><th>Drawbacks</th></tr>
-        </thead>
-        <tbody>
-          <tr><td>Share files and resources (e.g. printers)</td><td>Security risks (hackers, malware can spread)</td></tr>
-          <tr><td>Central backups of data</td><td>Expensive to set up (cabling, hardware)</td></tr>
-          <tr><td>Communication (email, messaging)</td><td>If the server fails, users lose access</td></tr>
-          <tr><td>Central management of software/updates</td><td>Requires specialist staff to maintain</td></tr>
-          <tr><td>Internet access for all connected devices</td><td>Privacy concerns (network traffic can be monitored)</td></tr>
-        </tbody>
-      </table>
-
-      <h3>Network Topologies</h3>
-      <p>A <strong>topology</strong> is the arrangement or layout of how devices are connected in a network.</p>
-
-      <h4>Star Topology</h4>
-      <p>Every device is connected to a <strong>central switch or hub</strong>. All data passes through this central device. Think of it like a spider&rsquo;s web with the switch at the centre. This is the most common topology used in modern networks, including schools, offices, and homes.</p>
+      <h4>Technologies Used in PANs</h4>
       <ul>
-        <li><strong>Advantages:</strong></li>
-      </ul>
-      <ul>
-        <li>If one cable fails, only that device is affected &mdash; the rest of the network continues working</li>
-        <li>Easy to add new devices without disrupting existing connections</li>
-        <li>Fast performance because each device has its own dedicated connection to the switch</li>
-        <li>Easy to troubleshoot &mdash; faults can be isolated to a single cable or device</li>
-      </ul>
-      <ul>
-        <li><strong>Disadvantages:</strong></li>
-      </ul>
-      <ul>
-        <li>If the central switch fails, the entire network goes down (single point of failure)</li>
-        <li>Requires more cabling than a bus topology (every device needs its own cable to the switch)</li>
-        <li>The central switch can be expensive, especially for large networks</li>
+        <li><strong>Bluetooth:</strong> The most common PAN technology. Uses radio waves over short distances (up to about 10 metres). Used for earbuds, speakers, mice, keyboards, smartwatches, and file transfers between phones.</li>
+        <li><strong>Infrared (IrDA):</strong> Uses infrared light to transmit data over very short distances. Requires a direct line of sight between devices. Largely replaced by Bluetooth, but still found in some TV remote controls.</li>
+        <li><strong>USB (wired PAN):</strong> A wired connection between personal devices. Faster than Bluetooth but requires a physical cable. Used for charging, data transfer, and connecting peripherals.</li>
+        <li><strong>NFC (Near Field Communication):</strong> Extremely short range (under 4 cm). Used for contactless payments (tapping your card or phone) and quick device pairing.</li>
       </ul>
 
-      <h4>Bus Topology</h4>
-      <p>All devices are connected to a single <strong>main cable</strong> (called the backbone or bus). Data sent by one device travels along the cable in both directions, and all devices can see it. Terminators are placed at each end of the cable to prevent signal reflection.</p>
-      <ul>
-        <li><strong>Advantages:</strong></li>
-      </ul>
-      <ul>
-        <li>Cheap and easy to set up &mdash; minimal cabling required</li>
-        <li>Works well for small, temporary networks</li>
-      </ul>
-      <ul>
-        <li><strong>Disadvantages:</strong></li>
-      </ul>
-      <ul>
-        <li>If the main cable (backbone) fails, the <strong>whole network goes down</strong></li>
-        <li>Performance slows as more devices are added due to data collisions</li>
-        <li>Difficult to troubleshoot faults (the problem could be anywhere along the cable)</li>
-        <li>Security issues &mdash; all devices can see all data transmitted on the bus</li>
-        <li>Limited cable length and number of devices</li>
-      </ul>
-
-      <h4>Mesh Topology</h4>
-      <p>Every device is connected to <strong>every other device</strong> (full mesh) or to several other devices (partial mesh). Data can take multiple paths between any two devices.</p>
-      <ul>
-        <li><strong>Advantages:</strong></li>
-      </ul>
-      <ul>
-        <li>Very reliable &mdash; if one connection fails, data can take an alternative route</li>
-        <li>No single point of failure &mdash; the network can survive multiple link failures</li>
-        <li>Data can travel via the fastest or least congested route</li>
-      </ul>
-      <ul>
-        <li><strong>Disadvantages:</strong></li>
-      </ul>
-      <ul>
-        <li>Very expensive &mdash; requires a large amount of cabling and many network ports</li>
-        <li>Complex to set up, configure, and maintain</li>
-        <li>Mostly used for critical infrastructure (e.g. the internet&rsquo;s backbone, military networks)</li>
-      </ul>
-      <p>In practice, <strong>partial mesh</strong> topologies are more common than full mesh. The internet itself is a partial mesh &mdash; not every router is connected to every other router, but there are enough connections that data can always find an alternative route if one path fails.</p>
+      <p>Most people carry a PAN with them every day without realising it. If you have a phone in your pocket connected to earbuds in your ears and a watch on your wrist, you are walking around with a personal area network.</p>
 
       <div class="key-concept">
-        <strong>Key Concept: Star vs Bus vs Mesh</strong>
-        <strong>Star</strong> is the most common in schools and offices (reliable, easy to manage). <strong>Bus</strong> is simple but fragile (one cable break = network down). <strong>Mesh</strong> is the most resilient but most expensive. In exams, you should be able to draw each topology and explain the pros and cons.
+        <strong>Key Concept: PAN</strong>
+        A PAN is a tiny network centred on one person, connecting their personal devices over a very short range (a few metres). It uses low-power technologies like Bluetooth. Think of it as your personal bubble of connected devices.
+      </div>
+
+      <!-- LAN -->
+      <h3>LAN &mdash; Local Area Network</h3>
+      <p>A LAN covers a <strong>small geographical area</strong>, such as a single building, a floor of an office, a school campus, or a home. It connects computers, printers, servers, and other devices within that area so they can share resources and communicate.</p>
+
+      <h4>Everyday Examples of LANs</h4>
+      <ul>
+        <li><strong>School network:</strong> All the computers in your school &mdash; in classrooms, the library, and staff offices &mdash; are connected to a LAN. Students can log in to any computer and access their files from a central server. Printers are shared across the network so any computer can print.</li>
+        <li><strong>Home network:</strong> Your home Wi-Fi router creates a LAN. Your laptop, phone, tablet, smart TV, games console, and smart speaker are all connected to the same network. They can share the internet connection and communicate with each other (for example, casting a video from your phone to the TV).</li>
+        <li><strong>Office network:</strong> A small business might have 20 computers, a shared printer, and a file server all connected by Ethernet cables and a switch. Employees can access shared documents and send files to the printer from any workstation.</li>
+        <li><strong>Internet cafe or library:</strong> Public computers connected together within a single building form a LAN, often with shared internet access and printing.</li>
+      </ul>
+
+      <h4>Key Characteristics of a LAN</h4>
+      <ul>
+        <li><strong>Range:</strong> Small area &mdash; typically a single building or small group of nearby buildings (a school campus, for instance)</li>
+        <li><strong>Speed:</strong> Fast &mdash; modern LANs operate at <strong>100 Mbps to 1 Gbps</strong> (gigabit Ethernet) or even <strong>10 Gbps</strong> in some cases. Wireless LANs (Wi-Fi 6) can reach several hundred Mbps.</li>
+        <li><strong>Ownership:</strong> The hardware (cables, switches, routers, servers) is <strong>owned and maintained by the organisation or individual</strong> who operates the LAN. You do not need to pay a telecoms company to run your school network.</li>
+        <li><strong>Cost:</strong> Relatively <strong>cheap to set up and maintain</strong> compared to a WAN. Cables, switches, and a router are the main expenses.</li>
+        <li><strong>Connection types:</strong> Can use <strong>wired connections</strong> (Ethernet cables &mdash; Cat5e, Cat6) or <strong>wireless connections</strong> (Wi-Fi), or a combination of both.</li>
+        <li><strong>Security:</strong> Easier to secure because the network is physically contained. The organisation controls who can access it and can implement firewalls, encryption, and access control policies.</li>
+        <li><strong>Number of devices:</strong> Typically from a handful (home) to hundreds or thousands (large school or office).</li>
+      </ul>
+
+      <h4>Technologies Used in LANs</h4>
+      <ul>
+        <li><strong>Ethernet (wired):</strong> The most common wired LAN technology. Data travels through copper or fibre-optic cables. Ethernet provides reliable, high-speed, low-latency connections. Most desktop computers and servers in schools and offices use Ethernet.</li>
+        <li><strong>Wi-Fi (wireless):</strong> Uses radio waves to connect devices without cables. Convenient for mobile devices like laptops, tablets, and phones. Modern Wi-Fi standards (Wi-Fi 6 / 802.11ax) offer speeds comparable to wired connections in many situations.</li>
+        <li><strong>Switches:</strong> Connect devices within the LAN and direct data to the correct destination using MAC addresses.</li>
+        <li><strong>Routers:</strong> Connect the LAN to external networks (like the internet / WAN) and manage traffic flow.</li>
+      </ul>
+
+      <div class="key-concept">
+        <strong>Key Concept: LAN</strong>
+        A LAN is a network covering a small area like a building or campus. The hardware is owned by the organisation. LANs are fast, relatively cheap, and can be wired (Ethernet), wireless (Wi-Fi), or both. Your school network and your home Wi-Fi are both LANs.
+      </div>
+
+      <!-- WAN -->
+      <h3>WAN &mdash; Wide Area Network</h3>
+      <p>A WAN covers a <strong>large geographical area</strong> &mdash; connecting LANs across cities, countries, or even continents. WANs allow organisations to communicate and share resources over vast distances.</p>
+
+      <h4>Everyday Examples of WANs</h4>
+      <ul>
+        <li><strong>The internet:</strong> The largest and most well-known WAN in the world. It connects billions of devices across every continent, linking LANs together through a global infrastructure of routers, switches, and cables.</li>
+        <li><strong>A multinational company:</strong> A company with offices in London, New York, and Tokyo needs all three offices to access the same files, databases, and communication systems. A WAN connects the LAN in each office across thousands of miles.</li>
+        <li><strong>A bank with branches:</strong> A high-street bank with hundreds of branches across the UK needs every branch to access the central customer database. A WAN connects each branch&rsquo;s LAN to the bank&rsquo;s central data centre.</li>
+        <li><strong>A supermarket chain:</strong> A chain like Tesco has thousands of stores. Their stock management, payment processing, and logistics systems rely on a WAN to connect every store to central servers.</li>
+        <li><strong>Government networks:</strong> The NHS, HMRC, and other government bodies use WANs to connect offices, hospitals, and agencies across the country.</li>
+      </ul>
+
+      <h4>Key Characteristics of a WAN</h4>
+      <ul>
+        <li><strong>Range:</strong> Large area &mdash; cities, countries, continents, or the entire globe</li>
+        <li><strong>Speed:</strong> Generally <strong>slower than a LAN</strong> because data has to travel much further and pass through more devices. However, modern WAN connections can still be very fast (e.g. fibre-optic leased lines can deliver hundreds of Mbps or more).</li>
+        <li><strong>Ownership:</strong> The infrastructure (cables, satellites, exchanges) is typically <strong>owned by telecommunications companies</strong> (like BT, Virgin Media, or international carriers). Organisations <strong>lease</strong> or rent access to this infrastructure rather than building it themselves.</li>
+        <li><strong>Cost:</strong> <strong>More expensive</strong> than a LAN. Organisations must pay ongoing fees to telecoms companies for leased lines, bandwidth, and maintenance. The cost of undersea fibre-optic cables, satellite links, and international infrastructure is enormous.</li>
+        <li><strong>Connection types:</strong> Uses a range of technologies including <strong>leased lines</strong> (dedicated, private connections), <strong>satellite links</strong>, <strong>undersea fibre-optic cables</strong>, <strong>microwave links</strong>, and <strong>public telephone networks</strong>.</li>
+        <li><strong>Security:</strong> <strong>Harder to secure</strong> because data crosses public infrastructure (cables, exchanges, and routers owned by third parties). Encryption and VPNs are essential to protect data in transit.</li>
+        <li><strong>Latency:</strong> Higher latency than a LAN because data may travel thousands of miles and pass through many routers. A packet sent from London to Sydney travels over 17,000 km.</li>
+      </ul>
+
+      <h4>Technologies Used in WANs</h4>
+      <ul>
+        <li><strong>Leased lines:</strong> Dedicated, private connections rented from a telecoms provider. Offer guaranteed bandwidth and reliability, but are expensive. Often used by businesses for critical connections.</li>
+        <li><strong>Fibre-optic cables (including undersea):</strong> Transmit data as pulses of light through glass fibres. Extremely fast and can carry enormous amounts of data. Undersea cables connect continents &mdash; over 95% of international data travels through undersea fibre-optic cables.</li>
+        <li><strong>Satellite links:</strong> Used to reach remote areas where cables cannot easily be laid (e.g. ships, aircraft, rural areas). Higher latency than cable connections because the signal must travel to a satellite in orbit and back.</li>
+        <li><strong>Microwave links:</strong> Use microwave radio signals transmitted between towers with a direct line of sight. Used for medium-distance WAN connections, especially where laying cables is impractical.</li>
+      </ul>
+
+      <div class="key-concept">
+        <strong>Key Concept: WAN</strong>
+        A WAN connects LANs across large distances &mdash; cities, countries, or the world. The infrastructure is owned by telecoms companies and leased by organisations. WANs are slower and more expensive than LANs, and harder to secure. The internet is the largest WAN.
+      </div>
+
+      <div class="warning">
+        <strong>Common Mistake:</strong> Students sometimes say &ldquo;the internet is a LAN.&rdquo; This is incorrect. The internet is the largest <strong>WAN</strong> in the world. A LAN only covers a small area like a building. The internet connects millions of LANs across the globe, making it a Wide Area Network. Remember: if it spans cities or countries, it is a WAN.
       </div>
     </section>
 
     <!-- ==================== UNDERSTAND ==================== -->
     <section class="understand">
       <span class="section-label">Understand</span>
-      <h2>Key Topics in Detail</h2>
+      <h2>Comparing Network Types</h2>
 
-      <!-- PROTOCOLS -->
-      <h3>Network Protocols</h3>
-      <p>A <strong>protocol</strong> is a set of rules that devices must follow to communicate with each other. Without protocols, devices would be like people speaking different languages &mdash; they could not understand each other.</p>
+      <h3>LAN vs WAN &mdash; Detailed Comparison</h3>
+      <p>In your GCSE exam, you are very likely to be asked to compare LANs and WANs. This table covers all the key differences:</p>
 
       <table>
         <thead>
-          <tr><th>Protocol</th><th>Full Name</th><th>Purpose</th></tr>
+          <tr><th>Feature</th><th>LAN (Local Area Network)</th><th>WAN (Wide Area Network)</th></tr>
         </thead>
         <tbody>
-          <tr><td><strong>TCP/IP</strong></td><td>Transmission Control Protocol / Internet Protocol</td><td>The fundamental protocol suite of the internet. TCP ensures data is delivered reliably and in order. IP handles addressing and routing.</td></tr>
-          <tr><td><strong>HTTP</strong></td><td>HyperText Transfer Protocol</td><td>Used for loading web pages. Your browser sends an HTTP request; the server sends back the page. Data is sent in <strong>plain text</strong> &mdash; not encrypted.</td></tr>
-          <tr><td><strong>HTTPS</strong></td><td>HTTP Secure</td><td>Same as HTTP but with <strong>TLS/SSL encryption</strong>, keeping data private (e.g. bank logins, online shopping). The padlock icon in your browser shows HTTPS is active.</td></tr>
-          <tr><td><strong>FTP</strong></td><td>File Transfer Protocol</td><td>Used for uploading and downloading files between computers. Often used by web developers to upload website files to a server. Transfers data in plain text unless SFTP (secure FTP) is used.</td></tr>
-          <tr><td><strong>SMTP</strong></td><td>Simple Mail Transfer Protocol</td><td>Used for <strong>sending</strong> emails from a client to a mail server, or between mail servers. Think of SMTP as the postal worker who picks up your letter.</td></tr>
-          <tr><td><strong>POP3</strong></td><td>Post Office Protocol 3</td><td>Used for <strong>receiving</strong> emails. Downloads emails to your device and typically <strong>deletes them from the server</strong>. Good for accessing email from one device only.</td></tr>
-          <tr><td><strong>IMAP</strong></td><td>Internet Message Access Protocol</td><td>Used for <strong>receiving</strong> emails. Keeps emails <strong>on the server</strong> so you can access them from multiple devices. More modern than POP3 and used by most webmail services.</td></tr>
-          <tr><td><strong>DNS</strong></td><td>Domain Name System</td><td>Translates human-friendly domain names (e.g. google.com) into IP addresses (e.g. 142.250.187.46) that computers use to find each other.</td></tr>
+          <tr>
+            <td><strong>Geographical area</strong></td>
+            <td>Small &mdash; a single building, school, home, or campus</td>
+            <td>Large &mdash; cities, countries, continents, or worldwide</td>
+          </tr>
+          <tr>
+            <td><strong>Speed</strong></td>
+            <td>High &mdash; typically 100 Mbps to 1 Gbps or more</td>
+            <td>Lower &mdash; depends on connection type; data travels further and through more devices</td>
+          </tr>
+          <tr>
+            <td><strong>Ownership</strong></td>
+            <td>Hardware is owned by the organisation or individual</td>
+            <td>Infrastructure is owned by telecoms companies and leased by organisations</td>
+          </tr>
+          <tr>
+            <td><strong>Cost</strong></td>
+            <td>Cheaper &mdash; cables, switches, and a router are the main expenses</td>
+            <td>More expensive &mdash; ongoing fees for leased lines, bandwidth, and specialist equipment</td>
+          </tr>
+          <tr>
+            <td><strong>Example</strong></td>
+            <td>School network, home Wi-Fi, office network</td>
+            <td>The internet, a multinational company&rsquo;s network, a bank&rsquo;s branch network</td>
+          </tr>
+          <tr>
+            <td><strong>Security</strong></td>
+            <td>Easier to secure &mdash; physical access can be controlled; network is self-contained</td>
+            <td>Harder to secure &mdash; data crosses public infrastructure owned by third parties</td>
+          </tr>
+          <tr>
+            <td><strong>Latency</strong></td>
+            <td>Low &mdash; data travels short distances</td>
+            <td>Higher &mdash; data may travel thousands of miles through many routers</td>
+          </tr>
+          <tr>
+            <td><strong>Connection types</strong></td>
+            <td>Ethernet (wired), Wi-Fi (wireless)</td>
+            <td>Leased lines, undersea fibre optics, satellite, microwave links</td>
+          </tr>
+          <tr>
+            <td><strong>Maintenance</strong></td>
+            <td>Maintained by the organisation&rsquo;s own IT staff or a local technician</td>
+            <td>Requires specialist telecoms engineers; often depends on third-party providers</td>
+          </tr>
         </tbody>
       </table>
 
-      <h4>HTTP vs HTTPS &mdash; Why Encryption Matters</h4>
-      <p>When you use <strong>HTTP</strong>, all data sent between your browser and the web server is in <strong>plain text</strong>. Anyone intercepting the traffic (e.g. on a public Wi-Fi network) could read your passwords, credit card numbers, or personal information.</p>
-      <p><strong>HTTPS</strong> adds a layer of <strong>TLS (Transport Layer Security) encryption</strong>. This means data is scrambled before it leaves your browser and can only be unscrambled by the intended server. The server proves its identity using a <strong>digital certificate</strong> issued by a trusted authority. Modern browsers now mark HTTP sites as &ldquo;Not Secure&rdquo; to warn users.</p>
+      <h3>PAN vs LAN vs WAN &mdash; At a Glance</h3>
+      <table>
+        <thead>
+          <tr><th>Feature</th><th>PAN</th><th>LAN</th><th>WAN</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Area</strong></td>
+            <td>A few metres (around one person)</td>
+            <td>A building or campus</td>
+            <td>Cities, countries, or the world</td>
+          </tr>
+          <tr>
+            <td><strong>Typical devices</strong></td>
+            <td>Phone, earbuds, watch, mouse</td>
+            <td>Computers, printers, servers</td>
+            <td>Routers connecting distant LANs</td>
+          </tr>
+          <tr>
+            <td><strong>Speed</strong></td>
+            <td>Low to moderate</td>
+            <td>High</td>
+            <td>Variable (often lower than LAN)</td>
+          </tr>
+          <tr>
+            <td><strong>Technology</strong></td>
+            <td>Bluetooth, USB, NFC</td>
+            <td>Ethernet, Wi-Fi</td>
+            <td>Leased lines, fibre, satellite</td>
+          </tr>
+          <tr>
+            <td><strong>Cost</strong></td>
+            <td>Very low</td>
+            <td>Moderate</td>
+            <td>High</td>
+          </tr>
+          <tr>
+            <td><strong>Example</strong></td>
+            <td>Phone + earbuds</td>
+            <td>School IT room</td>
+            <td>The internet</td>
+          </tr>
+        </tbody>
+      </table>
 
-      <h4>FTP &mdash; Transferring Files</h4>
-      <p>FTP allows files to be uploaded to or downloaded from a remote server. A web developer might use FTP to upload their website files to a hosting server. FTP requires a username and password to connect, but transmits data in plain text. For this reason, <strong>SFTP</strong> (Secure FTP) or <strong>FTPS</strong> (FTP Secure) are preferred for sensitive transfers.</p>
+      <h3>Benefits and Drawbacks of Networks</h3>
+      <p>Connecting devices together into a network brings many advantages, but also creates new problems and risks. You need to know both sides for your exam.</p>
 
-      <h4>Email Protocols: SMTP, POP3, and IMAP</h4>
-      <p>Sending and receiving email uses different protocols:</p>
-      <ul>
-        <li><strong>SMTP</strong> handles sending. When you click &ldquo;Send&rdquo;, your email client uses SMTP to deliver the message to the recipient&rsquo;s mail server.</li>
-        <li><strong>POP3</strong> downloads emails to your device and usually removes them from the server. This means you can only read those emails on the device you downloaded them to.</li>
-        <li><strong>IMAP</strong> keeps emails stored on the server and synchronises them across all your devices. If you read an email on your phone, it also shows as read on your laptop. Most modern email services (Gmail, Outlook) use IMAP.</li>
-      </ul>
-
-      <h4>DNS &mdash; How Domain Names Become IP Addresses</h4>
-      <p>When you type a web address like <code>www.bbc.co.uk</code> into your browser, your computer does not know what that means &mdash; it needs an IP address. Here is how DNS resolves the domain name, step by step:</p>
-      <ol>
-        <li><strong>Browser cache check</strong> &mdash; Your browser first checks whether it has recently visited this site and already knows the IP address. If so, it uses the cached address.</li>
-        <li><strong>Operating system cache</strong> &mdash; If the browser does not have it, the operating system checks its own DNS cache.</li>
-        <li><strong>Recursive DNS server</strong> &mdash; If neither cache has the answer, your device sends a query to a recursive DNS server (usually run by your Internet Service Provider). This server will do the hard work of finding the IP address.</li>
-        <li><strong>Root DNS server</strong> &mdash; The recursive server contacts a root DNS server, which does not know the IP address itself but directs the query to the correct <strong>Top-Level Domain (TLD) server</strong> (e.g. the server responsible for all <code>.co.uk</code> domains).</li>
-        <li><strong>TLD server</strong> &mdash; The TLD server directs the query to the <strong>authoritative DNS server</strong> for <code>bbc.co.uk</code>.</li>
-        <li><strong>Authoritative DNS server</strong> &mdash; This server holds the actual DNS records for <code>bbc.co.uk</code> and returns the IP address (e.g. <code>151.101.0.81</code>).</li>
-        <li><strong>Response returned</strong> &mdash; The IP address is passed back through the chain to your browser, which can now connect to the web server at that address. The result is cached for future use.</li>
-      </ol>
+      <table>
+        <thead>
+          <tr><th>Benefits of Networks</th><th>Drawbacks of Networks</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>File and resource sharing:</strong> Users can share files, folders, and hardware (such as printers and scanners) across the network, reducing duplication and cost. A single high-quality printer can serve an entire office.</td>
+            <td><strong>Security risks:</strong> Connecting devices together means that hackers, viruses, and other malware can spread across the network. A single infected computer can compromise the entire network if security is weak.</td>
+          </tr>
+          <tr>
+            <td><strong>Central backups:</strong> Data can be backed up automatically to a central server or cloud storage. If a user&rsquo;s computer fails, their files are safe because they are stored on the server, not just on the local machine.</td>
+            <td><strong>Expensive to set up:</strong> Setting up a network requires hardware (cables, switches, routers, servers) and professional installation. For larger networks, the initial cost can be significant.</td>
+          </tr>
+          <tr>
+            <td><strong>Communication:</strong> Networks enable email, instant messaging, video conferencing, and other communication tools. Staff in different offices (or even different countries) can collaborate in real time.</td>
+            <td><strong>Server failure:</strong> In a client-server network, if the central server goes down, users may lose access to files, applications, email, and other shared resources until the server is repaired or replaced.</td>
+          </tr>
+          <tr>
+            <td><strong>Central management:</strong> Software updates, security patches, and user accounts can be managed centrally by an IT administrator. This saves time compared to configuring each computer individually.</td>
+            <td><strong>Specialist staff required:</strong> Networks need trained IT technicians or network administrators to set up, manage, and troubleshoot. Employing specialist staff adds ongoing cost.</td>
+          </tr>
+          <tr>
+            <td><strong>Internet access:</strong> A network allows all connected devices to share a single internet connection, rather than each device needing its own separate connection.</td>
+            <td><strong>Privacy concerns:</strong> Network administrators can monitor traffic, emails, and websites visited by users. In a workplace or school, user activity may be logged and reviewed.</td>
+          </tr>
+          <tr>
+            <td><strong>Flexible working:</strong> Users can access files and applications from any computer on the network, or even remotely over a WAN. This supports hot-desking and remote working.</td>
+            <td><strong>Dependence on connectivity:</strong> If the network connection goes down, users may be unable to work, access files, or communicate. The organisation becomes dependent on the network functioning correctly.</td>
+          </tr>
+        </tbody>
+      </table>
 
       <div class="key-concept">
-        <strong>Did You Know?</strong>
-        There are over 5 billion internet users worldwide as of 2024 &mdash; more than 60% of the global population. Every time one of those users visits a website, the DNS process described above happens in the background, typically in just a few milliseconds. DNS servers worldwide handle trillions of queries every day.
+        <strong>Exam Tip</strong>
+        When writing about benefits and drawbacks of networks in an exam, always <strong>explain</strong> each point rather than just listing it. For example, do not just write &ldquo;sharing files.&rdquo; Instead, write: &ldquo;Users can share files across the network, which reduces duplication and means everyone can access the most up-to-date version of a document.&rdquo; Adding an example or explanation will earn you more marks.
       </div>
-
-      <!-- TCP/IP LAYERS -->
-      <h3>The TCP/IP Layer Model</h3>
-      <p>The TCP/IP model divides network communication into <strong>four layers</strong>. Each layer has a specific job and passes data to the layer above or below it. This layered approach means each layer can be developed and updated independently.</p>
-
-      <table>
-        <thead>
-          <tr><th>Layer</th><th>Name</th><th>What It Does</th><th>Protocols</th></tr>
-        </thead>
-        <tbody>
-          <tr><td>4 (top)</td><td><strong>Application</strong></td><td>Provides network services directly to the user or software. This is the layer you interact with &mdash; web browsers, email clients, and file transfer programs all operate here.</td><td>HTTP, HTTPS, FTP, SMTP, DNS, POP3, IMAP</td></tr>
-          <tr><td>3</td><td><strong>Transport</strong></td><td>Breaks data into packets, ensures reliable delivery, and reassembles at the other end. TCP provides reliable, ordered delivery. UDP provides faster but less reliable delivery (used for live streaming, gaming).</td><td>TCP, UDP</td></tr>
-          <tr><td>2</td><td><strong>Internet</strong></td><td>Handles addressing (IP addresses) and routing packets across networks. Each packet is given source and destination IP addresses so routers know where to send it.</td><td>IP</td></tr>
-          <tr><td>1 (bottom)</td><td><strong>Network Interface</strong></td><td>Handles the physical transmission of data as electrical signals through cables, radio waves through Wi-Fi, or light pulses through fibre optics. Also manages MAC addressing.</td><td>Ethernet, Wi-Fi</td></tr>
-        </tbody>
-      </table>
-
-      <p><strong>How the layers work together:</strong> When you send data (e.g. loading a web page), it starts at the Application layer and moves down through each layer. Each layer adds its own information (headers) to the data &mdash; this is called <strong>encapsulation</strong>. At the receiving end, the data moves back up through the layers, and each layer strips off its header to retrieve the original data &mdash; this is called <strong>de-encapsulation</strong>.</p>
-
-      <h4>Worked Example: Sending an Email</h4>
-      <p>Imagine you write an email in Gmail and press &ldquo;Send.&rdquo; Here is what happens at each layer:</p>
-      <ol>
-        <li><strong>Application layer</strong> &mdash; Gmail uses <strong>SMTP</strong> to format the email with headers (to, from, subject) and pass it to the Transport layer.</li>
-        <li><strong>Transport layer</strong> &mdash; <strong>TCP</strong> breaks the email into packets, adds sequence numbers so they can be reassembled, and establishes a reliable connection with the recipient&rsquo;s mail server.</li>
-        <li><strong>Internet layer</strong> &mdash; <strong>IP</strong> adds the source and destination IP addresses to each packet, enabling routers to direct each packet towards the mail server.</li>
-        <li><strong>Network Interface layer</strong> &mdash; Each packet is converted into electrical signals (Ethernet), radio waves (Wi-Fi), or light pulses (fibre optic) for physical transmission across the network.</li>
-      </ol>
-      <p>At the recipient&rsquo;s end, the process reverses: the Network Interface layer receives the signals, the Internet layer reads the IP addresses, the Transport layer reassembles the packets in order, and the Application layer delivers the complete email to the inbox.</p>
-
-      <!-- PACKET SWITCHING -->
-      <h3>Packet Switching</h3>
-      <p>When you send data across the internet &mdash; an email, a photo, a web page request &mdash; it does not travel as one big block. Instead, it is split into small chunks called <strong>packets</strong>.</p>
-
-      <h4>How Data Is Broken into Packets</h4>
-      <p>Suppose you send a 5 MB photograph to a friend. The Transport layer (TCP) divides this data into many small packets, each typically around <strong>1,500 bytes</strong> (the maximum transmission unit, or MTU, for most networks). A 5 MB photo would be split into roughly 3,500 packets. Each packet is numbered so it can be reassembled in the correct order at the other end.</p>
-
-      <h4>What Is in a Packet Header?</h4>
-      <p>Every packet has a <strong>header</strong> that contains essential routing and reassembly information:</p>
-      <ul>
-        <li><strong>Source IP address</strong> &mdash; The IP address of the device that sent the packet</li>
-        <li><strong>Destination IP address</strong> &mdash; The IP address of the device the packet is being sent to</li>
-        <li><strong>Sequence number</strong> &mdash; The position of this packet in the overall message, so packets can be reassembled in the correct order</li>
-        <li><strong>TTL (Time to Live)</strong> &mdash; A counter that decreases each time the packet passes through a router. If TTL reaches zero, the packet is discarded. This prevents packets from circulating the network forever if they cannot reach their destination.</li>
-        <li><strong>Protocol information</strong> &mdash; Identifies which protocol (TCP, UDP) is being used</li>
-        <li><strong>Checksum</strong> &mdash; Error-checking data used to verify the packet was not corrupted during transmission</li>
-      </ul>
-
-      <p><strong>Each packet also contains:</strong></p>
-      <ul>
-        <li><strong>Payload</strong> &mdash; A chunk of the actual data being sent</li>
-        <li><strong>Trailer/footer</strong> &mdash; Additional error-checking data to verify the packet arrived correctly</li>
-      </ul>
-
-      <h4>How Packets Travel Across the Network</h4>
-      <ol>
-        <li>The data is split into packets at the source device</li>
-        <li>Each packet is sent independently &mdash; they may take <strong>different routes</strong> across the network</li>
-        <li>Routers at each point examine the destination IP address and decide the best path for each packet based on current network traffic, congestion, and available routes</li>
-        <li>At the destination, packets are <strong>reassembled</strong> in the correct order using the sequence numbers in the headers</li>
-        <li>If any packets are missing or corrupted (detected by the checksum), they are <strong>re-requested</strong> from the source</li>
-        <li>Once all packets have arrived and been reassembled, the complete data (e.g. the photo) is delivered to the application</li>
-      </ol>
-
-      <h4>Why Packets Might Take Different Routes</h4>
-      <p>Unlike a phone call (which uses a dedicated circuit), packet switching does not reserve a single path. Each router independently decides where to send each packet based on the current state of the network. Packets may take different routes because:</p>
-      <ul>
-        <li>Some routes may be <strong>congested</strong> (busy with other traffic), so routers send packets along less busy paths</li>
-        <li>A link between two routers may have <strong>failed</strong>, forcing packets to be rerouted</li>
-        <li>Different routes may be <strong>faster</strong> at different moments in time</li>
-        <li>Routers use <strong>routing tables</strong> that are constantly updated to reflect the current network conditions</li>
-      </ul>
-      <p>This is one of the great strengths of packet switching: because no single route is required, the network is <strong>resilient</strong>. Even if an entire section of the network goes offline (e.g. a damaged undersea cable), packets are simply rerouted around the problem. The receiving device does not need to know or care which routes the packets took &mdash; it simply uses the sequence numbers to put them back in the right order.</p>
-
-      <div class="key-concept">
-        <strong>Key Concept: Why Packet Switching?</strong>
-        Packet switching is efficient because no single path is reserved for one communication &mdash; the network is shared. If one route is congested or fails, packets can take alternative routes. This makes the internet robust and able to handle millions of simultaneous users. It also means that if a single packet is lost, only that small packet needs to be resent &mdash; not the entire file.
-      </div>
-
-      <!-- IP ADDRESSING -->
-      <h3>IP Addressing</h3>
-      <p>Every device on a network needs a unique address so that data can be sent to the right place. This is the <strong>IP address</strong> (Internet Protocol address).</p>
-
-      <h4>IPv4</h4>
-      <ul>
-        <li>Four numbers separated by dots, each between 0 and 255</li>
-        <li>Example: <code>192.168.1.1</code></li>
-        <li>Uses 32 bits, giving approximately <strong>4.3 billion</strong> unique addresses</li>
-        <li>Running out of addresses due to the huge number of internet-connected devices</li>
-      </ul>
-
-      <h4>IPv6</h4>
-      <ul>
-        <li>Eight groups of four hexadecimal digits, separated by colons</li>
-        <li>Example: <code>2001:0db8:85a3:0000:0000:8a2e:0370:7334</code></li>
-        <li>Uses 128 bits, giving approximately <strong>340 undecillion</strong> (3.4 &times; 10<sup>38</sup>) unique addresses</li>
-        <li>Created to solve the IPv4 shortage &mdash; enough addresses for every grain of sand on Earth, many times over</li>
-      </ul>
-
-      <h4>MAC Address vs IP Address</h4>
-      <p>Students often confuse these two types of address. Here is the key difference:</p>
-      <table>
-        <thead>
-          <tr><th>Feature</th><th>MAC Address</th><th>IP Address</th></tr>
-        </thead>
-        <tbody>
-          <tr><td><strong>What is it?</strong></td><td>A unique hardware address assigned to a NIC at the factory</td><td>A logical address assigned to a device on a network</td></tr>
-          <tr><td><strong>Format</strong></td><td>Six pairs of hexadecimal digits (e.g. <code>00:1A:2B:3C:4D:5E</code>)</td><td>IPv4: four decimal numbers (e.g. <code>192.168.1.1</code>)</td></tr>
-          <tr><td><strong>Changes?</strong></td><td>Permanent &mdash; does not change (burned into hardware)</td><td>Can change &mdash; assigned by the network (e.g. DHCP)</td></tr>
-          <tr><td><strong>Scope</strong></td><td>Used within a local network (LAN)</td><td>Used to route data across networks (including the internet)</td></tr>
-          <tr><td><strong>Used by</strong></td><td>Switches</td><td>Routers</td></tr>
-        </tbody>
-      </table>
-
-      <!-- NETWORK HARDWARE -->
-      <h3>Network Hardware</h3>
-      <p>A network requires physical devices to connect computers and manage the flow of data. Here are the key hardware components you need to know:</p>
-
-      <h4>Router</h4>
-      <p>A <strong>router</strong> connects two or more <strong>different networks</strong> together and directs (routes) data packets between them. Your home router connects your local network (LAN) to the internet (WAN). Routers use <strong>IP addresses</strong> to determine the best path for each packet and maintain <strong>routing tables</strong> &mdash; databases that map out available paths and help the router decide which direction to forward each packet.</p>
-      <ul>
-        <li>Operates at the <strong>Internet layer</strong> of the TCP/IP model</li>
-        <li>Assigns local IP addresses to devices using DHCP (Dynamic Host Configuration Protocol)</li>
-        <li>Found in homes, schools, offices, and at key junctions across the internet</li>
-      </ul>
-
-      <h4>Switch</h4>
-      <p>A <strong>switch</strong> connects devices within the <strong>same network</strong> (LAN) and directs data only to the specific device it is intended for, using <strong>MAC addresses</strong>. Unlike a hub (which sends data to all connected devices), a switch is intelligent &mdash; it learns which device is connected to which port.</p>
-      <ul>
-        <li>Operates at the <strong>Network Interface layer</strong> of the TCP/IP model</li>
-        <li>Reduces unnecessary traffic and improves network performance</li>
-        <li>The central device in a star topology</li>
-      </ul>
-
-      <h4>NIC (Network Interface Card/Controller)</h4>
-      <p>A <strong>NIC</strong> is a hardware component inside a device (computer, printer, server) that allows it to connect to a network. Every NIC has a unique <strong>MAC address</strong> burned into it at the factory.</p>
-      <ul>
-        <li>Can be wired (Ethernet port) or wireless (Wi-Fi adapter)</li>
-        <li>Converts data into signals that can be transmitted over the network medium (cable or radio waves)</li>
-        <li>Most modern devices have both wired and wireless NICs built in</li>
-      </ul>
-
-      <h4>WAP (Wireless Access Point)</h4>
-      <p>A <strong>WAP</strong> provides a wireless connection point for devices to join a wired network. It acts as a bridge between Wi-Fi devices and the wired network infrastructure.</p>
-      <ul>
-        <li>Broadcasts a Wi-Fi signal that wireless devices can connect to</li>
-        <li>Often built into home routers (your home &ldquo;router&rdquo; is actually a router, switch, and WAP combined)</li>
-        <li>Schools and large offices use multiple WAPs to ensure wireless coverage across the entire building</li>
-        <li>Supports security features such as WPA2/WPA3 encryption and password protection</li>
-      </ul>
-
-      <table>
-        <thead>
-          <tr><th>Device</th><th>Connects</th><th>Uses</th><th>Key Feature</th></tr>
-        </thead>
-        <tbody>
-          <tr><td><strong>Router</strong></td><td>Different networks (e.g. LAN to WAN)</td><td>IP addresses</td><td>Routes packets between networks</td></tr>
-          <tr><td><strong>Switch</strong></td><td>Devices within the same LAN</td><td>MAC addresses</td><td>Sends data only to intended device</td></tr>
-          <tr><td><strong>NIC</strong></td><td>A device to the network</td><td>MAC address</td><td>Every networked device has one</td></tr>
-          <tr><td><strong>WAP</strong></td><td>Wireless devices to a wired network</td><td>Wi-Fi radio signals</td><td>Broadcasts wireless signal</td></tr>
-        </tbody>
-      </table>
-
-      <!-- NETWORK SECURITY -->
-      <h3>Network Security</h3>
-      <p>Networks are incredibly useful, but they also create vulnerabilities. Organisations and individuals must take steps to protect their data and systems from a wide range of threats.</p>
-
-      <h4>Types of Malware</h4>
-      <p><strong>Malware</strong> (malicious software) is any software designed to damage, disrupt, or gain unauthorised access to a system:</p>
-      <ul>
-        <li><strong>Virus</strong> &mdash; Attaches itself to a legitimate program and spreads when that program is run. Can corrupt or delete files. Requires human action to spread (e.g. opening an infected email attachment).</li>
-        <li><strong>Worm</strong> &mdash; Self-replicating malware that spreads across networks <strong>without</strong> needing a host program or human action. Can consume bandwidth and crash networks. Spreads much faster than viruses.</li>
-        <li><strong>Trojan</strong> &mdash; Disguises itself as legitimate software but performs malicious actions in the background (e.g. opening a &ldquo;backdoor&rdquo; for hackers). Unlike viruses and worms, trojans do not replicate themselves.</li>
-        <li><strong>Ransomware</strong> &mdash; Encrypts the victim&rsquo;s files and demands payment (a ransom) for the decryption key. Has targeted hospitals, schools, and businesses. Even if the ransom is paid, there is no guarantee the files will be recovered.</li>
-        <li><strong>Spyware</strong> &mdash; Secretly monitors user activity and collects data (passwords, browsing habits, keystrokes) without consent. Often installed alongside other software.</li>
-        <li><strong>Adware</strong> &mdash; Displays unwanted advertisements on the user&rsquo;s device. While not always harmful, adware can slow down a system, track browsing habits, and sometimes serve as a gateway for more dangerous malware.</li>
-      </ul>
-
-      <h4>Social Engineering Attacks</h4>
-      <p><strong>Social engineering</strong> manipulates <strong>people</strong> rather than technology to gain access to systems or data. It exploits human trust, curiosity, or fear.</p>
-      <ul>
-        <li><strong>Phishing</strong> &mdash; Fake emails, texts, or websites that trick users into revealing personal information (passwords, bank details). Often disguised as messages from trusted organisations like banks or HMRC. May include urgent language (&ldquo;Your account will be closed!&rdquo;) to pressure victims into acting quickly.</li>
-        <li><strong>Shoulder surfing</strong> &mdash; Physically looking over someone&rsquo;s shoulder to observe them entering a password, PIN, or other sensitive information. Common in public places such as coffee shops or on public transport.</li>
-        <li><strong>Pharming</strong> &mdash; Redirecting users from a legitimate website to a fraudulent copy without their knowledge. This is done by corrupting DNS settings so that a genuine web address leads to a fake site designed to steal login credentials.</li>
-        <li><strong>Pretexting</strong> &mdash; Creating a fabricated scenario (a pretext) to trick someone into providing information or performing an action. For example, a caller claiming to be from the IT department asking for your login details to &ldquo;fix a problem.&rdquo;</li>
-        <li><strong>Tailgating / piggybacking</strong> &mdash; Physically following an authorised person through a secure door or entrance without using their own credentials. For example, someone carrying heavy boxes asks you to hold the door open to a secure server room.</li>
-      </ul>
-      <p>Social engineering is often the weakest link in security because it targets <strong>human behaviour</strong> rather than technology. The best technical defences in the world cannot help if an employee gives away their password over the phone. This is why <strong>security awareness training</strong> is a critical part of any organisation&rsquo;s cyber security strategy.</p>
-
-      <h4>Other Attacks</h4>
-      <ul>
-        <li><strong>Brute force attack</strong> &mdash; Systematically trying every possible password combination until the correct one is found. Strong, long passwords take much longer to crack.</li>
-        <li><strong>DDoS (Distributed Denial of Service)</strong> &mdash; Flooding a server with so many requests that it cannot respond to legitimate users. Often uses a &ldquo;botnet&rdquo; (network of compromised computers).</li>
-        <li><strong>SQL injection</strong> &mdash; Inserting malicious SQL code into a website&rsquo;s input field (e.g. a login form) to manipulate the database. Can expose, modify, or delete data.</li>
-        <li><strong>Man-in-the-middle (MITM)</strong> &mdash; An attacker secretly intercepts and potentially alters communication between two parties who believe they are communicating directly with each other. HTTPS helps prevent this.</li>
-      </ul>
-
-      <h4>Encryption in Detail</h4>
-      <p>Encryption is one of the most important defences in network security. It scrambles data into an unreadable format so that only authorised recipients can read it. There are two main types:</p>
-      <ul>
-        <li><strong>Symmetric encryption</strong> &mdash; The same key is used to encrypt and decrypt the data. It is fast and efficient, making it ideal for encrypting large amounts of data. However, the key must be shared securely between both parties &mdash; if the key is intercepted, the data can be read.</li>
-        <li><strong>Asymmetric encryption</strong> &mdash; Uses a pair of keys: a <strong>public key</strong> (shared openly) to encrypt the data, and a <strong>private key</strong> (kept secret) to decrypt it. Anyone can encrypt a message using the public key, but only the holder of the private key can decrypt it. This is more secure for internet communication because the private key never needs to be transmitted. HTTPS uses a combination of both: asymmetric encryption to securely exchange a symmetric key, then symmetric encryption for the actual data transfer (because it is faster).</li>
-      </ul>
-
-      <h4>Prevention Methods</h4>
-      <p>There are many ways to protect a network and its users from cyber threats:</p>
-      <table>
-        <thead>
-          <tr><th>Method</th><th>Description</th></tr>
-        </thead>
-        <tbody>
-          <tr><td><strong>Firewall</strong></td><td>Monitors and filters incoming and outgoing network traffic based on security rules. Blocks suspicious connections and prevents unauthorised access. Can be hardware or software.</td></tr>
-          <tr><td><strong>Encryption</strong></td><td>Scrambles data into an unreadable format so only authorised recipients can read it. Used in HTTPS, email, and stored data. Symmetric encryption uses one key; asymmetric uses a public/private key pair.</td></tr>
-          <tr><td><strong>Anti-malware software</strong></td><td>Scans files and programs for known malware signatures. Can detect, quarantine, and remove malicious software. Must be kept up to date with the latest virus definitions.</td></tr>
-          <tr><td><strong>Authentication</strong></td><td>Verifying that a user is who they claim to be. Includes passwords, biometrics (fingerprint, face recognition), and two-factor authentication (2FA).</td></tr>
-          <tr><td><strong>Access control</strong></td><td>Restricting what resources different users can access. Users are given only the permissions they need for their role (the principle of least privilege). Prevents one compromised account from accessing everything.</td></tr>
-          <tr><td><strong>Patching and updates</strong></td><td>Regularly installing software updates and security patches to fix known vulnerabilities. Many attacks exploit flaws that have already been patched &mdash; organisations that delay updates are at higher risk.</td></tr>
-          <tr><td><strong>MAC address filtering</strong></td><td>Configuring a network to only allow devices with approved MAC addresses to connect. Adds a layer of security but can be bypassed by spoofing.</td></tr>
-          <tr><td><strong>Penetration testing</strong></td><td>Hiring ethical hackers to deliberately attempt to break into a system to identify weaknesses before malicious attackers find them.</td></tr>
-        </tbody>
-      </table>
-
-      <h4>Network Policies</h4>
-      <p>Organisations implement <strong>network policies</strong> to ensure consistent security practices and to guide staff behaviour:</p>
-      <ul>
-        <li><strong>Acceptable use policy</strong> &mdash; Defines what users are and are not allowed to do on the network. For example, rules about not installing unauthorised software, not visiting inappropriate websites, and not sharing passwords.</li>
-        <li><strong>Backup procedures</strong> &mdash; Defines how often data is backed up, where backups are stored, and how they can be restored. The <strong>3-2-1 rule</strong> is common: keep 3 copies of your data, on 2 different types of media, with 1 copy stored off-site.</li>
-        <li><strong>Disaster recovery plan</strong> &mdash; A documented plan for restoring systems and data after a major incident (e.g. ransomware attack, hardware failure, fire, or flood). Includes priorities, responsibilities, and step-by-step recovery procedures.</li>
-        <li><strong>Password policy</strong> &mdash; Rules about minimum password length, complexity, and how often passwords must be changed. May require multi-factor authentication for sensitive systems.</li>
-      </ul>
 
       <div class="warning">
-        <strong>Common Mistake:</strong> Students often confuse viruses and worms. A <strong>virus</strong> needs a host program to attach to and requires human action (like opening a file) to spread. A <strong>worm</strong> is standalone and spreads automatically across networks without any human action. Both are types of malware, but they work differently.
-      </div>
-
-      <div class="key-concept">
-        <strong>Did You Know?</strong>
-        The first email was sent in 1971 by Ray Tomlinson, an American computer programmer. He sent a test message between two computers that were side by side, connected via ARPANET (the precursor to the internet). He chose the @ symbol to separate the user name from the computer name &mdash; a convention we still use today. Tomlinson later said the message was probably something like &ldquo;QWERTYUIOP&rdquo; because he was just testing.
+        <strong>Common Mistake:</strong> Students sometimes confuse the drawbacks of networks with the drawbacks of the internet. While the internet is a type of network (a WAN), questions about &ldquo;drawbacks of networks&rdquo; are usually asking about networking in general &mdash; things like security risks, cost, server failure, and the need for specialist staff. Stick to network-specific drawbacks unless the question specifically mentions the internet.
       </div>
     </section>
 
-    <!-- ==================== CASE STUDIES ==================== -->
+    <!-- ==================== INTERACTIVE EXERCISES ==================== -->
     <section class="explore">
-      <span class="section-label">Real World</span>
-      <h2>Case Studies</h2>
+      <span class="section-label">Interactive</span>
+      <h2>Test Your Knowledge</h2>
 
-      <h3>Case Study 1: How Netflix Streams Video</h3>
-      <p>When you press play on a Netflix film, a remarkable chain of networking technologies springs into action:</p>
-      <ul>
-        <li><strong>DNS resolution</strong> &mdash; Your device uses DNS to convert <code>www.netflix.com</code> into an IP address, directing you to the nearest Netflix server.</li>
-        <li><strong>CDNs (Content Delivery Networks)</strong> &mdash; Netflix does not stream from a single location. It stores copies of its content on thousands of servers around the world, called a CDN. When you watch a film, it streams from a server <strong>geographically close to you</strong>, reducing latency and buffering.</li>
-        <li><strong>Packet switching</strong> &mdash; The video data is broken into millions of packets. Each packet travels independently through the network, potentially taking different routes, and is reassembled at your device.</li>
-        <li><strong>TCP and UDP</strong> &mdash; Netflix uses TCP (reliable delivery) for browsing the catalogue and loading the interface, but uses UDP-based protocols for the actual video stream because speed matters more than perfection &mdash; a few lost pixels are better than constant buffering.</li>
-        <li><strong>HTTPS</strong> &mdash; All communication is encrypted to protect your account details and viewing activity.</li>
-        <li><strong>Adaptive bitrate streaming</strong> &mdash; Netflix constantly monitors your connection speed. If your bandwidth drops, it automatically lowers the video quality to prevent buffering. When your connection improves, quality increases again.</li>
-      </ul>
-      <p>Netflix alone accounts for a significant proportion of all internet traffic during peak hours. This is why you can stream a 4K film in real time &mdash; decades of networking innovation working together seamlessly. Without CDNs, packet switching, and adaptive streaming, the internet would grind to a halt every evening.</p>
+      <p>Try these interactive exercises to check your understanding of network types. Read each scenario carefully and select the correct answer.</p>
 
-      <h3>Case Study 2: The WannaCry Ransomware Attack (2017)</h3>
-      <p>In May 2017, the WannaCry ransomware attack affected over <strong>200,000 computers across 150 countries</strong> in just a few days. It was one of the most devastating cyber attacks in history.</p>
-      <ul>
-        <li><strong>What happened:</strong> WannaCry was a <strong>worm</strong> that exploited a vulnerability in older versions of Microsoft Windows (called EternalBlue). It spread automatically across networks without any human action &mdash; no one had to click a link or open an attachment.</li>
-        <li><strong>Impact:</strong> The NHS in the UK was severely affected. Hospitals had to cancel operations and divert ambulances. Doctors could not access patient records. Factories, railways, and telecommunications companies worldwide were also hit.</li>
-        <li><strong>The ransom:</strong> Infected computers displayed a message demanding approximately $300 in Bitcoin to decrypt the files. Even those who paid were unlikely to get their data back.</li>
-        <li><strong>How it was stopped:</strong> A 22-year-old British security researcher, Marcus Hutchins, discovered that WannaCry checked a specific unregistered domain name before encrypting files. By registering that domain, he accidentally activated a &ldquo;kill switch&rdquo; that stopped the worm from spreading further.</li>
-        <li><strong>Lessons learned:</strong></li>
-      </ul>
-      <ol>
-        <li><strong>Keep systems updated</strong> &mdash; Microsoft had released a patch for the vulnerability two months before the attack. Systems that had been updated were not affected.</li>
-        <li><strong>Backup data regularly</strong> &mdash; Organisations with recent backups could restore their data without paying the ransom.</li>
-        <li><strong>Do not use unsupported software</strong> &mdash; Many affected systems were running Windows XP, which Microsoft had stopped supporting years earlier.</li>
-        <li><strong>Network segmentation</strong> &mdash; The worm spread because networks were not properly segmented. Isolating critical systems can limit the damage of a breach.</li>
-      </ol>
+      <!-- Exercise 1: Network Type Identifier -->
+      <div class="interactive-exercise" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 2rem; border-radius: 12px; color: white; margin: 1.5rem 0;">
+        <h4>Exercise 1: Network Type Identifier</h4>
+        <p>Read the scenario below and identify whether it describes a <strong>PAN</strong>, <strong>LAN</strong>, or <strong>WAN</strong>.</p>
+        <div class="exercise-problem" id="netTypeScenario" style="background: rgba(255,255,255,0.15); padding: 1.2rem; border-radius: 8px; margin: 1rem 0; font-size: 1.1rem; line-height: 1.6;"></div>
+        <div class="exercise-controls" style="display: flex; gap: 0.75rem; flex-wrap: wrap; margin-top: 1rem;">
+          <button class="check-btn" style="background: white; color: #667eea; border: none; padding: 0.5rem 1.5rem; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 1rem;" onclick="netTypeCheck('PAN')">PAN</button>
+          <button class="check-btn" style="background: white; color: #667eea; border: none; padding: 0.5rem 1.5rem; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 1rem;" onclick="netTypeCheck('LAN')">LAN</button>
+          <button class="check-btn" style="background: white; color: #667eea; border: none; padding: 0.5rem 1.5rem; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 1rem;" onclick="netTypeCheck('WAN')">WAN</button>
+          <button class="new-btn" style="background: rgba(255,255,255,0.2); color: white; border: 2px solid rgba(255,255,255,0.4); padding: 0.5rem 1.5rem; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 1rem;" onclick="netTypeNew()">Skip / New Question</button>
+        </div>
+        <div class="feedback" id="netTypeFeedback" style="margin-top: 1rem; font-weight: 600; min-height: 1.5rem;"></div>
+        <div class="score-display" style="margin-top: 0.5rem; font-size: 0.95rem; opacity: 0.9;">Score: <span id="netTypeCorrect">0</span> / <span id="netTypeTotal">0</span></div>
+      </div>
 
-      <h3>Case Study 3: How a School Network Works</h3>
-      <p>A typical school network brings together many of the concepts covered on this page. Here is how it is typically set up:</p>
-      <ul>
-        <li><strong>Network type:</strong> The school uses a <strong>LAN</strong> (Local Area Network) covering the entire school site. It connects to the internet via a <strong>WAN</strong> link provided by an Internet Service Provider (ISP).</li>
-        <li><strong>Model:</strong> A <strong>client-server</strong> model is used. Central servers store files, manage user accounts, host the school&rsquo;s management information system (MIS), and control printing.</li>
-        <li><strong>Topology:</strong> A <strong>star topology</strong> is used, with switches in each department or floor connected to a central core switch in the server room.</li>
-        <li><strong>Hardware:</strong> <strong>Switches</strong> in each area connect classroom computers. A <strong>router</strong> connects the school LAN to the internet. Multiple <strong>WAPs</strong> provide Wi-Fi coverage across the building. Every computer has a <strong>NIC</strong> (usually both wired and wireless).</li>
-        <li><strong>Security:</strong> A <strong>firewall</strong> filters internet traffic, blocking access to inappropriate content and preventing unauthorised external access. <strong>Anti-malware software</strong> is installed on all devices. Users log in with a unique username and password (<strong>authentication</strong>). Students and staff have different <strong>access control</strong> levels &mdash; students cannot access staff files or install software.</li>
-        <li><strong>Policies:</strong> An <strong>acceptable use policy</strong> defines rules for internet and network use. Data is backed up daily to an off-site location (<strong>backup procedure</strong>). A <strong>disaster recovery plan</strong> details how systems will be restored if a major incident occurs.</li>
-      </ul>
-      <p>When a student logs in and opens a web browser, all the topics from this page come together: their device uses a <strong>NIC</strong> to connect to a <strong>switch</strong>, which is part of a <strong>star topology</strong>. The browser performs a <strong>DNS lookup</strong>, the request passes through the school&rsquo;s <strong>firewall</strong> and <strong>router</strong> to the internet (<strong>WAN</strong>), the web page data returns as <strong>packets</strong> that are reassembled on the student&rsquo;s screen, and the entire connection is secured with <strong>HTTPS encryption</strong>. Every concept on this page is at work in that single action.</p>
+      <script>
+      (function() {
+        var scenarios = [
+          { text: "A student connects their smartphone to their Bluetooth earbuds to listen to music on the bus.", answer: "PAN", explanation: "This connects two personal devices over a very short range using Bluetooth -- a classic PAN." },
+          { text: "All 30 computers in a school IT classroom are connected to a central switch and can access a shared printer.", answer: "LAN", explanation: "The computers are in a single room within one building, connected by a switch -- this is a LAN." },
+          { text: "A company with offices in London and Manchester connects them so employees can access the same shared files.", answer: "WAN", explanation: "Two offices in different cities connected together covers a wide geographical area -- this is a WAN." },
+          { text: "You tap your contactless bank card on a payment terminal to pay for lunch.", answer: "PAN", explanation: "NFC (Near Field Communication) over just a few centimetres between two personal-scale devices is a PAN." },
+          { text: "A home Wi-Fi router connects a laptop, a smart TV, a games console, and two smartphones.", answer: "LAN", explanation: "All devices are within a single home, connected through a router -- this is a home LAN." },
+          { text: "The internet connects billions of devices across every continent.", answer: "WAN", explanation: "The internet spans the entire globe, connecting LANs worldwide -- it is the largest WAN in existence." },
+          { text: "A fitness tracker syncs your step count and heart rate data to your phone via Bluetooth.", answer: "PAN", explanation: "A fitness tracker and phone connected via Bluetooth over a short distance is a PAN." },
+          { text: "A library has 15 computers all connected to the same network, sharing a printer and internet access.", answer: "LAN", explanation: "All devices are within a single building (the library), sharing resources -- this is a LAN." },
+          { text: "A bank has 500 branches across the UK, all connected to a central database in London.", answer: "WAN", explanation: "Hundreds of locations across the UK connected to a central site is a wide area network -- a WAN." },
+          { text: "You connect a wireless mouse and wireless keyboard to your laptop to work at your desk.", answer: "PAN", explanation: "Personal peripherals connected to your laptop over a short range form a PAN." },
+          { text: "A university campus has separate buildings for science, arts, and engineering, all connected by fibre-optic cables to a central server room.", answer: "LAN", explanation: "A campus network covering nearby buildings owned by the same organisation is still a LAN (sometimes called a campus area network, but classified as a LAN for GCSE)." },
+          { text: "A global charity organisation connects its offices in London, Nairobi, and New Delhi so staff can video conference and share documents.", answer: "WAN", explanation: "Three offices on three different continents connected together is a WAN." },
+          { text: "You transfer photos from your phone to your laptop using a USB cable.", answer: "PAN", explanation: "A wired connection between two personal devices over a very short distance is a wired PAN." },
+          { text: "An online retailer has warehouses across Europe, all connected to a central stock management system.", answer: "WAN", explanation: "Multiple warehouses across different countries connected to a central system is a WAN." },
+          { text: "A small business has 5 computers, a printer, and a NAS (Network Attached Storage) all connected to a single router in one office.", answer: "LAN", explanation: "All devices are in a single office building, connected through a router -- this is a LAN." }
+        ];
+
+        var currentIndex = -1;
+        var correct = 0;
+        var total = 0;
+        var used = [];
+
+        function pickScenario() {
+          if (used.length >= scenarios.length) { used = []; }
+          var idx;
+          do { idx = Math.floor(Math.random() * scenarios.length); } while (used.indexOf(idx) !== -1);
+          used.push(idx);
+          currentIndex = idx;
+          document.getElementById('netTypeScenario').textContent = scenarios[idx].text;
+          document.getElementById('netTypeFeedback').textContent = '';
+          document.getElementById('netTypeFeedback').style.color = 'white';
+        }
+
+        window.netTypeCheck = function(answer) {
+          if (currentIndex < 0) return;
+          total++;
+          var s = scenarios[currentIndex];
+          var fb = document.getElementById('netTypeFeedback');
+          if (answer === s.answer) {
+            correct++;
+            fb.innerHTML = '<span style="color:#a0ffb0;">Correct!</span> ' + s.explanation;
+          } else {
+            fb.innerHTML = '<span style="color:#ffb0b0;">Not quite.</span> The answer is <strong>' + s.answer + '</strong>. ' + s.explanation;
+          }
+          document.getElementById('netTypeCorrect').textContent = correct;
+          document.getElementById('netTypeTotal').textContent = total;
+          setTimeout(pickScenario, 2500);
+        };
+
+        window.netTypeNew = function() {
+          pickScenario();
+        };
+
+        pickScenario();
+      })();
+      </script>
+
+      <!-- Exercise 2: LAN vs WAN Fact Sorter -->
+      <div class="interactive-exercise" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 2rem; border-radius: 12px; color: white; margin: 1.5rem 0;">
+        <h4>Exercise 2: LAN vs WAN Fact Sorter</h4>
+        <p>Read the fact or characteristic below and decide whether it applies to a <strong>LAN</strong> or a <strong>WAN</strong>.</p>
+        <div class="exercise-problem" id="factSorterFact" style="background: rgba(255,255,255,0.15); padding: 1.2rem; border-radius: 8px; margin: 1rem 0; font-size: 1.1rem; line-height: 1.6;"></div>
+        <div class="exercise-controls" style="display: flex; gap: 0.75rem; flex-wrap: wrap; margin-top: 1rem;">
+          <button class="check-btn" style="background: white; color: #667eea; border: none; padding: 0.5rem 1.5rem; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 1rem;" onclick="factSorterCheck('LAN')">LAN</button>
+          <button class="check-btn" style="background: white; color: #667eea; border: none; padding: 0.5rem 1.5rem; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 1rem;" onclick="factSorterCheck('WAN')">WAN</button>
+          <button class="new-btn" style="background: rgba(255,255,255,0.2); color: white; border: 2px solid rgba(255,255,255,0.4); padding: 0.5rem 1.5rem; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 1rem;" onclick="factSorterNew()">Skip / New Fact</button>
+        </div>
+        <div class="feedback" id="factSorterFeedback" style="margin-top: 1rem; font-weight: 600; min-height: 1.5rem;"></div>
+        <div class="score-display" style="margin-top: 0.5rem; font-size: 0.95rem; opacity: 0.9;">Score: <span id="factSorterCorrect">0</span> / <span id="factSorterTotal">0</span></div>
+      </div>
+
+      <script>
+      (function() {
+        var facts = [
+          { text: "The hardware is owned by the organisation or individual.", answer: "LAN", explanation: "In a LAN, the organisation owns all the networking hardware (switches, cables, routers)." },
+          { text: "Infrastructure is typically leased from telecommunications companies.", answer: "WAN", explanation: "WANs use infrastructure owned by telecoms companies -- organisations lease access to it." },
+          { text: "Covers a small geographical area such as a single building.", answer: "LAN", explanation: "A LAN covers a small area like one building, campus, or home." },
+          { text: "Connects networks across different cities or countries.", answer: "WAN", explanation: "WANs span large geographical areas, connecting networks across cities, countries, or continents." },
+          { text: "Data transfer speeds are typically very high (up to 1 Gbps or more).", answer: "LAN", explanation: "LANs offer high speeds because data only travels short distances through local equipment." },
+          { text: "Data may travel through undersea fibre-optic cables.", answer: "WAN", explanation: "Undersea cables are WAN infrastructure, connecting networks across oceans and continents." },
+          { text: "Relatively cheap to set up and maintain.", answer: "LAN", explanation: "LANs are cheaper because you only need local hardware -- no ongoing telecoms fees." },
+          { text: "Requires leased lines or satellite links for connectivity.", answer: "WAN", explanation: "WANs use leased lines, satellite, and other long-distance technologies to connect distant locations." },
+          { text: "Easier to secure because physical access can be controlled.", answer: "LAN", explanation: "LANs are easier to secure because the network is physically contained within a building the organisation controls." },
+          { text: "Data crosses public infrastructure, making security harder.", answer: "WAN", explanation: "WAN data crosses third-party infrastructure (cables, exchanges, routers), making it harder to secure." },
+          { text: "A school network connecting 200 computers in one building.", answer: "LAN", explanation: "A school network in one building is a classic example of a LAN." },
+          { text: "The internet is the largest example of this type of network.", answer: "WAN", explanation: "The internet connects networks worldwide -- it is the biggest WAN in existence." },
+          { text: "Commonly uses Ethernet cables and Wi-Fi.", answer: "LAN", explanation: "Ethernet (wired) and Wi-Fi (wireless) are the standard technologies for LANs." },
+          { text: "Higher latency because data may travel thousands of miles.", answer: "WAN", explanation: "WAN data travels long distances through many routers, increasing latency compared to a LAN." },
+          { text: "Can be set up using a single router, a switch, and some Ethernet cables.", answer: "LAN", explanation: "A basic LAN only needs a router, a switch, and cables -- simple and affordable." },
+          { text: "Often requires specialist telecoms engineers to maintain.", answer: "WAN", explanation: "WAN infrastructure is complex and often maintained by telecoms specialists rather than in-house IT staff." }
+        ];
+
+        var currentIndex = -1;
+        var correct = 0;
+        var total = 0;
+        var used = [];
+
+        function pickFact() {
+          if (used.length >= facts.length) { used = []; }
+          var idx;
+          do { idx = Math.floor(Math.random() * facts.length); } while (used.indexOf(idx) !== -1);
+          used.push(idx);
+          currentIndex = idx;
+          document.getElementById('factSorterFact').textContent = facts[idx].text;
+          document.getElementById('factSorterFeedback').textContent = '';
+        }
+
+        window.factSorterCheck = function(answer) {
+          if (currentIndex < 0) return;
+          total++;
+          var f = facts[currentIndex];
+          var fb = document.getElementById('factSorterFeedback');
+          if (answer === f.answer) {
+            correct++;
+            fb.innerHTML = '<span style="color:#a0ffb0;">Correct!</span> ' + f.explanation;
+          } else {
+            fb.innerHTML = '<span style="color:#ffb0b0;">Not quite.</span> The answer is <strong>' + f.answer + '</strong>. ' + f.explanation;
+          }
+          document.getElementById('factSorterCorrect').textContent = correct;
+          document.getElementById('factSorterTotal').textContent = total;
+          setTimeout(pickFact, 2500);
+        };
+
+        window.factSorterNew = function() {
+          pickFact();
+        };
+
+        pickFact();
+      })();
+      </script>
+
+    </section>
+
+    <!-- ==================== PRACTICE ==================== -->
+    <section class="practice">
+      <span class="section-label">Practice</span>
+      <h2>Practice Questions</h2>
+      <p>Click on each question to reveal the answer. Try to answer in your head or on paper first before checking!</p>
+
+      <div class="hint">
+        <div class="hint-title">Q1: What is the difference between a LAN and a WAN? Give one example of each.</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> A <strong>LAN</strong> (Local Area Network) covers a small geographical area such as a single building, school, or home, and the hardware is owned by the organisation or individual. Example: a school network. A <strong>WAN</strong> (Wide Area Network) covers a large geographical area such as cities, countries, or the whole world, and the infrastructure is typically owned by telecommunications companies and leased by organisations. Example: the internet. Key differences include speed (LAN is faster), cost (WAN is more expensive), and security (LAN is easier to secure).</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q2: Define the term &ldquo;PAN&rdquo; and give two examples of devices that might form a PAN.</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> A <strong>PAN</strong> (Personal Area Network) is a very small network that connects personal devices together over a short range, typically within a few metres of one person. It usually uses low-power wireless technologies like Bluetooth. Two examples: (1) a smartphone connected to wireless earbuds via Bluetooth for listening to music, and (2) a laptop connected to a wireless mouse and keyboard. Other valid examples include a smartwatch syncing with a phone, or a fitness tracker transferring data to an app via Bluetooth.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q3: State two benefits and two drawbacks of connecting computers in a network.</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> <strong>Benefits:</strong> (1) <strong>Resource sharing</strong> &mdash; users can share files and hardware such as printers, which reduces costs and means everyone can access the latest version of files. (2) <strong>Central backups</strong> &mdash; data can be automatically backed up to a central server, so if a user&rsquo;s computer fails, their work is not lost. <strong>Drawbacks:</strong> (1) <strong>Security risks</strong> &mdash; if one computer on the network is infected with malware, it can spread to other computers across the network. (2) <strong>Server dependency</strong> &mdash; if the central server fails, all users may lose access to shared files, applications, and services until it is repaired.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q4: Explain why a WAN is generally more expensive than a LAN.</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> A WAN is more expensive because: (1) the infrastructure (long-distance cables, satellite links, undersea fibre-optic cables, exchanges) is owned by <strong>telecommunications companies</strong>, and organisations must <strong>pay ongoing fees to lease</strong> access to this infrastructure. (2) The distances involved are much greater, requiring more complex and expensive equipment such as leased lines and satellite dishes. (3) WAN connections often require <strong>specialist telecoms engineers</strong> to install and maintain, adding to costs. In contrast, a LAN only needs relatively inexpensive local equipment (cables, switches, a router) that the organisation buys once and owns.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q5: A company has offices in Birmingham, Glasgow, and Cardiff. They want all employees to access the same central database. What type of network would they need, and why?</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> The company would need a <strong>WAN</strong> (Wide Area Network). This is because the three offices are in different cities across the UK, which is a large geographical area. A LAN only covers a single building or small campus, so it cannot connect offices hundreds of miles apart. The WAN would connect the LAN in each office together, allowing all employees to access the central database regardless of which office they are in. The company would likely lease connectivity from a telecommunications provider (e.g. leased lines or a VPN over the internet) to link the three sites.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q6: Explain why a LAN is typically faster than a WAN.</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> A LAN is typically faster than a WAN because: (1) data only needs to travel <strong>short distances</strong> (within a building), so there is very little delay. (2) The hardware used in a LAN (Ethernet cables, switches) supports very <strong>high speeds</strong> &mdash; modern Ethernet can deliver 1 Gbps or even 10 Gbps. (3) In a WAN, data must travel much <strong>greater distances</strong> (potentially thousands of miles) and pass through <strong>many more devices</strong> (routers, exchanges), each of which adds a small delay. (4) WAN connections are often <strong>shared</strong> with other users and organisations, which can reduce available bandwidth. The result is that LAN speeds are consistently higher and latency is consistently lower.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q7: Name two technologies commonly used in a PAN and explain how they work.</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> (1) <strong>Bluetooth</strong> &mdash; uses short-range radio waves (typically up to about 10 metres) to wirelessly connect personal devices. It is low-power, making it suitable for battery-powered devices like earbuds, smartwatches, and wireless mice. Devices must be &ldquo;paired&rdquo; before they can communicate. (2) <strong>NFC (Near Field Communication)</strong> &mdash; uses extremely short-range radio signals (under 4 centimetres) for quick data exchange. It is used for contactless payments (tapping a bank card on a terminal) and for quickly pairing Bluetooth devices by tapping them together. NFC is designed for very brief, close-range interactions.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q8: A school is considering whether to set up a network or keep computers standalone (not connected). Discuss the advantages and disadvantages of networking the school&rsquo;s computers. [6-mark style question]</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> <strong>Advantages:</strong> (1) <strong>File sharing</strong> &mdash; students and staff can save work to a central server and access it from any computer on the network, which is essential in a school where students move between classrooms. (2) <strong>Shared resources</strong> &mdash; expensive hardware like printers and scanners can be shared across the network, saving money compared to buying one for each computer. (3) <strong>Central backups</strong> &mdash; student work can be automatically backed up on the server, preventing data loss if a computer fails. (4) <strong>Central management</strong> &mdash; the IT technician can install software, push updates, and manage user accounts from one place, rather than configuring each computer individually. (5) <strong>Internet access</strong> &mdash; all computers can share a single internet connection. <strong>Disadvantages:</strong> (1) <strong>Cost</strong> &mdash; setting up a network requires purchasing switches, cables, a server, and a router, plus professional installation. (2) <strong>Security risks</strong> &mdash; a virus on one computer could spread across the entire network. (3) <strong>Server dependency</strong> &mdash; if the server fails, all students lose access to their files and shared resources. (4) <strong>Specialist staff</strong> &mdash; the school would need a trained IT technician to manage and troubleshoot the network, which is an ongoing cost. (5) <strong>Privacy</strong> &mdash; network administrators can monitor student activity. On balance, the advantages of networking (especially file sharing, backups, and central management) outweigh the disadvantages for a school, which is why virtually all schools use networked computers.</p>
+        </div>
+      </div>
     </section>
 
     <!-- ==================== KEY VOCABULARY ==================== -->
@@ -558,182 +551,79 @@
           <tr><th>Term</th><th>Definition</th></tr>
         </thead>
         <tbody>
-          <tr><td><strong>LAN</strong></td><td>Local Area Network &mdash; a network covering a small area such as a building or school</td></tr>
-          <tr><td><strong>WAN</strong></td><td>Wide Area Network &mdash; a network covering a large area, connecting LANs across cities or countries</td></tr>
-          <tr><td><strong>PAN</strong></td><td>Personal Area Network &mdash; a very small network connecting personal devices (e.g. phone and smartwatch)</td></tr>
-          <tr><td><strong>Topology</strong></td><td>The arrangement or layout of devices in a network</td></tr>
-          <tr><td><strong>Star</strong></td><td>A topology where all devices connect to a central switch</td></tr>
-          <tr><td><strong>Bus</strong></td><td>A topology where all devices connect to a single main cable</td></tr>
-          <tr><td><strong>Mesh</strong></td><td>A topology where devices are connected to multiple or all other devices</td></tr>
-          <tr><td><strong>Protocol</strong></td><td>A set of rules that govern how devices communicate on a network</td></tr>
-          <tr><td><strong>TCP/IP</strong></td><td>The fundamental protocol suite of the internet; TCP ensures reliable delivery, IP handles addressing</td></tr>
-          <tr><td><strong>HTTP</strong></td><td>HyperText Transfer Protocol &mdash; used for loading web pages (unencrypted)</td></tr>
-          <tr><td><strong>HTTPS</strong></td><td>HTTP Secure &mdash; HTTP with TLS encryption for secure communication</td></tr>
-          <tr><td><strong>FTP</strong></td><td>File Transfer Protocol &mdash; used for uploading/downloading files to/from a server</td></tr>
-          <tr><td><strong>DNS</strong></td><td>Domain Name System &mdash; converts domain names (e.g. google.com) into IP addresses</td></tr>
-          <tr><td><strong>Packet</strong></td><td>A small chunk of data with a header, payload, and trailer, sent independently across a network</td></tr>
-          <tr><td><strong>Router</strong></td><td>A device that connects different networks and routes packets between them using IP addresses</td></tr>
-          <tr><td><strong>Switch</strong></td><td>A device that connects devices within the same LAN and directs data using MAC addresses</td></tr>
-          <tr><td><strong>NIC</strong></td><td>Network Interface Card &mdash; hardware that allows a device to connect to a network</td></tr>
-          <tr><td><strong>WAP</strong></td><td>Wireless Access Point &mdash; provides a Wi-Fi connection to a wired network</td></tr>
-          <tr><td><strong>Firewall</strong></td><td>Hardware or software that monitors and filters network traffic to block unauthorised access</td></tr>
-          <tr><td><strong>Encryption</strong></td><td>Scrambling data into an unreadable format so only authorised parties can read it</td></tr>
-          <tr><td><strong>Malware</strong></td><td>Malicious software designed to damage, disrupt, or gain unauthorised access (viruses, worms, trojans, etc.)</td></tr>
-          <tr><td><strong>Phishing</strong></td><td>A social engineering attack using fake emails/websites to trick users into revealing sensitive information</td></tr>
-          <tr><td><strong>Client-Server</strong></td><td>A network model where a central server provides services to client devices</td></tr>
-          <tr><td><strong>Peer-to-Peer</strong></td><td>A network model where all devices have equal status and share resources directly</td></tr>
-          <tr><td><strong>IP Address</strong></td><td>A unique numerical address assigned to every device on a network (IPv4 or IPv6)</td></tr>
-          <tr><td><strong>MAC Address</strong></td><td>A unique hardware address permanently assigned to a NIC at the factory</td></tr>
-          <tr><td><strong>Bandwidth</strong></td><td>The maximum amount of data that can be transmitted over a network connection in a given time, usually measured in Mbps or Gbps</td></tr>
+          <tr><td><strong>Network</strong></td><td>Two or more devices connected together so they can communicate and share resources</td></tr>
+          <tr><td><strong>PAN</strong></td><td>Personal Area Network &mdash; a very small network (a few metres) connecting personal devices, typically using Bluetooth</td></tr>
+          <tr><td><strong>LAN</strong></td><td>Local Area Network &mdash; a network covering a small area such as a building or school, with hardware owned by the organisation</td></tr>
+          <tr><td><strong>WAN</strong></td><td>Wide Area Network &mdash; a network covering a large area (cities, countries, the world), using infrastructure leased from telecoms companies</td></tr>
+          <tr><td><strong>Bluetooth</strong></td><td>A short-range wireless technology used for PANs, connecting devices like earbuds, mice, and smartwatches</td></tr>
+          <tr><td><strong>NFC</strong></td><td>Near Field Communication &mdash; extremely short-range wireless technology (under 4 cm) used for contactless payments and device pairing</td></tr>
+          <tr><td><strong>Ethernet</strong></td><td>A wired networking technology commonly used in LANs, offering high speed and reliability via copper or fibre-optic cables</td></tr>
+          <tr><td><strong>Wi-Fi</strong></td><td>A wireless networking technology that uses radio waves, commonly used in LANs to connect devices without cables</td></tr>
+          <tr><td><strong>Leased line</strong></td><td>A dedicated, private connection rented from a telecoms provider, commonly used in WANs for reliable high-speed links</td></tr>
+          <tr><td><strong>Bandwidth</strong></td><td>The maximum amount of data that can be transmitted over a network connection in a given time, measured in Mbps or Gbps</td></tr>
+          <tr><td><strong>Latency</strong></td><td>The time delay between sending data and it being received at the destination &mdash; higher in WANs than LANs</td></tr>
+          <tr><td><strong>Infrastructure</strong></td><td>The physical hardware and connections (cables, routers, exchanges, satellites) that make up a network</td></tr>
+          <tr><td><strong>Telecommunications company</strong></td><td>A company (e.g. BT, Virgin Media) that owns and operates large-scale network infrastructure and sells access to organisations</td></tr>
+          <tr><td><strong>Router</strong></td><td>A device that connects different networks together (e.g. a LAN to the internet/WAN) and directs data packets using IP addresses</td></tr>
+          <tr><td><strong>Switch</strong></td><td>A device that connects devices within the same LAN and directs data to the correct device using MAC addresses</td></tr>
+          <tr><td><strong>Server</strong></td><td>A powerful computer that provides services (files, applications, backups) to other devices (clients) on a network</td></tr>
+          <tr><td><strong>Firewall</strong></td><td>Hardware or software that monitors and filters network traffic to block unauthorised access and suspicious connections</td></tr>
         </tbody>
       </table>
     </section>
 
-    <!-- ==================== PRACTICE ==================== -->
-    <section class="practice">
-      <span class="section-label">Practice</span>
-      <h2>Test Yourself</h2>
-      <p>Click on each question to reveal the answer. Try to answer in your head first!</p>
+    <!-- ==================== EXAM TIPS ==================== -->
+    <section class="understand">
+      <span class="section-label">Exam Tips</span>
+      <h2>How to Succeed in the Exam</h2>
 
-      <div class="hint">
-        <div class="hint-title">Q1: What is the difference between a LAN and a WAN?</div>
-        <div class="hint-content">
-          <p><strong>Answer:</strong> A <strong>LAN</strong> (Local Area Network) covers a small geographical area such as a single building, school, or home, and the hardware is usually owned by the organisation. A <strong>WAN</strong> (Wide Area Network) covers a large geographical area (cities, countries, or the whole world) and typically uses infrastructure owned by telecommunications companies. The internet is the largest WAN.</p>
-        </div>
+      <div class="key-concept">
+        <strong>Exam Tip: Know Your Three Network Types</strong>
+        You must be able to define PAN, LAN, and WAN, and give at least one example of each. A common question is: &ldquo;Describe the difference between a LAN and a WAN.&rdquo; Make sure you cover geographical area, ownership of hardware, speed, and cost. Remember PAN as well &mdash; it appears on many mark schemes.
       </div>
 
-      <div class="hint">
-        <div class="hint-title">Q2: In a star topology, what happens if the central switch fails?</div>
-        <div class="hint-content">
-          <p><strong>Answer:</strong> If the central switch (or hub) fails in a star topology, the <strong>entire network goes down</strong> because all devices rely on the central switch to communicate. This is the main disadvantage of a star topology &mdash; the central switch is a single point of failure. However, if just one cable or device fails, only that device is affected and the rest of the network continues working.</p>
-        </div>
+      <div class="key-concept">
+        <strong>Exam Tip: Use Specific Technical Language</strong>
+        Instead of saying &ldquo;a WAN goes far,&rdquo; say &ldquo;a WAN covers a large geographical area, such as connecting offices in different cities or countries.&rdquo; Instead of saying &ldquo;you do not own the wires,&rdquo; say &ldquo;the infrastructure is owned by telecommunications companies and leased by organisations.&rdquo; Precise language earns marks.
       </div>
 
-      <div class="hint">
-        <div class="hint-title">Q3: What does DNS stand for, and what does it do?</div>
-        <div class="hint-content">
-          <p><strong>Answer:</strong> DNS stands for <strong>Domain Name System</strong>. It translates human-friendly domain names (like <code>google.com</code>) into IP addresses (like <code>142.250.187.46</code>) that computers use to locate each other on the network. DNS works like a phone book for the internet &mdash; you look up a name and get the number you need to make the connection.</p>
-        </div>
+      <div class="key-concept">
+        <strong>Exam Tip: Explain, Do Not Just List</strong>
+        If a question asks you to &ldquo;describe&rdquo; or &ldquo;explain&rdquo; benefits or drawbacks of networks, you must do more than list them. For each point, explain <em>why</em> it is a benefit or drawback and, ideally, give an example. &ldquo;Files can be shared across the network, meaning employees can collaborate on documents without needing to use USB drives&rdquo; is much stronger than &ldquo;file sharing.&rdquo;
       </div>
 
-      <div class="hint">
-        <div class="hint-title">Q4: Name the four layers of the TCP/IP model, from top to bottom.</div>
-        <div class="hint-content">
-          <p><strong>Answer:</strong> From top to bottom: <strong>1. Application layer</strong> (provides services to the user, e.g. HTTP, FTP, SMTP). <strong>2. Transport layer</strong> (breaks data into packets, ensures reliable delivery, e.g. TCP). <strong>3. Internet layer</strong> (handles IP addressing and routing). <strong>4. Network Interface layer</strong> (handles physical transmission of data, e.g. Ethernet, Wi-Fi).</p>
-        </div>
+      <div class="key-concept">
+        <strong>Exam Tip: Scenario Questions</strong>
+        You may be given a real-world scenario and asked to identify the network type or recommend a network setup. Read carefully: does the scenario describe devices in one room (LAN), personal devices near one person (PAN), or offices in different cities (WAN)? Look for clues about geographical area, the devices involved, and the technologies mentioned.
       </div>
 
-      <div class="hint">
-        <div class="hint-title">Q5: Explain how packet switching works. Why is data split into packets?</div>
-        <div class="hint-content">
-          <p><strong>Answer:</strong> Data is split into small <strong>packets</strong>, each containing a header (source/destination addresses, packet number), payload (a chunk of the actual data), and error-checking information. Packets are sent independently and may take different routes across the network. At the destination, they are reassembled in the correct order. Data is split into packets because: (1) the network can be shared efficiently between many users, (2) if one route fails, packets can take alternative paths, and (3) lost or corrupted packets can be individually re-requested rather than resending everything.</p>
-        </div>
-      </div>
-
-      <div class="hint">
-        <div class="hint-title">Q6: Why was IPv6 created when we already had IPv4?</div>
-        <div class="hint-content">
-          <p><strong>Answer:</strong> IPv4 uses 32-bit addresses, allowing approximately <strong>4.3 billion</strong> unique addresses. With billions of internet-connected devices (phones, laptops, smart devices, servers), IPv4 addresses have run out. IPv6 uses 128-bit addresses, providing approximately <strong>3.4 &times; 10<sup>38</sup></strong> addresses &mdash; essentially unlimited. IPv6 was created to ensure every device can have a unique address as the internet continues to grow.</p>
-        </div>
-      </div>
-
-      <div class="hint">
-        <div class="hint-title">Q7: What is the difference between symmetric and asymmetric encryption?</div>
-        <div class="hint-content">
-          <p><strong>Answer:</strong> <strong>Symmetric encryption</strong> uses the <strong>same key</strong> for both encryption and decryption. It is fast but requires the key to be shared securely between both parties. <strong>Asymmetric encryption</strong> uses a <strong>pair of keys</strong>: a public key (shared openly) to encrypt the data, and a private key (kept secret) to decrypt it. Asymmetric encryption is more secure for internet communication because the private key never needs to be shared. HTTPS uses asymmetric encryption.</p>
-        </div>
-      </div>
-
-      <div class="hint">
-        <div class="hint-title">Q8: What is a DDoS attack, and how does it work?</div>
-        <div class="hint-content">
-          <p><strong>Answer:</strong> A <strong>DDoS (Distributed Denial of Service)</strong> attack floods a server or network with an overwhelming number of requests from many different sources (often a botnet of compromised computers). The server becomes unable to handle legitimate traffic and either slows to a crawl or crashes entirely. The goal is to make a website or service unavailable, not to steal data.</p>
-        </div>
-      </div>
-
-      <div class="hint">
-        <div class="hint-title">Q9: Explain the difference between a virus and a worm.</div>
-        <div class="hint-content">
-          <p><strong>Answer:</strong> A <strong>virus</strong> attaches itself to a legitimate program or file and only spreads when a user runs that infected program (requires human action). A <strong>worm</strong> is standalone malware that replicates and spreads automatically across networks without needing a host program or human action. Both can cause damage, but worms can spread much faster because they do not need anyone to open or run anything.</p>
-        </div>
-      </div>
-
-      <div class="hint">
-        <div class="hint-title">Q10: What is SQL injection, and how can it be prevented?</div>
-        <div class="hint-content">
-          <p><strong>Answer:</strong> <strong>SQL injection</strong> is an attack where malicious SQL code is entered into an input field on a website (e.g. a login form or search box). If the website does not properly validate inputs, the SQL code can be executed on the database, potentially allowing the attacker to view, modify, or delete data. It can be prevented by: <strong>(1) input validation/sanitisation</strong> &mdash; checking and cleaning all user input before processing it, <strong>(2) parameterised queries</strong> &mdash; using prepared statements that separate SQL code from user data, and <strong>(3) limiting database permissions</strong> so the web application only has access to what it needs.</p>
-        </div>
-      </div>
-
-      <div class="hint">
-        <div class="hint-title">Q11: Describe the steps involved in accessing a website, starting from typing the URL into your browser.</div>
-        <div class="hint-content">
-          <p><strong>Answer:</strong> (1) You type the URL (e.g. <code>www.bbc.co.uk</code>) into the browser. (2) The browser performs a <strong>DNS lookup</strong> to convert the domain name into an IP address. It checks local caches first, then queries recursive, root, TLD, and authoritative DNS servers as needed. (3) The browser establishes a <strong>TCP connection</strong> with the web server at that IP address (a &ldquo;three-way handshake&rdquo;). (4) If the site uses HTTPS, a <strong>TLS handshake</strong> occurs to establish an encrypted connection. (5) The browser sends an <strong>HTTP/HTTPS GET request</strong> to the server asking for the web page. (6) The web server processes the request and sends back the <strong>HTML, CSS, JavaScript, and media files</strong> as data packets. (7) The packets travel across the internet via routers, potentially taking different routes (<strong>packet switching</strong>). (8) The browser <strong>reassembles the packets</strong> and <strong>renders the web page</strong> on your screen.</p>
-        </div>
-      </div>
-
-      <div class="hint">
-        <div class="hint-title">Q12: A school wants to set up a network for 200 computers. Recommend a topology and justify your choice.</div>
-        <div class="hint-content">
-          <p><strong>Answer:</strong> A <strong>star topology</strong> would be the best choice for a school with 200 computers. <strong>Justification:</strong> (1) <strong>Reliability</strong> &mdash; if one cable or device fails, only that device is affected; the rest of the network continues working. This is important in a school where disruption must be minimised. (2) <strong>Easy to add/remove devices</strong> &mdash; new computers can be added by simply connecting them to a switch, without disrupting existing connections. (3) <strong>Easy to troubleshoot</strong> &mdash; faults can be identified and fixed quickly because each device has its own connection. (4) <strong>Good performance</strong> &mdash; each device has a dedicated connection to the switch, avoiding the data collisions that occur in bus topologies. The main disadvantage is the reliance on the central switch (a single point of failure), but this can be mitigated by using multiple switches connected in a hierarchy and keeping spare switches available.</p>
-        </div>
-      </div>
-
-      <div class="hint">
-        <div class="hint-title">Q13: What is the difference between a router and a switch?</div>
-        <div class="hint-content">
-          <p><strong>Answer:</strong> A <strong>switch</strong> connects devices within the <strong>same network (LAN)</strong> and uses <strong>MAC addresses</strong> to direct data to the correct device. It operates at the Network Interface layer. A <strong>router</strong> connects <strong>different networks together</strong> (e.g. a LAN to the internet/WAN) and uses <strong>IP addresses</strong> to route packets between them. It operates at the Internet layer. In short: a switch manages traffic <em>within</em> a network, while a router manages traffic <em>between</em> networks.</p>
-        </div>
-      </div>
-
-      <div class="hint">
-        <div class="hint-title">Q14: Describe three methods of preventing unauthorised access to a network.</div>
-        <div class="hint-content">
-          <p><strong>Answer:</strong> (1) <strong>Firewall</strong> &mdash; monitors all incoming and outgoing network traffic and blocks suspicious or unauthorised connections based on a set of security rules. (2) <strong>Strong authentication</strong> &mdash; requiring users to verify their identity using strong passwords and two-factor authentication (2FA), so that even if a password is compromised, the attacker cannot access the account without the second factor (e.g. a code sent to a phone). (3) <strong>Access control / user permissions</strong> &mdash; restricting each user to only the files and resources they need for their role (the principle of least privilege). This means that even if an account is compromised, the attacker has limited access. Other valid methods include encryption, MAC address filtering, anti-malware software, and keeping software up to date with security patches.</p>
-        </div>
-      </div>
-
-      <div class="hint">
-        <div class="hint-title">Q15: Explain why HTTPS is more secure than HTTP.</div>
-        <div class="hint-content">
-          <p><strong>Answer:</strong> HTTP transmits data in <strong>plain text</strong>, meaning anyone who intercepts the communication (e.g. on a public Wi-Fi network using a man-in-the-middle attack) can read all the data, including passwords, credit card numbers, and personal information. HTTPS adds a layer of <strong>TLS (Transport Layer Security) encryption</strong>, which scrambles the data before it is sent. Only the intended recipient (the web server) has the key to decrypt it. HTTPS also uses <strong>digital certificates</strong> to verify the identity of the web server, ensuring you are connected to the genuine site and not a fake copy. This is why browsers display a padlock icon for HTTPS sites and mark HTTP sites as &ldquo;Not Secure.&rdquo;</p>
-        </div>
+      <div class="key-concept">
+        <strong>Exam Tip: LAN vs WAN Table</strong>
+        Many students find it helpful to memorise the LAN vs WAN comparison table. The six key comparison points are: geographical area, speed, ownership, cost, example, and security. If you can confidently discuss all six, you can answer almost any LAN vs WAN comparison question.
       </div>
     </section>
 
     <!-- ==================== REFLECT ==================== -->
     <section class="reflect">
       <span class="section-label">Reflect</span>
-      <h2>Staying Safe Online</h2>
+      <h2>Networks in Your Life</h2>
 
-      <p>Now that you understand how networks work and the threats that exist, here are some practical steps you can take to protect yourself:</p>
+      <p>Now that you understand the three types of networks and their characteristics, take a moment to think about how many networks you interact with every day:</p>
 
       <ul>
-        <li><strong>Use strong, unique passwords</strong> &mdash; At least 12 characters, mixing uppercase, lowercase, numbers, and symbols. Use a password manager so you do not have to remember them all. Never reuse passwords across different accounts.</li>
-        <li><strong>Enable two-factor authentication (2FA)</strong> &mdash; This adds a second layer of security (like a code sent to your phone) so even if someone gets your password, they still cannot access your account.</li>
-        <li><strong>Look for HTTPS</strong> &mdash; Before entering any personal information on a website, check for the padlock icon and &ldquo;https://&rdquo; in the address bar. This means your connection is encrypted.</li>
-        <li><strong>Be sceptical of emails and links</strong> &mdash; Phishing attacks are increasingly sophisticated. If an email asks you to click a link or enter personal information, verify it is genuine before acting. Check the sender&rsquo;s actual email address, not just the display name.</li>
-        <li><strong>Keep software updated</strong> &mdash; Updates often contain security patches that fix vulnerabilities. Enable automatic updates where possible. The WannaCry attack showed what happens when updates are ignored.</li>
-        <li><strong>Think before you share</strong> &mdash; Information you post online is very difficult to remove completely. Consider whether you would be happy for a teacher, parent, or future employer to see it.</li>
-        <li><strong>Avoid public Wi-Fi for sensitive tasks</strong> &mdash; Public Wi-Fi networks are often unencrypted, making it easy for attackers to intercept your traffic. If you must use public Wi-Fi, consider using a VPN (Virtual Private Network) to encrypt your connection.</li>
-        <li><strong>Back up your data</strong> &mdash; Regular backups protect you from ransomware and hardware failure. If your files are encrypted by ransomware but you have a recent backup, you can restore everything without paying the ransom.</li>
+        <li><strong>Your PAN:</strong> Think about the personal devices you carry. Your phone, earbuds, smartwatch, and fitness tracker likely form a Bluetooth PAN that travels with you everywhere. You probably use NFC every time you make a contactless payment.</li>
+        <li><strong>Your home LAN:</strong> Your home Wi-Fi connects your phone, laptop, tablet, smart TV, games console, and perhaps smart home devices like lights and speakers. This LAN gives all your devices internet access through a single broadband connection.</li>
+        <li><strong>Your school LAN:</strong> When you log in to a school computer, you are joining the school&rsquo;s LAN. Your files are stored on a central server. You share printers. The IT team manages software and security centrally.</li>
+        <li><strong>The WAN:</strong> Every time you open a website, send a message, or stream a video, your data leaves your LAN and travels across the internet &mdash; the world&rsquo;s largest WAN &mdash; potentially crossing oceans through undersea cables to reach a server on the other side of the world.</li>
       </ul>
 
-      <p>The internet is an incredible tool for learning, creativity, and connection. Understanding how it works &mdash; and where the risks lie &mdash; empowers you to use it confidently and safely.</p>
+      <p>Understanding these network types is not just about passing an exam. It helps you understand why your Bluetooth earbuds have limited range, why your school&rsquo;s network is faster than your phone&rsquo;s mobile data, why large companies spend millions on their network infrastructure, and why the internet &mdash; a WAN connecting millions of LANs &mdash; is one of the most remarkable engineering achievements in human history.</p>
+
+      <p><strong>Challenge yourself:</strong> Over the next 24 hours, try to identify every network you use or interact with. Count how many PANs, LANs, and WANs you encounter. You might be surprised by how many there are.</p>
 
       <div class="key-concept">
         <strong>Exam Tip</strong>
-        In your GCSE exam, you may be asked to apply your knowledge of networks to unfamiliar scenarios. For example, you might be asked to recommend a network setup for a new business, explain why a company suffered a data breach, or describe what happens step-by-step when a user accesses a website. Always use the correct <strong>technical vocabulary</strong> (protocol, packet, DNS, firewall, etc.) and explain your reasoning clearly. Refer back to the key vocabulary table if you are unsure of any terms.
-      </div>
-
-      <div class="extra-resources">
-        <h3>Further Reading</h3>
-        <ul>
-          <li><a href="https://www.bbc.co.uk/bitesize/examspecs/zdqy7nb" target="_blank" rel="noopener">BBC Bitesize &mdash; Edexcel GCSE Computer Science</a> &mdash; Comprehensive revision guides covering networks, the internet, and cyber security</li>
-          <li><a href="https://isaaccomputerscience.org/topics/networks" target="_blank" rel="noopener">Isaac Computer Science &mdash; Networks</a> &mdash; In-depth interactive lessons on network fundamentals, protocols, and security</li>
-          <li><a href="https://hvgcsecs.cshub.org.je/topics/topic4.html" target="_blank" rel="noopener">GCSE Topic 4: Networks &amp; the Internet</a> &mdash; Full Edexcel specification coverage with diagrams and interactive examples</li>
-          <li><a href="https://hvgcsecs.cshub.org.je/activities/index.html" target="_blank" rel="noopener">Revision Activities</a> &mdash; Memory match and connection wall games for networks</li>
-        </ul>
+        In your GCSE exam, you may be asked to apply your knowledge of network types to unfamiliar scenarios. For example, you might need to recommend what type of network a new business should use, explain why a hospital needs a particular network setup, or identify the network type from a description. Always use the correct <strong>technical vocabulary</strong> (PAN, LAN, WAN, Bluetooth, Ethernet, leased line, bandwidth, latency, etc.) and explain your reasoning clearly. Refer back to the key vocabulary table if you are unsure of any terms.
       </div>
     </section>
 
@@ -741,14 +631,14 @@
     <nav class="chapter-nav">
       <a href="computer-systems.html">&larr; Previous: Computer Systems</a>
       <a href="../index.html">Course Home</a>
-      <a href="issues-and-impact.html">Next: Issues &amp; Impact &rarr;</a>
+      <a href="client-server-p2p.html">Next: Client-Server &amp; P2P &rarr;</a>
     </nav>
 
   </main>
 
   <footer class="site-footer">
     <p>Python Fundamentals &mdash; A KS4 Learning Platform</p>
-    <p>Networks &amp; the Internet &mdash; GCSE Computer Science Theory</p>
+    <p>Types of Networks &mdash; GCSE Computer Science Theory</p>
   </footer>
 
 </body>

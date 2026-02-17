@@ -1,0 +1,988 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IP Addressing &amp; MAC - Python Fundamentals</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/style.css" />
+</head>
+<body>
+
+  <header class="site-header">
+    <p><a href="../index.html">&larr; Back to Course</a></p>
+    <h1>IP Addressing &amp; MAC</h1>
+    <p class="subtitle">How every device on a network gets its unique identity</p>
+  </header>
+
+  <main>
+
+    <!-- ==================== THE IDEA ==================== -->
+    <section class="idea">
+      <span class="section-label">The Idea</span>
+      <h2>Why Do Devices Need Addresses?</h2>
+
+      <p>Think about the postal system. Every house has a unique address so that letters and parcels can be delivered to the correct location. Without addresses, the postal service would have no way of knowing where to send your mail. Computer networks face exactly the same problem &mdash; when one device wants to send data to another, it needs a way to identify the destination. This is where <strong>IP addresses</strong> and <strong>MAC addresses</strong> come in.</p>
+
+      <p>Every device connected to a network &mdash; your phone, laptop, smart TV, games console, even your smart fridge &mdash; needs at least one unique identifier so that data can be routed to it correctly. In fact, most devices have <strong>two</strong> types of address: an <strong>IP address</strong> for communication across networks (like the internet), and a <strong>MAC address</strong> for communication within a local network.</p>
+
+      <p><strong>In this topic you will learn:</strong></p>
+      <ul>
+        <li>What an IP address is and why it is needed</li>
+        <li>The difference between IPv4 and IPv6</li>
+        <li>Static vs dynamic IP addresses and when each is used</li>
+        <li>Public vs private IP addresses and how NAT connects them</li>
+        <li>What a MAC address is and how it differs from an IP address</li>
+        <li>How IP and MAC addresses work together to deliver data</li>
+      </ul>
+
+      <div class="key-concept">
+        <strong>Key Concept: Network Addresses</strong>
+        An <strong>IP address</strong> is a unique identifier assigned to a device on a network, used to route data across networks (including the internet). A <strong>MAC address</strong> is a unique hardware identifier burned into a device&rsquo;s network interface card, used to deliver data within a local network. Together, they ensure data reaches the correct device.
+      </div>
+    </section>
+
+    <!-- ==================== EXPLORE: IPv4 ==================== -->
+    <section class="explore">
+      <span class="section-label">Explore</span>
+      <h2>IPv4 &mdash; Internet Protocol Version 4</h2>
+
+      <p>The most widely used version of IP addresses is <strong>IPv4</strong> (Internet Protocol version 4). IPv4 has been the backbone of internet addressing since the 1980s, and the vast majority of internet traffic still uses it today.</p>
+
+      <h3>How IPv4 Addresses Work</h3>
+      <p>An IPv4 address is a <strong>32-bit</strong> number. This means it is made up of 32 binary digits (ones and zeros). However, writing out 32 bits every time would be impractical for humans, so IPv4 addresses are displayed in a more readable format called <strong>dotted decimal notation</strong>.</p>
+
+      <p>In dotted decimal notation, the 32 bits are divided into <strong>four groups of 8 bits</strong>. Each group of 8 bits is called an <strong>octet</strong>. Each octet is converted from binary to a decimal number between <strong>0 and 255</strong>, and the four octets are separated by dots (full stops).</p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">IPv4 Address Structure</span>
+        </div>
+        <pre><code>
+  Binary:    11000000 . 10101000 . 00000001 . 00000001
+  Decimal:      192   .   168    .    1     .    1
+
+  Format:    [octet1] . [octet2] . [octet3] . [octet4]
+  Range:      0-255   .  0-255   .  0-255   .  0-255
+
+  Examples:  192.168.1.1    (common home router address)
+             10.0.0.5       (private network address)
+             8.8.8.8        (Google's public DNS server)
+             172.16.0.1     (private network address)
+        </code></pre>
+      </div>
+
+      <h3>The IPv4 Exhaustion Problem</h3>
+      <p>Because IPv4 uses 32 bits, the total number of possible unique addresses is 2<sup>32</sup> = approximately <strong>4.3 billion</strong> addresses. When IPv4 was designed in the early 1980s, 4.3 billion seemed more than enough &mdash; the internet was a small research network with only a few hundred computers. Nobody imagined that billions of smartphones, tablets, laptops, servers, smart devices, and IoT sensors would all need unique addresses.</p>
+
+      <p>Today, with over 15 billion internet-connected devices worldwide, we have essentially <strong>run out of IPv4 addresses</strong>. The last blocks of IPv4 addresses were allocated in 2011. This shortage is known as <strong>IPv4 address exhaustion</strong>, and it is the primary reason IPv6 was developed.</p>
+
+      <div class="warning">
+        <strong>Common Mistake:</strong> Students sometimes write that each octet in an IPv4 address can range from 0 to 256. This is incorrect &mdash; the range is <strong>0 to 255</strong> (which is 256 possible values: 0, 1, 2, &hellip; 255). The maximum value of an 8-bit binary number is 11111111, which equals 255 in decimal.
+      </div>
+
+      <div class="key-concept">
+        <strong>Key Concept: IPv4</strong>
+        IPv4 addresses are <strong>32-bit</strong> numbers written as four octets in dotted decimal notation (e.g., 192.168.1.1). Each octet ranges from 0 to 255. IPv4 provides approximately 4.3 billion unique addresses, but these have been exhausted due to the massive growth of internet-connected devices.
+      </div>
+    </section>
+
+    <!-- ==================== EXPLORE: IPv6 ==================== -->
+    <section class="explore">
+      <span class="section-label">Explore</span>
+      <h2>IPv6 &mdash; Internet Protocol Version 6</h2>
+
+      <p><strong>IPv6</strong> was created specifically to solve the IPv4 address exhaustion problem. It uses a vastly larger address space that can accommodate the growth of the internet for the foreseeable future.</p>
+
+      <h3>How IPv6 Addresses Work</h3>
+      <p>An IPv6 address is a <strong>128-bit</strong> number &mdash; four times the length of an IPv4 address. It is written as <strong>eight groups of four hexadecimal digits</strong>, separated by <strong>colons</strong>.</p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">IPv6 Address Structure</span>
+        </div>
+        <pre><code>
+  Format:   [group1]:[group2]:[group3]:[group4]:[group5]:[group6]:[group7]:[group8]
+
+  Example:  2001:0db8:85a3:0000:0000:8a2e:0370:7334
+
+  Each group: 4 hexadecimal digits (0000 to ffff)
+  Total:      8 groups x 4 hex digits = 32 hex digits = 128 bits
+
+  Simplified: 2001:db8:85a3::8a2e:370:7334
+  (Leading zeros in each group can be omitted.
+   Consecutive groups of all zeros can be replaced with ::)
+        </code></pre>
+      </div>
+
+      <h3>The Scale of IPv6</h3>
+      <p>With 128 bits, IPv6 provides 2<sup>128</sup> possible addresses. That is approximately <strong>340 undecillion</strong> (340,282,366,920,938,463,463,374,607,431,768,211,456) unique addresses. To put this in perspective, there are enough IPv6 addresses to assign billions of addresses to every grain of sand on Earth. For all practical purposes, IPv6 provides an <strong>effectively unlimited</strong> supply of addresses.</p>
+
+      <h3>Why Is IPv6 Adoption Slow?</h3>
+      <p>Despite its advantages, IPv6 adoption has been gradual. Many existing systems and devices only support IPv4, and transitioning an entire network to IPv6 requires significant investment. Technologies like NAT (Network Address Translation) have helped extend the life of IPv4 by allowing many devices to share a single public IPv4 address. However, IPv6 adoption continues to grow steadily, and major companies like Google, Facebook, and Amazon fully support it.</p>
+
+      <div class="key-concept">
+        <strong>Key Concept: IPv6</strong>
+        IPv6 addresses are <strong>128-bit</strong> numbers written as eight groups of four hexadecimal digits separated by colons (e.g., 2001:0db8:85a3:0000:0000:8a2e:0370:7334). IPv6 provides approximately 340 undecillion addresses &mdash; effectively unlimited &mdash; and was created to solve the problem of IPv4 address exhaustion.
+      </div>
+    </section>
+
+    <!-- ==================== UNDERSTAND: IPv4 vs IPv6 COMPARISON ==================== -->
+    <section class="understand">
+      <span class="section-label">Understand</span>
+      <h2>IPv4 vs IPv6 Comparison</h2>
+
+      <p>This table summarises the key differences between IPv4 and IPv6. You should be able to describe these differences clearly in the exam.</p>
+
+      <table>
+        <thead>
+          <tr><th>Feature</th><th>IPv4</th><th>IPv6</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Address length</strong></td>
+            <td>32 bits</td>
+            <td>128 bits</td>
+          </tr>
+          <tr>
+            <td><strong>Format</strong></td>
+            <td>4 octets in dotted decimal (e.g., 192.168.1.1)</td>
+            <td>8 groups of 4 hex digits separated by colons (e.g., 2001:0db8:85a3::8a2e:0370:7334)</td>
+          </tr>
+          <tr>
+            <td><strong>Address space</strong></td>
+            <td>~4.3 billion (2<sup>32</sup>) addresses</td>
+            <td>~340 undecillion (2<sup>128</sup>) addresses</td>
+          </tr>
+          <tr>
+            <td><strong>Status</strong></td>
+            <td>Addresses exhausted; still widely used</td>
+            <td>Adoption growing; effectively unlimited supply</td>
+          </tr>
+          <tr>
+            <td><strong>Example</strong></td>
+            <td>192.168.1.1</td>
+            <td>2001:0db8:85a3:0000:0000:8a2e:0370:7334</td>
+          </tr>
+          <tr>
+            <td><strong>Notation</strong></td>
+            <td>Decimal numbers separated by dots</td>
+            <td>Hexadecimal numbers separated by colons</td>
+          </tr>
+          <tr>
+            <td><strong>NAT required?</strong></td>
+            <td>Often needed to conserve addresses</td>
+            <td>Not needed &mdash; enough addresses for every device</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="key-concept">
+        <strong>Exam Tip</strong>
+        A common exam question asks you to &ldquo;compare IPv4 and IPv6.&rdquo; Make sure you cover: the number of bits (32 vs 128), the format (dotted decimal vs hexadecimal with colons), the size of the address space (4.3 billion vs effectively unlimited), and why IPv6 was created (IPv4 exhaustion). Giving a specific example of each format will earn extra clarity marks.
+      </div>
+    </section>
+
+    <!-- ==================== EXPLORE: STATIC vs DYNAMIC ==================== -->
+    <section class="explore">
+      <span class="section-label">Explore</span>
+      <h2>Static vs Dynamic IP Addresses</h2>
+
+      <p>IP addresses can be assigned to devices in two different ways: <strong>statically</strong> (permanently) or <strong>dynamically</strong> (temporarily). The method used depends on the purpose of the device and the needs of the network.</p>
+
+      <h3>Static IP Addresses</h3>
+      <p>A <strong>static IP address</strong> is one that is <strong>permanently assigned</strong> to a device. It never changes, regardless of how many times the device connects or disconnects from the network. Static IPs are manually configured by a network administrator.</p>
+
+      <p><strong>Devices that typically use static IP addresses:</strong></p>
+      <ul>
+        <li><strong>Web servers:</strong> A website needs a consistent address so that users (and DNS servers) can always find it</li>
+        <li><strong>Email servers:</strong> Must be reachable at the same address for reliable mail delivery</li>
+        <li><strong>Network printers:</strong> So that all computers on the network can always locate the printer</li>
+        <li><strong>Routers and gateways:</strong> Need a fixed address as the &ldquo;default gateway&rdquo; for all devices on the network</li>
+      </ul>
+
+      <h3>Dynamic IP Addresses</h3>
+      <p>A <strong>dynamic IP address</strong> is one that is <strong>automatically assigned</strong> to a device each time it connects to the network. The address may change each time the device reconnects. Dynamic IPs are assigned by a <strong>DHCP server</strong> (Dynamic Host Configuration Protocol).</p>
+
+      <p><strong>How DHCP works:</strong> When a device connects to a network, it sends a request to the DHCP server. The DHCP server selects an available IP address from its pool of addresses and &ldquo;leases&rdquo; it to the device for a set period of time. When the lease expires (or the device disconnects), the address is returned to the pool and can be assigned to a different device.</p>
+
+      <p><strong>Devices that typically use dynamic IP addresses:</strong></p>
+      <ul>
+        <li><strong>Smartphones and tablets:</strong> Connect and disconnect frequently from different networks</li>
+        <li><strong>Laptops:</strong> Move between home, school, and public Wi-Fi networks</li>
+        <li><strong>Desktop computers:</strong> In most home networks, desktops receive dynamic addresses</li>
+        <li><strong>IoT devices:</strong> Smart home devices on a home network</li>
+      </ul>
+
+      <h3>Advantages and Disadvantages</h3>
+      <table>
+        <thead>
+          <tr><th>Type</th><th>Advantages</th><th>Disadvantages</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Static IP</strong></td>
+            <td>
+              <ul>
+                <li>Address never changes &mdash; always reachable</li>
+                <li>Easier to set up remote access and port forwarding</li>
+                <li>Essential for hosting services (websites, email, etc.)</li>
+              </ul>
+            </td>
+            <td>
+              <ul>
+                <li>Must be configured manually &mdash; time-consuming</li>
+                <li>Wastes addresses &mdash; reserved even when device is off</li>
+                <li>Less secure &mdash; a fixed target is easier to attack</li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <td><strong>Dynamic IP</strong></td>
+            <td>
+              <ul>
+                <li>Assigned automatically &mdash; no manual configuration</li>
+                <li>Efficient use of addresses &mdash; only active devices use an address</li>
+                <li>More secure &mdash; changing address is harder to target</li>
+              </ul>
+            </td>
+            <td>
+              <ul>
+                <li>Address may change &mdash; harder to host services</li>
+                <li>Requires a DHCP server on the network</li>
+                <li>Brief interruption possible when a lease expires and renews</li>
+              </ul>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="key-concept">
+        <strong>Exam Tip</strong>
+        If an exam question asks when you would use a static IP address, always relate it to devices that <strong>need to be found reliably</strong> &mdash; servers, printers, routers. For dynamic IPs, emphasise <strong>DHCP</strong> (the protocol that assigns them) and the fact that addresses are <strong>reused efficiently</strong> from a shared pool.
+      </div>
+    </section>
+
+    <!-- ==================== EXPLORE: PUBLIC vs PRIVATE ==================== -->
+    <section class="explore">
+      <span class="section-label">Explore</span>
+      <h2>Public vs Private IP Addresses</h2>
+
+      <p>Not all IP addresses are the same. There is an important distinction between <strong>public</strong> and <strong>private</strong> IP addresses, and understanding this difference is essential for GCSE Computer Science.</p>
+
+      <h3>Public IP Addresses</h3>
+      <p>A <strong>public IP address</strong> is an address that is <strong>unique across the entire internet</strong>. It is assigned to your network by your <strong>ISP</strong> (Internet Service Provider) and is used to identify your network on the global internet. No two devices on the internet can have the same public IP address at the same time.</p>
+      <p>When you visit a website, the web server sees your public IP address as the &ldquo;return address&rdquo; for sending the web page data back to you. Your home router typically has one public IP address that represents your entire household on the internet.</p>
+
+      <h3>Private IP Addresses</h3>
+      <p>A <strong>private IP address</strong> is an address used <strong>within a local area network (LAN)</strong> only. Private addresses are <strong>not routable on the internet</strong> &mdash; they cannot be used to communicate directly with devices outside the local network. Multiple different local networks around the world can use the same private address ranges without conflict, because these addresses are never exposed to the public internet.</p>
+
+      <p>The following address ranges are reserved for private use:</p>
+
+      <table>
+        <thead>
+          <tr><th>Range</th><th>From</th><th>To</th><th>Common Use</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>10.x.x.x</strong></td><td>10.0.0.0</td><td>10.255.255.255</td><td>Large organisations and corporate networks</td></tr>
+          <tr><td><strong>172.16.x.x &ndash; 172.31.x.x</strong></td><td>172.16.0.0</td><td>172.31.255.255</td><td>Medium-sized networks</td></tr>
+          <tr><td><strong>192.168.x.x</strong></td><td>192.168.0.0</td><td>192.168.255.255</td><td>Home and small office networks</td></tr>
+        </tbody>
+      </table>
+
+      <h3>NAT &mdash; Network Address Translation</h3>
+      <p>If private IP addresses cannot be used on the internet, how do devices on a home network access websites and online services? The answer is <strong>NAT (Network Address Translation)</strong>.</p>
+      <p>NAT is performed by the router. When a device on the local network (e.g., 192.168.1.5) sends data to the internet, the router <strong>replaces the private source IP address with its own public IP address</strong> before forwarding the data. When the response comes back, the router translates the public address back to the correct private address and delivers the data to the right device. This allows many devices to share a single public IP address.</p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">How NAT Works</span>
+        </div>
+        <pre><code>
+  Your Phone (192.168.1.5)  ---+
+                               |
+  Your Laptop (192.168.1.10) --+---> Router ---> Internet ---> Web Server
+                               |   (NAT)        (203.0.113.50)
+  Smart TV (192.168.1.15)   ---+   Public IP:
+                                   86.42.7.201
+
+  Outgoing: Router replaces 192.168.1.5 with 86.42.7.201
+  Incoming: Router replaces 86.42.7.201 with 192.168.1.5
+
+  The web server only sees 86.42.7.201 -- it never sees the
+  private addresses. All three devices share one public IP.
+        </code></pre>
+      </div>
+
+      <div class="warning">
+        <strong>Common Mistake:</strong> Students sometimes say that every device has its own public IP address. In most home networks, <strong>all devices share a single public IP address</strong> assigned to the router. Each device has a unique <strong>private</strong> IP address within the LAN, and the router uses NAT to translate between private and public addresses.
+      </div>
+
+      <div class="key-concept">
+        <strong>Key Concept: Public vs Private IP</strong>
+        <strong>Public IP addresses</strong> are globally unique, assigned by your ISP, and used on the internet. <strong>Private IP addresses</strong> (10.x.x.x, 172.16-31.x.x, 192.168.x.x) are used within a LAN and are not routable on the internet. <strong>NAT</strong> (performed by the router) translates between private and public addresses, allowing many devices to share one public IP.
+      </div>
+    </section>
+
+    <!-- ==================== UNDERSTAND: MAC ADDRESSES ==================== -->
+    <section class="understand">
+      <span class="section-label">Understand</span>
+      <h2>MAC Addresses</h2>
+
+      <p>While IP addresses identify devices at the network layer (for routing across networks), <strong>MAC addresses</strong> identify devices at the <strong>data link layer</strong> (also called the Network Access layer in the TCP/IP model). A MAC address is used to deliver data to the correct device <strong>within a local network</strong>.</p>
+
+      <h3>What Is a MAC Address?</h3>
+      <p>A <strong>MAC address</strong> (Media Access Control address) is a <strong>48-bit</strong> unique identifier that is <strong>permanently burned into</strong> the hardware of a device&rsquo;s <strong>NIC</strong> (Network Interface Card) by the manufacturer during production. Every NIC in the world &mdash; whether it is a Wi-Fi adapter, an Ethernet port, or a Bluetooth chip &mdash; has a unique MAC address assigned at the factory.</p>
+
+      <h3>MAC Address Format</h3>
+      <p>A MAC address is written as <strong>six pairs of hexadecimal digits</strong>, separated by colons (or sometimes hyphens). Each pair represents one byte (8 bits), giving a total of 48 bits.</p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">MAC Address Structure</span>
+        </div>
+        <pre><code>
+  Format:    XX:XX:XX:YY:YY:YY
+             |       | |       |
+             +---+---+ +---+---+
+                 |         |
+                OUI     Device
+           (manufacturer) (serial)
+
+  Example:   A1:B2:C3:D4:E5:F6
+
+  First 3 pairs (A1:B2:C3) = OUI (Organisationally Unique Identifier)
+    - Identifies the MANUFACTURER (e.g., Apple, Intel, Samsung)
+    - Assigned by the IEEE (Institute of Electrical and Electronics Engineers)
+
+  Last 3 pairs (D4:E5:F6) = Device Identifier
+    - A unique serial number for that specific device
+    - Assigned by the manufacturer
+
+  Total combinations: 2^48 = 281,474,976,710,656 (over 281 trillion)
+        </code></pre>
+      </div>
+
+      <h3>Key Properties of MAC Addresses</h3>
+      <ul>
+        <li><strong>Permanent:</strong> Burned into the hardware at manufacture &mdash; cannot normally be changed (though some advanced software can &ldquo;spoof&rdquo; a MAC address temporarily)</li>
+        <li><strong>Globally unique:</strong> No two NICs in the world should have the same MAC address</li>
+        <li><strong>Local scope:</strong> Used only within the local network (LAN) &mdash; MAC addresses are not used for routing across the internet</li>
+        <li><strong>Hardware-level:</strong> Operates at the Data Link / Network Access layer of the TCP/IP model</li>
+        <li><strong>Device-specific:</strong> A laptop with both Wi-Fi and Ethernet has two different MAC addresses (one per NIC)</li>
+      </ul>
+
+      <h3>How MAC Addresses Are Used</h3>
+      <p>When data arrives at a local network, it needs to be delivered to the correct device on that network. The router knows the destination IP address, but to physically deliver the data to the right NIC on the local network, it needs the MAC address. The <strong>ARP</strong> (Address Resolution Protocol) is used to map IP addresses to MAC addresses within a LAN. The router broadcasts an ARP request asking &ldquo;Who has IP address 192.168.1.5?&rdquo; and the device with that IP responds with its MAC address.</p>
+
+      <div class="key-concept">
+        <strong>Key Concept: MAC Addresses</strong>
+        A MAC address is a <strong>48-bit</strong> hardware identifier burned into a device&rsquo;s NIC by the manufacturer. It is written as six pairs of hex digits (e.g., A1:B2:C3:D4:E5:F6). The first three pairs identify the manufacturer (OUI) and the last three pairs are a unique device serial. MAC addresses are <strong>permanent</strong>, <strong>globally unique</strong>, and used at the <strong>Data Link layer</strong> to deliver data within a local network.
+      </div>
+
+      <div class="key-concept">
+        <strong>Exam Tip</strong>
+        Students often confuse IP and MAC addresses. Remember: an IP address is like a <strong>postal address</strong> (it tells the network which building to deliver to and can change if you move), while a MAC address is like a <strong>name</strong> (it is permanently assigned to you and identifies you specifically). IP addresses route data across the internet; MAC addresses deliver data to the correct device within a local network.
+      </div>
+    </section>
+
+    <!-- ==================== UNDERSTAND: IP vs MAC COMPARISON ==================== -->
+    <section class="understand">
+      <span class="section-label">Understand</span>
+      <h2>IP Address vs MAC Address Comparison</h2>
+
+      <p>Understanding the differences between IP and MAC addresses is a frequently tested topic. This table provides a clear comparison.</p>
+
+      <table>
+        <thead>
+          <tr><th>Feature</th><th>IP Address</th><th>MAC Address</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>OSI / TCP/IP layer</strong></td>
+            <td>Network layer (Layer 3) / Internet layer</td>
+            <td>Data Link layer (Layer 2) / Network Access layer</td>
+          </tr>
+          <tr>
+            <td><strong>Scope</strong></td>
+            <td>Global &mdash; used to route data across networks and the internet</td>
+            <td>Local &mdash; used to deliver data within a single LAN</td>
+          </tr>
+          <tr>
+            <td><strong>Format</strong></td>
+            <td>IPv4: 4 octets in decimal (e.g., 192.168.1.1)<br>IPv6: 8 groups of 4 hex digits (e.g., 2001:0db8::1)</td>
+            <td>6 pairs of hex digits (e.g., A1:B2:C3:D4:E5:F6)</td>
+          </tr>
+          <tr>
+            <td><strong>Length</strong></td>
+            <td>32 bits (IPv4) or 128 bits (IPv6)</td>
+            <td>48 bits</td>
+          </tr>
+          <tr>
+            <td><strong>Assignment</strong></td>
+            <td>Assigned by software &mdash; configured manually (static) or by DHCP (dynamic)</td>
+            <td>Assigned by hardware &mdash; burned into the NIC at manufacture</td>
+          </tr>
+          <tr>
+            <td><strong>Changeable?</strong></td>
+            <td>Yes &mdash; can change when connecting to different networks or by reconfiguration</td>
+            <td>No &mdash; permanently set in hardware (though can be temporarily spoofed)</td>
+          </tr>
+          <tr>
+            <td><strong>Used by</strong></td>
+            <td>Routers (to forward packets across networks)</td>
+            <td>Switches (to forward frames within a local network)</td>
+          </tr>
+          <tr>
+            <td><strong>Analogy</strong></td>
+            <td>A postal address (where you live, can change if you move)</td>
+            <td>A person&rsquo;s name (permanently identifies you)</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="warning">
+        <strong>Common Mistake:</strong> Some students say MAC addresses are used &ldquo;on the internet.&rdquo; This is incorrect. MAC addresses operate <strong>only within a local network</strong>. When a packet leaves your local network and travels across the internet, routers use <strong>IP addresses</strong> to forward it. The MAC address in the packet&rsquo;s frame header changes at every hop (each router replaces it with the MAC address of the next router), but the IP address remains constant from source to destination.
+      </div>
+    </section>
+
+    <!-- ==================== INTERACTIVE EXERCISES ==================== -->
+    <section class="explore">
+      <span class="section-label">Interactive</span>
+      <h2>Test Your Knowledge</h2>
+
+      <p>Try these interactive exercises to check your understanding of IP and MAC addresses. Read each question carefully and think about your answer before clicking.</p>
+
+      <!-- Exercise 1: IP or MAC? Address Identifier -->
+      <div class="interactive-exercise" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 2rem; border-radius: 12px; color: white; margin: 1.5rem 0;">
+        <h4>Exercise 1: IP or MAC? Address Identifier</h4>
+        <p>Look at the address shown below and identify whether it is an <strong>IPv4</strong>, <strong>IPv6</strong>, or <strong>MAC</strong> address.</p>
+        <div id="addrIdAddress" style="background: rgba(255,255,255,0.15); padding: 1.2rem; border-radius: 8px; margin: 1rem 0; font-size: 1.3rem; font-family: 'JetBrains Mono', monospace; text-align: center; letter-spacing: 0.05em;"></div>
+        <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; margin-top: 1rem; justify-content: center;">
+          <button style="background: white; color: #667eea; border: none; padding: 0.5rem 1.5rem; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 1rem;" onclick="addrIdCheck('IPv4')">IPv4</button>
+          <button style="background: white; color: #667eea; border: none; padding: 0.5rem 1.5rem; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 1rem;" onclick="addrIdCheck('IPv6')">IPv6</button>
+          <button style="background: white; color: #667eea; border: none; padding: 0.5rem 1.5rem; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 1rem;" onclick="addrIdCheck('MAC')">MAC</button>
+          <button style="background: rgba(255,255,255,0.2); color: white; border: 2px solid rgba(255,255,255,0.4); padding: 0.5rem 1.5rem; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 1rem;" onclick="addrIdNext()">Skip / Next</button>
+        </div>
+        <div id="addrIdFeedback" style="margin-top: 1rem; font-weight: 600; min-height: 1.5rem; text-align: center;"></div>
+        <div style="margin-top: 0.5rem; font-size: 0.95rem; opacity: 0.9; text-align: center;">Score: <span id="addrIdCorrect">0</span> / <span id="addrIdTotal">0</span></div>
+      </div>
+
+      <script>
+      (function() {
+        var addresses = [
+          { addr: "192.168.1.1", type: "IPv4", hint: "Four decimal octets separated by dots -- classic IPv4 format." },
+          { addr: "10.0.0.254", type: "IPv4", hint: "Four octets (10, 0, 0, 254) with dots -- this is an IPv4 private address." },
+          { addr: "255.255.255.0", type: "IPv4", hint: "Four decimal numbers separated by dots. This is actually a common subnet mask, but the format is IPv4." },
+          { addr: "8.8.8.8", type: "IPv4", hint: "Four octets separated by dots -- Google's well-known IPv4 DNS server." },
+          { addr: "172.16.0.1", type: "IPv4", hint: "Four decimal numbers with dots -- an IPv4 private address in the 172.16.x.x range." },
+          { addr: "203.0.113.50", type: "IPv4", hint: "Four decimal octets separated by dots -- a public IPv4 address." },
+          { addr: "2001:0db8:85a3:0000:0000:8a2e:0370:7334", type: "IPv6", hint: "Eight groups of four hex digits separated by colons -- classic IPv6 format." },
+          { addr: "fe80::1ff:fe23:4567:890a", type: "IPv6", hint: "Hex digits separated by colons with '::' shorthand -- IPv6 link-local address." },
+          { addr: "2001:db8::ff00:42:8329", type: "IPv6", hint: "Colons and hex digits with '::' compression -- definitely IPv6." },
+          { addr: "::1", type: "IPv6", hint: "The IPv6 loopback address (equivalent to 127.0.0.1 in IPv4). The '::' and colons indicate IPv6." },
+          { addr: "2607:f8b0:4004:0800::200e", type: "IPv6", hint: "Hex groups with colons and '::' -- an IPv6 address used by a major web service." },
+          { addr: "A1:B2:C3:D4:E5:F6", type: "MAC", hint: "Six pairs of hex digits separated by colons -- the standard 48-bit MAC address format." },
+          { addr: "00:1A:2B:3C:4D:5E", type: "MAC", hint: "Six hex pairs with colons -- a MAC address. The first three pairs (00:1A:2B) are the manufacturer OUI." },
+          { addr: "FF:FF:FF:FF:FF:FF", type: "MAC", hint: "Six pairs of FF with colons -- this is the broadcast MAC address, sent to all devices on the LAN." },
+          { addr: "3C:22:FB:91:A0:77", type: "MAC", hint: "Six hex pairs separated by colons -- a 48-bit MAC address burned into a NIC." },
+          { addr: "D4:6A:6A:12:34:56", type: "MAC", hint: "Six pairs of two hex digits with colons -- a MAC address format." },
+          { addr: "08:00:27:AB:CD:EF", type: "MAC", hint: "Six hex pairs with colons. 08:00:27 is actually Oracle VirtualBox's OUI." },
+          { addr: "44:38:39:00:11:22", type: "MAC", hint: "Six pairs of hex digits -- a MAC address. 44:38:39 is the OUI indicating the manufacturer." }
+        ];
+
+        var currentIndex = -1;
+        var correct = 0;
+        var totalAnswered = 0;
+        var used = [];
+        var answered = false;
+
+        function pick() {
+          if (used.length >= addresses.length) { used = []; }
+          var idx;
+          do { idx = Math.floor(Math.random() * addresses.length); } while (used.indexOf(idx) !== -1);
+          used.push(idx);
+          currentIndex = idx;
+          answered = false;
+          document.getElementById('addrIdAddress').textContent = addresses[idx].addr;
+          document.getElementById('addrIdFeedback').textContent = '';
+        }
+
+        window.addrIdCheck = function(answer) {
+          if (currentIndex < 0 || answered) return;
+          answered = true;
+          totalAnswered++;
+          var item = addresses[currentIndex];
+          var fb = document.getElementById('addrIdFeedback');
+          if (answer === item.type) {
+            correct++;
+            fb.innerHTML = '<span style="color:#a0ffb0;">Correct!</span> ' + item.hint;
+          } else {
+            fb.innerHTML = '<span style="color:#ffb0b0;">Not quite.</span> This is <strong>' + item.type + '</strong>. ' + item.hint;
+          }
+          document.getElementById('addrIdCorrect').textContent = correct;
+          document.getElementById('addrIdTotal').textContent = totalAnswered;
+          setTimeout(pick, 2800);
+        };
+
+        window.addrIdNext = function() {
+          pick();
+        };
+
+        pick();
+      })();
+      </script>
+
+      <!-- Exercise 2: IP Address Concepts Quiz -->
+      <div class="interactive-exercise" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 2rem; border-radius: 12px; color: white; margin: 1.5rem 0;">
+        <h4>Exercise 2: IP Address Concepts Quiz</h4>
+        <p>Test your knowledge of IP addressing concepts including static/dynamic, public/private, IPv4/IPv6, and MAC addresses.</p>
+        <div id="ipQuizQuestion" style="background: rgba(255,255,255,0.15); padding: 1.2rem; border-radius: 8px; margin: 1rem 0; font-size: 1.05rem; line-height: 1.6;"></div>
+        <div id="ipQuizOptions" style="display: flex; flex-direction: column; gap: 0.5rem; margin-top: 1rem;"></div>
+        <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; margin-top: 1rem;">
+          <button style="background: rgba(255,255,255,0.2); color: white; border: 2px solid rgba(255,255,255,0.4); padding: 0.5rem 1.5rem; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 1rem;" onclick="ipQuizNext()">Skip / Next Question</button>
+        </div>
+        <div id="ipQuizFeedback" style="margin-top: 1rem; font-weight: 600; min-height: 1.5rem;"></div>
+        <div style="margin-top: 0.5rem; font-size: 0.95rem; opacity: 0.9;">Score: <span id="ipQuizCorrect">0</span> / <span id="ipQuizTotal">0</span></div>
+      </div>
+
+      <script>
+      (function() {
+        var questions = [
+          {
+            q: "A school's web server needs an IP address that never changes so students can always access it. What type of IP address should it use?",
+            options: ["Dynamic IP", "Static IP", "Private IP only", "MAC address"],
+            answer: 1,
+            explanation: "A static IP address is permanently assigned and never changes. Servers need static IPs so they can always be found at the same address."
+          },
+          {
+            q: "Which protocol automatically assigns IP addresses to devices when they connect to a network?",
+            options: ["HTTP", "FTP", "DHCP", "ARP"],
+            answer: 2,
+            explanation: "DHCP (Dynamic Host Configuration Protocol) automatically assigns dynamic IP addresses from a pool when devices connect to the network."
+          },
+          {
+            q: "The address 192.168.0.15 is an example of which type of IP address?",
+            options: ["Public IPv4", "Private IPv4", "IPv6", "MAC address"],
+            answer: 1,
+            explanation: "192.168.x.x is one of the reserved private IP address ranges. Private addresses are used within a LAN and are not routable on the internet."
+          },
+          {
+            q: "How many bits make up an IPv6 address?",
+            options: ["32 bits", "48 bits", "64 bits", "128 bits"],
+            answer: 3,
+            explanation: "IPv6 addresses are 128 bits long (compared to 32 bits for IPv4). This provides approximately 340 undecillion unique addresses."
+          },
+          {
+            q: "What does NAT (Network Address Translation) do?",
+            options: [
+              "Encrypts data packets for security",
+              "Translates between private and public IP addresses",
+              "Converts IPv4 addresses to IPv6",
+              "Assigns MAC addresses to devices"
+            ],
+            answer: 1,
+            explanation: "NAT translates between private IP addresses (used within a LAN) and the public IP address (used on the internet), allowing multiple devices to share one public IP."
+          },
+          {
+            q: "The first three pairs of a MAC address (e.g., A1:B2:C3 in A1:B2:C3:D4:E5:F6) represent what?",
+            options: [
+              "The device's serial number",
+              "The network the device is on",
+              "The manufacturer (OUI)",
+              "The IP address it maps to"
+            ],
+            answer: 2,
+            explanation: "The first three pairs are the OUI (Organisationally Unique Identifier), which identifies the manufacturer (e.g., Apple, Intel, Samsung). The last three pairs are the unique device serial."
+          },
+          {
+            q: "Which of the following is TRUE about MAC addresses?",
+            options: [
+              "They are assigned by DHCP each time a device connects",
+              "They change when a device moves to a different network",
+              "They are burned into the NIC hardware by the manufacturer",
+              "They are used by routers to forward packets across the internet"
+            ],
+            answer: 2,
+            explanation: "MAC addresses are permanently burned into the Network Interface Card (NIC) during manufacture. They do not change when a device moves between networks."
+          },
+          {
+            q: "Why was IPv6 developed?",
+            options: [
+              "To make addresses easier for humans to read",
+              "To solve the problem of IPv4 address exhaustion",
+              "To replace MAC addresses",
+              "To make the internet faster"
+            ],
+            answer: 1,
+            explanation: "IPv6 was created because IPv4's 4.3 billion addresses ran out due to the explosive growth of internet-connected devices. IPv6 provides an effectively unlimited address space."
+          },
+          {
+            q: "Which address is used at the Data Link (Network Access) layer to deliver data within a local network?",
+            options: ["Public IP address", "Private IP address", "IPv6 address", "MAC address"],
+            answer: 3,
+            explanation: "MAC addresses operate at the Data Link / Network Access layer and are used to deliver frames to the correct device within a LAN. IP addresses work at the Network / Internet layer."
+          },
+          {
+            q: "A smartphone connects to a coffee shop's Wi-Fi. Its IP address is different from the one it had at home. What type of IP addressing is most likely being used?",
+            options: ["Static IP", "Dynamic IP (via DHCP)", "MAC addressing", "IPv6 only"],
+            answer: 1,
+            explanation: "Most devices on home and public Wi-Fi networks receive dynamic IP addresses from a DHCP server. The address changes when connecting to different networks."
+          },
+          {
+            q: "Which of the following is a valid IPv6 address?",
+            options: ["192.168.1.1", "A1:B2:C3:D4:E5:F6", "2001:0db8:85a3::8a2e:0370:7334", "256.100.50.1"],
+            answer: 2,
+            explanation: "2001:0db8:85a3::8a2e:0370:7334 is a valid IPv6 address (hex groups separated by colons). 192.168.1.1 is IPv4, A1:B2:C3:D4:E5:F6 is a MAC address, and 256.100.50.1 is invalid (256 exceeds the 0-255 range)."
+          },
+          {
+            q: "How many unique addresses does IPv4 provide?",
+            options: ["About 4.3 million", "About 4.3 billion", "About 4.3 trillion", "Unlimited"],
+            answer: 1,
+            explanation: "IPv4 uses 32 bits, giving 2^32 = approximately 4.3 billion unique addresses. This seemed sufficient in the 1980s but has since been exhausted."
+          },
+          {
+            q: "In a home network, the router has a public IP of 86.42.7.201 and your laptop has a private IP of 192.168.1.10. When you visit a website, which IP does the web server see?",
+            options: ["192.168.1.10", "86.42.7.201", "Both addresses", "The MAC address instead"],
+            answer: 1,
+            explanation: "The router uses NAT to replace your private IP (192.168.1.10) with its public IP (86.42.7.201) before sending data to the internet. The web server only sees the public address."
+          },
+          {
+            q: "A device has both a Wi-Fi adapter and an Ethernet port. How many MAC addresses does it have?",
+            options: ["One (shared between both)", "Two (one per NIC)", "None until it connects to a network", "It depends on the IP address assigned"],
+            answer: 1,
+            explanation: "Each NIC (Network Interface Card) has its own unique MAC address burned in at manufacture. A device with two NICs (Wi-Fi and Ethernet) has two different MAC addresses."
+          },
+          {
+            q: "Which private IP address range is most commonly used in home networks?",
+            options: ["10.x.x.x", "172.16.x.x to 172.31.x.x", "192.168.x.x", "224.0.0.x"],
+            answer: 2,
+            explanation: "The 192.168.x.x range is most commonly used in home and small office networks. Most home routers assign addresses like 192.168.0.1 or 192.168.1.1 by default."
+          }
+        ];
+
+        var currentIndex = -1;
+        var correct = 0;
+        var totalAnswered = 0;
+        var used = [];
+        var answered = false;
+
+        function pickQuestion() {
+          if (used.length >= questions.length) { used = []; }
+          var idx;
+          do { idx = Math.floor(Math.random() * questions.length); } while (used.indexOf(idx) !== -1);
+          used.push(idx);
+          currentIndex = idx;
+          answered = false;
+          renderQuestion();
+        }
+
+        function renderQuestion() {
+          var q = questions[currentIndex];
+          document.getElementById('ipQuizQuestion').innerHTML = '<strong>Q:</strong> ' + q.q;
+          var optionsDiv = document.getElementById('ipQuizOptions');
+          var html = '';
+          for (var i = 0; i < q.options.length; i++) {
+            html += '<button style="background: white; color: #667eea; border: none; padding: 0.6rem 1.2rem; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 0.95rem; text-align: left;" onclick="ipQuizAnswer(' + i + ')">';
+            html += String.fromCharCode(65 + i) + ') ' + q.options[i];
+            html += '</button>';
+          }
+          optionsDiv.innerHTML = html;
+          document.getElementById('ipQuizFeedback').textContent = '';
+        }
+
+        window.ipQuizAnswer = function(choice) {
+          if (answered) return;
+          answered = true;
+          totalAnswered++;
+          var q = questions[currentIndex];
+          var fb = document.getElementById('ipQuizFeedback');
+          if (choice === q.answer) {
+            correct++;
+            fb.innerHTML = '<span style="color:#a0ffb0;">Correct!</span> ' + q.explanation;
+          } else {
+            fb.innerHTML = '<span style="color:#ffb0b0;">Not quite.</span> The correct answer is <strong>' + String.fromCharCode(65 + q.answer) + ') ' + q.options[q.answer] + '</strong>. ' + q.explanation;
+          }
+          document.getElementById('ipQuizCorrect').textContent = correct;
+          document.getElementById('ipQuizTotal').textContent = totalAnswered;
+
+          var btns = document.getElementById('ipQuizOptions').querySelectorAll('button');
+          for (var i = 0; i < btns.length; i++) {
+            if (i === q.answer) {
+              btns[i].style.background = '#a0ffb0';
+              btns[i].style.color = '#1a1a2e';
+            } else if (i === choice && choice !== q.answer) {
+              btns[i].style.background = '#ffb0b0';
+              btns[i].style.color = '#1a1a2e';
+            }
+            btns[i].style.cursor = 'default';
+          }
+          setTimeout(pickQuestion, 3000);
+        };
+
+        window.ipQuizNext = function() {
+          pickQuestion();
+        };
+
+        pickQuestion();
+      })();
+      </script>
+
+      <!-- Exercise 3: Address Anatomy -->
+      <div class="interactive-exercise" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 2rem; border-radius: 12px; color: white; margin: 1.5rem 0;">
+        <h4>Exercise 3: True or False</h4>
+        <p>Read each statement about IP and MAC addresses and decide whether it is <strong>True</strong> or <strong>False</strong>.</p>
+        <div id="tfStatement" style="background: rgba(255,255,255,0.15); padding: 1.2rem; border-radius: 8px; margin: 1rem 0; font-size: 1.05rem; line-height: 1.6;"></div>
+        <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; margin-top: 1rem; justify-content: center;">
+          <button style="background: white; color: #667eea; border: none; padding: 0.5rem 1.5rem; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 1rem;" onclick="tfCheck(true)">True</button>
+          <button style="background: white; color: #667eea; border: none; padding: 0.5rem 1.5rem; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 1rem;" onclick="tfCheck(false)">False</button>
+          <button style="background: rgba(255,255,255,0.2); color: white; border: 2px solid rgba(255,255,255,0.4); padding: 0.5rem 1.5rem; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 1rem;" onclick="tfNext()">Skip / Next</button>
+        </div>
+        <div id="tfFeedback" style="margin-top: 1rem; font-weight: 600; min-height: 1.5rem; text-align: center;"></div>
+        <div style="margin-top: 0.5rem; font-size: 0.95rem; opacity: 0.9; text-align: center;">Score: <span id="tfCorrect">0</span> / <span id="tfTotal">0</span></div>
+      </div>
+
+      <script>
+      (function() {
+        var statements = [
+          { text: "An IPv4 address is made up of 32 bits.", answer: true, explanation: "True. IPv4 uses 32 bits, arranged as four 8-bit octets." },
+          { text: "MAC addresses are assigned by DHCP servers.", answer: false, explanation: "False. MAC addresses are burned into the NIC hardware by the manufacturer. DHCP assigns IP addresses, not MAC addresses." },
+          { text: "The address 192.168.1.5 is a private IP address.", answer: true, explanation: "True. 192.168.x.x is one of the three reserved private IP address ranges." },
+          { text: "IPv6 was created because IPv4 addresses were running out.", answer: true, explanation: "True. IPv4 exhaustion (only 4.3 billion addresses) was the primary motivation for developing IPv6 with its 128-bit address space." },
+          { text: "A MAC address can change when a device connects to a different network.", answer: false, explanation: "False. A MAC address is permanently burned into the hardware and does not change when the device moves between networks. The IP address may change, but not the MAC." },
+          { text: "Each octet in an IPv4 address can have a maximum value of 256.", answer: false, explanation: "False. The maximum value is 255 (not 256). An 8-bit binary number ranges from 0 (00000000) to 255 (11111111)." },
+          { text: "NAT allows multiple devices to share a single public IP address.", answer: true, explanation: "True. NAT (Network Address Translation) translates between private IPs on the LAN and the single public IP assigned to the router." },
+          { text: "MAC addresses are used by routers to forward packets across the internet.", answer: false, explanation: "False. Routers use IP addresses to forward packets across the internet. MAC addresses are used by switches to deliver data within a local network." },
+          { text: "A static IP address is assigned automatically by a DHCP server.", answer: false, explanation: "False. A static IP is manually configured by a network administrator. Dynamic IPs are assigned automatically by DHCP." },
+          { text: "The first three pairs of a MAC address identify the manufacturer.", answer: true, explanation: "True. The first three pairs are the OUI (Organisationally Unique Identifier), assigned by the IEEE to identify the manufacturer." },
+          { text: "Private IP addresses can be used to communicate directly on the internet.", answer: false, explanation: "False. Private IP addresses are not routable on the internet. They must be translated to a public IP by NAT before reaching the internet." },
+          { text: "IPv6 addresses use hexadecimal notation with colons as separators.", answer: true, explanation: "True. IPv6 addresses are written as eight groups of four hexadecimal digits separated by colons." },
+          { text: "A web server should typically use a dynamic IP address.", answer: false, explanation: "False. Web servers need static IP addresses so they can always be found at the same address. A changing address would make the server unreachable." },
+          { text: "A laptop with both Wi-Fi and Ethernet has two different MAC addresses.", answer: true, explanation: "True. Each network interface card (NIC) has its own unique MAC address. A device with two NICs has two MAC addresses." }
+        ];
+
+        var currentIndex = -1;
+        var correct = 0;
+        var totalAnswered = 0;
+        var used = [];
+        var answered = false;
+
+        function pick() {
+          if (used.length >= statements.length) { used = []; }
+          var idx;
+          do { idx = Math.floor(Math.random() * statements.length); } while (used.indexOf(idx) !== -1);
+          used.push(idx);
+          currentIndex = idx;
+          answered = false;
+          document.getElementById('tfStatement').innerHTML = '<strong>Statement:</strong> ' + statements[idx].text;
+          document.getElementById('tfFeedback').textContent = '';
+        }
+
+        window.tfCheck = function(answer) {
+          if (currentIndex < 0 || answered) return;
+          answered = true;
+          totalAnswered++;
+          var item = statements[currentIndex];
+          var fb = document.getElementById('tfFeedback');
+          if (answer === item.answer) {
+            correct++;
+            fb.innerHTML = '<span style="color:#a0ffb0;">Correct!</span> ' + item.explanation;
+          } else {
+            fb.innerHTML = '<span style="color:#ffb0b0;">Not quite.</span> ' + item.explanation;
+          }
+          document.getElementById('tfCorrect').textContent = correct;
+          document.getElementById('tfTotal').textContent = totalAnswered;
+          setTimeout(pick, 2800);
+        };
+
+        window.tfNext = function() {
+          pick();
+        };
+
+        pick();
+      })();
+      </script>
+    </section>
+
+    <!-- ==================== PRACTICE ==================== -->
+    <section class="practice">
+      <span class="section-label">Practice</span>
+      <h2>Practice Questions</h2>
+      <p>Click on each question to reveal the answer. Try to answer in your head or on paper first before checking!</p>
+
+      <div class="hint">
+        <div class="hint-title">Q1: Define the term &ldquo;IP address&rdquo; and explain its purpose.</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> An <strong>IP address</strong> (Internet Protocol address) is a unique numerical identifier assigned to every device connected to a network. Its purpose is to identify the device on the network so that data can be <strong>routed to the correct destination</strong>. It functions like a postal address for computers &mdash; just as a letter needs a delivery address and a return address, every data packet needs a source IP and destination IP address so that routers know where to forward it and the recipient knows where to send a reply. IP addresses work at the <strong>Network layer</strong> (Internet layer in the TCP/IP model).</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q2: Compare IPv4 and IPv6. Give two differences between them.</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> <strong>Difference 1 &mdash; Address length:</strong> IPv4 addresses are <strong>32 bits</strong> long, providing approximately 4.3 billion unique addresses. IPv6 addresses are <strong>128 bits</strong> long, providing approximately 340 undecillion unique addresses (effectively unlimited). <strong>Difference 2 &mdash; Format:</strong> IPv4 addresses are written as four decimal numbers (octets) separated by dots, e.g., <code>192.168.1.1</code>. IPv6 addresses are written as eight groups of four hexadecimal digits separated by colons, e.g., <code>2001:0db8:85a3:0000:0000:8a2e:0370:7334</code>. IPv6 was developed because IPv4&rsquo;s address space has been exhausted.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q3: Explain the difference between a static and a dynamic IP address. Give one example of a device that would use each type.</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> A <strong>static IP address</strong> is permanently assigned to a device and never changes. It is configured manually by a network administrator. Example: a <strong>web server</strong> needs a static IP so that it can always be found at the same address. A <strong>dynamic IP address</strong> is automatically assigned by a <strong>DHCP server</strong> each time a device connects to the network. The address may change between connections. Example: a <strong>smartphone</strong> connecting to Wi-Fi receives a dynamic IP because it does not need to be at a fixed address. Dynamic addressing is more efficient because addresses from the pool are only used while a device is connected.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q4: What is the difference between a public and a private IP address? Name one private IP address range.</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> A <strong>public IP address</strong> is globally unique and is used to identify a device (or network) <strong>on the internet</strong>. It is assigned by the ISP. A <strong>private IP address</strong> is used <strong>within a local area network (LAN) only</strong> and is not routable on the internet. Multiple networks around the world can reuse the same private address ranges without conflict. One reserved private range is <strong>192.168.0.0 to 192.168.255.255</strong> (commonly written as 192.168.x.x). Other ranges include 10.x.x.x and 172.16.x.x to 172.31.x.x. <strong>NAT</strong> (Network Address Translation) is used by the router to translate between private and public addresses.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q5: Define the term &ldquo;MAC address&rdquo; and explain how it differs from an IP address.</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> A <strong>MAC address</strong> (Media Access Control address) is a <strong>48-bit</strong> unique identifier that is <strong>permanently burned into</strong> the hardware of a device&rsquo;s Network Interface Card (NIC) by the manufacturer. It is written as six pairs of hexadecimal digits separated by colons (e.g., A1:B2:C3:D4:E5:F6). The first three pairs identify the manufacturer (OUI) and the last three are a unique device serial. It differs from an IP address in several ways: (1) a MAC address is <strong>permanent</strong> (set in hardware) while an IP address can <strong>change</strong>; (2) a MAC address operates at the <strong>Data Link layer</strong> for local delivery, while an IP address operates at the <strong>Network layer</strong> for routing across networks; (3) MAC addresses are used within a <strong>LAN</strong>, while IP addresses are used across the <strong>internet</strong>.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q6: Explain what NAT is and why it is needed.</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> <strong>NAT</strong> (Network Address Translation) is a technique performed by a router that <strong>translates between private IP addresses</strong> (used within a LAN) <strong>and the public IP address</strong> (used on the internet). When a device on a local network (e.g., 192.168.1.5) sends data to the internet, the router replaces the private source IP with its own public IP address. When the response returns, the router translates the public address back to the correct private address. NAT is needed because: (1) <strong>private IP addresses are not routable on the internet</strong>, so they must be translated to a public address; (2) it allows <strong>many devices to share a single public IP address</strong>, which helps conserve the limited supply of IPv4 addresses; (3) it provides a degree of <strong>security</strong> by hiding internal network addresses from the internet.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q7: A company has 50 desktop computers and 3 servers. Explain which devices should use static IP addresses and which should use dynamic, giving reasons.</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> The <strong>3 servers</strong> should use <strong>static IP addresses</strong> because they need to be reliably reachable at the same address at all times. Other devices and users on the network need to know the server&rsquo;s address to connect to shared files, printers, databases, or web services. If a server&rsquo;s IP changed, clients would lose their connection. The <strong>50 desktop computers</strong> should use <strong>dynamic IP addresses</strong> assigned by a DHCP server because: (1) it would be impractical and time-consuming to manually configure 50 static addresses; (2) dynamic addressing is more efficient &mdash; if some desktops are not in use, their addresses can be reassigned; (3) DHCP makes it easy to add new computers or change network settings centrally without touching each machine individually.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q8: The MAC address 3C:22:FB:91:A0:77 is found on a laptop&rsquo;s Wi-Fi adapter. Identify which part is the OUI and what it represents. Explain one property of MAC addresses.</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> The OUI is the <strong>first three pairs: 3C:22:FB</strong>. OUI stands for Organisationally Unique Identifier and it identifies the <strong>manufacturer</strong> of the network interface card. It is assigned by the IEEE (Institute of Electrical and Electronics Engineers). The remaining three pairs (91:A0:77) are a unique serial number assigned by that manufacturer to this specific device. One key property of MAC addresses is that they are <strong>permanent</strong> &mdash; the address is burned into the NIC hardware during manufacture and does not change when the device connects to different networks. Unlike IP addresses, which can be reassigned, a MAC address stays the same throughout the device&rsquo;s lifetime.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== KEY VOCABULARY ==================== -->
+    <section class="understand">
+      <span class="section-label">Reference</span>
+      <h2>Key Vocabulary</h2>
+      <p>This table summarises the essential terms for this topic. Use it for revision and to check your understanding.</p>
+
+      <table>
+        <thead>
+          <tr><th>Term</th><th>Definition</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>IP address</strong></td><td>A unique numerical identifier assigned to a device on a network, used to route data to the correct destination across networks and the internet</td></tr>
+          <tr><td><strong>IPv4</strong></td><td>Internet Protocol version 4 &mdash; uses 32-bit addresses written as four decimal octets separated by dots (e.g., 192.168.1.1), providing approximately 4.3 billion addresses</td></tr>
+          <tr><td><strong>IPv6</strong></td><td>Internet Protocol version 6 &mdash; uses 128-bit addresses written as eight groups of four hex digits separated by colons, providing an effectively unlimited address space</td></tr>
+          <tr><td><strong>Octet</strong></td><td>A group of 8 bits. In IPv4, the 32-bit address is divided into four octets, each representing a decimal value from 0 to 255</td></tr>
+          <tr><td><strong>Static IP address</strong></td><td>An IP address that is permanently and manually assigned to a device; it does not change between connections</td></tr>
+          <tr><td><strong>Dynamic IP address</strong></td><td>An IP address that is automatically assigned by a DHCP server each time a device connects; it may change between connections</td></tr>
+          <tr><td><strong>DHCP</strong></td><td>Dynamic Host Configuration Protocol &mdash; a protocol that automatically assigns IP addresses to devices from a pool of available addresses</td></tr>
+          <tr><td><strong>Public IP address</strong></td><td>A globally unique IP address assigned by an ISP, used to identify a device or network on the internet</td></tr>
+          <tr><td><strong>Private IP address</strong></td><td>An IP address used within a LAN only, not routable on the internet (ranges: 10.x.x.x, 172.16-31.x.x, 192.168.x.x)</td></tr>
+          <tr><td><strong>NAT</strong></td><td>Network Address Translation &mdash; a technique used by routers to translate between private IP addresses on a LAN and the public IP used on the internet</td></tr>
+          <tr><td><strong>MAC address</strong></td><td>Media Access Control address &mdash; a 48-bit hardware identifier burned into a device&rsquo;s NIC by the manufacturer, written as six pairs of hex digits (e.g., A1:B2:C3:D4:E5:F6)</td></tr>
+          <tr><td><strong>NIC</strong></td><td>Network Interface Card &mdash; the hardware component in a device that enables it to connect to a network (e.g., Wi-Fi adapter, Ethernet port)</td></tr>
+          <tr><td><strong>OUI</strong></td><td>Organisationally Unique Identifier &mdash; the first three pairs of a MAC address, identifying the manufacturer of the NIC</td></tr>
+          <tr><td><strong>ARP</strong></td><td>Address Resolution Protocol &mdash; used to map IP addresses to MAC addresses within a local network so data can be delivered to the correct device</td></tr>
+          <tr><td><strong>ISP</strong></td><td>Internet Service Provider &mdash; a company that provides internet access and assigns public IP addresses to customers</td></tr>
+          <tr><td><strong>IPv4 exhaustion</strong></td><td>The depletion of available IPv4 addresses, caused by the massive growth of internet-connected devices beyond the 4.3 billion address limit</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- ==================== EXAM TIPS ==================== -->
+    <section class="understand">
+      <span class="section-label">Exam Tips</span>
+      <h2>How to Succeed in the Exam</h2>
+
+      <div class="key-concept">
+        <strong>Exam Tip: Recognise Address Formats</strong>
+        You must be able to identify an address as IPv4, IPv6, or MAC by its format. <strong>IPv4:</strong> four decimal numbers (0&ndash;255) separated by dots. <strong>IPv6:</strong> eight groups of four hex digits separated by colons. <strong>MAC:</strong> six pairs of two hex digits separated by colons. If a question shows you an address and asks what type it is, look at the separators (dots vs colons) and the format (decimal octets vs hex groups vs hex pairs).
+      </div>
+
+      <div class="key-concept">
+        <strong>Exam Tip: Know When Static vs Dynamic Is Appropriate</strong>
+        A common scenario question gives you a network setup and asks which devices should have static or dynamic IPs. Servers, printers, and routers need <strong>static</strong> (they must always be reachable). User devices like laptops and phones use <strong>dynamic</strong> (assigned by DHCP, more efficient). Always state the reason, not just the type.
+      </div>
+
+      <div class="key-concept">
+        <strong>Exam Tip: Public/Private and NAT</strong>
+        Exam boards love questions about public vs private IPs and NAT. Remember: the router is the boundary &mdash; devices inside the LAN have <strong>private</strong> addresses, the router has a <strong>public</strong> address facing the internet, and <strong>NAT translates between them</strong>. Be able to name at least one private range (192.168.x.x is the easiest to remember).
+      </div>
+
+      <div class="key-concept">
+        <strong>Exam Tip: IP vs MAC &mdash; Layer and Scope</strong>
+        If asked to compare IP and MAC addresses, always mention: (1) the <strong>layer</strong> they operate at (Network vs Data Link), (2) their <strong>scope</strong> (global/internet vs local/LAN), (3) how they are <strong>assigned</strong> (software/DHCP vs hardware/manufacturer), and (4) whether they are <strong>changeable</strong> (yes vs no). The postal address vs name analogy is helpful for explaining the difference.
+      </div>
+
+      <div class="key-concept">
+        <strong>Exam Tip: MAC Address Structure</strong>
+        If asked about the structure of a MAC address, state that it is <strong>48 bits</strong> written as <strong>six pairs of hex digits</strong> separated by colons. The first three pairs are the <strong>OUI</strong> (identifying the manufacturer) and the last three pairs are the <strong>device serial number</strong>. Mention that it is burned into the <strong>NIC</strong> at manufacture and is unique worldwide.
+      </div>
+    </section>
+
+    <!-- ==================== REFLECT ==================== -->
+    <section class="reflect">
+      <span class="section-label">Reflect</span>
+      <h2>IP and MAC Addresses in Your Daily Life</h2>
+
+      <p>Now that you understand IP and MAC addresses, you can appreciate the invisible system of identification that makes every online activity possible. Consider these everyday scenarios:</p>
+
+      <ul>
+        <li><strong>Connecting to Wi-Fi:</strong> When you connect your phone to the school&rsquo;s Wi-Fi, a DHCP server assigns your phone a dynamic private IP address (like 192.168.10.45). Your phone&rsquo;s MAC address (permanently set in its Wi-Fi chip) is used by the switch to deliver data to your specific device on the local network. If you go home and connect to your home Wi-Fi, you get a <em>different</em> IP address, but your MAC address stays the same.</li>
+        <li><strong>Browsing the web:</strong> When you visit a website, your request travels from your device (private IP), through your router (which uses NAT to swap in its public IP), across the internet (routed using IP addresses), and arrives at the web server (which has a static public IP). The response takes the reverse journey. At each local network hop, MAC addresses ensure the data reaches the right physical device.</li>
+        <li><strong>Gaming online:</strong> Game servers have static public IP addresses so millions of players can connect to them reliably. Your console or PC uses a dynamic private IP at home. NAT on your router handles the translation, which is why you sometimes need to configure &ldquo;port forwarding&rdquo; for certain games &mdash; this tells NAT which private device should receive incoming game traffic.</li>
+        <li><strong>The future with IPv6:</strong> As more devices come online &mdash; smart watches, smart speakers, connected cars, industrial sensors &mdash; IPv6 will become increasingly essential. With IPv6, every device could have its own globally unique address, potentially eliminating the need for NAT entirely. You are living through this transition right now.</li>
+      </ul>
+
+      <p><strong>Challenge yourself:</strong> On your home computer, try opening the command prompt (Windows) or terminal (Mac/Linux) and typing <code>ipconfig</code> (Windows) or <code>ifconfig</code> (Mac/Linux). Can you find your device&rsquo;s private IP address and MAC address? Can you identify which private address range your home network uses? Try visiting a website like &ldquo;whatismyipaddress.com&rdquo; to see your public IP &mdash; notice how it is different from your private IP. This is NAT in action!</p>
+
+      <div class="key-concept">
+        <strong>Final Thought</strong>
+        IP addresses and MAC addresses are the foundation of network communication. Every time you send a message, load a web page, or stream a video, these two types of address work together to ensure your data reaches the right destination. IP addresses handle the big picture &mdash; routing data across the globe. MAC addresses handle the last step &mdash; delivering data to the exact device on the local network. Understanding how they work, how they differ, and why both are needed is essential for GCSE Computer Science and for making sense of the connected world around you.
+      </div>
+    </section>
+
+    <!-- ==================== NAVIGATION ==================== -->
+    <nav class="chapter-nav">
+      <a href="packet-switching.html">&larr; Previous: Packet Switching</a>
+      <a href="../index.html">Course Home</a>
+      <a href="network-hardware.html">Next: Network Hardware &rarr;</a>
+    </nav>
+
+  </main>
+
+  <footer class="site-footer">
+    <p>Python Fundamentals &mdash; A KS4 Learning Platform</p>
+    <p>IP Addressing &amp; MAC &mdash; GCSE Computer Science Theory</p>
+  </footer>
+
+  <!-- Hint toggle script -->
+  <script>
+  (function() {
+    var hints = document.querySelectorAll('.hint-title');
+    for (var i = 0; i < hints.length; i++) {
+      hints[i].addEventListener('click', function() {
+        var content = this.nextElementSibling;
+        if (content.classList.contains('visible')) {
+          content.classList.remove('visible');
+        } else {
+          content.classList.add('visible');
+        }
+      });
+    }
+  })();
+  </script>
+
+</body>
+</html>

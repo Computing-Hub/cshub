@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Network Protocols - Python Fundamentals</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/style.css" />
+</head>
+<body>
+
+  <header class="site-header">
+    <p><a href="../index.html">&larr; Back to Course</a></p>
+    <h1>Network Protocols</h1>
+    <p class="subtitle">The rules that let devices communicate &mdash; HTTP, FTP, SMTP, DNS, and more</p>
+  </header>
+
+  <main>
+
+    <!-- ==================== THE IDEA ==================== -->
+    <section class="idea">
+      <span class="section-label">The Idea</span>
+      <h2>What Is a Protocol?</h2>
+
+      <p>Imagine you are visiting a country where nobody speaks your language. You cannot ask for directions, order food, or understand signs. Communication breaks down completely because there is no shared set of rules for exchanging information. This is exactly the problem that computers face when they try to talk to each other &mdash; and <strong>protocols</strong> are the solution.</p>
+
+      <p>A <strong>network protocol</strong> is an <strong>agreed set of rules</strong> that governs how devices communicate over a network. Protocols define how data is formatted, transmitted, received, and acknowledged. They ensure that a message sent by one device can be correctly understood by another, even if the two devices are made by different manufacturers, run different operating systems, or are located on opposite sides of the world.</p>
+
+      <h3>Why Are Protocols Needed?</h3>
+      <p>Without protocols, network communication would be impossible. Consider the challenges:</p>
+      <ul>
+        <li><strong>Different manufacturers:</strong> Your laptop might be made by Dell, your phone by Samsung, and the web server you are connecting to might be built by HP. Each manufacturer designs their hardware differently. Protocols provide a common standard so that all these different devices can communicate regardless of who made them.</li>
+        <li><strong>Different operating systems:</strong> Your laptop might run Windows, your phone runs Android, and the server runs Linux. Protocols ensure that a request sent from Windows is understood by Linux, and the response from Linux is understood by Windows. Without protocols, each OS would speak its own incompatible language.</li>
+        <li><strong>Need for a common language:</strong> Just as humans need a shared language to communicate, computers need shared protocols. Protocols are the &ldquo;common language&rdquo; of networking. They specify exactly how data should be structured, what each part of a message means, and how devices should respond to each other.</li>
+        <li><strong>Different types of data:</strong> Networks carry many different types of data &mdash; web pages, emails, files, video streams, voice calls. Each type of data has different requirements. Protocols allow different applications to share the same network while each follows the rules appropriate for its type of data.</li>
+      </ul>
+
+      <p><strong>In this topic you will learn:</strong></p>
+      <ul>
+        <li>The key network protocols: <strong>HTTP</strong>, <strong>HTTPS</strong>, <strong>FTP</strong>, <strong>SMTP</strong>, <strong>POP3</strong>, <strong>IMAP</strong>, and <strong>DNS</strong></li>
+        <li>What each protocol does, the <strong>port numbers</strong> it uses, and real-world examples</li>
+        <li>How <strong>DNS</strong> translates domain names into IP addresses, step by step</li>
+        <li>How to compare the email protocols (SMTP, POP3, IMAP)</li>
+        <li>Key vocabulary, exam tips, and interactive exercises to test your knowledge</li>
+      </ul>
+
+      <div class="key-concept">
+        <strong>Key Concept: Protocol</strong>
+        A network protocol is an agreed set of rules that defines how data is formatted, transmitted, and received between devices on a network. Protocols are essential because they allow devices from different manufacturers, running different operating systems, to communicate using a common standard. Without protocols, no two different computers could exchange data reliably.
+      </div>
+
+      <div class="key-concept">
+        <strong>Did You Know?</strong>
+        Every protocol is assigned one or more <strong>port numbers</strong>. A port number is like a door number on a building &mdash; it tells the computer which application or service the data is intended for. A single computer can run a web server (port 80), an email server (port 25), and an FTP server (port 21) simultaneously, and port numbers ensure each incoming message reaches the correct service.
+      </div>
+    </section>
+
+    <!-- ==================== EXPLORE ==================== -->
+    <section class="explore">
+      <span class="section-label">Explore</span>
+      <h2>The Key Network Protocols</h2>
+
+      <p>There are many network protocols, but for GCSE Computer Science you need to know seven in detail. Each protocol has a specific purpose, uses specific port numbers, and is designed for a particular type of network communication.</p>
+
+      <!-- ===== HTTP ===== -->
+      <h3>HTTP &mdash; HyperText Transfer Protocol</h3>
+
+      <p><strong>HTTP</strong> is the protocol used to transfer web pages from a web server to your browser. Every time you type a web address into your browser or click a link, HTTP is working behind the scenes to request and deliver the page.</p>
+
+      <h4>How HTTP Works</h4>
+      <p>HTTP operates on a <strong>request-response</strong> model:</p>
+      <ol>
+        <li>You type a URL (such as <code>http://www.example.com/page.html</code>) into your browser.</li>
+        <li>Your browser sends an <strong>HTTP request</strong> to the web server at that address, asking for the specified page.</li>
+        <li>The web server receives the request, finds the page, and sends it back as an <strong>HTTP response</strong> containing the HTML, CSS, images, and other content.</li>
+        <li>Your browser receives the response and <strong>renders</strong> (displays) the web page on your screen.</li>
+      </ol>
+
+      <h4>Key Facts about HTTP</h4>
+      <ul>
+        <li><strong>Port:</strong> 80</li>
+        <li><strong>Purpose:</strong> Requesting and delivering web pages and web content</li>
+        <li><strong>Data:</strong> Not encrypted &mdash; data is sent in plain text, so anyone intercepting the traffic can read it</li>
+        <li><strong>Used by:</strong> Web browsers (Chrome, Firefox, Edge, Safari) when accessing websites</li>
+      </ul>
+
+      <div class="warning">
+        <strong>Security Warning:</strong> HTTP sends data in <strong>plain text</strong> with no encryption. This means that if someone intercepts the data (for example, on a public Wi-Fi network), they can read everything &mdash; including passwords, form data, and personal information. For this reason, HTTP is being replaced by HTTPS for most websites. You should never enter sensitive information on a website that uses HTTP instead of HTTPS.
+      </div>
+
+      <!-- ===== HTTPS ===== -->
+      <h3>HTTPS &mdash; HyperText Transfer Protocol Secure</h3>
+
+      <p><strong>HTTPS</strong> is the <strong>secure, encrypted version of HTTP</strong>. It works in exactly the same way as HTTP (request-response for web pages), but all data is <strong>encrypted</strong> using <strong>SSL</strong> (Secure Sockets Layer) or its successor <strong>TLS</strong> (Transport Layer Security) before being transmitted. This means that even if someone intercepts the data, they cannot read it because it is scrambled.</p>
+
+      <h4>How HTTPS Provides Security</h4>
+      <ul>
+        <li><strong>Encryption:</strong> All data exchanged between the browser and the server is encrypted using SSL/TLS. This protects sensitive information such as passwords, credit card numbers, and personal data from being intercepted and read.</li>
+        <li><strong>Authentication:</strong> The web server presents a <strong>digital certificate</strong> to prove its identity. This ensures you are communicating with the real website (e.g., your actual bank) and not an imposter. The browser verifies this certificate before establishing the connection.</li>
+        <li><strong>Data integrity:</strong> HTTPS ensures that data has not been tampered with during transmission. If anyone modifies the data in transit, the encryption detects the change and rejects the data.</li>
+      </ul>
+
+      <h4>Key Facts about HTTPS</h4>
+      <ul>
+        <li><strong>Port:</strong> 443</li>
+        <li><strong>Purpose:</strong> Secure, encrypted transfer of web pages and web content</li>
+        <li><strong>Visual indicator:</strong> A <strong>padlock icon</strong> appears in the browser&rsquo;s address bar when HTTPS is in use</li>
+        <li><strong>Used for:</strong> Online banking, online shopping, logging into accounts, any site handling sensitive data</li>
+        <li><strong>Modern standard:</strong> Most websites now use HTTPS by default, not just banking and shopping sites</li>
+      </ul>
+
+      <div class="key-concept">
+        <strong>Key Concept: HTTP vs HTTPS</strong>
+        HTTP (port 80) transfers web pages in plain text &mdash; data is not encrypted and can be intercepted. HTTPS (port 443) encrypts all data using SSL/TLS, protecting it from eavesdropping. HTTPS also authenticates the server using digital certificates. Always look for the padlock icon in your browser to confirm HTTPS is active, especially when entering passwords or payment details.
+      </div>
+
+      <!-- ===== FTP ===== -->
+      <h3>FTP &mdash; File Transfer Protocol</h3>
+
+      <p><strong>FTP</strong> is a protocol specifically designed for <strong>uploading and downloading files</strong> to and from a server. While HTTP can also transfer files (when you download a file from a website), FTP is purpose-built for managing files on a remote server and is much more efficient for large file transfers.</p>
+
+      <h4>How FTP Works</h4>
+      <p>FTP uses a <strong>client-server model</strong>:</p>
+      <ol>
+        <li>The user connects to an FTP server using an <strong>FTP client</strong> application (such as FileZilla) and authenticates with a username and password.</li>
+        <li>Once connected, the user can browse the server&rsquo;s file system, just like browsing folders on their own computer.</li>
+        <li>The user can <strong>upload</strong> files from their computer to the server, <strong>download</strong> files from the server to their computer, or <strong>delete</strong>, <strong>rename</strong>, and <strong>move</strong> files on the server.</li>
+      </ol>
+
+      <h4>Key Facts about FTP</h4>
+      <ul>
+        <li><strong>Ports:</strong> 20 (data transfer) and 21 (control/commands)</li>
+        <li><strong>Purpose:</strong> Uploading and downloading files to/from a remote server</li>
+        <li><strong>Used by:</strong> Web developers uploading website files to a web server, businesses transferring large files, backing up data to a remote server</li>
+        <li><strong>Security:</strong> Standard FTP sends data (including usernames and passwords) in plain text. <strong>SFTP</strong> (Secure FTP) and <strong>FTPS</strong> (FTP Secure) are encrypted versions that protect data in transit.</li>
+      </ul>
+
+      <div class="key-concept">
+        <strong>Key Concept: FTP</strong>
+        FTP (ports 20/21) is used for transferring files between a client and a server. It allows users to upload, download, rename, and manage files on a remote server. Web developers commonly use FTP to upload website files to a hosting server. Like HTTP, standard FTP is not encrypted, so secure alternatives (SFTP/FTPS) should be used for sensitive transfers.
+      </div>
+
+      <!-- ===== SMTP ===== -->
+      <h3>SMTP &mdash; Simple Mail Transfer Protocol</h3>
+
+      <p><strong>SMTP</strong> is the protocol used for <strong>sending emails</strong>. When you compose an email and click &ldquo;Send,&rdquo; SMTP is the protocol that pushes your email from your device to the mail server and then forwards it between mail servers until it reaches the recipient&rsquo;s mail server.</p>
+
+      <h4>How SMTP Works</h4>
+      <ol>
+        <li>You compose an email in your email client (Outlook, Gmail, Thunderbird, etc.) and click Send.</li>
+        <li>Your email client uses SMTP to send the email to your <strong>outgoing mail server</strong> (also called the SMTP server).</li>
+        <li>Your SMTP server looks up the recipient&rsquo;s domain (e.g., <code>gmail.com</code>) using DNS to find the recipient&rsquo;s mail server.</li>
+        <li>Your SMTP server forwards the email to the <strong>recipient&rsquo;s mail server</strong> using SMTP.</li>
+        <li>The email is stored on the recipient&rsquo;s mail server, waiting for the recipient to collect it (using POP3 or IMAP).</li>
+      </ol>
+
+      <h4>Key Facts about SMTP</h4>
+      <ul>
+        <li><strong>Port:</strong> 25 (original, server-to-server) or 587 (modern, client-to-server with authentication)</li>
+        <li><strong>Purpose:</strong> Sending emails from a client to a server, and forwarding emails between mail servers</li>
+        <li><strong>Direction:</strong> SMTP only <strong>sends</strong> (pushes) emails &mdash; it does not retrieve (pull) them. A separate protocol (POP3 or IMAP) is needed to receive emails.</li>
+        <li><strong>Used by:</strong> All email clients and all email servers for outgoing email</li>
+      </ul>
+
+      <div class="warning">
+        <strong>Common Mistake:</strong> Students sometimes say that SMTP is used for &ldquo;sending and receiving emails.&rdquo; This is incorrect. SMTP is <strong>only for sending</strong> (pushing) emails. To <strong>receive</strong> (retrieve/download) emails, you need either POP3 or IMAP. Think of SMTP as the postal van that picks up your letter and delivers it to the sorting office, but a different van (POP3 or IMAP) delivers it to the recipient&rsquo;s letterbox.
+      </div>
+
+      <!-- ===== POP3 ===== -->
+      <h3>POP3 &mdash; Post Office Protocol version 3</h3>
+
+      <p><strong>POP3</strong> is a protocol used to <strong>download emails</strong> from a mail server to a single device. When you check your email, POP3 retrieves the emails from the server and saves them on your local device.</p>
+
+      <h4>How POP3 Works</h4>
+      <ol>
+        <li>Your email client connects to the mail server using POP3.</li>
+        <li>POP3 <strong>downloads</strong> all new emails from the server to your device (laptop, phone, etc.).</li>
+        <li>By default, POP3 then <strong>deletes the emails from the server</strong> after downloading them. The emails now exist only on your local device.</li>
+        <li>You can read, organise, and manage your emails offline on that device.</li>
+      </ol>
+
+      <h4>Key Facts about POP3</h4>
+      <ul>
+        <li><strong>Port:</strong> 110</li>
+        <li><strong>Purpose:</strong> Downloading emails from the server to a local device</li>
+        <li><strong>Behaviour:</strong> Downloads emails and <strong>deletes them from the server</strong> (by default)</li>
+        <li><strong>Best for:</strong> Users who access email from a <strong>single device</strong> only</li>
+        <li><strong>Advantage:</strong> Emails are stored locally, so you can read them <strong>offline</strong> without an internet connection. Also uses less server storage because emails are removed from the server.</li>
+        <li><strong>Disadvantage:</strong> If you check email on your laptop, those emails will <strong>not appear on your phone</strong> because they were downloaded to the laptop and deleted from the server. This makes POP3 poor for users with multiple devices.</li>
+      </ul>
+
+      <!-- ===== IMAP ===== -->
+      <h3>IMAP &mdash; Internet Message Access Protocol</h3>
+
+      <p><strong>IMAP</strong> is a protocol used to <strong>synchronise emails</strong> across multiple devices. Unlike POP3, IMAP keeps emails stored on the server and synchronises them with every device that connects. This is the protocol used by most modern email services.</p>
+
+      <h4>How IMAP Works</h4>
+      <ol>
+        <li>Your email client connects to the mail server using IMAP.</li>
+        <li>IMAP <strong>synchronises</strong> your email &mdash; it shows you the emails stored on the server without downloading and deleting them.</li>
+        <li>Emails <strong>remain on the server</strong>. Any changes you make (reading, deleting, moving to folders) are reflected on the server and therefore on all your other devices.</li>
+        <li>If you read an email on your phone, it will also appear as read on your laptop, tablet, and any other device.</li>
+      </ol>
+
+      <h4>Key Facts about IMAP</h4>
+      <ul>
+        <li><strong>Port:</strong> 143</li>
+        <li><strong>Purpose:</strong> Synchronising emails across multiple devices, keeping emails on the server</li>
+        <li><strong>Behaviour:</strong> Keeps emails <strong>on the server</strong> and syncs across all devices</li>
+        <li><strong>Best for:</strong> Users who access email from <strong>multiple devices</strong> (phone, laptop, tablet, work computer)</li>
+        <li><strong>Advantage:</strong> Emails are <strong>synchronised</strong> &mdash; read an email on your phone and it appears as read on your laptop. Delete on one device and it is deleted everywhere. This is ideal for modern use where people check email on multiple devices.</li>
+        <li><strong>Disadvantage:</strong> Requires a <strong>constant internet connection</strong> to access emails (since they are stored on the server, not locally). Also uses more <strong>server storage</strong> because emails are not deleted from the server.</li>
+      </ul>
+
+      <div class="key-concept">
+        <strong>Key Concept: Email Protocols</strong>
+        <strong>SMTP</strong> (port 25/587) sends emails. <strong>POP3</strong> (port 110) downloads emails to one device and deletes them from the server. <strong>IMAP</strong> (port 143) synchronises emails across multiple devices, keeping them on the server. In modern use, SMTP + IMAP is the most common combination because people access email from multiple devices.
+      </div>
+
+      <!-- ===== DNS ===== -->
+      <h3>DNS &mdash; Domain Name System</h3>
+
+      <p><strong>DNS</strong> is the system that <strong>translates human-readable domain names into IP addresses</strong>. Computers identify each other using numerical IP addresses (like <code>142.250.187.206</code>), but humans find it much easier to remember names (like <code>www.google.com</code>). DNS acts as the &ldquo;phone book&rdquo; of the internet, converting names into numbers so your computer can find the right server.</p>
+
+      <h4>Why DNS Is Needed</h4>
+      <p>Every device on the internet has a unique <strong>IP address</strong> &mdash; a numerical identifier like <code>142.250.187.206</code> (IPv4) or <code>2a00:1450:4009:820::200e</code> (IPv6). These numbers are how computers locate each other on the internet. However, humans cannot easily remember long strings of numbers for every website they visit. DNS solves this by allowing you to type <code>www.google.com</code> instead of <code>142.250.187.206</code>. The DNS system automatically looks up the corresponding IP address.</p>
+
+      <h4>How a DNS Lookup Works (Step by Step)</h4>
+      <p>When you type a domain name into your browser, the following process occurs:</p>
+      <ol>
+        <li><strong>Browser cache check:</strong> Your browser first checks its own <strong>cache</strong> (local memory) to see if it has looked up this domain recently. If it has the IP address stored from a previous visit, it uses that immediately and skips the remaining steps.</li>
+        <li><strong>Operating system cache check:</strong> If the browser cache does not have it, the request goes to the operating system, which checks its own DNS cache.</li>
+        <li><strong>DNS resolver (recursive resolver):</strong> If neither cache has the answer, your computer sends the request to a <strong>DNS resolver</strong>. This is usually a server operated by your Internet Service Provider (ISP). The resolver&rsquo;s job is to track down the correct IP address by querying other DNS servers.</li>
+        <li><strong>Root server:</strong> The resolver contacts a <strong>root DNS server</strong>. There are 13 sets of root servers worldwide. The root server does not know the IP address of <code>www.google.com</code>, but it knows which server handles <code>.com</code> domains and directs the resolver there.</li>
+        <li><strong>TLD (Top-Level Domain) server:</strong> The resolver contacts the <strong>TLD server</strong> for <code>.com</code>. This server does not know the exact IP address either, but it knows which <strong>authoritative name server</strong> is responsible for <code>google.com</code> and directs the resolver there.</li>
+        <li><strong>Authoritative name server:</strong> The resolver contacts the <strong>authoritative name server</strong> for <code>google.com</code>. This server has the definitive record and returns the IP address (e.g., <code>142.250.187.206</code>) to the resolver.</li>
+        <li><strong>IP address returned:</strong> The resolver sends the IP address back to your computer. Both the resolver and your computer cache (store) this result for future use, so the next lookup will be much faster.</li>
+        <li><strong>Browser connects:</strong> Your browser now uses the IP address to connect directly to Google&rsquo;s web server using HTTP or HTTPS, and the web page is loaded.</li>
+      </ol>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">DNS Lookup Process</span>
+        </div>
+        <pre><code>
+  You type: www.google.com
+
+  [Your Browser]
+       |
+       v
+  [DNS Resolver (ISP)]
+       |
+       v
+  [Root Server]  ---->  "I don't know, but try the .com TLD server"
+       |
+       v
+  [.com TLD Server]  ---->  "I don't know, but try Google's name server"
+       |
+       v
+  [Authoritative Name Server for google.com]
+       |
+       v
+  Returns IP: 142.250.187.206
+       |
+       v
+  [Your Browser connects to 142.250.187.206 via HTTP/HTTPS]
+       |
+       v
+  Web page loads!
+        </code></pre>
+      </div>
+
+      <h4>Key Facts about DNS</h4>
+      <ul>
+        <li><strong>Port:</strong> 53</li>
+        <li><strong>Purpose:</strong> Translating domain names (e.g., <code>www.bbc.co.uk</code>) into IP addresses (e.g., <code>151.101.0.81</code>)</li>
+        <li><strong>Analogy:</strong> DNS is the &ldquo;phone book&rdquo; of the internet &mdash; you look up a name and get a number</li>
+        <li><strong>Caching:</strong> Results are cached at multiple levels (browser, OS, resolver) to speed up future lookups</li>
+        <li><strong>Without DNS:</strong> You would have to memorise the IP address of every website you want to visit</li>
+      </ul>
+
+      <div class="key-concept">
+        <strong>Key Concept: DNS</strong>
+        DNS (port 53) translates domain names into IP addresses. When you type a URL, the DNS lookup process involves your browser, a DNS resolver, root servers, TLD servers, and authoritative name servers. The IP address is returned to your browser, which then connects to the web server. Results are cached to speed up future visits. Without DNS, you would need to type numerical IP addresses for every website.
+      </div>
+
+      <div class="warning">
+        <strong>Common Mistake:</strong> Students sometimes say &ldquo;DNS converts IP addresses into domain names.&rdquo; While reverse DNS lookups do exist, for GCSE purposes DNS converts <strong>domain names into IP addresses</strong> (names to numbers). The user types the name; DNS finds the number. Always describe it in this direction in exam answers.
+      </div>
+    </section>
+
+    <!-- ==================== UNDERSTAND ==================== -->
+    <section class="understand">
+      <span class="section-label">Understand</span>
+      <h2>Comparing Protocols</h2>
+
+      <h3>Email Protocols Comparison</h3>
+      <p>Email communication relies on three protocols working together. SMTP handles sending, while POP3 and IMAP handle receiving. The table below compares all three:</p>
+
+      <table>
+        <thead>
+          <tr><th>Feature</th><th>SMTP</th><th>POP3</th><th>IMAP</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Full name</strong></td>
+            <td>Simple Mail Transfer Protocol</td>
+            <td>Post Office Protocol v3</td>
+            <td>Internet Message Access Protocol</td>
+          </tr>
+          <tr>
+            <td><strong>Purpose</strong></td>
+            <td>Sending emails</td>
+            <td>Downloading emails</td>
+            <td>Synchronising emails</td>
+          </tr>
+          <tr>
+            <td><strong>Direction</strong></td>
+            <td>Pushes email from client to server and between servers</td>
+            <td>Pulls (downloads) emails from server to client</td>
+            <td>Syncs emails between server and multiple clients</td>
+          </tr>
+          <tr>
+            <td><strong>Port</strong></td>
+            <td>25 / 587</td>
+            <td>110</td>
+            <td>143</td>
+          </tr>
+          <tr>
+            <td><strong>Emails on server?</strong></td>
+            <td>Stored temporarily until forwarded</td>
+            <td>Deleted after download (by default)</td>
+            <td>Kept on server permanently</td>
+          </tr>
+          <tr>
+            <td><strong>Multiple devices</strong></td>
+            <td>N/A (sending only)</td>
+            <td>Poor &mdash; emails only on the device that downloaded them</td>
+            <td>Excellent &mdash; emails synced across all devices</td>
+          </tr>
+          <tr>
+            <td><strong>Offline access</strong></td>
+            <td>N/A</td>
+            <td>Good &mdash; emails stored locally</td>
+            <td>Limited &mdash; requires internet to access emails on server</td>
+          </tr>
+          <tr>
+            <td><strong>Server storage</strong></td>
+            <td>N/A</td>
+            <td>Low &mdash; emails removed from server</td>
+            <td>High &mdash; all emails remain on server</td>
+          </tr>
+          <tr>
+            <td><strong>Modern usage</strong></td>
+            <td>Universal &mdash; used by all email systems for sending</td>
+            <td>Less common &mdash; outdated for multi-device use</td>
+            <td>Standard &mdash; used by Gmail, Outlook, and most modern services</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="key-concept">
+        <strong>Exam Tip: Email Protocol Combination</strong>
+        A complete email journey uses <strong>SMTP to send</strong> and either <strong>POP3 or IMAP to receive</strong>. A common exam question is: &ldquo;Explain the roles of SMTP and IMAP in sending and receiving an email.&rdquo; Your answer should explain that SMTP pushes the email from the sender to the mail server and between servers, while IMAP allows the recipient to synchronise and access the email on the destination server from multiple devices.
+      </div>
+
+      <h3>Summary of All Protocols</h3>
+      <p>This table provides a complete reference for all the protocols you need to know for GCSE Computer Science:</p>
+
+      <table>
+        <thead>
+          <tr><th>Protocol</th><th>Full Name</th><th>Purpose</th><th>Port(s)</th><th>Example Use</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>HTTP</strong></td>
+            <td>HyperText Transfer Protocol</td>
+            <td>Requesting and delivering web pages (unencrypted)</td>
+            <td>80</td>
+            <td>Browsing a basic website</td>
+          </tr>
+          <tr>
+            <td><strong>HTTPS</strong></td>
+            <td>HyperText Transfer Protocol Secure</td>
+            <td>Secure, encrypted transfer of web pages</td>
+            <td>443</td>
+            <td>Online banking, shopping, logging in</td>
+          </tr>
+          <tr>
+            <td><strong>FTP</strong></td>
+            <td>File Transfer Protocol</td>
+            <td>Uploading/downloading files to/from a server</td>
+            <td>20 / 21</td>
+            <td>Web developer uploading site files</td>
+          </tr>
+          <tr>
+            <td><strong>SMTP</strong></td>
+            <td>Simple Mail Transfer Protocol</td>
+            <td>Sending emails (client to server and server to server)</td>
+            <td>25 / 587</td>
+            <td>Clicking &ldquo;Send&rdquo; on an email</td>
+          </tr>
+          <tr>
+            <td><strong>POP3</strong></td>
+            <td>Post Office Protocol version 3</td>
+            <td>Downloading emails to a single device</td>
+            <td>110</td>
+            <td>Checking email on one laptop</td>
+          </tr>
+          <tr>
+            <td><strong>IMAP</strong></td>
+            <td>Internet Message Access Protocol</td>
+            <td>Synchronising emails across multiple devices</td>
+            <td>143</td>
+            <td>Accessing Gmail on phone and laptop</td>
+          </tr>
+          <tr>
+            <td><strong>DNS</strong></td>
+            <td>Domain Name System</td>
+            <td>Translating domain names to IP addresses</td>
+            <td>53</td>
+            <td>Typing www.bbc.co.uk into a browser</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="warning">
+        <strong>Common Mistake:</strong> Students sometimes confuse FTP with HTTP when it comes to file transfers. While you can download a file via HTTP (clicking a download link on a website), FTP is a dedicated protocol for <strong>managing files on a server</strong> &mdash; uploading, downloading, deleting, renaming, and organising files. FTP gives you direct access to the server&rsquo;s file system, whereas HTTP only lets you request specific files that the web server makes available.
+      </div>
+
+      <div class="key-concept">
+        <strong>Exam Tip: Port Numbers</strong>
+        You are expected to know the port numbers for each protocol. A useful memory aid: HTTP is <strong>80</strong> (the &ldquo;standard&rdquo; web), HTTPS is <strong>443</strong> (the &ldquo;secure&rdquo; web), FTP is <strong>20/21</strong> (the &ldquo;two-one&rdquo; for files), SMTP is <strong>25</strong> (sending), POP3 is <strong>110</strong> (pulling), IMAP is <strong>143</strong> (syncing), and DNS is <strong>53</strong> (domain lookup). Practise until you can recall these instantly.
+      </div>
+    </section>
+
+    <!-- ==================== INTERACTIVE EXERCISES ==================== -->
+    <section class="explore">
+      <span class="section-label">Interactive</span>
+      <h2>Test Your Knowledge</h2>
+
+      <p>Try these interactive exercises to check your understanding of network protocols. Read each question carefully before answering.</p>
+
+      <!-- Exercise 1: Protocol Matcher Quiz -->
+      <div class="interactive-exercise" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 2rem; border-radius: 12px; color: white; margin: 1.5rem 0;">
+        <h4 style="margin-top: 0;">Exercise 1: Protocol Matcher</h4>
+        <p>Read the scenario below and select the <strong>correct protocol</strong> that would be used.</p>
+        <div id="protoMatchScenario" style="background: rgba(255,255,255,0.15); padding: 1.2rem; border-radius: 8px; margin: 1rem 0; font-size: 1.1rem; line-height: 1.6;"></div>
+        <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; margin-top: 1rem;">
+          <button style="background: white; color: #667eea; border: none; padding: 0.5rem 1.5rem; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 1rem;" onclick="protoMatchCheck('HTTP')">HTTP</button>
+          <button style="background: white; color: #667eea; border: none; padding: 0.5rem 1.5rem; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 1rem;" onclick="protoMatchCheck('HTTPS')">HTTPS</button>
+          <button style="background: white; color: #667eea; border: none; padding: 0.5rem 1.5rem; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 1rem;" onclick="protoMatchCheck('FTP')">FTP</button>
+          <button style="background: white; color: #667eea; border: none; padding: 0.5rem 1.5rem; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 1rem;" onclick="protoMatchCheck('SMTP')">SMTP</button>
+          <button style="background: white; color: #667eea; border: none; padding: 0.5rem 1.5rem; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 1rem;" onclick="protoMatchCheck('POP3')">POP3</button>
+          <button style="background: white; color: #667eea; border: none; padding: 0.5rem 1.5rem; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 1rem;" onclick="protoMatchCheck('IMAP')">IMAP</button>
+          <button style="background: white; color: #667eea; border: none; padding: 0.5rem 1.5rem; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 1rem;" onclick="protoMatchCheck('DNS')">DNS</button>
+        </div>
+        <div style="margin-top: 0.75rem;">
+          <button style="background: rgba(255,255,255,0.2); color: white; border: 2px solid rgba(255,255,255,0.4); padding: 0.5rem 1.5rem; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 1rem;" onclick="protoMatchNext()">Skip / Next</button>
+        </div>
+        <div id="protoMatchFeedback" style="margin-top: 1rem; font-weight: 600; min-height: 1.5rem;"></div>
+        <div style="margin-top: 0.5rem; font-size: 0.95rem; opacity: 0.9;">Score: <span id="protoMatchCorrect">0</span> / <span id="protoMatchTotal">0</span></div>
+      </div>
+
+      <script>
+      (function() {
+        var scenarios = [
+          { text: "A student types www.bbc.co.uk into their browser. Before the page loads, the browser needs to find the IP address of the BBC's web server.", answer: "DNS", explanation: "DNS translates the domain name (www.bbc.co.uk) into an IP address so the browser can connect to the correct server." },
+          { text: "A customer enters their credit card details on an online shopping website. The connection is encrypted and a padlock icon appears in the address bar.", answer: "HTTPS", explanation: "HTTPS encrypts the connection using SSL/TLS, protecting sensitive data like credit card numbers. The padlock icon confirms HTTPS is active." },
+          { text: "A web developer uses FileZilla to upload their website's HTML, CSS, and image files to their web hosting server.", answer: "FTP", explanation: "FTP is used to upload and manage files on a remote server. FileZilla is a popular FTP client used by web developers." },
+          { text: "A teacher composes an email to all parents about a school trip and clicks 'Send' in Microsoft Outlook.", answer: "SMTP", explanation: "SMTP is the protocol used to send emails from the email client to the outgoing mail server and between mail servers." },
+          { text: "A user checks their email on their phone. The new emails also appear as read on their laptop and tablet.", answer: "IMAP", explanation: "IMAP synchronises emails across multiple devices, keeping them on the server. Changes on one device are reflected on all others." },
+          { text: "A user downloads all their emails to their home computer. The emails are then deleted from the mail server and are only available on that one computer.", answer: "POP3", explanation: "POP3 downloads emails to a single device and deletes them from the server by default, making them available only on that device." },
+          { text: "You browse a basic informational website about local weather. The URL starts with 'http://' and there is no padlock icon.", answer: "HTTP", explanation: "HTTP is used for unencrypted web browsing. The lack of a padlock and the 'http://' prefix confirm there is no encryption." },
+          { text: "A business backs up its large database files by transferring them overnight to a remote server using a dedicated file management tool.", answer: "FTP", explanation: "FTP is designed for transferring large files to and from servers, making it ideal for database backups." },
+          { text: "You log into your online banking account. The URL shows 'https://' and your browser displays a padlock icon.", answer: "HTTPS", explanation: "Online banking always uses HTTPS to encrypt all data, including login credentials and financial information." },
+          { text: "Your browser has never visited a particular website before. It needs to discover which server to connect to by converting the web address into a numerical address.", answer: "DNS", explanation: "DNS converts the human-readable domain name into a numerical IP address so the browser knows which server to contact." },
+          { text: "An employee sends a report by email to their manager. The email travels from the employee's email client to the company's outgoing mail server.", answer: "SMTP", explanation: "SMTP pushes the email from the client to the outgoing mail server. It handles all email sending operations." },
+          { text: "A student reads their school emails on their phone during lunch, then checks the same inbox on the library computer after lunch. All emails and read statuses are identical on both devices.", answer: "IMAP", explanation: "IMAP keeps emails on the server and synchronises the mailbox across all devices, so both phone and computer show the same state." },
+          { text: "A small business owner uses only one old desktop computer to check email. Emails are downloaded to the computer and removed from the server to save storage space.", answer: "POP3", explanation: "POP3 downloads emails to one device and removes them from the server. This saves server storage and is suitable when only one device is used." },
+          { text: "A web developer transfers a new version of their website's PHP scripts and image folders to the hosting company's server using a client application.", answer: "FTP", explanation: "FTP allows developers to upload, organise, and manage files directly on the hosting server." },
+          { text: "When you type 'www.google.com', your computer asks a special server to look up what numerical address corresponds to that name.", answer: "DNS", explanation: "DNS resolves domain names to IP addresses. The 'special server' is the DNS resolver, which queries root, TLD, and authoritative servers." },
+          { text: "A user clicks 'Send' on a birthday greeting email. The email is pushed from their device to their email provider's server, then forwarded to the recipient's email provider.", answer: "SMTP", explanation: "SMTP handles the sending of emails -- pushing them from client to server, and from server to server until they reach the recipient's mail server." }
+        ];
+
+        var currentIdx = -1;
+        var correct = 0;
+        var total = 0;
+        var used = [];
+        var answered = false;
+
+        function pick() {
+          if (used.length >= scenarios.length) { used = []; }
+          var idx;
+          do { idx = Math.floor(Math.random() * scenarios.length); } while (used.indexOf(idx) !== -1);
+          used.push(idx);
+          currentIdx = idx;
+          answered = false;
+          document.getElementById('protoMatchScenario').textContent = scenarios[idx].text;
+          document.getElementById('protoMatchFeedback').innerHTML = '';
+        }
+
+        window.protoMatchCheck = function(answer) {
+          if (currentIdx < 0 || answered) return;
+          answered = true;
+          total++;
+          var s = scenarios[currentIdx];
+          var fb = document.getElementById('protoMatchFeedback');
+          if (answer === s.answer) {
+            correct++;
+            fb.innerHTML = '<span style="color:#a0ffb0;">Correct!</span> ' + s.explanation;
+          } else {
+            fb.innerHTML = '<span style="color:#ffb0b0;">Not quite.</span> The answer is <strong>' + s.answer + '</strong>. ' + s.explanation;
+          }
+          document.getElementById('protoMatchCorrect').textContent = correct;
+          document.getElementById('protoMatchTotal').textContent = total;
+          setTimeout(pick, 3500);
+        };
+
+        window.protoMatchNext = function() {
+          pick();
+        };
+
+        pick();
+      })();
+      </script>
+
+      <!-- Exercise 2: Port Number Challenge -->
+      <div class="interactive-exercise" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 2rem; border-radius: 12px; color: white; margin: 1.5rem 0;">
+        <h4 style="margin-top: 0;">Exercise 2: Port Number Challenge</h4>
+        <p>You are shown a protocol name. Type the <strong>correct port number</strong> in the box and click Check. For protocols with two ports (e.g., FTP), enter either one.</p>
+        <div id="portChalProtocol" style="background: rgba(255,255,255,0.15); padding: 1.2rem; border-radius: 8px; margin: 1rem 0; font-size: 1.3rem; font-weight: 700; text-align: center; letter-spacing: 0.05em;"></div>
+        <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; align-items: center; margin-top: 1rem;">
+          <label for="portChalInput" style="font-weight: 600;">Port number:</label>
+          <input type="number" id="portChalInput" min="0" max="65535" style="padding: 0.5rem 1rem; border-radius: 6px; border: none; font-size: 1rem; width: 110px; color: #333;" />
+          <button style="background: white; color: #667eea; border: none; padding: 0.5rem 1.5rem; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 1rem;" onclick="portChalCheck()">Check</button>
+          <button style="background: rgba(255,255,255,0.2); color: white; border: 2px solid rgba(255,255,255,0.4); padding: 0.5rem 1.5rem; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 1rem;" onclick="portChalNew()">Skip / Next</button>
+        </div>
+        <div id="portChalFeedback" style="margin-top: 1rem; font-weight: 600; min-height: 1.5rem;"></div>
+        <div style="margin-top: 0.5rem; font-size: 0.95rem; opacity: 0.9;">Score: <span id="portChalCorrect">0</span> / <span id="portChalTotal">0</span></div>
+      </div>
+
+      <script>
+      (function() {
+        var protocols = [
+          { name: "HTTP", ports: [80], hint: "The standard web protocol" },
+          { name: "HTTPS", ports: [443], hint: "The secure web protocol" },
+          { name: "FTP (data transfer)", ports: [20], hint: "FTP uses two ports -- this one carries the file data" },
+          { name: "FTP (control/commands)", ports: [21], hint: "FTP uses two ports -- this one carries commands" },
+          { name: "SMTP", ports: [25, 587], hint: "Used for sending emails" },
+          { name: "POP3", ports: [110], hint: "Downloads emails to one device" },
+          { name: "IMAP", ports: [143], hint: "Synchronises emails across devices" },
+          { name: "DNS", ports: [53], hint: "Translates domain names to IP addresses" }
+        ];
+
+        var currentIdx = -1;
+        var correct = 0;
+        var total = 0;
+        var used = [];
+        var answered = false;
+
+        function generate() {
+          if (used.length >= protocols.length) { used = []; }
+          var idx;
+          do { idx = Math.floor(Math.random() * protocols.length); } while (used.indexOf(idx) !== -1);
+          used.push(idx);
+          currentIdx = idx;
+          answered = false;
+          document.getElementById('portChalProtocol').textContent = protocols[idx].name;
+          document.getElementById('portChalInput').value = '';
+          document.getElementById('portChalFeedback').innerHTML = '';
+        }
+
+        window.portChalCheck = function() {
+          if (currentIdx < 0 || answered) return;
+          var input = document.getElementById('portChalInput');
+          var userAnswer = parseInt(input.value, 10);
+          if (isNaN(userAnswer)) return;
+          answered = true;
+          total++;
+          var p = protocols[currentIdx];
+          var fb = document.getElementById('portChalFeedback');
+          if (p.ports.indexOf(userAnswer) !== -1) {
+            correct++;
+            fb.innerHTML = '<span style="color:#a0ffb0;">Correct!</span> ' + p.name + ' uses port ' + p.ports.join(' or ') + '. ' + p.hint + '.';
+          } else {
+            fb.innerHTML = '<span style="color:#ffb0b0;">Not quite.</span> ' + p.name + ' uses port <strong>' + p.ports.join(' or ') + '</strong>. ' + p.hint + '.';
+          }
+          document.getElementById('portChalCorrect').textContent = correct;
+          document.getElementById('portChalTotal').textContent = total;
+          setTimeout(generate, 3000);
+        };
+
+        window.portChalNew = function() {
+          generate();
+        };
+
+        // Allow Enter key to submit
+        document.getElementById('portChalInput').addEventListener('keydown', function(e) {
+          if (e.key === 'Enter') { portChalCheck(); }
+        });
+
+        generate();
+      })();
+      </script>
+
+      <!-- Exercise 3: DNS Sequence Sorter -->
+      <div class="interactive-exercise" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 2rem; border-radius: 12px; color: white; margin: 1.5rem 0;">
+        <h4 style="margin-top: 0;">Exercise 3: DNS Lookup Sequence</h4>
+        <p>The steps of a DNS lookup are shown below in a <strong>random order</strong>. Click them in the <strong>correct order</strong> (1st to last) to rebuild the DNS lookup process.</p>
+        <div id="dnsSeqButtons" style="display: flex; flex-direction: column; gap: 0.5rem; margin: 1rem 0;"></div>
+        <div id="dnsSeqOrder" style="background: rgba(255,255,255,0.15); padding: 1rem; border-radius: 8px; margin: 1rem 0; min-height: 2.5rem;">
+          <strong>Your sequence:</strong> <span id="dnsSeqSelected" style="font-size: 0.95rem;"></span>
+        </div>
+        <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; margin-top: 0.75rem;">
+          <button style="background: white; color: #667eea; border: none; padding: 0.5rem 1.5rem; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 1rem;" onclick="dnsSeqVerify()">Check Order</button>
+          <button style="background: rgba(255,255,255,0.2); color: white; border: 2px solid rgba(255,255,255,0.4); padding: 0.5rem 1.5rem; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 1rem;" onclick="dnsSeqReset()">Reset</button>
+        </div>
+        <div id="dnsSeqFeedback" style="margin-top: 1rem; font-weight: 600; min-height: 1.5rem;"></div>
+      </div>
+
+      <script>
+      (function() {
+        var correctOrder = [
+          "Browser checks its local cache",
+          "Request sent to DNS resolver (ISP)",
+          "Resolver queries a root DNS server",
+          "Root server directs to the TLD server",
+          "TLD server directs to the authoritative name server",
+          "Authoritative server returns the IP address",
+          "IP address sent back to the browser",
+          "Browser connects to the web server"
+        ];
+
+        var shuffled = [];
+        var selected = [];
+
+        function shuffle(arr) {
+          var a = arr.slice();
+          for (var i = a.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var temp = a[i]; a[i] = a[j]; a[j] = temp;
+          }
+          return a;
+        }
+
+        function render() {
+          var container = document.getElementById('dnsSeqButtons');
+          container.innerHTML = '';
+          shuffled.forEach(function(step, i) {
+            if (selected.indexOf(step) === -1) {
+              var btn = document.createElement('button');
+              btn.textContent = step;
+              btn.style.cssText = 'background: rgba(255,255,255,0.2); color: white; border: 1px solid rgba(255,255,255,0.4); padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer; font-size: 0.95rem; text-align: left;';
+              btn.onclick = (function(s) { return function() { selectStep(s); }; })(step);
+              container.appendChild(btn);
+            }
+          });
+          var selDisplay = document.getElementById('dnsSeqSelected');
+          if (selected.length === 0) {
+            selDisplay.textContent = '(click steps above in order)';
+          } else {
+            selDisplay.innerHTML = selected.map(function(s, i) {
+              return '<br>' + (i + 1) + '. ' + s;
+            }).join('');
+          }
+        }
+
+        function selectStep(step) {
+          selected.push(step);
+          document.getElementById('dnsSeqFeedback').innerHTML = '';
+          render();
+        }
+
+        window.dnsSeqVerify = function() {
+          var fb = document.getElementById('dnsSeqFeedback');
+          if (selected.length < correctOrder.length) {
+            fb.innerHTML = '<span style="color:#ffe0a0;">Select all ' + correctOrder.length + ' steps before checking.</span>';
+            return;
+          }
+          var allCorrect = true;
+          for (var i = 0; i < correctOrder.length; i++) {
+            if (selected[i] !== correctOrder[i]) { allCorrect = false; break; }
+          }
+          if (allCorrect) {
+            fb.innerHTML = '<span style="color:#a0ffb0;">Perfect! You have the DNS lookup sequence exactly right.</span>';
+          } else {
+            fb.innerHTML = '<span style="color:#ffb0b0;">Not quite right.</span> The correct order is:<br>' + correctOrder.map(function(s, i) { return (i + 1) + '. ' + s; }).join('<br>');
+          }
+        };
+
+        window.dnsSeqReset = function() {
+          selected = [];
+          shuffled = shuffle(correctOrder);
+          document.getElementById('dnsSeqFeedback').innerHTML = '';
+          render();
+        };
+
+        shuffled = shuffle(correctOrder);
+        render();
+      })();
+      </script>
+    </section>
+
+    <!-- ==================== PRACTICE ==================== -->
+    <section class="practice">
+      <span class="section-label">Practice</span>
+      <h2>Practice Questions</h2>
+      <p>Click on each question to reveal the answer. Try to answer in your head or on paper first before checking!</p>
+
+      <div class="hint">
+        <div class="hint-title">Q1: Define the term "network protocol" and explain why protocols are needed.</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> A <strong>network protocol</strong> is an agreed set of rules that defines how data is formatted, transmitted, and received between devices on a network. Protocols are needed because devices on a network may be made by <strong>different manufacturers</strong> and run <strong>different operating systems</strong>. Without a common set of rules (protocols), these devices would not be able to understand each other&rsquo;s data. Protocols act as a <strong>common language</strong>, ensuring that a message sent by one device is correctly interpreted by another, regardless of hardware or software differences.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q2: Explain the difference between HTTP and HTTPS. Why should online banking use HTTPS rather than HTTP?</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> <strong>HTTP</strong> (port 80) transfers web pages in <strong>plain text</strong> with no encryption. This means that anyone who intercepts the data can read it. <strong>HTTPS</strong> (port 443) is the secure version &mdash; it encrypts all data using <strong>SSL/TLS</strong> before transmission, so intercepted data cannot be read. HTTPS also uses <strong>digital certificates</strong> to authenticate the server, proving that the website is genuine. Online banking must use HTTPS because it handles extremely sensitive data &mdash; login credentials, account numbers, and financial transactions. If HTTP were used, a hacker on the same network could intercept and read this data. HTTPS encryption ensures that even if data is intercepted, it is unreadable without the encryption key.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q3: Describe how FTP is used by a web developer. State the port numbers used by FTP.</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> FTP (File Transfer Protocol) is used by web developers to <strong>upload website files</strong> (HTML, CSS, JavaScript, images) from their local computer to the web hosting server. The developer uses an <strong>FTP client</strong> (such as FileZilla) to connect to the server by entering the server address, username, and password. Once connected, they can browse the server&rsquo;s file system, upload new files, download files, and delete or rename existing files. FTP uses <strong>port 20</strong> for <strong>data transfer</strong> (the actual file content) and <strong>port 21</strong> for <strong>control commands</strong> (login, directory listing, file management instructions).</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q4: Compare POP3 and IMAP. Explain why IMAP is more suitable for a user who accesses email on both a phone and a laptop.</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> <strong>POP3</strong> (port 110) <strong>downloads</strong> emails from the mail server to the local device and then <strong>deletes them from the server</strong> (by default). This means emails are only available on the device that downloaded them. <strong>IMAP</strong> (port 143) <strong>synchronises</strong> emails across all devices, keeping them <strong>stored on the server</strong>. Changes made on one device (reading, deleting, moving emails) are reflected on all other devices. IMAP is more suitable for a user with both a phone and a laptop because: (1) emails are accessible on <strong>both devices</strong> rather than being stuck on one, (2) if the user reads an email on their phone, it will appear as <strong>read on the laptop too</strong>, and (3) the mailbox is always consistent across all devices. With POP3, emails downloaded on the phone would not appear on the laptop, creating confusion.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q5: Describe the step-by-step process of a DNS lookup when a user types "www.bbc.co.uk" into their browser.</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> (1) The browser first checks its <strong>local cache</strong> to see if it already has the IP address for www.bbc.co.uk from a recent visit. (2) If not found, the request is sent to a <strong>DNS resolver</strong>, usually operated by the user&rsquo;s ISP. (3) The resolver contacts a <strong>root DNS server</strong>, which does not know the IP address but directs the resolver to the <strong>TLD server</strong> responsible for <code>.uk</code> domains. (4) The resolver contacts the <strong>.uk TLD server</strong>, which directs it to the <strong>authoritative name server</strong> for <code>bbc.co.uk</code>. (5) The resolver contacts the <strong>authoritative name server</strong>, which holds the definitive record and returns the <strong>IP address</strong> (e.g., 151.101.0.81). (6) The IP address is returned to the browser. (7) The browser uses the IP address to connect to the BBC&rsquo;s web server using HTTP/HTTPS and the web page loads. The result is <strong>cached</strong> so future lookups are faster.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q6: Explain the role of SMTP in sending an email. Why is SMTP not sufficient on its own for a complete email system?</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> <strong>SMTP</strong> (Simple Mail Transfer Protocol, port 25/587) is responsible for <strong>sending emails</strong>. When a user clicks &ldquo;Send,&rdquo; SMTP pushes the email from the email client to the outgoing mail server. The SMTP server then uses DNS to find the recipient&rsquo;s mail server and forwards the email there using SMTP. However, SMTP is <strong>not sufficient on its own</strong> because it only handles <strong>sending</strong> (pushing) emails. It cannot retrieve emails from the server for the recipient to read. A separate protocol is needed for <strong>receiving</strong> emails: either <strong>POP3</strong> (which downloads emails to one device) or <strong>IMAP</strong> (which synchronises emails across multiple devices). A complete email system therefore needs SMTP for sending and POP3 or IMAP for receiving.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q7: A small business has a website for selling products online and also uses email for communication. List the protocols the business would use and explain the purpose of each.</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> The business would use the following protocols: (1) <strong>HTTPS</strong> &mdash; for the online shop, to securely transmit customer payment details and personal information with encryption via SSL/TLS. (2) <strong>DNS</strong> &mdash; to translate the business&rsquo;s domain name (e.g., www.shopname.com) into an IP address so customers&rsquo; browsers can find and connect to the web server. (3) <strong>FTP</strong> &mdash; for the web developer to upload and update website files on the hosting server. (4) <strong>SMTP</strong> &mdash; for sending emails (e.g., order confirmations, newsletters, staff communication). (5) <strong>IMAP</strong> &mdash; for receiving and synchronising emails across multiple devices (staff phones, laptops, office computers) so everyone can access the same inbox from any device. HTTP might also be used for non-sensitive informational pages, though HTTPS is now preferred for all pages.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q8: State the port numbers used by each of the following protocols: HTTP, HTTPS, FTP, SMTP, POP3, IMAP, DNS. [Knowledge recall question]</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong></p>
+          <ul>
+            <li><strong>HTTP:</strong> Port 80</li>
+            <li><strong>HTTPS:</strong> Port 443</li>
+            <li><strong>FTP:</strong> Port 20 (data transfer) and Port 21 (control/commands)</li>
+            <li><strong>SMTP:</strong> Port 25 (server-to-server) or Port 587 (client-to-server with authentication)</li>
+            <li><strong>POP3:</strong> Port 110</li>
+            <li><strong>IMAP:</strong> Port 143</li>
+            <li><strong>DNS:</strong> Port 53</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== KEY VOCABULARY ==================== -->
+    <section class="understand">
+      <span class="section-label">Reference</span>
+      <h2>Key Vocabulary</h2>
+      <p>This table summarises the essential terms for this topic. Use it for revision and to check your understanding.</p>
+
+      <table>
+        <thead>
+          <tr><th>Term</th><th>Definition</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>Protocol</strong></td><td>An agreed set of rules that governs how devices communicate and exchange data over a network</td></tr>
+          <tr><td><strong>Port number</strong></td><td>A numerical identifier that directs network traffic to the correct application or service on a computer (e.g., port 80 for HTTP)</td></tr>
+          <tr><td><strong>HTTP</strong></td><td>HyperText Transfer Protocol &mdash; transfers web pages in plain text (port 80)</td></tr>
+          <tr><td><strong>HTTPS</strong></td><td>HyperText Transfer Protocol Secure &mdash; transfers web pages with SSL/TLS encryption (port 443)</td></tr>
+          <tr><td><strong>SSL/TLS</strong></td><td>Secure Sockets Layer / Transport Layer Security &mdash; encryption protocols that secure data in transit, used by HTTPS</td></tr>
+          <tr><td><strong>Digital certificate</strong></td><td>An electronic document that proves the identity of a website, used by HTTPS to authenticate servers</td></tr>
+          <tr><td><strong>FTP</strong></td><td>File Transfer Protocol &mdash; uploads and downloads files to/from a server (ports 20/21)</td></tr>
+          <tr><td><strong>SMTP</strong></td><td>Simple Mail Transfer Protocol &mdash; sends (pushes) emails from client to server and between servers (port 25/587)</td></tr>
+          <tr><td><strong>POP3</strong></td><td>Post Office Protocol version 3 &mdash; downloads emails to a single device, deleting them from the server (port 110)</td></tr>
+          <tr><td><strong>IMAP</strong></td><td>Internet Message Access Protocol &mdash; synchronises emails across multiple devices, keeping them on the server (port 143)</td></tr>
+          <tr><td><strong>DNS</strong></td><td>Domain Name System &mdash; translates human-readable domain names into numerical IP addresses (port 53)</td></tr>
+          <tr><td><strong>IP address</strong></td><td>A unique numerical address assigned to every device on a network, used to identify and locate devices</td></tr>
+          <tr><td><strong>Domain name</strong></td><td>A human-readable name for a website (e.g., www.google.com) that DNS translates into an IP address</td></tr>
+          <tr><td><strong>DNS resolver</strong></td><td>A server (usually run by your ISP) that handles DNS lookups by querying root, TLD, and authoritative servers</td></tr>
+          <tr><td><strong>Root server</strong></td><td>A top-level DNS server that directs queries to the appropriate TLD server (e.g., .com, .uk, .org)</td></tr>
+          <tr><td><strong>TLD server</strong></td><td>A DNS server responsible for a top-level domain (e.g., all .com domains) that directs queries to the authoritative name server</td></tr>
+          <tr><td><strong>Authoritative name server</strong></td><td>The DNS server that holds the definitive IP address record for a specific domain name</td></tr>
+          <tr><td><strong>Cache</strong></td><td>A temporary store of recently accessed data, used by browsers and DNS to speed up repeated lookups</td></tr>
+          <tr><td><strong>Encryption</strong></td><td>The process of converting data into an unreadable format to prevent unauthorised access during transmission</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- ==================== EXAM TIPS ==================== -->
+    <section class="understand">
+      <span class="section-label">Exam Tips</span>
+      <h2>How to Succeed in the Exam</h2>
+
+      <div class="key-concept">
+        <strong>Exam Tip: Know Each Protocol&rsquo;s Purpose and Port</strong>
+        For each of the seven protocols (HTTP, HTTPS, FTP, SMTP, POP3, IMAP, DNS), you must know its full name, its purpose, its port number(s), and be able to give a real-world example. A very common question format is: &ldquo;State the protocol used for [scenario] and give its port number.&rdquo; Practise recalling all seven until you can do it instantly.
+      </div>
+
+      <div class="key-concept">
+        <strong>Exam Tip: HTTP vs HTTPS</strong>
+        When explaining HTTPS, always mention three things: (1) data is <strong>encrypted</strong> using SSL/TLS, (2) the server is <strong>authenticated</strong> using a digital certificate, and (3) you can identify HTTPS by the <strong>padlock icon</strong> in the browser. Simply saying &ldquo;HTTPS is more secure than HTTP&rdquo; is not enough for full marks &mdash; you must explain <em>how</em> it is more secure.
+      </div>
+
+      <div class="key-concept">
+        <strong>Exam Tip: POP3 vs IMAP</strong>
+        A favourite exam question is comparing POP3 and IMAP. Remember the key distinction: POP3 <strong>downloads and deletes</strong> (single device, offline access), while IMAP <strong>synchronises and keeps</strong> (multiple devices, requires internet). If a question mentions using email on multiple devices, the answer is almost always IMAP.
+      </div>
+
+      <div class="key-concept">
+        <strong>Exam Tip: DNS Lookup Steps</strong>
+        You may be asked to describe the DNS lookup process. Remember the chain: <strong>browser cache &rarr; DNS resolver &rarr; root server &rarr; TLD server &rarr; authoritative server &rarr; IP returned &rarr; browser connects</strong>. Mentioning caching at the end (results are stored for faster future lookups) can earn extra marks.
+      </div>
+
+      <div class="key-concept">
+        <strong>Exam Tip: SMTP Direction</strong>
+        Always be precise about the direction of SMTP. It <strong>sends</strong> (pushes) emails. It does not receive or download them. If asked about a &ldquo;complete email journey,&rdquo; explain that SMTP sends the email and POP3 or IMAP is used by the recipient to retrieve it.
+      </div>
+
+      <div class="key-concept">
+        <strong>Exam Tip: FTP Two Ports</strong>
+        FTP uses <strong>two ports</strong>: port 20 for data transfer and port 21 for control commands. If the mark scheme asks for the FTP port, stating both ports shows stronger knowledge. Remember: 20 = data, 21 = commands.
+      </div>
+    </section>
+
+    <!-- ==================== REFLECT ==================== -->
+    <section class="reflect">
+      <span class="section-label">Reflect</span>
+      <h2>Protocols in Your Daily Life</h2>
+
+      <p>Now that you understand the key network protocols, think about how many of them you use every single day &mdash; probably without even realising it:</p>
+
+      <ul>
+        <li><strong>DNS:</strong> Every time you type a web address or click a link, DNS silently translates the domain name into an IP address in milliseconds. You use DNS hundreds of times a day without ever seeing it work.</li>
+        <li><strong>HTTPS:</strong> When you log into social media, check your bank balance, or buy something online, HTTPS encrypts your data. The padlock icon in your browser is your visual confirmation that HTTPS is active.</li>
+        <li><strong>HTTP:</strong> Some basic informational websites still use HTTP, though this is becoming rarer as the web moves towards HTTPS everywhere.</li>
+        <li><strong>SMTP + IMAP:</strong> When you send an email, SMTP pushes it to the server. When you open Gmail or Outlook on your phone and laptop and see the same emails on both, that is IMAP synchronising your inbox across devices.</li>
+        <li><strong>FTP:</strong> If you have ever uploaded files to a website or a shared server, FTP (or its secure variant) was likely handling the transfer behind the scenes.</li>
+      </ul>
+
+      <p>Protocols are the invisible infrastructure that makes the internet work. Without HTTP/HTTPS, there would be no web browsing. Without SMTP, POP3, and IMAP, there would be no email. Without DNS, you would have to memorise numerical IP addresses for every website. Without FTP, web developers could not easily publish websites. Every online action you take relies on protocols working together seamlessly.</p>
+
+      <p><strong>Challenge yourself:</strong> Next time you are browsing the web, look at the address bar. Is the site using HTTP or HTTPS? Can you spot the padlock? When you send an email, think about SMTP pushing it to the server and IMAP synchronising it on the other end. When a website loads in under a second, remember that DNS resolved the domain name in milliseconds. Seeing these protocols in action deepens your understanding beyond what any textbook can teach.</p>
+
+      <div class="key-concept">
+        <strong>Final Thought</strong>
+        Protocols are the agreed-upon rules that allow billions of different devices &mdash; made by thousands of different manufacturers, running dozens of different operating systems &mdash; to communicate seamlessly across the world. They are one of the most important concepts in computer science. Without standardised protocols, the internet as we know it simply could not exist. Understanding protocols means understanding the foundation of all modern digital communication.
+      </div>
+    </section>
+
+    <!-- ==================== NAVIGATION ==================== -->
+    <nav class="chapter-nav">
+      <a href="network-topologies.html">&larr; Previous: Network Topologies</a>
+      <a href="../index.html">Course Home</a>
+      <a href="tcp-ip-model.html">Next: The TCP/IP Model &rarr;</a>
+    </nav>
+
+  </main>
+
+  <footer class="site-footer">
+    <p>Python Fundamentals &mdash; A KS4 Learning Platform</p>
+    <p>Network Protocols &mdash; GCSE Computer Science Theory</p>
+  </footer>
+
+  <!-- Hint toggle script (shared pattern from existing pages) -->
+  <script>
+  (function() {
+    document.querySelectorAll('.hint-title').forEach(function(title) {
+      title.addEventListener('click', function() {
+        var content = this.nextElementSibling;
+        if (content && content.classList.contains('hint-content')) {
+          content.classList.toggle('visible');
+        }
+      });
+    });
+  })();
+  </script>
+
+</body>
+</html>

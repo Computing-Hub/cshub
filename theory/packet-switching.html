@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Packet Switching - Python Fundamentals</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/style.css" />
+</head>
+<body>
+
+  <header class="site-header">
+    <p><a href="../index.html">&larr; Back to Course</a></p>
+    <h1>Packet Switching</h1>
+    <p class="subtitle">How data travels across the internet in small, independent packets</p>
+  </header>
+
+  <main>
+
+    <!-- ==================== THE IDEA ==================== -->
+    <section class="idea">
+      <span class="section-label">The Idea</span>
+      <h2>Why Can&rsquo;t We Just Send Data in One Big Chunk?</h2>
+
+      <p>Imagine you want to send a large photograph to a friend across the internet. The image file might be several megabytes &mdash; millions of bytes of data. If the internet tried to send this file as one continuous stream along a single path, it would tie up that entire route for the duration of the transfer. No one else could use those connections until your photo finished sending. If anything went wrong halfway through &mdash; a cable fault, a router crash &mdash; the entire transfer would fail and you would have to start again from scratch.</p>
+
+      <p>This is clearly not how the internet works. You can browse the web, stream music, and send messages all at the same time, sharing the same network connections with millions of other users worldwide. The solution that makes this possible is called <strong>packet switching</strong>.</p>
+
+      <p><strong>Packet switching</strong> is the method the internet uses to transmit data. Instead of sending a file as one big block, the data is broken into small, manageable pieces called <strong>packets</strong>. Each packet is sent independently across the network, potentially taking different routes, and is reassembled at the destination to recreate the original data.</p>
+
+      <p><strong>In this topic you will learn:</strong></p>
+      <ul>
+        <li>What packet switching is and why it is used</li>
+        <li>The structure of a data packet: header, payload, and trailer</li>
+        <li>The step-by-step process of how packet switching works</li>
+        <li>How packet switching compares to circuit switching</li>
+        <li>The role of routers in forwarding packets across the network</li>
+        <li>A real-world analogy to help you remember the concept</li>
+      </ul>
+
+      <div class="key-concept">
+        <strong>Key Concept: Packet Switching</strong>
+        Packet switching is a method of transmitting data across a network by breaking it into small packets, sending each packet independently (possibly via different routes), and reassembling them at the destination. It is the fundamental technique that makes the internet work.
+      </div>
+
+      <div class="key-concept">
+        <strong>Did You Know?</strong>
+        The concept of packet switching was independently invented by two researchers in the early 1960s: <strong>Paul Baran</strong> in the United States and <strong>Donald Davies</strong> in the United Kingdom. Davies actually coined the term &ldquo;packet.&rdquo; Their work became the foundation of ARPANET, the precursor to today&rsquo;s internet. The entire modern internet &mdash; every website, every video call, every online game &mdash; relies on packet switching.
+      </div>
+    </section>
+
+    <!-- ==================== EXPLORE: WHY PACKET SWITCHING ==================== -->
+    <section class="explore">
+      <span class="section-label">Explore</span>
+      <h2>Why Use Packet Switching?</h2>
+
+      <p>Packet switching became the standard for computer networks because it solves several critical problems with data transmission. There are three main reasons why it is used:</p>
+
+      <h3>1. Efficient Use of Bandwidth</h3>
+      <p>When data is split into packets, multiple users can share the same network connections simultaneously. While one user&rsquo;s packets travel along a link, another user&rsquo;s packets can use the same link in the gaps between them. This is like a motorway where many cars from different journeys share the same road at the same time, rather than closing the entire motorway for one car to travel from start to finish.</p>
+      <p>Without packet switching, sending a large file would monopolise an entire route, wasting bandwidth whenever there were brief pauses in the transmission. Packet switching ensures that network capacity is used as fully as possible.</p>
+
+      <h3>2. Fault Tolerance</h3>
+      <p>Because each packet is sent independently and can take a different route, the network is <strong>fault tolerant</strong>. If one router or cable fails, packets can simply be rerouted around the problem. The sender does not even need to know about the failure &mdash; the network handles it automatically.</p>
+      <p>This was actually one of the original motivations for developing packet switching. The US military wanted a communication system that could survive partial destruction. If a bomb destroyed one part of the network, messages would still get through by finding alternative routes &mdash; exactly what packet switching enables.</p>
+
+      <h3>3. Fairness</h3>
+      <p>Packet switching ensures that no single user can dominate the network. Because data is broken into small packets and these packets are interleaved with packets from other users, everyone gets a fair share of the available bandwidth. Multiple users share the same network lines fairly, rather than one user blocking everyone else while their large file transfers.</p>
+
+      <div class="key-concept">
+        <strong>Exam Tip</strong>
+        When asked &ldquo;Why is packet switching used?&rdquo; in an exam, aim to give three distinct reasons: (1) efficient use of bandwidth &mdash; multiple users share connections, (2) fault tolerance &mdash; if a route fails, packets find alternative paths, and (3) fairness &mdash; no single user can monopolise the network. Always explain each point rather than just listing it.
+      </div>
+    </section>
+
+    <!-- ==================== EXPLORE: STRUCTURE OF A PACKET ==================== -->
+    <section class="explore">
+      <span class="section-label">Explore</span>
+      <h2>The Structure of a Packet</h2>
+
+      <p>A packet is not just a random chunk of data. Every packet has a carefully defined structure with three distinct parts: the <strong>header</strong>, the <strong>payload</strong>, and the <strong>trailer</strong> (sometimes called the footer). Think of a packet like a letter in an envelope &mdash; the envelope has the address on the outside (header), the letter inside (payload), and a seal on the back to confirm it has not been tampered with (trailer).</p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Structure of a Data Packet</span>
+        </div>
+        <pre><code>
+  +------------------------------------------------------+
+  |                      PACKET                          |
+  +----------------+---------------------+---------------+
+  |     HEADER     |      PAYLOAD        |    TRAILER    |
+  |                |                     |               |
+  | - Source IP    |  The actual data    | - Error check |
+  | - Dest. IP     |  being sent         |   (checksum)  |
+  | - Packet No.   |                     | - End of      |
+  | - Total Pkts   |  Typically          |   packet      |
+  | - TTL          |  500-1500 bytes     |   marker      |
+  | - Protocol     |                     |               |
+  +----------------+---------------------+---------------+
+        </code></pre>
+      </div>
+
+      <h3>The Header</h3>
+      <p>The header is attached to the front of every packet and contains essential information that routers and the destination computer need to handle the packet correctly. It is like the address label on a parcel. The header includes:</p>
+      <ul>
+        <li><strong>Source IP address:</strong> The IP address of the computer that sent the packet. This tells the destination where the data came from and where to send any replies or error messages.</li>
+        <li><strong>Destination IP address:</strong> The IP address of the computer the packet is being sent to. Routers use this to decide where to forward the packet next.</li>
+        <li><strong>Packet number (sequence number):</strong> A number indicating this packet&rsquo;s position in the sequence. For example, if a file is split into 20 packets, this might be &ldquo;packet 7 of 20.&rdquo; The destination uses this to reassemble the packets in the correct order.</li>
+        <li><strong>Total number of packets:</strong> How many packets the original data was split into. This tells the destination how many packets to expect, so it knows when it has received them all.</li>
+        <li><strong>TTL (Time to Live):</strong> A counter that limits how long a packet can travel around the network. Each time the packet passes through a router, the TTL is reduced by one. If it reaches zero, the packet is discarded. This prevents lost or misdirected packets from circling the network forever, wasting bandwidth.</li>
+        <li><strong>Protocol:</strong> Identifies which protocol (set of rules) should be used to handle the data. For example, HTTP for web pages, SMTP for email, or FTP for file transfers. This tells the destination computer which application or service the data belongs to.</li>
+      </ul>
+
+      <h3>The Payload</h3>
+      <p>The payload is the middle section of the packet and contains the <strong>actual data</strong> being transmitted. This is the useful content &mdash; a piece of an image, a fragment of a web page, part of an email message, or a segment of a video stream.</p>
+      <p>The payload is typically between <strong>500 and 1,500 bytes</strong> in size. The maximum payload size is determined by the network&rsquo;s <strong>Maximum Transmission Unit (MTU)</strong>. On most networks, the MTU is 1,500 bytes. Keeping packets small means they can be transmitted quickly and retransmitted efficiently if an error occurs.</p>
+
+      <h3>The Trailer (Footer)</h3>
+      <p>The trailer is attached to the end of the packet and serves two important purposes:</p>
+      <ul>
+        <li><strong>Error checking data (checksum):</strong> A mathematical value calculated from the contents of the packet. When the packet arrives at its destination, the same calculation is performed on the received data. If the result matches the checksum in the trailer, the data arrived intact. If it does not match, the packet has been corrupted during transmission and must be re-requested.</li>
+        <li><strong>End of packet marker:</strong> A special sequence that signals to the receiving device that this is the end of the current packet. This helps the receiver distinguish where one packet ends and the next begins.</li>
+      </ul>
+
+      <div class="warning">
+        <strong>Common Mistake:</strong> Students sometimes confuse the header and the trailer. Remember: the <strong>header</strong> contains addressing and routing information (source IP, destination IP, sequence number, TTL, protocol) and is at the <strong>front</strong> of the packet. The <strong>trailer</strong> contains error checking data and an end marker and is at the <strong>back</strong> of the packet. Think of it this way: the header tells the network <em>where to send</em> the packet; the trailer checks that the packet <em>arrived correctly</em>.
+      </div>
+
+      <div class="key-concept">
+        <strong>Key Concept: Packet Structure</strong>
+        Every packet has three parts: (1) <strong>Header</strong> &mdash; source IP, destination IP, packet number, total packets, TTL, and protocol; (2) <strong>Payload</strong> &mdash; the actual data (500&ndash;1,500 bytes); (3) <strong>Trailer</strong> &mdash; error checking checksum and end-of-packet marker. You must know all three parts and what each contains for the exam.
+      </div>
+    </section>
+
+    <!-- ==================== UNDERSTAND: HOW PACKET SWITCHING WORKS ==================== -->
+    <section class="understand">
+      <span class="section-label">Understand</span>
+      <h2>How Packet Switching Works: Step by Step</h2>
+
+      <p>Now that you understand the structure of a packet, let us walk through the entire process of how data gets from one computer to another using packet switching. Imagine you are sending an image from your computer in London to a friend&rsquo;s computer in Edinburgh.</p>
+
+      <h3>Step 1: Data Is Split into Packets at the Source</h3>
+      <p>Your computer takes the image file and divides it into small chunks. Each chunk becomes the payload of a packet. If the image is 15,000 bytes and each payload can hold 1,500 bytes, the file will be split into 10 packets.</p>
+
+      <h3>Step 2: Each Packet Is Labelled</h3>
+      <p>Your computer adds a header to each packet containing the source IP address (your computer), the destination IP address (your friend&rsquo;s computer), the packet&rsquo;s sequence number (1 of 10, 2 of 10, etc.), the total number of packets (10), a TTL value, and the protocol. A trailer with error-checking data is also added.</p>
+
+      <h3>Step 3: Packets Are Sent Across the Network Independently</h3>
+      <p>The packets are sent out onto the network. Crucially, each packet is treated as an <strong>independent unit</strong>. They do not have to travel together or follow the same route. Each packet makes its own way through the network.</p>
+
+      <h3>Step 4: Routers Examine Each Packet and Forward It</h3>
+      <p>At each point in the network, a <strong>router</strong> examines the packet&rsquo;s destination IP address in the header. The router consults its <strong>routing table</strong> to determine the best next step (the &ldquo;next hop&rdquo;) for the packet to take towards its destination. The router then forwards the packet to the next router along the route.</p>
+
+      <h3>Step 5: Packets May Take Different Routes</h3>
+      <p>Because the internet is a complex mesh of interconnected routers and links, there are usually many possible paths between two points. Different packets from the same file may take completely different routes. Packet 1 might travel through Manchester and Leeds, while Packet 2 goes through Birmingham and Sheffield. Routers make decisions based on current network conditions &mdash; if one route is congested or a link has failed, they redirect packets along a different path.</p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Packets Taking Different Routes</span>
+        </div>
+        <pre><code>
+  SOURCE (London)                         DESTINATION (Edinburgh)
+       |                                         ^
+       |---> Router A ---> Router C ---> Router F ---> |  (Packet 1, 3, 7)
+       |                                               |
+       |---> Router A ---> Router D ---> Router F ---> |  (Packet 2, 5)
+       |                                               |
+       |---> Router B ---> Router E ---> Router F ---> |  (Packet 4, 6, 8, 9, 10)
+        </code></pre>
+      </div>
+
+      <h3>Step 6: Packets Arrive at the Destination (Possibly Out of Order)</h3>
+      <p>Because packets take different routes, they may arrive at the destination at different times and in a different order from which they were sent. Packet 5 might arrive before Packet 2, or Packet 10 might arrive before Packet 3. This is completely normal in packet switching.</p>
+
+      <h3>Step 7: Packets Are Reassembled in the Correct Order</h3>
+      <p>The destination computer uses the <strong>sequence numbers</strong> in each packet&rsquo;s header to put all the packets back in the correct order. It knows it needs 10 packets (from the &ldquo;total packets&rdquo; field), so it waits until all 10 have arrived, then arranges them from 1 to 10 and extracts the payload from each one to reconstruct the original image file.</p>
+
+      <h3>Step 8: Error Checking and Retransmission</h3>
+      <p>The destination checks each packet&rsquo;s <strong>checksum</strong> (in the trailer) to verify the data was not corrupted during transmission. If a packet is damaged or missing (perhaps it was discarded because its TTL reached zero, or it was lost due to a network error), the destination sends a request back to the source asking for that specific packet to be re-sent. Only the damaged or missing packets need to be retransmitted &mdash; not the entire file.</p>
+
+      <div class="key-concept">
+        <strong>Exam Tip</strong>
+        The eight steps of packet switching are a common exam question. You might be asked to &ldquo;describe how data is transmitted across the internet using packet switching&rdquo; for 4&ndash;6 marks. Make sure you cover: data split into packets, packets labelled with headers, packets sent independently, routers forward packets, packets may take different routes, packets arrive out of order, reassembled using sequence numbers, error checking and retransmission of damaged packets.
+      </div>
+    </section>
+
+    <!-- ==================== UNDERSTAND: ROLE OF ROUTERS ==================== -->
+    <section class="understand">
+      <span class="section-label">Understand</span>
+      <h2>The Role of Routers in Packet Switching</h2>
+
+      <p>Routers are the unsung heroes of the internet. Without them, packets would have no way of finding their destination. A <strong>router</strong> is a networking device that sits at junctions in the network and makes decisions about where to send each packet next.</p>
+
+      <h3>What Do Routers Do?</h3>
+      <ul>
+        <li><strong>Examine packet headers:</strong> When a router receives a packet, it reads the destination IP address from the packet&rsquo;s header. This tells the router where the packet ultimately needs to go.</li>
+        <li><strong>Consult routing tables:</strong> The router maintains a <strong>routing table</strong> &mdash; a database that maps destination addresses to the best &ldquo;next hop&rdquo; (the next router along the path). Routing tables are updated dynamically as network conditions change.</li>
+        <li><strong>Forward packets to the next hop:</strong> Based on the routing table, the router sends the packet to the next router that brings it closer to its destination. This process repeats at each router until the packet reaches the destination network.</li>
+        <li><strong>Manage network traffic:</strong> Routers can detect congestion and redirect packets along less busy routes. If a link fails, the routing table is updated and future packets are sent via alternative paths.</li>
+        <li><strong>Decrement the TTL:</strong> Each router reduces the packet&rsquo;s TTL by one. If the TTL reaches zero, the router discards the packet. This prevents misdirected packets from looping endlessly around the network.</li>
+      </ul>
+
+      <p>Think of routers like traffic police at junctions. Each officer looks at the address on a package, checks their map, and points it in the right direction towards the next junction. No single officer knows the entire route &mdash; they just know the best next step from their position.</p>
+
+      <div class="key-concept">
+        <strong>Key Concept: Routers</strong>
+        Routers examine the destination IP address in a packet&rsquo;s header, consult their routing table, and forward the packet to the next hop towards its destination. They are responsible for directing traffic across the internet, managing congestion, and rerouting packets when links fail.
+      </div>
+    </section>
+
+    <!-- ==================== UNDERSTAND: ANALOGY ==================== -->
+    <section class="understand">
+      <span class="section-label">Understand</span>
+      <h2>Real-World Analogy: Sending a Book by Post</h2>
+
+      <p>One of the best ways to understand packet switching is through a simple analogy. Imagine you want to send a book to a friend, but the postal service will only accept envelopes, not heavy parcels. Here is what you would do:</p>
+
+      <ol>
+        <li><strong>Tear out the pages:</strong> You carefully remove each page from the book. Each page is like a <strong>packet&rsquo;s payload</strong> &mdash; a small piece of the original data.</li>
+        <li><strong>Number the pages:</strong> You write a page number on each one (e.g., &ldquo;page 14 of 200&rdquo;). This is like the <strong>sequence number</strong> in the packet header.</li>
+        <li><strong>Put each page in a separate envelope:</strong> Each envelope has your address (source IP), your friend&rsquo;s address (destination IP), and the page number. The envelope is the <strong>header</strong>, and the page inside is the <strong>payload</strong>.</li>
+        <li><strong>Post the envelopes separately:</strong> You drop all 200 envelopes in the postbox. The postal service does not send them all together on the same van &mdash; they get mixed in with other people&rsquo;s mail and may travel via different sorting offices and delivery routes.</li>
+        <li><strong>Envelopes arrive at different times:</strong> Your friend starts receiving envelopes over several days. Page 47 might arrive before page 3. Page 150 might arrive on Tuesday while page 12 arrives on Wednesday. This is just like packets arriving <strong>out of order</strong>.</li>
+        <li><strong>Your friend reassembles the book:</strong> Using the page numbers, your friend puts all the pages back in the correct order (1, 2, 3 ... 200) and reconstructs the book. This is <strong>reassembly using sequence numbers</strong>.</li>
+        <li><strong>Check for missing pages:</strong> If any envelopes were lost in the post, your friend notices the gap (e.g., page 87 is missing) and contacts you to re-send just that page. This is like <strong>error checking and retransmission</strong>.</li>
+      </ol>
+
+      <p>This analogy captures the essential ideas of packet switching: breaking data into pieces, labelling them, sending them independently through a shared system, and reassembling them at the destination.</p>
+
+      <div class="key-concept">
+        <strong>Exam Tip</strong>
+        Analogies like the &ldquo;book by post&rdquo; example can be very useful in exams. If a question asks you to &ldquo;explain packet switching,&rdquo; using an analogy alongside the technical explanation shows the examiner that you truly understand the concept. However, always include the correct technical terms (packets, header, payload, sequence number, router, reassembly) alongside the analogy &mdash; an analogy alone may not earn full marks.
+      </div>
+    </section>
+
+    <!-- ==================== UNDERSTAND: PACKET vs CIRCUIT SWITCHING ==================== -->
+    <section class="understand">
+      <span class="section-label">Understand</span>
+      <h2>Packet Switching vs Circuit Switching</h2>
+
+      <p>To fully understand packet switching, it helps to compare it to the older method it replaced: <strong>circuit switching</strong>. Circuit switching is the technology used by traditional telephone networks.</p>
+
+      <h3>How Circuit Switching Works</h3>
+      <p>In circuit switching, a <strong>dedicated path</strong> (circuit) is established between the sender and receiver before any data is transmitted. This path remains exclusively reserved for that communication for the entire duration of the connection, even during silences or pauses. Think of an old-fashioned telephone call: when you dial a number, the telephone exchange creates a continuous electrical circuit from your phone to the other person&rsquo;s phone. That circuit is yours alone until you hang up.</p>
+
+      <h3>Comparison Table</h3>
+      <table>
+        <thead>
+          <tr><th>Feature</th><th>Packet Switching</th><th>Circuit Switching</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Connection type</strong></td>
+            <td>No dedicated path &mdash; packets find their own routes independently</td>
+            <td>A dedicated path (circuit) is established and held open for the entire session</td>
+          </tr>
+          <tr>
+            <td><strong>Bandwidth usage</strong></td>
+            <td>Efficient &mdash; bandwidth is shared among many users; unused capacity is available to others</td>
+            <td>Wasteful &mdash; the circuit is reserved even during silences or idle periods</td>
+          </tr>
+          <tr>
+            <td><strong>Fault tolerance</strong></td>
+            <td>High &mdash; if a route fails, packets can be rerouted automatically</td>
+            <td>Low &mdash; if any part of the circuit fails, the entire connection is lost</td>
+          </tr>
+          <tr>
+            <td><strong>Data order</strong></td>
+            <td>Packets may arrive out of order and must be reassembled</td>
+            <td>Data arrives in order because it follows a single path</td>
+          </tr>
+          <tr>
+            <td><strong>Setup time</strong></td>
+            <td>No setup needed &mdash; packets are sent immediately</td>
+            <td>A circuit must be established before data can flow (setup delay)</td>
+          </tr>
+          <tr>
+            <td><strong>Suitable for</strong></td>
+            <td>Internet, email, web browsing, file transfer, streaming</td>
+            <td>Traditional telephone calls, dedicated private connections</td>
+          </tr>
+          <tr>
+            <td><strong>Example</strong></td>
+            <td>The internet</td>
+            <td>Traditional landline telephone network (PSTN)</td>
+          </tr>
+          <tr>
+            <td><strong>Guaranteed quality</strong></td>
+            <td>No guarantee &mdash; packets may be delayed, lost, or arrive out of order</td>
+            <td>Guaranteed bandwidth and consistent quality for the duration of the call</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="warning">
+        <strong>Common Mistake:</strong> Students sometimes say that circuit switching is &ldquo;bad&rdquo; and packet switching is &ldquo;good.&rdquo; In reality, each has advantages for different situations. Circuit switching guarantees consistent quality and data order, making it ideal for real-time voice calls. Packet switching is more efficient and fault tolerant, making it ideal for internet traffic. The exam expects you to discuss the <strong>strengths and weaknesses of both</strong> methods objectively.
+      </div>
+
+      <div class="key-concept">
+        <strong>Key Concept: Packet vs Circuit Switching</strong>
+        <strong>Packet switching</strong> breaks data into independent packets that share network paths &mdash; efficient and fault tolerant, but packets may arrive out of order. <strong>Circuit switching</strong> establishes a dedicated path for the entire communication &mdash; guaranteed quality but wasteful of bandwidth. The internet uses packet switching; the traditional telephone network used circuit switching.
+      </div>
+    </section>
+
+    <!-- ==================== INTERACTIVE EXERCISES ==================== -->
+    <section class="explore">
+      <span class="section-label">Interactive</span>
+      <h2>Test Your Knowledge</h2>
+
+      <p>Try these interactive exercises to check your understanding of packet switching. Read each question carefully and think about your answer before clicking.</p>
+
+      <!-- Exercise 1: Packet Assembly Challenge -->
+      <div class="interactive-exercise" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 2rem; border-radius: 12px; color: white; margin: 1.5rem 0;">
+        <h4>Exercise 1: Packet Assembly Challenge</h4>
+        <p>Packets have arrived at the destination out of order! Read the packet information and click the packets in the <strong>correct sequence order</strong> (from first to last) to reassemble the original message.</p>
+        <div id="packetAssemblyArea" style="margin: 1rem 0;"></div>
+        <div id="packetAssemblyResult" style="background: rgba(255,255,255,0.15); padding: 1rem; border-radius: 8px; margin: 1rem 0; min-height: 2.5rem; font-size: 1.05rem; line-height: 1.6;"></div>
+        <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; margin-top: 1rem;">
+          <button style="background: white; color: #667eea; border: none; padding: 0.5rem 1.5rem; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 1rem;" onclick="packetAssemblyReset()">Reset</button>
+          <button style="background: rgba(255,255,255,0.2); color: white; border: 2px solid rgba(255,255,255,0.4); padding: 0.5rem 1.5rem; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 1rem;" onclick="packetAssemblyNew()">New Challenge</button>
+        </div>
+        <div id="packetAssemblyFeedback" style="margin-top: 1rem; font-weight: 600; min-height: 1.5rem;"></div>
+        <div style="margin-top: 0.5rem; font-size: 0.95rem; opacity: 0.9;">Score: <span id="packetAssemblyCorrect">0</span> / <span id="packetAssemblyTotal">0</span></div>
+      </div>
+
+      <script>
+      (function() {
+        var challenges = [
+          {
+            message: "HELLO WORLD",
+            packets: [
+              { seq: 1, total: 4, payload: "HEL", src: "192.168.1.10", dst: "10.0.0.5" },
+              { seq: 2, total: 4, payload: "LO ", src: "192.168.1.10", dst: "10.0.0.5" },
+              { seq: 3, total: 4, payload: "WOR", src: "192.168.1.10", dst: "10.0.0.5" },
+              { seq: 4, total: 4, payload: "LD", src: "192.168.1.10", dst: "10.0.0.5" }
+            ]
+          },
+          {
+            message: "PACKET SWITCHING IS EFFICIENT",
+            packets: [
+              { seq: 1, total: 5, payload: "PACKE", src: "172.16.0.1", dst: "203.0.113.7" },
+              { seq: 2, total: 5, payload: "T SWI", src: "172.16.0.1", dst: "203.0.113.7" },
+              { seq: 3, total: 5, payload: "TCHIN", src: "172.16.0.1", dst: "203.0.113.7" },
+              { seq: 4, total: 5, payload: "G IS ", src: "172.16.0.1", dst: "203.0.113.7" },
+              { seq: 5, total: 5, payload: "EFFICIENT", src: "172.16.0.1", dst: "203.0.113.7" }
+            ]
+          },
+          {
+            message: "ROUTERS FORWARD DATA",
+            packets: [
+              { seq: 1, total: 4, payload: "ROUTE", src: "10.1.1.1", dst: "192.168.50.20" },
+              { seq: 2, total: 4, payload: "RS FO", src: "10.1.1.1", dst: "192.168.50.20" },
+              { seq: 3, total: 4, payload: "RWARD", src: "10.1.1.1", dst: "192.168.50.20" },
+              { seq: 4, total: 4, payload: " DATA", src: "10.1.1.1", dst: "192.168.50.20" }
+            ]
+          },
+          {
+            message: "DATA IS SPLIT INTO PACKETS",
+            packets: [
+              { seq: 1, total: 5, payload: "DATA ", src: "192.168.0.5", dst: "10.10.10.1" },
+              { seq: 2, total: 5, payload: "IS SP", src: "192.168.0.5", dst: "10.10.10.1" },
+              { seq: 3, total: 5, payload: "LIT I", src: "192.168.0.5", dst: "10.10.10.1" },
+              { seq: 4, total: 5, payload: "NTO P", src: "192.168.0.5", dst: "10.10.10.1" },
+              { seq: 5, total: 5, payload: "ACKETS", src: "192.168.0.5", dst: "10.10.10.1" }
+            ]
+          },
+          {
+            message: "EACH PACKET HAS A HEADER",
+            packets: [
+              { seq: 1, total: 5, payload: "EACH ", src: "10.0.0.100", dst: "172.16.5.10" },
+              { seq: 2, total: 5, payload: "PACKE", src: "10.0.0.100", dst: "172.16.5.10" },
+              { seq: 3, total: 5, payload: "T HAS", src: "10.0.0.100", dst: "172.16.5.10" },
+              { seq: 4, total: 5, payload: " A HE", src: "10.0.0.100", dst: "172.16.5.10" },
+              { seq: 5, total: 5, payload: "ADER", src: "10.0.0.100", dst: "172.16.5.10" }
+            ]
+          }
+        ];
+
+        var currentChallenge = null;
+        var shuffledPackets = [];
+        var selectedOrder = [];
+        var correct = 0;
+        var total = 0;
+
+        function shuffle(arr) {
+          var a = arr.slice();
+          for (var i = a.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = a[i]; a[i] = a[j]; a[j] = tmp;
+          }
+          return a;
+        }
+
+        function renderChallenge() {
+          var ch = currentChallenge;
+          var area = document.getElementById('packetAssemblyArea');
+          var html = '<div style="display: flex; flex-wrap: wrap; gap: 0.75rem;">';
+          for (var i = 0; i < shuffledPackets.length; i++) {
+            var p = shuffledPackets[i];
+            var isSelected = selectedOrder.indexOf(i) !== -1;
+            var btnStyle = isSelected
+              ? 'background: rgba(255,255,255,0.3); color: rgba(255,255,255,0.5); border: 2px solid rgba(255,255,255,0.3); padding: 0.75rem; border-radius: 8px; cursor: default; font-size: 0.85rem; line-height: 1.5; min-width: 150px; text-align: left;'
+              : 'background: rgba(255,255,255,0.15); color: white; border: 2px solid rgba(255,255,255,0.4); padding: 0.75rem; border-radius: 8px; cursor: pointer; font-size: 0.85rem; line-height: 1.5; min-width: 150px; text-align: left; transition: background 0.2s;';
+            html += '<button style="' + btnStyle + '" ' + (isSelected ? 'disabled' : 'onclick="packetAssemblySelect(' + i + ')"') + '>';
+            html += '<strong>Seq: ' + p.seq + '/' + p.total + '</strong><br>';
+            html += 'From: ' + p.src + '<br>';
+            html += 'To: ' + p.dst + '<br>';
+            html += 'Data: <code style="background: rgba(0,0,0,0.2); padding: 0.1rem 0.3rem; border-radius: 3px;">' + p.payload + '</code>';
+            html += '</button>';
+          }
+          html += '</div>';
+          area.innerHTML = html;
+
+          var resultDiv = document.getElementById('packetAssemblyResult');
+          if (selectedOrder.length === 0) {
+            resultDiv.innerHTML = '<em>Click packets in the correct order to reassemble the message...</em>';
+          } else {
+            var assembled = '';
+            for (var k = 0; k < selectedOrder.length; k++) {
+              assembled += shuffledPackets[selectedOrder[k]].payload;
+            }
+            resultDiv.innerHTML = 'Assembled so far: <strong>' + assembled + '</strong>';
+          }
+        }
+
+        function checkComplete() {
+          if (selectedOrder.length !== shuffledPackets.length) return;
+          total++;
+          var fb = document.getElementById('packetAssemblyFeedback');
+          var isCorrect = true;
+          for (var i = 0; i < selectedOrder.length; i++) {
+            if (shuffledPackets[selectedOrder[i]].seq !== i + 1) {
+              isCorrect = false;
+              break;
+            }
+          }
+          if (isCorrect) {
+            correct++;
+            fb.innerHTML = '<span style="color:#a0ffb0;">Correct!</span> You reassembled the packets in the right order. The message is: <strong>' + currentChallenge.message + '</strong>';
+          } else {
+            fb.innerHTML = '<span style="color:#ffb0b0;">Not quite.</span> The packets were not in the correct sequence order. Use the sequence numbers in the headers to determine the right order. Click Reset to try again.';
+          }
+          document.getElementById('packetAssemblyCorrect').textContent = correct;
+          document.getElementById('packetAssemblyTotal').textContent = total;
+        }
+
+        window.packetAssemblySelect = function(idx) {
+          if (selectedOrder.indexOf(idx) !== -1) return;
+          selectedOrder.push(idx);
+          renderChallenge();
+          checkComplete();
+        };
+
+        window.packetAssemblyReset = function() {
+          selectedOrder = [];
+          renderChallenge();
+          document.getElementById('packetAssemblyFeedback').textContent = '';
+        };
+
+        window.packetAssemblyNew = function() {
+          var idx = Math.floor(Math.random() * challenges.length);
+          currentChallenge = challenges[idx];
+          shuffledPackets = shuffle(currentChallenge.packets);
+          selectedOrder = [];
+          document.getElementById('packetAssemblyFeedback').textContent = '';
+          renderChallenge();
+        };
+
+        window.packetAssemblyNew();
+      })();
+      </script>
+
+      <!-- Exercise 2: Packet Switching Quiz -->
+      <div class="interactive-exercise" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 2rem; border-radius: 12px; color: white; margin: 1.5rem 0;">
+        <h4>Exercise 2: Packet Switching Quiz</h4>
+        <p>Test your knowledge of packet switching concepts. Read each question and select the correct answer.</p>
+        <div id="psQuizQuestion" style="background: rgba(255,255,255,0.15); padding: 1.2rem; border-radius: 8px; margin: 1rem 0; font-size: 1.05rem; line-height: 1.6;"></div>
+        <div id="psQuizOptions" style="display: flex; flex-direction: column; gap: 0.5rem; margin-top: 1rem;"></div>
+        <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; margin-top: 1rem;">
+          <button style="background: rgba(255,255,255,0.2); color: white; border: 2px solid rgba(255,255,255,0.4); padding: 0.5rem 1.5rem; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 1rem;" onclick="psQuizNext()">Skip / Next Question</button>
+        </div>
+        <div id="psQuizFeedback" style="margin-top: 1rem; font-weight: 600; min-height: 1.5rem;"></div>
+        <div style="margin-top: 0.5rem; font-size: 0.95rem; opacity: 0.9;">Score: <span id="psQuizCorrect">0</span> / <span id="psQuizTotal">0</span></div>
+      </div>
+
+      <script>
+      (function() {
+        var questions = [
+          {
+            q: "Which part of a packet contains the source and destination IP addresses?",
+            options: ["Payload", "Header", "Trailer", "Checksum"],
+            answer: 1,
+            explanation: "The header contains addressing information including the source IP, destination IP, sequence number, TTL, and protocol."
+          },
+          {
+            q: "What does TTL (Time to Live) prevent?",
+            options: [
+              "Packets from being intercepted by hackers",
+              "Packets from being too large to transmit",
+              "Packets from circling the network forever if misdirected",
+              "Packets from arriving out of order"
+            ],
+            answer: 2,
+            explanation: "TTL is decremented by each router. When it reaches zero, the packet is discarded. This prevents lost or misdirected packets from looping endlessly and wasting bandwidth."
+          },
+          {
+            q: "Why might packets from the same file arrive at the destination in a different order from which they were sent?",
+            options: [
+              "Because the sender deliberately scrambles them for security",
+              "Because each packet may take a different route through the network",
+              "Because the destination computer sorts them randomly",
+              "Because circuit switching requires random ordering"
+            ],
+            answer: 1,
+            explanation: "In packet switching, each packet is routed independently. Different packets may take different paths through the network, so some may arrive before others depending on route length and congestion."
+          },
+          {
+            q: "What is the typical size range of a packet's payload?",
+            options: ["5-15 bytes", "50-150 bytes", "500-1,500 bytes", "50,000-150,000 bytes"],
+            answer: 2,
+            explanation: "A packet's payload is typically between 500 and 1,500 bytes. The maximum is usually determined by the network's Maximum Transmission Unit (MTU), which is commonly 1,500 bytes."
+          },
+          {
+            q: "Which of the following is an advantage of packet switching over circuit switching?",
+            options: [
+              "Data always arrives in the correct order",
+              "A dedicated path guarantees consistent quality",
+              "Bandwidth is shared efficiently among multiple users",
+              "No error checking is needed"
+            ],
+            answer: 2,
+            explanation: "Packet switching shares bandwidth efficiently because multiple users' packets are interleaved on the same network links. Circuit switching reserves an entire path for one connection, wasting bandwidth during silent periods."
+          },
+          {
+            q: "What does the trailer (footer) of a packet contain?",
+            options: [
+              "The source and destination IP addresses",
+              "The actual data being transmitted",
+              "Error checking data (checksum) and an end-of-packet marker",
+              "The protocol and TTL value"
+            ],
+            answer: 2,
+            explanation: "The trailer contains a checksum for error detection and an end-of-packet marker. The addressing and routing information is in the header, and the actual data is in the payload."
+          },
+          {
+            q: "A router receives a packet. What does it do first?",
+            options: [
+              "Reads the payload to check the content of the data",
+              "Examines the destination IP address in the header",
+              "Sends the packet back to the source for verification",
+              "Splits the packet into smaller packets"
+            ],
+            answer: 1,
+            explanation: "A router examines the destination IP address in the packet's header, then consults its routing table to determine the best next hop for the packet."
+          },
+          {
+            q: "How does the destination computer know the correct order to reassemble packets?",
+            options: [
+              "Packets always arrive in order, so no reassembly is needed",
+              "The payload contains ordering instructions",
+              "It uses the sequence numbers in each packet's header",
+              "The router sends a separate message with the correct order"
+            ],
+            answer: 2,
+            explanation: "Each packet's header contains a sequence number (e.g., 'packet 3 of 10'). The destination uses these numbers to arrange all packets in the correct order before extracting the data."
+          },
+          {
+            q: "What happens if a packet is corrupted during transmission?",
+            options: [
+              "The entire file must be re-sent from the beginning",
+              "The corrupted packet is ignored and the file is incomplete",
+              "The destination detects the error using the checksum and requests retransmission of that packet",
+              "The router automatically repairs the corrupted data"
+            ],
+            answer: 2,
+            explanation: "The checksum in the trailer is used to detect corruption. If the checksum does not match, the destination requests that specific packet to be re-sent. Only the damaged packet needs retransmission, not the entire file."
+          },
+          {
+            q: "In the 'book by post' analogy, what does numbering each page represent?",
+            options: [
+              "Adding a checksum to the trailer",
+              "Setting the TTL value",
+              "Assigning sequence numbers in the packet header",
+              "Choosing the protocol"
+            ],
+            answer: 2,
+            explanation: "Numbering the pages is like adding sequence numbers to packet headers. It allows the recipient to put the pages (packets) back in the correct order, regardless of the order they arrive."
+          },
+          {
+            q: "Which type of switching does the internet use?",
+            options: [
+              "Circuit switching",
+              "Packet switching",
+              "Message switching",
+              "Frequency switching"
+            ],
+            answer: 1,
+            explanation: "The internet uses packet switching. Data is broken into packets, sent independently across the network, and reassembled at the destination. Circuit switching is used by traditional telephone networks."
+          },
+          {
+            q: "Why is packet switching described as 'fault tolerant'?",
+            options: [
+              "Because packets are encrypted so they cannot be damaged",
+              "Because if one route fails, packets can be rerouted via alternative paths",
+              "Because every packet is sent along the same reliable path",
+              "Because routers fix any errors in the data automatically"
+            ],
+            answer: 1,
+            explanation: "Packet switching is fault tolerant because packets travel independently. If one router or link fails, other packets can take alternative routes around the problem. The network adapts automatically to failures."
+          },
+          {
+            q: "What is one disadvantage of circuit switching compared to packet switching?",
+            options: [
+              "Data may arrive out of order",
+              "It requires error checking at the destination",
+              "The dedicated path wastes bandwidth during periods of silence",
+              "Multiple users cannot make calls simultaneously"
+            ],
+            answer: 2,
+            explanation: "In circuit switching, the dedicated circuit is reserved for the entire duration of the connection, even during pauses or silences. This wastes bandwidth that could otherwise be used by other communications."
+          },
+          {
+            q: "A file of 12,000 bytes is split into packets with a maximum payload of 1,500 bytes. How many packets will be created?",
+            options: ["6 packets", "8 packets", "10 packets", "12 packets"],
+            answer: 1,
+            explanation: "12,000 bytes divided by 1,500 bytes per packet = 8 packets. Each packet carries up to 1,500 bytes of data in its payload."
+          },
+          {
+            q: "What information does a routing table contain?",
+            options: [
+              "The contents of every packet currently on the network",
+              "A log of every website the user has visited",
+              "Mappings of destination addresses to the best next hop for forwarding packets",
+              "The passwords for all connected devices"
+            ],
+            answer: 2,
+            explanation: "A routing table maps destination addresses to the best 'next hop' -- the next router the packet should be forwarded to. Routing tables are updated dynamically as network conditions change."
+          }
+        ];
+
+        var currentIndex = -1;
+        var correct = 0;
+        var totalAnswered = 0;
+        var used = [];
+        var answered = false;
+
+        function pickQuestion() {
+          if (used.length >= questions.length) { used = []; }
+          var idx;
+          do { idx = Math.floor(Math.random() * questions.length); } while (used.indexOf(idx) !== -1);
+          used.push(idx);
+          currentIndex = idx;
+          answered = false;
+          renderQuestion();
+        }
+
+        function renderQuestion() {
+          var q = questions[currentIndex];
+          document.getElementById('psQuizQuestion').innerHTML = '<strong>Q:</strong> ' + q.q;
+          var optionsDiv = document.getElementById('psQuizOptions');
+          var html = '';
+          for (var i = 0; i < q.options.length; i++) {
+            html += '<button style="background: white; color: #667eea; border: none; padding: 0.6rem 1.2rem; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 0.95rem; text-align: left;" onclick="psQuizAnswer(' + i + ')">';
+            html += String.fromCharCode(65 + i) + ') ' + q.options[i];
+            html += '</button>';
+          }
+          optionsDiv.innerHTML = html;
+          document.getElementById('psQuizFeedback').textContent = '';
+        }
+
+        window.psQuizAnswer = function(choice) {
+          if (answered) return;
+          answered = true;
+          totalAnswered++;
+          var q = questions[currentIndex];
+          var fb = document.getElementById('psQuizFeedback');
+          if (choice === q.answer) {
+            correct++;
+            fb.innerHTML = '<span style="color:#a0ffb0;">Correct!</span> ' + q.explanation;
+          } else {
+            fb.innerHTML = '<span style="color:#ffb0b0;">Not quite.</span> The correct answer is <strong>' + String.fromCharCode(65 + q.answer) + ') ' + q.options[q.answer] + '</strong>. ' + q.explanation;
+          }
+          document.getElementById('psQuizCorrect').textContent = correct;
+          document.getElementById('psQuizTotal').textContent = totalAnswered;
+
+          var btns = document.getElementById('psQuizOptions').querySelectorAll('button');
+          for (var i = 0; i < btns.length; i++) {
+            if (i === q.answer) {
+              btns[i].style.background = '#a0ffb0';
+              btns[i].style.color = '#1a1a2e';
+            } else if (i === choice && choice !== q.answer) {
+              btns[i].style.background = '#ffb0b0';
+              btns[i].style.color = '#1a1a2e';
+            }
+            btns[i].style.cursor = 'default';
+          }
+          setTimeout(pickQuestion, 3000);
+        };
+
+        window.psQuizNext = function() {
+          pickQuestion();
+        };
+
+        pickQuestion();
+      })();
+      </script>
+
+      <!-- Exercise 3: Packet Part Identifier -->
+      <div class="interactive-exercise" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 2rem; border-radius: 12px; color: white; margin: 1.5rem 0;">
+        <h4>Exercise 3: Packet Part Identifier</h4>
+        <p>Read the description below and identify which part of a packet it belongs to: <strong>Header</strong>, <strong>Payload</strong>, or <strong>Trailer</strong>.</p>
+        <div id="partIdDescription" style="background: rgba(255,255,255,0.15); padding: 1.2rem; border-radius: 8px; margin: 1rem 0; font-size: 1.1rem; line-height: 1.6;"></div>
+        <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; margin-top: 1rem;">
+          <button style="background: white; color: #667eea; border: none; padding: 0.5rem 1.5rem; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 1rem;" onclick="partIdCheck('Header')">Header</button>
+          <button style="background: white; color: #667eea; border: none; padding: 0.5rem 1.5rem; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 1rem;" onclick="partIdCheck('Payload')">Payload</button>
+          <button style="background: white; color: #667eea; border: none; padding: 0.5rem 1.5rem; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 1rem;" onclick="partIdCheck('Trailer')">Trailer</button>
+          <button style="background: rgba(255,255,255,0.2); color: white; border: 2px solid rgba(255,255,255,0.4); padding: 0.5rem 1.5rem; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 1rem;" onclick="partIdNew()">Skip / New Question</button>
+        </div>
+        <div id="partIdFeedback" style="margin-top: 1rem; font-weight: 600; min-height: 1.5rem;"></div>
+        <div style="margin-top: 0.5rem; font-size: 0.95rem; opacity: 0.9;">Score: <span id="partIdCorrect">0</span> / <span id="partIdTotal">0</span></div>
+      </div>
+
+      <script>
+      (function() {
+        var items = [
+          { text: "The IP address of the computer that originally sent the data.", answer: "Header", explanation: "The source IP address is stored in the header, so routers and the destination know where the packet came from." },
+          { text: "A fragment of a JPEG image being transferred between computers.", answer: "Payload", explanation: "The actual data being transmitted (part of an image, text, video, etc.) is the payload -- the middle section of the packet." },
+          { text: "A checksum value used to detect whether the data was corrupted during transmission.", answer: "Trailer", explanation: "The checksum is part of the trailer (footer). It is used for error detection at the destination." },
+          { text: "The sequence number indicating this is packet 5 of 12.", answer: "Header", explanation: "The sequence number is part of the header. It tells the destination the order in which packets should be reassembled." },
+          { text: "An end-of-packet marker that signals where this packet ends.", answer: "Trailer", explanation: "The end-of-packet marker is in the trailer. It helps the receiver identify the boundary between consecutive packets." },
+          { text: "The TTL (Time to Live) counter, currently set to 64.", answer: "Header", explanation: "TTL is in the header. It is decremented by each router and prevents packets from looping forever." },
+          { text: "A section of HTML code from a web page being downloaded.", answer: "Payload", explanation: "HTML code being transmitted is the actual data -- this goes in the payload section of the packet." },
+          { text: "The IP address of the computer the data is being sent to.", answer: "Header", explanation: "The destination IP address is in the header. Routers read this to decide where to forward the packet." },
+          { text: "Part of an email message body being sent to a mail server.", answer: "Payload", explanation: "The email message content is the data being transmitted, so it is carried in the payload." },
+          { text: "The protocol identifier showing this packet uses HTTP.", answer: "Header", explanation: "The protocol field is in the header. It tells the destination which application or service should process the data." },
+          { text: "Error detection data calculated from the contents of the packet.", answer: "Trailer", explanation: "Error detection (checksum) data is in the trailer. The destination recalculates it to verify the packet arrived intact." },
+          { text: "The total number of packets that the original data was split into.", answer: "Header", explanation: "The total packet count is in the header. It tells the destination how many packets to expect before reassembly can begin." }
+        ];
+
+        var currentIndex = -1;
+        var correct = 0;
+        var total = 0;
+        var used = [];
+
+        function pick() {
+          if (used.length >= items.length) { used = []; }
+          var idx;
+          do { idx = Math.floor(Math.random() * items.length); } while (used.indexOf(idx) !== -1);
+          used.push(idx);
+          currentIndex = idx;
+          document.getElementById('partIdDescription').textContent = items[idx].text;
+          document.getElementById('partIdFeedback').textContent = '';
+        }
+
+        window.partIdCheck = function(answer) {
+          if (currentIndex < 0) return;
+          total++;
+          var item = items[currentIndex];
+          var fb = document.getElementById('partIdFeedback');
+          if (answer === item.answer) {
+            correct++;
+            fb.innerHTML = '<span style="color:#a0ffb0;">Correct!</span> ' + item.explanation;
+          } else {
+            fb.innerHTML = '<span style="color:#ffb0b0;">Not quite.</span> The answer is <strong>' + item.answer + '</strong>. ' + item.explanation;
+          }
+          document.getElementById('partIdCorrect').textContent = correct;
+          document.getElementById('partIdTotal').textContent = total;
+          setTimeout(pick, 2500);
+        };
+
+        window.partIdNew = function() {
+          pick();
+        };
+
+        pick();
+      })();
+      </script>
+    </section>
+
+    <!-- ==================== PRACTICE ==================== -->
+    <section class="practice">
+      <span class="section-label">Practice</span>
+      <h2>Practice Questions</h2>
+      <p>Click on each question to reveal the answer. Try to answer in your head or on paper first before checking!</p>
+
+      <div class="hint">
+        <div class="hint-title">Q1: Define the term &ldquo;packet switching&rdquo; and explain why it is used on the internet.</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> <strong>Packet switching</strong> is a method of transmitting data across a network by breaking it into small units called packets. Each packet is sent independently across the network, potentially taking different routes, and is reassembled at the destination using sequence numbers. It is used on the internet because: (1) it makes <strong>efficient use of bandwidth</strong> &mdash; multiple users share the same network connections by interleaving their packets; (2) it is <strong>fault tolerant</strong> &mdash; if a route fails, packets can be rerouted via alternative paths; (3) it is <strong>fair</strong> &mdash; no single user can monopolise the network because data is sent in small packets that are mixed with other users&rsquo; traffic.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q2: Name and describe the three parts of a data packet.</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> A data packet has three parts: (1) <strong>Header</strong> &mdash; contains routing and control information including the source IP address, destination IP address, packet sequence number, total number of packets, TTL (Time to Live), and the protocol. The header is used by routers to forward the packet and by the destination to reassemble packets. (2) <strong>Payload</strong> &mdash; contains the actual data being transmitted (e.g., part of an image, web page, or email). The payload is typically 500&ndash;1,500 bytes. (3) <strong>Trailer (footer)</strong> &mdash; contains error checking data (a checksum) used to verify the packet was not corrupted, and an end-of-packet marker that indicates where the packet ends.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q3: Explain what TTL (Time to Live) is and why it is necessary.</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> <strong>TTL (Time to Live)</strong> is a value stored in the header of each packet. It is set to a number (e.g., 64) when the packet is first sent. Each time the packet passes through a router, the TTL is <strong>decremented (reduced) by one</strong>. If the TTL reaches <strong>zero</strong>, the packet is <strong>discarded</strong> by the router. TTL is necessary because without it, a misdirected or lost packet could keep circling the network indefinitely, passing from router to router in a loop. This would waste bandwidth and could cause network congestion. TTL ensures that packets have a limited lifespan and are eventually removed from the network if they cannot reach their destination.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q4: Describe the role of a router in packet switching.</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> A <strong>router</strong> is a networking device that directs packets across the network towards their destination. When a router receives a packet, it: (1) <strong>examines the destination IP address</strong> in the packet&rsquo;s header; (2) <strong>consults its routing table</strong> &mdash; a database that maps destination addresses to the best next hop (the next router along the path); (3) <strong>forwards the packet</strong> to the appropriate next router; (4) <strong>decrements the TTL</strong> by one (and discards the packet if TTL reaches zero). Routers also help manage congestion by detecting busy routes and redirecting packets via less congested paths. Their routing tables are updated dynamically as network conditions change.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q5: Compare packet switching and circuit switching. Give one advantage and one disadvantage of each.</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> <strong>Packet switching</strong> &mdash; Advantage: bandwidth is used <strong>efficiently</strong> because multiple users share network connections, and unused capacity is available to others. Disadvantage: packets may arrive <strong>out of order</strong> and must be reassembled, and there is <strong>no guaranteed bandwidth</strong> or quality of service. <strong>Circuit switching</strong> &mdash; Advantage: a <strong>dedicated path</strong> is established, guaranteeing consistent bandwidth and data arriving in order, which is ideal for real-time communication like voice calls. Disadvantage: the dedicated circuit is reserved even during <strong>periods of silence</strong>, wasting bandwidth that could otherwise be used by other communications. Also, if any part of the circuit fails, the entire connection is lost.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q6: A 9,000-byte file is transmitted using packet switching with a maximum payload of 1,500 bytes. Describe what happens step by step.</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> (1) The file is <strong>split into packets</strong>: 9,000 &divide; 1,500 = 6 packets. Each packet contains up to 1,500 bytes of the file in its payload. (2) Each packet is given a <strong>header</strong> containing the source IP, destination IP, sequence number (1 of 6, 2 of 6, etc.), total packets (6), TTL, and protocol. A <strong>trailer</strong> with a checksum is also added. (3) The 6 packets are <strong>sent independently</strong> across the network. (4) <strong>Routers</strong> at each junction examine the destination IP and forward each packet towards the destination. (5) Packets may take <strong>different routes</strong> and arrive <strong>out of order</strong>. (6) The destination uses the <strong>sequence numbers</strong> to reassemble the 6 packets in the correct order (1, 2, 3, 4, 5, 6). (7) The destination checks each packet&rsquo;s <strong>checksum</strong>. If any packet is corrupted or missing, it sends a request for <strong>retransmission</strong> of that specific packet.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q7: Explain why packet switching is described as &ldquo;fault tolerant.&rdquo; Use an example to support your answer.</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> Packet switching is <strong>fault tolerant</strong> because each packet is routed independently across the network. If one router or network link <strong>fails</strong>, packets do not all fail with it. Instead, routers detect the failure, update their routing tables, and <strong>redirect subsequent packets via alternative paths</strong>. For example, if a user in London is sending data to a server in New York, and a transatlantic cable between two routers fails, the packets that have not yet been sent will be automatically rerouted through a different cable or path. The sender does not even need to know about the failure &mdash; the network handles it transparently. In contrast, circuit switching would lose the entire connection if any part of the dedicated circuit failed.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q8: Using the &ldquo;book by post&rdquo; analogy, explain how packet switching works. Make sure to link each step of the analogy to the correct technical term.</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> Imagine sending a book by post: (1) You <strong>tear out each page</strong> &mdash; this is like <strong>splitting data into packets</strong> (each page is a payload). (2) You <strong>number each page</strong> (e.g., page 1 of 200) &mdash; this is like adding a <strong>sequence number</strong> to the packet header. (3) You put each page in a <strong>separate envelope</strong> with your address and the recipient&rsquo;s address &mdash; the envelope represents the <strong>header</strong> (with source and destination IP addresses), and the page inside is the <strong>payload</strong>. (4) You <strong>post them separately</strong> &mdash; each envelope (packet) travels independently through the postal system (network). (5) Envelopes <strong>travel via different sorting offices</strong> &mdash; this is like packets being <strong>routed via different paths</strong> by routers. (6) Envelopes <strong>arrive at different times and in a jumbled order</strong> &mdash; this mirrors packets arriving <strong>out of order</strong>. (7) The recipient uses page numbers to <strong>put the book back together</strong> &mdash; the destination uses <strong>sequence numbers to reassemble packets</strong>. (8) If any pages are <strong>missing</strong>, the recipient asks you to re-send just those pages &mdash; this is like <strong>error checking and retransmission</strong> of corrupted or lost packets.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== KEY VOCABULARY ==================== -->
+    <section class="understand">
+      <span class="section-label">Reference</span>
+      <h2>Key Vocabulary</h2>
+      <p>This table summarises the essential terms for this topic. Use it for revision and to check your understanding.</p>
+
+      <table>
+        <thead>
+          <tr><th>Term</th><th>Definition</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>Packet switching</strong></td><td>A method of transmitting data by breaking it into small independent packets, sending them across the network (possibly via different routes), and reassembling them at the destination</td></tr>
+          <tr><td><strong>Packet</strong></td><td>A small unit of data transmitted across a network, consisting of a header, payload, and trailer</td></tr>
+          <tr><td><strong>Header</strong></td><td>The front section of a packet containing routing and control information: source IP, destination IP, sequence number, total packets, TTL, and protocol</td></tr>
+          <tr><td><strong>Payload</strong></td><td>The middle section of a packet containing the actual data being transmitted, typically 500&ndash;1,500 bytes</td></tr>
+          <tr><td><strong>Trailer (footer)</strong></td><td>The end section of a packet containing error-checking data (checksum) and an end-of-packet marker</td></tr>
+          <tr><td><strong>Sequence number</strong></td><td>A number in the packet header indicating its position in the original data (e.g., packet 3 of 10), used for correct reassembly</td></tr>
+          <tr><td><strong>TTL (Time to Live)</strong></td><td>A counter in the packet header decremented by each router; if it reaches zero, the packet is discarded to prevent infinite loops</td></tr>
+          <tr><td><strong>Checksum</strong></td><td>A mathematical value in the trailer used to detect whether the packet data was corrupted during transmission</td></tr>
+          <tr><td><strong>Router</strong></td><td>A networking device that examines packet headers and forwards packets towards their destination using routing tables</td></tr>
+          <tr><td><strong>Routing table</strong></td><td>A database maintained by a router that maps destination addresses to the best next hop for forwarding packets</td></tr>
+          <tr><td><strong>Next hop</strong></td><td>The next router along the path that a packet should be forwarded to, as determined by the current router&rsquo;s routing table</td></tr>
+          <tr><td><strong>Circuit switching</strong></td><td>An older method of communication where a dedicated path is established between sender and receiver for the entire duration of the connection</td></tr>
+          <tr><td><strong>Bandwidth</strong></td><td>The maximum amount of data that can be transmitted over a network connection in a given time, measured in bits per second</td></tr>
+          <tr><td><strong>Fault tolerant</strong></td><td>The ability of a system to continue functioning when part of it fails &mdash; in packet switching, packets reroute around failures</td></tr>
+          <tr><td><strong>Protocol</strong></td><td>A set of rules governing how data is transmitted and received across a network (e.g., HTTP, SMTP, FTP)</td></tr>
+          <tr><td><strong>Reassembly</strong></td><td>The process of putting packets back in the correct order at the destination using their sequence numbers to reconstruct the original data</td></tr>
+          <tr><td><strong>MTU (Maximum Transmission Unit)</strong></td><td>The largest size of packet (in bytes) that a network can transmit; commonly 1,500 bytes on most networks</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- ==================== EXAM TIPS ==================== -->
+    <section class="understand">
+      <span class="section-label">Exam Tips</span>
+      <h2>How to Succeed in the Exam</h2>
+
+      <div class="key-concept">
+        <strong>Exam Tip: Know the Packet Structure</strong>
+        You must be able to name the three parts of a packet (header, payload, trailer) and list what each contains. A common 3&ndash;4 mark question asks: &ldquo;Describe the structure of a data packet.&rdquo; Make sure you mention specific header fields (source IP, destination IP, sequence number, TTL, protocol) rather than just saying &ldquo;the header contains information.&rdquo;
+      </div>
+
+      <div class="key-concept">
+        <strong>Exam Tip: Describe the Process Step by Step</strong>
+        When asked to describe how packet switching works, structure your answer as a step-by-step process: data split into packets, headers added, packets sent independently, routers forward packets, different routes taken, packets arrive out of order, reassembled using sequence numbers, error checking and retransmission. This logical structure makes your answer clear and thorough.
+      </div>
+
+      <div class="key-concept">
+        <strong>Exam Tip: Packet vs Circuit Switching Comparison</strong>
+        You may be asked to compare packet switching and circuit switching. Always discuss <strong>both</strong> methods and give advantages and disadvantages of each. Key comparison points: dedicated path vs shared routes, bandwidth efficiency, fault tolerance, data ordering, setup time, and typical use cases (internet vs telephone network).
+      </div>
+
+      <div class="key-concept">
+        <strong>Exam Tip: Use Technical Vocabulary Precisely</strong>
+        Use the correct terms: &ldquo;packet,&rdquo; &ldquo;header,&rdquo; &ldquo;payload,&rdquo; &ldquo;trailer,&rdquo; &ldquo;sequence number,&rdquo; &ldquo;checksum,&rdquo; &ldquo;TTL,&rdquo; &ldquo;routing table,&rdquo; &ldquo;next hop.&rdquo; Examiners award marks for precise technical language. Avoid vague phrases like &ldquo;the packet has some information on it&rdquo; &mdash; instead, name the specific fields.
+      </div>
+
+      <div class="key-concept">
+        <strong>Exam Tip: Calculations</strong>
+        You may be asked to calculate the number of packets needed to transmit a file. The formula is: <strong>number of packets = file size &divide; maximum payload size</strong> (round up if there is a remainder). For example, a 10,000-byte file with a 1,500-byte payload = 10,000 &divide; 1,500 = 6.67, rounded up to <strong>7 packets</strong>.
+      </div>
+    </section>
+
+    <!-- ==================== REFLECT ==================== -->
+    <section class="reflect">
+      <span class="section-label">Reflect</span>
+      <h2>Packet Switching in Your Daily Life</h2>
+
+      <p>Now that you understand packet switching, you can appreciate that every single thing you do online relies on this process. Consider these everyday activities:</p>
+
+      <ul>
+        <li><strong>Loading a web page:</strong> When you visit a website, the HTML, CSS, JavaScript, and images are all broken into packets, sent across the internet from the web server to your device, and reassembled by your browser to display the page. Hundreds or even thousands of packets may be involved in loading a single page.</li>
+        <li><strong>Sending a message:</strong> When you send a text message through an app like WhatsApp or iMessage, your message is split into packets, routed through the internet, and delivered to the recipient&rsquo;s device. The packets may travel through routers on different continents before arriving.</li>
+        <li><strong>Streaming a video:</strong> When you watch a YouTube video or a Netflix show, the video data is continuously broken into packets and streamed to your device. If some packets are delayed, you might see buffering &mdash; this is the player waiting for missing packets to arrive before it can continue playing.</li>
+        <li><strong>Online gaming:</strong> Every action you take in an online game (moving, shooting, chatting) is sent as packets to the game server and to other players. Low latency (fast packet delivery) is critical for smooth gameplay &mdash; this is why &ldquo;ping&rdquo; (a measure of packet round-trip time) matters so much to gamers.</li>
+      </ul>
+
+      <p>The beauty of packet switching is that all of these activities happen <strong>simultaneously</strong> across the same network infrastructure. Your web browsing packets, your friend&rsquo;s video stream, and a business&rsquo;s email traffic all share the same routers and cables, each packet finding its own way to its destination. This sharing is what makes the internet so powerful and efficient.</p>
+
+      <p><strong>Challenge yourself:</strong> Next time you experience slow internet or a video buffer, think about what might be happening at the packet level. Are packets being delayed because the network is congested? Are some being lost and retransmitted? Understanding packet switching gives you insight into why your internet sometimes behaves the way it does.</p>
+
+      <div class="key-concept">
+        <strong>Final Thought</strong>
+        Packet switching is one of the most important concepts in computer networking. It is the mechanism that allows billions of devices to share the internet simultaneously, that makes the network resilient to failures, and that enables everything from email to video calls to online gaming. Understanding how data is split into packets, labelled, routed, and reassembled is fundamental to GCSE Computer Science and to understanding the digital world around you.
+      </div>
+    </section>
+
+    <!-- ==================== NAVIGATION ==================== -->
+    <nav class="chapter-nav">
+      <a href="tcp-ip-model.html">&larr; Previous: The TCP/IP Model</a>
+      <a href="../index.html">Course Home</a>
+      <a href="ip-addressing.html">Next: IP Addressing &rarr;</a>
+    </nav>
+
+  </main>
+
+  <footer class="site-footer">
+    <p>Python Fundamentals &mdash; A KS4 Learning Platform</p>
+    <p>Packet Switching &mdash; GCSE Computer Science Theory</p>
+  </footer>
+
+</body>
+</html>
