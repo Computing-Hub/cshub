@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ASCII &amp; Unicode - Python Fundamentals</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <style>
+    .interactive-exercise { background: linear-gradient(135deg, #f0f7ff, #e8f0fe); border: 2px solid #4361ee; border-radius: 12px; padding: 1.5rem; margin: 1.5rem 0; }
+    .interactive-exercise h3 { margin-top: 0; color: #4361ee; }
+    .exercise-problem { font-size: 1.3rem; font-weight: 700; margin: 1rem 0; font-family: 'JetBrains Mono', monospace; }
+    .exercise-controls { display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap; margin: 1rem 0; }
+    .exercise-input { font-family: 'JetBrains Mono', monospace; font-size: 1.1rem; padding: 0.5rem 1rem; border: 2px solid #ccc; border-radius: 8px; width: 200px; }
+    .exercise-input:focus { border-color: #4361ee; outline: none; }
+    .check-btn, .new-btn { padding: 0.5rem 1.2rem; font-size: 1rem; font-weight: 600; border: none; border-radius: 8px; cursor: pointer; transition: background 0.2s; }
+    .check-btn { background: #4361ee; color: white; }
+    .check-btn:hover { background: #3a0ca3; }
+    .new-btn { background: #06d6a0; color: white; }
+    .new-btn:hover { background: #05b384; }
+    .feedback { margin-top: 0.5rem; padding: 0.5rem 1rem; border-radius: 8px; font-weight: 600; display: none; }
+    .feedback.correct { background: #e6f9f1; color: #087f5b; border: 1px solid #06d6a0; display: block; }
+    .feedback.incorrect { background: #fff5f5; color: #c92a2a; border: 1px solid #e63946; display: block; }
+    .score-display { font-weight: 600; color: #4361ee; margin-top: 0.5rem; }
+    .did-you-know { background: linear-gradient(135deg, #e8f4fd, #d1ecf9); border: 2px solid #0dcaf0; border-radius: 12px; padding: 1.5rem; margin: 1rem 0; }
+    .did-you-know strong:first-child { color: #0a7c9f; display: block; margin-bottom: 0.25rem; }
+    .exam-tip { background: linear-gradient(135deg, #f3e8ff, #ede5ff); border: 2px solid #7209b7; border-radius: 12px; padding: 1.5rem; margin: 1rem 0; }
+    .exam-tip strong:first-child { color: #7209b7; display: block; margin-bottom: 0.25rem; }
+    .vocab-table td:first-child { font-weight: 700; white-space: nowrap; }
+    .converter-output { font-family: 'JetBrains Mono', monospace; background: #1a1a2e; color: #06d6a0; border-radius: 10px; padding: 1rem 1.2rem; margin: 1rem 0; min-height: 60px; font-size: 0.95rem; line-height: 1.7; overflow-x: auto; }
+    .converter-output .label { color: #8888cc; font-weight: 600; }
+    .converter-output .char-code { color: #4cc9f0; }
+    .converter-output .char-binary { color: #f72585; }
+    .converter-output .summary-line { color: #ffd166; margin-top: 0.5rem; }
+    .converter-input-wide { font-family: 'JetBrains Mono', monospace; font-size: 1.1rem; padding: 0.5rem 1rem; border: 2px solid #ccc; border-radius: 8px; width: 100%; box-sizing: border-box; }
+    .converter-input-wide:focus { border-color: #4361ee; outline: none; }
+  </style>
+</head>
+<body>
+
+  <header class="site-header">
+    <p><a href="../index.html">&larr; Back to Course</a></p>
+    <h1>ASCII &amp; Unicode</h1>
+    <p class="subtitle">How computers store text &mdash; from the letter A to emojis, every character has a number</p>
+  </header>
+
+  <main>
+
+    <!-- ==================== THE IDEA ==================== -->
+    <section class="idea">
+      <span class="section-label">The Idea</span>
+      <h2>Giving Every Character a Number</h2>
+
+      <p>You already know that computers store everything as binary &mdash; patterns of 0s and 1s. But how does a computer store <strong>text</strong>? How does it know the difference between the letter &ldquo;A&rdquo;, the number &ldquo;7&rdquo;, and a question mark?</p>
+
+      <p>The answer is surprisingly simple: <strong>every character is given a unique number</strong>. When you type the letter &ldquo;A&rdquo; on your keyboard, the computer does not store the shape of the letter &mdash; it stores the number <strong>65</strong>. When it needs to display that character on screen, it looks up number 65 in a table and draws the corresponding shape.</p>
+
+      <p>This system of mapping characters to numbers is called <strong>character encoding</strong>. Think of it like a secret code book &mdash; everyone agrees that &ldquo;A&rdquo; means 65, &ldquo;B&rdquo; means 66, a space means 32, and so on. As long as every computer uses the same code book, text can be stored, transmitted, and displayed correctly everywhere.</p>
+
+      <p>There are two main character encoding standards you need to know for your GCSE:</p>
+      <ul>
+        <li><strong>ASCII</strong> &mdash; the original standard, designed in the 1960s for English-only text</li>
+        <li><strong>Unicode</strong> &mdash; the modern universal standard that covers every writing system on Earth (plus emojis!)</li>
+      </ul>
+
+      <div class="key-concept">
+        <strong>Key Concept: Character Encoding</strong>
+        Character encoding is an agreed-upon system that assigns a unique number to every character (letters, digits, punctuation, symbols). Computers store these numbers in binary. Without character encoding, a computer would have no way to know what text you typed &mdash; it would just see meaningless numbers.
+      </div>
+    </section>
+
+    <!-- ==================== EXPLORE: ASCII ==================== -->
+    <section class="explore">
+      <span class="section-label">Explore</span>
+      <h2>ASCII &mdash; The Original Standard</h2>
+
+      <p><strong>ASCII</strong> stands for <em>American Standard Code for Information Interchange</em>. It was created in 1963 and quickly became the universal way to encode text in early computers. ASCII uses <strong>7 bits</strong> per character, which means it can represent <strong>2<sup>7</sup> = 128 different characters</strong> (numbered 0 to 127).</p>
+
+      <p>Those 128 characters include:</p>
+      <ul>
+        <li><strong>Uppercase letters:</strong> A (65) to Z (90) &mdash; 26 characters</li>
+        <li><strong>Lowercase letters:</strong> a (97) to z (122) &mdash; 26 characters</li>
+        <li><strong>Digits:</strong> 0 (48) to 9 (57) &mdash; 10 characters</li>
+        <li><strong>Space:</strong> code 32</li>
+        <li><strong>Punctuation and symbols:</strong> ! @ # $ % &amp; * ( ) and many more</li>
+        <li><strong>Control characters:</strong> codes 0&ndash;31 (things like &ldquo;new line&rdquo;, &ldquo;tab&rdquo;, and &ldquo;backspace&rdquo; &mdash; invisible characters that control formatting)</li>
+      </ul>
+
+      <h3>Key ASCII Code Ranges</h3>
+      <p>You do not need to memorise the entire ASCII table, but you <strong>must</strong> know these key values:</p>
+
+      <table>
+        <thead>
+          <tr><th>Character</th><th>ASCII Code</th><th>Binary (7-bit)</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Space</td><td>32</td><td>0100000</td></tr>
+          <tr><td>0</td><td>48</td><td>0110000</td></tr>
+          <tr><td>1</td><td>49</td><td>0110001</td></tr>
+          <tr><td>9</td><td>57</td><td>0111001</td></tr>
+          <tr><td>A</td><td>65</td><td>1000001</td></tr>
+          <tr><td>B</td><td>66</td><td>1000010</td></tr>
+          <tr><td>Z</td><td>90</td><td>1011010</td></tr>
+          <tr><td>a</td><td>97</td><td>1100001</td></tr>
+          <tr><td>b</td><td>98</td><td>1100010</td></tr>
+          <tr><td>z</td><td>122</td><td>1111010</td></tr>
+        </tbody>
+      </table>
+
+      <h3>How ASCII Enables Alphabetical Sorting</h3>
+      <p>Notice that the letters are in order: A=65, B=66, C=67, and so on. This is not a coincidence &mdash; it was designed this way deliberately. Because &ldquo;A&rdquo; has a <strong>smaller code number</strong> than &ldquo;B&rdquo;, a computer can sort words alphabetically simply by <strong>comparing the numbers</strong>. The computer does not need to &ldquo;know&rdquo; the alphabet &mdash; it just compares the codes.</p>
+
+      <h3>The Uppercase/Lowercase Pattern</h3>
+      <p>There is a neat relationship between uppercase and lowercase letters in ASCII:</p>
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">ASCII Case Pattern</span>
+        </div>
+        <pre><code>  A = 65    a = 97    difference = 32
+  B = 66    b = 98    difference = 32
+  C = 67    c = 99    difference = 32
+  ...
+  Z = 90    z = 122   difference = 32
+
+  The lowercase version is ALWAYS 32 more than the uppercase.</code></pre>
+      </div>
+      <p>This means that to convert an uppercase letter to lowercase, a computer simply <strong>adds 32</strong> to the ASCII code. To convert lowercase to uppercase, it <strong>subtracts 32</strong>. This is incredibly efficient and still used in programming today.</p>
+
+      <h3>The Limitation of ASCII</h3>
+      <p>With only 128 characters, ASCII can represent <strong>English text and nothing more</strong>. It has no room for:</p>
+      <ul>
+        <li>Accented letters (like &eacute;, &uuml;, &ntilde;)</li>
+        <li>Other alphabets (Chinese, Arabic, Japanese, Hindi, Greek, Russian&hellip;)</li>
+        <li>Mathematical symbols beyond the basics</li>
+        <li>Emojis</li>
+      </ul>
+      <p>In the 1960s this was fine &mdash; computers were mostly used by English-speaking scientists and engineers. But as computers spread around the world, 128 characters was nowhere near enough. Something far bigger was needed.</p>
+
+      <div class="did-you-know">
+        <strong>Did You Know?</strong>
+        Before graphical interfaces existed, people used ASCII characters to create images called <strong>ASCII art</strong>. By carefully arranging letters, numbers, and symbols, artists could draw pictures using nothing but text. ASCII art is still popular today in programming culture &mdash; many command-line tools display ASCII art logos when they start up. Here is a tiny example:
+        <pre style="font-family: 'JetBrains Mono', monospace; margin-top: 0.5rem; line-height: 1.3;">  /\_/\
+ ( o.o )
+  > ^ <
+ /|   |\
+(_|   |_)</pre>
+      </div>
+    </section>
+
+    <!-- ==================== UNDERSTAND: UNICODE ==================== -->
+    <section class="understand">
+      <span class="section-label">Understand</span>
+      <h2>Unicode &mdash; The Universal Standard</h2>
+
+      <p>As the internet connected people across the globe, it became clear that the world needed a single encoding system that could handle <strong>every writing system</strong>. The solution was <strong>Unicode</strong>, first published in 1991.</p>
+
+      <p>Unicode uses up to <strong>32 bits</strong> per character, giving it the theoretical capacity to represent over <strong>4 billion</strong> characters. In practice, Unicode currently defines over <strong>149,000 characters</strong> covering:</p>
+
+      <ul>
+        <li><strong>Every modern writing system:</strong> Latin, Chinese, Arabic, Japanese (Kanji, Hiragana, Katakana), Hindi (Devanagari), Korean (Hangul), Cyrillic (Russian), Greek, Hebrew, Thai, and many more</li>
+        <li><strong>Historical scripts:</strong> Egyptian hieroglyphs, Cuneiform, Runic</li>
+        <li><strong>Mathematical symbols, musical notation, and technical symbols</strong></li>
+        <li><strong>Emojis:</strong> thousands of them, from smiley faces to flags to food</li>
+      </ul>
+
+      <h3>Backwards Compatibility with ASCII</h3>
+      <p>A brilliant design decision: the <strong>first 128 Unicode characters are identical to ASCII</strong>. This means that A is still 65, a is still 97, and 0 is still 48 in Unicode. Any old ASCII text file is automatically valid Unicode too. This is called <strong>backwards compatibility</strong> &mdash; the new system works with everything the old system created.</p>
+
+      <h3>UTF-8: The Most Common Encoding</h3>
+      <p>Unicode defines the <em>numbers</em> (called <strong>code points</strong>), but it needs an encoding scheme to turn those numbers into actual bytes stored on disk. The most widely used encoding is <strong>UTF-8</strong>, which uses a clever <strong>variable-length</strong> system:</p>
+
+      <ul>
+        <li><strong>1 byte</strong> for ASCII characters (codes 0&ndash;127) &mdash; identical to ASCII</li>
+        <li><strong>2 bytes</strong> for accented European letters, Greek, Cyrillic, Arabic, Hebrew</li>
+        <li><strong>3 bytes</strong> for Chinese, Japanese, and Korean characters</li>
+        <li><strong>4 bytes</strong> for emojis, rare historical scripts, and mathematical symbols</li>
+      </ul>
+
+      <p>This is incredibly efficient: English text takes exactly the same space in UTF-8 as in ASCII (1 byte per character), while characters from other languages use only as many bytes as they need.</p>
+
+      <h3>Emojis in Unicode</h3>
+      <p>Every emoji has a unique Unicode <strong>code point</strong>, written with a &ldquo;U+&rdquo; prefix followed by a hexadecimal number:</p>
+
+      <table>
+        <thead>
+          <tr><th>Emoji</th><th>Name</th><th>Code Point</th><th>UTF-8 Bytes</th></tr>
+        </thead>
+        <tbody>
+          <tr><td style="font-size: 1.5rem;">&#x1F600;</td><td>Grinning Face</td><td>U+1F600</td><td>4 bytes</td></tr>
+          <tr><td style="font-size: 1.5rem;">&#x1F44D;</td><td>Thumbs Up</td><td>U+1F44D</td><td>4 bytes</td></tr>
+          <tr><td style="font-size: 1.5rem;">&#x2764;</td><td>Red Heart</td><td>U+2764</td><td>3 bytes</td></tr>
+          <tr><td style="font-size: 1.5rem;">&#x1F680;</td><td>Rocket</td><td>U+1F680</td><td>4 bytes</td></tr>
+          <tr><td style="font-size: 1.5rem;">&#x1F3AE;</td><td>Video Game Controller</td><td>U+1F3AE</td><td>4 bytes</td></tr>
+        </tbody>
+      </table>
+
+      <p><strong>Why do emojis look different on different devices?</strong> The Unicode standard only defines the <em>code point</em> and a general description (e.g. &ldquo;grinning face&rdquo;). Each company &mdash; Apple, Google, Samsung, Microsoft &mdash; designs its own artwork for each emoji. That is why the same thumbs-up emoji (U+1F44D) can look quite different on an iPhone versus an Android phone. The <strong>code is the same</strong>, but the <strong>visual design is different</strong>.</p>
+
+      <h3>Storage Comparison</h3>
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">How Much Space Does Text Take?</span>
+        </div>
+        <pre><code>  Text: "Hello"
+  ASCII:  H(72) e(101) l(108) l(108) o(111)  = 5 bytes
+  UTF-8:  H(72) e(101) l(108) l(108) o(111)  = 5 bytes  (same!)
+
+  Chinese text: &#x4F60;&#x597D; ("hello" in Chinese)
+  UTF-8:  &#x4F60;(3 bytes) &#x597D;(3 bytes)              = 6 bytes
+
+  Emoji: &#x1F600;
+  UTF-8:  &#x1F600;(4 bytes)                        = 4 bytes
+
+  Key insight: UTF-8 is efficient because simple characters
+  use fewer bytes, and complex ones use more.</code></pre>
+      </div>
+
+      <div class="key-concept">
+        <strong>Key Concept: ASCII vs Unicode Comparison</strong>
+        <table>
+          <thead>
+            <tr><th>Feature</th><th>ASCII</th><th>Unicode (UTF-8)</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>Bits per character</strong></td><td>7 bits (stored in 1 byte)</td><td>8 to 32 bits (1 to 4 bytes)</td></tr>
+            <tr><td><strong>Total characters</strong></td><td>128</td><td>Over 149,000</td></tr>
+            <tr><td><strong>Languages supported</strong></td><td>English only</td><td>Every written language</td></tr>
+            <tr><td><strong>Emojis</strong></td><td>None</td><td>Thousands</td></tr>
+            <tr><td><strong>Storage (English text)</strong></td><td>1 byte per character</td><td>1 byte per character</td></tr>
+            <tr><td><strong>Storage (other scripts)</strong></td><td>Not supported</td><td>2&ndash;4 bytes per character</td></tr>
+            <tr><td><strong>Backwards compatible?</strong></td><td>&mdash;</td><td>Yes (first 128 = ASCII)</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="did-you-know">
+        <strong>Did You Know?</strong>
+        The Unicode Consortium (the organisation that manages Unicode) receives proposals for new emojis every year. Each proposal must include evidence of expected usage, explain why existing emojis cannot fill the role, and show that the emoji would be used frequently in text communication. It takes about two years from proposal to appearing on your phone. As of 2024, Unicode includes over 3,600 emoji characters!
+      </div>
+    </section>
+
+    <!-- ==================== INTERACTIVE EXERCISE 1: ASCII CODE LOOKUP ==================== -->
+    <section class="explore">
+      <span class="section-label">Explore</span>
+      <h2>Interactive Exercises</h2>
+
+      <div class="interactive-exercise" id="ascii-lookup-exercise">
+        <h3>Exercise 1: ASCII Code Lookup</h3>
+        <p>A random character will appear below. Type its <strong>ASCII code number</strong>.</p>
+        <p style="font-size: 0.9rem; color: #555;">Hint: A=65, a=97, 0=48. Letters and digits are in order from there.</p>
+        <div class="exercise-problem" id="asc1-problem">A</div>
+        <div class="exercise-controls">
+          <input type="text" class="exercise-input" id="asc1-answer" placeholder="e.g. 65" maxlength="3" autocomplete="off" />
+          <button class="check-btn" id="asc1-check">Check</button>
+          <button class="new-btn" id="asc1-new">New Question</button>
+        </div>
+        <div class="feedback" id="asc1-feedback"></div>
+        <div class="score-display" id="asc1-score">Score: 0 / 0</div>
+      </div>
+
+      <!-- ==================== INTERACTIVE EXERCISE 2: ASCII DECODER ==================== -->
+      <div class="interactive-exercise" id="ascii-decoder-exercise">
+        <h3>Exercise 2: ASCII Decoder</h3>
+        <p>The ASCII codes below spell out a word. <strong>Decode them</strong> and type the word.</p>
+        <p style="font-size: 0.9rem; color: #555;">Remember: A=65, a=97. Work out each letter from the code.</p>
+        <div class="exercise-problem" id="asc2-problem">72 101 108 108 111</div>
+        <div class="exercise-controls">
+          <input type="text" class="exercise-input" id="asc2-answer" placeholder="e.g. Hello" maxlength="20" autocomplete="off" />
+          <button class="check-btn" id="asc2-check">Check</button>
+          <button class="new-btn" id="asc2-new">New Question</button>
+        </div>
+        <div class="feedback" id="asc2-feedback"></div>
+        <div class="score-display" id="asc2-score">Score: 0 / 0</div>
+      </div>
+
+      <!-- ==================== INTERACTIVE EXERCISE 3: TEXT TO ASCII CONVERTER ==================== -->
+      <div class="interactive-exercise" id="text-converter-exercise">
+        <h3>Exercise 3: Text to ASCII Converter</h3>
+        <p>Type any text below and see its ASCII/Unicode codes, binary representation, and byte count <strong>in real time</strong>.</p>
+        <input type="text" class="converter-input-wide" id="converter-input" placeholder="Type something here... e.g. Hello World!" maxlength="60" autocomplete="off" value="Hi!" />
+        <div class="converter-output" id="converter-output"></div>
+      </div>
+    </section>
+
+    <!-- ==================== PRACTICE ==================== -->
+    <section class="practice">
+      <span class="section-label">Practice</span>
+      <h2>Test Yourself</h2>
+      <p>Click on each question to reveal the answer. Try to work it out yourself first!</p>
+
+      <div class="hint">
+        <div class="hint-title">Q1: How many characters can 7-bit ASCII represent?</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> <strong>128</strong> characters.</p>
+          <p>With 7 bits, the number of possible combinations is 2<sup>7</sup> = 128. These are numbered 0 to 127.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q2: What is the ASCII code for 'A'? And for 'a'?</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> A = <strong>65</strong>, a = <strong>97</strong>.</p>
+          <p>The difference between an uppercase and its lowercase equivalent is always 32. So to go from &lsquo;A&rsquo; (65) to &lsquo;a&rsquo; (97), add 32. This pattern holds for every letter in the alphabet.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q3: Why is ASCII limited? Give two reasons.</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong></p>
+          <ol>
+            <li>ASCII only supports <strong>English characters</strong>. It cannot represent letters from other languages such as Chinese, Arabic, Hindi, or even accented European letters like &eacute; or &uuml;.</li>
+            <li>With only <strong>128 characters</strong>, there is no room for additional symbols, emojis, or the characters needed by the billions of people who do not write in English.</li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q4: How does Unicode solve ASCII's limitations?</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> Unicode uses up to <strong>32 bits</strong> per character, allowing it to represent over <strong>149,000 characters</strong>. This includes every modern writing system (Chinese, Arabic, Japanese, Hindi, Korean, etc.), historical scripts, mathematical symbols, and emojis. Unicode is also <strong>backwards compatible</strong> with ASCII &mdash; the first 128 Unicode characters are identical to ASCII, so existing ASCII text works without any changes.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q5: What is UTF-8 and why is it commonly used?</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> UTF-8 is the most widely used <strong>encoding scheme</strong> for Unicode. It uses a <strong>variable-length</strong> system: ASCII characters take only 1 byte, while other characters use 2, 3, or 4 bytes as needed. This makes it efficient because English text is no larger than in ASCII, but it can still represent every Unicode character. UTF-8 is used by the vast majority of websites, emails, and modern software.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q6: Decode these ASCII codes: 80 121 116 104 111 110</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> &ldquo;<strong>Python</strong>&rdquo;</p>
+          <p>Working: 80=P, 121=y, 116=t, 104=h, 111=o, 110=n.</p>
+          <p>Method: P is the 16th letter of the alphabet, and uppercase letters start at 65, so P = 65 + 15 = 80. The lowercase letters: y = 97 + 24 = 121, t = 97 + 19 = 116, h = 97 + 7 = 104, o = 97 + 14 = 111, n = 97 + 13 = 110.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q7: A text file contains 500 ASCII characters. How many bytes is the file?</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> <strong>500 bytes</strong>.</p>
+          <p>Each ASCII character is stored using 1 byte (8 bits, though only 7 are needed for the code &mdash; the 8th bit is typically 0). So 500 characters &times; 1 byte = 500 bytes. In UTF-8, these same 500 ASCII characters would also be 500 bytes, since UTF-8 uses 1 byte for any character in the 0&ndash;127 range.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== KEY VOCABULARY ==================== -->
+    <section class="understand">
+      <span class="section-label">Understand</span>
+      <h2>Key Vocabulary</h2>
+      <p>Make sure you know all of these terms for your exam:</p>
+
+      <table class="vocab-table">
+        <thead>
+          <tr><th>Term</th><th>Definition</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>ASCII</td><td>American Standard Code for Information Interchange &mdash; a 7-bit character encoding that represents 128 characters including English letters, digits, punctuation, and control characters.</td></tr>
+          <tr><td>Unicode</td><td>A universal character encoding standard that can represent over 149,000 characters from every writing system in the world, plus emojis and symbols.</td></tr>
+          <tr><td>UTF-8</td><td>The most common Unicode encoding scheme. Uses variable-length encoding: 1 byte for ASCII characters, 2&ndash;4 bytes for other characters. Backwards compatible with ASCII.</td></tr>
+          <tr><td>Character Encoding</td><td>An agreed-upon system that assigns a unique number to each character (letter, digit, symbol) so that computers can store, transmit, and display text.</td></tr>
+          <tr><td>Code Point</td><td>The unique number assigned to a character in Unicode, written with a &ldquo;U+&rdquo; prefix and a hexadecimal value (e.g. U+0041 for &lsquo;A&rsquo;, U+1F600 for the grinning face emoji).</td></tr>
+          <tr><td>Backwards Compatible</td><td>When a newer system is designed to work correctly with data or files created for an older system. Unicode is backwards compatible with ASCII because its first 128 code points are identical.</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- ==================== EXAM TIPS ==================== -->
+    <section class="explore">
+      <span class="section-label">Explore</span>
+      <h2>Exam Tips</h2>
+
+      <div class="exam-tip">
+        <strong>Exam Tip 1: Memorise Three Key Codes</strong>
+        You do not need to memorise the full ASCII table, but you <strong>must</strong> know these three starting points: <strong>A = 65</strong>, <strong>a = 97</strong>, and <strong>0 = 48</strong>. From these, you can work out any letter or digit. For example, &lsquo;G&rsquo; is the 7th letter, so G = 65 + 6 = 71. The digit &lsquo;5&rsquo; = 48 + 5 = 53.
+      </div>
+
+      <div class="exam-tip">
+        <strong>Exam Tip 2: ASCII vs Unicode &mdash; The Compare Question</strong>
+        A very common exam question asks you to compare ASCII and Unicode. A strong answer covers four points: (1) ASCII uses 7 bits per character, Unicode uses up to 32 bits. (2) ASCII represents 128 characters, Unicode represents over 149,000. (3) ASCII only covers English, Unicode covers every language and emojis. (4) Unicode is backwards compatible with ASCII. Always include a point about <strong>storage</strong>: ASCII files are smaller for the same English text, but Unicode is necessary for multilingual content.
+      </div>
+
+      <div class="exam-tip">
+        <strong>Exam Tip 3: File Size Calculations</strong>
+        In ASCII, each character = 1 byte, so the file size in bytes equals the number of characters. A 2,000-character ASCII file = 2,000 bytes. In UTF-8, English characters are still 1 byte each, but characters from other languages may be 2, 3, or 4 bytes. If a question specifies &ldquo;ASCII text,&rdquo; you can assume 1 byte per character. Always show your working: <em>number of characters &times; bytes per character = file size</em>.
+      </div>
+
+      <div class="exam-tip">
+        <strong>Exam Tip 4: Common Mistakes to Avoid</strong>
+        <ul>
+          <li><strong>Saying &ldquo;Unicode uses 2 bytes per character.&rdquo;</strong> This is a common misconception. UTF-8 uses a <em>variable</em> number of bytes (1 to 4). Only the older UTF-16 encoding uses a minimum of 2 bytes.</li>
+          <li><strong>Forgetting backwards compatibility.</strong> If asked &ldquo;what is the advantage of Unicode over ASCII,&rdquo; always mention that Unicode is backwards compatible &mdash; it does not break existing ASCII files.</li>
+          <li><strong>Confusing the character with its code.</strong> The digit character &lsquo;7&rsquo; has ASCII code 55, not 7. The character &lsquo;0&rsquo; has code 48, not 0. This trips up many students.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ==================== REFLECT ==================== -->
+    <section class="reflect">
+      <span class="section-label">Reflect</span>
+      <h2>Character Encoding in Everyday Life</h2>
+
+      <p>Character encoding is something you use every single day without thinking about it:</p>
+
+      <ul>
+        <li><strong>Every text message you send</strong> is encoded as a sequence of Unicode numbers, transmitted as bytes, and decoded back into characters on the other person&rsquo;s phone.</li>
+        <li><strong>Every web page you visit</strong> declares its encoding (almost always UTF-8) in its HTML header, so your browser knows how to interpret the bytes into readable text.</li>
+        <li><strong>Every emoji you send</strong> is a Unicode code point. When you send a thumbs-up to a friend with a different phone, they receive the same code point (U+1F44D) but see their device&rsquo;s own artwork for it.</li>
+        <li><strong>Every programming language</strong> uses character encoding when working with strings. Python 3, for example, uses Unicode by default, which is why you can write <code>print("&#x4F60;&#x597D;")</code> and it works perfectly.</li>
+      </ul>
+
+      <p>Have you ever seen strange characters like &ldquo;&#xFFFD;&rdquo; or &ldquo;&Atilde;&copy;&rdquo; on a website? That happens when the <strong>encoding is wrong</strong> &mdash; the browser is trying to decode bytes using one encoding scheme when the file was saved in a different one. Understanding character encoding helps you understand and fix these problems.</p>
+
+      <p>From the simple 128-character ASCII table of the 1960s to Unicode&rsquo;s 149,000+ characters today, character encoding is a brilliant example of how computer science evolves to meet the needs of a connected world.</p>
+
+      <div class="extra-resources">
+        <h3>Further Reading</h3>
+        <ul>
+          <li><a href="https://www.bbc.co.uk/bitesize/examspecs/zdqy7nb" target="_blank" rel="noopener">BBC Bitesize &mdash; Edexcel GCSE Computer Science</a> &mdash; Full specification coverage for data representation including character encoding</li>
+          <li><a href="https://isaaccomputerscience.org/topics/data_representation" target="_blank" rel="noopener">Isaac Computer Science &mdash; Data Representation</a> &mdash; In-depth explanations of ASCII, Unicode, and text encoding</li>
+          <li><a href="https://hvgcsecs.cshub.org.je/topics/topic2.html" target="_blank" rel="noopener">GCSE Topic 2: Data Representation</a> &mdash; Interactive revision tools and character encoding activities</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ==================== NAVIGATION ==================== -->
+    <nav class="chapter-nav">
+      <a href="twos-complement.html">&larr; Previous: Two&rsquo;s Complement</a>
+      <a href="../index.html">Course Home</a>
+      <a href="image-representation.html">Next: Image Representation &rarr;</a>
+    </nav>
+
+  </main>
+
+  <footer class="site-footer">
+    <p>Python Fundamentals &mdash; A KS4 Learning Platform</p>
+    <p>ASCII &amp; Unicode &mdash; GCSE Computer Science Theory</p>
+  </footer>
+
+  <!-- ==================== JAVASCRIPT ==================== -->
+  <script>
+    // ========== EXERCISE 1: ASCII CODE LOOKUP ==========
+    (function() {
+      var correct = 0;
+      var total = 0;
+      var currentChar = '';
+      var currentCode = 0;
+
+      var problemEl = document.getElementById('asc1-problem');
+      var answerEl = document.getElementById('asc1-answer');
+      var feedbackEl = document.getElementById('asc1-feedback');
+      var scoreEl = document.getElementById('asc1-score');
+      var checkBtn = document.getElementById('asc1-check');
+      var newBtn = document.getElementById('asc1-new');
+
+      // Pool of characters: A-Z, a-z, 0-9
+      function randomChar() {
+        var pool = [];
+        // Uppercase A-Z
+        for (var i = 65; i <= 90; i++) pool.push(String.fromCharCode(i));
+        // Lowercase a-z
+        for (var i = 97; i <= 122; i++) pool.push(String.fromCharCode(i));
+        // Digits 0-9
+        for (var i = 48; i <= 57; i++) pool.push(String.fromCharCode(i));
+        var ch = pool[Math.floor(Math.random() * pool.length)];
+        return ch;
+      }
+
+      function generate() {
+        currentChar = randomChar();
+        currentCode = currentChar.charCodeAt(0);
+        problemEl.textContent = currentChar;
+        answerEl.value = '';
+        feedbackEl.className = 'feedback';
+        feedbackEl.textContent = '';
+        answerEl.focus();
+      }
+
+      function hintText(code) {
+        if (code >= 65 && code <= 90) {
+          return 'A=65, so ' + currentChar + ' = 65 + ' + (code - 65) + ' = ' + code;
+        } else if (code >= 97 && code <= 122) {
+          return 'a=97, so ' + currentChar + ' = 97 + ' + (code - 97) + ' = ' + code;
+        } else {
+          return '0=48, so ' + currentChar + ' = 48 + ' + (code - 48) + ' = ' + code;
+        }
+      }
+
+      function check() {
+        var userAnswer = answerEl.value.trim();
+        total++;
+
+        if (parseInt(userAnswer, 10) === currentCode) {
+          correct++;
+          feedbackEl.className = 'feedback correct';
+          feedbackEl.innerHTML = 'Correct! The ASCII code for \'' + currentChar + '\' is <strong>' + currentCode + '</strong>. ' + hintText(currentCode);
+        } else {
+          feedbackEl.className = 'feedback incorrect';
+          feedbackEl.innerHTML = 'Not quite. The ASCII code for \'' + currentChar + '\' is <strong>' + currentCode + '</strong>. ' + hintText(currentCode) + '. You answered: ' + (userAnswer || '(empty)');
+        }
+
+        scoreEl.textContent = 'Score: ' + correct + ' / ' + total;
+      }
+
+      checkBtn.addEventListener('click', check);
+      newBtn.addEventListener('click', generate);
+      answerEl.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') check();
+      });
+
+      generate();
+    })();
+
+    // ========== EXERCISE 2: ASCII DECODER ==========
+    (function() {
+      var correct = 0;
+      var total = 0;
+      var currentWord = '';
+      var currentCodes = '';
+
+      var problemEl = document.getElementById('asc2-problem');
+      var answerEl = document.getElementById('asc2-answer');
+      var feedbackEl = document.getElementById('asc2-feedback');
+      var scoreEl = document.getElementById('asc2-score');
+      var checkBtn = document.getElementById('asc2-check');
+      var newBtn = document.getElementById('asc2-new');
+
+      // Word list for decoding exercise (3-5 letter common words)
+      var wordList = [
+        'Cat', 'Dog', 'Run', 'Jump', 'Code', 'Data', 'Byte', 'Loop',
+        'File', 'Disk', 'Chip', 'Link', 'Page', 'Sort', 'Tree',
+        'Node', 'List', 'Hash', 'Ping', 'Port', 'Bits', 'Keys',
+        'True', 'Null', 'Char', 'Flag', 'Spam', 'Bugs', 'Help',
+        'Save', 'Load', 'Edit', 'Copy', 'Quit', 'Open', 'Scan',
+        'Test', 'Push', 'Pull', 'Send', 'Read', 'Type', 'Font',
+        'Bold', 'Zoom', 'Undo', 'Redo', 'Html', 'Wifi', 'App',
+        'Ram', 'Cpu', 'Gpu', 'Ssd', 'Url', 'Log', 'Hex', 'Bit',
+        'Net', 'Web', 'Tap', 'Map', 'Set', 'Row', 'Mod', 'Mix'
+      ];
+
+      function generate() {
+        currentWord = wordList[Math.floor(Math.random() * wordList.length)];
+        var codes = [];
+        for (var i = 0; i < currentWord.length; i++) {
+          codes.push(currentWord.charCodeAt(i));
+        }
+        currentCodes = codes.join(' ');
+        problemEl.textContent = currentCodes;
+        answerEl.value = '';
+        feedbackEl.className = 'feedback';
+        feedbackEl.textContent = '';
+        answerEl.focus();
+      }
+
+      function buildWorking() {
+        var parts = [];
+        for (var i = 0; i < currentWord.length; i++) {
+          parts.push(currentWord.charCodeAt(i) + '=' + currentWord[i]);
+        }
+        return parts.join(', ');
+      }
+
+      function check() {
+        var userAnswer = answerEl.value.trim();
+        total++;
+
+        if (userAnswer.toLowerCase() === currentWord.toLowerCase()) {
+          correct++;
+          feedbackEl.className = 'feedback correct';
+          feedbackEl.innerHTML = 'Correct! The codes ' + currentCodes + ' spell <strong>"' + currentWord + '"</strong>. (' + buildWorking() + ')';
+        } else {
+          feedbackEl.className = 'feedback incorrect';
+          feedbackEl.innerHTML = 'Not quite. The codes ' + currentCodes + ' spell <strong>"' + currentWord + '"</strong>. (' + buildWorking() + '). You answered: "' + (userAnswer || '') + '"';
+        }
+
+        scoreEl.textContent = 'Score: ' + correct + ' / ' + total;
+      }
+
+      checkBtn.addEventListener('click', check);
+      newBtn.addEventListener('click', generate);
+      answerEl.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') check();
+      });
+
+      generate();
+    })();
+
+    // ========== EXERCISE 3: TEXT TO ASCII/UNICODE CONVERTER ==========
+    (function() {
+      var inputEl = document.getElementById('converter-input');
+      var outputEl = document.getElementById('converter-output');
+
+      function charToBinary(code) {
+        if (code <= 127) {
+          // ASCII range: show as 8-bit
+          return code.toString(2).padStart(8, '0');
+        } else if (code <= 2047) {
+          // 2-byte UTF-8
+          var b1 = 0xC0 | (code >> 6);
+          var b2 = 0x80 | (code & 0x3F);
+          return b1.toString(2).padStart(8, '0') + ' ' + b2.toString(2).padStart(8, '0');
+        } else if (code <= 65535) {
+          // 3-byte UTF-8
+          var b1 = 0xE0 | (code >> 12);
+          var b2 = 0x80 | ((code >> 6) & 0x3F);
+          var b3 = 0x80 | (code & 0x3F);
+          return b1.toString(2).padStart(8, '0') + ' ' + b2.toString(2).padStart(8, '0') + ' ' + b3.toString(2).padStart(8, '0');
+        } else {
+          // 4-byte UTF-8
+          var b1 = 0xF0 | (code >> 18);
+          var b2 = 0x80 | ((code >> 12) & 0x3F);
+          var b3 = 0x80 | ((code >> 6) & 0x3F);
+          var b4 = 0x80 | (code & 0x3F);
+          return b1.toString(2).padStart(8, '0') + ' ' + b2.toString(2).padStart(8, '0') + ' ' + b3.toString(2).padStart(8, '0') + ' ' + b4.toString(2).padStart(8, '0');
+        }
+      }
+
+      function utf8ByteCount(code) {
+        if (code <= 127) return 1;
+        if (code <= 2047) return 2;
+        if (code <= 65535) return 3;
+        return 4;
+      }
+
+      function update() {
+        var text = inputEl.value;
+        if (text.length === 0) {
+          outputEl.innerHTML = '<span class="label">Type something above to see its encoding...</span>';
+          return;
+        }
+
+        var lines = [];
+        var totalAsciiBytes = 0;
+        var totalUtf8Bytes = 0;
+        var allAscii = true;
+
+        // Use Array.from to handle multi-byte characters (emojis, etc.)
+        var chars = Array.from(text);
+
+        lines.push('<span class="label">Character breakdown:</span>');
+
+        for (var i = 0; i < chars.length; i++) {
+          var ch = chars[i];
+          var code = ch.codePointAt(0);
+          var utf8Bytes = utf8ByteCount(code);
+          var binary = charToBinary(code);
+          var displayChar = code === 32 ? '[space]' : ch;
+          var codeDisplay = code <= 127 ? code : 'U+' + code.toString(16).toUpperCase().padStart(4, '0');
+
+          totalUtf8Bytes += utf8Bytes;
+          if (code <= 127) {
+            totalAsciiBytes += 1;
+          } else {
+            allAscii = false;
+          }
+
+          lines.push(
+            '  ' + displayChar + '  &rarr;  ' +
+            '<span class="char-code">code: ' + codeDisplay + '</span>  |  ' +
+            '<span class="char-binary">binary: ' + binary + '</span>  |  ' +
+            'UTF-8: ' + utf8Bytes + (utf8Bytes === 1 ? ' byte' : ' bytes')
+          );
+        }
+
+        lines.push('');
+        lines.push('<span class="summary-line">Total characters: ' + chars.length + '</span>');
+        lines.push('<span class="summary-line">UTF-8 size: ' + totalUtf8Bytes + ' bytes</span>');
+        if (allAscii) {
+          lines.push('<span class="summary-line">ASCII size: ' + totalAsciiBytes + ' bytes (same as UTF-8 for English text)</span>');
+        } else {
+          lines.push('<span class="summary-line">Note: This text contains non-ASCII characters, so it cannot be stored in ASCII.</span>');
+        }
+
+        outputEl.innerHTML = lines.join('\n');
+      }
+
+      inputEl.addEventListener('input', update);
+      update();
+    })();
+
+    // ========== HINT/REVEAL TOGGLE ==========
+    document.querySelectorAll('.hint-title').forEach(function(title) {
+      title.addEventListener('click', function() {
+        var parent = this.parentElement;
+        if (parent.classList.contains('open')) {
+          parent.classList.remove('open');
+        } else {
+          parent.classList.add('open');
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>

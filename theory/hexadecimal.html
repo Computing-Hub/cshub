@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hexadecimal - Python Fundamentals</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <style>
+    .interactive-exercise {
+      background: linear-gradient(135deg, #f0f7ff, #e8f0fe);
+      border: 2px solid #4361ee;
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+    }
+    .interactive-exercise h3 { margin-top: 0; color: #4361ee; }
+    .exercise-problem { font-size: 1.3rem; font-weight: 700; margin: 1rem 0; font-family: 'JetBrains Mono', monospace; }
+    .exercise-controls { display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap; margin: 1rem 0; }
+    .exercise-input { font-family: 'JetBrains Mono', monospace; font-size: 1.1rem; padding: 0.5rem 1rem; border: 2px solid #ccc; border-radius: 8px; width: 200px; }
+    .exercise-input:focus { border-color: #4361ee; outline: none; }
+    .check-btn, .new-btn { padding: 0.5rem 1.2rem; font-size: 1rem; font-weight: 600; border: none; border-radius: 8px; cursor: pointer; transition: background 0.2s; }
+    .check-btn { background: #4361ee; color: white; }
+    .check-btn:hover { background: #3a0ca3; }
+    .new-btn { background: #06d6a0; color: white; }
+    .new-btn:hover { background: #05b384; }
+    .feedback { margin-top: 0.5rem; padding: 0.5rem 1rem; border-radius: 8px; font-weight: 600; display: none; }
+    .feedback.correct { background: #e6f9f1; color: #087f5b; border: 1px solid #06d6a0; display: block; }
+    .feedback.incorrect { background: #fff5f5; color: #c92a2a; border: 1px solid #e63946; display: block; }
+    .score-display { font-weight: 600; color: #4361ee; margin-top: 0.5rem; }
+    .colour-swatch { display: inline-block; width: 1.2em; height: 1.2em; vertical-align: middle; border-radius: 3px; border: 1px solid #ccc; margin-right: 0.3em; }
+    .exam-tip { background: linear-gradient(135deg, #f3e8ff, #ede5ff); border: 2px solid #7209b7; border-radius: 12px; padding: 1.5rem; margin: 1rem 0; }
+    .exam-tip strong:first-child { color: #7209b7; display: block; margin-bottom: 0.25rem; }
+    .did-you-know { background: linear-gradient(135deg, #e8f4fd, #d1ecf9); border: 2px solid #0dcaf0; border-radius: 12px; padding: 1.5rem; margin: 1rem 0; }
+    .did-you-know strong:first-child { color: #0a7c9f; display: block; margin-bottom: 0.25rem; }
+    .colour-preview {
+      width: 100%;
+      height: 120px;
+      border-radius: 12px;
+      border: 2px solid #ccc;
+      margin: 1rem 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.2rem;
+      font-weight: 700;
+      transition: background 0.3s;
+    }
+    .colour-mixer-inputs {
+      display: flex;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      margin: 1rem 0;
+    }
+    .colour-channel {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.3rem;
+    }
+    .colour-channel label {
+      font-weight: 700;
+      font-size: 0.95rem;
+    }
+    .colour-channel .exercise-input {
+      width: 80px;
+      text-align: center;
+      text-transform: uppercase;
+    }
+    .colour-info {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1rem;
+      margin-top: 0.5rem;
+    }
+    .vocab-table td:first-child {
+      font-weight: 700;
+      white-space: nowrap;
+    }
+  </style>
+</head>
+<body>
+
+  <header class="site-header">
+    <p><a href="../index.html">&larr; Back to Course</a></p>
+    <h1>Hexadecimal</h1>
+    <p class="subtitle">Base-16 made simple &mdash; why programmers love hex, and how to convert between hex, binary, and denary</p>
+  </header>
+
+  <main>
+
+    <!-- ==================== THE IDEA ==================== -->
+    <section class="idea">
+      <span class="section-label">The Idea</span>
+      <h2>Why Hexadecimal?</h2>
+
+      <p>Binary is the language computers speak, but binary numbers get <strong>very long very quickly</strong>. The number 255 in binary is <code>11111111</code> &mdash; eight digits just for a relatively small number. Imagine trying to read, type, or debug a 32-bit memory address written entirely in 0s and 1s. You would almost certainly make a mistake.</p>
+
+      <p>This is where <strong>hexadecimal</strong> (hex for short) comes in. Hexadecimal is a <strong>base-16</strong> number system. It uses <strong>16 digits</strong>:</p>
+
+      <ul>
+        <li>The familiar digits <strong>0, 1, 2, 3, 4, 5, 6, 7, 8, 9</strong></li>
+        <li>Plus the letters <strong>A, B, C, D, E, F</strong> to represent the values 10 through 15</li>
+      </ul>
+
+      <table>
+        <thead>
+          <tr><th>Letter</th><th>A</th><th>B</th><th>C</th><th>D</th><th>E</th><th>F</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>Value</strong></td><td>10</td><td>11</td><td>12</td><td>13</td><td>14</td><td>15</td></tr>
+        </tbody>
+      </table>
+
+      <p>The magic of hex is that <strong>one hex digit represents exactly 4 binary bits</strong> (a <strong>nibble</strong>). This means you can convert between hex and binary very quickly, without doing any arithmetic. Two hex digits represent a full byte (8 bits), and the longest numbers become short and manageable.</p>
+
+      <div class="key-concept">
+        <strong>Key Concept: Why Hex Exists</strong>
+        Hexadecimal is not a different type of data &mdash; it is simply a <strong>more compact way for humans to read and write binary values</strong>. Computers still work in binary internally. Hex is a convenience for programmers, not for machines.
+      </div>
+
+      <p><strong>Where is hex used in real life?</strong></p>
+      <ul>
+        <li><strong>Colour codes</strong> in web design (e.g. <code>#FF5733</code>)</li>
+        <li><strong>Memory addresses</strong> (e.g. <code>0x7FFF5A2C</code>)</li>
+        <li><strong>MAC addresses</strong> for network devices (e.g. <code>AA:BB:CC:DD:EE:FF</code>)</li>
+        <li><strong>Error codes</strong> (e.g. the famous Windows &ldquo;blue screen&rdquo; stop codes like <code>0x0000007E</code>)</li>
+        <li><strong>Assembly language</strong> and low-level programming</li>
+      </ul>
+    </section>
+
+    <!-- ==================== EXPLORE ==================== -->
+    <section class="explore">
+      <span class="section-label">Explore</span>
+      <h2>The Hex-Binary-Denary Connection</h2>
+
+      <p>The table below is the foundation of all hex work. It shows every possible value for a single hex digit alongside its binary and denary equivalents. You do not need to memorise the entire table for the exam, but you should be very comfortable looking up or working out any row.</p>
+
+      <table>
+        <thead>
+          <tr><th>Denary</th><th>Binary (4-bit)</th><th>Hex</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>0</td><td>0000</td><td>0</td></tr>
+          <tr><td>1</td><td>0001</td><td>1</td></tr>
+          <tr><td>2</td><td>0010</td><td>2</td></tr>
+          <tr><td>3</td><td>0011</td><td>3</td></tr>
+          <tr><td>4</td><td>0100</td><td>4</td></tr>
+          <tr><td>5</td><td>0101</td><td>5</td></tr>
+          <tr><td>6</td><td>0110</td><td>6</td></tr>
+          <tr><td>7</td><td>0111</td><td>7</td></tr>
+          <tr><td>8</td><td>1000</td><td>8</td></tr>
+          <tr><td>9</td><td>1001</td><td>9</td></tr>
+          <tr><td>10</td><td>1010</td><td>A</td></tr>
+          <tr><td>11</td><td>1011</td><td>B</td></tr>
+          <tr><td>12</td><td>1100</td><td>C</td></tr>
+          <tr><td>13</td><td>1101</td><td>D</td></tr>
+          <tr><td>14</td><td>1110</td><td>E</td></tr>
+          <tr><td>15</td><td>1111</td><td>F</td></tr>
+        </tbody>
+      </table>
+
+      <!-- HEX TO BINARY -->
+      <h3>Converting Hex to Binary</h3>
+      <p>This is the easiest conversion of all. Simply <strong>replace each hex digit with its 4-bit binary equivalent</strong>. That is it &mdash; no arithmetic required.</p>
+
+      <p><strong>Example 1: Convert hex A7 to binary.</strong></p>
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Hex to Binary &mdash; A7</span>
+        </div>
+        <pre><code>  A    7
+  |    |
+ 1010  0111
+
+  A7 in binary = 10100111</code></pre>
+      </div>
+      <p>A = 1010, 7 = 0111. Join them together: <strong>10100111</strong>.</p>
+
+      <p><strong>Example 2: Convert hex 2F to binary.</strong></p>
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Hex to Binary &mdash; 2F</span>
+        </div>
+        <pre><code>  2    F
+  |    |
+ 0010  1111
+
+  2F in binary = 00101111</code></pre>
+      </div>
+      <p>2 = 0010, F = 1111. Join them together: <strong>00101111</strong>.</p>
+
+      <!-- BINARY TO HEX -->
+      <h3>Converting Binary to Hex</h3>
+      <p>This is the reverse of the method above. <strong>Split the binary number into groups of 4 bits (nibbles)</strong>, starting from the right, and convert each nibble to its hex digit.</p>
+
+      <p><strong>Example 1: Convert binary 10110011 to hex.</strong></p>
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Binary to Hex &mdash; 10110011</span>
+        </div>
+        <pre><code>  1011  0011
+   |     |
+   B     3
+
+  10110011 in hex = B3</code></pre>
+      </div>
+      <p>Split: 1011 = B, 0011 = 3. Answer: <strong>B3</strong>.</p>
+
+      <p><strong>Example 2: Convert binary 11101010 to hex.</strong></p>
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Binary to Hex &mdash; 11101010</span>
+        </div>
+        <pre><code>  1110  1010
+   |     |
+   E     A
+
+  11101010 in hex = EA</code></pre>
+      </div>
+      <p>Split: 1110 = E, 1010 = A. Answer: <strong>EA</strong>.</p>
+
+      <!-- HEX TO DENARY -->
+      <h3>Converting Hex to Denary</h3>
+      <p>Each hex digit has a <strong>place value</strong>, just like in denary and binary. For a two-digit hex number, the left digit is in the <strong>16s column</strong> and the right digit is in the <strong>1s column</strong>. Multiply each digit by its place value and add the results.</p>
+
+      <p><strong>Example 1: Convert hex 2F to denary.</strong></p>
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Hex to Denary &mdash; 2F</span>
+        </div>
+        <pre><code>  Place values:   16    1
+
+  Hex digits:      2    F (F = 15)
+
+  Calculation:   (2 &times; 16) + (15 &times; 1)
+               =    32    +    15
+               =    47
+
+  2F in denary = 47</code></pre>
+      </div>
+
+      <p><strong>Example 2: Convert hex B8 to denary.</strong></p>
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Hex to Denary &mdash; B8</span>
+        </div>
+        <pre><code>  Place values:   16    1
+
+  Hex digits:      B    8 (B = 11)
+
+  Calculation:   (11 &times; 16) + (8 &times; 1)
+               =    176    +    8
+               =    184
+
+  B8 in denary = 184</code></pre>
+      </div>
+
+      <!-- DENARY TO HEX -->
+      <h3>Converting Denary to Hex</h3>
+      <p>To convert denary to hex, <strong>divide by 16</strong>. The quotient (whole number part) becomes the first hex digit, and the remainder becomes the second hex digit.</p>
+
+      <p><strong>Example: Convert denary 94 to hex.</strong></p>
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Denary to Hex &mdash; 94</span>
+        </div>
+        <pre><code>  94 &divide; 16 = 5 remainder 14
+
+  Quotient:   5  &rarr; hex digit 5
+  Remainder: 14  &rarr; hex digit E
+
+  94 in hex = 5E</code></pre>
+      </div>
+      <p>Check: 5 &times; 16 + 14 = 80 + 14 = 94. Correct!</p>
+
+      <div class="try-this">
+        <strong>Quick Conversions to Try:</strong>
+        <ol>
+          <li>Convert hex C4 to binary. (C = 1100, 4 = 0100, so C4 = <strong>11000100</strong>)</li>
+          <li>Convert binary 11110001 to hex. (1111 = F, 0001 = 1, so 11110001 = <strong>F1</strong>)</li>
+          <li>Convert hex 5E to denary. (5 &times; 16 + 14 = 80 + 14 = <strong>94</strong>)</li>
+          <li>Convert denary 200 to hex. (200 &divide; 16 = 12 remainder 8, so 200 = <strong>C8</strong>)</li>
+          <li>Convert hex 3A to binary, then to denary. (3A = 00111010 = 58)</li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- ==================== UNDERSTAND ==================== -->
+    <section class="understand">
+      <span class="section-label">Understand</span>
+      <h2>Hex in the Real World</h2>
+
+      <!-- HEX COLOUR CODES -->
+      <h3>Hex Colour Codes in Web Design</h3>
+      <p>One of the most visible uses of hexadecimal is in <strong>web design</strong>. In HTML and CSS, colours are defined using a <strong>#</strong> symbol followed by six hex digits in the format <strong>#RRGGBB</strong>:</p>
+
+      <ul>
+        <li>The first two digits (<strong>RR</strong>) set the amount of <strong>Red</strong></li>
+        <li>The middle two digits (<strong>GG</strong>) set the amount of <strong>Green</strong></li>
+        <li>The last two digits (<strong>BB</strong>) set the amount of <strong>Blue</strong></li>
+      </ul>
+
+      <p>Each pair ranges from <strong>00</strong> (none of that colour, which is 0 in denary) to <strong>FF</strong> (maximum of that colour, which is 255 in denary). By mixing different amounts of red, green, and blue, you can create over <strong>16.7 million different colours</strong> (256 &times; 256 &times; 256 = 16,777,216).</p>
+
+      <table>
+        <thead>
+          <tr><th>Hex Code</th><th>Red</th><th>Green</th><th>Blue</th><th>Colour</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>#FF0000</code></td><td>FF (255)</td><td>00 (0)</td><td>00 (0)</td><td><span class="colour-swatch" style="background:#FF0000;"></span> Pure Red</td></tr>
+          <tr><td><code>#00FF00</code></td><td>00 (0)</td><td>FF (255)</td><td>00 (0)</td><td><span class="colour-swatch" style="background:#00FF00;"></span> Pure Green</td></tr>
+          <tr><td><code>#0000FF</code></td><td>00 (0)</td><td>00 (0)</td><td>FF (255)</td><td><span class="colour-swatch" style="background:#0000FF;"></span> Pure Blue</td></tr>
+          <tr><td><code>#FFFFFF</code></td><td>FF (255)</td><td>FF (255)</td><td>FF (255)</td><td><span class="colour-swatch" style="background:#FFFFFF;"></span> White</td></tr>
+          <tr><td><code>#000000</code></td><td>00 (0)</td><td>00 (0)</td><td>00 (0)</td><td><span class="colour-swatch" style="background:#000000;"></span> Black</td></tr>
+          <tr><td><code>#FF5733</code></td><td>FF (255)</td><td>57 (87)</td><td>33 (51)</td><td><span class="colour-swatch" style="background:#FF5733;"></span> Warm Orange</td></tr>
+        </tbody>
+      </table>
+
+      <p>Notice how hex makes colour codes compact and easy to read. Writing the same information in binary would mean 24 binary digits for every single colour &mdash; far too long to work with practically.</p>
+
+      <!-- HEX MEMORY ADDRESSES -->
+      <h3>Hex Memory Addresses</h3>
+      <p>Every byte stored in a computer&rsquo;s RAM has a unique <strong>memory address</strong>. These addresses are written in hexadecimal because hex is far more compact and readable than binary.</p>
+
+      <p>Consider this comparison:</p>
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Memory Address Comparison</span>
+        </div>
+        <pre><code>  Hex:      0x7FFF5A2C            (8 digits)
+  Binary:   01111111111111110101101000101100  (32 digits!)
+  Denary:   2147465772            (10 digits)</code></pre>
+      </div>
+
+      <p>The hex version is short, easy to read, and trivially converts to binary when needed. This is why programmers, debuggers, and operating systems all display memory addresses in hex. When you see addresses like <code>0x0040A000</code> or <code>0xDEADBEEF</code>, the <code>0x</code> prefix tells you the number is hexadecimal.</p>
+
+      <!-- MAC ADDRESSES -->
+      <h3>MAC Addresses</h3>
+      <p>Every network device (your laptop&rsquo;s Wi-Fi card, your phone&rsquo;s Bluetooth chip, your router) has a unique identifier called a <strong>MAC address</strong> (Media Access Control). MAC addresses are written as <strong>six pairs of hex digits</strong> separated by colons or hyphens:</p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">MAC Address Format</span>
+        </div>
+        <pre><code>  AA:BB:CC:DD:EE:FF
+
+  Each pair = 1 byte (8 bits)
+  6 pairs = 6 bytes = 48 bits total
+
+  In binary, the same address would be:
+  10101010:10111011:11001100:11011101:11101110:11111111</code></pre>
+      </div>
+
+      <p>The hex format is clearly much easier for network engineers to read, copy, and troubleshoot. The first three pairs typically identify the manufacturer (e.g. Apple, Samsung, Intel), and the last three pairs are unique to the individual device.</p>
+
+      <div class="did-you-know">
+        <strong>Did You Know?</strong>
+        Hexadecimal turns up in some surprising places in everyday life. The &ldquo;blue screen of death&rdquo; on Windows displays error codes in hex (like <code>0x0000007E</code>). Many software licence keys use hex digits. Even some playful programmers use hex to write words &mdash; <code>0xDEADBEEF</code>, <code>0xCAFEBABE</code>, and <code>0xBAADF00D</code> are all famous hex values used as debugging markers in real software! Java class files, for example, always begin with the &ldquo;magic number&rdquo; <code>0xCAFEBABE</code>.
+      </div>
+    </section>
+
+    <!-- ==================== INTERACTIVE EXERCISE 1 ==================== -->
+    <section class="explore">
+      <span class="section-label">Explore</span>
+      <h2>Interactive Exercises</h2>
+
+      <div class="interactive-exercise" id="hex-to-binary-exercise">
+        <h3>Exercise 1: Hex to Binary Converter</h3>
+        <p>Convert the following hexadecimal value to its <strong>8-bit binary</strong> equivalent.</p>
+        <div class="exercise-problem" id="htb-problem">A7</div>
+        <div class="exercise-controls">
+          <input type="text" class="exercise-input" id="htb-answer" placeholder="e.g. 10100111" maxlength="8" autocomplete="off" />
+          <button class="check-btn" id="htb-check">Check</button>
+          <button class="new-btn" id="htb-new">New Question</button>
+        </div>
+        <div class="feedback" id="htb-feedback"></div>
+        <div class="score-display" id="htb-score">Score: 0 / 0</div>
+      </div>
+
+      <div class="interactive-exercise" id="hex-to-denary-exercise">
+        <h3>Exercise 2: Hex to Denary Converter</h3>
+        <p>Convert the following hexadecimal value to its <strong>denary (decimal)</strong> equivalent.</p>
+        <div class="exercise-problem" id="htd-problem">2F</div>
+        <div class="exercise-controls">
+          <input type="text" class="exercise-input" id="htd-answer" placeholder="e.g. 47" maxlength="3" autocomplete="off" />
+          <button class="check-btn" id="htd-check">Check</button>
+          <button class="new-btn" id="htd-new">New Question</button>
+        </div>
+        <div class="feedback" id="htd-feedback"></div>
+        <div class="score-display" id="htd-score">Score: 0 / 0</div>
+      </div>
+
+      <div class="interactive-exercise" id="colour-mixer-exercise">
+        <h3>Exercise 3: Hex Colour Mixer</h3>
+        <p>Enter hex values (00 to FF) for each colour channel and watch the colour update in real time. Experiment to discover how red, green, and blue combine!</p>
+        <div class="colour-mixer-inputs">
+          <div class="colour-channel">
+            <label style="color: #c92a2a;">Red</label>
+            <input type="text" class="exercise-input" id="mix-red" value="FF" maxlength="2" autocomplete="off" />
+          </div>
+          <div class="colour-channel">
+            <label style="color: #087f5b;">Green</label>
+            <input type="text" class="exercise-input" id="mix-green" value="57" maxlength="2" autocomplete="off" />
+          </div>
+          <div class="colour-channel">
+            <label style="color: #1864ab;">Blue</label>
+            <input type="text" class="exercise-input" id="mix-blue" value="33" maxlength="2" autocomplete="off" />
+          </div>
+        </div>
+        <div class="colour-preview" id="colour-preview" style="background: #FF5733;">
+          <span id="colour-preview-text" style="color: #000;">#FF5733</span>
+        </div>
+        <div class="colour-info" id="colour-info">
+          Hex: #FF5733 &nbsp;|&nbsp; Denary: R=255, G=87, B=51
+        </div>
+        <div class="try-this" style="margin-top: 1rem;">
+          <strong>Challenges to Try:</strong>
+          <ol>
+            <li>Can you make pure yellow? (Hint: yellow = red + green, no blue)</li>
+            <li>Can you make a nice sky blue?</li>
+            <li>What happens when all three channels have the same value?</li>
+            <li>Try making your school&rsquo;s uniform colour!</li>
+          </ol>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== PRACTICE ==================== -->
+    <section class="practice">
+      <span class="section-label">Practice</span>
+      <h2>Test Yourself</h2>
+      <p>Click on each question to reveal the answer. Try to work it out yourself first!</p>
+
+      <div class="hint">
+        <div class="hint-title">Q1: Convert hex 3D to binary.</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> 3 = 0011, D = 1101. Join them: <strong>00111101</strong>.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q2: Convert binary 01011110 to hex.</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> Split into nibbles: 0101 = 5, 1110 = E. Answer: <strong>5E</strong>.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q3: Convert hex 9C to denary.</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> 9 &times; 16 + 12 &times; 1 = 144 + 12 = <strong>156</strong>.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q4: Convert denary 171 to hex.</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> 171 &divide; 16 = 10 remainder 11. 10 = A, 11 = B. Answer: <strong>AB</strong>. Check: 10 &times; 16 + 11 = 160 + 11 = 171. Correct!</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q5: A website uses the colour code #2E86C1. Break this down into its RGB components in denary.</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong><br />
+          <strong>Red:</strong> 2E = 2 &times; 16 + 14 = 32 + 14 = <strong>46</strong><br />
+          <strong>Green:</strong> 86 = 8 &times; 16 + 6 = 128 + 6 = <strong>134</strong><br />
+          <strong>Blue:</strong> C1 = 12 &times; 16 + 1 = 192 + 1 = <strong>193</strong><br />
+          This is a <span class="colour-swatch" style="background:#2E86C1;"></span> medium blue colour with low red, moderate green, and high blue.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q6: Why is hexadecimal used instead of binary for memory addresses?</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> Hexadecimal is used because it is much <strong>more compact and readable</strong> than binary. A 32-bit binary memory address would be 32 digits long, but the same address in hex is only 8 digits. Hex also converts easily to and from binary (each hex digit = 4 bits), so programmers can quickly switch between the two systems when needed. This reduces the chance of errors when reading or typing addresses.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q7: Convert the hex value FF to binary and then to denary. What is significant about this number?</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong><br />
+          <strong>To binary:</strong> F = 1111, F = 1111. FF = <strong>11111111</strong>.<br />
+          <strong>To denary:</strong> 15 &times; 16 + 15 = 240 + 15 = <strong>255</strong>.<br />
+          <strong>Significance:</strong> 255 is the <strong>largest value that can be stored in a single byte</strong> (8 bits). This is why colour channels in hex colour codes range from 00 to FF &mdash; each channel is exactly one byte. It is also the maximum value for many settings in computing, such as subnet masks in networking (255.255.255.0).</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== KEY VOCABULARY ==================== -->
+    <section class="idea">
+      <span class="section-label">The Idea</span>
+      <h2>Key Vocabulary</h2>
+      <p>Make sure you know all of these terms for your exam:</p>
+
+      <table class="vocab-table">
+        <thead>
+          <tr><th>Term</th><th>Definition</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Hexadecimal</td><td>A base-16 number system using digits 0&ndash;9 and letters A&ndash;F. Used as a compact, human-friendly shorthand for binary.</td></tr>
+          <tr><td>Nibble</td><td>A group of 4 bits (half a byte). One nibble can represent exactly one hexadecimal digit, with values from 0 to F (0&ndash;15 in denary).</td></tr>
+          <tr><td>Hex Colour Code</td><td>A six-digit hexadecimal value preceded by # (e.g. #FF5733) used in web design to define colours. The six digits represent Red, Green, and Blue components in pairs.</td></tr>
+          <tr><td>Memory Address</td><td>A unique identifier for a specific location in a computer&rsquo;s RAM. Typically written in hexadecimal with a 0x prefix for readability.</td></tr>
+          <tr><td>MAC Address</td><td>Media Access Control address &mdash; a unique 48-bit identifier assigned to every network interface, written as six pairs of hex digits (e.g. AA:BB:CC:DD:EE:FF).</td></tr>
+          <tr><td>RGB</td><td>Red, Green, Blue &mdash; the colour model used in screens and digital displays. Each component is stored as a value from 0 to 255 (00 to FF in hex).</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- ==================== EXAM TIPS ==================== -->
+    <section class="understand">
+      <span class="section-label">Understand</span>
+      <h2>Exam Tips</h2>
+
+      <div class="exam-tip">
+        <strong>Exam Tip 1: The Nibble Trick</strong>
+        The fastest way to convert between hex and binary is the <strong>nibble method</strong>. Each hex digit maps to exactly 4 bits. For hex-to-binary, replace each digit with its 4-bit pattern. For binary-to-hex, split the binary into groups of 4 from the right, then convert each group. This is much quicker than going via denary, and examiners love to see it used correctly.
+      </div>
+
+      <div class="exam-tip">
+        <strong>Exam Tip 2: Hex Place Values</strong>
+        For a two-digit hex number, the place values are <strong>16</strong> and <strong>1</strong>. Multiply each digit by its place value and add. For example, hex 3A = (3 &times; 16) + (10 &times; 1) = 48 + 10 = 58. If you see a three-digit hex number in a harder question, the place values are <strong>256, 16, 1</strong> (powers of 16: 16<sup>2</sup>, 16<sup>1</sup>, 16<sup>0</sup>).
+      </div>
+
+      <div class="exam-tip">
+        <strong>Exam Tip 3: Common Mistakes to Avoid</strong>
+        <ul>
+          <li><strong>Forgetting that A&ndash;F represent 10&ndash;15.</strong> If a question asks you to convert hex B to denary, the answer is 11, not &ldquo;B.&rdquo;</li>
+          <li><strong>Not padding to 4 bits.</strong> When converting hex 3 to binary, write 0011, not just 11. You need all four bits for each nibble.</li>
+          <li><strong>Mixing up the direction.</strong> Read the question carefully &mdash; &ldquo;hex to binary&rdquo; and &ldquo;binary to hex&rdquo; require opposite steps.</li>
+          <li><strong>Forgetting to show working.</strong> Always write out the nibble breakdown or place value calculation. Method marks are available even if the final answer is wrong.</li>
+        </ul>
+      </div>
+
+      <div class="exam-tip">
+        <strong>Exam Tip 4: Explaining Why Hex Is Used</strong>
+        A common exam question is: &ldquo;Explain why hexadecimal is used instead of binary.&rdquo; A strong answer includes three points: (1) Hex is more <strong>compact</strong> &mdash; fewer digits to represent the same value. (2) Hex is easier for humans to <strong>read and remember</strong>, reducing the chance of errors. (3) Hex converts to and from binary <strong>easily and quickly</strong> because each hex digit represents exactly 4 bits.
+      </div>
+    </section>
+
+    <!-- ==================== REFLECT ==================== -->
+    <section class="reflect">
+      <span class="section-label">Reflect</span>
+      <h2>Why Hex Matters</h2>
+
+      <p>Hexadecimal is one of those topics that might seem abstract at first, but once you start noticing it, you see it everywhere:</p>
+
+      <ul>
+        <li><strong>Every website you visit</strong> uses hex colour codes in its CSS. Inspect any web page and you will find values like <code>#333333</code> or <code>#4361ee</code> throughout the stylesheet.</li>
+        <li><strong>Every device on your network</strong> has a MAC address written in hex. Check your phone&rsquo;s settings &mdash; you will find it under &ldquo;About&rdquo; or &ldquo;Network.&rdquo;</li>
+        <li><strong>Every programmer</strong> encounters hex when debugging, reading error messages, or working with low-level code.</li>
+        <li><strong>Every pixel on your screen</strong> has its colour defined by three hex pairs &mdash; right now, as you read this text.</li>
+      </ul>
+
+      <p>The key takeaway is that hex is not a separate number system that computers use &mdash; computers always use binary. Hexadecimal is a <strong>tool for humans</strong>, a shorthand that makes binary manageable. Learning to convert fluently between hex, binary, and denary is an essential skill that will come up in your exam and serve you well if you continue into programming, networking, or cyber security.</p>
+
+      <div class="extra-resources">
+        <h3>Further Reading</h3>
+        <ul>
+          <li><a href="https://www.101computing.net/binary-logic/hexa-binary.html" target="_blank" rel="noopener">101 Computing &mdash; Hex-Binary Conversions</a> &mdash; Interactive tools for practising hex and binary conversions</li>
+          <li><a href="https://www.bbc.co.uk/bitesize/guides/zfspfcw/revision/5" target="_blank" rel="noopener">BBC Bitesize &mdash; Hexadecimal</a> &mdash; Clear explanations with practice questions from the BBC</li>
+          <li><a href="https://www.bbc.co.uk/bitesize/examspecs/zdqy7nb" target="_blank" rel="noopener">BBC Bitesize &mdash; Edexcel GCSE Computer Science</a> &mdash; Full specification coverage for data representation</li>
+          <li><a href="https://hvgcsecs.cshub.org.je/topics/topic2.html" target="_blank" rel="noopener">GCSE Topic 2: Data Representation</a> &mdash; Interactive revision tools and binary activities</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ==================== NAVIGATION ==================== -->
+    <nav class="chapter-nav">
+      <a href="binary-addition.html">&larr; Previous: Binary Addition</a>
+      <a href="../index.html">Course Home</a>
+      <a href="binary-shifts.html">Next: Binary Shifts &rarr;</a>
+    </nav>
+
+  </main>
+
+  <footer class="site-footer">
+    <p>Python Fundamentals &mdash; A KS4 Learning Platform</p>
+    <p>Hexadecimal &mdash; GCSE Computer Science Theory</p>
+  </footer>
+
+  <!-- ==================== JAVASCRIPT ==================== -->
+  <script>
+    // ========== UTILITY FUNCTIONS ==========
+    const hexDigits = '0123456789ABCDEF';
+
+    function randomHexDigit() {
+      return hexDigits[Math.floor(Math.random() * 16)];
+    }
+
+    function randomTwoDigitHex() {
+      return randomHexDigit() + randomHexDigit();
+    }
+
+    function hexCharToValue(ch) {
+      ch = ch.toUpperCase();
+      if (ch >= '0' && ch <= '9') return parseInt(ch);
+      return ch.charCodeAt(0) - 55; // A=65-55=10, B=11, etc.
+    }
+
+    function hexToDenary(hexStr) {
+      hexStr = hexStr.toUpperCase();
+      let result = 0;
+      for (let i = 0; i < hexStr.length; i++) {
+        result = result * 16 + hexCharToValue(hexStr[i]);
+      }
+      return result;
+    }
+
+    function hexDigitToBinary4(ch) {
+      return hexCharToValue(ch).toString(2).padStart(4, '0');
+    }
+
+    function hexToBinary(hexStr) {
+      hexStr = hexStr.toUpperCase();
+      return hexStr.split('').map(function(ch) {
+        return hexDigitToBinary4(ch);
+      }).join('');
+    }
+
+    // ========== EXERCISE 1: HEX TO BINARY ==========
+    (function() {
+      var correct = 0;
+      var total = 0;
+      var currentHex = '';
+
+      var problemEl = document.getElementById('htb-problem');
+      var answerEl = document.getElementById('htb-answer');
+      var feedbackEl = document.getElementById('htb-feedback');
+      var scoreEl = document.getElementById('htb-score');
+      var checkBtn = document.getElementById('htb-check');
+      var newBtn = document.getElementById('htb-new');
+
+      function generate() {
+        currentHex = randomTwoDigitHex();
+        problemEl.textContent = currentHex;
+        answerEl.value = '';
+        feedbackEl.className = 'feedback';
+        feedbackEl.textContent = '';
+        answerEl.focus();
+      }
+
+      function check() {
+        var userAnswer = answerEl.value.replace(/\s/g, '');
+        var correctAnswer = hexToBinary(currentHex);
+        var d1 = currentHex[0];
+        var d2 = currentHex[1];
+        var b1 = hexDigitToBinary4(d1);
+        var b2 = hexDigitToBinary4(d2);
+
+        total++;
+
+        if (userAnswer === correctAnswer) {
+          correct++;
+          feedbackEl.className = 'feedback correct';
+          feedbackEl.innerHTML = 'Correct! ' + currentHex + ' = ' + d1 + ' (' + b1 + ') + ' + d2 + ' (' + b2 + ') = <strong>' + correctAnswer + '</strong>';
+        } else {
+          feedbackEl.className = 'feedback incorrect';
+          feedbackEl.innerHTML = 'Not quite. ' + currentHex + ' = ' + d1 + ' (' + b1 + ') + ' + d2 + ' (' + b2 + ') = <strong>' + correctAnswer + '</strong>. You answered: ' + (userAnswer || '(empty)');
+        }
+
+        scoreEl.textContent = 'Score: ' + correct + ' / ' + total;
+      }
+
+      checkBtn.addEventListener('click', check);
+      newBtn.addEventListener('click', generate);
+      answerEl.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') check();
+      });
+
+      generate();
+    })();
+
+    // ========== EXERCISE 2: HEX TO DENARY ==========
+    (function() {
+      var correct = 0;
+      var total = 0;
+      var currentHex = '';
+
+      var problemEl = document.getElementById('htd-problem');
+      var answerEl = document.getElementById('htd-answer');
+      var feedbackEl = document.getElementById('htd-feedback');
+      var scoreEl = document.getElementById('htd-score');
+      var checkBtn = document.getElementById('htd-check');
+      var newBtn = document.getElementById('htd-new');
+
+      function generate() {
+        currentHex = randomTwoDigitHex();
+        problemEl.textContent = currentHex;
+        answerEl.value = '';
+        feedbackEl.className = 'feedback';
+        feedbackEl.textContent = '';
+        answerEl.focus();
+      }
+
+      function check() {
+        var userAnswer = answerEl.value.trim();
+        var d1 = currentHex[0];
+        var d2 = currentHex[1];
+        var v1 = hexCharToValue(d1);
+        var v2 = hexCharToValue(d2);
+        var correctAnswer = v1 * 16 + v2;
+
+        total++;
+
+        if (parseInt(userAnswer) === correctAnswer) {
+          correct++;
+          feedbackEl.className = 'feedback correct';
+          feedbackEl.innerHTML = 'Correct! ' + currentHex + ' = (' + d1 + ' [' + v1 + '] &times; 16) + (' + d2 + ' [' + v2 + '] &times; 1) = ' + (v1 * 16) + ' + ' + v2 + ' = <strong>' + correctAnswer + '</strong>';
+        } else {
+          feedbackEl.className = 'feedback incorrect';
+          feedbackEl.innerHTML = 'Not quite. ' + currentHex + ' = (' + d1 + ' [' + v1 + '] &times; 16) + (' + d2 + ' [' + v2 + '] &times; 1) = ' + (v1 * 16) + ' + ' + v2 + ' = <strong>' + correctAnswer + '</strong>. You answered: ' + (userAnswer || '(empty)');
+        }
+
+        scoreEl.textContent = 'Score: ' + correct + ' / ' + total;
+      }
+
+      checkBtn.addEventListener('click', check);
+      newBtn.addEventListener('click', generate);
+      answerEl.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') check();
+      });
+
+      generate();
+    })();
+
+    // ========== EXERCISE 3: COLOUR MIXER ==========
+    (function() {
+      var redInput = document.getElementById('mix-red');
+      var greenInput = document.getElementById('mix-green');
+      var blueInput = document.getElementById('mix-blue');
+      var preview = document.getElementById('colour-preview');
+      var previewText = document.getElementById('colour-preview-text');
+      var infoEl = document.getElementById('colour-info');
+
+      function isValidHexPair(str) {
+        return /^[0-9A-Fa-f]{1,2}$/.test(str);
+      }
+
+      function padHex(str) {
+        str = str.toUpperCase();
+        if (str.length === 1) str = '0' + str;
+        return str;
+      }
+
+      // Calculate relative luminance to decide text colour
+      function getContrastColour(r, g, b) {
+        var luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+        return luminance > 0.5 ? '#000000' : '#FFFFFF';
+      }
+
+      function update() {
+        var rStr = redInput.value.trim();
+        var gStr = greenInput.value.trim();
+        var bStr = blueInput.value.trim();
+
+        if (!isValidHexPair(rStr) || !isValidHexPair(gStr) || !isValidHexPair(bStr)) {
+          preview.style.background = '#f0f0f0';
+          previewText.textContent = 'Enter valid hex values (00-FF)';
+          previewText.style.color = '#666';
+          infoEl.textContent = 'Please enter valid hex values for each channel.';
+          return;
+        }
+
+        var rHex = padHex(rStr);
+        var gHex = padHex(gStr);
+        var bHex = padHex(bStr);
+        var hexCode = '#' + rHex + gHex + bHex;
+
+        var rDen = parseInt(rHex, 16);
+        var gDen = parseInt(gHex, 16);
+        var bDen = parseInt(bHex, 16);
+
+        preview.style.background = hexCode;
+        previewText.textContent = hexCode;
+        previewText.style.color = getContrastColour(rDen, gDen, bDen);
+
+        infoEl.innerHTML = 'Hex: <strong>' + hexCode + '</strong> &nbsp;|&nbsp; Denary: R=' + rDen + ', G=' + gDen + ', B=' + bDen;
+      }
+
+      redInput.addEventListener('input', update);
+      greenInput.addEventListener('input', update);
+      blueInput.addEventListener('input', update);
+
+      // Initial render
+      update();
+    })();
+
+    // ========== HINT/REVEAL TOGGLE ==========
+    document.querySelectorAll('.hint-title').forEach(function(title) {
+      title.addEventListener('click', function() {
+        var content = this.nextElementSibling;
+        var parent = this.parentElement;
+        if (parent.classList.contains('open')) {
+          parent.classList.remove('open');
+        } else {
+          parent.classList.add('open');
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>

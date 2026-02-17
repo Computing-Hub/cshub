@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Compression - Python Fundamentals</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <style>
+    .interactive-exercise { background: linear-gradient(135deg, #f0f7ff, #e8f0fe); border: 2px solid #4361ee; border-radius: 12px; padding: 1.5rem; margin: 1.5rem 0; }
+    .interactive-exercise h3 { margin-top: 0; color: #4361ee; }
+    .exercise-problem { font-size: 1.3rem; font-weight: 700; margin: 1rem 0; font-family: 'JetBrains Mono', monospace; }
+    .exercise-controls { display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap; margin: 1rem 0; }
+    .exercise-input { font-family: 'JetBrains Mono', monospace; font-size: 1.1rem; padding: 0.5rem 1rem; border: 2px solid #ccc; border-radius: 8px; width: 160px; }
+    .exercise-input:focus { border-color: #4361ee; outline: none; }
+    .check-btn, .new-btn { padding: 0.5rem 1.2rem; font-size: 1rem; font-weight: 600; border: none; border-radius: 8px; cursor: pointer; transition: background 0.2s; }
+    .check-btn { background: #4361ee; color: white; }
+    .check-btn:hover { background: #3a0ca3; }
+    .new-btn { background: #06d6a0; color: white; }
+    .new-btn:hover { background: #05b384; }
+    .feedback { margin-top: 0.5rem; padding: 0.5rem 1rem; border-radius: 8px; font-weight: 600; display: none; }
+    .feedback.correct { background: #e6f9f1; color: #087f5b; border: 1px solid #06d6a0; display: block; }
+    .feedback.incorrect { background: #fff5f5; color: #c92a2a; border: 1px solid #e63946; display: block; }
+    .score-display { font-weight: 600; color: #4361ee; margin-top: 0.5rem; }
+    .did-you-know { background: linear-gradient(135deg, #e8f4fd, #d1ecf9); border: 2px solid #0dcaf0; border-radius: 12px; padding: 1.5rem; margin: 1rem 0; }
+    .did-you-know strong:first-child { color: #0a7c9f; display: block; margin-bottom: 0.25rem; }
+    .exam-tip { background: linear-gradient(135deg, #f3e8ff, #ede5ff); border: 2px solid #7209b7; border-radius: 12px; padding: 1.5rem; margin: 1rem 0; }
+    .exam-tip strong:first-child { color: #7209b7; display: block; margin-bottom: 0.25rem; }
+    .case-study { background: #ffffff; border: 2px solid #6c757d; border-radius: 12px; padding: 1.5rem; margin: 1rem 0; }
+    .case-study strong:first-child { color: #495057; display: block; margin-bottom: 0.25rem; }
+    .vocab-table td:first-child { font-weight: 700; white-space: nowrap; }
+    .scenario-radio-group { display: flex; gap: 1.5rem; align-items: center; margin: 0.5rem 0; }
+    .scenario-radio-group label { font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 0.3rem; }
+    .scenario-radio-group input[type="radio"] { cursor: pointer; width: 1.1rem; height: 1.1rem; }
+    .exercise-input-wide { font-family: 'JetBrains Mono', monospace; font-size: 1.1rem; padding: 0.5rem 1rem; border: 2px solid #ccc; border-radius: 8px; width: 260px; }
+    .exercise-input-wide:focus { border-color: #4361ee; outline: none; }
+    .mode-toggle { display: flex; gap: 0.5rem; margin-bottom: 0.75rem; }
+    .mode-btn { padding: 0.4rem 1rem; font-size: 0.9rem; font-weight: 600; border: 2px solid #4361ee; border-radius: 8px; cursor: pointer; transition: all 0.2s; background: white; color: #4361ee; }
+    .mode-btn.active { background: #4361ee; color: white; }
+  </style>
+</head>
+<body>
+
+  <header class="site-header">
+    <p><a href="../index.html">&larr; Back to Course</a></p>
+    <h1>Compression</h1>
+    <p class="subtitle">Lossy and lossless &mdash; how we shrink files without (always) losing quality</p>
+  </header>
+
+  <main>
+
+    <!-- ==================== THE IDEA ==================== -->
+    <section class="idea">
+      <span class="section-label">The Idea</span>
+      <h2>Why Compress?</h2>
+
+      <p>Every digital file &mdash; whether it is a photograph, a song, a video, or a document &mdash; is ultimately stored as a long sequence of binary data. The problem is that <strong>uncompressed files are enormous</strong>. A single uncompressed photograph from a modern phone camera can exceed <strong>25 MB</strong>. A three-minute song stored as raw audio takes up roughly <strong>30 MB</strong>. And a two-hour film in uncompressed 4K? That would be around <strong>7 terabytes</strong> &mdash; more than most hard drives can hold.</p>
+
+      <p><strong>Compression</strong> is the process of reducing the file size of data so that it takes up less storage space. This is essential for three reasons:</p>
+
+      <ul>
+        <li><strong>Faster transmission:</strong> Smaller files can be sent over the internet more quickly. Streaming a 7 TB film would be impossible, but a compressed 5 GB version streams smoothly.</li>
+        <li><strong>Less storage:</strong> Your phone can hold thousands of compressed photos. Without compression, you might fit only a few hundred.</li>
+        <li><strong>Lower bandwidth:</strong> Compressed data uses less network capacity, which means less cost and less congestion on networks.</li>
+      </ul>
+
+      <p>There are <strong>two fundamental types</strong> of compression, and understanding the difference between them is one of the most important concepts in your GCSE:</p>
+
+      <ul>
+        <li><strong>Lossy compression</strong> &mdash; permanently removes some data to achieve much smaller file sizes. The original cannot be perfectly restored.</li>
+        <li><strong>Lossless compression</strong> &mdash; reduces file size without removing any data. The original can be perfectly reconstructed from the compressed version.</li>
+      </ul>
+
+      <div class="key-concept">
+        <strong>Key Concept: Compression Ratio</strong>
+        The <strong>compression ratio</strong> measures how much a file has been shrunk. It is calculated as:<br><br>
+        <strong>Compression Ratio = Original Size &divide; Compressed Size</strong><br><br>
+        For example, if a 20 MB file is compressed to 4 MB, the compression ratio is 20 &divide; 4 = <strong>5:1</strong> (read as &ldquo;five to one&rdquo;). This means the original is five times larger than the compressed version. You can also express compression as a <strong>percentage saved</strong>: (20 &minus; 4) &divide; 20 &times; 100 = <strong>80%</strong> reduction.
+      </div>
+    </section>
+
+    <!-- ==================== EXPLORE ==================== -->
+    <section class="explore">
+      <span class="section-label">Explore</span>
+      <h2>Lossy vs Lossless Compression</h2>
+
+      <h3>Lossy Compression</h3>
+
+      <p>Lossy compression works by <strong>permanently removing data</strong> that is considered less important or less noticeable to human senses. Once this data is discarded, it is gone forever &mdash; the original file <strong>cannot</strong> be perfectly restored from the compressed version.</p>
+
+      <p>The trade-off is that lossy compression achieves <strong>dramatically smaller file sizes</strong> &mdash; often reducing files to just 5&ndash;10% of their original size. For media files where small reductions in quality are acceptable, this is an excellent deal.</p>
+
+      <p>Common lossy formats include:</p>
+      <ul>
+        <li><strong>JPEG</strong> (images) &mdash; reduces colour detail and removes fine textures that the human eye barely notices. A quality slider lets you choose how much data to discard.</li>
+        <li><strong>MP3</strong> (audio) &mdash; removes sounds at frequencies that the human ear cannot easily hear, such as very high-pitched tones or quiet sounds masked by louder ones.</li>
+        <li><strong>MP4 / H.265</strong> (video) &mdash; compresses video by storing only the differences between frames rather than every complete frame, and by removing visual detail the eye will not notice.</li>
+      </ul>
+
+      <p><strong>Best for:</strong> photographs, music, podcasts, video streaming &mdash; any media where a small reduction in quality is acceptable in return for a much smaller file.</p>
+
+      <p><strong>Important:</strong> Every time you re-save a lossy file, <strong>more data is lost</strong>. If you open a JPEG, edit it, and save it again as a JPEG, the quality degrades further. This is called <strong>generation loss</strong>, and it is why professionals keep uncompressed originals and only export to lossy formats at the end.</p>
+
+      <h3>Lossless Compression</h3>
+
+      <p>Lossless compression reduces file size <strong>without removing any data at all</strong>. The original file can be perfectly reconstructed &mdash; bit for bit &mdash; from the compressed version. It achieves this by finding <strong>patterns and redundancy</strong> in the data and encoding them more efficiently.</p>
+
+      <p>The trade-off is that lossless compression typically achieves a <strong>smaller reduction in file size</strong> compared to lossy &mdash; usually around <strong>50&ndash;70%</strong> of the original, depending on the type of data.</p>
+
+      <p>Common lossless formats include:</p>
+      <ul>
+        <li><strong>PNG</strong> (images) &mdash; perfect quality, commonly used for screenshots, logos, and images with sharp edges or text.</li>
+        <li><strong>FLAC</strong> (audio) &mdash; audiophile-quality music with no data loss, roughly half the size of uncompressed audio.</li>
+        <li><strong>ZIP / 7z</strong> (any file) &mdash; general-purpose lossless compression that can bundle and shrink any type of file.</li>
+        <li><strong>GIF</strong> (images) &mdash; lossless but limited to a palette of 256 colours, best for simple graphics and short animations.</li>
+      </ul>
+
+      <p><strong>Best for:</strong> text files, source code, medical images, legal documents, logos, spreadsheets &mdash; any situation where <strong>quality must be preserved perfectly</strong> and no data can be lost.</p>
+
+      <h3>Comparison Table</h3>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Feature</th>
+            <th>Lossy Compression</th>
+            <th>Lossless Compression</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Data loss</strong></td>
+            <td>Yes &mdash; some data is permanently removed</td>
+            <td>No &mdash; all original data is preserved</td>
+          </tr>
+          <tr>
+            <td><strong>File size reduction</strong></td>
+            <td>Very large (often 80&ndash;95%)</td>
+            <td>Moderate (typically 30&ndash;70%)</td>
+          </tr>
+          <tr>
+            <td><strong>Reversibility</strong></td>
+            <td>Irreversible &mdash; cannot recover original</td>
+            <td>Fully reversible &mdash; original perfectly restored</td>
+          </tr>
+          <tr>
+            <td><strong>Example formats</strong></td>
+            <td>JPEG, MP3, MP4, AAC, H.265</td>
+            <td>PNG, FLAC, ZIP, GIF, 7z</td>
+          </tr>
+          <tr>
+            <td><strong>Best use cases</strong></td>
+            <td>Photos, music, video, streaming</td>
+            <td>Text, code, medical images, logos, archives</td>
+          </tr>
+          <tr>
+            <td><strong>Re-saving</strong></td>
+            <td>Each re-save degrades quality further</td>
+            <td>Can be saved and opened repeatedly with no loss</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="warning">
+        <strong>Watch Out:</strong>
+        Students often say that lossy compression &ldquo;loses quality.&rdquo; Be more precise in your exam answers: lossy compression <strong>permanently removes data</strong> that cannot be recovered. Saying &ldquo;removes data&rdquo; is more accurate and scientifically precise than &ldquo;loses quality,&rdquo; and examiners reward precise language.
+      </div>
+    </section>
+
+    <!-- ==================== UNDERSTAND ==================== -->
+    <section class="understand">
+      <span class="section-label">Understand</span>
+      <h2>How Compression Works</h2>
+
+      <h3>Run-Length Encoding (RLE) &mdash; A Simple Lossless Technique</h3>
+
+      <p><strong>Run-Length Encoding</strong> is one of the simplest and most intuitive compression algorithms. Instead of storing every single value individually, RLE replaces <strong>consecutive repeated values</strong> (called &ldquo;runs&rdquo;) with a single value and a count.</p>
+
+      <p>For example, instead of storing:</p>
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Before RLE Compression</span>
+        </div>
+        <pre><code>  AAAAAABBBCCC
+
+  12 characters = 12 bytes</code></pre>
+      </div>
+
+      <p>We can store:</p>
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">After RLE Compression</span>
+        </div>
+        <pre><code>  6A3B3C
+
+  6 characters = 6 bytes    (50% smaller!)</code></pre>
+      </div>
+
+      <p>The compressed version tells us: &ldquo;six As, three Bs, three Cs.&rdquo; We can perfectly reconstruct the original, so this is <strong>lossless</strong>.</p>
+
+      <h4>Worked Example: A 1-Bit Image Row</h4>
+
+      <p>Imagine a row of pixels in a simple black-and-white image, where W = white and B = black:</p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">RLE Worked Example &mdash; Image Row</span>
+        </div>
+        <pre><code>  Original pixel row:  W W W W B B B B W W W
+  Original length:     11 values
+
+  RLE encoded:         4W 4B 3W
+  Encoded length:      6 values  (3 pairs of count + colour)
+
+  Saving:  11 values reduced to 6 values = 45% smaller
+
+  To decode, simply expand each pair:
+    4W  &rarr;  W W W W
+    4B  &rarr;  B B B B
+    3W  &rarr;  W W W
+  Result:  W W W W B B B B W W W  (identical to original)</code></pre>
+      </div>
+
+      <p>RLE works extremely well for data with <strong>lots of repetition</strong> &mdash; simple graphics, icons, fax transmissions, and bitmap images with large areas of uniform colour. It works <strong>poorly</strong> on data with little repetition (e.g., a photograph with constantly varying colours), where the encoded version might even be <em>larger</em> than the original.</p>
+
+      <h3>Huffman Coding &mdash; Brief Explanation</h3>
+
+      <p><strong>Huffman coding</strong> is a more sophisticated lossless technique. It works by analysing how frequently each value appears in the data and assigning <strong>shorter binary codes to the most common values</strong> and <strong>longer codes to the rarer values</strong>.</p>
+
+      <p>Think of Morse code as an analogy: the letter E (the most common letter in English) is encoded as just a single dot ( &middot; ), while the rare letter Q is encoded as a much longer sequence ( &ndash; &ndash; &middot; &ndash; ). Huffman coding applies this same idea automatically to any data.</p>
+
+      <p>For example, if the letter &lsquo;e&rsquo; appears 1,000 times in a text file and the letter &lsquo;z&rsquo; appears only 3 times, Huffman coding would assign a very short binary code (perhaps just 2 bits) to &lsquo;e&rsquo; and a longer code (perhaps 10 bits) to &lsquo;z&rsquo;. Overall, the total number of bits needed to encode the entire file is minimised.</p>
+
+      <div class="try-this">
+        <strong>Try This:</strong> Think about the text message &ldquo;AAAAABBC&rdquo;. The letter A appears 5 times, B appears 2 times, and C appears once. If we used a fixed-length code of 2 bits per character, we would need 8 &times; 2 = 16 bits. But with Huffman coding, we could assign: A = 0 (1 bit), B = 10 (2 bits), C = 11 (2 bits). Total: 5(1) + 2(2) + 1(2) = 11 bits &mdash; a saving of 31%!
+      </div>
+
+      <h3>How JPEG Compression Works (Simplified)</h3>
+
+      <p>JPEG is the most widely used lossy image format. Understanding the basic steps helps you explain <em>why</em> lossy compression removes data without making images look terrible:</p>
+
+      <ol>
+        <li><strong>Divide the image into 8&times;8 blocks:</strong> The image is split into small squares of 8 by 8 pixels (64 pixels each).</li>
+        <li><strong>Apply a mathematical transformation:</strong> A technique called the <em>Discrete Cosine Transform</em> (DCT) converts each block from pixel values into frequency information &mdash; essentially separating the &ldquo;smooth gradients&rdquo; from the &ldquo;fine details.&rdquo;</li>
+        <li><strong>Remove fine detail:</strong> The high-frequency data (sharp edges, tiny textures) is reduced or discarded. Human eyes are much more sensitive to gradual colour changes than to fine detail, so this removal is often barely noticeable.</li>
+        <li><strong>Quality slider:</strong> When you save a JPEG, the &ldquo;quality&rdquo; setting controls how aggressively step 3 discards data. Quality 100 keeps almost everything (large file). Quality 10 discards most of the detail (tiny file, visible degradation).</li>
+      </ol>
+    </section>
+
+    <!-- ==================== CASE STUDIES ==================== -->
+    <section class="explore">
+      <span class="section-label">Explore</span>
+      <h2>Real-World Case Studies</h2>
+
+      <div class="case-study">
+        <strong>Case Study 1: Spotify Audio Streaming</strong>
+        <p>A typical three-minute song stored as uncompressed audio (CD quality WAV) takes up approximately <strong>30 MB</strong>. Spotify uses lossy compression (Ogg Vorbis and AAC codecs) to shrink these files dramatically:</p>
+        <ul>
+          <li><strong>Normal quality (160 kbps):</strong> approximately 3.5 MB &mdash; a compression ratio of about 8.5:1</li>
+          <li><strong>High quality (256 kbps):</strong> approximately 5.5 MB &mdash; a compression ratio of about 5.5:1</li>
+          <li><strong>Very high quality (320 kbps):</strong> approximately 7 MB &mdash; a compression ratio of about 4.3:1</li>
+        </ul>
+        <p>How does it achieve this? The lossy codec analyses the audio and identifies frequencies that humans can barely hear &mdash; very high-pitched sounds above 16 kHz, quiet tones masked by louder simultaneous sounds, and extremely subtle variations. These are removed or simplified. Most listeners cannot tell the difference between 320 kbps and uncompressed audio.</p>
+        <p>Without compression, Spotify&rsquo;s library of over 100 million tracks would require vastly more server storage, and streaming over mobile data would be impractical.</p>
+      </div>
+
+      <div class="case-study">
+        <strong>Case Study 2: Medical Imaging</strong>
+        <p>Hospitals store X-rays, CT scans, and MRI images in a format called <strong>DICOM</strong> (Digital Imaging and Communications in Medicine). These images <strong>must</strong> use <strong>lossless compression</strong> &mdash; lossy formats like JPEG are forbidden for diagnostic images.</p>
+        <p>Why? Because even a tiny amount of data loss could mean the difference between spotting a small tumour and missing it, or correctly identifying a hairline fracture and overlooking it. A radiologist needs to see <strong>every single detail</strong> in the image, exactly as the scanner captured it.</p>
+        <p>Lossless compression still achieves a useful reduction of <strong>50&ndash;70%</strong> in file size while preserving perfect quality. For a hospital generating thousands of scans per day, this saving in storage is significant &mdash; without compromising patient safety.</p>
+      </div>
+
+      <div class="case-study">
+        <strong>Case Study 3: 4K Video Streaming</strong>
+        <p>This is where compression truly works miracles. Consider the numbers:</p>
+        <ul>
+          <li>A single frame of 4K video (3840 &times; 2160 pixels, 24-bit colour) = approximately <strong>24 MB</strong></li>
+          <li>At 30 frames per second, one second of video = approximately <strong>720 MB</strong></li>
+          <li>A two-hour film at this rate = approximately <strong>5.2 TB uncompressed</strong></li>
+        </ul>
+        <p>Modern video codecs like <strong>H.265 (HEVC)</strong> compress this to just <strong>5&ndash;15 GB</strong> &mdash; a compression ratio of around 500:1. They achieve this by only storing the <em>differences</em> between consecutive frames (since most of the image stays the same from one frame to the next) and by applying lossy techniques to remove visual detail the eye will not notice during motion.</p>
+        <p><strong>Without compression, services like Netflix and YouTube simply could not exist.</strong> No internet connection could stream 720 MB per second of uncompressed video, and no server could store billions of uncompressed films.</p>
+      </div>
+
+      <div class="did-you-know">
+        <strong>Did You Know?</strong>
+        The first digital image was created in 1957 by Russell Kirsch at the US National Bureau of Standards. It was a picture of his infant son and measured just 176 &times; 176 pixels &mdash; a total of <strong>30,976 pixels</strong>. By contrast, a modern 12-megapixel phone camera captures <strong>12,000,000 pixels</strong> per photograph &mdash; nearly 400 times more data. Without compression, a single 12 MP photo in full 24-bit colour would take up 36 MB. Thanks to JPEG compression, that same photo typically takes up only 3&ndash;5 MB.
+      </div>
+    </section>
+
+    <!-- ==================== INTERACTIVE EXERCISE 1: RUN-LENGTH ENCODING ==================== -->
+    <div class="interactive-exercise" id="rle-exercise">
+      <h3>Interactive Exercise 1: Run-Length Encoding</h3>
+      <p>Practice encoding and decoding with RLE. Use the buttons to switch mode.</p>
+
+      <div class="mode-toggle">
+        <button class="mode-btn active" id="rle-encode-mode" onclick="setRleMode('encode')">Encode Mode</button>
+        <button class="mode-btn" id="rle-decode-mode" onclick="setRleMode('decode')">Decode Mode</button>
+      </div>
+
+      <p id="rle-instructions"><strong>Encode:</strong> Convert the repeated string into RLE notation (e.g., AAABBB &rarr; 3A3B)</p>
+
+      <div class="exercise-problem" id="rle-problem">Loading...</div>
+
+      <div class="exercise-controls">
+        <input type="text" class="exercise-input-wide" id="rle-answer" placeholder="e.g. 3A3B" autocomplete="off" />
+        <button class="check-btn" onclick="checkRle()">Check Answer</button>
+        <button class="new-btn" onclick="newRleQuestion()">New Question</button>
+      </div>
+
+      <div class="feedback" id="rle-feedback"></div>
+      <div class="score-display" id="rle-score">Score: 0 / 0</div>
+    </div>
+
+    <script>
+      // ===== EXERCISE 1: Run-Length Encoding =====
+      var rleMode = 'encode';
+      var rleOriginal = '';
+      var rleExpected = '';
+      var rleCorrect = 0;
+      var rleTotal = 0;
+
+      function setRleMode(mode) {
+        rleMode = mode;
+        document.getElementById('rle-encode-mode').className = mode === 'encode' ? 'mode-btn active' : 'mode-btn';
+        document.getElementById('rle-decode-mode').className = mode === 'decode' ? 'mode-btn active' : 'mode-btn';
+        if (mode === 'encode') {
+          document.getElementById('rle-instructions').innerHTML = '<strong>Encode:</strong> Convert the repeated string into RLE notation (e.g., AAABBB &rarr; 3A3B)';
+        } else {
+          document.getElementById('rle-instructions').innerHTML = '<strong>Decode:</strong> Expand the RLE notation back into the original string (e.g., 3X5Y2Z &rarr; XXXYYYYYYZZ)';
+        }
+        newRleQuestion();
+      }
+
+      function generateRleString() {
+        var letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        var result = '';
+        var numGroups = 2 + Math.floor(Math.random() * 4); // 2 to 5 groups
+        var usedLetters = [];
+        for (var i = 0; i < numGroups; i++) {
+          var letter;
+          do {
+            letter = letters[Math.floor(Math.random() * 10)]; // use first 10 letters for simplicity
+          } while (usedLetters.length > 0 && usedLetters[usedLetters.length - 1] === letter);
+          usedLetters.push(letter);
+          var count = 2 + Math.floor(Math.random() * 7); // 2 to 8 repetitions
+          for (var j = 0; j < count; j++) {
+            result += letter;
+          }
+        }
+        return result;
+      }
+
+      function encodeRle(str) {
+        var encoded = '';
+        var i = 0;
+        while (i < str.length) {
+          var ch = str[i];
+          var count = 1;
+          while (i + count < str.length && str[i + count] === ch) {
+            count++;
+          }
+          encoded += count + ch;
+          i += count;
+        }
+        return encoded;
+      }
+
+      function decodeRle(str) {
+        var decoded = '';
+        var i = 0;
+        while (i < str.length) {
+          var numStr = '';
+          while (i < str.length && str[i] >= '0' && str[i] <= '9') {
+            numStr += str[i];
+            i++;
+          }
+          if (i < str.length) {
+            var count = parseInt(numStr, 10) || 1;
+            for (var j = 0; j < count; j++) {
+              decoded += str[i];
+            }
+            i++;
+          }
+        }
+        return decoded;
+      }
+
+      function generateRleEncoded() {
+        var letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        var encoded = '';
+        var numGroups = 2 + Math.floor(Math.random() * 4);
+        var usedLetters = [];
+        for (var i = 0; i < numGroups; i++) {
+          var letter;
+          do {
+            letter = letters[Math.floor(Math.random() * 10)];
+          } while (usedLetters.length > 0 && usedLetters[usedLetters.length - 1] === letter);
+          usedLetters.push(letter);
+          var count = 2 + Math.floor(Math.random() * 7);
+          encoded += count + letter;
+        }
+        return encoded;
+      }
+
+      function newRleQuestion() {
+        if (rleMode === 'encode') {
+          rleOriginal = generateRleString();
+          rleExpected = encodeRle(rleOriginal);
+          document.getElementById('rle-problem').textContent = rleOriginal;
+        } else {
+          var encoded = generateRleEncoded();
+          rleOriginal = encoded;
+          rleExpected = decodeRle(encoded);
+          document.getElementById('rle-problem').textContent = encoded;
+        }
+        document.getElementById('rle-answer').value = '';
+        document.getElementById('rle-feedback').className = 'feedback';
+        document.getElementById('rle-feedback').textContent = '';
+        document.getElementById('rle-answer').focus();
+      }
+
+      function checkRle() {
+        var userAnswer = document.getElementById('rle-answer').value.trim().toUpperCase();
+        var feedback = document.getElementById('rle-feedback');
+
+        if (userAnswer === '') {
+          feedback.className = 'feedback incorrect';
+          feedback.textContent = 'Please enter an answer.';
+          return;
+        }
+
+        rleTotal++;
+
+        if (userAnswer === rleExpected.toUpperCase()) {
+          rleCorrect++;
+          feedback.className = 'feedback correct';
+          if (rleMode === 'encode') {
+            feedback.innerHTML = 'Correct! ' + rleOriginal + ' encodes to <strong>' + rleExpected + '</strong>. Original: ' + rleOriginal.length + ' characters, encoded: ' + rleExpected.length + ' characters.';
+          } else {
+            feedback.innerHTML = 'Correct! ' + rleOriginal + ' decodes to <strong>' + rleExpected + '</strong>.';
+          }
+        } else {
+          feedback.className = 'feedback incorrect';
+          if (rleMode === 'encode') {
+            feedback.innerHTML = 'Not quite. The correct encoding of ' + rleOriginal + ' is <strong>' + rleExpected + '</strong>. Count each consecutive run of letters. You answered: ' + userAnswer;
+          } else {
+            feedback.innerHTML = 'Not quite. ' + rleOriginal + ' decodes to <strong>' + rleExpected + '</strong>. Expand each number-letter pair. You answered: ' + userAnswer;
+          }
+        }
+
+        document.getElementById('rle-score').textContent = 'Score: ' + rleCorrect + ' / ' + rleTotal;
+      }
+
+      document.getElementById('rle-answer').addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') checkRle();
+      });
+
+      newRleQuestion();
+    </script>
+
+    <!-- ==================== INTERACTIVE EXERCISE 2: COMPRESSION RATIO CALCULATOR ==================== -->
+    <div class="interactive-exercise" id="ratio-exercise">
+      <h3>Interactive Exercise 2: Compression Ratio Calculator</h3>
+      <p>Calculate the <strong>compression ratio</strong> (e.g., 5:1) and the <strong>percentage saved</strong> (e.g., 80%) from the given file sizes.</p>
+
+      <div class="exercise-problem" id="ratio-problem">Loading...</div>
+
+      <div class="exercise-controls">
+        <label style="font-weight: 600;">Ratio:</label>
+        <input type="text" class="exercise-input" id="ratio-answer" placeholder="e.g. 5:1" autocomplete="off" style="width: 100px;" />
+        <label style="font-weight: 600;">% saved:</label>
+        <input type="text" class="exercise-input" id="percent-answer" placeholder="e.g. 80" autocomplete="off" style="width: 80px;" />
+        <span style="font-weight: 600;">%</span>
+      </div>
+
+      <div class="exercise-controls">
+        <button class="check-btn" onclick="checkRatio()">Check Answer</button>
+        <button class="new-btn" onclick="newRatioQuestion()">New Question</button>
+      </div>
+
+      <div class="feedback" id="ratio-feedback"></div>
+      <div class="score-display" id="ratio-score">Score: 0 / 0</div>
+    </div>
+
+    <script>
+      // ===== EXERCISE 2: Compression Ratio Calculator =====
+      var ratioOriginal = 0;
+      var ratioCompressed = 0;
+      var ratioCorrect = 0;
+      var ratioTotal = 0;
+
+      function newRatioQuestion() {
+        // Generate clean ratios for student-friendly numbers
+        var ratios = [
+          [10, 2], [10, 5], [12, 3], [12, 4], [15, 3], [15, 5],
+          [20, 4], [20, 5], [20, 10], [24, 6], [24, 8], [25, 5],
+          [30, 6], [30, 10], [36, 9], [40, 8], [40, 10], [50, 10],
+          [50, 25], [60, 12], [60, 15], [80, 16], [80, 20], [100, 10],
+          [100, 20], [100, 25], [100, 50], [200, 40], [200, 50], [500, 100]
+        ];
+        var pair = ratios[Math.floor(Math.random() * ratios.length)];
+        ratioOriginal = pair[0];
+        ratioCompressed = pair[1];
+
+        var units = ratioOriginal >= 100 ? 'MB' : 'MB';
+        document.getElementById('ratio-problem').innerHTML =
+          'Original file size: <strong>' + ratioOriginal + ' MB</strong>&nbsp;&nbsp;&nbsp;Compressed file size: <strong>' + ratioCompressed + ' MB</strong>';
+
+        document.getElementById('ratio-answer').value = '';
+        document.getElementById('percent-answer').value = '';
+        document.getElementById('ratio-feedback').className = 'feedback';
+        document.getElementById('ratio-feedback').textContent = '';
+        document.getElementById('ratio-answer').focus();
+      }
+
+      function checkRatio() {
+        var ratioInput = document.getElementById('ratio-answer').value.trim();
+        var percentInput = document.getElementById('percent-answer').value.trim();
+        var feedback = document.getElementById('ratio-feedback');
+
+        if (ratioInput === '' || percentInput === '') {
+          feedback.className = 'feedback incorrect';
+          feedback.textContent = 'Please fill in both fields: the ratio and the percentage saved.';
+          return;
+        }
+
+        ratioTotal++;
+
+        var expectedRatio = ratioOriginal / ratioCompressed;
+        var expectedPercent = ((ratioOriginal - ratioCompressed) / ratioOriginal * 100);
+
+        // Parse ratio — accept formats like "5:1", "5", "5 to 1"
+        var ratioValue = 0;
+        ratioInput = ratioInput.replace(/\s+/g, '');
+        if (ratioInput.indexOf(':') !== -1) {
+          var parts = ratioInput.split(':');
+          ratioValue = parseFloat(parts[0]) / parseFloat(parts[1]);
+        } else if (ratioInput.toLowerCase().indexOf('to') !== -1) {
+          var parts = ratioInput.toLowerCase().split('to');
+          ratioValue = parseFloat(parts[0]) / parseFloat(parts[1]);
+        } else {
+          ratioValue = parseFloat(ratioInput);
+        }
+
+        var percentValue = parseFloat(percentInput.replace('%', ''));
+
+        var ratioCorrectFlag = Math.abs(ratioValue - expectedRatio) < 0.01;
+        var percentCorrectFlag = Math.abs(percentValue - expectedPercent) < 0.5;
+
+        if (ratioCorrectFlag && percentCorrectFlag) {
+          ratioCorrect++;
+          feedback.className = 'feedback correct';
+          feedback.innerHTML = 'Correct! ' + ratioOriginal + ' MB &divide; ' + ratioCompressed + ' MB = <strong>' + expectedRatio + ':1</strong>. Percentage saved: (' + ratioOriginal + ' &minus; ' + ratioCompressed + ') &divide; ' + ratioOriginal + ' &times; 100 = <strong>' + Math.round(expectedPercent) + '%</strong>.';
+        } else {
+          feedback.className = 'feedback incorrect';
+          var msg = 'Not quite. ';
+          if (!ratioCorrectFlag) {
+            msg += 'Ratio: ' + ratioOriginal + ' &divide; ' + ratioCompressed + ' = <strong>' + expectedRatio + ':1</strong>. ';
+          }
+          if (!percentCorrectFlag) {
+            msg += 'Percentage saved: (' + ratioOriginal + ' &minus; ' + ratioCompressed + ') &divide; ' + ratioOriginal + ' &times; 100 = <strong>' + Math.round(expectedPercent) + '%</strong>. ';
+          }
+          if (ratioCorrectFlag) msg += 'Your ratio was correct! ';
+          if (percentCorrectFlag) msg += 'Your percentage was correct! ';
+          feedback.innerHTML = msg;
+        }
+
+        document.getElementById('ratio-score').textContent = 'Score: ' + ratioCorrect + ' / ' + ratioTotal;
+      }
+
+      document.getElementById('ratio-answer').addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') document.getElementById('percent-answer').focus();
+      });
+      document.getElementById('percent-answer').addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') checkRatio();
+      });
+
+      newRatioQuestion();
+    </script>
+
+    <!-- ==================== INTERACTIVE EXERCISE 3: LOSSY OR LOSSLESS? ==================== -->
+    <div class="interactive-exercise" id="scenario-exercise">
+      <h3>Interactive Exercise 3: Lossy or Lossless?</h3>
+      <p>Read the scenario and decide: would <strong>lossy</strong> or <strong>lossless</strong> compression be more appropriate?</p>
+
+      <div class="exercise-problem" id="scenario-problem" style="font-size: 1.1rem; font-family: 'Inter', sans-serif;">Loading...</div>
+
+      <div class="scenario-radio-group">
+        <label><input type="radio" name="scenario-choice" value="lossy" /> Lossy</label>
+        <label><input type="radio" name="scenario-choice" value="lossless" /> Lossless</label>
+      </div>
+
+      <div class="exercise-controls">
+        <button class="check-btn" onclick="checkScenario()">Check Answer</button>
+        <button class="new-btn" onclick="newScenarioQuestion()">New Question</button>
+      </div>
+
+      <div class="feedback" id="scenario-feedback"></div>
+      <div class="score-display" id="scenario-score">Score: 0 / 0</div>
+    </div>
+
+    <script>
+      // ===== EXERCISE 3: Lossy or Lossless? =====
+      var scenarios = [
+        {
+          text: "A hospital storing CT scan images for diagnosis.",
+          answer: "lossless",
+          explanation: "Medical images must use lossless compression because even tiny data loss could mean missing a tumour or fracture. Patient safety depends on perfect image quality."
+        },
+        {
+          text: "A music streaming service delivering songs to millions of listeners over mobile networks.",
+          answer: "lossy",
+          explanation: "Music streaming uses lossy compression (e.g., MP3, AAC) because the small quality loss is barely noticeable to most listeners, and the dramatically smaller files make streaming over mobile data practical."
+        },
+        {
+          text: "A software developer creating a backup of all their source code files.",
+          answer: "lossless",
+          explanation: "Source code must be preserved exactly. Even one changed character could introduce a bug or break the program entirely. Lossless formats like ZIP are essential."
+        },
+        {
+          text: "A social media platform allowing users to upload photos to their profiles.",
+          answer: "lossy",
+          explanation: "Social media photos are viewed on screens at reduced resolution. Lossy compression (JPEG) dramatically reduces file sizes, saving storage and bandwidth, while the quality loss is barely visible on a phone or monitor."
+        },
+        {
+          text: "A law firm archiving legal contracts and court documents as digital files.",
+          answer: "lossless",
+          explanation: "Legal documents must be preserved exactly as written. Any alteration to the data, no matter how small, could change the meaning of a legal term or clause. Lossless compression (e.g., PDF with lossless, ZIP) is essential."
+        },
+        {
+          text: "A video streaming service like Netflix delivering films to viewers' homes.",
+          answer: "lossy",
+          explanation: "Video streaming requires lossy compression because uncompressed 4K video would be over 700 MB per second. Lossy codecs like H.265 reduce this to a manageable stream while maintaining excellent visual quality."
+        },
+        {
+          text: "A graphic designer saving a company logo with sharp edges and text on a transparent background.",
+          answer: "lossless",
+          explanation: "Logos require sharp, precise edges and often need transparent backgrounds. Lossless formats like PNG preserve every pixel perfectly. Lossy compression (JPEG) would blur the edges and does not support transparency."
+        },
+        {
+          text: "A podcast platform storing thousands of episodes for on-demand listening.",
+          answer: "lossy",
+          explanation: "Podcasts are primarily speech audio, and lossy compression (MP3, AAC) can reduce file sizes by 90% with minimal perceptible quality loss for voice recordings. This saves enormous amounts of server storage."
+        },
+        {
+          text: "A scientist emailing a spreadsheet of experimental results to a colleague.",
+          answer: "lossless",
+          explanation: "Scientific data must be preserved exactly. Changing even one digit in a dataset could invalidate experimental results. Lossless compression (ZIP) preserves every value precisely."
+        },
+        {
+          text: "A satellite transmitting high-resolution weather images back to Earth over a limited bandwidth connection.",
+          answer: "lossless",
+          explanation: "Weather satellite images are used for scientific analysis and forecasting. Meteorologists need accurate data to detect cloud patterns and storm formations. Lossless compression preserves all detail while still reducing file size for transmission."
+        }
+      ];
+
+      var currentScenarioIndex = -1;
+      var scenarioCorrect = 0;
+      var scenarioTotal = 0;
+      var usedScenarios = [];
+
+      function newScenarioQuestion() {
+        // If all used, reset
+        if (usedScenarios.length >= scenarios.length) {
+          usedScenarios = [];
+        }
+
+        var index;
+        do {
+          index = Math.floor(Math.random() * scenarios.length);
+        } while (usedScenarios.indexOf(index) !== -1);
+
+        usedScenarios.push(index);
+        currentScenarioIndex = index;
+
+        document.getElementById('scenario-problem').textContent = scenarios[index].text;
+        document.getElementById('scenario-feedback').className = 'feedback';
+        document.getElementById('scenario-feedback').textContent = '';
+
+        // Clear radio buttons
+        var radios = document.querySelectorAll('input[name="scenario-choice"]');
+        radios.forEach(function(r) { r.checked = false; });
+      }
+
+      function checkScenario() {
+        var feedback = document.getElementById('scenario-feedback');
+        var selectedRadio = document.querySelector('input[name="scenario-choice"]:checked');
+
+        if (!selectedRadio) {
+          feedback.className = 'feedback incorrect';
+          feedback.textContent = 'Please select either Lossy or Lossless.';
+          return;
+        }
+
+        scenarioTotal++;
+
+        var scenario = scenarios[currentScenarioIndex];
+        var userChoice = selectedRadio.value;
+
+        if (userChoice === scenario.answer) {
+          scenarioCorrect++;
+          feedback.className = 'feedback correct';
+          feedback.innerHTML = 'Correct &mdash; <strong>' + scenario.answer.charAt(0).toUpperCase() + scenario.answer.slice(1) + '</strong>! ' + scenario.explanation;
+        } else {
+          feedback.className = 'feedback incorrect';
+          feedback.innerHTML = 'Not quite. The best answer is <strong>' + scenario.answer.charAt(0).toUpperCase() + scenario.answer.slice(1) + '</strong>. ' + scenario.explanation;
+        }
+
+        document.getElementById('scenario-score').textContent = 'Score: ' + scenarioCorrect + ' / ' + scenarioTotal;
+      }
+
+      newScenarioQuestion();
+    </script>
+
+    <!-- ==================== PRACTICE ==================== -->
+    <section class="practice">
+      <span class="section-label">Practice</span>
+      <h2>Test Yourself</h2>
+      <p>Click on each question to reveal the answer. Try to work it out yourself first!</p>
+
+      <div class="hint">
+        <div class="hint-title">Q1: Explain the difference between lossy and lossless compression.</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong></p>
+          <p><strong>Lossy compression</strong> permanently removes data from the file that is considered less important or less noticeable to human senses. The original file <strong>cannot</strong> be perfectly reconstructed from the compressed version. It achieves very large reductions in file size (often 80&ndash;95%).</p>
+          <p><strong>Lossless compression</strong> reduces file size by finding and encoding patterns more efficiently, <strong>without removing any data</strong>. The original file can be perfectly reconstructed from the compressed version. It typically achieves a smaller reduction (around 50&ndash;70%).</p>
+          <p>The key difference is <strong>reversibility</strong>: lossless is fully reversible; lossy is not.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q2: Give two examples of lossy file formats and two examples of lossless file formats.</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong></p>
+          <p><strong>Lossy:</strong> JPEG (images) and MP3 (audio). Other acceptable answers include MP4, AAC, or H.265.</p>
+          <p><strong>Lossless:</strong> PNG (images) and ZIP (any file). Other acceptable answers include FLAC, GIF, or 7z.</p>
+          <p>For full marks, name the format <em>and</em> state what type of file it is used for.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q3: Explain why hospitals use lossless compression for medical images rather than lossy compression.</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong></p>
+          <p>Hospitals use lossless compression because medical images such as X-rays, CT scans, and MRIs are used to <strong>diagnose illnesses and injuries</strong>. Even a tiny amount of data loss from lossy compression could mean that a small tumour, fracture, or other abnormality is no longer visible in the image. This could lead to a <strong>missed diagnosis</strong>, which could be life-threatening.</p>
+          <p>Lossless compression still reduces file sizes by 50&ndash;70%, which saves significant storage, while <strong>preserving every detail exactly</strong> as the scanner captured it. Patient safety requires that no data is lost.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q4: What is run-length encoding (RLE)? Give an example.</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong></p>
+          <p>Run-length encoding (RLE) is a <strong>lossless compression technique</strong> that replaces consecutive repeated values (&ldquo;runs&rdquo;) with a single count-value pair.</p>
+          <p><strong>Example:</strong> The string WWWWWBBBBRRR (12 characters) would be encoded as 5W4B3R (6 characters) &mdash; a 50% reduction. To decompress, you simply expand each pair: 5W becomes WWWWW, 4B becomes BBBB, and 3R becomes RRR.</p>
+          <p>RLE works best on data with long runs of identical values, such as simple images with large areas of uniform colour.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q5: Why is lossy compression used for music streaming services like Spotify?</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong></p>
+          <p>Lossy compression is used for music streaming because:</p>
+          <ol>
+            <li>An uncompressed three-minute song is approximately <strong>30 MB</strong>. Lossy compression reduces this to around <strong>3&ndash;7 MB</strong>, making streaming over mobile data practical.</li>
+            <li>The lossy codec removes <strong>sounds that humans can barely hear</strong> &mdash; such as very high frequencies and quiet tones masked by louder sounds. Most listeners <strong>cannot perceive the difference</strong> between a high-quality lossy stream and the uncompressed original.</li>
+            <li>With millions of users streaming simultaneously, the <strong>bandwidth and storage savings</strong> are enormous. Without lossy compression, the service would not be economically or technically feasible.</li>
+          </ol>
+          <p>The small, largely imperceptible reduction in quality is an acceptable trade-off for dramatically smaller file sizes.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q6: A 15 MB file is compressed to 3 MB. What is the compression ratio? What percentage of the file size has been saved?</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong></p>
+          <p><strong>Compression ratio:</strong> 15 &divide; 3 = <strong>5:1</strong> (the original is 5 times larger than the compressed version).</p>
+          <p><strong>Percentage saved:</strong> (15 &minus; 3) &divide; 15 &times; 100 = 12 &divide; 15 &times; 100 = <strong>80%</strong>.</p>
+          <p>Always show your working in the exam. State the formula, substitute the values, and give the final answer with the correct unit (:1 for ratio, % for percentage).</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q7: Explain why compression is essential for video streaming services.</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong></p>
+          <p>Compression is essential for video streaming because uncompressed video files are <strong>extraordinarily large</strong>. A single second of 4K video contains approximately 30 frames, each with over 8 million pixels in 24-bit colour &mdash; totalling roughly <strong>720 MB per second</strong>. A two-hour film would be approximately <strong>5 TB uncompressed</strong>.</p>
+          <p>No home internet connection could stream 720 MB per second, and no practical server could store billions of uncompressed films. Video codecs like H.265 compress this to just <strong>5&ndash;15 GB</strong> by:</p>
+          <ul>
+            <li>Storing only the <strong>differences between consecutive frames</strong> (since most of the image stays the same from frame to frame)</li>
+            <li>Removing <strong>visual detail</strong> that the human eye will not notice during motion</li>
+          </ul>
+          <p>Without compression, services like Netflix and YouTube <strong>simply could not exist</strong>.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== KEY VOCABULARY ==================== -->
+    <section class="understand">
+      <span class="section-label">Understand</span>
+      <h2>Key Vocabulary</h2>
+      <p>Make sure you know all of these terms for your exam:</p>
+
+      <table class="vocab-table">
+        <thead>
+          <tr><th>Term</th><th>Definition</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Compression</td>
+            <td>The process of reducing the file size of data so it takes up less storage space and can be transmitted more quickly. There are two types: lossy and lossless.</td>
+          </tr>
+          <tr>
+            <td>Lossy Compression</td>
+            <td>A type of compression that permanently removes data considered less important. The original file cannot be perfectly reconstructed. Examples: JPEG, MP3, MP4.</td>
+          </tr>
+          <tr>
+            <td>Lossless Compression</td>
+            <td>A type of compression that reduces file size without removing any data. The original file can be perfectly reconstructed from the compressed version. Examples: PNG, FLAC, ZIP.</td>
+          </tr>
+          <tr>
+            <td>Run-Length Encoding (RLE)</td>
+            <td>A simple lossless compression technique that replaces consecutive repeated values with a count-value pair. For example, AAABBB becomes 3A3B.</td>
+          </tr>
+          <tr>
+            <td>Huffman Coding</td>
+            <td>A lossless compression technique that assigns shorter binary codes to frequently occurring values and longer codes to rare values, minimising the total number of bits needed.</td>
+          </tr>
+          <tr>
+            <td>Compression Ratio</td>
+            <td>A measure of how much a file has been compressed, calculated as original size divided by compressed size. A ratio of 5:1 means the original is five times larger than the compressed version.</td>
+          </tr>
+          <tr>
+            <td>Bit Rate</td>
+            <td>The number of bits processed or transmitted per second, typically measured in kilobits per second (kbps). Higher bit rates generally mean better quality but larger files. For example, Spotify streams at 160&ndash;320 kbps.</td>
+          </tr>
+          <tr>
+            <td>Codec</td>
+            <td>Short for &ldquo;coder-decoder.&rdquo; A codec is a program or algorithm that compresses (encodes) and decompresses (decodes) data. Examples include H.265 for video and MP3 for audio.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- ==================== EXAM TIPS ==================== -->
+    <section class="understand">
+      <span class="section-label">Understand</span>
+      <h2>Exam Tips</h2>
+
+      <div class="exam-tip">
+        <strong>Exam Tip 1: Use Precise Language About Lossy Compression</strong>
+        Never say that lossy compression &ldquo;loses quality&rdquo; or &ldquo;makes the file worse.&rdquo; Instead, say it <strong>&ldquo;permanently removes data that cannot be recovered.&rdquo;</strong> This is scientifically precise and demonstrates the level of understanding examiners are looking for. For extra marks, specify <em>what</em> data is removed: &ldquo;JPEG removes fine colour detail that the human eye barely notices&rdquo; or &ldquo;MP3 removes sound frequencies that the human ear cannot easily perceive.&rdquo;
+      </div>
+
+      <div class="exam-tip">
+        <strong>Exam Tip 2: Name Specific File Formats</strong>
+        When asked about lossy or lossless compression, always give <strong>named examples of file formats</strong>. Do not just say &ldquo;images can be lossy or lossless&rdquo; &mdash; say &ldquo;JPEG is a lossy image format; PNG is a lossless image format.&rdquo; Examiners award marks for specific, concrete knowledge. Remember: <strong>JPEG = lossy image</strong>, <strong>MP3 = lossy audio</strong>, <strong>PNG = lossless image</strong>, <strong>FLAC = lossless audio</strong>, <strong>ZIP = lossless general-purpose</strong>.
+      </div>
+
+      <div class="exam-tip">
+        <strong>Exam Tip 3: Explain WHY a Type Is Chosen</strong>
+        A very common exam question gives a scenario and asks which type of compression is appropriate. Your answer must explain <strong>why</strong>, not just state the type. Structure your answer as: (1) state the type, (2) explain why it is suitable for this specific scenario, and (3) explain why the other type would be inappropriate. For example: &ldquo;Lossless compression should be used because medical images are used for diagnosis and any data loss could cause a condition to be missed. Lossy compression would be unsuitable because it permanently removes data, which is unacceptable when lives may depend on the image quality.&rdquo;
+      </div>
+
+      <div class="exam-tip">
+        <strong>Exam Tip 4: Show Your Working for Compression Calculations</strong>
+        When calculating compression ratios or percentages, always show the formula and your working:
+        <ul>
+          <li><strong>Compression ratio:</strong> Original &divide; Compressed = ratio. Write it as X:1.</li>
+          <li><strong>Percentage saved:</strong> (Original &minus; Compressed) &divide; Original &times; 100 = percentage.</li>
+        </ul>
+        Even if you get the arithmetic slightly wrong, showing the correct method can earn you partial marks.
+      </div>
+    </section>
+
+    <!-- ==================== REFLECT ==================== -->
+    <section class="reflect">
+      <span class="section-label">Reflect</span>
+      <h2>Compression in Everyday Life</h2>
+
+      <p>Compression is one of those technologies that is completely invisible yet absolutely essential to modern digital life. Every time you do any of these things, compression is working behind the scenes:</p>
+
+      <ul>
+        <li><strong>Take a photo on your phone:</strong> Your camera sensor captures raw data, but the image is immediately compressed to JPEG before being saved. Without this, your phone&rsquo;s storage would fill up 5&ndash;10 times faster.</li>
+        <li><strong>Stream a song on Spotify or Apple Music:</strong> The original studio recording is compressed from approximately 30 MB to 3&ndash;7 MB using lossy codecs, allowing it to stream smoothly over mobile data.</li>
+        <li><strong>Watch a video on YouTube or Netflix:</strong> The video is compressed from potentially terabytes of raw footage into a few gigabytes, then streamed at a bit rate your internet connection can handle.</li>
+        <li><strong>Send a ZIP file by email:</strong> Lossless compression bundles and shrinks your files so they can be attached to an email without exceeding the size limit.</li>
+        <li><strong>Browse the web:</strong> Images on websites are compressed (JPEG, PNG, or the modern WebP format) so pages load quickly rather than taking minutes.</li>
+      </ul>
+
+      <p>The next time you take a photo, stream a song, or watch a video, think about the incredible mathematics happening behind the scenes &mdash; shrinking millions or billions of bytes into something that fits in your pocket and streams over the air. Compression is one of computer science&rsquo;s greatest achievements, and understanding it gives you real insight into how the digital world works.</p>
+
+      <div class="extra-resources">
+        <h3>Further Reading</h3>
+        <ul>
+          <li><a href="https://www.bbc.co.uk/bitesize/examspecs/zdqy7nb" target="_blank" rel="noopener">BBC Bitesize &mdash; Edexcel GCSE Computer Science</a> &mdash; Comprehensive coverage of compression including lossy, lossless, and RLE</li>
+          <li><a href="https://isaaccomputerscience.org/topics/data_representation" target="_blank" rel="noopener">Isaac Computer Science &mdash; Data Representation</a> &mdash; In-depth explanations of compression techniques with worked examples</li>
+          <li><a href="https://hvgcsecs.cshub.org.je/topics/topic2.html" target="_blank" rel="noopener">GCSE Topic 2: Data Representation</a> &mdash; Interactive revision tools covering compression and file formats</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ==================== NAVIGATION ==================== -->
+    <nav class="chapter-nav">
+      <a href="sound-representation.html">&larr; Previous: Sound Representation</a>
+      <a href="../index.html">Course Home</a>
+      <a href="computer-systems.html">Next: Computer Systems &rarr;</a>
+    </nav>
+
+  </main>
+
+  <footer class="site-footer">
+    <p>Python Fundamentals &mdash; A KS4 Learning Platform</p>
+    <p>Compression &mdash; GCSE Computer Science Theory</p>
+  </footer>
+
+  <!-- ==================== HINT/REVEAL TOGGLE ==================== -->
+  <script>
+    document.querySelectorAll('.hint-title').forEach(function(title) {
+      title.addEventListener('click', function() {
+        var parent = this.parentElement;
+        if (parent.classList.contains('open')) {
+          parent.classList.remove('open');
+        } else {
+          parent.classList.add('open');
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>

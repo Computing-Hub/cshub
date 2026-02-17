@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Two's Complement - Python Fundamentals</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <style>
+    .interactive-exercise {
+      background: linear-gradient(135deg, #f0f7ff, #e8f0fe);
+      border: 2px solid #4361ee;
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+    }
+    .interactive-exercise h3 { margin-top: 0; color: #4361ee; }
+    .exercise-problem { font-size: 1.3rem; font-weight: 700; margin: 1rem 0; font-family: 'JetBrains Mono', monospace; }
+    .exercise-controls { display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap; margin: 1rem 0; }
+    .exercise-input { font-family: 'JetBrains Mono', monospace; font-size: 1.1rem; padding: 0.5rem 1rem; border: 2px solid #ccc; border-radius: 8px; width: 220px; }
+    .exercise-input:focus { border-color: #4361ee; outline: none; }
+    .check-btn, .new-btn { padding: 0.5rem 1.2rem; font-size: 1rem; font-weight: 600; border: none; border-radius: 8px; cursor: pointer; transition: background 0.2s; }
+    .check-btn { background: #4361ee; color: white; }
+    .check-btn:hover { background: #3a0ca3; }
+    .new-btn { background: #06d6a0; color: white; }
+    .new-btn:hover { background: #05b384; }
+    .feedback { margin-top: 0.5rem; padding: 0.5rem 1rem; border-radius: 8px; font-weight: 600; display: none; }
+    .feedback.correct { background: #e6f9f1; color: #087f5b; border: 1px solid #06d6a0; display: block; }
+    .feedback.incorrect { background: #fff5f5; color: #c92a2a; border: 1px solid #e63946; display: block; }
+    .score-display { font-weight: 600; color: #4361ee; margin-top: 0.5rem; }
+    .exam-tip { background: linear-gradient(135deg, #f3e8ff, #ede5ff); border: 2px solid #7209b7; border-radius: 12px; padding: 1.5rem; margin: 1rem 0; }
+    .exam-tip strong:first-child { color: #7209b7; display: block; margin-bottom: 0.25rem; }
+  </style>
+</head>
+<body>
+
+  <header class="site-header">
+    <p><a href="../index.html">&larr; Back to Course</a></p>
+    <h1>Two&rsquo;s Complement</h1>
+    <p class="subtitle">How computers represent negative numbers using only 0s and 1s</p>
+  </header>
+
+  <main>
+
+    <!-- ==================== THE IDEA ==================== -->
+    <section class="idea">
+      <span class="section-label">The Idea</span>
+      <h2>Representing Negative Numbers</h2>
+
+      <p>So far, every binary number you have worked with has been <strong>unsigned</strong> &mdash; it can only represent zero or positive values. But computers need negative numbers too. Think about bank balances, temperatures below zero, or game characters moving backwards. How can a system that only has 0s and 1s represent something like &minus;42?</p>
+
+      <p>The answer is <strong>two&rsquo;s complement</strong>. It is the most widely used method for representing signed (positive and negative) integers in modern computers. Nearly every processor in every phone, laptop, and server uses two&rsquo;s complement, and it is a core topic in your GCSE Computer Science exam.</p>
+
+      <p>The idea is elegant: in an 8-bit two&rsquo;s complement number, the <strong>leftmost bit</strong> (the Most Significant Bit, or MSB) acts as a <strong>sign bit</strong>:</p>
+
+      <ul>
+        <li>If the MSB is <strong>0</strong>, the number is <strong>positive</strong> (or zero).</li>
+        <li>If the MSB is <strong>1</strong>, the number is <strong>negative</strong>.</li>
+      </ul>
+
+      <p>With 8 bits, two&rsquo;s complement can represent any integer from <strong>&minus;128</strong> to <strong>+127</strong>. That is 256 different values in total &mdash; the same count as unsigned 8-bit binary (0 to 255), but the range is shifted to include negative numbers.</p>
+
+      <div class="key-concept">
+        <strong>Key Concept: The Sign Bit</strong>
+        In two&rsquo;s complement, the MSB is called the <strong>sign bit</strong>. It does not simply &ldquo;flag&rdquo; the number as negative &mdash; it actually contributes a <strong>negative place value</strong>. In an 8-bit system, the MSB has a place value of <strong>&minus;128</strong> (not +128). This is what makes two&rsquo;s complement work so cleanly for arithmetic.
+      </div>
+    </section>
+
+    <!-- ==================== EXPLORE ==================== -->
+    <section class="explore">
+      <span class="section-label">Explore</span>
+      <h2>How Two&rsquo;s Complement Works</h2>
+
+      <h3>The Modified Place Value Table</h3>
+      <p>In unsigned binary, the place values for 8 bits are:</p>
+
+      <table>
+        <thead>
+          <tr><th>128</th><th>64</th><th>32</th><th>16</th><th>8</th><th>4</th><th>2</th><th>1</th></tr>
+        </thead>
+      </table>
+
+      <p>In two&rsquo;s complement, the <strong>only change</strong> is that the MSB becomes <strong>negative</strong>:</p>
+
+      <table>
+        <thead>
+          <tr><th>&minus;128</th><th>64</th><th>32</th><th>16</th><th>8</th><th>4</th><th>2</th><th>1</th></tr>
+        </thead>
+      </table>
+
+      <p>That single change is all it takes. The rest of the place values stay exactly the same. To read a two&rsquo;s complement number, you simply add up the place values of every column that has a 1 in it &mdash; just as you always do with binary &mdash; but remember that the leftmost column is now <strong>&minus;128</strong>.</p>
+
+      <h3>Reading Two&rsquo;s Complement Numbers</h3>
+
+      <p><strong>Example 1: What is 11111011 in two&rsquo;s complement?</strong></p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Two&rsquo;s Complement &mdash; Reading 11111011</span>
+        </div>
+        <pre><code>  Place values:  -128   64   32   16    8    4    2    1
+  Bits:             1    1    1    1    1    0    1    1
+
+  Calculation:  -128 + 64 + 32 + 16 + 8 + 0 + 2 + 1
+              = -128 + 123
+              = -5</code></pre>
+      </div>
+      <p>The answer is <strong>&minus;5</strong>. Notice that the MSB contributes &minus;128, and all the other 1-bits add up to +123, giving a final value of &minus;5.</p>
+
+      <p><strong>More examples:</strong></p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Two&rsquo;s Complement &mdash; More Reading Examples</span>
+        </div>
+        <pre><code>  10000000 = -128 + 0              = -128  (most negative 8-bit value)
+  01111111 =    0 + 64+32+16+8+4+2+1 = +127  (most positive 8-bit value)
+  11110000 = -128 + 64+32+16       = -16
+  11111111 = -128 + 64+32+16+8+4+2+1 = -1
+  00000000 =    0                  =  0</code></pre>
+      </div>
+
+      <h3>Converting Positive to Negative: The 3-Step Method</h3>
+      <p>To convert a positive number to its negative two&rsquo;s complement representation, follow these three steps:</p>
+
+      <ol>
+        <li><strong>Step 1:</strong> Write the positive number in 8-bit binary.</li>
+        <li><strong>Step 2:</strong> Flip all the bits (change every 0 to 1 and every 1 to 0). This is called the <strong>one&rsquo;s complement</strong>.</li>
+        <li><strong>Step 3:</strong> Add 1 to the result.</li>
+      </ol>
+
+      <p><strong>Worked Example 1: Represent &minus;5 in two&rsquo;s complement.</strong></p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Converting &minus;5 to Two&rsquo;s Complement</span>
+        </div>
+        <pre><code>  Step 1: Write +5 in binary:     0 0 0 0 0 1 0 1
+  Step 2: Flip all bits:          1 1 1 1 1 0 1 0   (one's complement)
+  Step 3: Add 1:                  1 1 1 1 1 0 1 1   (two's complement)
+
+  -5 in two's complement = 11111011</code></pre>
+      </div>
+
+      <p><strong>Worked Example 2: Represent &minus;20 in two&rsquo;s complement.</strong></p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Converting &minus;20 to Two&rsquo;s Complement</span>
+        </div>
+        <pre><code>  Step 1: Write +20 in binary:    0 0 0 1 0 1 0 0
+  Step 2: Flip all bits:          1 1 1 0 1 0 1 1   (one's complement)
+  Step 3: Add 1:                  1 1 1 0 1 1 0 0   (two's complement)
+
+  -20 in two's complement = 11101100</code></pre>
+      </div>
+
+      <p><strong>Worked Example 3: Represent &minus;1 in two&rsquo;s complement.</strong></p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Converting &minus;1 to Two&rsquo;s Complement</span>
+        </div>
+        <pre><code>  Step 1: Write +1 in binary:     0 0 0 0 0 0 0 1
+  Step 2: Flip all bits:          1 1 1 1 1 1 1 0   (one's complement)
+  Step 3: Add 1:                  1 1 1 1 1 1 1 1   (two's complement)
+
+  -1 in two's complement = 11111111</code></pre>
+      </div>
+      <p>This is a famous result: &minus;1 is always represented as all 1s in two&rsquo;s complement, regardless of how many bits you use.</p>
+
+      <div class="try-this">
+        <strong>Try This:</strong> Use the 3-step method to convert <strong>&minus;42</strong> and <strong>&minus;100</strong> to 8-bit two&rsquo;s complement. Then check your answers by reading them back using the modified place value table (the &minus;128, 64, 32, 16, 8, 4, 2, 1 method). Do you get &minus;42 and &minus;100 again?
+      </div>
+    </section>
+
+    <!-- ==================== UNDERSTAND ==================== -->
+    <section class="understand">
+      <span class="section-label">Understand</span>
+      <h2>Key Properties</h2>
+
+      <h3>Range of Two&rsquo;s Complement</h3>
+      <p>The range depends on the number of bits used. For <em>n</em> bits, the range is <strong>&minus;2<sup>n&minus;1</sup></strong> to <strong>+2<sup>n&minus;1</sup> &minus; 1</strong>.</p>
+
+      <table>
+        <thead>
+          <tr><th>Number of Bits</th><th>Minimum Value</th><th>Maximum Value</th><th>Total Values</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>8-bit</strong></td><td>&minus;128</td><td>+127</td><td>256</td></tr>
+          <tr><td><strong>16-bit</strong></td><td>&minus;32,768</td><td>+32,767</td><td>65,536</td></tr>
+          <tr><td><strong>32-bit</strong></td><td>&minus;2,147,483,648</td><td>+2,147,483,647</td><td>4,294,967,296</td></tr>
+        </tbody>
+      </table>
+
+      <p>Notice that there is always <strong>one more negative number</strong> than there are positive numbers. For 8-bit, you can reach &minus;128 but only +127. This asymmetry exists because zero takes up one of the &ldquo;positive&rdquo; slots (00000000).</p>
+
+      <h3>Zero in Two&rsquo;s Complement</h3>
+      <p>Zero is simply <strong>00000000</strong>. There is only one representation of zero in two&rsquo;s complement &mdash; this is one of its key advantages over older methods like sign-and-magnitude, which had both +0 and &minus;0.</p>
+
+      <h3>A Number Plus Its Negative Gives Zero</h3>
+      <p>If you take any number and add its two&rsquo;s complement (i.e., its negative), the result is always zero (ignoring any overflow carry). For example:</p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">5 + (&minus;5) = 0 in Two&rsquo;s Complement</span>
+        </div>
+        <pre><code>    0 0 0 0 0 1 0 1     (+5)
+  + 1 1 1 1 1 0 1 1     (-5)
+  -----------------
+  1 0 0 0 0 0 0 0 0     (9th bit is discarded)
+
+  Result in 8 bits: 00000000 = 0</code></pre>
+      </div>
+
+      <p>The 9th bit (the carry) is simply discarded, leaving a perfect zero. This is exactly why the method works so well.</p>
+
+      <h3>Why Two&rsquo;s Complement Is Used</h3>
+      <p>The most important reason computers use two&rsquo;s complement is that it <strong>simplifies the hardware</strong>. With two&rsquo;s complement, the processor does not need separate circuits for addition and subtraction &mdash; the same addition circuit works for both positive and negative numbers. Subtraction is simply &ldquo;add the two&rsquo;s complement.&rdquo; This means fewer transistors, simpler chip designs, faster calculations, and lower power consumption.</p>
+
+      <div class="warning">
+        <strong>Watch Out &mdash; Common Exam Mistake:</strong> When reading a two&rsquo;s complement number, students often forget that the MSB has a <strong>negative</strong> place value. If you see 10000001 and treat it as unsigned, you get 129. But in two&rsquo;s complement, the correct answer is &minus;128 + 1 = <strong>&minus;127</strong>. Always check whether the question specifies &ldquo;signed&rdquo; or &ldquo;two&rsquo;s complement&rdquo; &mdash; if it does, the MSB is negative.
+      </div>
+    </section>
+
+    <!-- ==================== INTERACTIVE EXERCISE 1 ==================== -->
+    <div class="interactive-exercise" id="tc-to-denary-exercise">
+      <h3>Interactive Exercise 1: Two&rsquo;s Complement to Denary</h3>
+      <p>Convert the following 8-bit two&rsquo;s complement number to its <strong>denary (decimal)</strong> value. Remember: the MSB has a place value of &minus;128.</p>
+
+      <div class="exercise-problem" id="tc2d-problem">Loading...</div>
+
+      <div class="exercise-controls">
+        <input type="text" class="exercise-input" id="tc2d-answer" maxlength="5" placeholder="e.g. -5" autocomplete="off" />
+        <button class="check-btn" id="tc2d-check" onclick="checkTcToDenary()">Check Answer</button>
+        <button class="new-btn" id="tc2d-new" onclick="newTcToDenaryQuestion()">New Question</button>
+      </div>
+
+      <div class="feedback" id="tc2d-feedback"></div>
+      <div class="score-display" id="tc2d-score">Score: 0 / 0</div>
+    </div>
+
+    <script>
+      // ===== EXERCISE 1: Two's Complement to Denary =====
+      var tc2dBits = [];
+      var tc2dCorrectCount = 0, tc2dTotalCount = 0;
+      var placeValues = [-128, 64, 32, 16, 8, 4, 2, 1];
+
+      function toBin8(n) {
+        if (n < 0) {
+          // Convert negative to two's complement unsigned representation
+          return (256 + n).toString(2).padStart(8, '0');
+        }
+        return n.toString(2).padStart(8, '0');
+      }
+
+      function tcBitsToValue(bits) {
+        var value = 0;
+        for (var i = 0; i < 8; i++) {
+          value += bits[i] * placeValues[i];
+        }
+        return value;
+      }
+
+      function newTcToDenaryQuestion() {
+        // Generate a negative two's complement number (MSB = 1)
+        var denaryValue = -(Math.floor(Math.random() * 128) + 1); // -1 to -128
+        var binStr = toBin8(denaryValue);
+        tc2dBits = binStr.split('').map(Number);
+
+        document.getElementById('tc2d-problem').textContent = binStr;
+        document.getElementById('tc2d-answer').value = '';
+        document.getElementById('tc2d-feedback').className = 'feedback';
+        document.getElementById('tc2d-feedback').textContent = '';
+        document.getElementById('tc2d-answer').focus();
+      }
+
+      function checkTcToDenary() {
+        var userAnswer = document.getElementById('tc2d-answer').value.trim();
+        var feedback = document.getElementById('tc2d-feedback');
+        var correctValue = tcBitsToValue(tc2dBits);
+
+        if (!/^-?\d+$/.test(userAnswer)) {
+          feedback.className = 'feedback incorrect';
+          feedback.textContent = 'Please enter an integer (e.g. -5 or 127).';
+          return;
+        }
+
+        tc2dTotalCount++;
+
+        // Build the place value explanation
+        var parts = [];
+        for (var i = 0; i < 8; i++) {
+          if (tc2dBits[i] === 1) {
+            parts.push((placeValues[i] < 0 ? '(' + placeValues[i] + ')' : '' + placeValues[i]));
+          }
+        }
+        var explanation = parts.join(' + ') + ' = ' + correctValue;
+
+        if (parseInt(userAnswer) === correctValue) {
+          tc2dCorrectCount++;
+          feedback.className = 'feedback correct';
+          feedback.innerHTML = 'Correct! ' + tc2dBits.join('') + ' = ' + explanation;
+        } else {
+          feedback.className = 'feedback incorrect';
+          feedback.innerHTML = 'Not quite. The correct answer is <strong>' + correctValue + '</strong>.<br>' +
+            'Place value calculation: ' + explanation;
+        }
+
+        document.getElementById('tc2d-score').textContent =
+          'Score: ' + tc2dCorrectCount + ' / ' + tc2dTotalCount;
+      }
+
+      document.getElementById('tc2d-answer').addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') checkTcToDenary();
+      });
+
+      newTcToDenaryQuestion();
+    </script>
+
+    <!-- ==================== INTERACTIVE EXERCISE 2 ==================== -->
+    <div class="interactive-exercise" id="denary-to-tc-exercise">
+      <h3>Interactive Exercise 2: Denary to Two&rsquo;s Complement</h3>
+      <p>Convert the following negative denary number to its <strong>8-bit two&rsquo;s complement binary</strong> representation. Use the 3-step method: write the positive in binary, flip all bits, add 1.</p>
+
+      <div class="exercise-problem" id="d2tc-problem">Loading...</div>
+
+      <div class="exercise-controls">
+        <input type="text" class="exercise-input" id="d2tc-answer" maxlength="8" placeholder="e.g. 11111011" autocomplete="off" />
+        <button class="check-btn" id="d2tc-check" onclick="checkDenaryToTc()">Check Answer</button>
+        <button class="new-btn" id="d2tc-new" onclick="newDenaryToTcQuestion()">New Question</button>
+      </div>
+
+      <div class="feedback" id="d2tc-feedback"></div>
+      <div class="score-display" id="d2tc-score">Score: 0 / 0</div>
+    </div>
+
+    <script>
+      // ===== EXERCISE 2: Denary to Two's Complement =====
+      var d2tcValue = 0;
+      var d2tcCorrectCount = 0, d2tcTotalCount = 0;
+
+      function flipBits(binStr) {
+        return binStr.split('').map(function(b) { return b === '0' ? '1' : '0'; }).join('');
+      }
+
+      function addOneBin(binStr) {
+        var bits = binStr.split('').map(Number);
+        var carry = 1;
+        for (var i = bits.length - 1; i >= 0; i--) {
+          var sum = bits[i] + carry;
+          bits[i] = sum % 2;
+          carry = Math.floor(sum / 2);
+        }
+        return bits.join('');
+      }
+
+      function newDenaryToTcQuestion() {
+        d2tcValue = -(Math.floor(Math.random() * 128) + 1); // -1 to -128
+        document.getElementById('d2tc-problem').textContent = d2tcValue;
+        document.getElementById('d2tc-answer').value = '';
+        document.getElementById('d2tc-feedback').className = 'feedback';
+        document.getElementById('d2tc-feedback').textContent = '';
+        document.getElementById('d2tc-answer').focus();
+      }
+
+      function checkDenaryToTc() {
+        var userAnswer = document.getElementById('d2tc-answer').value.trim();
+        var feedback = document.getElementById('d2tc-feedback');
+
+        if (!/^[01]{8}$/.test(userAnswer)) {
+          feedback.className = 'feedback incorrect';
+          feedback.textContent = 'Please enter exactly 8 binary digits (0s and 1s only).';
+          return;
+        }
+
+        d2tcTotalCount++;
+
+        var positive = -d2tcValue;
+        var step1 = positive.toString(2).padStart(8, '0');
+        var step2 = flipBits(step1);
+        var step3 = addOneBin(step2);
+
+        if (userAnswer === step3) {
+          d2tcCorrectCount++;
+          feedback.className = 'feedback correct';
+          feedback.innerHTML = 'Correct! Converting ' + d2tcValue + ' to two&rsquo;s complement:<br>' +
+            'Step 1: +' + positive + ' = ' + step1 + '<br>' +
+            'Step 2: Flip bits = ' + step2 + '<br>' +
+            'Step 3: Add 1 = <strong>' + step3 + '</strong>';
+        } else {
+          feedback.className = 'feedback incorrect';
+          feedback.innerHTML = 'Not quite. Here is the 3-step method for ' + d2tcValue + ':<br>' +
+            'Step 1: +' + positive + ' in binary = ' + step1 + '<br>' +
+            'Step 2: Flip all bits = ' + step2 + '<br>' +
+            'Step 3: Add 1 = <strong>' + step3 + '</strong>';
+        }
+
+        document.getElementById('d2tc-score').textContent =
+          'Score: ' + d2tcCorrectCount + ' / ' + d2tcTotalCount;
+      }
+
+      document.getElementById('d2tc-answer').addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') checkDenaryToTc();
+      });
+
+      newDenaryToTcQuestion();
+    </script>
+
+    <!-- ==================== PRACTICE ==================== -->
+    <section class="practice">
+      <span class="section-label">Practice</span>
+      <h2>Test Yourself</h2>
+      <p>Click on each question to reveal the answer. Try to work it out on paper first &mdash; use the place value table or the 3-step method as appropriate.</p>
+
+      <div class="hint">
+        <div class="hint-title">Q1: Convert the two&rsquo;s complement number 11111011 to denary.</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong></p>
+          <pre><code>  Place values: -128  64  32  16  8  4  2  1
+  Bits:            1   1   1   1  1  0  1  1
+
+  -128 + 64 + 32 + 16 + 8 + 2 + 1 = -5</code></pre>
+          <p>The answer is <strong>&minus;5</strong>.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q2: Represent &minus;20 in 8-bit two&rsquo;s complement.</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong></p>
+          <pre><code>  Step 1: +20 in binary  = 00010100
+  Step 2: Flip all bits  = 11101011
+  Step 3: Add 1          = 11101100</code></pre>
+          <p>&minus;20 in two&rsquo;s complement is <strong>11101100</strong>.</p>
+          <p>Check: &minus;128 + 64 + 32 + 8 + 4 = &minus;128 + 108 = &minus;20. Correct!</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q3: What is the range of values that can be stored using 8-bit two&rsquo;s complement?</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> The range is <strong>&minus;128 to +127</strong>.</p>
+          <p>The formula for <em>n</em> bits is &minus;2<sup>n&minus;1</sup> to +2<sup>n&minus;1</sup> &minus; 1. For 8 bits: &minus;2<sup>7</sup> to +2<sup>7</sup> &minus; 1 = &minus;128 to +127.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q4: Why is two&rsquo;s complement preferred over sign-and-magnitude for representing negative numbers?</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> Two&rsquo;s complement is preferred for several reasons:</p>
+          <ul>
+            <li><strong>Simpler hardware:</strong> The same addition circuit can be used for both positive and negative numbers. Subtraction is just adding the two&rsquo;s complement. This means fewer logic gates and simpler, cheaper processors.</li>
+            <li><strong>No double zero:</strong> Sign-and-magnitude has both +0 (00000000) and &minus;0 (10000000), which wastes a value and complicates comparisons. Two&rsquo;s complement has only one zero: 00000000.</li>
+            <li><strong>One extra value:</strong> Two&rsquo;s complement can represent one additional negative number (&minus;128 in 8-bit) because there is no wasted &minus;0.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q5: Convert the two&rsquo;s complement number 10000001 to denary.</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong></p>
+          <pre><code>  Place values: -128  64  32  16  8  4  2  1
+  Bits:            1   0   0   0  0  0  0  1
+
+  -128 + 1 = -127</code></pre>
+          <p>The answer is <strong>&minus;127</strong>. Be careful not to mistake this for +129 (which is what you would get if you treated it as unsigned binary).</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q6: What does 00000000 represent in two&rsquo;s complement?</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> It represents <strong>zero</strong>. Since none of the bits are set, no place values are added: 0 + 0 + 0 + 0 + 0 + 0 + 0 + 0 = 0. Notice that the MSB is 0, so the sign bit indicates a non-negative number. Two&rsquo;s complement has only one representation of zero, which is an advantage over sign-and-magnitude.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q7: Represent &minus;1 in 8-bit two&rsquo;s complement.</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong></p>
+          <pre><code>  Step 1: +1 in binary  = 00000001
+  Step 2: Flip all bits = 11111110
+  Step 3: Add 1         = 11111111</code></pre>
+          <p>&minus;1 in two&rsquo;s complement is <strong>11111111</strong> &mdash; all 1s.</p>
+          <p>Check: &minus;128 + 64 + 32 + 16 + 8 + 4 + 2 + 1 = &minus;128 + 127 = &minus;1. Correct!</p>
+          <p>This is a well-known result: &minus;1 is always all 1s in two&rsquo;s complement, regardless of the number of bits.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== KEY VOCABULARY ==================== -->
+    <section class="understand">
+      <span class="section-label">Understand</span>
+      <h2>Key Vocabulary</h2>
+      <p>Make sure you know all of these terms for your exam:</p>
+
+      <table class="vocab-table">
+        <thead>
+          <tr><th>Term</th><th>Definition</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Two&rsquo;s Complement</td>
+            <td>A method for representing signed (positive and negative) integers in binary, where the MSB has a negative place value. Used by virtually all modern processors.</td>
+          </tr>
+          <tr>
+            <td>Sign Bit</td>
+            <td>The most significant bit in a signed binary number. In two&rsquo;s complement, if the sign bit is 0, the number is positive (or zero); if it is 1, the number is negative.</td>
+          </tr>
+          <tr>
+            <td>Most Significant Bit (MSB)</td>
+            <td>The leftmost bit in a binary number. In unsigned binary, the MSB has the largest positive place value. In two&rsquo;s complement, the MSB has a negative place value (e.g. &minus;128 in 8-bit).</td>
+          </tr>
+          <tr>
+            <td>One&rsquo;s Complement</td>
+            <td>The result of flipping (inverting) every bit in a binary number. It is the intermediate step when converting a positive number to its two&rsquo;s complement negative form.</td>
+          </tr>
+          <tr>
+            <td>Signed Binary</td>
+            <td>A binary representation that can express both positive and negative integers. Two&rsquo;s complement is the most common signed binary system.</td>
+          </tr>
+          <tr>
+            <td>Unsigned Binary</td>
+            <td>A binary representation that can only express zero and positive integers. All bits contribute positive place values (e.g. 128, 64, 32, 16, 8, 4, 2, 1 in 8-bit).</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- ==================== EXAM TIPS ==================== -->
+    <section class="understand">
+      <span class="section-label">Understand</span>
+      <h2>Exam Tips</h2>
+
+      <div class="exam-tip">
+        <strong>Exam Tip 1: Memorise the 3-Step Method</strong>
+        To convert a positive number to its negative two&rsquo;s complement: (1) write the positive value in binary, (2) flip all the bits, (3) add 1. This method is quick, reliable, and easy to show working for. Examiners will expect you to show all three steps clearly &mdash; label them &ldquo;Step 1,&rdquo; &ldquo;Step 2,&rdquo; and &ldquo;Step 3&rdquo; to earn full method marks.
+      </div>
+
+      <div class="exam-tip">
+        <strong>Exam Tip 2: Always Check Your Answer</strong>
+        After converting a number to two&rsquo;s complement, <strong>verify it using the place value table</strong>. Read your answer back using the &minus;128, 64, 32, 16, 8, 4, 2, 1 place values. If you converted &minus;20 and got 11101100, check: &minus;128 + 64 + 32 + 8 + 4 = &minus;20. If the check fails, you have made an error in one of the three steps. This 15-second check can save you from losing marks.
+      </div>
+
+      <div class="exam-tip">
+        <strong>Exam Tip 3: Know the Range Formula</strong>
+        For <em>n</em>-bit two&rsquo;s complement, the range is <strong>&minus;2<sup>n&minus;1</sup></strong> to <strong>+2<sup>n&minus;1</sup> &minus; 1</strong>. For 8-bit, that is &minus;128 to +127. Exam questions often ask for the range or ask you to explain why a certain value cannot be stored. If you know the formula, you can answer quickly and confidently for any number of bits.
+      </div>
+
+      <div class="exam-tip">
+        <strong>Exam Tip 4: Signed vs Unsigned</strong>
+        Read the question carefully. If it says &ldquo;unsigned binary,&rdquo; the MSB is +128 and all values are positive. If it says &ldquo;two&rsquo;s complement&rdquo; or &ldquo;signed binary,&rdquo; the MSB is &minus;128 and negative values are possible. The binary pattern 10000001 could be <strong>129</strong> (unsigned) or <strong>&minus;127</strong> (two&rsquo;s complement) &mdash; the interpretation depends entirely on what the question specifies.
+      </div>
+    </section>
+
+    <!-- ==================== REFLECT ==================== -->
+    <section class="reflect">
+      <span class="section-label">Reflect</span>
+      <h2>Why Two&rsquo;s Complement Matters</h2>
+
+      <p>Two&rsquo;s complement is not just an exam topic &mdash; it is the foundation of how every computer on Earth handles negative numbers. When you write <code>temperature = -5</code> in Python or any other language, the processor stores that value using two&rsquo;s complement. When a game character loses health points, or a bank processes a withdrawal, or a GPS calculates the direction you need to travel, two&rsquo;s complement arithmetic is working behind the scenes.</p>
+
+      <p>The elegance of two&rsquo;s complement lies in its simplicity: by making one small change (giving the MSB a negative weight), the same addition hardware works for both positive and negative numbers. This single insight, developed in the early days of computing, saved chip designers from building separate subtraction circuits and remains one of the cleverest ideas in all of computer science.</p>
+
+      <p>Understanding two&rsquo;s complement also gives you a deeper appreciation of <strong>why</strong> computers have limits. When a 32-bit signed integer overflows past +2,147,483,647, it wraps around to &minus;2,147,483,648 &mdash; a phenomenon that has caused real bugs in video games, financial software, and even spacecraft. Knowing how numbers are stored at the binary level makes you a better, more thoughtful programmer.</p>
+
+      <div class="extra-resources">
+        <h3>Further Reading</h3>
+        <ul>
+          <li><a href="https://www.bbc.co.uk/bitesize/examspecs/zdqy7nb" target="_blank" rel="noopener">BBC Bitesize &mdash; Edexcel GCSE Computer Science</a> &mdash; Comprehensive coverage of binary and data representation topics</li>
+          <li><a href="https://hvgcsecs.cshub.org.je/topics/topic2.html" target="_blank" rel="noopener">GCSE Topic 2: Data Representation</a> &mdash; Interactive revision tools and specification coverage for signed binary</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ==================== NAVIGATION ==================== -->
+    <nav class="chapter-nav">
+      <a href="binary-shifts.html">&larr; Previous: Binary Shifts</a>
+      <a href="../index.html">Course Home</a>
+      <a href="ascii-unicode.html">Next: ASCII &amp; Unicode &rarr;</a>
+    </nav>
+
+  </main>
+
+  <footer class="site-footer">
+    <p>Python Fundamentals &mdash; A KS4 Learning Platform</p>
+    <p>Two&rsquo;s Complement &mdash; GCSE Computer Science Theory</p>
+  </footer>
+
+  <!-- ==================== HINT/REVEAL TOGGLE ==================== -->
+  <script>
+    document.querySelectorAll('.hint-title').forEach(function(title) {
+      title.addEventListener('click', function() {
+        var content = this.nextElementSibling;
+        if (content.classList.contains('visible')) {
+          content.classList.remove('visible');
+        } else {
+          content.classList.add('visible');
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>

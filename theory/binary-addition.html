@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Binary Addition - Python Fundamentals</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <style>
+    .interactive-exercise {
+      background: linear-gradient(135deg, #f0f7ff, #e8f0fe);
+      border: 2px solid #4361ee;
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+    }
+    .interactive-exercise h3 { margin-top: 0; color: #4361ee; }
+    .exercise-problem { font-size: 1.3rem; font-weight: 700; margin: 1rem 0; font-family: 'JetBrains Mono', monospace; }
+    .exercise-controls { display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap; margin: 1rem 0; }
+    .exercise-input { font-family: 'JetBrains Mono', monospace; font-size: 1.1rem; padding: 0.5rem 1rem; border: 2px solid #ccc; border-radius: 8px; width: 220px; }
+    .exercise-input:focus { border-color: #4361ee; outline: none; }
+    .check-btn, .new-btn { padding: 0.5rem 1.2rem; font-size: 1rem; font-weight: 600; border: none; border-radius: 8px; cursor: pointer; transition: background 0.2s; }
+    .check-btn { background: #4361ee; color: white; }
+    .check-btn:hover { background: #3a0ca3; }
+    .new-btn { background: #06d6a0; color: white; }
+    .new-btn:hover { background: #05b384; }
+    .feedback { margin-top: 0.5rem; padding: 0.5rem 1rem; border-radius: 8px; font-weight: 600; display: none; }
+    .feedback.correct { background: #e6f9f1; color: #087f5b; border: 1px solid #06d6a0; display: block; }
+    .feedback.incorrect { background: #fff5f5; color: #c92a2a; border: 1px solid #e63946; display: block; }
+    .score-display { font-weight: 600; color: #4361ee; margin-top: 0.5rem; }
+    .exam-tip { background: linear-gradient(135deg, #f3e8ff, #ede5ff); border: 2px solid #7209b7; border-radius: 12px; padding: 1.5rem; margin: 1rem 0; }
+    .exam-tip strong:first-child { color: #7209b7; display: block; margin-bottom: 0.25rem; }
+    .overflow-radio-group { display: flex; gap: 1.5rem; align-items: center; margin: 0.5rem 0; }
+    .overflow-radio-group label { font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 0.3rem; }
+    .overflow-radio-group input[type="radio"] { cursor: pointer; width: 1.1rem; height: 1.1rem; }
+    .vocab-table td:first-child { font-weight: 700; white-space: nowrap; }
+  </style>
+</head>
+<body>
+
+  <header class="site-header">
+    <p><a href="../index.html">&larr; Back to Course</a></p>
+    <h1>Binary Addition</h1>
+    <p class="subtitle">Master the rules of adding in binary &mdash; including carries and overflow errors</p>
+  </header>
+
+  <main>
+
+    <!-- ==================== THE IDEA ==================== -->
+    <section class="idea">
+      <span class="section-label">The Idea</span>
+      <h2>Adding in Binary</h2>
+
+      <p>You already know how to add numbers in denary (base 10). You start from the rightmost column and work your way left, carrying over when a column adds up to 10 or more. Binary addition works in exactly the same way &mdash; but because binary only has two digits (0 and 1), you carry whenever a column adds up to <strong>2 or more</strong>.</p>
+
+      <p>Think of it this way: in denary, when you add 7 + 5, you get 12. You write down the 2 and carry the 1. In binary, when you add 1 + 1, you get 10 (which is &ldquo;two&rdquo; in binary). You write down the 0 and carry the 1. That is the entire foundation of binary addition.</p>
+
+      <p>Here are the five rules you need to memorise:</p>
+
+      <table>
+        <thead>
+          <tr><th>Addition</th><th>Result</th><th>What You Write</th><th>What You Carry</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>0 + 0</strong></td><td>0</td><td>0</td><td>Nothing</td></tr>
+          <tr><td><strong>0 + 1</strong></td><td>1</td><td>1</td><td>Nothing</td></tr>
+          <tr><td><strong>1 + 0</strong></td><td>1</td><td>1</td><td>Nothing</td></tr>
+          <tr><td><strong>1 + 1</strong></td><td>10</td><td>0</td><td>1</td></tr>
+          <tr><td><strong>1 + 1 + 1</strong></td><td>11</td><td>1</td><td>1</td></tr>
+        </tbody>
+      </table>
+
+      <p>The last two rules are the ones students most often forget. Let us break them down:</p>
+      <ul>
+        <li><strong>1 + 1 = 10:</strong> One plus one equals two. In binary, two is written as 10. So you write <strong>0</strong> in the current column and <strong>carry 1</strong> to the next column on the left.</li>
+        <li><strong>1 + 1 + 1 = 11:</strong> This happens when you have two 1s in a column <em>plus</em> a carry from the previous column. One plus one plus one equals three. In binary, three is written as 11. So you write <strong>1</strong> in the current column and <strong>carry 1</strong> to the next column.</li>
+      </ul>
+
+      <div class="key-concept">
+        <strong>Key Concept: The Carry</strong>
+        A <strong>carry</strong> in binary addition works just like a carry in denary addition. Whenever the sum of a column is 2 or more, you must carry a 1 to the next column on the left. Always work from <strong>right to left</strong>, just as you would in denary. Write the carry row above the numbers so you can keep track of it &mdash; examiners love to see this, and it helps you avoid mistakes.
+      </div>
+    </section>
+
+    <!-- ==================== EXPLORE ==================== -->
+    <section class="explore">
+      <span class="section-label">Explore</span>
+      <h2>Worked Examples</h2>
+
+      <p>Let us work through three examples step by step. For each one, we add from <strong>right to left</strong>, just like denary addition, and we always show the carry row above.</p>
+
+      <!-- Example 1 -->
+      <h3>Example 1: 01101011 + 00110101</h3>
+      <p>First, let us confirm the denary values: 01101011 = 64 + 32 + 8 + 2 + 1 = <strong>107</strong>, and 00110101 = 32 + 16 + 4 + 1 = <strong>53</strong>. We expect the answer to be 107 + 53 = <strong>160</strong>.</p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Binary Addition &mdash; Example 1 (107 + 53 = 160)</span>
+        </div>
+        <pre><code>  Carry:  1 1 1 1 1 1
+          0 1 1 0 1 0 1 1   (107)
+        + 0 0 1 1 0 1 0 1   ( 53)
+        -----------------
+          1 0 1 0 0 0 0 0   (160)</code></pre>
+      </div>
+
+      <p><strong>Column-by-column working (right to left):</strong></p>
+      <ol>
+        <li><strong>Column 1 (ones):</strong> 1 + 1 = 10. Write <strong>0</strong>, carry <strong>1</strong>.</li>
+        <li><strong>Column 2 (twos):</strong> 1 + 0 + carry 1 = 10. Write <strong>0</strong>, carry <strong>1</strong>.</li>
+        <li><strong>Column 3 (fours):</strong> 0 + 1 + carry 1 = 10. Write <strong>0</strong>, carry <strong>1</strong>.</li>
+        <li><strong>Column 4 (eights):</strong> 1 + 0 + carry 1 = 10. Write <strong>0</strong>, carry <strong>1</strong>.</li>
+        <li><strong>Column 5 (sixteens):</strong> 0 + 1 + carry 1 = 10. Write <strong>0</strong>, carry <strong>1</strong>.</li>
+        <li><strong>Column 6 (thirty-twos):</strong> 1 + 1 + carry 1 = 11. Write <strong>1</strong>, carry <strong>1</strong>. Wait &mdash; actually 1 + 1 = 10, plus carry 1 = 11. So we write 1 and carry 1.</li>
+        <li><strong>Column 7 (sixty-fours):</strong> 1 + 0 + carry 1 = 10. Write <strong>0</strong>, carry <strong>1</strong>.</li>
+        <li><strong>Column 8 (one-twenty-eights):</strong> 0 + 0 + carry 1 = 1. Write <strong>1</strong>. No carry.</li>
+      </ol>
+      <p>Result: <strong>10100000</strong>. Check: 128 + 32 = 160. Correct!</p>
+
+      <!-- Example 2 -->
+      <h3>Example 2: 00101100 + 01001110</h3>
+      <p>Denary check: 00101100 = 32 + 8 + 4 = <strong>44</strong>, and 01001110 = 64 + 8 + 4 + 2 = <strong>78</strong>. Expected answer: 44 + 78 = <strong>122</strong>.</p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Binary Addition &mdash; Example 2 (44 + 78 = 122)</span>
+        </div>
+        <pre><code>  Carry:      1 1 1
+          0 0 1 0 1 1 0 0   ( 44)
+        + 0 1 0 0 1 1 1 0   ( 78)
+        -----------------
+          0 1 1 1 1 0 1 0   (122)</code></pre>
+      </div>
+
+      <p><strong>Column-by-column working (right to left):</strong></p>
+      <ol>
+        <li><strong>Column 1:</strong> 0 + 0 = 0. Write <strong>0</strong>.</li>
+        <li><strong>Column 2:</strong> 0 + 1 = 1. Write <strong>1</strong>.</li>
+        <li><strong>Column 3:</strong> 1 + 1 = 10. Write <strong>0</strong>, carry <strong>1</strong>.</li>
+        <li><strong>Column 4:</strong> 0 + 0 + carry 1 = 1. Write <strong>1</strong>.</li>
+        <li><strong>Column 5:</strong> 1 + 1 = 10. Write <strong>0</strong> &mdash; wait, let us be careful. Actually column 5 is the 16s column: 1 + 0 = 1. Write <strong>1</strong>. No carry.</li>
+      </ol>
+      <p>Let us redo this more carefully:</p>
+      <ol>
+        <li><strong>Column 1 (1s):</strong> 0 + 0 = 0. Write <strong>0</strong>.</li>
+        <li><strong>Column 2 (2s):</strong> 0 + 1 = 1. Write <strong>1</strong>.</li>
+        <li><strong>Column 3 (4s):</strong> 1 + 1 = 10. Write <strong>0</strong>, carry <strong>1</strong>.</li>
+        <li><strong>Column 4 (8s):</strong> 1 + 1 + carry 1 = 11. Write <strong>1</strong>, carry <strong>1</strong>.</li>
+        <li><strong>Column 5 (16s):</strong> 0 + 0 + carry 1 = 1. Write <strong>1</strong>.</li>
+        <li><strong>Column 6 (32s):</strong> 1 + 0 = 1. Write <strong>1</strong>.</li>
+        <li><strong>Column 7 (64s):</strong> 0 + 1 = 1. Write <strong>1</strong>.</li>
+        <li><strong>Column 8 (128s):</strong> 0 + 0 = 0. Write <strong>0</strong>.</li>
+      </ol>
+      <p>Result: <strong>01111010</strong>. Check: 64 + 32 + 16 + 8 + 2 = 122. Correct!</p>
+
+      <div class="try-this">
+        <strong>Try This:</strong> Before looking at Example 3, try adding 11001000 + 01100101 yourself on paper. Work column by column from the right. When you are done, convert your answer to denary and check whether it equals 200 + 101 = 301. What do you notice?
+      </div>
+
+      <!-- Example 3 — Overflow -->
+      <h3>Example 3: 11001000 + 01100101 (Overflow!)</h3>
+      <p>Denary check: 11001000 = 128 + 64 + 8 = <strong>200</strong>, and 01100101 = 64 + 32 + 4 + 1 = <strong>101</strong>. Expected answer: 200 + 101 = <strong>301</strong>.</p>
+      <p>But wait &mdash; the maximum value an 8-bit unsigned binary number can hold is 11111111 = <strong>255</strong>. The number 301 is bigger than 255, so it <strong>cannot fit</strong> in 8 bits. Let us see what happens:</p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Binary Addition &mdash; Overflow Example (200 + 101 = 301)</span>
+        </div>
+        <pre><code>  Carry: 1 1 1
+          1 1 0 0 1 0 0 0   (200)
+        + 0 1 1 0 0 1 0 1   (101)
+        -----------------
+        1 0 0 1 0 1 1 0 1   (301 &mdash; needs 9 bits!)
+
+  But we only have 8 bits, so the 9th bit is LOST:
+        0 0 1 0 1 1 0 1   = 45   (WRONG!)
+
+  This is an OVERFLOW ERROR.</code></pre>
+      </div>
+
+      <p>The true answer is 100101101 in binary, which is a <strong>9-bit number</strong>. Since our system only has 8 bits, the leftmost bit (the 1 in the 256s column) is <strong>discarded</strong>. The computer stores 00101101, which equals just <strong>45</strong> &mdash; a completely incorrect answer. This is called an <strong>overflow error</strong>.</p>
+    </section>
+
+    <!-- ==================== UNDERSTAND ==================== -->
+    <section class="understand">
+      <span class="section-label">Understand</span>
+      <h2>Overflow Errors</h2>
+
+      <p>An <strong>overflow error</strong> occurs when the result of a calculation is <strong>too large to be stored</strong> in the number of bits available. It is one of the most important concepts in binary arithmetic, and exam boards love to test it.</p>
+
+      <h3>Why Does Overflow Happen?</h3>
+      <p>Every computer system allocates a fixed number of bits to store each number. With <strong>8 bits</strong> (one byte), the largest unsigned integer you can represent is:</p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Maximum 8-Bit Unsigned Value</span>
+        </div>
+        <pre><code>  1 1 1 1 1 1 1 1
+  128+64+32+16+8+4+2+1 = 255
+
+  Maximum value with n bits = 2^n - 1
+  For 8 bits: 2^8 - 1 = 256 - 1 = 255</code></pre>
+      </div>
+
+      <p>If a binary addition produces a result greater than 255 (for 8-bit), the answer requires a <strong>9th bit</strong>. But there is no 9th bit available &mdash; so that extra bit is simply <strong>lost</strong>. The remaining 8 bits give an incorrect, smaller number.</p>
+
+      <h3>How to Spot Overflow</h3>
+      <p>You can detect overflow in two ways:</p>
+      <ol>
+        <li><strong>The denary check:</strong> Convert both numbers to denary. If their sum exceeds 255 (for 8-bit), there will be overflow.</li>
+        <li><strong>The carry-out check:</strong> If there is a carry out of the <strong>most significant bit</strong> (the leftmost column) &mdash; meaning a 9th bit is generated &mdash; overflow has occurred.</li>
+      </ol>
+
+      <h3>What Happens When Overflow Occurs?</h3>
+      <ul>
+        <li>The 9th bit (the carry out of the MSB) is <strong>discarded</strong></li>
+        <li>The stored answer is <strong>incorrect</strong> &mdash; it &ldquo;wraps around&rdquo; to a small number</li>
+        <li>The computer may raise an <strong>overflow flag</strong> or error, but some languages silently ignore it</li>
+        <li>This can lead to <strong>serious, dangerous bugs</strong> in software</li>
+      </ul>
+
+      <h3>Real-World Consequences of Overflow</h3>
+
+      <p><strong>Ariane 5 Rocket (1996):</strong> The European Space Agency&rsquo;s Ariane 5 rocket exploded just 37 seconds after launch. The cause? A 64-bit floating-point number (representing horizontal velocity) was converted to a 16-bit signed integer. The velocity value was too large for 16 bits, causing an overflow error. The guidance system received garbage data, the rocket veered off course, and the self-destruct mechanism was triggered. The rocket and its four satellites &mdash; worth over <strong>$370 million</strong> &mdash; were destroyed.</p>
+
+      <p><strong>Boeing 787 Dreamliner (2015):</strong> The US Federal Aviation Administration issued a safety directive after discovering that a counter in the Boeing 787&rsquo;s generator control units would overflow after exactly <strong>248 days</strong> (2<sup>31</sup> hundredths of a second) of continuous operation. If all four generators were powered on simultaneously and left running for 248 days, the overflow could cause them to shut down simultaneously, resulting in a total loss of electrical power mid-flight. The fix was simple: restart the generators before the counter overflowed.</p>
+
+      <div class="warning">
+        <strong>Watch Out &mdash; Overflow on Exam Papers:</strong> If a question asks you to add two 8-bit binary numbers and the result exceeds 255, you <strong>must</strong> state that an overflow error has occurred. Do not just write the 9-bit answer &mdash; explain that the 9th bit is lost, the stored result is incorrect, and this is called an overflow error. This is a common source of lost marks.
+      </div>
+    </section>
+
+    <!-- ==================== INTERACTIVE EXERCISE 1 ==================== -->
+    <div class="interactive-exercise" id="addition-exercise">
+      <h3>Interactive Exercise 1: Binary Addition Practice</h3>
+      <p>Add the two 8-bit binary numbers below. Type your answer as an 8-bit binary number (e.g. 01100100).</p>
+
+      <div class="exercise-problem" id="addition-problem">Loading...</div>
+
+      <div class="exercise-controls">
+        <input type="text" class="exercise-input" id="addition-answer" maxlength="8" placeholder="00000000" autocomplete="off" />
+        <button class="check-btn" id="addition-check" onclick="checkAddition()">Check Answer</button>
+        <button class="new-btn" id="addition-new" onclick="newAdditionQuestion()">New Question</button>
+      </div>
+
+      <div class="feedback" id="addition-feedback"></div>
+      <div class="score-display" id="addition-score">Score: 0 / 0</div>
+    </div>
+
+    <script>
+      // ===== EXERCISE 1: Binary Addition Practice =====
+      let addNum1 = 0, addNum2 = 0;
+      let addCorrect = 0, addTotal = 0;
+
+      function toBin8(n) {
+        return n.toString(2).padStart(8, '0');
+      }
+
+      function newAdditionQuestion() {
+        // Both numbers 0-127 so sum fits in 8 bits (max 254)
+        addNum1 = Math.floor(Math.random() * 128);
+        addNum2 = Math.floor(Math.random() * (255 - addNum1 + 1));
+        if (addNum2 > 127) addNum2 = 127;
+        // Ensure sum <= 255
+        if (addNum1 + addNum2 > 255) {
+          addNum2 = 255 - addNum1;
+        }
+        document.getElementById('addition-problem').innerHTML =
+          '&nbsp;&nbsp;' + toBin8(addNum1) + '<br>+ ' + toBin8(addNum2);
+        document.getElementById('addition-answer').value = '';
+        document.getElementById('addition-feedback').className = 'feedback';
+        document.getElementById('addition-feedback').textContent = '';
+        document.getElementById('addition-answer').focus();
+      }
+
+      function checkAddition() {
+        var userAnswer = document.getElementById('addition-answer').value.trim();
+        var feedback = document.getElementById('addition-feedback');
+        var correctSum = addNum1 + addNum2;
+        var correctBin = toBin8(correctSum);
+
+        if (!/^[01]{8}$/.test(userAnswer)) {
+          feedback.className = 'feedback incorrect';
+          feedback.textContent = 'Please enter exactly 8 binary digits (0s and 1s only).';
+          return;
+        }
+
+        addTotal++;
+
+        if (userAnswer === correctBin) {
+          addCorrect++;
+          feedback.className = 'feedback correct';
+          feedback.innerHTML = 'Correct! ' + toBin8(addNum1) + ' (' + addNum1 + ') + ' +
+            toBin8(addNum2) + ' (' + addNum2 + ') = ' + correctBin + ' (' + correctSum + ')';
+        } else {
+          feedback.className = 'feedback incorrect';
+          feedback.innerHTML = 'Not quite. The correct answer is <strong>' + correctBin + '</strong>.<br>' +
+            'In denary: ' + addNum1 + ' + ' + addNum2 + ' = ' + correctSum + ', which is ' + correctBin + ' in binary.';
+        }
+
+        document.getElementById('addition-score').textContent =
+          'Score: ' + addCorrect + ' / ' + addTotal;
+      }
+
+      // Allow Enter key to check answer
+      document.getElementById('addition-answer').addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') checkAddition();
+      });
+
+      newAdditionQuestion();
+    </script>
+
+    <!-- ==================== INTERACTIVE EXERCISE 2 ==================== -->
+    <div class="interactive-exercise" id="overflow-exercise">
+      <h3>Interactive Exercise 2: Overflow Detector</h3>
+      <p>Add the two 8-bit binary numbers below. Enter the 8-bit result <strong>and</strong> decide whether an overflow error occurs.</p>
+
+      <div class="exercise-problem" id="overflow-problem">Loading...</div>
+
+      <div class="exercise-controls">
+        <input type="text" class="exercise-input" id="overflow-answer" maxlength="8" placeholder="00000000" autocomplete="off" />
+      </div>
+
+      <p style="margin: 0.5rem 0; font-weight: 600;">Does overflow occur?</p>
+      <div class="overflow-radio-group">
+        <label><input type="radio" name="overflow-choice" value="yes" /> Yes &mdash; overflow</label>
+        <label><input type="radio" name="overflow-choice" value="no" /> No &mdash; no overflow</label>
+      </div>
+
+      <div class="exercise-controls">
+        <button class="check-btn" onclick="checkOverflow()">Check Answer</button>
+        <button class="new-btn" onclick="newOverflowQuestion()">New Question</button>
+      </div>
+
+      <div class="feedback" id="overflow-feedback"></div>
+      <div class="score-display" id="overflow-score">Score: 0 / 0</div>
+    </div>
+
+    <script>
+      // ===== EXERCISE 2: Overflow Detector =====
+      let ovNum1 = 0, ovNum2 = 0;
+      let ovCorrect = 0, ovTotal = 0;
+
+      function newOverflowQuestion() {
+        // Roughly 50/50 chance of overflow
+        if (Math.random() < 0.5) {
+          // No overflow: sum <= 255
+          ovNum1 = Math.floor(Math.random() * 200) + 20;  // 20-219
+          ovNum2 = Math.floor(Math.random() * (256 - ovNum1));  // ensures sum <= 255
+        } else {
+          // Overflow: sum > 255
+          ovNum1 = Math.floor(Math.random() * 128) + 128;  // 128-255
+          ovNum2 = Math.floor(Math.random() * (256 - 128)) + (256 - ovNum1);  // ensures sum > 255
+          if (ovNum2 > 255) ovNum2 = 255;
+          // Double check
+          if (ovNum1 + ovNum2 <= 255) {
+            ovNum2 = 256 - ovNum1 + Math.floor(Math.random() * 50);
+            if (ovNum2 > 255) ovNum2 = 255;
+          }
+        }
+
+        document.getElementById('overflow-problem').innerHTML =
+          '&nbsp;&nbsp;' + toBin8(ovNum1) + '<br>+ ' + toBin8(ovNum2);
+        document.getElementById('overflow-answer').value = '';
+        document.getElementById('overflow-feedback').className = 'feedback';
+        document.getElementById('overflow-feedback').textContent = '';
+        // Clear radio buttons
+        var radios = document.querySelectorAll('input[name="overflow-choice"]');
+        radios.forEach(function(r) { r.checked = false; });
+        document.getElementById('overflow-answer').focus();
+      }
+
+      function checkOverflow() {
+        var userBin = document.getElementById('overflow-answer').value.trim();
+        var feedback = document.getElementById('overflow-feedback');
+        var selectedRadio = document.querySelector('input[name="overflow-choice"]:checked');
+
+        if (!/^[01]{8}$/.test(userBin)) {
+          feedback.className = 'feedback incorrect';
+          feedback.textContent = 'Please enter exactly 8 binary digits (0s and 1s only).';
+          return;
+        }
+
+        if (!selectedRadio) {
+          feedback.className = 'feedback incorrect';
+          feedback.textContent = 'Please select whether overflow occurs (Yes or No).';
+          return;
+        }
+
+        ovTotal++;
+
+        var trueSum = ovNum1 + ovNum2;
+        var hasOverflow = trueSum > 255;
+        var truncatedSum = trueSum % 256;  // what 8 bits would store
+        var correctBin = toBin8(truncatedSum);
+        var userOverflow = selectedRadio.value === 'yes';
+
+        var binCorrect = (userBin === correctBin);
+        var overflowCorrect = (userOverflow === hasOverflow);
+
+        if (binCorrect && overflowCorrect) {
+          ovCorrect++;
+          feedback.className = 'feedback correct';
+          if (hasOverflow) {
+            feedback.innerHTML = 'Correct! ' + ovNum1 + ' + ' + ovNum2 + ' = ' + trueSum +
+              ', which exceeds 255. Overflow occurs! The 9th bit is lost, leaving ' + correctBin +
+              ' (' + truncatedSum + ') &mdash; an incorrect result.';
+          } else {
+            feedback.innerHTML = 'Correct! ' + ovNum1 + ' + ' + ovNum2 + ' = ' + trueSum +
+              ', which fits in 8 bits. No overflow. The result is ' + correctBin + ' (' + trueSum + ').';
+          }
+        } else {
+          feedback.className = 'feedback incorrect';
+          var msg = 'Not quite. ';
+          msg += ovNum1 + ' + ' + ovNum2 + ' = ' + trueSum + '. ';
+          if (hasOverflow) {
+            msg += 'This <strong>exceeds 255</strong>, so overflow DOES occur. ';
+            msg += 'The true 9-bit result is ' + trueSum.toString(2).padStart(9, '0') +
+              ', but the 9th bit is lost, leaving <strong>' + correctBin + '</strong> (' + truncatedSum + ').';
+          } else {
+            msg += 'This <strong>fits within 255</strong>, so overflow does NOT occur. ';
+            msg += 'The correct 8-bit answer is <strong>' + correctBin + '</strong> (' + trueSum + ').';
+          }
+          feedback.innerHTML = msg;
+        }
+
+        document.getElementById('overflow-score').textContent =
+          'Score: ' + ovCorrect + ' / ' + ovTotal;
+      }
+
+      // Allow Enter key to check answer
+      document.getElementById('overflow-answer').addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') checkOverflow();
+      });
+
+      newOverflowQuestion();
+    </script>
+
+    <!-- ==================== PRACTICE ==================== -->
+    <section class="practice">
+      <span class="section-label">Practice</span>
+      <h2>Test Yourself</h2>
+      <p>Click on each question to reveal the answer. Try to work it out on paper first &mdash; remember to show your carry row!</p>
+
+      <div class="hint">
+        <div class="hint-title">Q1: Add the binary numbers 00011010 + 00001111. Give your answer in 8-bit binary and check in denary.</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong></p>
+          <pre><code>  Carry:    1 1 1 1 1
+          0 0 0 1 1 0 1 0   ( 26)
+        + 0 0 0 0 1 1 1 1   ( 15)
+        -----------------
+          0 0 1 0 1 0 0 1   ( 41)</code></pre>
+          <p>26 + 15 = 41. The result <strong>00101001</strong> = 32 + 8 + 1 = 41. Correct, no overflow.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q2: Add 01010101 + 00101010. Does overflow occur?</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong></p>
+          <pre><code>  Carry:
+          0 1 0 1 0 1 0 1   ( 85)
+        + 0 0 1 0 1 0 1 0   ( 42)
+        -----------------
+          0 1 1 1 1 1 1 1   (127)</code></pre>
+          <p>85 + 42 = 127. Result: <strong>01111111</strong> = 127. No overflow (127 &le; 255). Notice that no carries were needed at all &mdash; no column had two 1s!</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q3: Add 11111111 + 00000001. What happens?</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong></p>
+          <pre><code>  Carry: 1 1 1 1 1 1 1 1
+          1 1 1 1 1 1 1 1   (255)
+        + 0 0 0 0 0 0 0 1   (  1)
+        -----------------
+        1 0 0 0 0 0 0 0 0   (256 &mdash; needs 9 bits!)</code></pre>
+          <p>255 + 1 = 256. This exceeds 255, so an <strong>overflow error</strong> occurs. The 9th bit is lost, leaving <strong>00000000</strong> = 0. The answer wraps around from the maximum value back to zero!</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q4: Add 10110100 + 01001011. Does overflow occur? What is the result?</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong></p>
+          <pre><code>  Carry:  1 1 1 1 1 1
+          1 0 1 1 0 1 0 0   (180)
+        + 0 1 0 0 1 0 1 1   ( 75)
+        -----------------
+          1 1 1 1 1 1 1 1   (255)</code></pre>
+          <p>180 + 75 = 255. Result: <strong>11111111</strong> = 255. No overflow! This is the <strong>largest possible 8-bit value</strong>. One more and it would overflow.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q5: A computer uses 8-bit unsigned integers. A program tries to store the result of 200 + 200. What value is actually stored, and why?</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> 200 + 200 = 400. Since 400 &gt; 255, an <strong>overflow error</strong> occurs. In binary: 200 = 11001000, and 200 + 200 = 110010000 (9 bits). The 9th bit is lost, leaving <strong>10010000</strong> = 144. So the computer stores <strong>144</strong> instead of the correct answer of 400. Alternatively: 400 &minus; 256 = 144 (the value &ldquo;wraps around&rdquo;).</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q6: Explain two ways you can check whether overflow has occurred after adding two 8-bit binary numbers.</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong></p>
+          <ol>
+            <li><strong>Denary check:</strong> Convert both numbers to denary and add them. If the sum exceeds <strong>255</strong>, overflow has occurred.</li>
+            <li><strong>Carry-out check:</strong> Perform the binary addition. If a <strong>carry is generated out of the most significant bit</strong> (i.e., a 9th bit is produced), overflow has occurred.</li>
+          </ol>
+          <p>Both methods are equally valid in an exam. The denary check is often quicker if you are already comfortable converting.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q7: Why does the Ariane 5 rocket disaster demonstrate the importance of understanding overflow errors?</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> The Ariane 5 rocket exploded in 1996 because a 64-bit floating-point number (representing horizontal velocity) was converted to a <strong>16-bit signed integer</strong>. The velocity value was too large for 16 bits, causing an <strong>overflow error</strong>. This fed incorrect data to the guidance system, causing the rocket to veer off course and self-destruct. The accident destroyed over <strong>$370 million</strong> worth of equipment. This shows that overflow errors are not just theoretical exam questions &mdash; they can have catastrophic real-world consequences. Programmers must always consider the <strong>range of values</strong> their variables might hold and choose data types with enough bits to store them safely.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== KEY VOCABULARY ==================== -->
+    <section class="understand">
+      <span class="section-label">Understand</span>
+      <h2>Key Vocabulary</h2>
+      <p>Make sure you know all of these terms for your exam:</p>
+
+      <table class="vocab-table">
+        <thead>
+          <tr><th>Term</th><th>Definition</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Binary Addition</td>
+            <td>The process of adding two binary numbers together column by column, from right to left, following the rules of base-2 arithmetic (where 1 + 1 = 10).</td>
+          </tr>
+          <tr>
+            <td>Carry</td>
+            <td>A digit that is transferred to the next column on the left when the sum of a column equals or exceeds the base value. In binary, a carry of 1 occurs whenever a column totals 2 or 3.</td>
+          </tr>
+          <tr>
+            <td>Overflow Error</td>
+            <td>An error that occurs when the result of a calculation is too large to be represented in the available number of bits. The extra bit(s) are lost, producing an incorrect result.</td>
+          </tr>
+          <tr>
+            <td>Most Significant Bit (MSB)</td>
+            <td>The leftmost bit in a binary number. It has the highest place value (e.g. 128 in an 8-bit number). A carry out of the MSB indicates overflow in unsigned addition.</td>
+          </tr>
+          <tr>
+            <td>Least Significant Bit (LSB)</td>
+            <td>The rightmost bit in a binary number. It has the lowest place value (1). Binary addition always starts from the LSB and works leftward.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- ==================== EXAM TIPS ==================== -->
+    <section class="understand">
+      <span class="section-label">Understand</span>
+      <h2>Exam Tips</h2>
+
+      <div class="exam-tip">
+        <strong>Exam Tip 1: Always Show the Carry Row</strong>
+        When performing binary addition in an exam, <strong>always write the carry row</strong> above the two numbers. Even if you get the final answer slightly wrong, examiners can see your method and award you partial marks. A carry row also helps you avoid mistakes &mdash; it is surprisingly easy to forget a carry when working under pressure.
+      </div>
+
+      <div class="exam-tip">
+        <strong>Exam Tip 2: Check Your Answer Using Denary</strong>
+        After completing a binary addition, <strong>convert all three numbers to denary</strong> (both inputs and your result) and verify that the denary addition matches. If 01101011 (107) + 00110101 (53) gives you 10100000, check: does 128 + 32 = 160? Does 107 + 53 = 160? Yes &mdash; so your binary addition is correct. This 30-second check can save you from losing easy marks.
+      </div>
+
+      <div class="exam-tip">
+        <strong>Exam Tip 3: Spotting Overflow</strong>
+        If a question gives you two 8-bit binary numbers to add and asks &ldquo;what problems might occur?&rdquo; &mdash; that is your cue to discuss <strong>overflow</strong>. Quick test: if either number starts with a 1 (meaning it is 128 or above), overflow is possible. If <em>both</em> numbers start with a 1, overflow is <strong>guaranteed</strong> (since both are at least 128, their sum is at least 256, which exceeds the 8-bit maximum of 255).
+      </div>
+
+      <div class="exam-tip">
+        <strong>Exam Tip 4: Read the Question Carefully</strong>
+        Some questions ask for the &ldquo;result of the addition&rdquo; (meaning the 8-bit answer that would be stored), while others ask &ldquo;what is the correct answer?&rdquo; (meaning the full mathematical answer, even if it needs 9 bits). Make sure you answer what is actually being asked. If overflow occurs, state both: the true answer (e.g. 301) and what would actually be stored in 8 bits (e.g. 45).
+      </div>
+    </section>
+
+    <!-- ==================== REFLECT ==================== -->
+    <section class="reflect">
+      <span class="section-label">Reflect</span>
+      <h2>Why Binary Addition Matters</h2>
+
+      <p>Binary addition is not just an exam topic &mdash; it is the <strong>most fundamental operation</strong> that every computer performs. Every single calculation your computer, phone, or games console carries out is ultimately built on binary addition.</p>
+
+      <ul>
+        <li><strong>Subtraction</strong> is performed using addition (by adding the two&rsquo;s complement of a number).</li>
+        <li><strong>Multiplication</strong> is performed using repeated addition and binary shifts.</li>
+        <li><strong>Division</strong> is performed using repeated subtraction (which is itself addition).</li>
+      </ul>
+
+      <p>Inside the CPU, the component that performs binary addition is called the <strong>Arithmetic Logic Unit (ALU)</strong>. It contains millions of logic gates wired together to add binary numbers at incredible speed &mdash; billions of additions per second. Understanding binary addition gives you insight into how computers actually think at the lowest level.</p>
+
+      <p>And overflow errors? They are not ancient history. They still cause real bugs today in games (integer overflow exploits), financial systems (incorrect calculations), and embedded systems (sensor data errors). Understanding overflow means you can write safer, more robust software.</p>
+
+      <div class="extra-resources">
+        <h3>Further Reading</h3>
+        <ul>
+          <li><a href="https://www.101computing.net/binary-logic/binary-additions.html" target="_blank" rel="noopener">101 Computing &mdash; Binary Additions</a> &mdash; Interactive practice with binary addition, including step-by-step animations</li>
+          <li><a href="https://www.bbc.co.uk/bitesize/examspecs/zdqy7nb" target="_blank" rel="noopener">BBC Bitesize &mdash; Edexcel GCSE Computer Science</a> &mdash; Comprehensive coverage of binary arithmetic with exam-style questions</li>
+          <li><a href="https://hvgcsecs.cshub.org.je/topics/topic2.html" target="_blank" rel="noopener">GCSE Topic 2: Data Representation</a> &mdash; Full specification coverage including binary addition and overflow</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ==================== NAVIGATION ==================== -->
+    <nav class="chapter-nav">
+      <a href="data-representation.html">&larr; Previous: Number Systems</a>
+      <a href="../index.html">Course Home</a>
+      <a href="hexadecimal.html">Next: Hexadecimal &rarr;</a>
+    </nav>
+
+  </main>
+
+  <footer class="site-footer">
+    <p>Python Fundamentals &mdash; A KS4 Learning Platform</p>
+    <p>Binary Addition &mdash; GCSE Computer Science Theory</p>
+  </footer>
+
+</body>
+</html>

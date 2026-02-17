@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sound Representation - Python Fundamentals</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <style>
+    .interactive-exercise { background: linear-gradient(135deg, #f0f7ff, #e8f0fe); border: 2px solid #4361ee; border-radius: 12px; padding: 1.5rem; margin: 1.5rem 0; }
+    .interactive-exercise h3 { margin-top: 0; color: #4361ee; }
+    .exercise-problem { font-size: 1.3rem; font-weight: 700; margin: 1rem 0; font-family: 'JetBrains Mono', monospace; }
+    .exercise-controls { display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap; margin: 1rem 0; }
+    .exercise-input { font-family: 'JetBrains Mono', monospace; font-size: 1.1rem; padding: 0.5rem 1rem; border: 2px solid #ccc; border-radius: 8px; width: 160px; }
+    .exercise-input:focus { border-color: #4361ee; outline: none; }
+    .check-btn, .new-btn { padding: 0.5rem 1.2rem; font-size: 1rem; font-weight: 600; border: none; border-radius: 8px; cursor: pointer; transition: background 0.2s; }
+    .check-btn { background: #4361ee; color: white; }
+    .check-btn:hover { background: #3a0ca3; }
+    .new-btn { background: #06d6a0; color: white; }
+    .new-btn:hover { background: #05b384; }
+    .feedback { margin-top: 0.5rem; padding: 0.5rem 1rem; border-radius: 8px; font-weight: 600; display: none; }
+    .feedback.correct { background: #e6f9f1; color: #087f5b; border: 1px solid #06d6a0; display: block; }
+    .feedback.incorrect { background: #fff5f5; color: #c92a2a; border: 1px solid #e63946; display: block; }
+    .score-display { font-weight: 600; color: #4361ee; margin-top: 0.5rem; }
+    .did-you-know { background: linear-gradient(135deg, #e8f4fd, #d1ecf9); border: 2px solid #0dcaf0; border-radius: 12px; padding: 1.5rem; margin: 1rem 0; }
+    .did-you-know strong:first-child { color: #0a7c9f; display: block; margin-bottom: 0.25rem; }
+    .exam-tip { background: linear-gradient(135deg, #f3e8ff, #ede5ff); border: 2px solid #7209b7; border-radius: 12px; padding: 1.5rem; margin: 1rem 0; }
+    .exam-tip strong:first-child { color: #7209b7; display: block; margin-bottom: 0.25rem; }
+    .case-study { background: #ffffff; border: 2px solid #6c757d; border-radius: 12px; padding: 1.5rem; margin: 1rem 0; }
+    .case-study strong:first-child { color: #495057; display: block; margin-bottom: 0.25rem; }
+    .vocab-table td:first-child { font-weight: 700; white-space: nowrap; }
+    .quality-radio-group { display: flex; gap: 1.5rem; align-items: center; margin: 0.5rem 0; flex-wrap: wrap; }
+    .quality-radio-group label { font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 0.3rem; }
+    .quality-radio-group input[type="radio"] { cursor: pointer; width: 1.1rem; height: 1.1rem; }
+    .config-card { background: #f8f9fa; border: 2px solid #dee2e6; border-radius: 10px; padding: 1rem 1.2rem; margin: 0.5rem 0; font-family: 'JetBrains Mono', monospace; font-size: 1rem; line-height: 1.8; }
+    .config-card .config-label { font-weight: 700; color: #4361ee; font-size: 1.1rem; margin-bottom: 0.25rem; }
+  </style>
+</head>
+<body>
+
+  <header class="site-header">
+    <p><a href="../index.html">&larr; Back to Course</a></p>
+    <h1>Sound Representation</h1>
+    <p class="subtitle">How computers capture and store sound &mdash; from analogue waves to digital samples</p>
+  </header>
+
+  <main>
+
+    <!-- ==================== THE IDEA ==================== -->
+    <section class="idea">
+      <span class="section-label">The Idea</span>
+      <h2>From Sound Waves to Numbers</h2>
+
+      <p>When you clap your hands, speak, or play a guitar, you create <strong>sound waves</strong> &mdash; vibrations in the air that travel to your ears. These waves are <strong>analogue</strong>: they change continuously and smoothly, with an infinite number of values at every moment. If you could zoom in on a sound wave, you would always find more detail, no matter how closely you looked.</p>
+
+      <p>Computers, however, can only store <strong>digital data</strong> &mdash; discrete numbers made up of 0s and 1s. A computer cannot store a smooth, continuous wave directly. So how does your phone record your voice? How does Spotify stream a song? How does a game play sound effects?</p>
+
+      <p>The answer is <strong>sampling</strong>. To store sound digitally, a computer takes thousands of &ldquo;snapshots&rdquo; of the sound wave every second. Each snapshot captures the <strong>amplitude</strong> (height) of the wave at that exact moment and stores it as a number. When these snapshots are played back in rapid succession, your ears hear what sounds like a continuous, smooth wave &mdash; even though the computer is really just playing a series of numbers, one after another.</p>
+
+      <p>Think of it like a flip book. Each page shows a slightly different picture. When you flip through them quickly, you see smooth animation &mdash; even though each page is a single, frozen image. Sound sampling works the same way: each &ldquo;page&rdquo; is a single measurement of the wave, and playing them rapidly recreates the original sound.</p>
+
+      <div class="key-concept">
+        <strong>Key Concept: Analogue vs Digital</strong>
+        <strong>Analogue</strong> data is continuous &mdash; it has an infinite number of possible values and changes smoothly over time. Real-world sound is analogue. <strong>Digital</strong> data is discrete &mdash; it consists of separate, fixed values represented as binary numbers. Computers store everything digitally. To convert analogue sound into digital data, the computer uses <strong>sampling</strong>: measuring the amplitude of the sound wave at regular intervals and recording each measurement as a binary number.
+      </div>
+    </section>
+
+    <!-- ==================== EXPLORE ==================== -->
+    <section class="explore">
+      <span class="section-label">Explore</span>
+      <h2>How Sound Sampling Works</h2>
+
+      <p>Imagine you are trying to describe a roller coaster&rsquo;s shape to someone who cannot see it. You could measure the height of the track at regular intervals &mdash; every metre, say &mdash; and write down each measurement. The more frequently you measure, the more accurately your list of numbers captures the true shape of the track. Sound sampling works on exactly the same principle.</p>
+
+      <p>When a computer samples sound, two key settings determine the quality of the recording:</p>
+
+      <h3>Sample Rate (Frequency)</h3>
+
+      <p>The <strong>sample rate</strong> is how many samples (measurements) the computer takes <strong>per second</strong>. It is measured in <strong>Hertz (Hz)</strong>, where 1 Hz means one sample per second.</p>
+
+      <ul>
+        <li><strong>Telephone quality:</strong> 8,000 Hz (8 kHz) &mdash; 8,000 samples every second</li>
+        <li><strong>FM radio quality:</strong> 22,050 Hz (22.05 kHz)</li>
+        <li><strong>CD quality:</strong> 44,100 Hz (44.1 kHz) &mdash; 44,100 samples every second</li>
+        <li><strong>Professional audio / Blu-ray:</strong> 96,000 Hz or 192,000 Hz</li>
+      </ul>
+
+      <p>A higher sample rate captures the sound wave more frequently, which means it can reproduce <strong>higher-pitched sounds</strong> more accurately. Think of our roller coaster analogy: measuring every 10 centimetres gives you far more detail than measuring every 5 metres.</p>
+
+      <h3>Bit Depth (Sample Resolution)</h3>
+
+      <p>The <strong>bit depth</strong> (also called <strong>sample resolution</strong>) is the number of <strong>bits used to store each individual sample</strong>. It determines how precisely the amplitude of the wave can be recorded.</p>
+
+      <ul>
+        <li><strong>8-bit:</strong> 2<sup>8</sup> = <strong>256</strong> possible amplitude values</li>
+        <li><strong>16-bit (CD quality):</strong> 2<sup>16</sup> = <strong>65,536</strong> possible amplitude values</li>
+        <li><strong>24-bit (professional):</strong> 2<sup>24</sup> = <strong>16,777,216</strong> possible amplitude values (over 16.7 million)</li>
+      </ul>
+
+      <p>A higher bit depth means each sample can be recorded with <strong>greater precision</strong>. With only 8 bits, the computer must round the true amplitude to one of 256 levels, which can introduce a slight &ldquo;graininess&rdquo; called <strong>quantisation error</strong>. With 16 bits, there are 65,536 levels to choose from, so the rounding is far less noticeable. With 24 bits, the precision is so fine that the human ear cannot detect any rounding at all.</p>
+
+      <p>To summarise the roles of each setting:</p>
+      <ul>
+        <li><strong>Higher sample rate</strong> = better capture of <strong>frequency</strong> (high-pitched and rapidly changing sounds)</li>
+        <li><strong>Higher bit depth</strong> = more precise capture of <strong>amplitude</strong> (volume levels and subtle dynamics)</li>
+      </ul>
+
+      <h3>The Quality vs File Size Trade-off</h3>
+
+      <p>There is an unavoidable trade-off: <strong>better quality means larger files</strong>. Doubling the sample rate doubles the file size. Doubling the bit depth also doubles the file size. A CD-quality recording takes up roughly 80 times more space than the same recording at telephone quality. This is why different applications use different settings &mdash; a phone call does not need CD quality, and a streaming service must balance quality against bandwidth and storage.</p>
+
+      <div class="did-you-know">
+        <strong>Did You Know?</strong>
+        The reason CD audio uses a sample rate of 44,100 Hz comes from the <strong>Nyquist theorem</strong>. This theorem states that to accurately capture a sound wave, you must sample at <strong>at least twice</strong> the highest frequency present. Human hearing ranges from about 20 Hz to 20,000 Hz (20 kHz). To capture the full range of human hearing, the sample rate must be at least 2 &times; 20,000 = 40,000 Hz. CD audio uses 44,100 Hz &mdash; just over double the upper limit &mdash; to provide a small safety margin. This is not a coincidence; it is deliberate engineering based on the mathematics of signal processing.
+      </div>
+    </section>
+
+    <!-- ==================== UNDERSTAND ==================== -->
+    <section class="understand">
+      <span class="section-label">Understand</span>
+      <h2>Calculating Sound File Size</h2>
+
+      <p>One of the most commonly examined skills in GCSE Computer Science is calculating the file size of an uncompressed sound recording. The formula is straightforward:</p>
+
+      <div class="key-concept">
+        <strong>The Formula</strong>
+        <p style="font-size: 1.2rem; font-family: 'JetBrains Mono', monospace; margin: 0.75rem 0;">File size (bits) = sample rate &times; bit depth &times; duration (seconds)</p>
+        <p>For <strong>stereo</strong> audio (two channels &mdash; left and right), multiply by <strong>2</strong>:</p>
+        <p style="font-size: 1.2rem; font-family: 'JetBrains Mono', monospace; margin: 0.75rem 0;">File size (bits) = sample rate &times; bit depth &times; duration &times; 2</p>
+        <p style="margin-bottom: 0;">To convert: <strong>bits &divide; 8 = bytes</strong>, then <strong>bytes &divide; 1,024 = KB</strong>, then <strong>KB &divide; 1,024 = MB</strong>.</p>
+      </div>
+
+      <h3>Worked Example 1: CD-Quality Stereo (30 seconds)</h3>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Worked Example 1</span>
+        </div>
+        <pre><code>  Sample rate:  44,100 Hz
+  Bit depth:    16 bits
+  Duration:     30 seconds
+  Channels:     Stereo (2)
+
+  File size = 44,100 &times; 16 &times; 30 &times; 2
+           = 42,336,000 bits
+           = 42,336,000 &divide; 8 = 5,292,000 bytes
+           = 5,292,000 &divide; 1,024 = 5,168.0 KB
+           = 5,168.0 &divide; 1,024 &asymp; 5.05 MB</code></pre>
+      </div>
+      <p>Just 30 seconds of uncompressed CD stereo audio takes over <strong>5 MB</strong>. That gives you an idea of why music files are compressed!</p>
+
+      <h3>Worked Example 2: Telephone-Quality Mono (10 seconds)</h3>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Worked Example 2</span>
+        </div>
+        <pre><code>  Sample rate:  8,000 Hz
+  Bit depth:    8 bits
+  Duration:     10 seconds
+  Channels:     Mono (1)
+
+  File size = 8,000 &times; 8 &times; 10
+           = 640,000 bits
+           = 640,000 &divide; 8 = 80,000 bytes
+           = 80,000 &divide; 1,024 &asymp; 78.13 KB</code></pre>
+      </div>
+      <p>The same 10 seconds at telephone quality takes under <strong>80 KB</strong> &mdash; a tiny fraction of CD quality. The sound quality is much worse, but for a voice call it is perfectly adequate.</p>
+
+      <h3>Worked Example 3: 3-Minute CD Stereo Song</h3>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Worked Example 3</span>
+        </div>
+        <pre><code>  Sample rate:  44,100 Hz
+  Bit depth:    16 bits
+  Duration:     3 minutes = 180 seconds
+  Channels:     Stereo (2)
+
+  File size = 44,100 &times; 16 &times; 180 &times; 2
+           = 254,016,000 bits
+           = 254,016,000 &divide; 8 = 31,752,000 bytes
+           = 31,752,000 &divide; 1,024 = 31,007.8 KB
+           = 31,007.8 &divide; 1,024 &asymp; 30.28 MB</code></pre>
+      </div>
+      <p>A single 3-minute song takes about <strong>30 MB</strong> uncompressed. An album of 12 songs could easily exceed 400 MB. This is why compression (like MP3 or AAC) is essential for practical music storage and streaming.</p>
+
+      <h3>Quality Settings Comparison</h3>
+
+      <table>
+        <thead>
+          <tr><th>Quality Level</th><th>Sample Rate</th><th>Bit Depth</th><th>Channels</th><th>~Size per Minute</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>Telephone</strong></td><td>8,000 Hz</td><td>8 bits</td><td>Mono</td><td>~469 KB</td></tr>
+          <tr><td><strong>FM Radio</strong></td><td>22,050 Hz</td><td>16 bits</td><td>Stereo</td><td>~5.05 MB</td></tr>
+          <tr><td><strong>CD</strong></td><td>44,100 Hz</td><td>16 bits</td><td>Stereo</td><td>~10.09 MB</td></tr>
+          <tr><td><strong>Professional</strong></td><td>96,000 Hz</td><td>24 bits</td><td>Stereo</td><td>~32.96 MB</td></tr>
+        </tbody>
+      </table>
+
+      <div class="warning">
+        <strong>Important:</strong> The formula gives you the <strong>uncompressed</strong> file size. In practice, audio files are almost always compressed. MP3 compression typically reduces file size by about <strong>90%</strong>, so a 30 MB uncompressed song might become a 3 MB MP3. Exam questions will specify whether they want the uncompressed size (most do) or will tell you a compression ratio to apply.
+      </div>
+    </section>
+
+    <!-- ==================== CASE STUDY ==================== -->
+    <div class="case-study">
+      <strong>Case Study: How Spotify Compresses Audio</strong>
+      <p>Spotify streams music to over 600 million users worldwide. Storing and transmitting uncompressed audio at that scale would be impossibly expensive, so Spotify uses <strong>lossy compression</strong> &mdash; specifically <strong>Ogg Vorbis</strong> (on desktop) and <strong>AAC</strong> (on mobile) formats.</p>
+
+      <p>Consider a typical 3-minute song:</p>
+      <ul>
+        <li><strong>Uncompressed (WAV):</strong> ~30 MB</li>
+        <li><strong>Spotify Normal quality (96 kbps):</strong> ~2.2 MB</li>
+        <li><strong>Spotify High quality (160 kbps):</strong> ~3.5 MB</li>
+        <li><strong>Spotify Very High quality (320 kbps):</strong> ~7 MB</li>
+      </ul>
+
+      <p>How does lossy compression shrink files so dramatically? It uses <strong>psychoacoustic models</strong> &mdash; algorithms based on how human hearing works &mdash; to remove sounds that most people cannot perceive. For example:</p>
+      <ul>
+        <li><strong>Frequency masking:</strong> A loud sound at one frequency makes nearby quieter sounds inaudible, so those quieter sounds are removed.</li>
+        <li><strong>Temporal masking:</strong> A loud sound makes softer sounds immediately before and after it undetectable, so those are removed too.</li>
+        <li><strong>Inaudible frequencies:</strong> Sounds above 20 kHz (beyond human hearing) are discarded entirely.</li>
+      </ul>
+
+      <p>This approach enables streaming without consuming huge amounts of mobile data. At Normal quality, streaming for one hour uses roughly <strong>43 MB</strong> of data &mdash; compared to about <strong>605 MB</strong> if the audio were uncompressed. That is a reduction of over <strong>93%</strong>.</p>
+    </div>
+
+    <!-- ==================== INTERACTIVE EXERCISE 1 ==================== -->
+    <div class="interactive-exercise" id="filesize-exercise">
+      <h3>Exercise 1: Sound File Size Calculator</h3>
+      <p>Calculate the file size of the sound recording described below. Give your answer in <strong>MB</strong>, rounded to <strong>2 decimal places</strong>.</p>
+      <p style="font-size: 0.9rem; color: #555;">Formula: file size (bits) = sample rate &times; bit depth &times; duration &times; channels. Then convert bits &rarr; bytes &rarr; KB &rarr; MB.</p>
+
+      <div class="exercise-problem" id="fs-problem">Loading...</div>
+
+      <div class="exercise-controls">
+        <input type="text" class="exercise-input" id="fs-answer" placeholder="e.g. 5.05" maxlength="10" autocomplete="off" />
+        <span style="font-weight: 600;">MB</span>
+        <button class="check-btn" id="fs-check">Check</button>
+        <button class="new-btn" id="fs-new">New Question</button>
+      </div>
+
+      <div class="feedback" id="fs-feedback"></div>
+      <div class="score-display" id="fs-score">Score: 0 / 0</div>
+    </div>
+
+    <!-- ==================== INTERACTIVE EXERCISE 2 ==================== -->
+    <div class="interactive-exercise" id="compare-exercise">
+      <h3>Exercise 2: Quality Comparison</h3>
+      <p>Two audio recordings are described below. Determine which has <strong>higher quality</strong>, which has a <strong>larger file size</strong>, and calculate the <strong>exact file size</strong> of each in MB (to 2 decimal places).</p>
+
+      <div id="cmp-configs" style="display: flex; gap: 1rem; flex-wrap: wrap; margin: 1rem 0;">
+        <div class="config-card" id="cmp-config-a" style="flex: 1; min-width: 240px;">
+          <div class="config-label">Configuration A</div>
+          <div id="cmp-a-details">Loading...</div>
+        </div>
+        <div class="config-card" id="cmp-config-b" style="flex: 1; min-width: 240px;">
+          <div class="config-label">Configuration B</div>
+          <div id="cmp-b-details">Loading...</div>
+        </div>
+      </div>
+
+      <p style="font-weight: 600; margin-bottom: 0.25rem;">Which recording has higher quality?</p>
+      <div class="quality-radio-group">
+        <label><input type="radio" name="cmp-quality" value="A" /> Configuration A</label>
+        <label><input type="radio" name="cmp-quality" value="B" /> Configuration B</label>
+      </div>
+
+      <p style="font-weight: 600; margin-bottom: 0.25rem; margin-top: 0.75rem;">Which recording has a larger file size?</p>
+      <div class="quality-radio-group">
+        <label><input type="radio" name="cmp-size" value="A" /> Configuration A</label>
+        <label><input type="radio" name="cmp-size" value="B" /> Configuration B</label>
+      </div>
+
+      <div class="exercise-controls" style="margin-top: 0.75rem;">
+        <span style="font-weight: 600; min-width: 100px;">Size of A:</span>
+        <input type="text" class="exercise-input" id="cmp-size-a" placeholder="e.g. 10.09" maxlength="10" autocomplete="off" />
+        <span style="font-weight: 600;">MB</span>
+      </div>
+      <div class="exercise-controls" style="margin-top: 0.25rem;">
+        <span style="font-weight: 600; min-width: 100px;">Size of B:</span>
+        <input type="text" class="exercise-input" id="cmp-size-b" placeholder="e.g. 5.05" maxlength="10" autocomplete="off" />
+        <span style="font-weight: 600;">MB</span>
+      </div>
+
+      <div class="exercise-controls">
+        <button class="check-btn" id="cmp-check">Check</button>
+        <button class="new-btn" id="cmp-new">New Question</button>
+      </div>
+
+      <div class="feedback" id="cmp-feedback"></div>
+      <div class="score-display" id="cmp-score">Score: 0 / 0</div>
+    </div>
+
+    <!-- ==================== PRACTICE ==================== -->
+    <section class="practice">
+      <span class="section-label">Practice</span>
+      <h2>Test Yourself</h2>
+      <p>Click on each question to reveal the answer. Try to work it out yourself first!</p>
+
+      <div class="hint">
+        <div class="hint-title">Q1: What is meant by the term &ldquo;sampling&rdquo; in the context of sound representation?</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> Sampling is the process of measuring the <strong>amplitude (height)</strong> of an analogue sound wave at <strong>regular intervals</strong> and recording each measurement as a digital (binary) number. These discrete measurements are called <strong>samples</strong>. When played back in rapid succession, the samples recreate an approximation of the original sound wave.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q2: Explain the difference between sample rate and bit depth.</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong></p>
+          <ul>
+            <li><strong>Sample rate</strong> is the number of samples taken <strong>per second</strong>, measured in Hertz (Hz). A higher sample rate captures sound more frequently, improving the accuracy of high-frequency sounds. CD quality uses 44,100 Hz.</li>
+            <li><strong>Bit depth</strong> is the number of <strong>bits used to store each sample</strong>. A higher bit depth means more possible amplitude values, so each sample is more precise. CD quality uses 16 bits (65,536 possible values).</li>
+          </ul>
+          <p>In short: sample rate determines <em>how often</em> you measure, and bit depth determines <em>how precisely</em> you measure.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q3: Calculate the file size of a 45-second mono recording at 22,050 Hz with a bit depth of 16 bits.</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong></p>
+          <pre><code>  File size = 22,050 &times; 16 &times; 45 &times; 1
+           = 15,876,000 bits
+           = 15,876,000 &divide; 8 = 1,984,500 bytes
+           = 1,984,500 &divide; 1,024 = 1,938.0 KB
+           = 1,938.0 &divide; 1,024 &asymp; 1.89 MB</code></pre>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q4: A stereo audio file has a sample rate of 44,100 Hz, a bit depth of 16 bits, and a file size of approximately 60.56 MB. Estimate the duration of the recording.</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> Rearrange the formula to find duration:</p>
+          <pre><code>  60.56 MB = 60.56 &times; 1,024 &times; 1,024 bytes
+           = 63,504,957 bytes (approximately)
+           = 63,504,957 &times; 8 = 508,039,654 bits
+
+  Duration = bits &divide; (sample rate &times; bit depth &times; channels)
+           = 508,039,654 &divide; (44,100 &times; 16 &times; 2)
+           = 508,039,654 &divide; 1,411,200
+           &asymp; 360 seconds = 6 minutes</code></pre>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q5: Explain why increasing the sample rate improves sound quality but also increases file size.</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> A higher sample rate means <strong>more samples are taken per second</strong>, so the digital recording captures the shape of the analogue wave more accurately. Rapid changes in the wave (high-frequency sounds) that would be missed at a low sample rate are caught at a higher one. However, each additional sample takes up space &mdash; more samples per second means more data per second. Since file size = sample rate &times; bit depth &times; duration, <strong>doubling the sample rate exactly doubles the file size</strong>.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q6: What is the Nyquist theorem and why is it relevant to CD audio?</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> The <strong>Nyquist theorem</strong> states that to accurately capture and reproduce a sound wave, the sample rate must be <strong>at least twice the highest frequency</strong> present in the sound. Human hearing ranges up to approximately <strong>20,000 Hz (20 kHz)</strong>. To capture this full range, the sample rate must be at least 2 &times; 20,000 = 40,000 Hz. CD audio uses a sample rate of <strong>44,100 Hz</strong>, which is slightly above this minimum to provide a safety margin. If the sample rate were less than twice the highest frequency, the recording would suffer from a distortion called <strong>aliasing</strong>, where high-frequency sounds are incorrectly represented.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q7: A podcast is recorded in mono at 22,050 Hz with 16-bit depth. The same content is also recorded in stereo at 44,100 Hz with 24-bit depth. How many times larger is the stereo file?</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong></p>
+          <pre><code>  Mono file:   22,050 &times; 16 &times; 1 = 352,800 bits per second
+  Stereo file: 44,100 &times; 24 &times; 2 = 2,116,800 bits per second
+
+  Ratio = 2,116,800 &divide; 352,800 = 6</code></pre>
+          <p>The stereo file is <strong>6 times larger</strong> than the mono file for the same duration. This is because the sample rate doubled (&times;2), the bit depth increased from 16 to 24 (&times;1.5), and it went from mono to stereo (&times;2). Combined: 2 &times; 1.5 &times; 2 = 6.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== KEY VOCABULARY ==================== -->
+    <section class="understand">
+      <span class="section-label">Understand</span>
+      <h2>Key Vocabulary</h2>
+      <p>Make sure you know all of these terms for your exam:</p>
+
+      <table class="vocab-table">
+        <thead>
+          <tr><th>Term</th><th>Definition</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Sampling</td>
+            <td>The process of measuring the amplitude of an analogue sound wave at regular intervals and storing each measurement as a digital value. This converts continuous sound into discrete data a computer can store.</td>
+          </tr>
+          <tr>
+            <td>Sample Rate</td>
+            <td>The number of samples taken per second, measured in Hertz (Hz). A higher sample rate captures more detail and higher frequencies. CD quality is 44,100 Hz.</td>
+          </tr>
+          <tr>
+            <td>Bit Depth</td>
+            <td>The number of bits used to represent each individual sample. A higher bit depth provides more possible amplitude values and greater precision. Also called sample resolution. CD quality is 16-bit.</td>
+          </tr>
+          <tr>
+            <td>Analogue</td>
+            <td>A continuous signal with an infinite number of possible values. Real-world sound is analogue &mdash; it varies smoothly and continuously over time.</td>
+          </tr>
+          <tr>
+            <td>Digital</td>
+            <td>Data represented as discrete values, typically stored as binary numbers (0s and 1s). Computers can only process digital data.</td>
+          </tr>
+          <tr>
+            <td>Hertz (Hz)</td>
+            <td>The unit of measurement for frequency. 1 Hz = one cycle (or one sample) per second. 1 kHz = 1,000 Hz. Used to express both sample rate and sound frequency.</td>
+          </tr>
+          <tr>
+            <td>Mono</td>
+            <td>A single audio channel. All sound is mixed into one stream. Uses half the storage of stereo.</td>
+          </tr>
+          <tr>
+            <td>Stereo</td>
+            <td>Two separate audio channels (left and right), creating a sense of spatial depth. Requires twice the storage of mono because every sample must be recorded for both channels.</td>
+          </tr>
+          <tr>
+            <td>Nyquist Theorem</td>
+            <td>A principle stating that the sample rate must be at least twice the highest frequency in the sound to accurately reproduce it. This is why CD audio samples at 44.1 kHz for sounds up to 20 kHz.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- ==================== EXAM TIPS ==================== -->
+    <section class="explore">
+      <span class="section-label">Explore</span>
+      <h2>Exam Tips</h2>
+
+      <div class="exam-tip">
+        <strong>Exam Tip 1: Memorise the Formula</strong>
+        The file size formula comes up in almost every GCSE paper. Learn it by heart: <strong>file size (bits) = sample rate &times; bit depth &times; duration (seconds) &times; number of channels</strong>. Always show your full working in the exam &mdash; even if your final answer is slightly wrong, clear working can earn you method marks. Write the formula first, then substitute the values, then calculate step by step.
+      </div>
+
+      <div class="exam-tip">
+        <strong>Exam Tip 2: Do Not Forget Stereo &times; 2</strong>
+        One of the most common mistakes in sound representation questions is forgetting to multiply by <strong>2 for stereo</strong>. If a question says &ldquo;stereo&rdquo;, &ldquo;two channels&rdquo;, or &ldquo;left and right&rdquo;, you must multiply the result by 2. If it says &ldquo;mono&rdquo; or &ldquo;single channel&rdquo;, you do not. If the question does not mention channels at all, assume mono (1 channel) unless the context clearly implies stereo.
+      </div>
+
+      <div class="exam-tip">
+        <strong>Exam Tip 3: Quality vs File Size Trade-off</strong>
+        A very common exam question asks you to discuss the <strong>trade-off</strong> between quality and file size. A strong answer includes: (1) increasing sample rate captures more detail but produces larger files; (2) increasing bit depth gives more precise amplitude values but produces larger files; (3) the optimal settings depend on the application &mdash; a phone call does not need CD quality, but a music studio does; (4) compression can reduce file size but may reduce quality (lossy) or require decompression (lossless).
+      </div>
+
+      <div class="exam-tip">
+        <strong>Exam Tip 4: Unit Conversions</strong>
+        Many students lose marks on unit conversions. Remember the chain: <strong>bits &divide; 8 = bytes</strong>, <strong>bytes &divide; 1,024 = kilobytes (KB)</strong>, <strong>KB &divide; 1,024 = megabytes (MB)</strong>. Some questions ask for the answer in bits, some in bytes, some in KB, some in MB. Always check what unit the question asks for and convert accordingly. Show each conversion step clearly.
+      </div>
+
+      <div class="exam-tip">
+        <strong>Exam Tip 5: Common Mistakes to Avoid</strong>
+        <ul>
+          <li><strong>Using 1,000 instead of 1,024:</strong> In computing, 1 KB = 1,024 bytes and 1 MB = 1,024 KB. Some exam boards accept 1,000, but using 1,024 is more accurate and always accepted.</li>
+          <li><strong>Forgetting to convert minutes to seconds:</strong> If the duration is given in minutes, you must convert to seconds first (multiply by 60) before using the formula.</li>
+          <li><strong>Confusing the formula with image file size:</strong> Image size uses width &times; height &times; colour depth. Sound size uses sample rate &times; bit depth &times; duration. Do not mix them up.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ==================== REFLECT ==================== -->
+    <section class="reflect">
+      <span class="section-label">Reflect</span>
+      <h2>Sound Representation in Everyday Life</h2>
+
+      <p>Sound representation is at work every time you interact with digital audio &mdash; which, in the modern world, is almost constantly:</p>
+
+      <ul>
+        <li><strong>Every phone call you make</strong> involves your voice being sampled thousands of times per second, compressed, transmitted over a network, decompressed, and played through a speaker &mdash; all in real time with barely perceptible delay.</li>
+        <li><strong>Every song you stream</strong> on Spotify, Apple Music, or YouTube Music was originally recorded at high quality, then compressed using lossy algorithms that discard sounds humans cannot easily hear, reducing file sizes by 80&ndash;95%.</li>
+        <li><strong>Every voice assistant</strong> (Siri, Alexa, Google Assistant) samples your speech, converts the samples into data, and sends that data to servers where it is analysed and interpreted &mdash; all beginning with the simple act of sampling an analogue wave.</li>
+        <li><strong>Every video game</strong> uses sound sampling for effects, music, and dialogue. Game developers carefully balance audio quality against file size to fit everything onto a disc or download within reasonable limits.</li>
+      </ul>
+
+      <p>Understanding how computers represent sound gives you insight into the engineering behind every podcast you listen to, every video call you join, and every voice note you send. The principles are simple &mdash; sample rate, bit depth, and duration &mdash; but they underpin a vast, multi-billion-pound industry that shapes how we communicate and experience music every day.</p>
+
+      <div class="extra-resources">
+        <h3>Further Reading</h3>
+        <ul>
+          <li><a href="https://www.bbc.co.uk/bitesize/examspecs/zdqy7nb" target="_blank" rel="noopener">BBC Bitesize &mdash; Edexcel GCSE Computer Science</a> &mdash; Full specification coverage for data representation including sound</li>
+          <li><a href="https://isaaccomputerscience.org/topics/data_representation" target="_blank" rel="noopener">Isaac Computer Science &mdash; Data Representation</a> &mdash; In-depth explanations of sound sampling, file sizes, and compression</li>
+          <li><a href="https://hvgcsecs.cshub.org.je/topics/topic2.html" target="_blank" rel="noopener">GCSE Topic 2: Data Representation</a> &mdash; Interactive revision tools and sound representation activities</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ==================== NAVIGATION ==================== -->
+    <nav class="chapter-nav">
+      <a href="image-representation.html">&larr; Previous: Image Representation</a>
+      <a href="../index.html">Course Home</a>
+      <a href="compression.html">Next: Compression &rarr;</a>
+    </nav>
+
+  </main>
+
+  <footer class="site-footer">
+    <p>Python Fundamentals &mdash; A KS4 Learning Platform</p>
+    <p>Sound Representation &mdash; GCSE Computer Science Theory</p>
+  </footer>
+
+  <!-- ==================== JAVASCRIPT ==================== -->
+  <script>
+    // ========== EXERCISE 1: SOUND FILE SIZE CALCULATOR ==========
+    (function() {
+      var correct = 0;
+      var total = 0;
+
+      var sampleRates = [8000, 22050, 44100, 48000];
+      var sampleRateLabels = { 8000: '8,000 Hz', 22050: '22,050 Hz', 44100: '44,100 Hz', 48000: '48,000 Hz' };
+      var bitDepths = [8, 16, 24];
+      var currentRate, currentDepth, currentDuration, currentChannels, currentAnswer;
+
+      var problemEl = document.getElementById('fs-problem');
+      var answerEl = document.getElementById('fs-answer');
+      var feedbackEl = document.getElementById('fs-feedback');
+      var scoreEl = document.getElementById('fs-score');
+      var checkBtn = document.getElementById('fs-check');
+      var newBtn = document.getElementById('fs-new');
+
+      function generate() {
+        currentRate = sampleRates[Math.floor(Math.random() * sampleRates.length)];
+        currentDepth = bitDepths[Math.floor(Math.random() * bitDepths.length)];
+        currentDuration = Math.floor(Math.random() * 56) + 5; // 5 to 60 seconds
+        currentChannels = Math.random() < 0.5 ? 1 : 2;
+        var channelLabel = currentChannels === 1 ? 'Mono (1 channel)' : 'Stereo (2 channels)';
+
+        var bits = currentRate * currentDepth * currentDuration * currentChannels;
+        var mb = bits / 8 / 1024 / 1024;
+        currentAnswer = Math.round(mb * 100) / 100;
+
+        problemEl.innerHTML =
+          'Sample rate: <strong>' + sampleRateLabels[currentRate] + '</strong><br>' +
+          'Bit depth: <strong>' + currentDepth + ' bits</strong><br>' +
+          'Duration: <strong>' + currentDuration + ' seconds</strong><br>' +
+          'Channels: <strong>' + channelLabel + '</strong>';
+
+        answerEl.value = '';
+        feedbackEl.className = 'feedback';
+        feedbackEl.textContent = '';
+        answerEl.focus();
+      }
+
+      function formatNumber(n) {
+        return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+      }
+
+      function check() {
+        var userVal = parseFloat(answerEl.value.trim());
+        if (isNaN(userVal)) {
+          feedbackEl.className = 'feedback incorrect';
+          feedbackEl.textContent = 'Please enter a number (e.g. 5.05).';
+          return;
+        }
+
+        total++;
+
+        var bits = currentRate * currentDepth * currentDuration * currentChannels;
+        var bytes = bits / 8;
+        var kb = bytes / 1024;
+        var mb = kb / 1024;
+        var channelText = currentChannels === 1 ? '' : ' \u00d7 2';
+
+        var working =
+          formatNumber(currentRate) + ' \u00d7 ' + currentDepth + ' \u00d7 ' + currentDuration + channelText +
+          ' = ' + formatNumber(bits) + ' bits<br>' +
+          formatNumber(bits) + ' \u00f7 8 = ' + formatNumber(bytes) + ' bytes<br>' +
+          formatNumber(bytes) + ' \u00f7 1,024 = ' + kb.toFixed(1) + ' KB<br>' +
+          kb.toFixed(1) + ' \u00f7 1,024 = <strong>' + currentAnswer.toFixed(2) + ' MB</strong>';
+
+        // Allow tolerance of 0.02 MB for rounding differences
+        if (Math.abs(userVal - currentAnswer) <= 0.02) {
+          correct++;
+          feedbackEl.className = 'feedback correct';
+          feedbackEl.innerHTML = 'Correct! ' + currentAnswer.toFixed(2) + ' MB.<br>' + working;
+        } else {
+          feedbackEl.className = 'feedback incorrect';
+          feedbackEl.innerHTML = 'Not quite. The correct answer is <strong>' + currentAnswer.toFixed(2) + ' MB</strong>.<br>' + working + '<br>You answered: ' + userVal.toFixed(2) + ' MB';
+        }
+
+        scoreEl.textContent = 'Score: ' + correct + ' / ' + total;
+      }
+
+      checkBtn.addEventListener('click', check);
+      newBtn.addEventListener('click', generate);
+      answerEl.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') check();
+      });
+
+      generate();
+    })();
+
+    // ========== EXERCISE 2: QUALITY COMPARISON ==========
+    (function() {
+      var correct = 0;
+      var total = 0;
+
+      var sampleRates = [8000, 22050, 44100, 48000];
+      var sampleRateLabels = { 8000: '8,000 Hz', 22050: '22,050 Hz', 44100: '44,100 Hz', 48000: '48,000 Hz' };
+      var bitDepths = [8, 16, 24];
+      var durations = [10, 15, 20, 25, 30, 45, 60];
+
+      var configA = {};
+      var configB = {};
+      var sizeA, sizeB;
+
+      var configAEl = document.getElementById('cmp-a-details');
+      var configBEl = document.getElementById('cmp-b-details');
+      var sizeAInput = document.getElementById('cmp-size-a');
+      var sizeBInput = document.getElementById('cmp-size-b');
+      var feedbackEl = document.getElementById('cmp-feedback');
+      var scoreEl = document.getElementById('cmp-score');
+      var checkBtn = document.getElementById('cmp-check');
+      var newBtn = document.getElementById('cmp-new');
+
+      function pick(arr) {
+        return arr[Math.floor(Math.random() * arr.length)];
+      }
+
+      function calcMB(rate, depth, dur, ch) {
+        return Math.round((rate * depth * dur * ch) / 8 / 1024 / 1024 * 100) / 100;
+      }
+
+      function qualityScore(rate, depth) {
+        // Higher is better quality
+        return rate * depth;
+      }
+
+      function renderConfig(cfg) {
+        var chLabel = cfg.channels === 1 ? 'Mono' : 'Stereo';
+        return 'Sample rate: ' + sampleRateLabels[cfg.rate] + '<br>' +
+               'Bit depth: ' + cfg.depth + ' bits<br>' +
+               'Duration: ' + cfg.duration + ' seconds<br>' +
+               'Channels: ' + chLabel;
+      }
+
+      function generate() {
+        // Ensure A and B have different quality levels
+        var rateA, rateB, depthA, depthB;
+        do {
+          rateA = pick(sampleRates);
+          rateB = pick(sampleRates);
+          depthA = pick(bitDepths);
+          depthB = pick(bitDepths);
+        } while (qualityScore(rateA, depthA) === qualityScore(rateB, depthB));
+
+        configA = { rate: rateA, depth: depthA, duration: pick(durations), channels: Math.random() < 0.5 ? 1 : 2 };
+        configB = { rate: rateB, depth: depthB, duration: pick(durations), channels: Math.random() < 0.5 ? 1 : 2 };
+
+        sizeA = calcMB(configA.rate, configA.depth, configA.duration, configA.channels);
+        sizeB = calcMB(configB.rate, configB.depth, configB.duration, configB.channels);
+
+        configAEl.innerHTML = renderConfig(configA);
+        configBEl.innerHTML = renderConfig(configB);
+
+        sizeAInput.value = '';
+        sizeBInput.value = '';
+        feedbackEl.className = 'feedback';
+        feedbackEl.textContent = '';
+
+        // Clear radio buttons
+        document.querySelectorAll('input[name="cmp-quality"]').forEach(function(r) { r.checked = false; });
+        document.querySelectorAll('input[name="cmp-size"]').forEach(function(r) { r.checked = false; });
+      }
+
+      function check() {
+        var qualityChoice = document.querySelector('input[name="cmp-quality"]:checked');
+        var sizeChoice = document.querySelector('input[name="cmp-size"]:checked');
+        var userSizeA = parseFloat(sizeAInput.value.trim());
+        var userSizeB = parseFloat(sizeBInput.value.trim());
+
+        if (!qualityChoice || !sizeChoice) {
+          feedbackEl.className = 'feedback incorrect';
+          feedbackEl.textContent = 'Please select an answer for both the quality and file size comparisons.';
+          return;
+        }
+        if (isNaN(userSizeA) || isNaN(userSizeB)) {
+          feedbackEl.className = 'feedback incorrect';
+          feedbackEl.textContent = 'Please enter file sizes for both A and B (in MB, e.g. 5.05).';
+          return;
+        }
+
+        total++;
+
+        var qScoreA = qualityScore(configA.rate, configA.depth);
+        var qScoreB = qualityScore(configB.rate, configB.depth);
+        var correctQuality = qScoreA > qScoreB ? 'A' : 'B';
+        var correctSize = sizeA > sizeB ? 'A' : (sizeB > sizeA ? 'B' : 'A');
+
+        var qualityCorrect = qualityChoice.value === correctQuality;
+        var sizeCorrect = sizeChoice.value === correctSize;
+        var sizeACorrect = Math.abs(userSizeA - sizeA) <= 0.02;
+        var sizeBCorrect = Math.abs(userSizeB - sizeB) <= 0.02;
+
+        var allCorrect = qualityCorrect && sizeCorrect && sizeACorrect && sizeBCorrect;
+
+        var explanation = '<br><strong>Explanation:</strong><br>' +
+          'Configuration A quality: ' + configA.rate.toLocaleString() + ' Hz \u00d7 ' + configA.depth + '-bit = ' + qScoreA.toLocaleString() + ' (quality score)<br>' +
+          'Configuration B quality: ' + configB.rate.toLocaleString() + ' Hz \u00d7 ' + configB.depth + '-bit = ' + qScoreB.toLocaleString() + ' (quality score)<br>' +
+          'Higher quality: <strong>Configuration ' + correctQuality + '</strong><br><br>' +
+          'File size A: <strong>' + sizeA.toFixed(2) + ' MB</strong><br>' +
+          'File size B: <strong>' + sizeB.toFixed(2) + ' MB</strong><br>' +
+          'Larger file: <strong>Configuration ' + correctSize + '</strong>';
+
+        if (allCorrect) {
+          correct++;
+          feedbackEl.className = 'feedback correct';
+          feedbackEl.innerHTML = 'Correct on all parts! Well done.' + explanation;
+        } else {
+          var wrongParts = [];
+          if (!qualityCorrect) wrongParts.push('quality comparison');
+          if (!sizeCorrect) wrongParts.push('file size comparison');
+          if (!sizeACorrect) wrongParts.push('size of A (you said ' + userSizeA.toFixed(2) + ', correct is ' + sizeA.toFixed(2) + ')');
+          if (!sizeBCorrect) wrongParts.push('size of B (you said ' + userSizeB.toFixed(2) + ', correct is ' + sizeB.toFixed(2) + ')');
+          feedbackEl.className = 'feedback incorrect';
+          feedbackEl.innerHTML = 'Not quite. Incorrect: ' + wrongParts.join('; ') + '.' + explanation;
+        }
+
+        scoreEl.textContent = 'Score: ' + correct + ' / ' + total;
+      }
+
+      checkBtn.addEventListener('click', check);
+      newBtn.addEventListener('click', generate);
+
+      generate();
+    })();
+
+    // ========== HINT/REVEAL TOGGLE ==========
+    document.querySelectorAll('.hint-title').forEach(function(title) {
+      title.addEventListener('click', function() {
+        var parent = this.parentElement;
+        if (parent.classList.contains('open')) {
+          parent.classList.remove('open');
+        } else {
+          parent.classList.add('open');
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Binary Shifts - Python Fundamentals</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <style>
+    .interactive-exercise {
+      background: linear-gradient(135deg, #f0f7ff, #e8f0fe);
+      border: 2px solid #4361ee;
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+    }
+    .interactive-exercise h3 { margin-top: 0; color: #4361ee; }
+    .exercise-problem { font-size: 1.3rem; font-weight: 700; margin: 1rem 0; font-family: 'JetBrains Mono', monospace; }
+    .exercise-controls { display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap; margin: 1rem 0; }
+    .exercise-input { font-family: 'JetBrains Mono', monospace; font-size: 1.1rem; padding: 0.5rem 1rem; border: 2px solid #ccc; border-radius: 8px; width: 220px; }
+    .exercise-input:focus { border-color: #4361ee; outline: none; }
+    .check-btn, .new-btn { padding: 0.5rem 1.2rem; font-size: 1rem; font-weight: 600; border: none; border-radius: 8px; cursor: pointer; transition: background 0.2s; }
+    .check-btn { background: #4361ee; color: white; }
+    .check-btn:hover { background: #3a0ca3; }
+    .new-btn { background: #06d6a0; color: white; }
+    .new-btn:hover { background: #05b384; }
+    .feedback { margin-top: 0.5rem; padding: 0.5rem 1rem; border-radius: 8px; font-weight: 600; display: none; }
+    .feedback.correct { background: #e6f9f1; color: #087f5b; border: 1px solid #06d6a0; display: block; }
+    .feedback.incorrect { background: #fff5f5; color: #c92a2a; border: 1px solid #e63946; display: block; }
+    .score-display { font-weight: 600; color: #4361ee; margin-top: 0.5rem; }
+    .exam-tip { background: linear-gradient(135deg, #f3e8ff, #ede5ff); border: 2px solid #7209b7; border-radius: 12px; padding: 1.5rem; margin: 1rem 0; }
+    .exam-tip strong:first-child { color: #7209b7; display: block; margin-bottom: 0.25rem; }
+    .vocab-table td:first-child { font-weight: 700; white-space: nowrap; }
+  </style>
+</head>
+<body>
+
+  <header class="site-header">
+    <p><a href="../index.html">&larr; Back to Course</a></p>
+    <h1>Binary Shifts</h1>
+    <p class="subtitle">Multiply and divide using nothing but shifting bits left and right</p>
+  </header>
+
+  <main>
+
+    <!-- ==================== THE IDEA ==================== -->
+    <section class="idea">
+      <span class="section-label">The Idea</span>
+      <h2>What Is a Logical Binary Shift?</h2>
+
+      <p>A <strong>logical binary shift</strong> is the process of moving every bit in a binary number to the <strong>left</strong> or to the <strong>right</strong> by a specified number of places. It is one of the simplest operations a computer&rsquo;s processor can perform, and it has a remarkably useful side effect: it <strong>multiplies</strong> or <strong>divides</strong> the number by a power of 2.</p>
+
+      <p>Here is the core idea in two sentences:</p>
+      <ul>
+        <li>A <strong>left shift</strong> by <em>n</em> places moves every bit <em>n</em> positions to the left. The empty spaces on the right are filled with <strong>0s</strong>. This has the effect of <strong>multiplying</strong> the number by <strong>2<sup>n</sup></strong>.</li>
+        <li>A <strong>right shift</strong> by <em>n</em> places moves every bit <em>n</em> positions to the right. The empty spaces on the left are filled with <strong>0s</strong>. This has the effect of performing an <strong>integer division</strong> (whole-number division) by <strong>2<sup>n</sup></strong>.</li>
+      </ul>
+
+      <p>In both cases, any bits that are <strong>pushed off the end</strong> of the register are permanently <strong>lost</strong>. They do not wrap around &mdash; they simply disappear. This is an important detail that catches many students out in exams.</p>
+
+      <p>Think of it like a row of eight boxes on a conveyor belt. If you push the belt to the left by one position, everything moves one box to the left, a zero drops into the empty box on the right, and whatever was in the leftmost box falls off the edge and is gone forever.</p>
+
+      <div class="key-concept">
+        <strong>Key Concept: Shifts and Multiplication</strong>
+        A <strong>left shift by 1</strong> = multiply by 2. A <strong>left shift by 2</strong> = multiply by 4. A <strong>left shift by 3</strong> = multiply by 8. In general, a <strong>left shift by n</strong> = multiply by <strong>2<sup>n</sup></strong>. Similarly, a <strong>right shift by n</strong> = integer divide by <strong>2<sup>n</sup></strong>. This works because binary is a base-2 system &mdash; shifting digits changes their place values by powers of 2, just as shifting digits in denary changes their place values by powers of 10.
+      </div>
+    </section>
+
+    <!-- ==================== EXPLORE ==================== -->
+    <section class="explore">
+      <span class="section-label">Explore</span>
+      <h2>Worked Examples</h2>
+
+      <p>Let us work through several examples so you can see exactly what happens to the bits during a shift. Pay close attention to where the 0s are inserted and where bits fall off.</p>
+
+      <!-- Example 1: Left shift by 1 -->
+      <h3>Example 1: Left Shift by 1</h3>
+      <p>Starting number: <strong>00001010</strong> (10 in denary). Shift all bits <strong>one place to the left</strong>.</p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Left Shift by 1 &mdash; 00001010 (10)</span>
+        </div>
+        <pre><code>  Before:  0 0 0 0 1 0 1 0     (10)
+              &larr; &larr; &larr; &larr; &larr; &larr; &larr; &larr;   shift left by 1
+  After:   0 0 0 1 0 1 0 0     (20)
+                             ^
+                         0 fills in
+
+  Result: 10 &times; 2 = 20  &#10003;</code></pre>
+      </div>
+      <p>Every bit moved one position to the left. A <strong>0</strong> filled the empty space on the right. The leftmost bit (0) fell off, but since it was already 0 this caused no problem. The denary value doubled from <strong>10</strong> to <strong>20</strong>.</p>
+
+      <!-- Example 2: Left shift by 2 -->
+      <h3>Example 2: Left Shift by 2</h3>
+      <p>Starting number: <strong>00000110</strong> (6 in denary). Shift all bits <strong>two places to the left</strong>.</p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Left Shift by 2 &mdash; 00000110 (6)</span>
+        </div>
+        <pre><code>  Before:  0 0 0 0 0 1 1 0     (6)
+              &larr; &larr; &larr; &larr; &larr; &larr; &larr; &larr;   shift left by 2
+  After:   0 0 0 1 1 0 0 0     (24)
+                           ^ ^
+                       0s fill in
+
+  Result: 6 &times; 4 = 24  &#10003;
+  (Left shift by 2 = multiply by 2&sup2; = multiply by 4)</code></pre>
+      </div>
+      <p>Every bit jumped two positions to the left. Two <strong>0s</strong> filled in on the right. The two leftmost bits (both 0) fell off harmlessly. The denary value went from <strong>6</strong> to <strong>24</strong> &mdash; that is 6 &times; 4, exactly as the rule predicts.</p>
+
+      <!-- Example 3: Right shift by 1 -->
+      <h3>Example 3: Right Shift by 1</h3>
+      <p>Starting number: <strong>00010100</strong> (20 in denary). Shift all bits <strong>one place to the right</strong>.</p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Right Shift by 1 &mdash; 00010100 (20)</span>
+        </div>
+        <pre><code>  Before:  0 0 0 1 0 1 0 0     (20)
+              &rarr; &rarr; &rarr; &rarr; &rarr; &rarr; &rarr; &rarr;   shift right by 1
+  After:   0 0 0 0 1 0 1 0     (10)
+           ^
+       0 fills in
+
+  Result: 20 &divide; 2 = 10  &#10003;</code></pre>
+      </div>
+      <p>Every bit moved one position to the right. A <strong>0</strong> filled in on the left. The rightmost bit (0) fell off, and since it was 0 no data was lost. The denary value halved from <strong>20</strong> to <strong>10</strong>.</p>
+
+      <!-- Example 4: Right shift by 3 -->
+      <h3>Example 4: Right Shift by 3</h3>
+      <p>Starting number: <strong>01101000</strong> (104 in denary). Shift all bits <strong>three places to the right</strong>.</p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Right Shift by 3 &mdash; 01101000 (104)</span>
+        </div>
+        <pre><code>  Before:  0 1 1 0 1 0 0 0     (104)
+              &rarr; &rarr; &rarr; &rarr; &rarr; &rarr; &rarr; &rarr;   shift right by 3
+  After:   0 0 0 0 1 1 0 1     (13)
+           ^ ^ ^
+        0s fill in
+
+  Result: 104 &divide; 8 = 13  &#10003;
+  (Right shift by 3 = divide by 2&sup3; = divide by 8)</code></pre>
+      </div>
+      <p>Every bit moved three positions to the right. Three <strong>0s</strong> filled in on the left. Three bits (0, 0, 0) fell off the right-hand side &mdash; all were 0 in this case, so no data was lost. The denary value went from <strong>104</strong> to <strong>13</strong> &mdash; that is 104 &divide; 8, exactly as the rule predicts.</p>
+
+      <!-- Data Loss Example -->
+      <h3>When Things Go Wrong: Data Loss from a Left Shift</h3>
+      <p>Now let us see what happens when a left shift pushes a <strong>significant bit</strong> (a 1) off the left-hand edge.</p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Left Shift by 1 &mdash; 11000000 (192) &mdash; DATA LOSS!</span>
+        </div>
+        <pre><code>  Before:  1 1 0 0 0 0 0 0     (192)
+              &larr; &larr; &larr; &larr; &larr; &larr; &larr; &larr;   shift left by 1
+  After:   1 0 0 0 0 0 0 0     (128)
+       ^                   ^
+   1 fell off!          0 fills in
+
+  Expected: 192 &times; 2 = 384
+  Actual:   128              &#10007; WRONG!
+  The answer 384 does not fit in 8 bits.</code></pre>
+      </div>
+      <p>The leftmost <strong>1</strong> was pushed off the edge and lost. The mathematically correct answer is 192 &times; 2 = <strong>384</strong>, but 384 requires 9 bits to represent (110000000). Since we only have 8 bits, the 9th bit is gone and we are left with <strong>10000000</strong> = 128 &mdash; a completely wrong result. This is <strong>overflow</strong> caused by a left shift.</p>
+
+      <div class="try-this">
+        <strong>Try These on Paper:</strong>
+        <ol>
+          <li>Left shift 00000101 (5) by 2. What do you get? (Expected: 5 &times; 4 = 20 = <strong>00010100</strong>)</li>
+          <li>Right shift 00110000 (48) by 2. What do you get? (Expected: 48 &divide; 4 = 12 = <strong>00001100</strong>)</li>
+          <li>Left shift 01100000 (96) by 2. Does data loss occur? (Yes! 96 &times; 4 = 384, which overflows 8 bits)</li>
+          <li>Right shift 00000111 (7) by 1. What do you get? Is the result exactly 3.5? (You get 3 &mdash; the 0.5 is lost)</li>
+        </ol>
+      </div>
+
+      <div class="key-concept">
+        <strong>Key Concept: Why Shifts Are Used</strong>
+        Shifting bits is the <strong>fastest mathematical operation a CPU can perform</strong>. It is significantly faster than multiplication or division because no actual arithmetic needs to happen &mdash; the processor simply moves the bits along the register. In games, graphics engines, and embedded systems where speed is critical, programmers often use shifts instead of multiplication. For example, instead of writing <code>x * 8</code>, a programmer might write <code>x &lt;&lt; 3</code> (left shift by 3), and the CPU executes it in a single clock cycle rather than several.
+      </div>
+    </section>
+
+    <!-- ==================== UNDERSTAND ==================== -->
+    <section class="understand">
+      <span class="section-label">Understand</span>
+      <h2>Shifts and Data Loss</h2>
+
+      <p>Data loss is the most important pitfall to understand when working with binary shifts. There are two situations where it occurs, and both are commonly tested in exams.</p>
+
+      <h3>1. Left Shift Overflow</h3>
+      <p>When you shift bits to the left, the leftmost bits are pushed off the edge of the register. If any of those lost bits were <strong>1s</strong>, the result will be <strong>incorrect</strong>. This is essentially the same kind of overflow error you learned about in binary addition &mdash; the correct answer simply does not fit in the available number of bits.</p>
+
+      <p>For example, in 8 bits, the number <strong>192</strong> (11000000) cannot be doubled by a left shift because 384 needs 9 bits. Any number larger than <strong>127</strong> will overflow if left-shifted by 1 in an 8-bit system. More generally, a left shift by <em>n</em> will overflow if the original number is greater than <strong>255 &divide; 2<sup>n</sup></strong> (for 8-bit unsigned numbers).</p>
+
+      <h3>2. Right Shift Precision Loss</h3>
+      <p>When you shift bits to the right, the rightmost bits fall off. If any of them were <strong>1s</strong>, information is lost. This most commonly happens when you right-shift an <strong>odd number</strong>.</p>
+
+      <p>Consider the number <strong>7</strong> (00000111). If we right-shift by 1:</p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Right Shift by 1 &mdash; 00000111 (7) &mdash; Precision Loss</span>
+        </div>
+        <pre><code>  Before:  0 0 0 0 0 1 1 1     (7)
+              &rarr; &rarr; &rarr; &rarr; &rarr; &rarr; &rarr; &rarr;   shift right by 1
+  After:   0 0 0 0 0 0 1 1     (3)
+                             ^
+                         1 fell off!
+
+  Expected: 7 &divide; 2 = 3.5
+  Actual:   3                (the .5 is lost)
+
+  This is INTEGER division &mdash; the remainder is discarded.</code></pre>
+      </div>
+
+      <p>The mathematically correct answer is 3.5, but binary integers cannot represent fractions. The rightmost 1 fell off and was lost, so the computer stores <strong>3</strong>. This is not an error in the way overflow is &mdash; it is the expected behaviour of integer division &mdash; but it does mean that right shifting is only an <strong>exact</strong> division when the number is evenly divisible by 2<sup>n</sup>.</p>
+
+      <h3>Summary of Data Loss Rules</h3>
+      <table>
+        <thead>
+          <tr><th>Shift Direction</th><th>What Can Go Wrong</th><th>When It Happens</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>Left</strong></td><td>Overflow &mdash; significant 1s pushed off the left</td><td>When the result exceeds the maximum value for the bit width (e.g. &gt; 255 for 8 bits)</td></tr>
+          <tr><td><strong>Right</strong></td><td>Precision loss &mdash; significant 1s fall off the right</td><td>When the original number is odd, or more generally when any of the discarded bits are 1</td></tr>
+        </tbody>
+      </table>
+
+      <div class="warning">
+        <strong>Watch Out &mdash; Data Loss in Exams:</strong> If an exam question asks you to perform a binary shift, <strong>always check whether any 1-bits are lost</strong>. For a left shift, check whether any of the leftmost bits that will be shifted out are 1s. For a right shift, check the rightmost bits. If 1s are lost, you must state this and explain that the result is inaccurate. Examiners specifically set questions that cause data loss to test whether you understand this concept &mdash; do not fall into the trap of just writing the shifted answer without commenting on it.
+      </div>
+    </section>
+
+    <!-- ==================== INTERACTIVE EXERCISE 1 ==================== -->
+    <div class="interactive-exercise" id="left-shift-exercise">
+      <h3>Interactive Exercise 1: Left Shift Practice</h3>
+      <p>Perform the left shift shown below. Enter the resulting <strong>8-bit binary number</strong>.</p>
+
+      <div class="exercise-problem" id="ls-problem">Loading...</div>
+
+      <div class="exercise-controls">
+        <input type="text" class="exercise-input" id="ls-answer" maxlength="8" placeholder="e.g. 00010100" autocomplete="off" />
+        <button class="check-btn" id="ls-check">Check Answer</button>
+        <button class="new-btn" id="ls-new">New Question</button>
+      </div>
+
+      <div class="feedback" id="ls-feedback"></div>
+      <div class="score-display" id="ls-score">Score: 0 / 0</div>
+    </div>
+
+    <!-- ==================== INTERACTIVE EXERCISE 2 ==================== -->
+    <div class="interactive-exercise" id="right-shift-exercise">
+      <h3>Interactive Exercise 2: Right Shift Practice</h3>
+      <p>Perform the right shift shown below. Enter the resulting <strong>8-bit binary number</strong>.</p>
+
+      <div class="exercise-problem" id="rs-problem">Loading...</div>
+
+      <div class="exercise-controls">
+        <input type="text" class="exercise-input" id="rs-answer" maxlength="8" placeholder="e.g. 00001010" autocomplete="off" />
+        <button class="check-btn" id="rs-check">Check Answer</button>
+        <button class="new-btn" id="rs-new">New Question</button>
+      </div>
+
+      <div class="feedback" id="rs-feedback"></div>
+      <div class="score-display" id="rs-score">Score: 0 / 0</div>
+    </div>
+
+    <!-- ==================== PRACTICE ==================== -->
+    <section class="practice">
+      <span class="section-label">Practice</span>
+      <h2>Test Yourself</h2>
+      <p>Click on each question to reveal the answer. Try to work it out on paper first &mdash; draw out the 8 boxes and physically move the bits!</p>
+
+      <div class="hint">
+        <div class="hint-title">Q1: Perform a left shift by 1 on the binary number 00010110 (22). Give the result in binary and denary.</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong></p>
+          <pre><code>  Before:  0 0 0 1 0 1 1 0   (22)
+  After:   0 0 1 0 1 1 0 0   (44)</code></pre>
+          <p>Result: <strong>00101100</strong> = 44. Check: 22 &times; 2 = 44. Correct &mdash; no data loss.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q2: Perform a right shift by 2 on the binary number 01100100 (100). Give the result in binary and denary.</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong></p>
+          <pre><code>  Before:  0 1 1 0 0 1 0 0   (100)
+  After:   0 0 0 1 1 0 0 1   (25)</code></pre>
+          <p>Result: <strong>00011001</strong> = 25. Check: 100 &divide; 4 = 25. Correct &mdash; no data loss because the two rightmost bits were both 0.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q3: Perform a left shift by 3 on the binary number 00000101 (5). What is the result and what denary multiplication does this represent?</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong></p>
+          <pre><code>  Before:  0 0 0 0 0 1 0 1   (5)
+  After:   0 0 1 0 1 0 0 0   (40)</code></pre>
+          <p>Result: <strong>00101000</strong> = 40. A left shift by 3 is the same as multiplying by 2<sup>3</sup> = 8. Check: 5 &times; 8 = 40. Correct.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q4: Perform a right shift by 1 on the binary number 00001011 (11). What is the result, and has any data been lost?</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong></p>
+          <pre><code>  Before:  0 0 0 0 1 0 1 1   (11)
+  After:   0 0 0 0 0 1 0 1   (5)</code></pre>
+          <p>Result: <strong>00000101</strong> = 5. The mathematically correct answer is 11 &divide; 2 = <strong>5.5</strong>, but the rightmost 1-bit fell off. The computer gives <strong>5</strong> &mdash; the 0.5 is lost. This is <strong>precision loss</strong> due to integer division.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q5: Perform a left shift by 2 on the binary number 01100000 (96). What happens?</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong></p>
+          <pre><code>  Before:  0 1 1 0 0 0 0 0   (96)
+  After:   1 0 0 0 0 0 0 0   (128)
+
+  Expected: 96 &times; 4 = 384
+  Actual:   128  &#10007; WRONG!</code></pre>
+          <p>The correct answer is 96 &times; 4 = <strong>384</strong>, but 384 cannot fit in 8 bits (it would need 9 bits: 110000000). The leftmost 1 was shifted out and lost, leaving 10000000 = <strong>128</strong>. This is <strong>overflow</strong> &mdash; the result is incorrect because significant bits were lost during the shift.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q6: Explain why a left shift by n places is equivalent to multiplying by 2<sup>n</sup>.</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> Binary is a base-2 number system, where each column has a place value that is <strong>twice</strong> the column to its right (1, 2, 4, 8, 16, 32, 64, 128). When you shift a bit one place to the left, you move it from its current column into the column with <strong>double</strong> the place value. For example, a 1 in the 8s column moves to the 16s column &mdash; its value doubles. Since <em>every</em> bit doubles in value, the entire number doubles. Shifting by 2 places doubles twice (&times; 4), by 3 places doubles three times (&times; 8), and so on. In general, shifting left by <em>n</em> places multiplies by 2<sup>n</sup>.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q7: A programmer writes code that uses a left shift by 4 to multiply a variable by 16. Under what circumstances would this produce a wrong answer?</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> A left shift by 4 moves all bits four places to the left, meaning the <strong>four leftmost bits</strong> will be shifted out and lost. If any of those four bits are <strong>1s</strong>, the result will be incorrect due to <strong>overflow</strong>. Specifically, for an 8-bit unsigned number, the shift will only give the correct answer if the original number is <strong>15 or less</strong> (i.e. 255 &divide; 16 = 15, rounded down). Any value from 16 upwards, when multiplied by 16, exceeds 255 and cannot fit in 8 bits. For example, 16 &times; 16 = 256, which overflows. The programmer should ensure the variable&rsquo;s value is small enough that the result fits within the bit width, or use a larger data type.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== KEY VOCABULARY ==================== -->
+    <section class="understand">
+      <span class="section-label">Understand</span>
+      <h2>Key Vocabulary</h2>
+      <p>Make sure you know all of these terms for your exam:</p>
+
+      <table class="vocab-table">
+        <thead>
+          <tr><th>Term</th><th>Definition</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Binary Shift</td>
+            <td>The process of moving all bits in a binary number a specified number of places to the left or right. Empty positions are filled with 0s, and bits that move beyond the register are lost.</td>
+          </tr>
+          <tr>
+            <td>Left Shift</td>
+            <td>A binary shift that moves all bits to the left by <em>n</em> places. Equivalent to multiplying the number by 2<sup>n</sup>. Zeros fill in on the right-hand side.</td>
+          </tr>
+          <tr>
+            <td>Right Shift</td>
+            <td>A binary shift that moves all bits to the right by <em>n</em> places. Equivalent to integer division by 2<sup>n</sup>. Zeros fill in on the left-hand side.</td>
+          </tr>
+          <tr>
+            <td>Logical Shift</td>
+            <td>A type of binary shift where the vacated positions are always filled with 0s, regardless of the direction of the shift. This is the type of shift studied at GCSE level (as opposed to arithmetic shifts, which preserve the sign bit).</td>
+          </tr>
+          <tr>
+            <td>Data Loss</td>
+            <td>The permanent loss of information when bits containing 1s are shifted off the edge of the register. This causes the result to be inaccurate. It can occur in both left shifts (overflow) and right shifts (precision loss).</td>
+          </tr>
+          <tr>
+            <td>Overflow</td>
+            <td>An error that occurs when the result of an operation is too large to fit in the available number of bits. In the context of shifts, overflow happens when a left shift pushes significant 1-bits off the left-hand end of the register.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- ==================== EXAM TIPS ==================== -->
+    <section class="understand">
+      <span class="section-label">Understand</span>
+      <h2>Exam Tips</h2>
+
+      <div class="exam-tip">
+        <strong>Exam Tip 1: Always Show Before and After</strong>
+        When a question asks you to perform a binary shift, write out the binary number <strong>before</strong> the shift and the binary number <strong>after</strong> the shift, clearly labelled. Draw the 8-bit pattern both times. This makes your working crystal clear and earns you method marks even if you make a small error in the shifting. Some students also draw arrows to show the direction of the shift, which is an excellent habit.
+      </div>
+
+      <div class="exam-tip">
+        <strong>Exam Tip 2: State the Multiplication or Division</strong>
+        After performing the shift, always write a sentence explaining the <strong>denary effect</strong>. For example: &ldquo;A left shift by 2 is equivalent to multiplying by 4. The original number was 6 and the result is 24, which confirms 6 &times; 4 = 24.&rdquo; This demonstrates understanding beyond just moving bits, and examiners award marks for this explanation. It also serves as a useful check on your own answer.
+      </div>
+
+      <div class="exam-tip">
+        <strong>Exam Tip 3: Spotting Data Loss</strong>
+        If the question involves a left shift and the original number has <strong>1s near the left-hand end</strong> of the byte, alarm bells should ring &mdash; there is a good chance those 1s will be shifted off the end. Similarly, if a right shift is applied to an <strong>odd number</strong>, the rightmost bit is a 1 and will be lost. Examiners deliberately set questions that cause data loss to see if you mention it. If you spot it, write something like: &ldquo;The leftmost 1-bit was shifted out and lost, causing overflow. The stored result (128) is incorrect because the true answer (384) exceeds 255 and cannot be represented in 8 bits.&rdquo;
+      </div>
+
+      <div class="exam-tip">
+        <strong>Exam Tip 4: Know Your Powers of 2</strong>
+        Shift questions often require you to know the powers of 2 quickly. Memorise them: 2<sup>1</sup> = 2, 2<sup>2</sup> = 4, 2<sup>3</sup> = 8, 2<sup>4</sup> = 16, 2<sup>5</sup> = 32, 2<sup>6</sup> = 64, 2<sup>7</sup> = 128, 2<sup>8</sup> = 256. If a question says &ldquo;left shift by 3,&rdquo; you should immediately think &ldquo;multiply by 8.&rdquo; If it says &ldquo;right shift by 2,&rdquo; you should immediately think &ldquo;divide by 4.&rdquo; This quick mental lookup helps you verify your binary answer using denary arithmetic.
+      </div>
+    </section>
+
+    <!-- ==================== REFLECT ==================== -->
+    <section class="reflect">
+      <span class="section-label">Reflect</span>
+      <h2>Why Binary Shifts Matter</h2>
+
+      <p>Binary shifts might seem like a simple mechanical process, but they are <strong>fundamental to how computers work at the hardware level</strong>. Here is why they matter beyond the exam:</p>
+
+      <ul>
+        <li><strong>CPU optimisation:</strong> Modern compilers automatically convert multiplications and divisions by powers of 2 into shift operations because shifts are the fastest operations a processor can perform &mdash; often completing in a single clock cycle. When you write <code>score * 2</code> in your code, the compiler may silently turn it into a left shift by 1.</li>
+        <li><strong>Graphics and games:</strong> Game engines and graphics processors use shifts extensively. For example, pixel colour values are packed into 32-bit integers, and shifts are used to extract or combine the red, green, blue, and alpha (transparency) channels. Scrolling a screen, zooming an image, and blending colours all rely on shift operations under the hood.</li>
+        <li><strong>Networking:</strong> IP addresses and subnet masks are manipulated using shifts and bitwise operations. When a router determines whether a packet belongs to a particular network, it uses shifts to isolate the network portion of the address.</li>
+        <li><strong>Embedded systems:</strong> In microcontrollers (like those in washing machines, car engines, and medical devices), memory and processing power are extremely limited. Shifts allow programmers to perform multiplication and division without needing the full multiplication circuitry, saving both time and chip space.</li>
+        <li><strong>Cryptography:</strong> Encryption algorithms like AES and SHA use combinations of shifts, rotations, and bitwise operations to scramble data securely.</li>
+      </ul>
+
+      <p>Understanding shifts gives you a deeper insight into how computers think at the most fundamental level. Every multiplication, every pixel drawn on screen, and every encrypted message you send is built upon these simple bit-moving operations.</p>
+
+      <div class="extra-resources">
+        <h3>Further Reading</h3>
+        <ul>
+          <li><a href="https://www.bbc.co.uk/bitesize/guides/zfspfcw/revision/6" target="_blank" rel="noopener">BBC Bitesize &mdash; Binary Shifts</a> &mdash; Clear explanations of left and right shifts with practice questions</li>
+          <li><a href="https://www.bbc.co.uk/bitesize/examspecs/zdqy7nb" target="_blank" rel="noopener">BBC Bitesize &mdash; Edexcel GCSE Computer Science</a> &mdash; Full specification coverage for data representation including binary shifts</li>
+          <li><a href="https://hvgcsecs.cshub.org.je/topics/topic2.html" target="_blank" rel="noopener">GCSE Topic 2: Data Representation</a> &mdash; Interactive revision tools covering binary shifts and related topics</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ==================== NAVIGATION ==================== -->
+    <nav class="chapter-nav">
+      <a href="hexadecimal.html">&larr; Previous: Hexadecimal</a>
+      <a href="../index.html">Course Home</a>
+      <a href="twos-complement.html">Next: Two&rsquo;s Complement &rarr;</a>
+    </nav>
+
+  </main>
+
+  <footer class="site-footer">
+    <p>Python Fundamentals &mdash; A KS4 Learning Platform</p>
+    <p>Binary Shifts &mdash; GCSE Computer Science Theory</p>
+  </footer>
+
+  <!-- ==================== JAVASCRIPT ==================== -->
+  <script>
+    // ========== UTILITY FUNCTIONS ==========
+    function toBin8(n) {
+      return (n & 0xFF).toString(2).padStart(8, '0');
+    }
+
+    // ========== EXERCISE 1: LEFT SHIFT PRACTICE ==========
+    (function() {
+      var correct = 0;
+      var total = 0;
+      var currentNum = 0;
+      var currentShift = 0;
+
+      var problemEl = document.getElementById('ls-problem');
+      var answerEl = document.getElementById('ls-answer');
+      var feedbackEl = document.getElementById('ls-feedback');
+      var scoreEl = document.getElementById('ls-score');
+      var checkBtn = document.getElementById('ls-check');
+      var newBtn = document.getElementById('ls-new');
+
+      function generate() {
+        // Random 8-bit number from 1 to 127 (keep small enough that some overflow, some don't)
+        currentNum = Math.floor(Math.random() * 127) + 1;
+        currentShift = Math.floor(Math.random() * 3) + 1; // 1, 2, or 3
+        problemEl.innerHTML = toBin8(currentNum) + ' (' + currentNum + ')&nbsp; &laquo;&nbsp; LEFT SHIFT by ' + currentShift;
+        answerEl.value = '';
+        feedbackEl.className = 'feedback';
+        feedbackEl.textContent = '';
+        answerEl.focus();
+      }
+
+      function check() {
+        var userAnswer = answerEl.value.replace(/\s/g, '');
+        var trueResult = currentNum * Math.pow(2, currentShift);
+        var eightBitResult = (currentNum << currentShift) & 0xFF;
+        var correctBin = toBin8(eightBitResult);
+
+        if (!/^[01]{8}$/.test(userAnswer)) {
+          feedbackEl.className = 'feedback incorrect';
+          feedbackEl.textContent = 'Please enter exactly 8 binary digits (0s and 1s only).';
+          return;
+        }
+
+        total++;
+
+        var hasOverflow = trueResult > 255;
+        var explanation = '';
+
+        if (hasOverflow) {
+          explanation = toBin8(currentNum) + ' (' + currentNum + ') left shifted by ' + currentShift +
+            ' = ' + correctBin + ' (' + eightBitResult + '). ' +
+            'Note: the true answer is ' + currentNum + ' &times; ' + Math.pow(2, currentShift) +
+            ' = ' + trueResult + ', which overflows 8 bits. Data was lost!';
+        } else {
+          explanation = toBin8(currentNum) + ' (' + currentNum + ') left shifted by ' + currentShift +
+            ' = ' + correctBin + ' (' + eightBitResult + '). ' +
+            'Check: ' + currentNum + ' &times; ' + Math.pow(2, currentShift) + ' = ' + trueResult + '.';
+        }
+
+        if (userAnswer === correctBin) {
+          correct++;
+          feedbackEl.className = 'feedback correct';
+          feedbackEl.innerHTML = 'Correct! ' + explanation;
+        } else {
+          feedbackEl.className = 'feedback incorrect';
+          feedbackEl.innerHTML = 'Not quite. ' + explanation + ' You answered: ' + userAnswer + '.';
+        }
+
+        scoreEl.textContent = 'Score: ' + correct + ' / ' + total;
+      }
+
+      checkBtn.addEventListener('click', check);
+      newBtn.addEventListener('click', generate);
+      answerEl.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') check();
+      });
+
+      generate();
+    })();
+
+    // ========== EXERCISE 2: RIGHT SHIFT PRACTICE ==========
+    (function() {
+      var correct = 0;
+      var total = 0;
+      var currentNum = 0;
+      var currentShift = 0;
+
+      var problemEl = document.getElementById('rs-problem');
+      var answerEl = document.getElementById('rs-answer');
+      var feedbackEl = document.getElementById('rs-feedback');
+      var scoreEl = document.getElementById('rs-score');
+      var checkBtn = document.getElementById('rs-check');
+      var newBtn = document.getElementById('rs-new');
+
+      function generate() {
+        // Random 8-bit number from 8 to 255 (ensure there's something to shift)
+        currentNum = Math.floor(Math.random() * 248) + 8;
+        currentShift = Math.floor(Math.random() * 3) + 1; // 1, 2, or 3
+        problemEl.innerHTML = toBin8(currentNum) + ' (' + currentNum + ')&nbsp; &raquo;&nbsp; RIGHT SHIFT by ' + currentShift;
+        answerEl.value = '';
+        feedbackEl.className = 'feedback';
+        feedbackEl.textContent = '';
+        answerEl.focus();
+      }
+
+      function check() {
+        var userAnswer = answerEl.value.replace(/\s/g, '');
+        var eightBitResult = currentNum >>> currentShift;
+        var correctBin = toBin8(eightBitResult);
+        var divisor = Math.pow(2, currentShift);
+        var exactResult = currentNum / divisor;
+        var hasPrecisionLoss = (currentNum % divisor) !== 0;
+
+        if (!/^[01]{8}$/.test(userAnswer)) {
+          feedbackEl.className = 'feedback incorrect';
+          feedbackEl.textContent = 'Please enter exactly 8 binary digits (0s and 1s only).';
+          return;
+        }
+
+        total++;
+
+        var explanation = '';
+
+        if (hasPrecisionLoss) {
+          explanation = toBin8(currentNum) + ' (' + currentNum + ') right shifted by ' + currentShift +
+            ' = ' + correctBin + ' (' + eightBitResult + '). ' +
+            'Note: ' + currentNum + ' &divide; ' + divisor + ' = ' + exactResult +
+            ', but integer division gives ' + eightBitResult + '. The fractional part is lost.';
+        } else {
+          explanation = toBin8(currentNum) + ' (' + currentNum + ') right shifted by ' + currentShift +
+            ' = ' + correctBin + ' (' + eightBitResult + '). ' +
+            'Check: ' + currentNum + ' &divide; ' + divisor + ' = ' + eightBitResult + '.';
+        }
+
+        if (userAnswer === correctBin) {
+          correct++;
+          feedbackEl.className = 'feedback correct';
+          feedbackEl.innerHTML = 'Correct! ' + explanation;
+        } else {
+          feedbackEl.className = 'feedback incorrect';
+          feedbackEl.innerHTML = 'Not quite. ' + explanation + ' You answered: ' + userAnswer + '.';
+        }
+
+        scoreEl.textContent = 'Score: ' + correct + ' / ' + total;
+      }
+
+      checkBtn.addEventListener('click', check);
+      newBtn.addEventListener('click', generate);
+      answerEl.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') check();
+      });
+
+      generate();
+    })();
+
+    // ========== HINT/REVEAL TOGGLE ==========
+    document.querySelectorAll('.hint-title').forEach(function(title) {
+      title.addEventListener('click', function() {
+        var parent = this.parentElement;
+        if (parent.classList.contains('open')) {
+          parent.classList.remove('open');
+        } else {
+          parent.classList.add('open');
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>

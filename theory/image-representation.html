@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Image Representation - Python Fundamentals</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <style>
+    .interactive-exercise { background: linear-gradient(135deg, #f0f7ff, #e8f0fe); border: 2px solid #4361ee; border-radius: 12px; padding: 1.5rem; margin: 1.5rem 0; }
+    .interactive-exercise h3 { margin-top: 0; color: #4361ee; }
+    .exercise-problem { font-size: 1.3rem; font-weight: 700; margin: 1rem 0; font-family: 'JetBrains Mono', monospace; }
+    .exercise-controls { display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap; margin: 1rem 0; }
+    .exercise-input { font-family: 'JetBrains Mono', monospace; font-size: 1.1rem; padding: 0.5rem 1rem; border: 2px solid #ccc; border-radius: 8px; width: 160px; }
+    .exercise-input:focus { border-color: #4361ee; outline: none; }
+    .check-btn, .new-btn { padding: 0.5rem 1.2rem; font-size: 1rem; font-weight: 600; border: none; border-radius: 8px; cursor: pointer; transition: background 0.2s; }
+    .check-btn { background: #4361ee; color: white; }
+    .check-btn:hover { background: #3a0ca3; }
+    .new-btn { background: #06d6a0; color: white; }
+    .new-btn:hover { background: #05b384; }
+    .feedback { margin-top: 0.5rem; padding: 0.5rem 1rem; border-radius: 8px; font-weight: 600; display: none; }
+    .feedback.correct { background: #e6f9f1; color: #087f5b; border: 1px solid #06d6a0; display: block; }
+    .feedback.incorrect { background: #fff5f5; color: #c92a2a; border: 1px solid #e63946; display: block; }
+    .score-display { font-weight: 600; color: #4361ee; margin-top: 0.5rem; }
+    .did-you-know { background: linear-gradient(135deg, #e8f4fd, #d1ecf9); border: 2px solid #0dcaf0; border-radius: 12px; padding: 1.5rem; margin: 1rem 0; }
+    .did-you-know strong:first-child { color: #0a7c9f; display: block; margin-bottom: 0.25rem; }
+    .exam-tip { background: linear-gradient(135deg, #f3e8ff, #ede5ff); border: 2px solid #7209b7; border-radius: 12px; padding: 1.5rem; margin: 1rem 0; }
+    .exam-tip strong:first-child { color: #7209b7; display: block; margin-bottom: 0.25rem; }
+    .case-study { background: #ffffff; border: 2px solid #6c757d; border-radius: 12px; padding: 1.5rem; margin: 1rem 0; }
+    .case-study strong:first-child { color: #495057; display: block; margin-bottom: 0.25rem; }
+    .pixel-grid { display: inline-grid; gap: 1px; background: #333; padding: 1px; border-radius: 4px; margin: 1rem 0; }
+    .pixel-grid div { width: 20px; height: 20px; }
+  </style>
+</head>
+<body>
+
+  <header class="site-header">
+    <p><a href="../index.html">&larr; Back to Course</a></p>
+    <h1>Image Representation</h1>
+    <p class="subtitle">How computers store pictures using pixels, resolution, and colour depth</p>
+  </header>
+
+  <main>
+
+    <!-- ==================== THE IDEA ==================== -->
+    <section class="idea">
+      <span class="section-label">The Idea</span>
+      <h2>Pictures Made of Squares</h2>
+
+      <p>Open any photo on your phone and zoom in as far as you can. Keep going. Eventually you will see that the image breaks apart into tiny coloured squares. These squares are called <strong>pixels</strong> (short for &ldquo;picture elements&rdquo;), and they are the building blocks of every digital image.</p>
+
+      <p>Each pixel stores a single colour, and that colour is represented as a <strong>binary number</strong>. A digital image is nothing more than a huge grid of these numbers &mdash; row after row of binary colour values that your screen decodes and displays as a photograph, a game screenshot, or a meme.</p>
+
+      <p>Two key factors determine how an image looks and how much storage space it requires:</p>
+      <ul>
+        <li><strong>Resolution</strong> &mdash; how many pixels make up the image (width &times; height)</li>
+        <li><strong>Colour depth</strong> &mdash; how many bits are used to store the colour of each pixel</li>
+      </ul>
+
+      <p>Together, these two factors control the <strong>detail</strong>, <strong>colour richness</strong>, and <strong>file size</strong> of every image your computer handles. Understanding the trade-offs between them is a core part of your GCSE.</p>
+
+      <div class="key-concept">
+        <strong>Key Concept: Pixels</strong>
+        A pixel is the smallest individual element of a digital image. Each pixel stores one colour as a binary number. When millions of these tiny squares are arranged in a grid and viewed from a normal distance, your eyes blend them together into a smooth picture. The more pixels you have and the more colours each pixel can display, the more realistic the image looks &mdash; but the larger the file becomes.
+      </div>
+    </section>
+
+    <!-- ==================== EXPLORE ==================== -->
+    <section class="explore">
+      <span class="section-label">Explore</span>
+      <h2>Resolution and Colour Depth</h2>
+
+      <h3>Resolution</h3>
+      <p>The <strong>resolution</strong> of an image is the number of pixels it contains, expressed as <strong>width &times; height</strong>. A higher resolution means more pixels, which means more detail &mdash; but also a larger file.</p>
+
+      <p>Here are some common resolutions you will encounter:</p>
+      <table>
+        <thead>
+          <tr><th>Name</th><th>Resolution</th><th>Total Pixels</th><th>Typical Use</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Old Web</td><td>640 &times; 480</td><td>307,200</td><td>Early websites, low-quality video</td></tr>
+          <tr><td>HD (720p)</td><td>1280 &times; 720</td><td>921,600</td><td>Streaming video, small displays</td></tr>
+          <tr><td>Full HD (1080p)</td><td>1920 &times; 1080</td><td>2,073,600</td><td>Most monitors, TV, gaming</td></tr>
+          <tr><td>4K (Ultra HD)</td><td>3840 &times; 2160</td><td>8,294,400</td><td>Premium TVs, cinema, pro photography</td></tr>
+        </tbody>
+      </table>
+
+      <p>Notice that going from Full HD to 4K means <strong>four times</strong> as many pixels &mdash; and therefore roughly four times the file size for the same colour depth. Higher resolution always comes at a storage cost.</p>
+
+      <h3>Colour Depth</h3>
+      <p><strong>Colour depth</strong> (also called <em>bit depth</em>) is the number of <strong>bits used to store the colour of each pixel</strong>. The more bits per pixel, the more colours are available, and the more realistic the image can look.</p>
+
+      <p>The number of possible colours is calculated as <strong>2<sup>n</sup></strong>, where <em>n</em> is the colour depth in bits:</p>
+
+      <table>
+        <thead>
+          <tr><th>Colour Depth</th><th>Number of Colours</th><th>Use Case</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>1 bit</td><td>2<sup>1</sup> = 2</td><td>Black and white only (e.g. fax machines, simple icons)</td></tr>
+          <tr><td>4 bits</td><td>2<sup>4</sup> = 16</td><td>Early computer graphics (CGA/EGA era)</td></tr>
+          <tr><td>8 bits</td><td>2<sup>8</sup> = 256</td><td>GIF images, simple web graphics, retro games</td></tr>
+          <tr><td>16 bits</td><td>2<sup>16</sup> = 65,536</td><td>High-colour displays, older mobile screens</td></tr>
+          <tr><td>24 bits</td><td>2<sup>24</sup> = 16,777,216</td><td><strong>True colour</strong> &mdash; photos, web images (8 bits each for R, G, B)</td></tr>
+          <tr><td>32 bits</td><td>2<sup>24</sup> colours + alpha</td><td>True colour with transparency (RGBA &mdash; used in graphic design)</td></tr>
+        </tbody>
+      </table>
+
+      <p><strong>True colour (24-bit)</strong> is the standard for photographs and most images you see on the web. It uses 8 bits for <span style="color:#c00;font-weight:700;">Red</span>, 8 bits for <span style="color:#060;font-weight:700;">Green</span>, and 8 bits for <span style="color:#00c;font-weight:700;">Blue</span> &mdash; giving over 16.7 million possible colour combinations. This is called the <strong>RGB colour model</strong>.</p>
+
+      <h3>Metadata</h3>
+      <p>As well as pixel data, image files also store <strong>metadata</strong> &mdash; extra information such as the image dimensions, the date the photo was taken, camera settings (ISO, shutter speed, aperture), GPS location, and the software used to create it. However, metadata is tiny compared to the pixel data, so it barely affects file size calculations. In exams, you can usually ignore metadata when calculating file sizes.</p>
+
+      <div class="did-you-know">
+        <strong>Did You Know?</strong>
+        The first ever digital photograph was created in 1957 by Russell Kirsch at the US National Bureau of Standards. It was a picture of his baby son, scanned at just <strong>176 &times; 176 pixels</strong> &mdash; that is only 30,976 pixels in total. Today, a typical smartphone photo is 12 megapixels (12 million pixels), nearly <strong>400 times</strong> more detail than that very first digital image.
+      </div>
+    </section>
+
+    <!-- ==================== UNDERSTAND ==================== -->
+    <section class="understand">
+      <span class="section-label">Understand</span>
+      <h2>Calculating Image File Size</h2>
+
+      <p>One of the most important skills in this topic is being able to calculate the file size of an uncompressed image. The formula is straightforward:</p>
+
+      <div class="key-concept">
+        <strong>The Formula</strong>
+        <p style="font-size: 1.3rem; font-family: 'JetBrains Mono', monospace; margin: 0.5rem 0;">File size (bits) = width &times; height &times; colour depth</p>
+        <p style="margin-bottom: 0;">To convert to useful units:<br />
+        Bits &divide; 8 = <strong>Bytes</strong><br />
+        Bytes &divide; 1,000 = <strong>Kilobytes (KB)</strong><br />
+        KB &divide; 1,000 = <strong>Megabytes (MB)</strong></p>
+      </div>
+
+      <h3>Worked Example 1</h3>
+      <p><strong>Calculate the file size of a 1920 &times; 1080 image with 24-bit colour depth.</strong></p>
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Full HD Photo Calculation</span>
+        </div>
+        <pre><code>  Step 1:  Total pixels = 1920 &times; 1080 = 2,073,600 pixels
+  Step 2:  File size in bits = 2,073,600 &times; 24 = 49,766,400 bits
+  Step 3:  Convert to bytes = 49,766,400 &divide; 8 = 6,220,800 bytes
+  Step 4:  Convert to KB = 6,220,800 &divide; 1,000 = 6,220.8 KB
+  Step 5:  Convert to MB = 6,220.8 &divide; 1,000 = 6.22 MB
+
+  Answer: approximately 6.22 MB (uncompressed)</code></pre>
+      </div>
+
+      <h3>Worked Example 2</h3>
+      <p><strong>Calculate the file size of an 800 &times; 600 image with 24-bit colour depth.</strong></p>
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Web Image Calculation</span>
+        </div>
+        <pre><code>  Step 1:  Total pixels = 800 &times; 600 = 480,000 pixels
+  Step 2:  File size in bits = 480,000 &times; 24 = 11,520,000 bits
+  Step 3:  Convert to bytes = 11,520,000 &divide; 8 = 1,440,000 bytes
+  Step 4:  Convert to KB = 1,440,000 &divide; 1,000 = 1,440 KB
+  Step 5:  Convert to MB = 1,440 &divide; 1,000 = 1.44 MB
+
+  Answer: approximately 1.44 MB (uncompressed)</code></pre>
+      </div>
+
+      <h3>Worked Example 3</h3>
+      <p><strong>Calculate the file size of a 640 &times; 480 image with 8-bit colour depth.</strong></p>
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Low-Colour Image Calculation</span>
+        </div>
+        <pre><code>  Step 1:  Total pixels = 640 &times; 480 = 307,200 pixels
+  Step 2:  File size in bits = 307,200 &times; 8 = 2,457,600 bits
+  Step 3:  Convert to bytes = 2,457,600 &divide; 8 = 307,200 bytes
+  Step 4:  Convert to KB = 307,200 &divide; 1,000 = 307.2 KB
+  Step 5:  Convert to MB = 307.2 &divide; 1,000 = 0.31 MB
+
+  Answer: approximately 0.31 MB (uncompressed)</code></pre>
+      </div>
+
+      <div class="warning">
+        <strong>Important:</strong> These calculations give you the <strong>uncompressed</strong> file size. In the real world, images are almost always stored using compression formats like <strong>JPEG</strong> (lossy &mdash; reduces quality slightly to save space), <strong>PNG</strong> (lossless &mdash; no quality loss), or <strong>GIF</strong> (limited to 256 colours). A 6 MB uncompressed photo might become just 1&ndash;2 MB as a JPEG. Exam questions will ask for the <em>uncompressed</em> size unless they specifically mention compression.
+      </div>
+
+      <h3>Trade-offs: Resolution vs Colour Depth</h3>
+      <p>Understanding the trade-offs is essential for exam questions that ask you to <em>explain</em> the effect of changing image settings:</p>
+
+      <table>
+        <thead>
+          <tr><th>Change</th><th>Effect on Quality</th><th>Effect on File Size</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Increase resolution</strong> (more pixels)</td>
+            <td>More detail; sharper edges; more realistic</td>
+            <td>File size increases (more pixels to store)</td>
+          </tr>
+          <tr>
+            <td><strong>Increase colour depth</strong> (more bits per pixel)</td>
+            <td>Smoother colour gradients; more realistic shading</td>
+            <td>File size increases (each pixel needs more bits)</td>
+          </tr>
+          <tr>
+            <td><strong>Increase both</strong></td>
+            <td>Best quality: more detail and richer colours</td>
+            <td>File size increases dramatically (multiplied effect)</td>
+          </tr>
+          <tr>
+            <td><strong>Decrease resolution</strong></td>
+            <td>Image looks blocky or pixelated</td>
+            <td>File size decreases</td>
+          </tr>
+          <tr>
+            <td><strong>Decrease colour depth</strong></td>
+            <td>Fewer colours; visible banding in gradients</td>
+            <td>File size decreases</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="exam-tip">
+        <strong>Exam Tip: Always Show the Formula First</strong>
+        In any file size calculation question, always <strong>write the formula first</strong> before plugging in numbers: <em>File size = width &times; height &times; colour depth</em>. Even if you make an arithmetic mistake later, writing the correct formula earns you a method mark. Then show every step of the conversion from bits to bytes to KB to MB.
+      </div>
+    </section>
+
+    <!-- ==================== CASE STUDY ==================== -->
+    <div class="case-study">
+      <strong>Case Study: How Colour Depth Affects Smartphone Photos</strong>
+      <p>Modern smartphones typically capture photos with <strong>24-bit colour depth</strong>, which gives 16.7 million colours &mdash; more than enough for most photography. However, flagship phones from Apple, Samsung, and Google are now offering <strong>30-bit</strong> or even <strong>48-bit HDR</strong> (High Dynamic Range) photography, which captures over a billion colours and produces incredibly smooth gradients in skies, sunsets, and skin tones.</p>
+
+      <p>Why does this matter? With low colour depth, smooth gradients (like a blue sky fading from light to dark) can show visible <strong>banding</strong> &mdash; harsh lines where one shade abruptly changes to the next, instead of blending smoothly. Higher colour depth eliminates this problem, but the file sizes increase significantly.</p>
+
+      <p>Consider a typical <strong>12-megapixel</strong> (12 million pixels) smartphone photo:</p>
+      <ul>
+        <li>At <strong>24-bit</strong> colour depth: 12,000,000 &times; 24 = 288,000,000 bits = <strong>~36 MB</strong> uncompressed</li>
+        <li>At <strong>48-bit</strong> colour depth: 12,000,000 &times; 48 = 576,000,000 bits = <strong>~72 MB</strong> uncompressed</li>
+      </ul>
+      <p>This is exactly why your phone uses <strong>compression</strong> (usually JPEG or HEIF). Without it, you would fill your phone&rsquo;s storage with just a few hundred photos!</p>
+    </div>
+
+    <!-- ==================== INTERACTIVE EXERCISE 1 ==================== -->
+    <div class="interactive-exercise" id="filesize-exercise">
+      <h3>Exercise 1: Image File Size Calculator</h3>
+      <p>A random image will appear below with its width, height, and colour depth. Calculate the <strong>file size in MB</strong> (to 2 decimal places). Remember: bits &divide; 8 = bytes, then &divide; 1,000 twice to get MB.</p>
+      <div class="exercise-problem" id="fs-problem">Loading...</div>
+      <div class="exercise-controls">
+        <input type="text" class="exercise-input" id="fs-answer" placeholder="e.g. 6.22" maxlength="10" autocomplete="off" />
+        <span style="font-weight:600;">MB</span>
+        <button class="check-btn" id="fs-check">Check</button>
+        <button class="new-btn" id="fs-new">New Question</button>
+      </div>
+      <div class="feedback" id="fs-feedback"></div>
+      <div class="score-display" id="fs-score">Score: 0 / 0</div>
+    </div>
+
+    <!-- ==================== INTERACTIVE EXERCISE 2 ==================== -->
+    <div class="interactive-exercise" id="pixelart-exercise">
+      <h3>Exercise 2: Pixel Art Creator</h3>
+      <p>Click on the squares below to toggle between <strong>black</strong> (1) and <strong>white</strong> (0). This is a 1-bit colour depth image &mdash; each pixel is stored as a single bit. Try drawing a simple pattern!</p>
+      <div id="pixel-canvas" style="display: flex; gap: 1.5rem; flex-wrap: wrap; align-items: flex-start;"></div>
+      <div style="margin-top: 1rem;">
+        <button class="check-btn" id="pa-show">Show Binary Data</button>
+        <button class="new-btn" id="pa-clear">Clear Grid</button>
+      </div>
+      <div id="pa-binary-output" style="display:none; margin-top: 1rem;">
+        <p style="font-weight:700; color: #4361ee; margin-bottom: 0.5rem;">Binary representation of your image:</p>
+        <div class="code-block">
+          <div class="code-block-header">
+            <span class="code-block-label">1-bit Image Data (8&times;8)</span>
+          </div>
+          <pre><code id="pa-binary-text">00000000
+00000000
+00000000
+00000000
+00000000
+00000000
+00000000
+00000000</code></pre>
+        </div>
+        <p id="pa-size-info" style="font-weight: 600; color: #4361ee;"></p>
+      </div>
+    </div>
+
+    <!-- ==================== PRACTICE ==================== -->
+    <section class="practice">
+      <span class="section-label">Practice</span>
+      <h2>Test Yourself</h2>
+      <p>Click on each question to reveal the answer. Try to work it out yourself first!</p>
+
+      <div class="hint">
+        <div class="hint-title">Q1: What is meant by the &ldquo;resolution&rdquo; of a digital image?</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> The resolution of a digital image is the <strong>number of pixels</strong> that make up the image, expressed as <strong>width &times; height</strong> (e.g. 1920 &times; 1080). A higher resolution means more pixels and therefore more detail, but it also results in a larger file size.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q2: An image has a colour depth of 8 bits. How many different colours can each pixel display?</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> <strong>256 colours</strong>.</p>
+          <p>The number of colours is 2<sup>n</sup>, where n is the colour depth. So 2<sup>8</sup> = 256.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q3: Calculate the file size in MB of a 2048 &times; 1536 image with 24-bit colour depth.</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong></p>
+          <p>File size = 2048 &times; 1536 &times; 24 = 75,497,472 bits</p>
+          <p>75,497,472 &divide; 8 = 9,437,184 bytes</p>
+          <p>9,437,184 &divide; 1,000 = 9,437.184 KB</p>
+          <p>9,437.184 &divide; 1,000 = <strong>9.44 MB</strong> (to 2 d.p.)</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q4: Explain why increasing the colour depth of an image increases the file size.</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> Increasing the colour depth means using <strong>more bits to store each pixel&rsquo;s colour</strong>. Since file size = width &times; height &times; colour depth, increasing the colour depth directly increases the number of bits needed for every single pixel in the image. For example, changing from 8-bit to 24-bit colour means each pixel needs three times as many bits, so the file size triples &mdash; even though the resolution has not changed.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q5: What does &ldquo;true colour&rdquo; mean, and how many bits does it use?</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> True colour uses <strong>24 bits per pixel</strong> &mdash; 8 bits for red, 8 bits for green, and 8 bits for blue (the RGB model). This gives 2<sup>24</sup> = <strong>16,777,216 different colours</strong>, which is considered enough to represent photographic images realistically to the human eye. Each of the three colour channels can have a value from 0 to 255.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q6: A 500 &times; 400 image has a file size of 200,000 bytes. What is the colour depth?</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong></p>
+          <p>Start with the formula: File size (bits) = width &times; height &times; colour depth</p>
+          <p>Convert bytes to bits: 200,000 &times; 8 = 1,600,000 bits</p>
+          <p>Total pixels: 500 &times; 400 = 200,000 pixels</p>
+          <p>Colour depth = 1,600,000 &divide; 200,000 = <strong>8 bits per pixel</strong></p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q7: Give two reasons why images are usually stored in a compressed format rather than as raw bitmap data.</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong></p>
+          <ol>
+            <li><strong>File size reduction:</strong> Uncompressed images are very large (e.g. a Full HD 24-bit image is over 6 MB). Compression significantly reduces the file size, meaning images take up less storage space on devices and hard drives.</li>
+            <li><strong>Faster transmission:</strong> Smaller files are quicker to upload, download, and share over the internet. A compressed JPEG loads much faster on a website than an uncompressed bitmap, improving the user experience and reducing bandwidth costs.</li>
+          </ol>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== KEY VOCABULARY ==================== -->
+    <section class="understand">
+      <span class="section-label">Understand</span>
+      <h2>Key Vocabulary</h2>
+      <p>Make sure you know all of these terms for your exam:</p>
+
+      <table class="vocab-table">
+        <thead>
+          <tr><th>Term</th><th>Definition</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Pixel</td><td>The smallest individual element of a digital image. Short for &ldquo;picture element.&rdquo; Each pixel stores one colour as a binary value.</td></tr>
+          <tr><td>Resolution</td><td>The number of pixels in an image, expressed as width &times; height (e.g. 1920 &times; 1080). Higher resolution means more detail but a larger file size.</td></tr>
+          <tr><td>Colour Depth</td><td>The number of bits used to represent the colour of each pixel. A colour depth of <em>n</em> bits allows 2<sup>n</sup> different colours.</td></tr>
+          <tr><td>True Colour</td><td>24-bit colour depth, using 8 bits each for red, green, and blue (RGB). Supports 16,777,216 colours &mdash; enough for photographic realism.</td></tr>
+          <tr><td>Metadata</td><td>Additional data stored in an image file beyond the pixel data, such as dimensions, date taken, camera settings, and GPS location.</td></tr>
+          <tr><td>Bitmap</td><td>An image format that stores colour data for every individual pixel in a grid. &ldquo;Bitmap&rdquo; is also a general term for any pixel-based (raster) image.</td></tr>
+          <tr><td>RGB</td><td>Red, Green, Blue &mdash; the colour model used by screens and digital images. Colours are created by mixing different intensities of red, green, and blue light.</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- ==================== EXAM TIPS ==================== -->
+    <section class="explore">
+      <span class="section-label">Explore</span>
+      <h2>Exam Tips</h2>
+
+      <div class="exam-tip">
+        <strong>Exam Tip 1: The Formula Is Your Best Friend</strong>
+        Write this formula at the top of every image file size question: <strong>File size (bits) = width &times; height &times; colour depth</strong>. Even if you get the arithmetic wrong, writing the correct formula earns you a mark. Then convert carefully through the units: bits &rarr; bytes (&divide; 8) &rarr; KB (&divide; 1,000) &rarr; MB (&divide; 1,000). Show every step.
+      </div>
+
+      <div class="exam-tip">
+        <strong>Exam Tip 2: Unit Conversion Traps</strong>
+        The most common mistake is forgetting to <strong>divide by 8</strong> when converting from bits to bytes. Remember: there are 8 bits in a byte. Some students also confuse KB and MB by dividing or multiplying by the wrong amount. Write out the conversion chain so examiners can follow your working: <em>bits &rarr; &divide; 8 &rarr; bytes &rarr; &divide; 1,000 &rarr; KB &rarr; &divide; 1,000 &rarr; MB</em>.
+      </div>
+
+      <div class="exam-tip">
+        <strong>Exam Tip 3: Explaining the Effect of Changes</strong>
+        A common 4&ndash;6 mark question asks you to &ldquo;explain the effect of increasing the resolution / colour depth.&rdquo; A strong answer covers <strong>both sides</strong>: the <em>benefit</em> (more detail or more colours) <strong>and</strong> the <em>drawback</em> (larger file size). Use specific numbers where possible. For example: &ldquo;Doubling the width and height of an image quadruples the number of pixels, which quadruples the file size, because file size = width &times; height &times; colour depth.&rdquo;
+      </div>
+
+      <div class="exam-tip">
+        <strong>Exam Tip 4: Rearranging the Formula</strong>
+        Some questions give you the file size and ask you to find the colour depth (or the resolution). You need to <strong>rearrange the formula</strong>. For example: Colour depth = file size in bits &divide; (width &times; height). Make sure you convert the file size to bits first (multiply bytes by 8) before dividing. Practise this &mdash; it catches many students out.
+      </div>
+    </section>
+
+    <!-- ==================== REFLECT ==================== -->
+    <section class="reflect">
+      <span class="section-label">Reflect</span>
+      <h2>Image Representation in Everyday Life</h2>
+
+      <p>Understanding image representation is not just an exam topic &mdash; it explains the technology you interact with every day:</p>
+
+      <ul>
+        <li><strong>Every photo you take</strong> on your phone is a grid of millions of pixels, each one stored as a 24-bit (or higher) colour value. Your phone&rsquo;s camera sensor captures light and converts it into these binary colour values millions of times per second.</li>
+        <li><strong>Social media platforms</strong> like Instagram and Snapchat <em>compress</em> your images when you upload them, reducing the resolution and applying JPEG compression to save bandwidth. That is why photos sometimes look slightly worse after uploading.</li>
+        <li><strong>Video games</strong> render images in real time. Your GPU (graphics processing unit) calculates the colour of every pixel on your screen 30, 60, or even 120 times per second. A 4K display at 60 fps means calculating the colour of 8.3 million pixels &times; 60 = nearly <strong>500 million pixel colour values every second</strong>.</li>
+        <li><strong>Medical imaging</strong> (X-rays, MRI scans) uses very high colour depths (12&ndash;16 bits per channel) so that doctors can see subtle differences in tissue density. Losing detail through low colour depth could mean missing a diagnosis.</li>
+      </ul>
+
+      <p>From the 176 &times; 176 first digital image of 1957 to today&rsquo;s 100-megapixel smartphone cameras, image representation shows how the same fundamental principles &mdash; pixels, resolution, and colour depth &mdash; scale to meet ever-growing demands for visual quality.</p>
+
+      <div class="extra-resources">
+        <h3>Further Reading</h3>
+        <ul>
+          <li><a href="https://www.bbc.co.uk/bitesize/examspecs/zdqy7nb" target="_blank" rel="noopener">BBC Bitesize &mdash; Edexcel GCSE Computer Science</a> &mdash; Full specification coverage for data representation including image representation</li>
+          <li><a href="https://isaaccomputerscience.org/topics/data_representation" target="_blank" rel="noopener">Isaac Computer Science &mdash; Data Representation</a> &mdash; In-depth explanations of how images are stored and processed digitally</li>
+          <li><a href="https://hvgcsecs.cshub.org.je/topics/topic2.html" target="_blank" rel="noopener">GCSE Topic 2: Data Representation</a> &mdash; Interactive revision tools and image representation activities</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ==================== NAVIGATION ==================== -->
+    <nav class="chapter-nav">
+      <a href="ascii-unicode.html">&larr; Previous: ASCII &amp; Unicode</a>
+      <a href="../index.html">Course Home</a>
+      <a href="sound-representation.html">Next: Sound Representation &rarr;</a>
+    </nav>
+
+  </main>
+
+  <footer class="site-footer">
+    <p>Python Fundamentals &mdash; A KS4 Learning Platform</p>
+    <p>Image Representation &mdash; GCSE Computer Science Theory</p>
+  </footer>
+
+  <!-- ==================== JAVASCRIPT ==================== -->
+  <script>
+    // ========== EXERCISE 1: IMAGE FILE SIZE CALCULATOR ==========
+    (function() {
+      var correct = 0;
+      var total = 0;
+      var currentWidth = 0;
+      var currentHeight = 0;
+      var currentDepth = 0;
+      var currentAnswerMB = 0;
+
+      var problemEl = document.getElementById('fs-problem');
+      var answerEl = document.getElementById('fs-answer');
+      var feedbackEl = document.getElementById('fs-feedback');
+      var scoreEl = document.getElementById('fs-score');
+      var checkBtn = document.getElementById('fs-check');
+      var newBtn = document.getElementById('fs-new');
+
+      var depthOptions = [1, 8, 16, 24, 32];
+
+      function randRange(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+      }
+
+      function generate() {
+        // Generate random dimensions (multiples of common sizes for realism)
+        var widthChoices = [100, 200, 320, 400, 500, 640, 800, 1024, 1280, 1600, 1920, 2048, 2560, 3840];
+        var heightChoices = [100, 150, 200, 240, 300, 400, 480, 600, 720, 768, 900, 1080, 1200, 1440, 1536, 2160];
+
+        currentWidth = widthChoices[Math.floor(Math.random() * widthChoices.length)];
+        currentHeight = heightChoices[Math.floor(Math.random() * heightChoices.length)];
+        currentDepth = depthOptions[Math.floor(Math.random() * depthOptions.length)];
+
+        var bits = currentWidth * currentHeight * currentDepth;
+        var bytes = bits / 8;
+        var mb = bytes / 1000000;
+        currentAnswerMB = Math.round(mb * 100) / 100;
+
+        problemEl.innerHTML = currentWidth + ' &times; ' + currentHeight + ' pixels, ' + currentDepth + '-bit colour';
+        answerEl.value = '';
+        feedbackEl.className = 'feedback';
+        feedbackEl.textContent = '';
+        answerEl.focus();
+      }
+
+      function check() {
+        var userAnswer = parseFloat(answerEl.value.trim());
+        if (isNaN(userAnswer)) {
+          feedbackEl.className = 'feedback incorrect';
+          feedbackEl.textContent = 'Please enter a number (e.g. 6.22).';
+          return;
+        }
+
+        total++;
+        var bits = currentWidth * currentHeight * currentDepth;
+        var bytes = bits / 8;
+        var kb = bytes / 1000;
+        var mb = kb / 1000;
+
+        var workingText = currentWidth + ' \u00d7 ' + currentHeight + ' \u00d7 ' + currentDepth +
+          ' = ' + bits.toLocaleString() + ' bits \u00f7 8 = ' + bytes.toLocaleString() +
+          ' bytes \u00f7 1,000,000 = ' + currentAnswerMB + ' MB';
+
+        // Allow small floating-point tolerance
+        if (Math.abs(userAnswer - currentAnswerMB) < 0.015) {
+          correct++;
+          feedbackEl.className = 'feedback correct';
+          feedbackEl.innerHTML = 'Correct! ' + workingText;
+        } else {
+          feedbackEl.className = 'feedback incorrect';
+          feedbackEl.innerHTML = 'Not quite. The answer is <strong>' + currentAnswerMB + ' MB</strong>. Working: ' + workingText;
+        }
+
+        scoreEl.textContent = 'Score: ' + correct + ' / ' + total;
+      }
+
+      checkBtn.addEventListener('click', check);
+      newBtn.addEventListener('click', generate);
+      answerEl.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') check();
+      });
+
+      generate();
+    })();
+
+    // ========== EXERCISE 2: PIXEL ART CREATOR ==========
+    (function() {
+      var GRID_SIZE = 8;
+      var grid = [];
+
+      // Initialise 8x8 grid of zeros
+      for (var r = 0; r < GRID_SIZE; r++) {
+        grid[r] = [];
+        for (var c = 0; c < GRID_SIZE; c++) {
+          grid[r][c] = 0;
+        }
+      }
+
+      var canvasContainer = document.getElementById('pixel-canvas');
+      var binaryOutput = document.getElementById('pa-binary-output');
+      var binaryText = document.getElementById('pa-binary-text');
+      var sizeInfo = document.getElementById('pa-size-info');
+      var showBtn = document.getElementById('pa-show');
+      var clearBtn = document.getElementById('pa-clear');
+
+      // Build the pixel grid
+      var pixelGridEl = document.createElement('div');
+      pixelGridEl.className = 'pixel-grid';
+      pixelGridEl.style.gridTemplateColumns = 'repeat(' + GRID_SIZE + ', 20px)';
+
+      var cells = [];
+
+      for (var r = 0; r < GRID_SIZE; r++) {
+        for (var c = 0; c < GRID_SIZE; c++) {
+          var cell = document.createElement('div');
+          cell.style.background = '#ffffff';
+          cell.style.cursor = 'pointer';
+          cell.dataset.row = r;
+          cell.dataset.col = c;
+          cell.setAttribute('role', 'button');
+          cell.setAttribute('aria-label', 'Pixel row ' + (r + 1) + ' column ' + (c + 1) + ', white');
+          cell.setAttribute('tabindex', '0');
+
+          cell.addEventListener('click', function() {
+            var row = parseInt(this.dataset.row);
+            var col = parseInt(this.dataset.col);
+            grid[row][col] = grid[row][col] === 0 ? 1 : 0;
+            this.style.background = grid[row][col] === 1 ? '#1a1a2e' : '#ffffff';
+            this.setAttribute('aria-label',
+              'Pixel row ' + (row + 1) + ' column ' + (col + 1) + ', ' +
+              (grid[row][col] === 1 ? 'black' : 'white'));
+            updateBinary();
+          });
+
+          cell.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              this.click();
+            }
+          });
+
+          pixelGridEl.appendChild(cell);
+          cells.push(cell);
+        }
+      }
+
+      canvasContainer.appendChild(pixelGridEl);
+
+      // Build the binary display area (alongside the grid)
+      function updateBinary() {
+        if (binaryOutput.style.display === 'none') return;
+        var lines = [];
+        var totalOnes = 0;
+        for (var r = 0; r < GRID_SIZE; r++) {
+          var row = '';
+          for (var c = 0; c < GRID_SIZE; c++) {
+            row += grid[r][c];
+            totalOnes += grid[r][c];
+          }
+          lines.push(row);
+        }
+        binaryText.textContent = lines.join('\n');
+        var totalBits = GRID_SIZE * GRID_SIZE;
+        var totalBytes = totalBits / 8;
+        sizeInfo.textContent = 'Total size: ' + totalBits + ' bits (' + totalBytes + ' bytes) | ' +
+          'Black pixels: ' + totalOnes + ' | White pixels: ' + (totalBits - totalOnes);
+      }
+
+      showBtn.addEventListener('click', function() {
+        if (binaryOutput.style.display === 'none') {
+          binaryOutput.style.display = 'block';
+          showBtn.textContent = 'Hide Binary Data';
+        } else {
+          binaryOutput.style.display = 'none';
+          showBtn.textContent = 'Show Binary Data';
+        }
+        updateBinary();
+      });
+
+      clearBtn.addEventListener('click', function() {
+        for (var r = 0; r < GRID_SIZE; r++) {
+          for (var c = 0; c < GRID_SIZE; c++) {
+            grid[r][c] = 0;
+          }
+        }
+        for (var i = 0; i < cells.length; i++) {
+          cells[i].style.background = '#ffffff';
+          var row = parseInt(cells[i].dataset.row);
+          var col = parseInt(cells[i].dataset.col);
+          cells[i].setAttribute('aria-label', 'Pixel row ' + (row + 1) + ' column ' + (col + 1) + ', white');
+        }
+        updateBinary();
+      });
+    })();
+
+    // ========== HINT/REVEAL TOGGLE ==========
+    document.querySelectorAll('.hint-title').forEach(function(title) {
+      title.addEventListener('click', function() {
+        var parent = this.parentElement;
+        var content = parent.querySelector('.hint-content');
+        if (content.classList.contains('visible')) {
+          content.classList.remove('visible');
+        } else {
+          content.classList.add('visible');
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>
