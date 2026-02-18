@@ -45,7 +45,7 @@
       <ul>
         <li><strong>Two searching algorithms:</strong> Linear search and binary search</li>
         <li><strong>Three sorting algorithms:</strong> Bubble sort, insertion sort, and merge sort</li>
-        <li><strong>How to compare them</strong> using Big O notation</li>
+        <li><strong>How to compare them</strong> and when to use which one</li>
       </ul>
 
       <div class="key-concept">
@@ -114,6 +114,13 @@ OUTPUT "Item not found"</code></pre>
       <p><strong>Pros:</strong> Works on any list (sorted or unsorted). Simple to understand and implement.</p>
       <p><strong>Cons:</strong> Slow for large lists &mdash; in the worst case, you check every single item.</p>
 
+      <div class="video-links" style="margin: var(--space-md) 0;">
+        <a href="https://youtu.be/UU5QAJ1XMqQ?si=q4WIBWwUEn5u_Juz" class="video-card" target="_blank" rel="noopener">
+          <span class="play-icon" role="img" aria-label="play">&#x25B6;&#xFE0F;</span>
+          <div class="video-info">Linear Search Explained<small>Watch a clear walkthrough of linear search in action</small></div>
+        </a>
+      </div>
+
       <h4>Binary Search</h4>
       <p>Binary search is much faster, but the list <strong>must be sorted</strong> first. It works by repeatedly halving the data:</p>
 
@@ -149,6 +156,13 @@ OUTPUT "Item not found"</code></pre>
 
       <p><strong>Pros:</strong> Very fast, even with huge lists. Each step eliminates half the remaining data.</p>
       <p><strong>Cons:</strong> Only works on <strong>sorted</strong> data. Slightly more complex to implement.</p>
+
+      <div class="video-links" style="margin: var(--space-md) 0;">
+        <a href="https://youtu.be/8TNLRK_FyFc?si=A6segOCJ1y61oevH" class="video-card" target="_blank" rel="noopener">
+          <span class="play-icon" role="img" aria-label="play">&#x25B6;&#xFE0F;</span>
+          <div class="video-info">Binary Search Explained<small>See how binary search halves the data each step</small></div>
+        </a>
+      </div>
 
       <div class="key-concept">
         <strong>The Guessing Game Analogy</strong>
@@ -205,6 +219,13 @@ UNTIL swapped == FALSE</code></pre>
       <div class="key-concept">
         <strong>Bubble Sort Analogy</strong>
         Think about lining up students by height for a photo. You walk along the line comparing each pair of neighbours. If someone tall is in front of someone short, they swap places. You keep walking through the line until nobody needs to swap.
+      </div>
+
+      <div class="video-links" style="margin: var(--space-md) 0;">
+        <a href="https://youtu.be/46HwsWfZbRU?si=26PzoU4m3lI9LLGQ" class="video-card" target="_blank" rel="noopener">
+          <span class="play-icon" role="img" aria-label="play">&#x25B6;&#xFE0F;</span>
+          <div class="video-info">Bubble Sort Explained<small>Step-by-step walkthrough of the bubble sort algorithm</small></div>
+        </a>
       </div>
 
       <h4>Insertion Sort</h4>
@@ -308,83 +329,63 @@ ENDFUNCTION</code></pre>
       <p><strong>Pros:</strong> Much faster than bubble sort for large lists. Consistent performance regardless of how the data starts.</p>
       <p><strong>Cons:</strong> Uses more memory (needs extra space for the sub-lists). More complex to code.</p>
 
+      <div class="video-links" style="margin: var(--space-md) 0;">
+        <a href="https://youtu.be/v-zT0BH5IU4?si=Xg7jjEvl55hCzocF" class="video-card" target="_blank" rel="noopener">
+          <span class="play-icon" role="img" aria-label="play">&#x25B6;&#xFE0F;</span>
+          <div class="video-info">Merge Sort Explained<small>How divide and conquer makes sorting fast</small></div>
+        </a>
+      </div>
+
       <div class="key-concept">
         <strong>Key Concept: Comparing Sorts</strong>
         <strong>Bubble sort</strong> is simple but slow &mdash; best for small or nearly-sorted lists. <strong>Insertion sort</strong> is also simple and performs well on small or nearly-sorted data, often better than bubble sort. <strong>Merge sort</strong> is faster for large data sets but uses more memory. In exams, you may be asked to trace through each algorithm step by step, so practise with small lists until you are confident.
       </div>
 
-      <!-- EFFICIENCY AND BIG O -->
-      <h3>Efficiency and Big O Notation</h3>
-      <p>When there are several algorithms that solve the same problem, how do we decide which one is &ldquo;better&rdquo;? We look at <strong>efficiency</strong> &mdash; how quickly an algorithm runs as the amount of data grows. In computer science, we describe this using <strong>Big O notation</strong>.</p>
-
-      <p>Big O notation is a simple way of saying: &ldquo;In the worst case, roughly how many steps does this algorithm need as the data gets bigger?&rdquo; We use the letter <strong>n</strong> to stand for the number of items in the data set.</p>
-
-      <table>
-        <thead>
-          <tr><th>Big O</th><th>Name</th><th>What It Means</th><th>Example Algorithm</th></tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><strong>O(1)</strong></td>
-            <td>Constant</td>
-            <td>The same number of steps regardless of data size</td>
-            <td>Accessing an item in a list by its index</td>
-          </tr>
-          <tr>
-            <td><strong>O(log n)</strong></td>
-            <td>Logarithmic</td>
-            <td>Halves the data each step &mdash; very fast even for huge data sets</td>
-            <td>Binary search</td>
-          </tr>
-          <tr>
-            <td><strong>O(n)</strong></td>
-            <td>Linear</td>
-            <td>Checks each item once &mdash; double the data means double the time</td>
-            <td>Linear search</td>
-          </tr>
-          <tr>
-            <td><strong>O(n log n)</strong></td>
-            <td>Linearithmic</td>
-            <td>Faster than quadratic but slower than linear &mdash; efficient sorting</td>
-            <td>Merge sort</td>
-          </tr>
-          <tr>
-            <td><strong>O(n&sup2;)</strong></td>
-            <td>Quadratic</td>
-            <td>Compares every pair &mdash; double the data means four times the time</td>
-            <td>Bubble sort, insertion sort</td>
-          </tr>
-        </tbody>
-      </table>
-
-      <p><strong>What does this look like in practice?</strong> Imagine you have a list of 1,000 items:</p>
-      <ul>
-        <li><strong>Linear search O(n):</strong> Up to 1,000 comparisons in the worst case</li>
-        <li><strong>Binary search O(log n):</strong> Up to about 10 comparisons (since 2<sup>10</sup> = 1,024)</li>
-        <li><strong>Bubble sort O(n&sup2;):</strong> Up to roughly 1,000,000 comparisons in the worst case</li>
-        <li><strong>Merge sort O(n log n):</strong> Up to roughly 10,000 comparisons</li>
-      </ul>
-
-      <p>You can see that the choice of algorithm makes an enormous difference. For large data sets, an O(n&sup2;) algorithm can be hundreds of times slower than an O(n log n) one.</p>
+      <!-- COMPARING ALGORITHMS -->
+      <h3>Comparing Algorithms: When to Use Which</h3>
 
       <div class="key-concept">
         <strong>When to Use Which &mdash; Searching</strong>
-        Use <strong>Linear Search</strong> when data is NOT sorted, you have a small list, or you need simple code. Use <strong>Binary Search</strong> when data IS sorted, you have a large list (in a phone book with 1 million names, linear search might check all 1 million, binary search finds anyone in just 20 checks!).
+        Use <strong>Linear Search</strong> when data is NOT sorted, you have a small list, or you need simple code. Use <strong>Binary Search</strong> when data IS sorted and you have a large list. In a phone book with 1 million names, linear search might check all 1 million &mdash; binary search finds anyone in just 20 checks!
       </div>
 
       <div class="key-concept">
         <strong>When to Use Which &mdash; Sorting</strong>
-        For small lists (less than ~1,000 items): Both take about the same time. Bubble sort is easier to write. For large lists: Merge sort is MUCH faster.
+        <strong>Bubble sort</strong> and <strong>insertion sort</strong> are simple but slow on large lists &mdash; best for small data sets or data that is already nearly sorted. <strong>Merge sort</strong> is much faster for large data sets, but uses more memory because it creates sub-lists during the divide step.
       </div>
 
-      <div class="key-concept">
-        <strong>Did You Know?</strong>
-        The most efficient general-purpose sorting algorithms &mdash; including merge sort and similar approaches &mdash; run in <strong>O(n log n)</strong> time. It has been mathematically proven that no comparison-based sorting algorithm can do better than this in the worst case. So O(n log n) is effectively the speed limit for sorting!
-      </div>
+      <h4>How Many Comparisons?</h4>
+      <p>To understand <strong>why</strong> some algorithms are faster than others, think about how many comparisons they need for a list of 1,000 items:</p>
 
-      <div class="warning">
-        <strong>Exam Tip:</strong> You do not need to memorise complex mathematics for Big O at GCSE level. Just remember: <strong>O(1)</strong> is the fastest, <strong>O(log n)</strong> is very fast, <strong>O(n)</strong> is fair, <strong>O(n log n)</strong> is good for sorting, and <strong>O(n&sup2;)</strong> is slow for large data. Be able to say which algorithms belong to which category and explain <em>why</em> one is faster than another.
-      </div>
+      <table>
+        <thead>
+          <tr><th>Algorithm</th><th>Comparisons (worst case, 1,000 items)</th><th>Why?</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Linear Search</strong></td>
+            <td>Up to <strong>1,000</strong></td>
+            <td>Checks every item one by one</td>
+          </tr>
+          <tr>
+            <td><strong>Binary Search</strong></td>
+            <td>Up to <strong>10</strong></td>
+            <td>Halves the data each step (2<sup>10</sup> = 1,024)</td>
+          </tr>
+          <tr>
+            <td><strong>Bubble Sort</strong></td>
+            <td>Up to <strong>~1,000,000</strong></td>
+            <td>Compares every pair, multiple passes</td>
+          </tr>
+          <tr>
+            <td><strong>Merge Sort</strong></td>
+            <td>Up to <strong>~10,000</strong></td>
+            <td>Divides and merges efficiently</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p>The choice of algorithm makes an enormous difference. For large data sets, a slow algorithm can take hundreds of times longer than a fast one to produce the same result.</p>
     </section>
 
     <!-- ==================== PRACTICE ==================== -->
@@ -447,23 +448,15 @@ ENDFUNCTION</code></pre>
         <div class="hint-title">Q7: Give one advantage and one disadvantage of merge sort compared to bubble sort.</div>
         <div class="hint-content">
           <p><strong>Answer:</strong></p>
-          <p><strong>Advantage:</strong> Merge sort is significantly faster for large data sets. It runs in O(n log n) time, whereas bubble sort runs in O(n&sup2;) time. For example, on a list of 10,000 items, merge sort might need roughly 130,000 steps while bubble sort could need up to 100,000,000 steps.</p>
+          <p><strong>Advantage:</strong> Merge sort is significantly faster for large data sets. For example, on a list of 10,000 items, merge sort might need roughly 130,000 comparisons while bubble sort could need up to 100,000,000 comparisons.</p>
           <p><strong>Disadvantage:</strong> Merge sort uses more memory than bubble sort because it creates new sub-lists at each stage of the divide step. Bubble sort sorts the list &ldquo;in place&rdquo; without needing significant extra memory.</p>
         </div>
       </div>
 
       <div class="hint">
-        <div class="hint-title">Q8: What is the Big O efficiency of each algorithm you have studied?</div>
+        <div class="hint-title">Q8: Why is binary search faster than linear search for large lists?</div>
         <div class="hint-content">
-          <p><strong>Answer:</strong></p>
-          <ul>
-            <li><strong>Linear search:</strong> O(n) &mdash; checks each item once</li>
-            <li><strong>Binary search:</strong> O(log n) &mdash; halves the data each step</li>
-            <li><strong>Bubble sort:</strong> O(n&sup2;) &mdash; compares all pairs in each pass</li>
-            <li><strong>Insertion sort:</strong> O(n&sup2;) &mdash; shifts items for each insertion</li>
-            <li><strong>Merge sort:</strong> O(n log n) &mdash; divides and merges efficiently</li>
-          </ul>
-          <p>Remember: lower Big O = faster algorithm for large data sets.</p>
+          <p><strong>Answer:</strong> Binary search is faster because it <strong>halves the remaining data</strong> with each comparison, whereas linear search checks each item <strong>one at a time</strong>. For a list of 1,000 items, linear search might need up to 1,000 comparisons, but binary search only needs about 10 (since 2<sup>10</sup> = 1,024). However, binary search <strong>only works on sorted data</strong>, so if the data is unsorted you must use linear search.</p>
         </div>
       </div>
 
@@ -504,31 +497,27 @@ ENDFUNCTION</code></pre>
         <tbody>
           <tr>
             <td><strong>Linear Search</strong></td>
-            <td>A search algorithm that checks each item in a list one by one from start to end. Works on unsorted data. Efficiency: O(n).</td>
+            <td>A search algorithm that checks each item in a list one by one from start to end. Works on unsorted data. Simple but slow for large lists.</td>
           </tr>
           <tr>
             <td><strong>Binary Search</strong></td>
-            <td>A search algorithm that repeatedly halves a sorted list to find an item. Much faster than linear search. Efficiency: O(log n).</td>
+            <td>A search algorithm that repeatedly halves a sorted list to find an item. Much faster than linear search, but only works on sorted data.</td>
           </tr>
           <tr>
             <td><strong>Bubble Sort</strong></td>
-            <td>A sorting algorithm that repeatedly compares adjacent pairs and swaps them if they are in the wrong order. Simple but slow. Efficiency: O(n&sup2;).</td>
+            <td>A sorting algorithm that repeatedly compares adjacent pairs and swaps them if they are in the wrong order. Simple to understand but slow on large lists.</td>
           </tr>
           <tr>
             <td><strong>Insertion Sort</strong></td>
-            <td>A sorting algorithm that builds a sorted list one item at a time by inserting each new item into its correct position. Efficiency: O(n&sup2;).</td>
+            <td>A sorting algorithm that builds a sorted list one item at a time by inserting each new item into its correct position. Good for small or nearly-sorted lists.</td>
           </tr>
           <tr>
             <td><strong>Merge Sort</strong></td>
-            <td>A sorting algorithm that divides a list in half repeatedly, then merges the halves back in order. Fast but uses extra memory. Efficiency: O(n log n).</td>
+            <td>A sorting algorithm that divides a list in half repeatedly, then merges the halves back in order. Much faster than bubble sort for large lists, but uses more memory.</td>
           </tr>
           <tr>
             <td><strong>Efficiency</strong></td>
-            <td>A measure of how well an algorithm performs, usually described in terms of time (speed) and space (memory usage) as the input size grows.</td>
-          </tr>
-          <tr>
-            <td><strong>Big O Notation</strong></td>
-            <td>A mathematical notation that describes the worst-case efficiency of an algorithm as the input size grows. E.g. O(n), O(log n), O(n&sup2;).</td>
+            <td>A measure of how well an algorithm performs, usually described in terms of time (speed) and space (memory usage) as the data set grows larger.</td>
           </tr>
           <tr>
             <td><strong>Divide and Conquer</strong></td>
@@ -552,8 +541,8 @@ ENDFUNCTION</code></pre>
       <h3>3. Read the Data Carefully</h3>
       <p>Pay attention to whether data is sorted or unsorted. If a question gives you an unsorted list and asks which search algorithm to use, the answer is <strong>linear search</strong> &mdash; binary search cannot be used on unsorted data. If the data is sorted, mention that binary search would be more efficient.</p>
 
-      <h3>4. Know Your Big O Categories</h3>
-      <p>You should be able to state the Big O efficiency of every search and sort algorithm you have studied and explain why one is faster than another. Practice sentences like: &ldquo;Binary search is O(log n) because it halves the remaining data with each comparison, whereas linear search is O(n) because it checks each item one at a time.&rdquo;</p>
+      <h3>4. Explain Why One Algorithm Is Faster</h3>
+      <p>You should be able to explain <strong>why</strong> one algorithm is faster than another. Practise sentences like: &ldquo;Binary search is faster than linear search because it halves the remaining data with each comparison, whereas linear search checks each item one at a time.&rdquo; Always link your answer to what the algorithm <strong>actually does</strong>.</p>
 
       <div class="warning">
         <strong>Top Exam Tip:</strong> If you are running out of time and cannot finish a trace table, at least write down your final answer with a brief explanation. You may still get the mark for the correct answer, and partial working often picks up method marks. Never leave an algorithm question blank.
@@ -586,16 +575,7 @@ ENDFUNCTION</code></pre>
         </ul>
 
         <h3>Video Resources</h3>
-        <div class="video-links">
-          <a href="https://youtu.be/fHo9W11uG30" class="video-card" target="_blank" rel="noopener">
-            <span class="play-icon">&#9654;&#65039;</span>
-            <div class="video-info">Craig 'n' Dave: Linear Search<small>Detailed walkthrough with trace tables</small></div>
-          </a>
-          <a href="https://youtu.be/8e2XpzAig5w" class="video-card" target="_blank" rel="noopener">
-            <span class="play-icon">&#9654;&#65039;</span>
-            <div class="video-info">Craig 'n' Dave: Bubble Sort &amp; Merge Sort<small>Complete walkthrough of sorting algorithms</small></div>
-          </a>
-        </div>
+        <p>All algorithm videos are embedded next to each algorithm section above. Scroll up to find the video for the specific algorithm you want to revise.</p>
       </div>
     </section>
 
