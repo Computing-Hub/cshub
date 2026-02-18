@@ -451,6 +451,47 @@
         <li><strong>Security</strong> &mdash; User accounts, passwords, access permissions, and controlling who can do what</li>
       </ul>
 
+      <!-- SCHEDULING ALGORITHMS -->
+      <h3>Scheduling Algorithms</h3>
+      <p>When multiple programs are running at once, the OS must decide which process gets to use the CPU next. This is called <strong>scheduling</strong>. Different algorithms suit different situations:</p>
+
+      <table>
+        <thead>
+          <tr><th>Algorithm</th><th>How It Works</th><th>Advantages</th><th>Disadvantages</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>First Come First Served (FCFS)</strong></td>
+            <td>Processes are executed in the order they arrive &mdash; like a queue at a shop</td>
+            <td>Simple to implement; fair (no starvation)</td>
+            <td>Short jobs may wait behind long ones; not efficient for interactive systems</td>
+          </tr>
+          <tr>
+            <td><strong>Round Robin</strong></td>
+            <td>Each process gets a fixed <strong>time slice</strong> (e.g. 10 ms). If it is not finished, it goes to the back of the queue</td>
+            <td>Fair &mdash; every process gets regular CPU time; good for interactive/multi-user systems</td>
+            <td>Context switching adds overhead; not ideal if time slices are too short or too long</td>
+          </tr>
+          <tr>
+            <td><strong>Shortest Job First (SJF)</strong></td>
+            <td>The process with the shortest estimated execution time runs next</td>
+            <td>Minimises average waiting time; efficient for batch processing</td>
+            <td>Hard to predict execution time; long processes may be starved (never get to run)</td>
+          </tr>
+          <tr>
+            <td><strong>Priority-Based</strong></td>
+            <td>Each process is assigned a priority level. Higher-priority processes run first</td>
+            <td>Important tasks (e.g. system processes) are handled quickly</td>
+            <td>Low-priority processes may be starved; requires careful priority assignment</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="exam-tip">
+        <strong>Exam Tip: Scheduling Algorithms</strong>
+        <p>In exam questions, you are often given a scenario and asked to recommend a scheduling algorithm. <strong>Round Robin</strong> is best for multi-user/interactive systems where fairness matters. <strong>FCFS</strong> is simplest but can cause long wait times. <strong>SJF</strong> is most efficient for batch jobs. <strong>Priority-Based</strong> is best when some tasks are more urgent than others.</p>
+      </div>
+
       <!-- UTILITY SOFTWARE -->
       <h3>Utility Software</h3>
       <p>Utility software performs specific maintenance or housekeeping tasks to keep the computer running smoothly:</p>
@@ -462,6 +503,34 @@
         <li><strong>Backup software</strong> &mdash; Creates copies of files so they can be restored if the originals are lost, corrupted, or damaged. Can be full, incremental, or differential backups.</li>
         <li><strong>Disk cleanup / compression</strong> &mdash; Removes temporary files and compresses data to free up storage space.</li>
       </ul>
+
+      <h4>Types of Backup</h4>
+      <p>Backup software can create copies in different ways, each with trade-offs:</p>
+      <table>
+        <thead>
+          <tr><th>Backup Type</th><th>What It Does</th><th>Advantages</th><th>Disadvantages</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Full Backup</strong></td>
+            <td>Copies <strong>all</strong> files every time</td>
+            <td>Simple to restore &mdash; everything is in one place</td>
+            <td>Slow and uses the most storage space; time-consuming for large systems</td>
+          </tr>
+          <tr>
+            <td><strong>Incremental Backup</strong></td>
+            <td>Copies only files that have <strong>changed since the last backup</strong> (of any type)</td>
+            <td>Fast and uses minimal storage</td>
+            <td>Slower to restore &mdash; you need the last full backup plus every incremental backup since</td>
+          </tr>
+          <tr>
+            <td><strong>Differential Backup</strong></td>
+            <td>Copies all files that have <strong>changed since the last full backup</strong></td>
+            <td>Faster to restore than incremental &mdash; only need the last full backup plus the latest differential</td>
+            <td>Uses more storage than incremental; gets larger over time until the next full backup</td>
+          </tr>
+        </tbody>
+      </table>
 
       <!-- LANGUAGES -->
       <h3>High-Level vs Low-Level Languages</h3>
@@ -739,6 +808,110 @@
       </div>
     </section>
 
+    <!-- ==================== PAST PAPER QUESTIONS ==================== -->
+    <section class="practice">
+      <span class="section-label">Practice</span>
+      <h2>Past Paper Questions</h2>
+      <p>Practise these exam-style questions. Click each question to reveal the mark scheme.</p>
+
+      <details style="background: #fff; border: 2px solid #e0e0e0; border-radius: 8px; margin: 1rem 0; overflow: hidden;">
+        <summary style="padding: 1rem; font-weight: 700; cursor: pointer; user-select: none;">
+          Describe the purpose of the CPU and name its three main components.
+          <span style="display: inline-block; background: linear-gradient(135deg, #4361ee, #3a0ca3); color: #fff; font-size: 0.75rem; font-weight: 700; padding: 2px 10px; border-radius: 50px; margin-left: 0.5rem;">3 marks</span>
+        </summary>
+        <div style="padding: 1rem; border-top: 1px solid #e0e0e0; background: #f8faf8;">
+          <p><strong>Mark scheme:</strong></p>
+          <ul>
+            <li>The CPU processes instructions / carries out calculations and makes decisions (1 mark)</li>
+            <li>ALU (Arithmetic Logic Unit) &mdash; performs arithmetic and logic operations (1 mark)</li>
+            <li>CU (Control Unit) &mdash; fetches, decodes and coordinates execution of instructions (1 mark)</li>
+            <li>Registers &mdash; tiny, fast storage locations inside the CPU (1 mark, alternative third component: Cache)</li>
+          </ul>
+        </div>
+      </details>
+
+      <details style="background: #fff; border: 2px solid #e0e0e0; border-radius: 8px; margin: 1rem 0; overflow: hidden;">
+        <summary style="padding: 1rem; font-weight: 700; cursor: pointer; user-select: none;">
+          Describe the three stages of the fetch-decode-execute cycle. Name the registers used in the fetch stage.
+          <span style="display: inline-block; background: linear-gradient(135deg, #4361ee, #3a0ca3); color: #fff; font-size: 0.75rem; font-weight: 700; padding: 2px 10px; border-radius: 50px; margin-left: 0.5rem;">5 marks</span>
+        </summary>
+        <div style="padding: 1rem; border-top: 1px solid #e0e0e0; background: #f8faf8;">
+          <p><strong>Mark scheme:</strong></p>
+          <ul>
+            <li><strong>Fetch:</strong> The next instruction is retrieved from memory; the address is held in the PC, copied to the MAR, and the instruction is placed in the MDR (2 marks)</li>
+            <li><strong>Decode:</strong> The Control Unit interprets the instruction to determine what operation is needed (1 mark)</li>
+            <li><strong>Execute:</strong> The instruction is carried out, which may involve the ALU performing a calculation or data being transferred (1 mark)</li>
+            <li>Registers: Program Counter (PC), Memory Address Register (MAR), Memory Data Register (MDR) (1 mark)</li>
+          </ul>
+        </div>
+      </details>
+
+      <details style="background: #fff; border: 2px solid #e0e0e0; border-radius: 8px; margin: 1rem 0; overflow: hidden;">
+        <summary style="padding: 1rem; font-weight: 700; cursor: pointer; user-select: none;">
+          Explain the difference between RAM and ROM. Give one example of data stored in each.
+          <span style="display: inline-block; background: linear-gradient(135deg, #4361ee, #3a0ca3); color: #fff; font-size: 0.75rem; font-weight: 700; padding: 2px 10px; border-radius: 50px; margin-left: 0.5rem;">4 marks</span>
+        </summary>
+        <div style="padding: 1rem; border-top: 1px solid #e0e0e0; background: #f8faf8;">
+          <p><strong>Mark scheme:</strong></p>
+          <ul>
+            <li>RAM is volatile (data is lost when power is off); ROM is non-volatile (data is retained without power) (1 mark)</li>
+            <li>RAM can be read from and written to; ROM is read-only (1 mark)</li>
+            <li>RAM stores currently running programs and data, e.g. an open web browser or document (1 mark)</li>
+            <li>ROM stores permanent start-up instructions, e.g. the BIOS/UEFI (1 mark)</li>
+          </ul>
+        </div>
+      </details>
+
+      <details style="background: #fff; border: 2px solid #e0e0e0; border-radius: 8px; margin: 1rem 0; overflow: hidden;">
+        <summary style="padding: 1rem; font-weight: 700; cursor: pointer; user-select: none;">
+          A small business needs to choose between an HDD and an SSD for their office computers. Discuss the advantages and disadvantages of each and make a recommendation.
+          <span style="display: inline-block; background: linear-gradient(135deg, #4361ee, #3a0ca3); color: #fff; font-size: 0.75rem; font-weight: 700; padding: 2px 10px; border-radius: 50px; margin-left: 0.5rem;">6 marks</span>
+        </summary>
+        <div style="padding: 1rem; border-top: 1px solid #e0e0e0; background: #f8faf8;">
+          <p><strong>Mark scheme:</strong></p>
+          <ul>
+            <li>SSD advantage: Much faster read/write speeds so programs load quickly (1 mark)</li>
+            <li>SSD advantage: No moving parts so more durable and reliable (1 mark)</li>
+            <li>SSD disadvantage: More expensive per GB than HDD (1 mark)</li>
+            <li>HDD advantage: Lower cost per GB, available in very high capacities (1 mark)</li>
+            <li>HDD disadvantage: Slower, has moving parts that can fail, uses more power (1 mark)</li>
+            <li>Recommendation with justification, e.g. SSD for the operating system drive for fast boot times, with HDD or cloud storage for bulk file archiving (1 mark)</li>
+          </ul>
+        </div>
+      </details>
+
+      <details style="background: #fff; border: 2px solid #e0e0e0; border-radius: 8px; margin: 1rem 0; overflow: hidden;">
+        <summary style="padding: 1rem; font-weight: 700; cursor: pointer; user-select: none;">
+          Explain the difference between a compiler and an interpreter. State one advantage of each.
+          <span style="display: inline-block; background: linear-gradient(135deg, #4361ee, #3a0ca3); color: #fff; font-size: 0.75rem; font-weight: 700; padding: 2px 10px; border-radius: 50px; margin-left: 0.5rem;">4 marks</span>
+        </summary>
+        <div style="padding: 1rem; border-top: 1px solid #e0e0e0; background: #f8faf8;">
+          <p><strong>Mark scheme:</strong></p>
+          <ul>
+            <li>A compiler translates the entire source code into machine code at once, producing a standalone executable (1 mark)</li>
+            <li>An interpreter translates and executes the code one line at a time (1 mark)</li>
+            <li>Compiler advantage: The compiled program runs faster because no further translation is needed (1 mark)</li>
+            <li>Interpreter advantage: Errors are found immediately at the exact line, making debugging easier (1 mark)</li>
+          </ul>
+        </div>
+      </details>
+
+      <details style="background: #fff; border: 2px solid #e0e0e0; border-radius: 8px; margin: 1rem 0; overflow: hidden;">
+        <summary style="padding: 1rem; font-weight: 700; cursor: pointer; user-select: none;">
+          Describe Round Robin scheduling. Explain one advantage and one disadvantage of this algorithm.
+          <span style="display: inline-block; background: linear-gradient(135deg, #4361ee, #3a0ca3); color: #fff; font-size: 0.75rem; font-weight: 700; padding: 2px 10px; border-radius: 50px; margin-left: 0.5rem;">3 marks</span>
+        </summary>
+        <div style="padding: 1rem; border-top: 1px solid #e0e0e0; background: #f8faf8;">
+          <p><strong>Mark scheme:</strong></p>
+          <ul>
+            <li>Round Robin gives each process a fixed time slice; if the process is not finished, it goes to the back of the queue (1 mark)</li>
+            <li>Advantage: Fair &mdash; every process gets regular CPU time; good for multi-user/interactive systems (1 mark)</li>
+            <li>Disadvantage: Context switching between processes adds overhead / not efficient if time slices are poorly chosen (1 mark)</li>
+          </ul>
+        </div>
+      </details>
+    </section>
+
     <!-- ==================== REFLECT ==================== -->
     <section class="reflect">
       <span class="section-label">Reflect</span>
@@ -754,6 +927,34 @@
       </ul>
 
       <p>Every line of Python you write eventually becomes machine code instructions that travel through the CPU&rsquo;s fetch-decode-execute cycle. Understanding that journey &mdash; from your high-level <code>print("Hello")</code> to electrons flowing through transistors &mdash; is one of the most fascinating parts of computer science.</p>
+
+      <h3>Video Resources</h3>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin: 1rem 0;">
+        <a href="https://youtu.be/TNW1qzeEA0w?si=C6vSbUQ_H_yGIiPY" style="background: #fff; border: 2px solid #e0e0e0; border-radius: 8px; padding: 1rem; display: flex; align-items: center; gap: 1rem; text-decoration: none; transition: border-color 0.2s, box-shadow 0.2s;" target="_blank" rel="noopener" onmouseover="this.style.borderColor='#e63946'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.1)';" onmouseout="this.style.borderColor='#e0e0e0'; this.style.boxShadow='none';">
+          <span style="font-size: 2rem; flex-shrink: 0;" role="img" aria-label="play">&#x25B6;&#xFE0F;</span>
+          <div style="font-size: 0.9rem; color: #333; font-weight: 600;">Craig 'n' Dave: The CPU<small style="display: block; font-weight: 400; color: #666; font-size: 0.8rem;">CPU components, registers, and the fetch-decode-execute cycle</small></div>
+        </a>
+        <a href="https://youtu.be/lNjIZu-b2Cs?si=kViuKB89RhWOUIJr" style="background: #fff; border: 2px solid #e0e0e0; border-radius: 8px; padding: 1rem; display: flex; align-items: center; gap: 1rem; text-decoration: none; transition: border-color 0.2s, box-shadow 0.2s;" target="_blank" rel="noopener" onmouseover="this.style.borderColor='#e63946'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.1)';" onmouseout="this.style.borderColor='#e0e0e0'; this.style.boxShadow='none';">
+          <span style="font-size: 2rem; flex-shrink: 0;" role="img" aria-label="play">&#x25B6;&#xFE0F;</span>
+          <div style="font-size: 0.9rem; color: #333; font-weight: 600;">Craig 'n' Dave: RAM, ROM and Virtual Memory<small style="display: block; font-weight: 400; color: #666; font-size: 0.8rem;">Types of memory, volatility, and how virtual memory works</small></div>
+        </a>
+        <a href="https://youtu.be/CZEhQLrYgDM?si=xXVw7oo5nogMjles" style="background: #fff; border: 2px solid #e0e0e0; border-radius: 8px; padding: 1rem; display: flex; align-items: center; gap: 1rem; text-decoration: none; transition: border-color 0.2s, box-shadow 0.2s;" target="_blank" rel="noopener" onmouseover="this.style.borderColor='#e63946'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.1)';" onmouseout="this.style.borderColor='#e0e0e0'; this.style.boxShadow='none';">
+          <span style="font-size: 2rem; flex-shrink: 0;" role="img" aria-label="play">&#x25B6;&#xFE0F;</span>
+          <div style="font-size: 0.9rem; color: #333; font-weight: 600;">Craig 'n' Dave: Secondary Storage<small style="display: block; font-weight: 400; color: #666; font-size: 0.8rem;">HDD, SSD, optical, and cloud storage compared</small></div>
+        </a>
+        <a href="https://youtu.be/QCwWO_tR3rA?si=G0eVUJmyDW3IULWJ" style="background: #fff; border: 2px solid #e0e0e0; border-radius: 8px; padding: 1rem; display: flex; align-items: center; gap: 1rem; text-decoration: none; transition: border-color 0.2s, box-shadow 0.2s;" target="_blank" rel="noopener" onmouseover="this.style.borderColor='#e63946'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.1)';" onmouseout="this.style.borderColor='#e0e0e0'; this.style.boxShadow='none';">
+          <span style="font-size: 2rem; flex-shrink: 0;" role="img" aria-label="play">&#x25B6;&#xFE0F;</span>
+          <div style="font-size: 0.9rem; color: #333; font-weight: 600;">Craig 'n' Dave: Operating Systems<small style="display: block; font-weight: 400; color: #666; font-size: 0.8rem;">Purpose and functionality of operating systems</small></div>
+        </a>
+        <a href="https://youtu.be/oONakZsHYdU?si=U6_3rhNUWOyvyqR4" style="background: #fff; border: 2px solid #e0e0e0; border-radius: 8px; padding: 1rem; display: flex; align-items: center; gap: 1rem; text-decoration: none; transition: border-color 0.2s, box-shadow 0.2s;" target="_blank" rel="noopener" onmouseover="this.style.borderColor='#e63946'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.1)';" onmouseout="this.style.borderColor='#e0e0e0'; this.style.boxShadow='none';">
+          <span style="font-size: 2rem; flex-shrink: 0;" role="img" aria-label="play">&#x25B6;&#xFE0F;</span>
+          <div style="font-size: 0.9rem; color: #333; font-weight: 600;">Craig 'n' Dave: Utility Software<small style="display: block; font-weight: 400; color: #666; font-size: 0.8rem;">Defragmentation, encryption, backups, and antivirus</small></div>
+        </a>
+        <a href="https://youtu.be/phpLmogTH0k?si=enPmhYi1b2salDzC" style="background: #fff; border: 2px solid #e0e0e0; border-radius: 8px; padding: 1rem; display: flex; align-items: center; gap: 1rem; text-decoration: none; transition: border-color 0.2s, box-shadow 0.2s;" target="_blank" rel="noopener" onmouseover="this.style.borderColor='#e63946'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.1)';" onmouseout="this.style.borderColor='#e0e0e0'; this.style.boxShadow='none';">
+          <span style="font-size: 2rem; flex-shrink: 0;" role="img" aria-label="play">&#x25B6;&#xFE0F;</span>
+          <div style="font-size: 0.9rem; color: #333; font-weight: 600;">Craig 'n' Dave: Programming Languages<small style="display: block; font-weight: 400; color: #666; font-size: 0.8rem;">High-level vs low-level, compilers and interpreters</small></div>
+        </a>
+      </div>
 
       <div class="extra-resources">
         <h3>Further Reading</h3>
