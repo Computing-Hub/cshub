@@ -715,6 +715,140 @@ ENDIF</code></pre>
       </table>
     </section>
 
+    <!-- ==================== FLOWCHART ACTIVITIES ==================== -->
+    <section class="practice">
+      <span class="section-label">Practice</span>
+      <h2>Flowchart Activities</h2>
+      <p>Put your flowchart skills into practice! Use the free online tool below to draw your flowcharts, then check your answer with the accordion.</p>
+      <p><a href="https://app.diagrams.net/" target="_blank" rel="noopener" class="button" style="display:inline-block;">Open draw.io Flowchart Tool &rarr;</a></p>
+      <p class="exam-tip"><strong>Tip:</strong> In draw.io, use the <strong>Flowchart</strong> shape library on the left panel. Drag shapes onto the canvas, double-click to add text, and use arrows to connect them. Remember to label your Yes/No paths on decision diamonds!</p>
+
+      <!-- Activity 1 -->
+      <h3>Activity 1: Can You Drive?</h3>
+      <div class="did-you-know">
+        <strong>The scenario:</strong> A program asks the user to enter their age. If they are 17 or older, it outputs &ldquo;You can learn to drive!&rdquo;. Otherwise, it outputs &ldquo;You are too young to drive.&rdquo; The program then ends.
+      </div>
+      <p><strong>Your task:</strong> Draw a flowchart for this program using the correct symbols:</p>
+      <ul>
+        <li><strong>Oval</strong> for Start and Stop</li>
+        <li><strong>Parallelogram</strong> for Input (age) and Output (message)</li>
+        <li><strong>Diamond</strong> for the decision (Is age &ge; 17?)</li>
+        <li><strong>Arrows</strong> with Yes/No labels on the decision paths</li>
+      </ul>
+
+      <div class="hint">
+        <div class="hint-title">Reveal Model Answer &mdash; Activity 1</div>
+        <div class="hint-content">
+          <p><strong>Flowchart steps (top to bottom):</strong></p>
+          <ol>
+            <li><strong>Oval:</strong> START</li>
+            <li><strong>Parallelogram:</strong> INPUT age</li>
+            <li><strong>Diamond:</strong> Is age &ge; 17?</li>
+            <li><strong>Yes &rarr; Parallelogram:</strong> OUTPUT &ldquo;You can learn to drive!&rdquo;</li>
+            <li><strong>No &rarr; Parallelogram:</strong> OUTPUT &ldquo;You are too young to drive.&rdquo;</li>
+            <li>Both paths rejoin &rarr; <strong>Oval:</strong> STOP</li>
+          </ol>
+          <div class="code-block">
+            <div class="code-block-header">
+              <span class="code-block-label">Flowchart Diagram (text version)</span>
+            </div>
+            <pre><code>        ┌───────────┐
+        │   START   │  (oval)
+        └─────┬─────┘
+              ▼
+        ╱           ╲
+       ╱  INPUT age  ╲   (parallelogram)
+       ╲             ╱
+        ╲           ╱
+              │
+              ▼
+          ╱       ╲
+         ╱ Is age  ╲
+        ╱  >= 17?   ╲    (diamond)
+        ╲           ╱
+         ╲         ╱
+       Yes ╲     ╱ No
+          │       │
+          ▼       ▼
+    ╱─────────╲  ╱──────────────╲
+   ╱ OUTPUT    ╲╱ OUTPUT         ╲
+   ╲ "You can  ╱╲ "Too young     ╱
+    ╲ drive!" ╱  ╲ to drive."   ╱
+          │           │
+          └─────┬─────┘
+                ▼
+          ┌───────────┐
+          │   STOP    │  (oval)
+          └───────────┘</code></pre>
+          </div>
+          <p><strong>Key points:</strong> This is a <strong>selection</strong> (IF/ELSE) flowchart &mdash; notice both paths go <strong>forward</strong> and rejoin. There are no backward arrows, so there is no loop.</p>
+        </div>
+      </div>
+
+      <!-- Activity 2 -->
+      <h3>Activity 2: Password Checker (with a Loop)</h3>
+      <div class="did-you-know">
+        <strong>The scenario:</strong> A program asks the user to enter a password. The correct password is &ldquo;python123&rdquo;. If the password is wrong, the program says &ldquo;Incorrect, try again&rdquo; and asks again. This repeats until the user enters the correct password, at which point the program outputs &ldquo;Access granted!&rdquo; and stops.
+      </div>
+      <p><strong>Your task:</strong> Draw a flowchart for this program. Think carefully about:</p>
+      <ul>
+        <li>Where does the <strong>loop</strong> go back to? (Which step repeats?)</li>
+        <li>Which symbol represents the <strong>decision</strong>?</li>
+        <li>Where does the <strong>backward arrow</strong> go? (This is what makes it iteration, not selection!)</li>
+      </ul>
+
+      <div class="hint">
+        <div class="hint-title">Reveal Model Answer &mdash; Activity 2</div>
+        <div class="hint-content">
+          <p><strong>Flowchart steps:</strong></p>
+          <ol>
+            <li><strong>Oval:</strong> START</li>
+            <li><strong>Parallelogram:</strong> INPUT password</li>
+            <li><strong>Diamond:</strong> Is password = &ldquo;python123&rdquo;?</li>
+            <li><strong>No &rarr; Parallelogram:</strong> OUTPUT &ldquo;Incorrect, try again&rdquo; &rarr; arrow loops <strong>back to step 2</strong></li>
+            <li><strong>Yes &rarr; Parallelogram:</strong> OUTPUT &ldquo;Access granted!&rdquo;</li>
+            <li><strong>Oval:</strong> STOP</li>
+          </ol>
+          <div class="code-block">
+            <div class="code-block-header">
+              <span class="code-block-label">Flowchart Diagram (text version)</span>
+            </div>
+            <pre><code>          ┌───────────┐
+          │   START   │  (oval)
+          └─────┬─────┘
+                ▼
+     ┌──╱           ╲
+     │ ╱INPUT password╲   (parallelogram)
+     │ ╲              ╱
+     │  ╲            ╱
+     │        │
+     │        ▼
+     │    ╱       ╲
+     │   ╱password ╲
+     │  ╱= python   ╲    (diamond)
+     │  ╲  123?     ╱
+     │   ╲         ╱
+     │  No ╲     ╱ Yes
+     │    │       │
+     │    ▼       ▼
+     │ ╱─────────╲  ╱──────────╲
+     │╱  OUTPUT   ╲╱  OUTPUT    ╲
+     │╲"Incorrect,╱╲ "Access    ╱
+     │ ╲try again"╱  ╲granted!" ╱
+     │    │              │
+     └────┘              ▼
+                   ┌───────────┐
+                   │   STOP    │  (oval)
+                   └───────────┘
+        ▲
+  The backward arrow makes
+  this ITERATION (a loop)!</code></pre>
+          </div>
+          <p><strong>Key points:</strong> This is <strong>iteration</strong> (a WHILE loop) &mdash; notice the backward arrow from the &ldquo;Incorrect&rdquo; output back to the INPUT step. This is how you can tell the difference between selection and iteration in a flowchart: <strong>look for the backward arrow</strong>.</p>
+        </div>
+      </div>
+    </section>
+
     <!-- ==================== ARITHMETIC OPERATORS ==================== -->
     <section class="understand">
       <span class="section-label">Understand</span>
