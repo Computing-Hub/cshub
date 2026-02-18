@@ -436,5 +436,14 @@ OUTPUT "The average is: " + average</code></pre>
     <p>Pseudocode &amp; Flowcharts &mdash; GCSE Computer Science Theory</p>
   </footer>
 
+  <script>
+    document.querySelectorAll('.hint-title').forEach(function (title) {
+      title.addEventListener('click', function () {
+        var content = this.nextElementSibling;
+        content.classList.toggle('visible');
+      });
+    });
+  </script>
+
 </body>
 </html>
