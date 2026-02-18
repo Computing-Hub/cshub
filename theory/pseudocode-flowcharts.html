@@ -276,6 +276,37 @@
       </div>
     </section>
 
+    <!-- ==================== THE THREE CONSTRUCTS ==================== -->
+    <section class="explore">
+      <span class="section-label">Explore</span>
+      <h2>The Three Programming Constructs</h2>
+
+      <p>All algorithms &mdash; no matter how complex &mdash; are built from just <strong>three basic building blocks</strong> called constructs. Understanding these is essential for writing pseudocode and reading flowcharts:</p>
+
+      <div class="why-cards">
+        <div class="why-card" style="border-top: 4px solid #4361ee;">
+          <span class="card-icon" role="img" aria-label="arrow">&#x27A1;&#xFE0F;</span>
+          <h4>Sequence</h4>
+          <p>Instructions carried out <strong>one after another</strong>, in order. Like following a recipe &mdash; you do step 1, then step 2, then step 3.</p>
+        </div>
+        <div class="why-card" style="border-top: 4px solid #f77f00;">
+          <span class="card-icon" role="img" aria-label="fork">&#x1F500;</span>
+          <h4>Selection</h4>
+          <p>Making a <strong>decision</strong> &mdash; choosing which path to take based on a condition. Like checking the weather: IF raining THEN take umbrella ELSE wear sunglasses.</p>
+        </div>
+        <div class="why-card" style="border-top: 4px solid #06d6a0;">
+          <span class="card-icon" role="img" aria-label="repeat">&#x1F501;</span>
+          <h4>Iteration (Loops)</h4>
+          <p><strong>Repeating</strong> instructions until a condition is met. Like eating dinner &mdash; you keep eating UNTIL your plate is empty!</p>
+        </div>
+      </div>
+
+      <div class="key-concept">
+        <strong>Why Does This Matter?</strong>
+        In pseudocode, you use keywords to show each construct: sequence is just one line after another, selection uses <code>IF...THEN...ELSE</code>, and iteration uses <code>FOR</code>, <code>WHILE</code>, or <code>REPEAT...UNTIL</code>. In flowcharts, selection and iteration both use the decision diamond &mdash; but their arrows behave differently (you&rsquo;ll see this below).
+      </div>
+    </section>
+
     <!-- ==================== EXPLORE: PSEUDOCODE ==================== -->
     <section class="explore">
       <span class="section-label">Explore</span>
@@ -715,6 +746,159 @@ ENDIF</code></pre>
       </table>
     </section>
 
+    <!-- ==================== ARITHMETIC OPERATORS ==================== -->
+    <section class="understand">
+      <span class="section-label">Understand</span>
+      <h2>Arithmetic Operators in Pseudocode</h2>
+
+      <p>When writing pseudocode, you need to perform calculations. Here are the <strong>arithmetic operators</strong> you must know:</p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Operator</th>
+            <th>Name</th>
+            <th>What It Does</th>
+            <th>Example</th>
+            <th>Result</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>+</strong></td>
+            <td>Addition</td>
+            <td>Adds two numbers together</td>
+            <td><code>5 + 3</code></td>
+            <td><strong>8</strong></td>
+          </tr>
+          <tr>
+            <td><strong>-</strong></td>
+            <td>Subtraction</td>
+            <td>Takes one number away from another</td>
+            <td><code>10 - 4</code></td>
+            <td><strong>6</strong></td>
+          </tr>
+          <tr>
+            <td><strong>*</strong></td>
+            <td>Multiplication</td>
+            <td>Multiplies two numbers</td>
+            <td><code>4 * 3</code></td>
+            <td><strong>12</strong></td>
+          </tr>
+          <tr>
+            <td><strong>/</strong></td>
+            <td>Division</td>
+            <td>Divides one number by another (includes decimals)</td>
+            <td><code>7 / 2</code></td>
+            <td><strong>3.5</strong></td>
+          </tr>
+          <tr>
+            <td><strong>DIV</strong></td>
+            <td>Integer Division</td>
+            <td>Divides and gives whole number only (no decimals)</td>
+            <td><code>7 DIV 2</code></td>
+            <td><strong>3</strong></td>
+          </tr>
+          <tr>
+            <td><strong>MOD</strong></td>
+            <td>Modulus (Remainder)</td>
+            <td>Gives the remainder after division</td>
+            <td><code>7 MOD 2</code></td>
+            <td><strong>1</strong></td>
+          </tr>
+          <tr>
+            <td><strong>^</strong></td>
+            <td>Exponent (Power)</td>
+            <td>Raises a number to a power</td>
+            <td><code>2 ^ 3</code></td>
+            <td><strong>8</strong> (2&times;2&times;2)</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>DIV and MOD &mdash; The Tricky Ones Explained</h3>
+      <p>These two operators confuse many students, but they are simple once you understand them.</p>
+
+      <div class="spot-grid">
+        <div class="key-concept">
+          <strong>DIV &mdash; Integer Division</strong>
+          <p>Imagine sharing <strong>17 sweets</strong> between <strong>5 friends</strong> equally. Each friend gets <strong>3 sweets</strong> (the whole number part).</p>
+          <p><code>17 DIV 5 = 3</code></p>
+          <p>DIV ignores the remainder and only gives you the whole number.</p>
+        </div>
+        <div class="key-concept">
+          <strong>MOD &mdash; Remainder</strong>
+          <p>After sharing 17 sweets between 5 friends, there is <strong>1 sweet left over</strong> (the remainder).</p>
+          <p><code>17 MOD 5 = 2</code></p>
+          <p>MOD tells you what is left over after dividing as many times as you can.</p>
+        </div>
+      </div>
+
+      <div class="warning">
+        <strong>Exam Favourite:</strong> &ldquo;Is a number even or odd?&rdquo; &mdash; Use <code>number MOD 2</code>. If the result is 0, it&rsquo;s <strong>even</strong>. If the result is 1, it&rsquo;s <strong>odd</strong>. Other common uses: get the last digit (<code>1234 MOD 10 = 4</code>) and wrap-around values (clock times, game levels).
+      </div>
+    </section>
+
+    <!-- ==================== VARIABLES & CONSTANTS ==================== -->
+    <section class="idea">
+      <span class="section-label">Understand</span>
+      <h2>Variables and Constants</h2>
+
+      <p>When writing pseudocode, you need places to <strong>store data</strong>. That is where variables and constants come in. Think of them as <strong>labelled boxes</strong>:</p>
+
+      <div class="spot-grid">
+        <div class="key-concept">
+          <strong>Variable &mdash; A Box That Can Change</strong>
+          <p>A named storage location whose value <strong>can change</strong> while the program runs.</p>
+          <p><strong>Examples:</strong> <code>score</code> (goes up when you get points), <code>lives</code> (goes down when you lose), <code>userName</code> (changes for each user).</p>
+          <div class="code-block" style="margin-top: var(--space-sm);">
+            <div class="code-block-header"><span class="code-block-label">Pseudocode</span></div>
+            <pre><code>SET score TO 0
+SET score TO score + 10
+OUTPUT score    // Shows 10</code></pre>
+          </div>
+        </div>
+        <div class="key-concept">
+          <strong>Constant &mdash; A Locked Box</strong>
+          <p>A named storage location whose value is set <strong>once and never changes</strong>.</p>
+          <p><strong>Examples:</strong> <code>PI = 3.14159</code>, <code>VAT_RATE = 0.20</code>, <code>MAX_LIVES = 3</code>, <code>DAYS_IN_WEEK = 7</code>.</p>
+          <div class="code-block" style="margin-top: var(--space-sm);">
+            <div class="code-block-header"><span class="code-block-label">Pseudocode</span></div>
+            <pre><code>CONST VAT_RATE = 0.20
+SET tax TO price * VAT_RATE
+// VAT_RATE never changes!</code></pre>
+          </div>
+        </div>
+      </div>
+
+      <h3>Naming Conventions</h3>
+      <p>When naming variables, you must follow rules and conventions to keep your code readable:</p>
+
+      <div class="spot-grid">
+        <div class="key-concept">
+          <strong>camelCase</strong>
+          <p>First word lowercase, then capitalise the first letter of each new word. Called &ldquo;camelCase&rdquo; because the capitals look like camel humps.</p>
+          <p><code>firstName</code>, <code>totalScore</code>, <code>numberOfPlayers</code></p>
+        </div>
+        <div class="key-concept">
+          <strong>snake_case</strong>
+          <p>All lowercase letters with underscores between words. Called &ldquo;snake_case&rdquo; because it is long and low like a snake.</p>
+          <p><code>first_name</code>, <code>total_score</code>, <code>number_of_players</code></p>
+        </div>
+      </div>
+
+      <div class="warning">
+        <strong>Rules for Naming Variables:</strong>
+        <ul>
+          <li>Must start with a <strong>letter</strong> (not a number) &mdash; <code>score1</code> is fine, <code>1score</code> is not</li>
+          <li><strong>No spaces</strong> &mdash; use camelCase or snake_case instead</li>
+          <li>Cannot use <strong>reserved words</strong> (like <code>IF</code>, <code>WHILE</code>, <code>FOR</code>)</li>
+          <li>Should be <strong>meaningful</strong> &mdash; <code>age</code> is better than <code>x</code></li>
+          <li>Constants are written in <strong>UPPERCASE</strong>: <code>MAX_SCORE = 100</code></li>
+        </ul>
+      </div>
+    </section>
+
     <!-- ==================== PRACTICE ==================== -->
     <section class="practice">
       <span class="section-label">Practice</span>
@@ -972,6 +1156,26 @@ OUTPUT total                          (1)</code></pre>
             <td><strong>Trace Table</strong></td>
             <td>A table used to track the values of variables as you step through an algorithm, used to test and debug logic.</td>
           </tr>
+          <tr>
+            <td><strong>Sequence</strong></td>
+            <td>A programming construct where instructions are carried out one after another, in order.</td>
+          </tr>
+          <tr>
+            <td><strong>Variable</strong></td>
+            <td>A named storage location that holds a value which can change during program execution.</td>
+          </tr>
+          <tr>
+            <td><strong>Constant</strong></td>
+            <td>A named storage location that holds a value which is set once and cannot change. Written in UPPERCASE (e.g. VAT_RATE).</td>
+          </tr>
+          <tr>
+            <td><strong>DIV</strong></td>
+            <td>Integer division &mdash; divides and gives the whole number only, ignoring the remainder (e.g. 7 DIV 2 = 3).</td>
+          </tr>
+          <tr>
+            <td><strong>MOD</strong></td>
+            <td>Modulus &mdash; gives the remainder after division (e.g. 7 MOD 2 = 1). Used to check even/odd numbers.</td>
+          </tr>
         </tbody>
       </table>
     </section>
@@ -992,6 +1196,17 @@ OUTPUT total                          (1)</code></pre>
 
       <h3>4. Check Your Logic Flows</h3>
       <p>When drawing flowcharts, make sure all paths eventually lead to the STOP terminator. Decision diamonds must have exactly two exits labelled &ldquo;Yes&rdquo; and &ldquo;No.&rdquo; Loops should have a clear path back to an earlier step.</p>
+
+      <h3>5. What Exam Questions Look Like</h3>
+      <p>In exams, you might be asked to:</p>
+      <ul>
+        <li>Complete missing parts of flowcharts or pseudocode</li>
+        <li>Identify whether a flowchart shows selection or iteration</li>
+        <li>Convert between flowcharts and pseudocode</li>
+        <li>Trace through a flowchart or pseudocode with given input values</li>
+        <li>Identify whether something should be a variable or constant</li>
+        <li>Fix incorrect variable names or pseudocode</li>
+      </ul>
 
       <div class="warning">
         <strong>Top Exam Tip:</strong> If you are running out of time and cannot finish a trace table, at least write down your final answer with a brief explanation. You may still get the mark for the correct answer, and partial working often picks up method marks. Never leave an algorithm question blank.
@@ -1018,18 +1233,25 @@ OUTPUT total                          (1)</code></pre>
       <p>These videos from Craig 'n' Dave cover the key concepts in more detail:</p>
 
       <div class="video-links">
-        <a href="https://www.youtube.com/results?search_query=craig+n+dave+pseudocode+gcse" class="video-card" target="_blank" rel="noopener">
+        <a href="https://youtu.be/AFvApRWVobM" class="video-card" target="_blank" rel="noopener">
           <span class="play-icon" role="img" aria-label="play">&#x25B6;&#xFE0F;</span>
           <div class="video-info">
-            Craig 'n' Dave: Pseudocode
-            <small>GCSE Computer Science</small>
+            Craig 'n' Dave: Pseudocode and Flow Diagrams
+            <small>How to produce algorithms using pseudocode and flowcharts</small>
           </div>
         </a>
-        <a href="https://www.youtube.com/results?search_query=craig+n+dave+flowcharts+gcse" class="video-card" target="_blank" rel="noopener">
+        <a href="https://youtu.be/swjob6iZtR4" class="video-card" target="_blank" rel="noopener">
           <span class="play-icon" role="img" aria-label="play">&#x25B6;&#xFE0F;</span>
           <div class="video-info">
-            Craig 'n' Dave: Flowcharts
-            <small>GCSE Computer Science</small>
+            Craig 'n' Dave: How to Produce Algorithms
+            <small>Covers pseudocode conventions and flowchart creation</small>
+          </div>
+        </a>
+        <a href="https://youtu.be/pjg_oSiXnL8" class="video-card" target="_blank" rel="noopener">
+          <span class="play-icon" role="img" aria-label="play">&#x25B6;&#xFE0F;</span>
+          <div class="video-info">
+            Craig 'n' Dave: Algorithmic Thinking
+            <small>Developing step-by-step solutions to problems</small>
           </div>
         </a>
       </div>

@@ -8,6 +8,15 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="../css/style.css" />
+  <style>
+    /* Video link cards */
+    .video-links { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: var(--space-md); margin: var(--space-lg) 0; }
+    .video-card { background: var(--color-white); border: 2px solid #e0e0e0; border-radius: var(--radius-md); padding: var(--space-md); display: flex; align-items: center; gap: var(--space-md); text-decoration: none; transition: border-color 0.2s, box-shadow 0.2s; }
+    .video-card:hover { border-color: #e63946; box-shadow: var(--shadow-md); }
+    .video-card .play-icon { font-size: 2rem; flex-shrink: 0; }
+    .video-card .video-info { font-size: 0.9rem; color: var(--color-text); font-weight: 600; }
+    .video-card .video-info small { display: block; font-weight: 400; color: var(--color-text-light); font-size: 0.8rem; }
+  </style>
 </head>
 <body>
 
@@ -39,6 +48,17 @@
       <p>These skills are at the heart of GCSE Computer Science, and they will help you in every other subject too. Let&rsquo;s explore each one.</p>
 
       <div class="key-concept">
+        <strong>Simple Way to Think About It</strong>
+        Computational thinking is like being a detective! When a detective solves a crime, they don&rsquo;t try to figure everything out at once. They:
+        <ul>
+          <li><strong>Break the mystery into smaller clues</strong> (decomposition)</li>
+          <li><strong>Focus only on important evidence</strong> (abstraction)</li>
+          <li><strong>Look for patterns</strong> (pattern recognition)</li>
+          <li><strong>Create a step-by-step plan</strong> (algorithmic thinking)</li>
+        </ul>
+      </div>
+
+      <div class="key-concept">
         <strong>Did You Know?</strong>
         The word &ldquo;algorithm&rdquo; comes from the name of the 9th century Persian mathematician <strong>Muhammad ibn Musa al-Khwarizmi</strong>. He wrote a hugely influential book on mathematics, and the Latin translation of his name &mdash; <em>Algoritmi</em> &mdash; eventually became the word we use today. So every time you write an algorithm, you are honouring over 1,000 years of mathematical history!
       </div>
@@ -64,6 +84,11 @@
       <div class="key-concept">
         <strong>Key Concept: Decomposition</strong>
         Decomposition means breaking a complex problem into smaller sub-problems that are easier to understand, solve, and test individually. In programming, this often means splitting a large program into separate functions or modules.
+      </div>
+
+      <div class="key-concept">
+        <strong>Everyday Analogy</strong>
+        Think about cleaning your bedroom. Instead of panicking about the mess, you break it into smaller tasks: make the bed, pick up clothes, tidy the desk, vacuum the floor.
       </div>
 
       <h4>Decomposition in Programming: School Registration System</h4>
@@ -135,6 +160,11 @@
       </ul>
       <p>Recognising patterns saves time because you can reuse solutions rather than starting from scratch every time.</p>
 
+      <div class="key-concept">
+        <strong>Everyday Analogy</strong>
+        Recognising that calculating VAT always uses the same formula, regardless of the product.
+      </div>
+
       <h3>Abstraction: Focusing on What Matters</h3>
       <p>Think about the London Underground map. It does not show the real distances between stations or the exact layout of the tunnels. It removes all of that unnecessary detail and just shows which stations connect to which lines. That&rsquo;s <strong>abstraction</strong>.</p>
 
@@ -143,6 +173,11 @@
       <div class="key-concept">
         <strong>Key Concept: Abstraction</strong>
         Abstraction means filtering out unnecessary detail and focusing only on the important information needed to solve the problem. It simplifies complex systems by hiding how things work &ldquo;under the hood.&rdquo;
+      </div>
+
+      <div class="key-concept">
+        <strong>Everyday Analogy</strong>
+        The London Tube map is an abstraction &ndash; it doesn&rsquo;t show exact geographical routes or distances, just the connections needed to navigate.
       </div>
 
       <h3>Algorithmic Thinking: Writing Step-by-Step Solutions</h3>
@@ -158,6 +193,11 @@
         <li><strong>Ordered</strong> &mdash; The steps happen in the right sequence</li>
         <li><strong>Finite</strong> &mdash; It must eventually stop (no infinite loops!)</li>
       </ul>
+
+      <div class="key-concept">
+        <strong>Everyday Analogy</strong>
+        A recipe is an algorithm &ndash; it has clear steps that must be followed in order.
+      </div>
 
       <div class="try-this">
         <strong>Think About It:</strong> Write an algorithm (in plain English) for making a cheese sandwich. How many steps do you need? Could someone with no cooking experience follow your instructions exactly?
@@ -269,6 +309,15 @@
           <p><strong>Answer:</strong> Google Search uses all four pillars: <strong>Decomposition</strong> &mdash; the problem of finding relevant results is broken into crawling, indexing, and ranking. <strong>Pattern recognition</strong> &mdash; the ranking algorithm spots patterns in links, content, and user behaviour to decide relevance. <strong>Abstraction</strong> &mdash; each web page is reduced to key features (keywords, links, freshness) rather than processing every word. <strong>Algorithmic thinking</strong> &mdash; the PageRank algorithm follows precise, ordered steps to score and sort billions of pages in under a second.</p>
         </div>
       </div>
+
+      <div class="hint">
+        <div class="hint-title">Q8: Explain how decomposition and abstraction could be used when designing a school management system. (3 marks)</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong></p>
+          <p><strong>Decomposition:</strong> Break the system into smaller parts such as student records, attendance tracking, timetabling, report generation. Each module can be developed and tested separately.</p>
+          <p><strong>Abstraction:</strong> Focus only on relevant student details (name, ID, classes) not irrelevant details (favourite colour). Remove unnecessary complexity to make the system manageable.</p>
+        </div>
+      </div>
     </section>
 
     <!-- ==================== KEY VOCABULARY ==================== -->
@@ -357,6 +406,34 @@
       </ol>
 
       <p>The more you practise this way of thinking, the more natural it becomes. And when you start writing code, you will find that the hardest part is not the programming language itself &mdash; it is <strong>thinking through the problem clearly</strong>. Get that right, and the code almost writes itself.</p>
+
+      <!-- Video Resources -->
+      <h3>Video Resources</h3>
+      <p>These videos from Craig 'n' Dave cover the key concepts in more detail:</p>
+
+      <div class="video-links">
+        <a href="https://youtu.be/Qdmz2gsQW1s" class="video-card" target="_blank" rel="noopener">
+          <span class="play-icon" role="img" aria-label="play">&#x25B6;&#xFE0F;</span>
+          <div class="video-info">
+            Craig 'n' Dave: Decomposition
+            <small>Breaking down complex problems into smaller parts</small>
+          </div>
+        </a>
+        <a href="https://youtu.be/KyH-9WG1utM" class="video-card" target="_blank" rel="noopener">
+          <span class="play-icon" role="img" aria-label="play">&#x25B6;&#xFE0F;</span>
+          <div class="video-info">
+            Craig 'n' Dave: Abstraction
+            <small>Removing unnecessary details to focus on what's important</small>
+          </div>
+        </a>
+        <a href="https://youtu.be/6lVPi8Gg-r8" class="video-card" target="_blank" rel="noopener">
+          <span class="play-icon" role="img" aria-label="play">&#x25B6;&#xFE0F;</span>
+          <div class="video-info">
+            Craig 'n' Dave: Using Abstraction and Decomposition
+            <small>Applying abstraction and decomposition to solve problems</small>
+          </div>
+        </a>
+      </div>
 
       <div class="extra-resources">
         <h3>Further Reading &amp; External Resources</h3>

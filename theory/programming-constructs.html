@@ -8,6 +8,14 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="../css/style.css" />
+  <style>
+    .video-links { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: var(--space-md); margin: var(--space-lg) 0; }
+    .video-card { background: var(--color-white); border: 2px solid #e0e0e0; border-radius: var(--radius-md); padding: var(--space-md); display: flex; align-items: center; gap: var(--space-md); text-decoration: none; transition: border-color 0.2s, box-shadow 0.2s; }
+    .video-card:hover { border-color: #e63946; box-shadow: var(--shadow-md); }
+    .video-card .play-icon { font-size: 2rem; flex-shrink: 0; }
+    .video-card .video-info { font-size: 0.9rem; color: var(--color-text); font-weight: 600; }
+    .video-card .video-info small { display: block; font-weight: 400; color: var(--color-text-light); font-size: 0.8rem; }
+  </style>
 </head>
 <body>
 
@@ -79,6 +87,11 @@ OUTPUT area</code></pre>
       </div>
 
       <p>In this example, the three instructions always run in exactly this order: first the input, then the calculation, then the output. Swapping the order would produce incorrect results or errors.</p>
+
+      <div class="key-concept">
+        <strong>Why Computers Need EXACT Instructions</strong>
+        If you tell a human &ldquo;wait for the water to boil&rdquo;, they know to keep checking until it boils. But a computer would just wait&hellip; forever! You&rsquo;d need to say &ldquo;keep checking if the temperature equals 100&deg;C, and only stop when it does.&rdquo;
+      </div>
 
       <h3>2. Selection (Decisions)</h3>
       <p>The program makes a <strong>decision</strong> based on a condition. If the condition is true, one path is followed; if false, a different path is taken. This is like a fork in the road.</p>
@@ -166,6 +179,11 @@ OUTPUT "Access granted"</code></pre>
       <div class="key-concept">
         <strong>WHILE vs. REPEAT...UNTIL</strong>
         The key difference is <strong>when the condition is checked</strong>. A WHILE loop checks <em>before</em> running the code (so it might run zero times). A REPEAT...UNTIL loop checks <em>after</em> running the code (so it always runs at least once). In the password example above, REPEAT...UNTIL is better because you need to ask for the password at least once before checking it.
+      </div>
+
+      <div class="key-concept">
+        <strong>Did You Know?</strong>
+        We use iteration in our daily lives all the time! When traffic lights are red, you keep waiting UNTIL they turn green. When learning lines for a play, you repeat them over and over UNTIL you know them all. Every video game loop checks &ldquo;has the player won?&rdquo; repeatedly until you finish the level!
       </div>
 
       <h3>Combining the Three Constructs</h3>
@@ -365,6 +383,20 @@ OUTPUT "Blast off!"</code></pre>
       </ul>
 
       <p>Once you start seeing these patterns everywhere, you will find it much easier to design algorithms and write code. The three constructs are your toolkit &mdash; master them, and you can build anything.</p>
+
+      <div class="extra-resources">
+        <strong>Video Resources</strong>
+        <div class="video-links">
+          <a href="https://youtu.be/swjob6iZtR4" class="video-card" target="_blank" rel="noopener">
+            <span class="play-icon" role="img" aria-label="play">&#x25B6;&#xFE0F;</span>
+            <div class="video-info">Craig 'n' Dave: How to Produce Algorithms<small>Covers pseudocode conventions and flowchart creation</small></div>
+          </a>
+          <a href="https://youtu.be/pjg_oSiXnL8" class="video-card" target="_blank" rel="noopener">
+            <span class="play-icon" role="img" aria-label="play">&#x25B6;&#xFE0F;</span>
+            <div class="video-info">Craig 'n' Dave: Algorithmic Thinking<small>Developing step-by-step solutions to problems</small></div>
+          </a>
+        </div>
+      </div>
     </section>
 
     <!-- ==================== NAVIGATION ==================== -->

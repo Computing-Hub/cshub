@@ -8,6 +8,14 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="../css/style.css" />
+  <style>
+    .video-links { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: var(--space-md); margin: var(--space-lg) 0; }
+    .video-card { background: var(--color-white); border: 2px solid #e0e0e0; border-radius: var(--radius-md); padding: var(--space-md); display: flex; align-items: center; gap: var(--space-md); text-decoration: none; transition: border-color 0.2s, box-shadow 0.2s; }
+    .video-card:hover { border-color: #e63946; box-shadow: var(--shadow-md); }
+    .video-card .play-icon { font-size: 2rem; flex-shrink: 0; }
+    .video-card .video-info { font-size: 0.9rem; color: var(--color-text); font-weight: 600; }
+    .video-card .video-info small { display: block; font-weight: 400; color: var(--color-text-light); font-size: 0.8rem; }
+  </style>
 </head>
 <body>
 
@@ -25,6 +33,11 @@
       <h2>Why Searching and Sorting Matter</h2>
 
       <p>Two of the most common tasks in computing are <strong>searching</strong> (finding a specific item in a collection of data) and <strong>sorting</strong> (arranging data into a particular order). These operations happen billions of times every day &mdash; every Google search, every online shopping filter, every playlist sorted by artist name.</p>
+
+      <div class="key-concept">
+        <strong>Simple Way to Remember</strong>
+        Linear Search = Looking through a messy drawer one item at a time until you find your keys. Binary Search = Playing &lsquo;higher or lower&rsquo; to guess a number &ndash; you eliminate half the options each time!
+      </div>
 
       <p>There are different algorithms for searching and sorting, and they are not all equally good. Some are simple but slow. Others are clever and fast, but more complex. Understanding the strengths and weaknesses of each algorithm is a key part of GCSE Computer Science.</p>
 
@@ -137,6 +150,11 @@ OUTPUT "Item not found"</code></pre>
       <p><strong>Pros:</strong> Very fast, even with huge lists. Each step eliminates half the remaining data.</p>
       <p><strong>Cons:</strong> Only works on <strong>sorted</strong> data. Slightly more complex to implement.</p>
 
+      <div class="key-concept">
+        <strong>The Guessing Game Analogy</strong>
+        Have you ever played &lsquo;guess the number between 1 and 100&rsquo;? You probably: First guess 50 (the middle). If told &lsquo;too high&rsquo;, guess 25 (middle of 1&ndash;50). If told &lsquo;too low&rsquo;, guess 37 (middle of 25&ndash;50). Keep halving until you find it! That&rsquo;s exactly how binary search works! You can find ANY number from 1&ndash;100 in just 7 guesses maximum.
+      </div>
+
       <div class="warning">
         <strong>Common Mistake:</strong> Students often forget that binary search <strong>requires a sorted list</strong>. If the data is not sorted, binary search will not work correctly. If asked which search to use on unsorted data, the answer is always linear search.
       </div>
@@ -183,6 +201,11 @@ UNTIL swapped == FALSE</code></pre>
 
       <p><strong>Pros:</strong> Simple to understand and code. Detects if the list is already sorted (no swaps = stop early).</p>
       <p><strong>Cons:</strong> Very slow for large lists. Makes many unnecessary comparisons.</p>
+
+      <div class="key-concept">
+        <strong>Bubble Sort Analogy</strong>
+        Think about lining up students by height for a photo. You walk along the line comparing each pair of neighbours. If someone tall is in front of someone short, they swap places. You keep walking through the line until nobody needs to swap.
+      </div>
 
       <h4>Insertion Sort</h4>
       <p>Think about how you sort a hand of playing cards. You pick up one card at a time and slide it into the correct position among the cards you have already sorted.</p>
@@ -345,6 +368,16 @@ ENDFUNCTION</code></pre>
       <p>You can see that the choice of algorithm makes an enormous difference. For large data sets, an O(n&sup2;) algorithm can be hundreds of times slower than an O(n log n) one.</p>
 
       <div class="key-concept">
+        <strong>When to Use Which &mdash; Searching</strong>
+        Use <strong>Linear Search</strong> when data is NOT sorted, you have a small list, or you need simple code. Use <strong>Binary Search</strong> when data IS sorted, you have a large list (in a phone book with 1 million names, linear search might check all 1 million, binary search finds anyone in just 20 checks!).
+      </div>
+
+      <div class="key-concept">
+        <strong>When to Use Which &mdash; Sorting</strong>
+        For small lists (less than ~1,000 items): Both take about the same time. Bubble sort is easier to write. For large lists: Merge sort is MUCH faster.
+      </div>
+
+      <div class="key-concept">
         <strong>Did You Know?</strong>
         The most efficient general-purpose sorting algorithms &mdash; including merge sort and similar approaches &mdash; run in <strong>O(n log n)</strong> time. It has been mathematically proven that no comparison-based sorting algorithm can do better than this in the worst case. So O(n log n) is effectively the speed limit for sorting!
       </div>
@@ -431,6 +464,29 @@ ENDFUNCTION</code></pre>
             <li><strong>Merge sort:</strong> O(n log n) &mdash; divides and merges efficiently</li>
           </ul>
           <p>Remember: lower Big O = faster algorithm for large data sets.</p>
+        </div>
+      </div>
+
+      <h3>Past Paper Practice</h3>
+
+      <div class="hint">
+        <div class="hint-title">Q9 (Past Paper Style &mdash; 4 marks): A sorted list contains these values: [3, 7, 12, 18, 24, 31, 45]. Show the steps a binary search would take to find the value 18.</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong></p>
+          <p><strong>Step 1:</strong> low=0, high=6, mid=3. list[3]=18, which equals target.</p>
+          <p><strong>Result:</strong> Found at index 3.</p>
+          <p>(1 mark for correct method, 1 mark for each correct step, 1 mark for correct answer)</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q10 (Past Paper Style &mdash; 4 marks): The following list needs to be sorted using bubble sort: [12, 8, 15, 3, 9]. Show the state after each complete pass.</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong></p>
+          <p><strong>Pass 1:</strong> [8, 12, 3, 9, 15]</p>
+          <p><strong>Pass 2:</strong> [8, 3, 9, 12, 15]</p>
+          <p><strong>Pass 3:</strong> [3, 8, 9, 12, 15]</p>
+          <p><strong>Pass 4:</strong> No swaps, sorted.</p>
         </div>
       </div>
     </section>
@@ -528,6 +584,18 @@ ENDFUNCTION</code></pre>
           <li><a href="https://www.bbc.co.uk/bitesize/examspecs/zdqy7nb" target="_blank" rel="noopener">BBC Bitesize &mdash; Edexcel GCSE Computer Science</a> &mdash; Comprehensive coverage of all GCSE algorithm topics</li>
           <li><a href="https://hvgcsecs.cshub.org.je/topics/topic1.html" target="_blank" rel="noopener">GCSE Topic 1: Computational Thinking &amp; Algorithms</a> &mdash; Full Edexcel specification coverage</li>
         </ul>
+
+        <h3>Video Resources</h3>
+        <div class="video-links">
+          <a href="https://youtu.be/fHo9W11uG30" class="video-card" target="_blank" rel="noopener">
+            <span class="play-icon">&#9654;&#65039;</span>
+            <div class="video-info">Craig 'n' Dave: Linear Search<small>Detailed walkthrough with trace tables</small></div>
+          </a>
+          <a href="https://youtu.be/8e2XpzAig5w" class="video-card" target="_blank" rel="noopener">
+            <span class="play-icon">&#9654;&#65039;</span>
+            <div class="video-info">Craig 'n' Dave: Bubble Sort &amp; Merge Sort<small>Complete walkthrough of sorting algorithms</small></div>
+          </a>
+        </div>
       </div>
     </section>
 
