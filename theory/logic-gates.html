@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Logic Gates - Python Fundamentals</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <style>
+    /* --- Page-specific styles --- */
+
+    /* Gate diagram containers */
+    .gate-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: var(--space-lg);
+      margin: var(--space-lg) 0;
+    }
+    .gate-card {
+      background: var(--color-white);
+      border: 2px solid #e0e0e0;
+      border-radius: var(--radius-lg);
+      padding: var(--space-lg);
+      text-align: center;
+    }
+    .gate-card:hover {
+      box-shadow: var(--shadow-md);
+    }
+    .gate-card h3 {
+      margin-top: var(--space-sm);
+      margin-bottom: var(--space-xs);
+    }
+    .gate-card p {
+      font-size: 0.9rem;
+      color: var(--color-text-light);
+      margin: 0 0 var(--space-sm);
+    }
+    .gate-card svg {
+      display: block;
+      margin: 0 auto var(--space-md);
+    }
+
+    /* Truth tables */
+    .truth-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: var(--space-md) 0;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.9rem;
+    }
+    .truth-table th {
+      background: var(--gradient-blue);
+      color: var(--color-white);
+      padding: 10px 16px;
+      text-align: center;
+      font-weight: 700;
+    }
+    .truth-table td {
+      padding: 10px 16px;
+      text-align: center;
+      border-bottom: 1px solid #e0e0e0;
+    }
+    .truth-table tr:nth-child(even) td {
+      background: #f8f8fa;
+    }
+    .truth-table .output-col {
+      font-weight: 700;
+      color: #4361ee;
+    }
+    .truth-table .highlight-row td {
+      background: #e8f5e9;
+    }
+
+    /* Circuit diagram container */
+    .circuit-container {
+      background: var(--color-white);
+      border: 2px solid #e0e0e0;
+      border-radius: var(--radius-lg);
+      padding: var(--space-lg);
+      margin: var(--space-lg) 0;
+      text-align: center;
+      overflow-x: auto;
+    }
+    .circuit-container h4 {
+      margin-top: 0;
+      margin-bottom: var(--space-md);
+    }
+    .circuit-container svg {
+      max-width: 100%;
+      height: auto;
+    }
+
+    /* Big picture cards */
+    .big-picture-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: var(--space-md);
+      margin: var(--space-lg) 0;
+    }
+    .big-picture-card {
+      background: var(--color-white);
+      border: 2px solid #e0e0e0;
+      border-radius: var(--radius-lg);
+      padding: var(--space-lg);
+      text-align: center;
+      position: relative;
+    }
+    .big-picture-card .card-icon {
+      font-size: 2.5rem;
+      display: block;
+      margin-bottom: var(--space-sm);
+    }
+    .big-picture-card h4 {
+      margin: 0 0 var(--space-xs);
+    }
+    .big-picture-card p {
+      font-size: 0.85rem;
+      color: var(--color-text-light);
+      margin: 0;
+    }
+    .arrow-right {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      color: #4361ee;
+      font-weight: 700;
+    }
+    @media (max-width: 700px) {
+      .arrow-right {
+        transform: rotate(90deg);
+      }
+    }
+
+    /* Two-column layout */
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-lg);
+      margin: var(--space-lg) 0;
+    }
+    @media (max-width: 700px) {
+      .two-col {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Video link cards */
+    .video-links {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: var(--space-md);
+      margin: var(--space-lg) 0;
+    }
+    .video-card {
+      background: var(--color-white);
+      border: 2px solid #e0e0e0;
+      border-radius: var(--radius-md);
+      padding: var(--space-md);
+      display: flex;
+      align-items: center;
+      gap: var(--space-md);
+      text-decoration: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .video-card:hover {
+      border-color: #e63946;
+      box-shadow: var(--shadow-md);
+    }
+    .video-card .play-icon {
+      font-size: 2rem;
+      flex-shrink: 0;
+    }
+    .video-card .video-info {
+      font-size: 0.9rem;
+      color: var(--color-text);
+      font-weight: 600;
+    }
+    .video-card .video-info small {
+      display: block;
+      font-weight: 400;
+      color: var(--color-text-light);
+      font-size: 0.8rem;
+    }
+
+    /* Formula highlight */
+    .formula-box {
+      background: linear-gradient(135deg, #4361ee 0%, #3a0ca3 100%);
+      color: white;
+      border-radius: var(--radius-lg);
+      padding: var(--space-lg);
+      text-align: center;
+      margin: var(--space-lg) 0;
+      font-size: 1.3rem;
+      font-weight: 700;
+    }
+    .formula-box small {
+      display: block;
+      font-weight: 400;
+      font-size: 0.9rem;
+      margin-top: var(--space-sm);
+      opacity: 0.9;
+    }
+  </style>
+</head>
+<body>
+
+  <header class="site-header">
+    <p><a href="../index.html">&larr; Back to Course</a></p>
+    <h1>Logic Gates</h1>
+    <p class="subtitle">AND, OR, NOT &mdash; the tiny switches that make every computer work</p>
+  </header>
+
+  <main>
+
+    <!-- ==================== THE BIG PICTURE ==================== -->
+    <section class="idea">
+      <span class="section-label">The Big Picture</span>
+      <h2>From Tiny Switches to Powerful Computers</h2>
+
+      <p>Every computer &mdash; from a pocket calculator to a supercomputer &mdash; is built from <strong>billions of tiny electronic switches</strong> called <strong>transistors</strong>. A transistor can only be in two states: <strong>ON</strong> (1) or <strong>OFF</strong> (0). That is why computers work in binary.</p>
+
+      <p>Transistors are grouped together to form <strong>logic gates</strong> &mdash; circuits that take one or more binary inputs and produce a single binary output based on a simple rule. These logic gates are the building blocks of everything a CPU does: adding numbers, comparing values, making decisions, and storing data.</p>
+
+      <div class="big-picture-grid">
+        <div class="big-picture-card">
+          <span class="card-icon" role="img" aria-label="lightbulb">&#x1F4A1;</span>
+          <h4>Transistors</h4>
+          <p>Tiny electronic switches that are either ON (1) or OFF (0). A modern CPU has billions of them.</p>
+        </div>
+        <div class="arrow-right" aria-hidden="true">&#x27A1;</div>
+        <div class="big-picture-card">
+          <span class="card-icon" role="img" aria-label="circuit">&#x1F50C;</span>
+          <h4>Logic Gates</h4>
+          <p>Groups of transistors that follow simple rules (AND, OR, NOT) to process binary data.</p>
+        </div>
+        <div class="arrow-right" aria-hidden="true">&#x27A1;</div>
+        <div class="big-picture-card">
+          <span class="card-icon" role="img" aria-label="computer">&#x1F5A5;</span>
+          <h4>CPU Circuits</h4>
+          <p>Logic gates combined into adders, multiplexers, and other circuits that do calculations.</p>
+        </div>
+      </div>
+
+      <div class="key-concept">
+        <strong>Why Does This Matter?</strong>
+        When you write <code>3 + 5</code> in Python, the CPU does not &ldquo;understand&rdquo; maths the way you do. Instead, it converts 3 and 5 into binary (0011 and 0101), then passes the bits through millions of logic gates that physically calculate the answer. Logic gates are the reason computers can compute anything at all.
+      </div>
+    </section>
+
+    <!-- ==================== THE THREE GATES ==================== -->
+    <section class="explore">
+      <span class="section-label">Explore</span>
+      <h2>The Three Essential Logic Gates</h2>
+
+      <p>For GCSE, you need to know three logic gates: <strong>AND</strong>, <strong>OR</strong>, and <strong>NOT</strong>. Each gate has a standard symbol, a simple rule, and a truth table that shows every possible input and output combination.</p>
+
+      <div class="gate-grid">
+
+        <!-- AND Gate -->
+        <div class="gate-card">
+          <svg width="220" height="120" viewBox="0 0 220 120" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="AND gate symbol">
+            <!-- Input lines -->
+            <line x1="10" y1="40" x2="60" y2="40" stroke="#333" stroke-width="3"/>
+            <line x1="10" y1="80" x2="60" y2="80" stroke="#333" stroke-width="3"/>
+            <!-- Gate body -->
+            <path d="M60,20 L60,100 L120,100 C160,100 160,20 120,20 Z" fill="#4361ee" stroke="#3451ce" stroke-width="2.5"/>
+            <!-- Output line -->
+            <line x1="160" y1="60" x2="210" y2="60" stroke="#333" stroke-width="3"/>
+            <!-- Labels -->
+            <text x="20" y="36" font-family="Inter, sans-serif" font-size="13" font-weight="600" fill="#555">A</text>
+            <text x="20" y="76" font-family="Inter, sans-serif" font-size="13" font-weight="600" fill="#555">B</text>
+            <text x="196" y="56" font-family="Inter, sans-serif" font-size="13" font-weight="600" fill="#555">Q</text>
+            <text x="100" y="65" text-anchor="middle" font-family="Inter, sans-serif" font-size="14" font-weight="700" fill="white">AND</text>
+          </svg>
+          <h3>AND Gate</h3>
+          <p>Output is 1 <strong>only if BOTH</strong> inputs are 1</p>
+          <p><em>&ldquo;Both switches must be on for the light to work&rdquo;</em></p>
+        </div>
+
+        <!-- OR Gate -->
+        <div class="gate-card">
+          <svg width="220" height="120" viewBox="0 0 220 120" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="OR gate symbol">
+            <!-- Input lines -->
+            <line x1="10" y1="40" x2="68" y2="40" stroke="#333" stroke-width="3"/>
+            <line x1="10" y1="80" x2="68" y2="80" stroke="#333" stroke-width="3"/>
+            <!-- Gate body -->
+            <path d="M50,20 Q70,60 50,100 Q110,100 160,60 Q110,20 50,20 Z" fill="#06d6a0" stroke="#05b88a" stroke-width="2.5"/>
+            <!-- Output line -->
+            <line x1="160" y1="60" x2="210" y2="60" stroke="#333" stroke-width="3"/>
+            <!-- Labels -->
+            <text x="20" y="36" font-family="Inter, sans-serif" font-size="13" font-weight="600" fill="#555">A</text>
+            <text x="20" y="76" font-family="Inter, sans-serif" font-size="13" font-weight="600" fill="#555">B</text>
+            <text x="196" y="56" font-family="Inter, sans-serif" font-size="13" font-weight="600" fill="#555">Q</text>
+            <text x="105" y="65" text-anchor="middle" font-family="Inter, sans-serif" font-size="14" font-weight="700" fill="white">OR</text>
+          </svg>
+          <h3>OR Gate</h3>
+          <p>Output is 1 <strong>if AT LEAST ONE</strong> input is 1</p>
+          <p><em>&ldquo;Either switch turns the light on&rdquo;</em></p>
+        </div>
+
+        <!-- NOT Gate -->
+        <div class="gate-card">
+          <svg width="220" height="120" viewBox="0 0 220 120" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="NOT gate symbol">
+            <!-- Input line -->
+            <line x1="10" y1="60" x2="60" y2="60" stroke="#333" stroke-width="3"/>
+            <!-- Gate body (triangle) -->
+            <polygon points="60,20 60,100 150,60" fill="#f77f00" stroke="#d66d00" stroke-width="2.5"/>
+            <!-- Inversion bubble -->
+            <circle cx="158" cy="60" r="8" fill="white" stroke="#d66d00" stroke-width="2.5"/>
+            <!-- Output line -->
+            <line x1="166" y1="60" x2="210" y2="60" stroke="#333" stroke-width="3"/>
+            <!-- Labels -->
+            <text x="20" y="56" font-family="Inter, sans-serif" font-size="13" font-weight="600" fill="#555">A</text>
+            <text x="196" y="56" font-family="Inter, sans-serif" font-size="13" font-weight="600" fill="#555">Q</text>
+            <text x="95" y="66" text-anchor="middle" font-family="Inter, sans-serif" font-size="14" font-weight="700" fill="white">NOT</text>
+          </svg>
+          <h3>NOT Gate</h3>
+          <p>Output is the <strong>opposite</strong> of the input</p>
+          <p><em>&ldquo;The inverter &mdash; it flips 0 to 1 and 1 to 0&rdquo;</em></p>
+        </div>
+
+      </div>
+
+      <div class="key-concept">
+        <strong>Real-World Analogy</strong>
+        Think of an <strong>AND gate</strong> like needing both a key AND a PIN to open a safe &mdash; both must be correct. An <strong>OR gate</strong> is like a doorbell that rings if either the front button OR the back button is pressed. A <strong>NOT gate</strong> is like a &ldquo;Closed&rdquo; sign &mdash; if the shop is open (1), the sign shows NOT open, i.e. closed (0).
+      </div>
+    </section>
+
+    <!-- ==================== TRUTH TABLES ==================== -->
+    <section class="understand">
+      <span class="section-label">Understand</span>
+      <h2>Truth Tables</h2>
+
+      <p>A <strong>truth table</strong> shows every possible combination of inputs and the resulting output for a logic gate or circuit. They are essential because:</p>
+
+      <ul>
+        <li>They prove exactly <strong>how a circuit behaves</strong> for every possible input</li>
+        <li>They help you <strong>design</strong> circuits &mdash; start with the truth table, then build the gates</li>
+        <li>They help you <strong>debug</strong> circuits &mdash; compare expected vs actual outputs</li>
+        <li>They are a core part of the <strong>GCSE exam</strong> &mdash; you will be asked to complete or interpret truth tables</li>
+      </ul>
+
+      <h3>AND Truth Table</h3>
+      <p>The AND gate only outputs 1 when <strong>both</strong> inputs are 1. Think: &ldquo;A <strong>and</strong> B must both be true.&rdquo;</p>
+
+      <table class="truth-table">
+        <thead>
+          <tr><th>A</th><th>B</th><th>Q (A AND B)</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>0</td><td>0</td><td class="output-col">0</td></tr>
+          <tr><td>0</td><td>1</td><td class="output-col">0</td></tr>
+          <tr><td>1</td><td>0</td><td class="output-col">0</td></tr>
+          <tr class="highlight-row"><td>1</td><td>1</td><td class="output-col">1</td></tr>
+        </tbody>
+      </table>
+
+      <h3>OR Truth Table</h3>
+      <p>The OR gate outputs 1 when <strong>at least one</strong> input is 1. Think: &ldquo;A <strong>or</strong> B (or both) must be true.&rdquo;</p>
+
+      <table class="truth-table">
+        <thead>
+          <tr><th>A</th><th>B</th><th>Q (A OR B)</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>0</td><td>0</td><td class="output-col">0</td></tr>
+          <tr class="highlight-row"><td>0</td><td>1</td><td class="output-col">1</td></tr>
+          <tr class="highlight-row"><td>1</td><td>0</td><td class="output-col">1</td></tr>
+          <tr class="highlight-row"><td>1</td><td>1</td><td class="output-col">1</td></tr>
+        </tbody>
+      </table>
+
+      <h3>NOT Truth Table</h3>
+      <p>The NOT gate has only one input. It <strong>inverts</strong> the value: 0 becomes 1, and 1 becomes 0.</p>
+
+      <table class="truth-table">
+        <thead>
+          <tr><th>A</th><th>Q (NOT A)</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>0</td><td class="output-col">1</td></tr>
+          <tr><td>1</td><td class="output-col">0</td></tr>
+        </tbody>
+      </table>
+
+      <div class="warning">
+        <strong>Exam Tip:</strong> When filling in truth tables, always list the inputs in <strong>binary counting order</strong>: 00, 01, 10, 11. This ensures you never miss a combination and makes it easy for the examiner to check your work.
+      </div>
+    </section>
+
+    <!-- ==================== HOW MANY ROWS? ==================== -->
+    <section class="understand">
+      <span class="section-label">Understand</span>
+      <h2>How Many Rows in a Truth Table?</h2>
+
+      <p>Each input can be either 0 or 1 &mdash; that is 2 possibilities per input. When you have multiple inputs, you multiply the possibilities together. The formula is:</p>
+
+      <div class="formula-box">
+        Number of rows = 2<sup>n</sup>
+        <small>where <strong>n</strong> is the number of inputs</small>
+      </div>
+
+      <table class="truth-table">
+        <thead>
+          <tr><th>Number of Inputs (n)</th><th>Calculation</th><th>Rows Needed</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>1</td><td>2<sup>1</sup></td><td class="output-col">2</td></tr>
+          <tr><td>2</td><td>2<sup>2</sup></td><td class="output-col">4</td></tr>
+          <tr><td>3</td><td>2<sup>3</sup></td><td class="output-col">8</td></tr>
+          <tr><td>4</td><td>2<sup>4</sup></td><td class="output-col">16</td></tr>
+        </tbody>
+      </table>
+
+      <p>So a truth table with <strong>3 inputs</strong> needs <strong>8 rows</strong>. This is because there are 8 unique combinations of three binary values (000, 001, 010, 011, 100, 101, 110, 111).</p>
+
+      <div class="key-concept">
+        <strong>Why 2<sup>n</sup>?</strong>
+        Think of it like coin flips. One coin has 2 outcomes (heads or tails). Two coins have 2 &times; 2 = 4 outcomes. Three coins have 2 &times; 2 &times; 2 = 8 outcomes. Each input is like a coin flip &mdash; it doubles the number of combinations.
+      </div>
+    </section>
+
+    <!-- ==================== COMBINED CIRCUITS ==================== -->
+    <section class="explore">
+      <span class="section-label">Explore</span>
+      <h2>Combined Logic Circuits</h2>
+
+      <p>Real circuits combine multiple logic gates together. The output of one gate becomes the input of the next. To work out the final output, you trace the values through each gate step by step.</p>
+
+      <!-- Circuit 1: NOT AND (NAND-style) -->
+      <div class="circuit-container">
+        <h4>Circuit 1: AND gate followed by NOT gate</h4>
+        <svg width="420" height="140" viewBox="0 0 420 140" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Circuit with AND gate feeding into NOT gate">
+          <!-- Input lines -->
+          <line x1="10" y1="40" x2="60" y2="40" stroke="#333" stroke-width="2.5"/>
+          <line x1="10" y1="100" x2="60" y2="100" stroke="#333" stroke-width="2.5"/>
+          <!-- AND gate -->
+          <path d="M60,20 L60,120 L120,120 C160,120 160,20 120,20 Z" fill="#4361ee" stroke="#3451ce" stroke-width="2"/>
+          <text x="100" y="75" text-anchor="middle" font-family="Inter, sans-serif" font-size="13" font-weight="700" fill="white">AND</text>
+          <!-- Wire between gates -->
+          <line x1="160" y1="70" x2="230" y2="70" stroke="#333" stroke-width="2.5"/>
+          <!-- NOT gate -->
+          <polygon points="230,35 230,105 310,70" fill="#f77f00" stroke="#d66d00" stroke-width="2"/>
+          <text x="265" y="75" text-anchor="middle" font-family="Inter, sans-serif" font-size="13" font-weight="700" fill="white">NOT</text>
+          <circle cx="317" cy="70" r="7" fill="white" stroke="#d66d00" stroke-width="2"/>
+          <!-- Output line -->
+          <line x1="324" y1="70" x2="400" y2="70" stroke="#333" stroke-width="2.5"/>
+          <!-- Labels -->
+          <text x="20" y="34" font-family="Inter, sans-serif" font-size="14" font-weight="700" fill="#333">A</text>
+          <text x="20" y="94" font-family="Inter, sans-serif" font-size="14" font-weight="700" fill="#333">B</text>
+          <text x="385" y="64" font-family="Inter, sans-serif" font-size="14" font-weight="700" fill="#333">Q</text>
+          <!-- Intermediate label -->
+          <text x="195" y="60" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" fill="#888" font-style="italic">P</text>
+        </svg>
+        <p><strong>How it works:</strong> First the AND gate calculates P = A AND B. Then the NOT gate inverts it: Q = NOT P. So the output is 1 when the AND result is 0, and vice versa.</p>
+      </div>
+
+      <h3>Truth Table for Circuit 1</h3>
+      <p>Trace through step by step &mdash; first work out the AND (intermediate value P), then apply NOT to get Q:</p>
+
+      <table class="truth-table">
+        <thead>
+          <tr><th>A</th><th>B</th><th>P (A AND B)</th><th>Q (NOT P)</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>0</td><td>0</td><td>0</td><td class="output-col">1</td></tr>
+          <tr><td>0</td><td>1</td><td>0</td><td class="output-col">1</td></tr>
+          <tr><td>1</td><td>0</td><td>0</td><td class="output-col">1</td></tr>
+          <tr><td>1</td><td>1</td><td>1</td><td class="output-col">0</td></tr>
+        </tbody>
+      </table>
+
+      <!-- Circuit 2: Three-input circuit -->
+      <div class="circuit-container">
+        <h4>Circuit 2: Three-input circuit &mdash; (A AND B) OR C</h4>
+        <svg width="480" height="180" viewBox="0 0 480 180" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Three-input circuit: A AND B fed into OR gate with C">
+          <!-- Input A -->
+          <line x1="10" y1="40" x2="60" y2="40" stroke="#333" stroke-width="2.5"/>
+          <text x="20" y="34" font-family="Inter, sans-serif" font-size="14" font-weight="700" fill="#333">A</text>
+          <!-- Input B -->
+          <line x1="10" y1="90" x2="60" y2="90" stroke="#333" stroke-width="2.5"/>
+          <text x="20" y="84" font-family="Inter, sans-serif" font-size="14" font-weight="700" fill="#333">B</text>
+          <!-- Input C (goes directly to OR gate) -->
+          <line x1="10" y1="150" x2="240" y2="150" stroke="#333" stroke-width="2.5"/>
+          <text x="20" y="144" font-family="Inter, sans-serif" font-size="14" font-weight="700" fill="#333">C</text>
+          <!-- AND gate -->
+          <path d="M60,20 L60,110 L115,110 C150,110 150,20 115,20 Z" fill="#4361ee" stroke="#3451ce" stroke-width="2"/>
+          <text x="98" y="70" text-anchor="middle" font-family="Inter, sans-serif" font-size="12" font-weight="700" fill="white">AND</text>
+          <!-- Wire AND to OR -->
+          <line x1="150" y1="65" x2="240" y2="105" stroke="#333" stroke-width="2.5"/>
+          <!-- Intermediate label -->
+          <text x="190" y="76" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" fill="#888" font-style="italic">P</text>
+          <!-- OR gate -->
+          <path d="M230,85 Q250,127 230,170 Q290,170 350,127 Q290,85 230,85 Z" fill="#06d6a0" stroke="#05b88a" stroke-width="2"/>
+          <text x="290" y="133" text-anchor="middle" font-family="Inter, sans-serif" font-size="12" font-weight="700" fill="white">OR</text>
+          <!-- Output line -->
+          <line x1="350" y1="127" x2="450" y2="127" stroke="#333" stroke-width="2.5"/>
+          <text x="435" y="121" font-family="Inter, sans-serif" font-size="14" font-weight="700" fill="#333">Q</text>
+        </svg>
+        <p><strong>How it works:</strong> First the AND gate calculates P = A AND B. Then the OR gate combines P with C: Q = P OR C. The output is 1 if both A and B are on, OR if C is on (or both).</p>
+      </div>
+
+      <h3>Truth Table for Circuit 2 (3 Inputs = 8 Rows)</h3>
+      <p>With 3 inputs we need 2<sup>3</sup> = <strong>8 rows</strong>. Trace through each row:</p>
+
+      <table class="truth-table">
+        <thead>
+          <tr><th>A</th><th>B</th><th>C</th><th>P (A AND B)</th><th>Q (P OR C)</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>0</td><td>0</td><td>0</td><td>0</td><td class="output-col">0</td></tr>
+          <tr><td>0</td><td>0</td><td>1</td><td>0</td><td class="output-col">1</td></tr>
+          <tr><td>0</td><td>1</td><td>0</td><td>0</td><td class="output-col">0</td></tr>
+          <tr><td>0</td><td>1</td><td>1</td><td>0</td><td class="output-col">1</td></tr>
+          <tr><td>1</td><td>0</td><td>0</td><td>0</td><td class="output-col">0</td></tr>
+          <tr><td>1</td><td>0</td><td>1</td><td>0</td><td class="output-col">1</td></tr>
+          <tr class="highlight-row"><td>1</td><td>1</td><td>0</td><td>1</td><td class="output-col">1</td></tr>
+          <tr class="highlight-row"><td>1</td><td>1</td><td>1</td><td>1</td><td class="output-col">1</td></tr>
+        </tbody>
+      </table>
+
+      <!-- Circuit 3: NOT input into AND -->
+      <div class="circuit-container">
+        <h4>Circuit 3: NOT gate on one input &mdash; (NOT A) AND B</h4>
+        <svg width="420" height="140" viewBox="0 0 420 140" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Circuit with NOT on input A feeding into AND gate with B">
+          <!-- Input A -->
+          <line x1="10" y1="40" x2="60" y2="40" stroke="#333" stroke-width="2.5"/>
+          <text x="20" y="34" font-family="Inter, sans-serif" font-size="14" font-weight="700" fill="#333">A</text>
+          <!-- NOT gate on A -->
+          <polygon points="60,15 60,65 120,40" fill="#f77f00" stroke="#d66d00" stroke-width="2"/>
+          <text x="82" y="44" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" font-weight="700" fill="white">NOT</text>
+          <circle cx="126" cy="40" r="6" fill="white" stroke="#d66d00" stroke-width="2"/>
+          <!-- Wire NOT to AND -->
+          <line x1="132" y1="40" x2="200" y2="40" stroke="#333" stroke-width="2.5"/>
+          <text x="165" y="34" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" fill="#888" font-style="italic">P</text>
+          <!-- Input B directly to AND -->
+          <line x1="10" y1="100" x2="200" y2="100" stroke="#333" stroke-width="2.5"/>
+          <text x="20" y="94" font-family="Inter, sans-serif" font-size="14" font-weight="700" fill="#333">B</text>
+          <!-- AND gate -->
+          <path d="M200,20 L200,120 L260,120 C300,120 300,20 260,20 Z" fill="#4361ee" stroke="#3451ce" stroke-width="2"/>
+          <text x="240" y="75" text-anchor="middle" font-family="Inter, sans-serif" font-size="13" font-weight="700" fill="white">AND</text>
+          <!-- Output -->
+          <line x1="300" y1="70" x2="400" y2="70" stroke="#333" stroke-width="2.5"/>
+          <text x="385" y="64" font-family="Inter, sans-serif" font-size="14" font-weight="700" fill="#333">Q</text>
+        </svg>
+        <p><strong>How it works:</strong> The NOT gate flips input A first (P = NOT A). Then the AND gate compares the flipped value with B: Q = P AND B. The output is 1 only when A is 0 <strong>and</strong> B is 1.</p>
+      </div>
+
+      <h3>Truth Table for Circuit 3</h3>
+
+      <table class="truth-table">
+        <thead>
+          <tr><th>A</th><th>B</th><th>P (NOT A)</th><th>Q (P AND B)</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>0</td><td>0</td><td>1</td><td class="output-col">0</td></tr>
+          <tr class="highlight-row"><td>0</td><td>1</td><td>1</td><td class="output-col">1</td></tr>
+          <tr><td>1</td><td>0</td><td>0</td><td class="output-col">0</td></tr>
+          <tr><td>1</td><td>1</td><td>0</td><td class="output-col">0</td></tr>
+        </tbody>
+      </table>
+
+      <div class="warning">
+        <strong>Common Mistake:</strong> When tracing through combined circuits, students often try to jump straight to the final output. Always work through the <strong>intermediate values</strong> first &mdash; calculate each gate&rsquo;s output before moving to the next gate. Show these intermediate columns in your truth table to pick up method marks.
+      </div>
+    </section>
+
+    <!-- ==================== HOW TO TRACE ==================== -->
+    <section class="understand">
+      <span class="section-label">Understand</span>
+      <h2>How to Complete a Truth Table: Step by Step</h2>
+
+      <ol>
+        <li><strong>Count the inputs</strong> &mdash; use the formula 2<sup>n</sup> to work out how many rows you need</li>
+        <li><strong>List all input combinations</strong> &mdash; fill in the input columns in binary counting order (000, 001, 010, 011, 100, 101, 110, 111 for 3 inputs)</li>
+        <li><strong>Identify the gates</strong> &mdash; work out which gate processes which inputs, and in what order</li>
+        <li><strong>Add intermediate columns</strong> &mdash; one column for each gate&rsquo;s output (not just the final answer)</li>
+        <li><strong>Trace row by row</strong> &mdash; for each row, calculate each gate&rsquo;s output using the values from the previous column</li>
+        <li><strong>Write the final output</strong> &mdash; the last column is your circuit&rsquo;s output Q</li>
+      </ol>
+
+      <div class="key-concept">
+        <strong>Pro Tip: Binary Counting Order</strong>
+        For 3 inputs (A, B, C), count in binary from 000 to 111:
+        <code>000, 001, 010, 011, 100, 101, 110, 111</code>.
+        The rightmost column (C) alternates every row: 0, 1, 0, 1, 0, 1, 0, 1.
+        The middle column (B) alternates every 2 rows: 0, 0, 1, 1, 0, 0, 1, 1.
+        The leftmost column (A) alternates every 4 rows: 0, 0, 0, 0, 1, 1, 1, 1.
+      </div>
+    </section>
+
+    <!-- ==================== PRACTICE ==================== -->
+    <section class="practice">
+      <span class="section-label">Practice</span>
+      <h2>Test Yourself</h2>
+      <p>Click on each question to reveal the answer. Try to answer in your head first!</p>
+
+      <div class="hint">
+        <div class="hint-title">Q1: What does an AND gate do?</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> An AND gate outputs 1 <strong>only if both inputs are 1</strong>. If either input (or both) is 0, the output is 0. Think of it as needing both conditions to be true, like needing both a username AND a password to log in.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q2: What does an OR gate do?</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> An OR gate outputs 1 <strong>if at least one input is 1</strong>. The output is only 0 when both inputs are 0. Think of it like a burglar alarm that triggers if the front door OR the back door is opened.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q3: What does a NOT gate do?</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> A NOT gate <strong>inverts</strong> its single input: 0 becomes 1, and 1 becomes 0. It is sometimes called an <strong>inverter</strong>. Unlike AND and OR, it has only one input.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q4: How many rows does a truth table need for 3 inputs?</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> <strong>8 rows</strong>. The formula is 2<sup>n</sup> where n is the number of inputs. So 2<sup>3</sup> = 2 &times; 2 &times; 2 = 8. Each input can be 0 or 1, so three inputs have 8 possible combinations: 000, 001, 010, 011, 100, 101, 110, 111.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q5: Complete the truth table for (A OR B) AND C</div>
+        <div class="hint-content">
+          <table class="truth-table">
+            <thead>
+              <tr><th>A</th><th>B</th><th>C</th><th>P (A OR B)</th><th>Q (P AND C)</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>0</td><td>0</td><td>0</td><td>0</td><td class="output-col">0</td></tr>
+              <tr><td>0</td><td>0</td><td>1</td><td>0</td><td class="output-col">0</td></tr>
+              <tr><td>0</td><td>1</td><td>0</td><td>1</td><td class="output-col">0</td></tr>
+              <tr><td>0</td><td>1</td><td>1</td><td>1</td><td class="output-col">1</td></tr>
+              <tr><td>1</td><td>0</td><td>0</td><td>1</td><td class="output-col">0</td></tr>
+              <tr><td>1</td><td>0</td><td>1</td><td>1</td><td class="output-col">1</td></tr>
+              <tr><td>1</td><td>1</td><td>0</td><td>1</td><td class="output-col">0</td></tr>
+              <tr><td>1</td><td>1</td><td>1</td><td>1</td><td class="output-col">1</td></tr>
+            </tbody>
+          </table>
+          <p><strong>Method:</strong> First calculate P = A OR B for each row. Then calculate Q = P AND C. The output is 1 only when at least one of A or B is 1, <strong>and</strong> C is also 1.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q6: Why are logic gates important in computing?</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> Logic gates are the <strong>fundamental building blocks</strong> of all digital circuits. CPUs are made from <strong>billions of transistors</strong> arranged into logic gates. These gates perform all the calculations, comparisons, and data processing that computers do. Every operation &mdash; from adding two numbers to rendering a video &mdash; ultimately comes down to combinations of AND, OR, and NOT gates working together at incredible speed.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q7: A circuit uses (NOT A) AND (B OR C). What is the output when A=1, B=0, C=1?</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> Trace through step by step:</p>
+          <ol>
+            <li>NOT A = NOT 1 = <strong>0</strong></li>
+            <li>B OR C = 0 OR 1 = <strong>1</strong></li>
+            <li>(NOT A) AND (B OR C) = 0 AND 1 = <strong>0</strong></li>
+          </ol>
+          <p>The output Q = <strong>0</strong>.</p>
+        </div>
+      </div>
+
+      <div class="hint">
+        <div class="hint-title">Q8: How many rows would a truth table need for 4 inputs?</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> <strong>16 rows</strong>. Using the formula 2<sup>n</sup> = 2<sup>4</sup> = 16. Each additional input doubles the number of rows because it adds another binary choice (0 or 1) to every existing combination.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== KEY VOCABULARY ==================== -->
+    <section class="understand">
+      <span class="section-label">Reference</span>
+      <h2>Key Vocabulary</h2>
+
+      <table>
+        <thead>
+          <tr><th>Term</th><th>Definition</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Logic Gate</strong></td>
+            <td>An electronic circuit that takes one or more binary inputs and produces a single binary output based on a logical rule.</td>
+          </tr>
+          <tr>
+            <td><strong>AND Gate</strong></td>
+            <td>A logic gate that outputs 1 only when all inputs are 1. Both conditions must be true.</td>
+          </tr>
+          <tr>
+            <td><strong>OR Gate</strong></td>
+            <td>A logic gate that outputs 1 when at least one input is 1. Any condition being true is enough.</td>
+          </tr>
+          <tr>
+            <td><strong>NOT Gate</strong></td>
+            <td>A logic gate that inverts its single input: 0 becomes 1, and 1 becomes 0. Also called an inverter.</td>
+          </tr>
+          <tr>
+            <td><strong>Truth Table</strong></td>
+            <td>A table showing every possible combination of inputs and the resulting outputs for a logic circuit.</td>
+          </tr>
+          <tr>
+            <td><strong>Transistor</strong></td>
+            <td>A tiny electronic switch that can be ON (1) or OFF (0). Transistors are combined to build logic gates.</td>
+          </tr>
+          <tr>
+            <td><strong>Boolean</strong></td>
+            <td>A data type with only two possible values: TRUE (1) or FALSE (0). Logic gates operate on Boolean values.</td>
+          </tr>
+          <tr>
+            <td><strong>Input</strong></td>
+            <td>The binary values (0 or 1) fed into a logic gate or circuit.</td>
+          </tr>
+          <tr>
+            <td><strong>Output</strong></td>
+            <td>The binary value (0 or 1) produced by a logic gate based on its inputs and its logical rule.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- ==================== EXAM TIPS ==================== -->
+    <section class="explore">
+      <span class="section-label">Exam Skills</span>
+      <h2>Exam Tips: Logic Gate Questions</h2>
+
+      <h3>1. Draw the Correct Symbols</h3>
+      <p>If asked to draw a circuit, use the correct gate symbols. AND has a flat left side and curved right side. OR has curved sides and a pointed output. NOT is a triangle with a small circle at the tip. Using the wrong symbol will lose you marks.</p>
+
+      <h3>2. Always Show Intermediate Values</h3>
+      <p>When completing truth tables for combined circuits, <strong>always include columns for intermediate values</strong>. This shows your working and earns you method marks even if the final answer is wrong.</p>
+
+      <h3>3. Use Binary Counting Order</h3>
+      <p>Always list your inputs systematically: 000, 001, 010, 011, 100, 101, 110, 111. This ensures you cover every combination and makes it easy for the examiner to check your answers.</p>
+
+      <h3>4. Remember the 2<sup>n</sup> Formula</h3>
+      <p>If a question asks how many rows are needed, use 2<sup>n</sup>. This is a common 1-mark question that students often get wrong by just guessing.</p>
+
+      <div class="warning">
+        <strong>Top Exam Tip:</strong> A very common exam question gives you a partially completed truth table and asks you to fill in the missing values. Identify which logic gate is being used by looking at the given outputs, then apply that gate&rsquo;s rule to complete the table. If you are unsure, try each gate (AND, OR, NOT) and see which one matches the given values.
+      </div>
+    </section>
+
+    <!-- ==================== REFLECT ==================== -->
+    <section class="reflect">
+      <span class="section-label">Reflect</span>
+      <h2>Think About It</h2>
+
+      <p>It is remarkable that every app on your phone, every website you visit, and every game you play all boils down to billions of tiny AND, OR, and NOT gates switching on and off billions of times per second.</p>
+
+      <p>Logic gates are not just exam content &mdash; they are the physical reality of how computers work. When you write an <code>if</code> statement in Python, the CPU is literally using logic gates to evaluate that condition. When you add two numbers, logic gates arranged into an <strong>adder circuit</strong> carry out the binary addition.</p>
+
+      <p>The three gates you have learned here (AND, OR, NOT) are enough to build <strong>any</strong> digital circuit. More complex gates like NAND, NOR, and XOR are just combinations of these three. From these simple building blocks, we can build processors, memory, graphics cards &mdash; entire computers.</p>
+
+      <!-- Video Resources -->
+      <h3>Video Resources</h3>
+      <p>These videos cover logic gates in more detail:</p>
+
+      <div class="video-links">
+        <a href="https://youtu.be/SW2Bwc17_wA" class="video-card" target="_blank" rel="noopener">
+          <span class="play-icon" role="img" aria-label="play">&#x25B6;&#xFE0F;</span>
+          <div class="video-info">
+            Craig 'n' Dave: Logic Gates
+            <small>AND, OR, NOT gates explained with truth tables</small>
+          </div>
+        </a>
+        <a href="https://youtu.be/UvI-AMAtrvE" class="video-card" target="_blank" rel="noopener">
+          <span class="play-icon" role="img" aria-label="play">&#x25B6;&#xFE0F;</span>
+          <div class="video-info">
+            Craig 'n' Dave: Truth Tables
+            <small>How to construct and complete truth tables</small>
+          </div>
+        </a>
+      </div>
+
+      <div class="extra-resources">
+        <h3>Further Reading &amp; External Resources</h3>
+        <ul>
+          <li><a href="https://www.bbc.co.uk/bitesize/guides/zc4bb7h/revision/1" target="_blank" rel="noopener">BBC Bitesize &mdash; Logic Gates</a> &mdash; Interactive explanations with diagrams and quizzes</li>
+          <li><a href="https://isaaccomputerscience.org/topics/boolean_logic" target="_blank" rel="noopener">Isaac Computer Science &mdash; Boolean Logic</a> &mdash; In-depth coverage of logic gates and Boolean algebra</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ==================== NAVIGATION ==================== -->
+    <nav class="chapter-nav">
+      <a href="computer-systems.html">&larr; Previous: Computer Systems</a>
+      <a href="../index.html">Course Home</a>
+      <a href="networks.html">Next: Networks &rarr;</a>
+    </nav>
+
+  </main>
+
+  <footer class="site-footer">
+    <p>Python Fundamentals &mdash; A KS4 Learning Platform</p>
+    <p>Logic Gates &mdash; GCSE Computer Science Theory</p>
+  </footer>
+
+  <script>
+    document.querySelectorAll('.hint-title').forEach(function (title) {
+      title.addEventListener('click', function () {
+        var content = this.nextElementSibling;
+        content.classList.toggle('visible');
+      });
+    });
+  </script>
+
+</body>
+</html>
