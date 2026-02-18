@@ -306,6 +306,10 @@ print("RGB:", red, green, blue)</code></pre>
 
       <p>The recommended style in Python is called <strong>snake_case</strong> &mdash; all lowercase letters, with words separated by underscores. For example: <code>player_name</code>, <code>high_score</code>, <code>is_game_over</code>. This makes your code easy to read, and it is what professional Python developers use every day.</p>
 
+      <div class="key-concept">
+        <strong>camelCase vs snake_case:</strong> Other languages like JavaScript and Java prefer <strong>camelCase</strong>, where the first word is lowercase and each new word starts with a capital letter: <code>firstName</code>, <code>totalScore</code>, <code>numberOfPlayers</code>. In your exams, pseudocode may use either convention. In Python, always use <strong>snake_case</strong>.
+      </div>
+
       <div class="code-block">
         <div class="code-block-header">
           <span class="code-block-label">Python Code</span>
@@ -434,6 +438,129 @@ print(type(decimal_number))</code></pre>
       <div class="key-concept">
         <strong>Key Concept:</strong>
         The <code>=</code> sign in Python is the <strong>assignment operator</strong>. It does not mean "equals" &mdash; it means "store this value". Think of it as an arrow pointing left: <code>name &larr; "Alice"</code>.
+      </div>
+
+      <!-- Arithmetic Operators -->
+      <h3>Arithmetic Operators</h3>
+      <p>When writing programs, you need to perform calculations. Here are the <strong>arithmetic operators</strong> you must know for Python and your exams:</p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Operator</th>
+            <th>Name</th>
+            <th>What It Does</th>
+            <th>Example</th>
+            <th>Result</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>+</strong></td>
+            <td>Addition</td>
+            <td>Adds two numbers together</td>
+            <td><code>5 + 3</code></td>
+            <td><strong>8</strong></td>
+          </tr>
+          <tr>
+            <td><strong>-</strong></td>
+            <td>Subtraction</td>
+            <td>Takes one number away from another</td>
+            <td><code>10 - 4</code></td>
+            <td><strong>6</strong></td>
+          </tr>
+          <tr>
+            <td><strong>*</strong></td>
+            <td>Multiplication</td>
+            <td>Multiplies two numbers</td>
+            <td><code>4 * 3</code></td>
+            <td><strong>12</strong></td>
+          </tr>
+          <tr>
+            <td><strong>/</strong></td>
+            <td>Division</td>
+            <td>Divides one number by another (includes decimals)</td>
+            <td><code>7 / 2</code></td>
+            <td><strong>3.5</strong></td>
+          </tr>
+          <tr>
+            <td><strong>//</strong></td>
+            <td>Integer Division</td>
+            <td>Divides and gives whole number only (no decimals)</td>
+            <td><code>7 // 2</code></td>
+            <td><strong>3</strong></td>
+          </tr>
+          <tr>
+            <td><strong>%</strong></td>
+            <td>Modulus (Remainder)</td>
+            <td>Gives the remainder after division</td>
+            <td><code>7 % 2</code></td>
+            <td><strong>1</strong></td>
+          </tr>
+          <tr>
+            <td><strong>**</strong></td>
+            <td>Exponent (Power)</td>
+            <td>Raises a number to a power</td>
+            <td><code>2 ** 3</code></td>
+            <td><strong>8</strong> (2&times;2&times;2)</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="key-concept">
+        <strong>Pseudocode vs Python:</strong> In exams, pseudocode uses <code>DIV</code> for integer division, <code>MOD</code> for modulus, and <code>^</code> for exponent. In Python, these are <code>//</code>, <code>%</code>, and <code>**</code> respectively. Make sure you know both!
+      </div>
+
+      <h4>Integer Division (//) and Modulus (%) &mdash; The Tricky Ones</h4>
+      <p>These two operators confuse many students, but they are simple once you understand them.</p>
+
+      <div class="key-concept">
+        <strong>// &mdash; Integer Division</strong>
+        <p>Imagine sharing <strong>17 sweets</strong> between <strong>5 friends</strong> equally. Each friend gets <strong>3 sweets</strong> (the whole number part).</p>
+        <p><code>17 // 5 = 3</code></p>
+        <p>Integer division ignores the remainder and only gives you the whole number.</p>
+      </div>
+
+      <div class="key-concept">
+        <strong>% &mdash; Modulus (Remainder)</strong>
+        <p>After sharing 17 sweets between 5 friends, there are <strong>2 sweets left over</strong> (the remainder).</p>
+        <p><code>17 % 5 = 2</code></p>
+        <p>Modulus tells you what is left over after dividing as many times as you can.</p>
+      </div>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Python Code</span>
+          <div>
+            <button class="copy-button">Copy Code</button>
+            <button class="run-button">Run Code</button>
+          </div>
+        </div>
+        <pre><code contenteditable="true"># Integer division (//) - gives the whole number only
+print("17 // 5 =", 17 // 5)   # 3 (each friend gets 3 sweets)
+
+# Modulus (%) - gives the remainder
+print("17 % 5 =", 17 % 5)     # 2 (2 sweets left over)
+
+# Exponent (**) - raises to a power
+print("2 ** 3 =", 2 ** 3)     # 8 (2 x 2 x 2)
+
+# Is a number even or odd? Use % 2
+number = 7
+if number % 2 == 0:
+    print(number, "is even")
+else:
+    print(number, "is odd")
+
+# Get the last digit of a number
+big_number = 1234
+last_digit = big_number % 10
+print("Last digit of", big_number, "is", last_digit)</code></pre>
+        <div class="output-box empty">(click "Run Code" to see output)</div>
+      </div>
+
+      <div class="warning">
+        <strong>Exam Favourite:</strong> &ldquo;Is a number even or odd?&rdquo; &mdash; Use <code>number % 2</code>. If the result is 0, it&rsquo;s <strong>even</strong>. If the result is 1, it&rsquo;s <strong>odd</strong>. Other common uses: get the last digit (<code>1234 % 10 = 4</code>) and wrap-around values (clock times, game levels).
       </div>
 
       <!-- Common Mistakes -->
@@ -631,6 +758,18 @@ print("=============================")</code></pre>
           <tr style="border-bottom:1px solid #eee;">
             <td style="padding:0.5rem;"><strong>snake_case</strong></td>
             <td style="padding:0.5rem;">The naming convention used in Python where words are separated by underscores and written in lowercase (e.g. <code>player_name</code>).</td>
+          </tr>
+          <tr style="border-bottom:1px solid #eee;">
+            <td style="padding:0.5rem;"><strong>camelCase</strong></td>
+            <td style="padding:0.5rem;">A naming convention where the first word is lowercase and each new word starts with a capital letter (e.g. <code>firstName</code>). Used in JavaScript and pseudocode.</td>
+          </tr>
+          <tr style="border-bottom:1px solid #eee;">
+            <td style="padding:0.5rem;"><strong>Integer Division (//)</strong></td>
+            <td style="padding:0.5rem;">Division that returns only the whole number part, discarding any remainder. In pseudocode: <code>DIV</code>. In Python: <code>//</code>.</td>
+          </tr>
+          <tr style="border-bottom:1px solid #eee;">
+            <td style="padding:0.5rem;"><strong>Modulus (%)</strong></td>
+            <td style="padding:0.5rem;">An operator that returns the remainder after division. In pseudocode: <code>MOD</code>. In Python: <code>%</code>.</td>
           </tr>
         </tbody>
       </table>
