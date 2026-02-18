@@ -8,6 +8,223 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="../css/style.css" />
+  <style>
+    /* --- Page-specific styles for visual enhancements --- */
+
+    /* Why Use Pseudocode cards */
+    .why-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: var(--space-md);
+      margin: var(--space-lg) 0;
+    }
+    .why-card {
+      background: var(--color-white);
+      border: 2px solid #e0e0e0;
+      border-radius: var(--radius-lg);
+      padding: var(--space-lg);
+      text-align: center;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .why-card:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-md);
+    }
+    .why-card .card-icon {
+      font-size: 2.2rem;
+      display: block;
+      margin-bottom: var(--space-sm);
+    }
+    .why-card h4 {
+      margin-top: 0;
+      margin-bottom: var(--space-xs);
+      font-size: 1rem;
+    }
+    .why-card p {
+      font-size: 0.9rem;
+      color: var(--color-text-light);
+      margin: 0;
+    }
+
+    /* Side-by-side comparison */
+    .comparison-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-md);
+      margin: var(--space-lg) 0;
+    }
+    @media (max-width: 700px) {
+      .comparison-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Flowchart SVG container */
+    .flowchart-container {
+      background: var(--color-white);
+      border: 2px solid #e0e0e0;
+      border-radius: var(--radius-lg);
+      padding: var(--space-lg);
+      margin: var(--space-lg) 0;
+      text-align: center;
+      overflow-x: auto;
+    }
+    .flowchart-container h4 {
+      margin-top: 0;
+      margin-bottom: var(--space-md);
+      text-align: center;
+    }
+    .flowchart-container svg {
+      max-width: 100%;
+      height: auto;
+    }
+
+    /* Flowchart symbol shapes (CSS) */
+    .symbol-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: var(--space-md);
+      margin: var(--space-lg) 0;
+    }
+    .symbol-card {
+      background: var(--color-white);
+      border: 2px solid #e0e0e0;
+      border-radius: var(--radius-lg);
+      padding: var(--space-lg);
+      text-align: center;
+    }
+    .symbol-shape {
+      width: 100px;
+      height: 50px;
+      margin: 0 auto var(--space-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--color-white);
+    }
+    .shape-terminator {
+      background: #4361ee;
+      border-radius: 25px;
+    }
+    .shape-process {
+      background: #06d6a0;
+      border-radius: 4px;
+    }
+    .shape-decision {
+      background: #f77f00;
+      width: 70px;
+      height: 70px;
+      transform: rotate(45deg);
+      border-radius: 4px;
+    }
+    .shape-decision span {
+      transform: rotate(-45deg);
+    }
+    .shape-io {
+      background: #f72585;
+      transform: skewX(-15deg);
+      border-radius: 4px;
+    }
+    .shape-io span {
+      transform: skewX(15deg);
+    }
+    .symbol-card h4 {
+      margin-top: var(--space-sm);
+      margin-bottom: var(--space-xs);
+    }
+    .symbol-card p {
+      font-size: 0.85rem;
+      color: var(--color-text-light);
+      margin: 0;
+    }
+
+    /* Spot the difference side-by-side */
+    .spot-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-lg);
+      margin: var(--space-lg) 0;
+    }
+    @media (max-width: 700px) {
+      .spot-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Past paper details */
+    .past-paper {
+      background: var(--color-white);
+      border: 2px solid #e0e0e0;
+      border-radius: var(--radius-md);
+      margin: var(--space-md) 0;
+      overflow: hidden;
+    }
+    .past-paper summary {
+      padding: var(--space-md);
+      font-weight: 700;
+      cursor: pointer;
+      user-select: none;
+      transition: background 0.2s;
+    }
+    .past-paper summary:hover {
+      background: #f8f8fa;
+    }
+    .past-paper .paper-answer {
+      padding: var(--space-md);
+      border-top: 1px solid #e0e0e0;
+      background: #f8faf8;
+    }
+    .past-paper .mark-badge {
+      display: inline-block;
+      background: var(--gradient-blue);
+      color: var(--color-white);
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 2px 10px;
+      border-radius: 50px;
+      margin-left: var(--space-sm);
+    }
+
+    /* Video link cards */
+    .video-links {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: var(--space-md);
+      margin: var(--space-lg) 0;
+    }
+    .video-card {
+      background: var(--color-white);
+      border: 2px solid #e0e0e0;
+      border-radius: var(--radius-md);
+      padding: var(--space-md);
+      display: flex;
+      align-items: center;
+      gap: var(--space-md);
+      text-decoration: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .video-card:hover {
+      border-color: #e63946;
+      box-shadow: var(--shadow-md);
+    }
+    .video-card .play-icon {
+      font-size: 2rem;
+      flex-shrink: 0;
+    }
+    .video-card .video-info {
+      font-size: 0.9rem;
+      color: var(--color-text);
+      font-weight: 600;
+    }
+    .video-card .video-info small {
+      display: block;
+      font-weight: 400;
+      color: var(--color-text-light);
+      font-size: 0.8rem;
+    }
+  </style>
 </head>
 <body>
 
@@ -33,20 +250,93 @@
 
       <p>Both methods let you plan your logic without worrying about the syntax rules of any particular programming language. They are essential skills for GCSE Computer Science &mdash; you will be asked to read, write, and trace through both pseudocode and flowcharts in the exam.</p>
 
+      <h3>Why Use Pseudocode &amp; Flowcharts?</h3>
+
+      <div class="why-cards">
+        <div class="why-card">
+          <span class="card-icon" role="img" aria-label="brain">&#x1F9E0;</span>
+          <h4>Focus on Logic</h4>
+          <p>Plan your solution without getting distracted by syntax errors or language-specific rules</p>
+        </div>
+        <div class="why-card">
+          <span class="card-icon" role="img" aria-label="speech bubble">&#x1F4AC;</span>
+          <h4>Anyone Can Read It</h4>
+          <p>Pseudocode is language-independent &mdash; any programmer can understand it, regardless of what language they use</p>
+        </div>
+        <div class="why-card">
+          <span class="card-icon" role="img" aria-label="arrows">&#x1F504;</span>
+          <h4>Easy to Convert</h4>
+          <p>Well-written pseudocode translates directly into any programming language with minimal effort</p>
+        </div>
+      </div>
+
       <div class="key-concept">
         <strong>Why Not Just Write Code?</strong>
         Planning with pseudocode or flowcharts first helps you focus on the <strong>logic</strong> of your solution. If you jump straight into code, you often get distracted by syntax errors and miss logical mistakes. Professional programmers almost always plan before coding &mdash; and so should you.
       </div>
     </section>
 
-    <!-- ==================== EXPLORE ==================== -->
+    <!-- ==================== EXPLORE: PSEUDOCODE ==================== -->
     <section class="explore">
       <span class="section-label">Explore</span>
       <h2>Pseudocode in Action</h2>
 
       <p><strong>Pseudocode</strong> is a way of writing an algorithm using structured English that looks a bit like programming code, but is not written in any specific language. It lets you plan your logic without worrying about syntax rules.</p>
 
-      <p>Here is a simple example &mdash; an algorithm to check if a student has passed an exam:</p>
+      <!-- Keywords Reference Table -->
+      <h3>Pseudocode Keywords</h3>
+      <p>These are the standard keywords you should use when writing pseudocode in the exam:</p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Keyword</th>
+            <th>What It Does</th>
+            <th>Example</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>INPUT</code></td>
+            <td>Gets data from the user</td>
+            <td><code>INPUT name</code></td>
+          </tr>
+          <tr>
+            <td><code>OUTPUT</code></td>
+            <td>Displays data to the user</td>
+            <td><code>OUTPUT "Hello"</code></td>
+          </tr>
+          <tr>
+            <td><code>SET...TO</code></td>
+            <td>Assigns a value to a variable</td>
+            <td><code>SET total TO 0</code></td>
+          </tr>
+          <tr>
+            <td><code>IF...THEN...ELSE...ENDIF</code></td>
+            <td>Makes a decision (selection)</td>
+            <td><code>IF age >= 18 THEN</code></td>
+          </tr>
+          <tr>
+            <td><code>FOR...ENDFOR</code></td>
+            <td>Repeats a set number of times</td>
+            <td><code>FOR i = 1 TO 10</code></td>
+          </tr>
+          <tr>
+            <td><code>WHILE...ENDWHILE</code></td>
+            <td>Repeats while a condition is true</td>
+            <td><code>WHILE count &lt; 5</code></td>
+          </tr>
+          <tr>
+            <td><code>REPEAT...UNTIL</code></td>
+            <td>Repeats until a condition is true</td>
+            <td><code>REPEAT...UNTIL answer = "yes"</code></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Simple example -->
+      <h3>A Simple Example</h3>
+      <p>Here is a simple algorithm to check if a student has passed an exam:</p>
 
       <div class="code-block">
         <div class="code-block-header">
@@ -76,34 +366,215 @@ ENDFOR
 OUTPUT largest</code></pre>
       </div>
 
-      <div class="key-concept">
-        <strong>Key Concept: Pseudocode</strong>
-        Pseudocode is not a real programming language &mdash; there is no single &ldquo;correct&rdquo; way to write it. The aim is to clearly communicate the logic of an algorithm in a way that any programmer could understand and convert into actual code. Common keywords include: INPUT, OUTPUT, IF...THEN...ELSE, FOR, WHILE, SET, and REPEAT...UNTIL.
+      <!-- Side-by-side: Pseudocode vs Python -->
+      <h3>Pseudocode vs Python: Side by Side</h3>
+      <p>Pseudocode is designed to be <strong>easy to convert</strong> into any programming language. Compare this voting-age checker written in both pseudocode and Python:</p>
+
+      <div class="comparison-grid">
+        <div class="code-block">
+          <div class="code-block-header">
+            <span class="code-block-label">Pseudocode</span>
+          </div>
+          <pre><code>OUTPUT "Enter your age:"
+INPUT age
+IF age >= 18 THEN
+    OUTPUT "You can vote!"
+ELSE
+    OUTPUT "Too young to vote."
+ENDIF</code></pre>
+        </div>
+        <div class="code-block">
+          <div class="code-block-header">
+            <span class="code-block-label">Python</span>
+          </div>
+          <pre><code>age = int(input("Enter your age: "))
+if age >= 18:
+    print("You can vote!")
+else:
+    print("Too young to vote.")</code></pre>
+        </div>
       </div>
 
-      <h3>Flowcharts at a Glance</h3>
+      <div class="key-concept">
+        <strong>Key Concept: Pseudocode</strong>
+        Pseudocode is not a real programming language &mdash; there is no single &ldquo;correct&rdquo; way to write it. The aim is to clearly communicate the logic of an algorithm in a way that any programmer could understand and convert into actual code. Notice how the pseudocode version maps almost 1-to-1 to the Python code.
+      </div>
+    </section>
+
+    <!-- ==================== EXPLORE: FLOWCHARTS ==================== -->
+    <section class="explore">
+      <span class="section-label">Explore</span>
+      <h2>Flowcharts: Visual Algorithms</h2>
+
       <p>A <strong>flowchart</strong> is a visual diagram that shows the steps of an algorithm using standard symbols connected by arrows. They make it easy to see the flow of logic at a glance &mdash; especially for algorithms that involve decisions and loops.</p>
 
-      <p>Here is the same pass/fail algorithm as a description of its flowchart:</p>
-      <ol>
-        <li><strong>Oval:</strong> START</li>
-        <li><strong>Parallelogram:</strong> INPUT score</li>
-        <li><strong>Diamond:</strong> Is score >= 50?</li>
-        <li><strong>Yes path &rarr; Parallelogram:</strong> OUTPUT &ldquo;Pass&rdquo;</li>
-        <li><strong>No path &rarr; Parallelogram:</strong> OUTPUT &ldquo;Fail&rdquo;</li>
-        <li>Both paths lead to &rarr; <strong>Oval:</strong> STOP</li>
-      </ol>
+      <!-- Flowchart Symbols with CSS shapes -->
+      <h3>Flowchart Symbols</h3>
+      <p>You must know these four key flowchart symbols for the exam:</p>
 
-      <p>Notice how the diamond shape creates two paths &mdash; one for Yes and one for No. This is how flowcharts show <strong>selection</strong> (decisions).</p>
+      <div class="symbol-grid">
+        <div class="symbol-card">
+          <div class="symbol-shape shape-terminator">START</div>
+          <h4>Terminator</h4>
+          <p>Oval &mdash; marks the START or STOP of an algorithm</p>
+        </div>
+        <div class="symbol-card">
+          <div class="symbol-shape shape-process">x = x + 1</div>
+          <h4>Process</h4>
+          <p>Rectangle &mdash; an action or calculation</p>
+        </div>
+        <div class="symbol-card">
+          <div class="symbol-shape shape-decision"><span>x &gt; 5?</span></div>
+          <h4>Decision</h4>
+          <p>Diamond &mdash; a Yes/No question</p>
+        </div>
+        <div class="symbol-card">
+          <div class="symbol-shape shape-io"><span>INPUT x</span></div>
+          <h4>Input / Output</h4>
+          <p>Parallelogram &mdash; data in or results out</p>
+        </div>
+      </div>
+
+      <p>Arrows connect the symbols and show which step comes next. Decision diamonds always have two paths coming out: one for &ldquo;Yes&rdquo; and one for &ldquo;No.&rdquo;</p>
+
+      <!-- SVG Flowchart: Selection (IF) -->
+      <h3>Flowchart Example: Selection (IF Statement)</h3>
+      <p>This flowchart shows the voting-age checker &mdash; an example of <strong>selection</strong>, where the program takes a different path depending on a condition:</p>
+
+      <div class="flowchart-container">
+        <svg width="360" height="480" viewBox="0 0 360 480" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Flowchart showing an IF statement for voting age">
+          <!-- START -->
+          <ellipse cx="180" cy="30" rx="60" ry="22" fill="#4361ee" stroke="#3451ce" stroke-width="2"/>
+          <text x="180" y="35" text-anchor="middle" fill="white" font-family="Inter, sans-serif" font-weight="700" font-size="14">START</text>
+          <!-- Arrow -->
+          <line x1="180" y1="52" x2="180" y2="80" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+
+          <!-- INPUT -->
+          <polygon points="110,80 250,80 270,115 130,115" fill="#f72585" stroke="#d91e6e" stroke-width="2"/>
+          <text x="190" y="103" text-anchor="middle" fill="white" font-family="Inter, sans-serif" font-weight="600" font-size="13">INPUT age</text>
+          <!-- Arrow -->
+          <line x1="180" y1="115" x2="180" y2="155" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+
+          <!-- Decision diamond -->
+          <polygon points="180,155 290,215 180,275 70,215" fill="#f77f00" stroke="#d66d00" stroke-width="2"/>
+          <text x="180" y="211" text-anchor="middle" fill="white" font-family="Inter, sans-serif" font-weight="700" font-size="13">age &gt;= 18?</text>
+
+          <!-- YES path (left) -->
+          <line x1="70" y1="215" x2="30" y2="215" stroke="#06d6a0" stroke-width="2"/>
+          <line x1="30" y1="215" x2="30" y2="340" stroke="#06d6a0" stroke-width="2" marker-end="url(#arrow)"/>
+          <text x="48" y="200" fill="#06d6a0" font-family="Inter, sans-serif" font-weight="700" font-size="12">YES</text>
+          <!-- Output: You can vote -->
+          <polygon points="-30,340 90,340 110,375 -10,375" fill="#f72585" stroke="#d91e6e" stroke-width="2"/>
+          <text x="40" y="363" text-anchor="middle" fill="white" font-family="Inter, sans-serif" font-weight="600" font-size="11">OUTPUT "You can vote!"</text>
+          <line x1="40" y1="375" x2="40" y2="410" stroke="#333" stroke-width="2"/>
+          <line x1="40" y1="410" x2="180" y2="410" stroke="#333" stroke-width="2"/>
+
+          <!-- NO path (right) -->
+          <line x1="290" y1="215" x2="330" y2="215" stroke="#e63946" stroke-width="2"/>
+          <line x1="330" y1="215" x2="330" y2="340" stroke="#e63946" stroke-width="2" marker-end="url(#arrow)"/>
+          <text x="296" y="200" fill="#e63946" font-family="Inter, sans-serif" font-weight="700" font-size="12">NO</text>
+          <!-- Output: Too young -->
+          <polygon points="260,340 400,340 420,375 280,375" fill="#f72585" stroke="#d91e6e" stroke-width="2"/>
+          <text x="340" y="363" text-anchor="middle" fill="white" font-family="Inter, sans-serif" font-weight="600" font-size="11">OUTPUT "Too young"</text>
+          <line x1="330" y1="375" x2="330" y2="410" stroke="#333" stroke-width="2"/>
+          <line x1="330" y1="410" x2="180" y2="410" stroke="#333" stroke-width="2"/>
+
+          <!-- Arrow down to STOP -->
+          <line x1="180" y1="410" x2="180" y2="435" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+
+          <!-- STOP -->
+          <ellipse cx="180" cy="455" rx="55" ry="22" fill="#4361ee" stroke="#3451ce" stroke-width="2"/>
+          <text x="180" y="460" text-anchor="middle" fill="white" font-family="Inter, sans-serif" font-weight="700" font-size="14">STOP</text>
+
+          <!-- Arrow marker -->
+          <defs>
+            <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="#333"/>
+            </marker>
+          </defs>
+        </svg>
+      </div>
+
+      <!-- SVG Flowchart: Iteration (WHILE) -->
+      <h3>Flowchart Example: Iteration (WHILE Loop)</h3>
+      <p>This flowchart shows a countdown from 5 to 1 &mdash; an example of <strong>iteration</strong>, where steps are repeated while a condition is true:</p>
+
+      <div class="flowchart-container">
+        <svg width="320" height="480" viewBox="0 0 320 480" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Flowchart showing a WHILE loop for countdown">
+          <!-- START -->
+          <ellipse cx="160" cy="30" rx="60" ry="22" fill="#4361ee" stroke="#3451ce" stroke-width="2"/>
+          <text x="160" y="35" text-anchor="middle" fill="white" font-family="Inter, sans-serif" font-weight="700" font-size="14">START</text>
+          <line x1="160" y1="52" x2="160" y2="80" stroke="#333" stroke-width="2" marker-end="url(#arrow2)"/>
+
+          <!-- SET count TO 5 -->
+          <rect x="75" y="80" width="170" height="40" rx="4" fill="#06d6a0" stroke="#05b88a" stroke-width="2"/>
+          <text x="160" y="105" text-anchor="middle" fill="white" font-family="Inter, sans-serif" font-weight="600" font-size="13">SET count TO 5</text>
+          <line x1="160" y1="120" x2="160" y2="160" stroke="#333" stroke-width="2" marker-end="url(#arrow2)"/>
+
+          <!-- Decision: count > 0? -->
+          <polygon points="160,160 265,215 160,270 55,215" fill="#f77f00" stroke="#d66d00" stroke-width="2"/>
+          <text x="160" y="211" text-anchor="middle" fill="white" font-family="Inter, sans-serif" font-weight="700" font-size="13">count &gt; 0?</text>
+
+          <!-- YES path (down) -->
+          <line x1="160" y1="270" x2="160" y2="305" stroke="#06d6a0" stroke-width="2" marker-end="url(#arrow2)"/>
+          <text x="172" y="292" fill="#06d6a0" font-family="Inter, sans-serif" font-weight="700" font-size="12">YES</text>
+
+          <!-- OUTPUT count -->
+          <polygon points="90,305 230,305 250,340 110,340" fill="#f72585" stroke="#d91e6e" stroke-width="2"/>
+          <text x="170" y="328" text-anchor="middle" fill="white" font-family="Inter, sans-serif" font-weight="600" font-size="13">OUTPUT count</text>
+          <line x1="160" y1="340" x2="160" y2="370" stroke="#333" stroke-width="2" marker-end="url(#arrow2)"/>
+
+          <!-- count = count - 1 -->
+          <rect x="75" y="370" width="170" height="40" rx="4" fill="#06d6a0" stroke="#05b88a" stroke-width="2"/>
+          <text x="160" y="395" text-anchor="middle" fill="white" font-family="Inter, sans-serif" font-weight="600" font-size="12">count = count - 1</text>
+
+          <!-- Loop back arrow -->
+          <line x1="75" y1="390" x2="25" y2="390" stroke="#333" stroke-width="2"/>
+          <line x1="25" y1="390" x2="25" y2="215" stroke="#333" stroke-width="2"/>
+          <line x1="25" y1="215" x2="55" y2="215" stroke="#333" stroke-width="2" marker-end="url(#arrow2)"/>
+
+          <!-- NO path (right) -->
+          <line x1="265" y1="215" x2="295" y2="215" stroke="#e63946" stroke-width="2"/>
+          <line x1="295" y1="215" x2="295" y2="440" stroke="#e63946" stroke-width="2"/>
+          <line x1="295" y1="440" x2="220" y2="440" stroke="#333" stroke-width="2" marker-end="url(#arrow2)"/>
+          <text x="275" y="200" fill="#e63946" font-family="Inter, sans-serif" font-weight="700" font-size="12">NO</text>
+
+          <!-- STOP -->
+          <ellipse cx="160" cy="440" rx="55" ry="22" fill="#4361ee" stroke="#3451ce" stroke-width="2"/>
+          <text x="160" y="445" text-anchor="middle" fill="white" font-family="Inter, sans-serif" font-weight="700" font-size="14">STOP</text>
+
+          <defs>
+            <marker id="arrow2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="#333"/>
+            </marker>
+          </defs>
+        </svg>
+      </div>
+
+      <!-- Spot the Difference -->
+      <h3>Spot the Difference: Selection vs Iteration</h3>
+      <p>Both selection and iteration use a <strong>decision diamond</strong>, but there is one crucial difference:</p>
+
+      <div class="spot-grid">
+        <div class="key-concept">
+          <strong>Selection (IF Statement)</strong>
+          <p>The flowchart <strong>branches</strong> into two paths &mdash; one path for YES, another for NO. Both paths continue forward and eventually meet up again. The code inside is executed <strong>once</strong> (or not at all).</p>
+        </div>
+        <div class="key-concept">
+          <strong>Iteration (WHILE Loop)</strong>
+          <p>One path from the decision <strong>loops back</strong> to a previous step, creating a cycle. The code inside can be executed <strong>many times</strong> until the condition changes. Look for the arrow going backwards.</p>
+        </div>
+      </div>
+
+      <div class="warning">
+        <strong>Common Mistake:</strong> Students often forget to use the correct shapes in flowcharts. Remember &mdash; rectangles are for processes, diamonds are for decisions, and parallelograms are for input/output. Using the wrong shape will lose you marks in the exam.
+      </div>
     </section>
 
     <!-- ==================== UNDERSTAND ==================== -->
     <section class="understand">
       <span class="section-label">Understand</span>
-      <h2>Pseudocode &amp; Flowcharts in Detail</h2>
-
-      <!-- PSEUDOCODE EXAMPLES -->
-      <h3>Pseudocode Examples</h3>
+      <h2>Pseudocode in Detail: Worked Examples</h2>
 
       <p>Here are three practical algorithms written in pseudocode. Practise reading through each one and tracing the logic step by step.</p>
 
@@ -203,9 +674,8 @@ ELSE
 ENDIF</code></pre>
       </div>
 
-      <!-- FLOWCHARTS -->
-      <h3>Flowchart Symbols</h3>
-      <p>You must know these four key flowchart symbols for the exam:</p>
+      <!-- Reference table for symbols -->
+      <h3>Flowchart Symbols: Quick Reference Table</h3>
 
       <table>
         <thead>
@@ -243,12 +713,6 @@ ENDIF</code></pre>
           </tr>
         </tbody>
       </table>
-
-      <p>Arrows connect the symbols and show which step comes next. Decision diamonds always have two paths coming out: one for &ldquo;Yes&rdquo; and one for &ldquo;No.&rdquo;</p>
-
-      <div class="warning">
-        <strong>Common Mistake:</strong> Students often forget to use the correct shapes in flowcharts. Remember &mdash; rectangles are for processes, diamonds are for decisions, and parallelograms are for input/output. Using the wrong shape will lose you marks in the exam.
-      </div>
     </section>
 
     <!-- ==================== PRACTICE ==================== -->
@@ -330,6 +794,118 @@ OUTPUT "The average is: " + average</code></pre>
           <p><strong>Answer:</strong> Pseudocode should be language-independent. If the question asks for pseudocode and you write <code>print()</code> instead of <code>OUTPUT</code>, or <code>input()</code> instead of <code>INPUT</code>, the examiner may not award full marks. Pseudocode should use the standard keywords (IF, THEN, ELSE, FOR, WHILE, etc.) rather than any specific programming language&rsquo;s syntax.</p>
         </div>
       </div>
+
+      <div class="hint">
+        <div class="hint-title">Q8: How can you tell the difference between selection and iteration in a flowchart?</div>
+        <div class="hint-content">
+          <p><strong>Answer:</strong> Both use a <strong>diamond (decision)</strong> shape, but the key difference is in the <strong>arrows</strong>:</p>
+          <ul>
+            <li><strong>Selection (IF):</strong> Both paths from the diamond go <strong>forward</strong> &mdash; they branch and then rejoin. No arrow goes backwards.</li>
+            <li><strong>Iteration (WHILE/REPEAT):</strong> One path from the diamond creates a <strong>loop</strong> &mdash; an arrow goes <strong>back to a previous step</strong>, creating a cycle that repeats.</li>
+          </ul>
+          <p>Look for the backward arrow &mdash; if there is one, it&rsquo;s iteration. If both paths only go forward, it&rsquo;s selection.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== PAST PAPER PRACTICE ==================== -->
+    <section class="understand">
+      <span class="section-label">Exam Practice</span>
+      <h2>Past Paper Questions</h2>
+      <p>Try these exam-style questions, then click to reveal the mark scheme answer.</p>
+
+      <details class="past-paper">
+        <summary>
+          Describe what is meant by pseudocode.
+          <span class="mark-badge">2 marks</span>
+        </summary>
+        <div class="paper-answer">
+          <p><strong>Mark scheme:</strong></p>
+          <ul>
+            <li>Pseudocode is a way of writing/describing an algorithm <strong>(1)</strong></li>
+            <li>using structured English / not in a specific programming language / cannot be executed by a computer <strong>(1)</strong></li>
+          </ul>
+        </div>
+      </details>
+
+      <details class="past-paper">
+        <summary>
+          Draw the four standard flowchart symbols and state what each one represents.
+          <span class="mark-badge">4 marks</span>
+        </summary>
+        <div class="paper-answer">
+          <p><strong>Mark scheme:</strong> One mark for each correct symbol with its name/description:</p>
+          <ul>
+            <li><strong>Oval/rounded rectangle</strong> &mdash; Terminator (Start/Stop) <strong>(1)</strong></li>
+            <li><strong>Rectangle</strong> &mdash; Process (action/calculation) <strong>(1)</strong></li>
+            <li><strong>Diamond</strong> &mdash; Decision (Yes/No question) <strong>(1)</strong></li>
+            <li><strong>Parallelogram</strong> &mdash; Input/Output <strong>(1)</strong></li>
+          </ul>
+        </div>
+      </details>
+
+      <details class="past-paper">
+        <summary>
+          Write pseudocode for a program that asks the user to enter numbers until they enter &minus;1. The program should then output the total of all the numbers entered (not including &minus;1).
+          <span class="mark-badge">5 marks</span>
+        </summary>
+        <div class="paper-answer">
+          <p><strong>Mark scheme:</strong></p>
+          <div class="code-block">
+            <div class="code-block-header">
+              <span class="code-block-label">Pseudocode</span>
+            </div>
+            <pre><code>SET total TO 0                        (1)
+INPUT number                          (1)
+WHILE number != -1                    (1)
+    SET total TO total + number        (1)
+    INPUT number
+ENDWHILE
+OUTPUT total                          (1)</code></pre>
+          </div>
+          <p>Accept equivalent solutions using REPEAT...UNTIL. Key marks: initialisation of total, input before loop, correct loop condition, accumulation, output after loop.</p>
+        </div>
+      </details>
+
+      <details class="past-paper">
+        <summary>
+          Explain the difference between how selection and iteration are shown in a flowchart.
+          <span class="mark-badge">3 marks</span>
+        </summary>
+        <div class="paper-answer">
+          <p><strong>Mark scheme:</strong></p>
+          <ul>
+            <li>Both use a diamond/decision symbol <strong>(1)</strong></li>
+            <li>In selection, the two paths go forward and rejoin / no path loops back <strong>(1)</strong></li>
+            <li>In iteration, one path loops back to a previous step / creates a cycle <strong>(1)</strong></li>
+          </ul>
+        </div>
+      </details>
+
+      <details class="past-paper">
+        <summary>
+          A program uses the following pseudocode. Trace through the algorithm and state the output when the input is 7.
+          <br><br>
+          <code>INPUT x &nbsp; SET y TO 0 &nbsp; WHILE x > 0: &nbsp; SET y TO y + x &nbsp; SET x TO x - 2 &nbsp; ENDWHILE &nbsp; OUTPUT y</code>
+          <span class="mark-badge">4 marks</span>
+        </summary>
+        <div class="paper-answer">
+          <p><strong>Mark scheme:</strong> Trace table (1 mark per correct row of working, 1 mark for correct output):</p>
+          <table>
+            <thead>
+              <tr><th>x</th><th>y</th><th>x &gt; 0?</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>7</td><td>0</td><td>Yes</td></tr>
+              <tr><td>5</td><td>7</td><td>Yes</td></tr>
+              <tr><td>3</td><td>12</td><td>Yes</td></tr>
+              <tr><td>1</td><td>15</td><td>Yes</td></tr>
+              <tr><td>-1</td><td>16</td><td>No</td></tr>
+            </tbody>
+          </table>
+          <p><strong>Output: 16</strong></p>
+        </div>
+      </details>
     </section>
 
     <!-- ==================== KEY VOCABULARY ==================== -->
@@ -371,6 +947,18 @@ OUTPUT "The average is: " + average</code></pre>
             <td><strong>Input/Output</strong></td>
             <td>A parallelogram shape in a flowchart that represents data being entered or results being displayed.</td>
           </tr>
+          <tr>
+            <td><strong>Selection</strong></td>
+            <td>A programming construct where the program chooses between two or more paths based on a condition (IF...THEN...ELSE).</td>
+          </tr>
+          <tr>
+            <td><strong>Iteration</strong></td>
+            <td>A programming construct where steps are repeated (looped) using FOR, WHILE, or REPEAT...UNTIL.</td>
+          </tr>
+          <tr>
+            <td><strong>Trace Table</strong></td>
+            <td>A table used to track the values of variables as you step through an algorithm, used to test and debug logic.</td>
+          </tr>
         </tbody>
       </table>
     </section>
@@ -411,6 +999,27 @@ OUTPUT "The average is: " + average</code></pre>
       </ul>
 
       <p>Next time you have a programming challenge, try writing the pseudocode or drawing a flowchart <em>before</em> you touch the keyboard. You will be surprised how much easier the coding becomes when the logic is already clear in your head.</p>
+
+      <!-- Video Resources -->
+      <h3>Video Resources</h3>
+      <p>These videos from Craig 'n' Dave cover the key concepts in more detail:</p>
+
+      <div class="video-links">
+        <a href="https://www.youtube.com/results?search_query=craig+n+dave+pseudocode+gcse" class="video-card" target="_blank" rel="noopener">
+          <span class="play-icon" role="img" aria-label="play">&#x25B6;&#xFE0F;</span>
+          <div class="video-info">
+            Craig 'n' Dave: Pseudocode
+            <small>GCSE Computer Science</small>
+          </div>
+        </a>
+        <a href="https://www.youtube.com/results?search_query=craig+n+dave+flowcharts+gcse" class="video-card" target="_blank" rel="noopener">
+          <span class="play-icon" role="img" aria-label="play">&#x25B6;&#xFE0F;</span>
+          <div class="video-info">
+            Craig 'n' Dave: Flowcharts
+            <small>GCSE Computer Science</small>
+          </div>
+        </a>
+      </div>
 
       <div class="extra-resources">
         <h3>Further Reading &amp; External Resources</h3>
