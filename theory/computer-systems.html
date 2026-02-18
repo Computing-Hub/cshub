@@ -451,47 +451,6 @@
         <li><strong>Security</strong> &mdash; User accounts, passwords, access permissions, and controlling who can do what</li>
       </ul>
 
-      <!-- SCHEDULING ALGORITHMS -->
-      <h3>Scheduling Algorithms</h3>
-      <p>When multiple programs are running at once, the OS must decide which process gets to use the CPU next. This is called <strong>scheduling</strong>. Different algorithms suit different situations:</p>
-
-      <table>
-        <thead>
-          <tr><th>Algorithm</th><th>How It Works</th><th>Advantages</th><th>Disadvantages</th></tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><strong>First Come First Served (FCFS)</strong></td>
-            <td>Processes are executed in the order they arrive &mdash; like a queue at a shop</td>
-            <td>Simple to implement; fair (no starvation)</td>
-            <td>Short jobs may wait behind long ones; not efficient for interactive systems</td>
-          </tr>
-          <tr>
-            <td><strong>Round Robin</strong></td>
-            <td>Each process gets a fixed <strong>time slice</strong> (e.g. 10 ms). If it is not finished, it goes to the back of the queue</td>
-            <td>Fair &mdash; every process gets regular CPU time; good for interactive/multi-user systems</td>
-            <td>Context switching adds overhead; not ideal if time slices are too short or too long</td>
-          </tr>
-          <tr>
-            <td><strong>Shortest Job First (SJF)</strong></td>
-            <td>The process with the shortest estimated execution time runs next</td>
-            <td>Minimises average waiting time; efficient for batch processing</td>
-            <td>Hard to predict execution time; long processes may be starved (never get to run)</td>
-          </tr>
-          <tr>
-            <td><strong>Priority-Based</strong></td>
-            <td>Each process is assigned a priority level. Higher-priority processes run first</td>
-            <td>Important tasks (e.g. system processes) are handled quickly</td>
-            <td>Low-priority processes may be starved; requires careful priority assignment</td>
-          </tr>
-        </tbody>
-      </table>
-
-      <div class="exam-tip">
-        <strong>Exam Tip: Scheduling Algorithms</strong>
-        <p>In exam questions, you are often given a scenario and asked to recommend a scheduling algorithm. <strong>Round Robin</strong> is best for multi-user/interactive systems where fairness matters. <strong>FCFS</strong> is simplest but can cause long wait times. <strong>SJF</strong> is most efficient for batch jobs. <strong>Priority-Based</strong> is best when some tasks are more urgent than others.</p>
-      </div>
-
       <!-- UTILITY SOFTWARE -->
       <h3>Utility Software</h3>
       <p>Utility software performs specific maintenance or housekeeping tasks to keep the computer running smoothly:</p>
@@ -896,20 +855,6 @@
         </div>
       </details>
 
-      <details style="background: #fff; border: 2px solid #e0e0e0; border-radius: 8px; margin: 1rem 0; overflow: hidden;">
-        <summary style="padding: 1rem; font-weight: 700; cursor: pointer; user-select: none;">
-          Describe Round Robin scheduling. Explain one advantage and one disadvantage of this algorithm.
-          <span style="display: inline-block; background: linear-gradient(135deg, #4361ee, #3a0ca3); color: #fff; font-size: 0.75rem; font-weight: 700; padding: 2px 10px; border-radius: 50px; margin-left: 0.5rem;">3 marks</span>
-        </summary>
-        <div style="padding: 1rem; border-top: 1px solid #e0e0e0; background: #f8faf8;">
-          <p><strong>Mark scheme:</strong></p>
-          <ul>
-            <li>Round Robin gives each process a fixed time slice; if the process is not finished, it goes to the back of the queue (1 mark)</li>
-            <li>Advantage: Fair &mdash; every process gets regular CPU time; good for multi-user/interactive systems (1 mark)</li>
-            <li>Disadvantage: Context switching between processes adds overhead / not efficient if time slices are poorly chosen (1 mark)</li>
-          </ul>
-        </div>
-      </details>
     </section>
 
     <!-- ==================== REFLECT ==================== -->
