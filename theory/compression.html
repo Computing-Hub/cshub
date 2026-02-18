@@ -878,6 +878,59 @@
       </div>
     </section>
 
+    <!-- ==================== PAST PAPER PRACTICE ==================== -->
+    <section class="understand">
+      <span class="section-label">Exam Practice</span>
+      <h2>Past Paper Questions</h2>
+      <p>Try these exam-style questions, then click to reveal the mark scheme answer.</p>
+
+      <details style="background: #fff; border: 2px solid #e0e0e0; border-radius: 8px; margin: 1rem 0; overflow: hidden;">
+        <summary style="padding: 1rem; font-weight: 700; cursor: pointer; user-select: none;">
+          Explain the difference between lossy and lossless compression. Give an example of when each type would be appropriate.
+          <span style="display: inline-block; background: linear-gradient(135deg, #4361ee, #3a0ca3); color: #fff; font-size: 0.75rem; font-weight: 700; padding: 2px 10px; border-radius: 50px; margin-left: 0.5rem;">4 marks</span>
+        </summary>
+        <div style="padding: 1rem; border-top: 1px solid #e0e0e0; background: #f8faf8;">
+          <p><strong>Mark scheme:</strong></p>
+          <p><strong>Lossy (2 marks):</strong></p>
+          <ul>
+            <li>Permanently removes data / some quality is lost / cannot be reversed <strong>(1)</strong></li>
+            <li>Appropriate for: streaming media / web images / where smaller size matters more than perfect quality (e.g. MP3, JPEG) <strong>(1)</strong></li>
+          </ul>
+          <p><strong>Lossless (2 marks):</strong></p>
+          <ul>
+            <li>No data is lost / original can be perfectly reconstructed <strong>(1)</strong></li>
+            <li>Appropriate for: text files / program code / medical images / where accuracy is essential (e.g. PNG, ZIP) <strong>(1)</strong></li>
+          </ul>
+        </div>
+      </details>
+
+      <details style="background: #fff; border: 2px solid #e0e0e0; border-radius: 8px; margin: 1rem 0; overflow: hidden;">
+        <summary style="padding: 1rem; font-weight: 700; cursor: pointer; user-select: none;">
+          Apply Run Length Encoding (RLE) to compress the following data: AAABBBBCCCCCCDD
+          <span style="display: inline-block; background: linear-gradient(135deg, #4361ee, #3a0ca3); color: #fff; font-size: 0.75rem; font-weight: 700; padding: 2px 10px; border-radius: 50px; margin-left: 0.5rem;">2 marks</span>
+        </summary>
+        <div style="padding: 1rem; border-top: 1px solid #e0e0e0; background: #f8faf8;">
+          <p><strong>Mark scheme:</strong></p>
+          <p>Compressed: <strong>3A 4B 6C 2D</strong> <strong>(1 mark)</strong></p>
+          <p>Original = 15 characters, compressed = 8 characters &mdash; demonstrating the data has been reduced in size <strong>(1 mark)</strong></p>
+        </div>
+      </details>
+
+      <details style="background: #fff; border: 2px solid #e0e0e0; border-radius: 8px; margin: 1rem 0; overflow: hidden;">
+        <summary style="padding: 1rem; font-weight: 700; cursor: pointer; user-select: none;">
+          Give two reasons why compression is used when transmitting files over the internet.
+          <span style="display: inline-block; background: linear-gradient(135deg, #4361ee, #3a0ca3); color: #fff; font-size: 0.75rem; font-weight: 700; padding: 2px 10px; border-radius: 50px; margin-left: 0.5rem;">2 marks</span>
+        </summary>
+        <div style="padding: 1rem; border-top: 1px solid #e0e0e0; background: #f8faf8;">
+          <p><strong>Mark scheme:</strong></p>
+          <ul>
+            <li>Reduces the file size so it takes less time to transmit / download <strong>(1)</strong></li>
+            <li>Uses less bandwidth / allows more data to be sent in the same time / reduces storage requirements on servers <strong>(1)</strong></li>
+          </ul>
+        </div>
+      </details>
+    </section>
+
     <!-- ==================== REFLECT ==================== -->
     <section class="reflect">
       <span class="section-label">Reflect</span>
@@ -896,6 +949,14 @@
       <p>The next time you take a photo, stream a song, or watch a video, think about the incredible mathematics happening behind the scenes &mdash; shrinking millions or billions of bytes into something that fits in your pocket and streams over the air. Compression is one of computer science&rsquo;s greatest achievements, and understanding it gives you real insight into how the digital world works.</p>
 
       <div class="extra-resources">
+        <h3>Video Resources</h3>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin: 1rem 0;">
+          <a href="https://youtu.be/1BPpmNL2DPw?si=hnfRq1MVpnzGUIC4" style="background: #fff; border: 2px solid #e0e0e0; border-radius: 8px; padding: 1rem; display: flex; align-items: center; gap: 1rem; text-decoration: none; transition: border-color 0.2s, box-shadow 0.2s;" target="_blank" rel="noopener" onmouseover="this.style.borderColor='#e63946'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.1)';" onmouseout="this.style.borderColor='#e0e0e0'; this.style.boxShadow='none';">
+            <span style="font-size: 2rem; flex-shrink: 0;" role="img" aria-label="play">&#x25B6;&#xFE0F;</span>
+            <div style="font-size: 0.9rem; color: #333; font-weight: 600;">Craig 'n' Dave: Compression<small style="display: block; font-weight: 400; color: #666; font-size: 0.8rem;">Lossy vs lossless compression techniques</small></div>
+          </a>
+        </div>
+
         <h3>Further Reading</h3>
         <ul>
           <li><a href="https://www.bbc.co.uk/bitesize/examspecs/zdqy7nb" target="_blank" rel="noopener">BBC Bitesize &mdash; Edexcel GCSE Computer Science</a> &mdash; Comprehensive coverage of compression including lossy, lossless, and RLE</li>
