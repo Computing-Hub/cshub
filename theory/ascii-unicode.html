@@ -9,26 +9,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="../css/style.css" />
   <style>
-    .interactive-exercise { background: linear-gradient(135deg, #f0f7ff, #e8f0fe); border: 2px solid #4361ee; border-radius: 12px; padding: 1.5rem; margin: 1.5rem 0; }
-    .interactive-exercise h3 { margin-top: 0; color: #4361ee; }
-    .exercise-problem { font-size: 1.3rem; font-weight: 700; margin: 1rem 0; font-family: 'JetBrains Mono', monospace; }
-    .exercise-controls { display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap; margin: 1rem 0; }
-    .exercise-input { font-family: 'JetBrains Mono', monospace; font-size: 1.1rem; padding: 0.5rem 1rem; border: 2px solid #ccc; border-radius: 8px; width: 200px; }
-    .exercise-input:focus { border-color: #4361ee; outline: none; }
-    .check-btn, .new-btn { padding: 0.5rem 1.2rem; font-size: 1rem; font-weight: 600; border: none; border-radius: 8px; cursor: pointer; transition: background 0.2s; }
-    .check-btn { background: #4361ee; color: white; }
-    .check-btn:hover { background: #3a0ca3; }
-    .new-btn { background: #06d6a0; color: white; }
-    .new-btn:hover { background: #05b384; }
-    .feedback { margin-top: 0.5rem; padding: 0.5rem 1rem; border-radius: 8px; font-weight: 600; display: none; }
-    .feedback.correct { background: #e6f9f1; color: #087f5b; border: 1px solid #06d6a0; display: block; }
-    .feedback.incorrect { background: #fff5f5; color: #c92a2a; border: 1px solid #e63946; display: block; }
-    .score-display { font-weight: 600; color: #4361ee; margin-top: 0.5rem; }
-    .did-you-know { background: linear-gradient(135deg, #e8f4fd, #d1ecf9); border: 2px solid #0dcaf0; border-radius: 12px; padding: 1.5rem; margin: 1rem 0; }
-    .did-you-know strong:first-child { color: #0a7c9f; display: block; margin-bottom: 0.25rem; }
-    .exam-tip { background: linear-gradient(135deg, #f3e8ff, #ede5ff); border: 2px solid #7209b7; border-radius: 12px; padding: 1.5rem; margin: 1rem 0; }
-    .exam-tip strong:first-child { color: #7209b7; display: block; margin-bottom: 0.25rem; }
-    .vocab-table td:first-child { font-weight: 700; white-space: nowrap; }
     .converter-output { font-family: 'JetBrains Mono', monospace; background: #1a1a2e; color: #06d6a0; border-radius: 10px; padding: 1rem 1.2rem; margin: 1rem 0; min-height: 60px; font-size: 0.95rem; line-height: 1.7; overflow-x: auto; }
     .converter-output .label { color: #8888cc; font-weight: 600; }
     .converter-output .char-code { color: #4cc9f0; }
@@ -420,10 +400,10 @@
 
       <div class="extra-resources">
         <h3>Video Resources</h3>
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin: 1rem 0;">
-          <a href="https://youtu.be/NVXR7GJ2uUM?si=hnfRq1MVpnzGUIC4" style="background: #fff; border: 2px solid #e0e0e0; border-radius: 8px; padding: 1rem; display: flex; align-items: center; gap: 1rem; text-decoration: none; transition: border-color 0.2s, box-shadow 0.2s;" target="_blank" rel="noopener" onmouseover="this.style.borderColor='#e63946'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.1)';" onmouseout="this.style.borderColor='#e0e0e0'; this.style.boxShadow='none';">
-            <span style="font-size: 2rem; flex-shrink: 0;" role="img" aria-label="play">&#x25B6;&#xFE0F;</span>
-            <div style="font-size: 0.9rem; color: #333; font-weight: 600;">Craig 'n' Dave: Representing Text<small style="display: block; font-weight: 400; color: #666; font-size: 0.8rem;">ASCII and Unicode character sets explained</small></div>
+        <div class="video-links">
+          <a href="https://youtu.be/NVXR7GJ2uUM?si=hnfRq1MVpnzGUIC4" class="video-card" target="_blank" rel="noopener">
+            <span class="play-icon" role="img" aria-label="play">&#x25B6;&#xFE0F;</span>
+            <div class="video-info">Craig 'n' Dave: Representing Text<small>ASCII and Unicode character sets explained</small></div>
           </a>
         </div>
 

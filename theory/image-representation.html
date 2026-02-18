@@ -9,27 +9,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="../css/style.css" />
   <style>
-    .interactive-exercise { background: linear-gradient(135deg, #f0f7ff, #e8f0fe); border: 2px solid #4361ee; border-radius: 12px; padding: 1.5rem; margin: 1.5rem 0; }
-    .interactive-exercise h3 { margin-top: 0; color: #4361ee; }
-    .exercise-problem { font-size: 1.3rem; font-weight: 700; margin: 1rem 0; font-family: 'JetBrains Mono', monospace; }
-    .exercise-controls { display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap; margin: 1rem 0; }
-    .exercise-input { font-family: 'JetBrains Mono', monospace; font-size: 1.1rem; padding: 0.5rem 1rem; border: 2px solid #ccc; border-radius: 8px; width: 160px; }
-    .exercise-input:focus { border-color: #4361ee; outline: none; }
-    .check-btn, .new-btn { padding: 0.5rem 1.2rem; font-size: 1rem; font-weight: 600; border: none; border-radius: 8px; cursor: pointer; transition: background 0.2s; }
-    .check-btn { background: #4361ee; color: white; }
-    .check-btn:hover { background: #3a0ca3; }
-    .new-btn { background: #06d6a0; color: white; }
-    .new-btn:hover { background: #05b384; }
-    .feedback { margin-top: 0.5rem; padding: 0.5rem 1rem; border-radius: 8px; font-weight: 600; display: none; }
-    .feedback.correct { background: #e6f9f1; color: #087f5b; border: 1px solid #06d6a0; display: block; }
-    .feedback.incorrect { background: #fff5f5; color: #c92a2a; border: 1px solid #e63946; display: block; }
-    .score-display { font-weight: 600; color: #4361ee; margin-top: 0.5rem; }
-    .did-you-know { background: linear-gradient(135deg, #e8f4fd, #d1ecf9); border: 2px solid #0dcaf0; border-radius: 12px; padding: 1.5rem; margin: 1rem 0; }
-    .did-you-know strong:first-child { color: #0a7c9f; display: block; margin-bottom: 0.25rem; }
-    .exam-tip { background: linear-gradient(135deg, #f3e8ff, #ede5ff); border: 2px solid #7209b7; border-radius: 12px; padding: 1.5rem; margin: 1rem 0; }
-    .exam-tip strong:first-child { color: #7209b7; display: block; margin-bottom: 0.25rem; }
-    .case-study { background: #ffffff; border: 2px solid #6c757d; border-radius: 12px; padding: 1.5rem; margin: 1rem 0; }
-    .case-study strong:first-child { color: #495057; display: block; margin-bottom: 0.25rem; }
     .pixel-grid { display: inline-grid; gap: 1px; background: #333; padding: 1px; border-radius: 4px; margin: 1rem 0; }
     .pixel-grid div { width: 20px; height: 20px; }
   </style>
@@ -408,12 +387,12 @@
       <h2>Past Paper Questions</h2>
       <p>Try these exam-style questions, then click to reveal the mark scheme answer.</p>
 
-      <details style="background: #fff; border: 2px solid #e0e0e0; border-radius: 8px; margin: 1rem 0; overflow: hidden;">
-        <summary style="padding: 1rem; font-weight: 700; cursor: pointer; user-select: none;">
+      <details class="past-paper">
+        <summary>
           Calculate the file size in bytes of an image that is 640 &times; 480 pixels with a colour depth of 8 bits. Show your working.
-          <span style="display: inline-block; background: linear-gradient(135deg, #4361ee, #3a0ca3); color: #fff; font-size: 0.75rem; font-weight: 700; padding: 2px 10px; border-radius: 50px; margin-left: 0.5rem;">3 marks</span>
+          <span class="mark-badge">3 marks</span>
         </summary>
-        <div style="padding: 1rem; border-top: 1px solid #e0e0e0; background: #f8faf8;">
+        <div class="paper-answer">
           <p><strong>Mark scheme:</strong></p>
           <p>File size = width &times; height &times; colour depth <strong>(1 mark)</strong></p>
           <p>= 640 &times; 480 &times; 8 = 2,457,600 bits <strong>(1 mark)</strong></p>
@@ -421,12 +400,12 @@
         </div>
       </details>
 
-      <details style="background: #fff; border: 2px solid #e0e0e0; border-radius: 8px; margin: 1rem 0; overflow: hidden;">
-        <summary style="padding: 1rem; font-weight: 700; cursor: pointer; user-select: none;">
+      <details class="past-paper">
+        <summary>
           Explain how increasing the resolution of an image affects its quality and file size.
-          <span style="display: inline-block; background: linear-gradient(135deg, #4361ee, #3a0ca3); color: #fff; font-size: 0.75rem; font-weight: 700; padding: 2px 10px; border-radius: 50px; margin-left: 0.5rem;">3 marks</span>
+          <span class="mark-badge">3 marks</span>
         </summary>
-        <div style="padding: 1rem; border-top: 1px solid #e0e0e0; background: #f8faf8;">
+        <div class="paper-answer">
           <p><strong>Mark scheme:</strong></p>
           <ul>
             <li>Increasing resolution means more pixels are used to represent the image <strong>(1)</strong></li>
@@ -436,12 +415,12 @@
         </div>
       </details>
 
-      <details style="background: #fff; border: 2px solid #e0e0e0; border-radius: 8px; margin: 1rem 0; overflow: hidden;">
-        <summary style="padding: 1rem; font-weight: 700; cursor: pointer; user-select: none;">
+      <details class="past-paper">
+        <summary>
           An image has a file size of 1,228,800 bits. The image dimensions are 640 &times; 480. Calculate the colour depth of the image.
-          <span style="display: inline-block; background: linear-gradient(135deg, #4361ee, #3a0ca3); color: #fff; font-size: 0.75rem; font-weight: 700; padding: 2px 10px; border-radius: 50px; margin-left: 0.5rem;">2 marks</span>
+          <span class="mark-badge">2 marks</span>
         </summary>
-        <div style="padding: 1rem; border-top: 1px solid #e0e0e0; background: #f8faf8;">
+        <div class="paper-answer">
           <p><strong>Mark scheme:</strong></p>
           <p>Colour depth = file size &divide; (width &times; height) <strong>(1 mark)</strong></p>
           <p>= 1,228,800 &divide; (640 &times; 480) = 1,228,800 &divide; 307,200 = <strong>4 bits</strong> <strong>(1 mark)</strong></p>
@@ -467,10 +446,10 @@
 
       <div class="extra-resources">
         <h3>Video Resources</h3>
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin: 1rem 0;">
-          <a href="https://youtu.be/FPehdYxrdsA?si=hnfRq1MVpnzGUIC4" style="background: #fff; border: 2px solid #e0e0e0; border-radius: 8px; padding: 1rem; display: flex; align-items: center; gap: 1rem; text-decoration: none; transition: border-color 0.2s, box-shadow 0.2s;" target="_blank" rel="noopener" onmouseover="this.style.borderColor='#e63946'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.1)';" onmouseout="this.style.borderColor='#e0e0e0'; this.style.boxShadow='none';">
-            <span style="font-size: 2rem; flex-shrink: 0;" role="img" aria-label="play">&#x25B6;&#xFE0F;</span>
-            <div style="font-size: 0.9rem; color: #333; font-weight: 600;">Craig 'n' Dave: Representing Images<small style="display: block; font-weight: 400; color: #666; font-size: 0.8rem;">Pixels, resolution, and colour depth</small></div>
+        <div class="video-links">
+          <a href="https://youtu.be/FPehdYxrdsA?si=hnfRq1MVpnzGUIC4" class="video-card" target="_blank" rel="noopener">
+            <span class="play-icon" role="img" aria-label="play">&#x25B6;&#xFE0F;</span>
+            <div class="video-info">Craig 'n' Dave: Representing Images<small>Pixels, resolution, and colour depth</small></div>
           </a>
         </div>
 

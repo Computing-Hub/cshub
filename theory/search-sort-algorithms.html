@@ -8,14 +8,6 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="../css/style.css" />
-  <style>
-    .video-links { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: var(--space-md); margin: var(--space-lg) 0; }
-    .video-card { background: var(--color-white); border: 2px solid #e0e0e0; border-radius: var(--radius-md); padding: var(--space-md); display: flex; align-items: center; gap: var(--space-md); text-decoration: none; transition: border-color 0.2s, box-shadow 0.2s; }
-    .video-card:hover { border-color: #e63946; box-shadow: var(--shadow-md); }
-    .video-card .play-icon { font-size: 2rem; flex-shrink: 0; }
-    .video-card .video-info { font-size: 0.9rem; color: var(--color-text); font-weight: 600; }
-    .video-card .video-info small { display: block; font-weight: 400; color: var(--color-text-light); font-size: 0.8rem; }
-  </style>
 </head>
 <body>
 
@@ -114,7 +106,7 @@ OUTPUT "Item not found"</code></pre>
       <p><strong>Pros:</strong> Works on any list (sorted or unsorted). Simple to understand and implement.</p>
       <p><strong>Cons:</strong> Slow for large lists &mdash; in the worst case, you check every single item.</p>
 
-      <div class="video-links" style="margin: var(--space-md) 0;">
+      <div class="video-links">
         <a href="https://youtu.be/UU5QAJ1XMqQ?si=q4WIBWwUEn5u_Juz" class="video-card" target="_blank" rel="noopener">
           <span class="play-icon" role="img" aria-label="play">&#x25B6;&#xFE0F;</span>
           <div class="video-info">Linear Search Explained<small>Watch a clear walkthrough of linear search in action</small></div>
@@ -157,7 +149,7 @@ OUTPUT "Item not found"</code></pre>
       <p><strong>Pros:</strong> Very fast, even with huge lists. Each step eliminates half the remaining data.</p>
       <p><strong>Cons:</strong> Only works on <strong>sorted</strong> data. Slightly more complex to implement.</p>
 
-      <div class="video-links" style="margin: var(--space-md) 0;">
+      <div class="video-links">
         <a href="https://youtu.be/8TNLRK_FyFc?si=A6segOCJ1y61oevH" class="video-card" target="_blank" rel="noopener">
           <span class="play-icon" role="img" aria-label="play">&#x25B6;&#xFE0F;</span>
           <div class="video-info">Binary Search Explained<small>See how binary search halves the data each step</small></div>
@@ -221,7 +213,7 @@ UNTIL swapped == FALSE</code></pre>
         Think about lining up students by height for a photo. You walk along the line comparing each pair of neighbours. If someone tall is in front of someone short, they swap places. You keep walking through the line until nobody needs to swap.
       </div>
 
-      <div class="video-links" style="margin: var(--space-md) 0;">
+      <div class="video-links">
         <a href="https://youtu.be/46HwsWfZbRU?si=26PzoU4m3lI9LLGQ" class="video-card" target="_blank" rel="noopener">
           <span class="play-icon" role="img" aria-label="play">&#x25B6;&#xFE0F;</span>
           <div class="video-info">Bubble Sort Explained<small>Step-by-step walkthrough of the bubble sort algorithm</small></div>
@@ -329,7 +321,7 @@ ENDFUNCTION</code></pre>
       <p><strong>Pros:</strong> Much faster than bubble sort for large lists. Consistent performance regardless of how the data starts.</p>
       <p><strong>Cons:</strong> Uses more memory (needs extra space for the sub-lists). More complex to code.</p>
 
-      <div class="video-links" style="margin: var(--space-md) 0;">
+      <div class="video-links">
         <a href="https://youtu.be/v-zT0BH5IU4?si=Xg7jjEvl55hCzocF" class="video-card" target="_blank" rel="noopener">
           <span class="play-icon" role="img" aria-label="play">&#x25B6;&#xFE0F;</span>
           <div class="video-info">Merge Sort Explained<small>How divide and conquer makes sorting fast</small></div>
