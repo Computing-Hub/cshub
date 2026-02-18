@@ -670,7 +670,122 @@ button:active, .button:active {
   margin: var(--space-md) 0;
 }
 
-/* --- Chapter List (index.html) --- */
+/* --- Index Page: Sidebar Layout --- */
+.index-page {
+  max-width: 1200px;
+}
+
+.site-layout {
+  display: flex;
+  gap: var(--space-xl);
+  align-items: flex-start;
+}
+
+/* --- Sidebar Navigation --- */
+.sidebar {
+  position: sticky;
+  top: var(--space-lg);
+  width: 280px;
+  min-width: 280px;
+  max-height: calc(100vh - 2 * var(--space-lg));
+  overflow-y: auto;
+  background: var(--color-white);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  padding: var(--space-md) 0;
+}
+
+.sidebar-toggle {
+  display: none;
+}
+
+.sidebar-inner {
+  padding: 0 var(--space-sm);
+}
+
+/* --- Navigation Groups --- */
+.nav-group {
+  margin-bottom: var(--space-xs);
+}
+
+.nav-group-title {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: var(--color-text);
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  user-select: none;
+  transition: background 0.2s;
+}
+
+.nav-group-title:hover {
+  background: var(--color-bg);
+}
+
+.nav-group-icon {
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+.nav-chevron {
+  margin-left: auto;
+  flex-shrink: 0;
+  width: 0.5em;
+  height: 0.5em;
+  border-right: 2px solid var(--color-text-light);
+  border-bottom: 2px solid var(--color-text-light);
+  transform: rotate(-45deg);
+  transition: transform 0.2s;
+}
+
+.nav-group.open .nav-chevron {
+  transform: rotate(45deg);
+}
+
+.nav-group-links {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+}
+
+.nav-group.open .nav-group-links {
+  max-height: 600px;
+}
+
+.nav-group-links li {
+  margin: 0;
+}
+
+.nav-group-links a {
+  display: block;
+  padding: var(--space-xs) var(--space-md) var(--space-xs) calc(var(--space-md) + 1.6rem);
+  font-size: 0.85rem;
+  color: var(--color-text-light);
+  text-decoration: none;
+  border-radius: var(--radius-sm);
+  transition: background 0.15s, color 0.15s;
+  line-height: 1.4;
+}
+
+.nav-group-links a:hover {
+  background: var(--color-idea);
+  color: var(--color-link);
+}
+
+/* --- Main Content Area --- */
+.main-content {
+  flex: 1;
+  min-width: 0;
+}
+
+/* --- Chapter List (kept for any remaining usage) --- */
 .chapter-list {
   display: grid;
   gap: var(--space-lg);
@@ -961,6 +1076,84 @@ tr:nth-child(even) {
 }
 
 /* --- Responsive Design --- */
+
+/* Sidebar collapses on tablets/mobile */
+@media (max-width: 900px) {
+  .index-page {
+    max-width: 100%;
+  }
+
+  .site-layout {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    position: relative;
+    top: 0;
+    width: 100%;
+    min-width: 0;
+    max-height: none;
+    overflow: visible;
+    padding: 0;
+    box-shadow: none;
+    background: transparent;
+    border-radius: 0;
+  }
+
+  .sidebar-toggle {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    width: 44px;
+    height: 44px;
+    background: var(--color-white);
+    border: 2px solid #e0e0e0;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    padding: 0;
+    margin-bottom: var(--space-sm);
+    transition: border-color 0.2s;
+  }
+
+  .sidebar-toggle:hover {
+    border-color: var(--color-link);
+  }
+
+  .sidebar-toggle span {
+    display: block;
+    width: 20px;
+    height: 2px;
+    background: var(--color-text);
+    border-radius: 2px;
+    transition: transform 0.2s, opacity 0.2s;
+  }
+
+  .sidebar-toggle.active span:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+  }
+  .sidebar-toggle.active span:nth-child(2) {
+    opacity: 0;
+  }
+  .sidebar-toggle.active span:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+  }
+
+  .sidebar-inner {
+    display: none;
+    background: var(--color-white);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    padding: var(--space-sm);
+    margin-bottom: var(--space-lg);
+  }
+
+  .sidebar-inner.open {
+    display: block;
+  }
+}
+
 @media (max-width: 600px) {
   body {
     padding: var(--space-md);
