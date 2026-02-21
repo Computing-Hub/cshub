@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PLS Quick-Fire Quiz - Python Fundamentals</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <style>
+    /* ---- Quiz-specific styles ---- */
+    .quiz-container {
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    /* Progress bar */
+    .progress-wrapper {
+      margin-bottom: var(--space-lg);
+    }
+    .progress-stats {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: var(--space-sm);
+      font-size: 0.9rem;
+      font-weight: 700;
+    }
+    .progress-score {
+      color: var(--color-link);
+    }
+    .progress-counter {
+      color: var(--color-text-light);
+    }
+    .progress-bar-track {
+      width: 100%;
+      height: 10px;
+      background: #e0e0e0;
+      border-radius: 50px;
+      overflow: hidden;
+    }
+    .progress-bar-fill {
+      height: 100%;
+      background: var(--gradient-blue);
+      border-radius: 50px;
+      transition: width 0.5s ease;
+      width: 0%;
+    }
+
+    /* Category badge */
+    .category-badge {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: var(--space-xs) var(--space-md);
+      border-radius: 50px;
+      color: var(--color-white);
+      margin-bottom: var(--space-md);
+    }
+    .category-badge.data-types { background: var(--gradient-blue); }
+    .category-badge.operators { background: var(--gradient-green); }
+    .category-badge.string-ops { background: var(--gradient-orange); }
+    .category-badge.io { background: var(--gradient-pink); }
+    .category-badge.control-flow { background: var(--gradient-purple); }
+    .category-badge.file-handling { background: linear-gradient(135deg, #0077b6, #4cc9f0); }
+
+    /* Question card */
+    .question-card {
+      background: var(--color-white);
+      border: 2px solid #e0e0e0;
+      border-radius: var(--radius-lg);
+      padding: var(--space-xl);
+      margin-bottom: var(--space-lg);
+      animation: slideInUp 0.4s ease;
+    }
+    .question-number {
+      font-size: 0.85rem;
+      font-weight: 800;
+      color: var(--color-text-light);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: var(--space-sm);
+    }
+    .question-text {
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin-bottom: var(--space-lg);
+      line-height: 1.5;
+    }
+    .question-text code {
+      background: rgba(67,97,238,0.1);
+      padding: 0.15em 0.45em;
+      border-radius: var(--radius-sm);
+      font-family: var(--font-code);
+      font-size: 0.88em;
+      color: #4361ee;
+      font-weight: 600;
+    }
+
+    /* Answer input area */
+    .answer-area {
+      display: flex;
+      gap: var(--space-sm);
+      align-items: stretch;
+      flex-wrap: wrap;
+    }
+    .answer-input {
+      flex: 1;
+      min-width: 200px;
+      font-family: var(--font-code);
+      font-size: 1rem;
+      padding: var(--space-sm) var(--space-md);
+      border: 2px solid #ccc;
+      border-radius: var(--radius-md);
+      transition: border-color 0.2s;
+      background: var(--color-white);
+      color: var(--color-text);
+    }
+    .answer-input:focus {
+      border-color: var(--color-link);
+      outline: none;
+    }
+    .answer-input:disabled {
+      background: #f5f5f5;
+      color: #999;
+    }
+
+    .check-btn, .next-btn, .restart-btn {
+      font-family: var(--font-body);
+      font-size: 0.9rem;
+      font-weight: 700;
+      padding: var(--space-sm) var(--space-lg);
+      border: none;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      transition: transform 0.15s, box-shadow 0.15s;
+      color: var(--color-white);
+    }
+    .check-btn:hover, .next-btn:hover, .restart-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-md);
+    }
+    .check-btn:active, .next-btn:active, .restart-btn:active {
+      transform: translateY(0) scale(0.98);
+    }
+    .check-btn:disabled, .next-btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+    .check-btn {
+      background: var(--gradient-blue);
+    }
+    .next-btn {
+      background: var(--gradient-green);
+    }
+    .restart-btn {
+      background: var(--gradient-purple);
+      font-size: 1rem;
+      padding: var(--space-md) var(--space-xl);
+    }
+
+    /* Feedback */
+    .quiz-feedback {
+      margin-top: var(--space-md);
+      padding: var(--space-sm) var(--space-md);
+      border-radius: var(--radius-md);
+      font-weight: 600;
+      font-size: 0.95rem;
+      display: none;
+      animation: slideInUp 0.3s ease;
+    }
+    .quiz-feedback.correct {
+      background: #e6f9f1;
+      color: #087f5b;
+      border: 2px solid #06d6a0;
+      display: block;
+    }
+    .quiz-feedback.incorrect {
+      background: #fff5f5;
+      color: #c92a2a;
+      border: 2px solid var(--color-error);
+      display: block;
+    }
+
+    /* Summary */
+    .summary-card {
+      background: var(--color-white);
+      border: 2px solid #e0e0e0;
+      border-radius: var(--radius-lg);
+      padding: var(--space-xl);
+      text-align: center;
+      animation: slideInUp 0.4s ease;
+    }
+    .summary-score {
+      font-size: 3rem;
+      font-weight: 800;
+      background: var(--gradient-hero);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin: var(--space-md) 0;
+    }
+    .summary-message {
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin-bottom: var(--space-lg);
+      color: var(--color-text);
+    }
+    .summary-sub {
+      font-size: 0.95rem;
+      color: var(--color-text-light);
+      margin-bottom: var(--space-lg);
+    }
+
+    /* Category breakdown */
+    .breakdown-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: var(--space-lg) 0;
+      text-align: left;
+    }
+    .breakdown-table th {
+      background: var(--color-idea);
+      font-weight: 700;
+      padding: var(--space-sm) var(--space-md);
+      border: 1px solid #e0e0e0;
+    }
+    .breakdown-table td {
+      padding: var(--space-sm) var(--space-md);
+      border: 1px solid #e0e0e0;
+    }
+    .breakdown-table tr:nth-child(even) {
+      background: #f8f8fa;
+    }
+    .breakdown-score {
+      font-weight: 700;
+      font-family: var(--font-code);
+    }
+    .breakdown-bar {
+      display: inline-block;
+      height: 8px;
+      border-radius: 4px;
+      margin-left: var(--space-sm);
+      vertical-align: middle;
+      transition: width 0.5s ease;
+    }
+
+    /* PLS reference table (shown after quiz) */
+    .pls-reference {
+      display: none;
+      animation: slideInUp 0.4s ease;
+    }
+    .pls-reference.visible {
+      display: block;
+    }
+    .pls-reference h2 {
+      margin-top: var(--space-xl);
+    }
+    .pls-reference table {
+      width: 100%;
+      margin: var(--space-md) 0 var(--space-lg) 0;
+    }
+    .pls-reference th {
+      background: linear-gradient(135deg, #4361ee, #4cc9f0);
+      color: var(--color-white);
+      font-weight: 700;
+    }
+    .pls-reference td code {
+      background: rgba(67,97,238,0.1);
+      padding: 0.15em 0.45em;
+      border-radius: var(--radius-sm);
+      font-family: var(--font-code);
+      font-size: 0.85em;
+      color: #4361ee;
+      font-weight: 600;
+    }
+
+    /* Animations */
+    @keyframes slideInUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 600px) {
+      .question-text {
+        font-size: 1rem;
+      }
+      .answer-area {
+        flex-direction: column;
+      }
+      .answer-input {
+        min-width: 100%;
+      }
+      .summary-score {
+        font-size: 2.2rem;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .question-card,
+      .summary-card,
+      .quiz-feedback,
+      .pls-reference {
+        animation: none !important;
+      }
+      .progress-bar-fill {
+        transition: none !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="site-header">
+    <p><a href="../index.html">&larr; Back to Course</a></p>
+    <h1>PLS Quick-Fire Quiz</h1>
+    <p class="subtitle">Test your knowledge of the Pearson Edexcel Python Programming Language Subset</p>
+  </header>
+
+  <main>
+    <div class="quiz-container">
+
+      <!-- Intro -->
+      <div class="key-concept" id="introBox">
+        <strong>What is the PLS?</strong>
+        <p>The <strong>Programming Language Subset (PLS)</strong> is the official list of Python commands, functions, and operators that Pearson Edexcel expect you to know for your GCSE Computer Science exam (Paper 2). This quiz tests your recall of the key items from that list.</p>
+        <p style="margin-bottom:0;">There are <strong>20 questions</strong> across 6 categories. Type your answer and hit Check. Good luck!</p>
+      </div>
+
+      <!-- Progress -->
+      <div class="progress-wrapper" id="progressWrapper">
+        <div class="progress-stats">
+          <span class="progress-score" id="scoreDisplay">Score: 0 / 20</span>
+          <span class="progress-counter" id="questionCounter">Question 1 of 20</span>
+        </div>
+        <div class="progress-bar-track">
+          <div class="progress-bar-fill" id="progressBar"></div>
+        </div>
+      </div>
+
+      <!-- Question area -->
+      <div id="questionArea"></div>
+
+      <!-- Summary area (hidden initially) -->
+      <div id="summaryArea" style="display:none;"></div>
+
+      <!-- PLS Reference (shown after completing the quiz) -->
+      <div class="pls-reference" id="plsReference">
+        <h2>PLS Reference Sheet</h2>
+        <p>Now you have completed the quiz, here is a summary of the key PLS items to revise.</p>
+
+        <h3>Data Types and Casting</h3>
+        <table>
+          <thead><tr><th>Function / Type</th><th>Description</th><th>Example</th></tr></thead>
+          <tbody>
+            <tr><td><code>int</code></td><td>Integer (whole number)</td><td><code>x = 42</code></td></tr>
+            <tr><td><code>float</code></td><td>Floating-point (decimal)</td><td><code>x = 3.14</code></td></tr>
+            <tr><td><code>str</code></td><td>String (text)</td><td><code>x = "hello"</code></td></tr>
+            <tr><td><code>bool</code></td><td>Boolean (True / False)</td><td><code>x = True</code></td></tr>
+            <tr><td><code>int()</code></td><td>Cast to integer</td><td><code>int("15")</code> returns <code>15</code></td></tr>
+            <tr><td><code>float()</code></td><td>Cast to float</td><td><code>float(7)</code> returns <code>7.0</code></td></tr>
+            <tr><td><code>str()</code></td><td>Cast to string</td><td><code>str(42)</code> returns <code>"42"</code></td></tr>
+            <tr><td><code>ord()</code></td><td>Character to ASCII value</td><td><code>ord("A")</code> returns <code>65</code></td></tr>
+            <tr><td><code>chr()</code></td><td>ASCII value to character</td><td><code>chr(65)</code> returns <code>"A"</code></td></tr>
+          </tbody>
+        </table>
+
+        <h3>Arithmetic Operators</h3>
+        <table>
+          <thead><tr><th>Operator</th><th>Name</th><th>Example</th></tr></thead>
+          <tbody>
+            <tr><td><code>+</code></td><td>Addition</td><td><code>3 + 2</code> = <code>5</code></td></tr>
+            <tr><td><code>-</code></td><td>Subtraction</td><td><code>5 - 1</code> = <code>4</code></td></tr>
+            <tr><td><code>*</code></td><td>Multiplication</td><td><code>4 * 3</code> = <code>12</code></td></tr>
+            <tr><td><code>/</code></td><td>Division</td><td><code>10 / 3</code> = <code>3.33...</code></td></tr>
+            <tr><td><code>//</code></td><td>Integer (floor) division</td><td><code>10 // 3</code> = <code>3</code></td></tr>
+            <tr><td><code>%</code></td><td>Modulus (remainder)</td><td><code>10 % 3</code> = <code>1</code></td></tr>
+            <tr><td><code>**</code></td><td>Exponentiation (power)</td><td><code>2 ** 3</code> = <code>8</code></td></tr>
+          </tbody>
+        </table>
+
+        <h3>Relational Operators</h3>
+        <table>
+          <thead><tr><th>Operator</th><th>Meaning</th></tr></thead>
+          <tbody>
+            <tr><td><code>==</code></td><td>Equal to</td></tr>
+            <tr><td><code>!=</code></td><td>Not equal to</td></tr>
+            <tr><td><code>&lt;</code></td><td>Less than</td></tr>
+            <tr><td><code>&gt;</code></td><td>Greater than</td></tr>
+            <tr><td><code>&lt;=</code></td><td>Less than or equal to</td></tr>
+            <tr><td><code>&gt;=</code></td><td>Greater than or equal to</td></tr>
+          </tbody>
+        </table>
+
+        <h3>Logical Operators</h3>
+        <table>
+          <thead><tr><th>Operator</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td><code>and</code></td><td>Both conditions must be True</td></tr>
+            <tr><td><code>or</code></td><td>At least one condition must be True</td></tr>
+            <tr><td><code>not</code></td><td>Reverses the truth value</td></tr>
+          </tbody>
+        </table>
+
+        <h3>String Operations</h3>
+        <table>
+          <thead><tr><th>Operation</th><th>Description</th><th>Example</th></tr></thead>
+          <tbody>
+            <tr><td><code>len()</code></td><td>Length of a string</td><td><code>len("hello")</code> returns <code>5</code></td></tr>
+            <tr><td><code>[index]</code></td><td>Access character at position</td><td><code>"hello"[1]</code> returns <code>"e"</code></td></tr>
+            <tr><td><code>.upper()</code></td><td>Convert to uppercase</td><td><code>"hello".upper()</code> returns <code>"HELLO"</code></td></tr>
+            <tr><td><code>.lower()</code></td><td>Convert to lowercase</td><td><code>"HELLO".lower()</code> returns <code>"hello"</code></td></tr>
+            <tr><td><code>[start:end]</code></td><td>Substring (slicing)</td><td><code>"hello"[1:4]</code> returns <code>"ell"</code></td></tr>
+          </tbody>
+        </table>
+
+        <h3>Input / Output</h3>
+        <table>
+          <thead><tr><th>Function</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td><code>input()</code></td><td>Get text input from the user</td></tr>
+            <tr><td><code>print()</code></td><td>Display output to the screen</td></tr>
+          </tbody>
+        </table>
+
+        <h3>Control Flow</h3>
+        <table>
+          <thead><tr><th>Keyword</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td><code>for</code></td><td>Definite iteration (known number of times)</td></tr>
+            <tr><td><code>while</code></td><td>Indefinite iteration (until a condition is met)</td></tr>
+            <tr><td><code>if / elif / else</code></td><td>Selection (branching)</td></tr>
+          </tbody>
+        </table>
+
+        <h3>File Handling</h3>
+        <table>
+          <thead><tr><th>Code</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td><code>open(filename, "a")</code></td><td>Open a file for appending</td></tr>
+            <tr><td><code>open(filename, "r")</code></td><td>Open a file for reading</td></tr>
+            <tr><td><code>open(filename, "w")</code></td><td>Open a file for writing</td></tr>
+            <tr><td><code>.readlines()</code></td><td>Read all lines into a list</td></tr>
+            <tr><td><code>.readline()</code></td><td>Read a single line</td></tr>
+            <tr><td><code>.write()</code></td><td>Write a string to a file</td></tr>
+            <tr><td><code>.close()</code></td><td>Close a file</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <p>Python Fundamentals &mdash; A KS4 Learning Platform</p>
+  </footer>
+
+<script>
+// ============================================================
+//  PLS Quick-Fire Quiz  -  20 Questions
+// ============================================================
+
+const QUESTIONS = [
+  // ---- Data Types & Casting (5) ----
+  {
+    category: "Data Types & Casting",
+    categoryClass: "data-types",
+    question: "What are the four main data types in the PLS? (Separate with commas)",
+    accept: [
+      (a) => {
+        const norm = a.toLowerCase().replace(/\s+/g, '');
+        const required = ['int', 'float', 'str', 'bool'];
+        return required.every(r => norm.includes(r));
+      }
+    ],
+    display: "int, float, str, bool"
+  },
+  {
+    category: "Data Types & Casting",
+    categoryClass: "data-types",
+    question: "What does <code>int(\"15\")</code> return?",
+    accept: ["15"],
+    display: "15"
+  },
+  {
+    category: "Data Types & Casting",
+    categoryClass: "data-types",
+    question: "What does <code>str(42)</code> return?",
+    accept: ['"42"', "'42'", "42", "\"42\"", "'42'"],
+    display: '"42"'
+  },
+  {
+    category: "Data Types & Casting",
+    categoryClass: "data-types",
+    question: "What does <code>float(7)</code> return?",
+    accept: ["7.0"],
+    display: "7.0"
+  },
+  {
+    category: "Data Types & Casting",
+    categoryClass: "data-types",
+    question: "What function converts a character to its ASCII value?",
+    accept: ["ord", "ord()"],
+    display: "ord()"
+  },
+
+  // ---- Operators (5) ----
+  {
+    category: "Operators",
+    categoryClass: "operators",
+    question: "Name four relational (comparison) operators from the PLS. (Separate with commas or spaces)",
+    accept: [
+      (a) => {
+        const ops = ['==', '!=', '<', '>', '<=', '>='];
+        const found = ops.filter(op => a.includes(op));
+        return found.length >= 4;
+      }
+    ],
+    display: "==  !=  <  >  <=  >="
+  },
+  {
+    category: "Operators",
+    categoryClass: "operators",
+    question: "What is the name of the <code>%</code> operator in Python?",
+    accept: ["modulus", "modulo", "mod", "remainder"],
+    display: "Modulus (remainder)"
+  },
+  {
+    category: "Operators",
+    categoryClass: "operators",
+    question: "What does <code>//</code> do in Python?",
+    accept: [
+      "integer division", "floor division", "int division",
+      "integer div", "floor div", "whole number division",
+      "divides and rounds down", "divides and gives the whole number",
+      (a) => {
+        const n = a.toLowerCase();
+        return (n.includes('integer') || n.includes('floor') || n.includes('whole')) && n.includes('divis');
+      }
+    ],
+    display: "Integer (floor) division"
+  },
+  {
+    category: "Operators",
+    categoryClass: "operators",
+    question: "What does <code>**</code> do in Python?",
+    accept: [
+      "exponentiation", "power", "exponent", "to the power of",
+      "raises to the power", "powers",
+      (a) => {
+        const n = a.toLowerCase();
+        return n.includes('power') || n.includes('exponent');
+      }
+    ],
+    display: "Exponentiation (power)"
+  },
+  {
+    category: "Operators",
+    categoryClass: "operators",
+    question: "What are the three logical operators in Python?",
+    accept: [
+      (a) => {
+        const n = a.toLowerCase();
+        return n.includes('and') && n.includes('or') && n.includes('not');
+      }
+    ],
+    display: "and, or, not"
+  },
+
+  // ---- String Operations (3) ----
+  {
+    category: "String Operations",
+    categoryClass: "string-ops",
+    question: "What does <code>len(\"hello\")</code> return?",
+    accept: ["5"],
+    display: "5"
+  },
+  {
+    category: "String Operations",
+    categoryClass: "string-ops",
+    question: "What does <code>\"hello\"[1]</code> return?",
+    accept: ["e", '"e"', "'e'"],
+    display: '"e"'
+  },
+  {
+    category: "String Operations",
+    categoryClass: "string-ops",
+    question: "What does <code>\"hello\".upper()</code> return?",
+    accept: ["HELLO", '"HELLO"', "'HELLO'"],
+    display: '"HELLO"'
+  },
+
+  // ---- Input/Output (2) ----
+  {
+    category: "Input / Output",
+    categoryClass: "io",
+    question: "What function gets text input from the user?",
+    accept: ["input", "input()"],
+    display: "input()"
+  },
+  {
+    category: "Input / Output",
+    categoryClass: "io",
+    question: "What function displays output to the screen?",
+    accept: ["print", "print()"],
+    display: "print()"
+  },
+
+  // ---- Control Flow (3) ----
+  {
+    category: "Control Flow",
+    categoryClass: "control-flow",
+    question: "Which loop is used for <strong>definite</strong> iteration (when you know how many times to repeat)?",
+    accept: ["for", "for loop", "a for loop"],
+    display: "for"
+  },
+  {
+    category: "Control Flow",
+    categoryClass: "control-flow",
+    question: "Which loop is used for <strong>indefinite</strong> iteration (when you do not know how many times to repeat)?",
+    accept: ["while", "while loop", "a while loop"],
+    display: "while"
+  },
+  {
+    category: "Control Flow",
+    categoryClass: "control-flow",
+    question: "What keyword is used for selection with multiple conditions (between <code>if</code> and <code>else</code>)?",
+    accept: ["elif", "else if"],
+    display: "elif"
+  },
+
+  // ---- File Handling (2) ----
+  {
+    category: "File Handling",
+    categoryClass: "file-handling",
+    question: 'What two parameters does <code>open()</code> need to open a file for <strong>appending</strong>? (e.g. <code>open(?, ?)</code>)',
+    accept: [
+      (a) => {
+        const n = a.toLowerCase().replace(/\s+/g, '').replace(/["']/g, '');
+        return (n.includes('filename') || n.includes('file') || n.includes('name')) && n.includes('a');
+      },
+      'filename, "a"', "filename, a", 'file, "a"', "file, a",
+      'the filename and "a"', 'filename and "a"',
+      'filename and a', 'the file name and a',
+      'filename, "a"', "filename, 'a'"
+    ],
+    display: 'filename and "a"'
+  },
+  {
+    category: "File Handling",
+    categoryClass: "file-handling",
+    question: "What method reads <strong>all lines</strong> from a file into a list?",
+    accept: ["readlines", "readlines()", ".readlines()", ".readlines"],
+    display: ".readlines()"
+  }
+];
+
+// ============================================================
+//  State
+// ============================================================
+let currentIndex = 0;
+let score = 0;
+let answered = new Array(QUESTIONS.length).fill(false);  // true/false per question
+let results = new Array(QUESTIONS.length).fill(null);     // true = correct, false = wrong
+let quizFinished = false;
+
+// ============================================================
+//  DOM references
+// ============================================================
+const questionArea = document.getElementById('questionArea');
+const summaryArea = document.getElementById('summaryArea');
+const progressBar = document.getElementById('progressBar');
+const scoreDisplay = document.getElementById('scoreDisplay');
+const questionCounter = document.getElementById('questionCounter');
+const progressWrapper = document.getElementById('progressWrapper');
+const introBox = document.getElementById('introBox');
+const plsReference = document.getElementById('plsReference');
+
+// ============================================================
+//  Render question
+// ============================================================
+function renderQuestion() {
+  if (currentIndex >= QUESTIONS.length) {
+    showSummary();
+    return;
+  }
+
+  const q = QUESTIONS[currentIndex];
+  const html = `
+    <div class="question-card" id="qCard">
+      <span class="category-badge ${q.categoryClass}">${q.category}</span>
+      <div class="question-number">Question ${currentIndex + 1} of ${QUESTIONS.length}</div>
+      <div class="question-text">${q.question}</div>
+      <div class="answer-area">
+        <input type="text" class="answer-input" id="answerInput"
+               placeholder="Type your answer..."
+               autocomplete="off" spellcheck="false" />
+        <button class="check-btn" id="checkBtn" onclick="checkAnswer()">Check Answer</button>
+        <button class="next-btn" id="nextBtn" onclick="nextQuestion()" style="display:none;">Next Question</button>
+      </div>
+      <div class="quiz-feedback" id="feedback"></div>
+    </div>
+  `;
+  questionArea.innerHTML = html;
+  summaryArea.style.display = 'none';
+
+  // Focus the input
+  const inp = document.getElementById('answerInput');
+  inp.focus();
+  inp.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      const checkBtn = document.getElementById('checkBtn');
+      const nextBtn = document.getElementById('nextBtn');
+      if (nextBtn.style.display !== 'none') {
+        nextQuestion();
+      } else if (!checkBtn.disabled) {
+        checkAnswer();
+      }
+    }
+  });
+
+  updateProgress();
+}
+
+// ============================================================
+//  Check answer
+// ============================================================
+function checkAnswer() {
+  const inp = document.getElementById('answerInput');
+  const feedback = document.getElementById('feedback');
+  const checkBtn = document.getElementById('checkBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  const raw = inp.value.trim();
+
+  if (!raw) {
+    inp.style.borderColor = 'var(--color-error)';
+    setTimeout(() => { inp.style.borderColor = '#ccc'; }, 800);
+    return;
+  }
+
+  const q = QUESTIONS[currentIndex];
+  const isCorrect = evaluateAnswer(raw, q.accept);
+
+  answered[currentIndex] = true;
+
+  if (isCorrect) {
+    results[currentIndex] = true;
+    score++;
+    feedback.className = 'quiz-feedback correct';
+    feedback.textContent = 'Correct!';
+    inp.style.borderColor = '#06d6a0';
+  } else {
+    results[currentIndex] = false;
+    feedback.className = 'quiz-feedback incorrect';
+    feedback.innerHTML = 'Not quite. The answer is: <strong>' + q.display + '</strong>';
+    inp.style.borderColor = 'var(--color-error)';
+  }
+
+  inp.disabled = true;
+  checkBtn.disabled = true;
+  checkBtn.style.display = 'none';
+  nextBtn.style.display = 'inline-block';
+  nextBtn.focus();
+
+  updateProgress();
+}
+
+// ============================================================
+//  Evaluate answer against accept list
+// ============================================================
+function evaluateAnswer(raw, acceptList) {
+  const normalised = raw.trim().toLowerCase();
+  for (const acceptItem of acceptList) {
+    if (typeof acceptItem === 'function') {
+      if (acceptItem(normalised)) return true;
+    } else {
+      if (normalised === acceptItem.toLowerCase()) return true;
+    }
+  }
+  return false;
+}
+
+// ============================================================
+//  Next question
+// ============================================================
+function nextQuestion() {
+  currentIndex++;
+  if (currentIndex >= QUESTIONS.length) {
+    showSummary();
+  } else {
+    renderQuestion();
+  }
+}
+
+// ============================================================
+//  Update progress bar + score
+// ============================================================
+function updateProgress() {
+  const answeredCount = answered.filter(Boolean).length;
+  const pct = (answeredCount / QUESTIONS.length) * 100;
+  progressBar.style.width = pct + '%';
+  scoreDisplay.textContent = 'Score: ' + score + ' / ' + QUESTIONS.length;
+  if (currentIndex < QUESTIONS.length) {
+    questionCounter.textContent = 'Question ' + (currentIndex + 1) + ' of ' + QUESTIONS.length;
+  } else {
+    questionCounter.textContent = 'Complete!';
+  }
+}
+
+// ============================================================
+//  Summary screen
+// ============================================================
+function showSummary() {
+  quizFinished = true;
+  questionArea.innerHTML = '';
+  progressWrapper.style.display = 'none';
+  introBox.style.display = 'none';
+
+  // Build category breakdown
+  const categories = {};
+  QUESTIONS.forEach((q, i) => {
+    if (!categories[q.category]) {
+      categories[q.category] = { total: 0, correct: 0, cssClass: q.categoryClass };
+    }
+    categories[q.category].total++;
+    if (results[i]) categories[q.category].correct++;
+  });
+
+  const pct = Math.round((score / QUESTIONS.length) * 100);
+  let message = '';
+  if (pct === 100) message = 'Perfect score! You know the PLS inside out!';
+  else if (pct >= 80) message = 'Excellent work! A few areas to brush up on.';
+  else if (pct >= 60) message = 'Good effort! Keep revising the PLS.';
+  else if (pct >= 40) message = 'A solid start. Review the reference table below.';
+  else message = 'Keep practising! Use the reference table below to revise.';
+
+  let breakdownRows = '';
+  for (const [cat, data] of Object.entries(categories)) {
+    const catPct = Math.round((data.correct / data.total) * 100);
+    const barColor = catPct === 100 ? '#06d6a0' : catPct >= 50 ? '#f77f00' : '#e63946';
+    breakdownRows += `
+      <tr>
+        <td><span class="category-badge ${data.cssClass}" style="font-size:0.7rem;margin:0;">${cat}</span></td>
+        <td>
+          <span class="breakdown-score">${data.correct} / ${data.total}</span>
+          <span class="breakdown-bar" style="width:${catPct}px;max-width:100px;background:${barColor};"></span>
+        </td>
+      </tr>`;
+  }
+
+  summaryArea.innerHTML = `
+    <div class="summary-card">
+      <div class="question-number">Quiz Complete</div>
+      <div class="summary-score">${score} / ${QUESTIONS.length}</div>
+      <div class="summary-message">${message}</div>
+      <div class="summary-sub">You scored ${pct}% overall</div>
+
+      <table class="breakdown-table">
+        <thead><tr><th>Category</th><th>Score</th></tr></thead>
+        <tbody>${breakdownRows}</tbody>
+      </table>
+
+      <button class="restart-btn" onclick="restartQuiz()">Restart Quiz</button>
+    </div>
+  `;
+  summaryArea.style.display = 'block';
+
+  // Show PLS reference
+  plsReference.classList.add('visible');
+}
+
+// ============================================================
+//  Restart
+// ============================================================
+function restartQuiz() {
+  currentIndex = 0;
+  score = 0;
+  answered = new Array(QUESTIONS.length).fill(false);
+  results = new Array(QUESTIONS.length).fill(null);
+  quizFinished = false;
+
+  summaryArea.style.display = 'none';
+  summaryArea.innerHTML = '';
+  progressWrapper.style.display = '';
+  introBox.style.display = '';
+  plsReference.classList.remove('visible');
+
+  renderQuestion();
+}
+
+// ============================================================
+//  Initialise
+// ============================================================
+renderQuestion();
+</script>
+
+</body>
+</html>

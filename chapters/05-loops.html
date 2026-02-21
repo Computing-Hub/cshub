@@ -57,6 +57,13 @@
       <h3>Example 1: For Loop with <code>range()</code></h3>
       <p>This program counts from 1 to 5 and prints each number. The <code>for</code> loop automatically moves through each value in the range.</p>
 
+      <div class="predict-box">
+        <strong>Predict First!</strong>
+        The code uses <code>range(1, 6)</code>. How many numbers will it print? Will it include 6? Careful &mdash; this is a common exam trap!
+        <button class="predict-toggle" onclick="this.nextElementSibling.classList.toggle('visible')">Reveal Answer</button>
+        <div class="predict-answer">1<br>2<br>3<br>4<br>5<br><br>range(1, 6) goes from 1 up to but NOT including 6. So it prints 5 numbers. The stop value is always excluded.</div>
+      </div>
+
       <div class="code-block">
         <div class="code-block-header">
           <span class="code-block-label">Python Code</span>
@@ -100,6 +107,13 @@ for fruit in fruits:
 
       <h3>Example 3: While Loop &mdash; Countdown</h3>
       <p>A <code>while</code> loop keeps running as long as its condition is <code>True</code>. This program counts down from 5 to 1, then prints "Blast off!"</p>
+
+      <div class="predict-box">
+        <strong>Predict First!</strong>
+        Trace through this code carefully. The variable <code>countdown</code> starts at 5. Each time around the loop, it decreases by 1. How many times will the loop body run? Will "Blast off!" appear inside or outside the loop?
+        <button class="predict-toggle" onclick="this.nextElementSibling.classList.toggle('visible')">Reveal Answer</button>
+        <div class="predict-answer">5<br>4<br>3<br>2<br>1<br>Blast off!<br><br>The loop runs 5 times (while countdown > 0). "Blast off!" is OUTSIDE the loop (not indented), so it runs once after the loop finishes.</div>
+      </div>
 
       <div class="code-block">
         <div class="code-block-header">

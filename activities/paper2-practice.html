@@ -1,0 +1,1782 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Paper 2 Exam Practice - Python Fundamentals</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <style>
+    /* ========== Page-specific styles ========== */
+
+    /* --- Progress Bar --- */
+    .exam-progress-wrapper {
+      margin-bottom: var(--space-xl);
+    }
+    .exam-progress-bar-bg {
+      width: 100%;
+      height: 12px;
+      background: #e0e0e0;
+      border-radius: 6px;
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+    }
+    .exam-progress-bar-fill {
+      height: 100%;
+      width: 0%;
+      background: var(--gradient-green);
+      border-radius: 6px;
+      transition: width 0.5s ease;
+    }
+    .exam-progress-text {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--color-text-light);
+      margin-top: var(--space-sm);
+    }
+    .total-score {
+      font-size: 1rem;
+      font-weight: 800;
+      background: var(--gradient-hero);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* --- Question Navigation Tabs --- */
+    .question-nav {
+      display: flex;
+      gap: var(--space-sm);
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: var(--space-xl);
+    }
+    .q-nav-btn {
+      font-family: var(--font-body);
+      font-size: 0.85rem;
+      font-weight: 700;
+      padding: var(--space-sm) var(--space-lg);
+      border: 2px solid #e0e0e0;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      background: var(--color-white);
+      color: var(--color-text);
+      transition: all 0.2s;
+      position: relative;
+    }
+    .q-nav-btn:hover {
+      border-color: var(--color-link);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+    .q-nav-btn.active {
+      background: var(--gradient-hero);
+      color: var(--color-white);
+      border-color: transparent;
+      box-shadow: var(--shadow-md);
+    }
+    .q-nav-btn .q-mark-badge {
+      position: absolute;
+      top: -8px;
+      right: -8px;
+      background: var(--gradient-green);
+      color: var(--color-white);
+      font-size: 0.65rem;
+      font-weight: 800;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--shadow-sm);
+    }
+    .q-nav-btn.answered .q-mark-badge {
+      display: flex;
+    }
+
+    /* --- Question Panels --- */
+    .question-panel {
+      display: none;
+    }
+    .question-panel.active {
+      display: block;
+      animation: fadeSlideIn 0.35s ease;
+    }
+    @keyframes fadeSlideIn {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .question-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+      margin-bottom: var(--space-lg);
+    }
+    .question-header h2 {
+      margin: 0;
+      font-size: 1.4rem;
+    }
+    .marks-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+      background: var(--gradient-purple);
+      color: var(--color-white);
+      font-size: 0.8rem;
+      font-weight: 700;
+      padding: var(--space-xs) var(--space-md);
+      border-radius: 50px;
+      white-space: nowrap;
+    }
+
+    .question-intro {
+      color: var(--color-text-light);
+      margin-bottom: var(--space-lg);
+      line-height: 1.7;
+    }
+
+    /* --- Code Display (exam-style, dark theme) --- */
+    .exam-code {
+      margin: var(--space-md) 0;
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      box-shadow: var(--shadow-md);
+    }
+    .exam-code-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--color-code-header);
+      padding: var(--space-sm) var(--space-md);
+    }
+    .exam-code-label {
+      color: #999;
+      font-size: 0.8rem;
+      font-family: var(--font-code);
+      font-weight: 600;
+    }
+    .exam-code pre {
+      margin: 0;
+      padding: var(--space-lg);
+      background: var(--color-code-bg);
+      overflow-x: auto;
+    }
+    .exam-code code {
+      font-family: var(--font-code);
+      font-size: 0.9rem;
+      color: var(--color-code-text);
+      line-height: 1.7;
+      white-space: pre;
+    }
+    .exam-code .line-number {
+      color: #585b70;
+      user-select: none;
+      display: inline-block;
+      width: 2.5ch;
+      text-align: right;
+      margin-right: 1.5ch;
+    }
+
+    /* --- Error correction inputs --- */
+    .error-item {
+      background: var(--color-white);
+      border: 2px solid #e0e0e0;
+      border-radius: var(--radius-md);
+      padding: var(--space-lg);
+      margin-bottom: var(--space-md);
+      transition: border-color 0.2s;
+    }
+    .error-item.correct {
+      border-color: #06d6a0;
+      background: #e6f9f1;
+    }
+    .error-item.incorrect {
+      border-color: var(--color-error);
+      background: #fff5f5;
+    }
+    .error-item label {
+      display: block;
+      font-weight: 700;
+      margin-bottom: var(--space-sm);
+      font-size: 0.95rem;
+    }
+    .error-item input[type="text"] {
+      font-family: var(--font-code);
+      font-size: 0.95rem;
+      padding: var(--space-sm) var(--space-md);
+      border: 2px solid #ccc;
+      border-radius: var(--radius-sm);
+      width: 100%;
+      max-width: 500px;
+      transition: border-color 0.2s;
+    }
+    .error-item input[type="text"]:focus {
+      border-color: var(--color-link);
+      outline: none;
+    }
+    .error-feedback {
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-top: var(--space-sm);
+      display: none;
+    }
+    .error-feedback.show {
+      display: block;
+    }
+    .error-feedback.correct {
+      color: #087f5b;
+    }
+    .error-feedback.incorrect {
+      color: #c92a2a;
+    }
+
+    /* --- Drag-and-drop (Q2) --- */
+    .parsons-source {
+      min-height: 60px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+      padding: var(--space-md);
+      background: var(--color-bg);
+      border: 2px dashed #ccc;
+      border-radius: var(--radius-md);
+      margin-bottom: var(--space-lg);
+    }
+    .parsons-source.drag-over {
+      border-color: var(--color-link);
+      background: rgba(67,97,238,0.05);
+    }
+    .parsons-target {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+    }
+    .parsons-slot {
+      min-height: 48px;
+      border: 2px dashed #ccc;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      padding: 4px;
+      position: relative;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .parsons-slot::before {
+      content: attr(data-slot);
+      position: absolute;
+      left: var(--space-sm);
+      font-size: 0.75rem;
+      color: #999;
+      font-family: var(--font-code);
+      pointer-events: none;
+    }
+    .parsons-slot.drag-over {
+      border-color: var(--color-link);
+      background: rgba(67,97,238,0.05);
+    }
+    .parsons-slot.correct {
+      border-color: #06d6a0;
+      background: #e6f9f1;
+    }
+    .parsons-slot.correct::after {
+      content: '\2713';
+      position: absolute;
+      right: var(--space-sm);
+      color: #06d6a0;
+      font-size: 1.1rem;
+      font-weight: 700;
+    }
+    .parsons-slot.incorrect {
+      border-color: var(--color-error);
+      background: #fff5f5;
+    }
+    .parsons-block {
+      font-family: var(--font-code);
+      font-size: 0.85rem;
+      background: var(--color-code-bg);
+      color: var(--color-code-text);
+      border: 1px solid #45475a;
+      border-radius: var(--radius-sm);
+      padding: var(--space-sm) var(--space-md);
+      cursor: grab;
+      user-select: none;
+      transition: transform 0.15s, box-shadow 0.15s;
+      white-space: pre;
+      line-height: 1.5;
+    }
+    .parsons-block:hover {
+      box-shadow: var(--shadow-md);
+      transform: translateY(-1px);
+    }
+    .parsons-block.dragging {
+      opacity: 0.4;
+    }
+    .parsons-slot .parsons-block {
+      width: 100%;
+      cursor: grab;
+      animation: popIn 0.25s ease;
+    }
+    @keyframes popIn {
+      0% { transform: scale(0.9); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    /* --- Dropdown selects (Q3) --- */
+    .code-with-blanks {
+      margin: var(--space-md) 0;
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      box-shadow: var(--shadow-md);
+    }
+    .code-with-blanks pre {
+      margin: 0;
+      padding: var(--space-lg);
+      background: var(--color-code-bg);
+      overflow-x: auto;
+      line-height: 2;
+    }
+    .code-with-blanks code {
+      font-family: var(--font-code);
+      font-size: 0.9rem;
+      color: var(--color-code-text);
+    }
+    .blank-select {
+      font-family: var(--font-code);
+      font-size: 0.85rem;
+      padding: 4px 8px;
+      border: 2px solid #f77f00;
+      border-radius: var(--radius-sm);
+      background: #1e1e2e;
+      color: #f77f00;
+      font-weight: 600;
+      cursor: pointer;
+      appearance: auto;
+    }
+    .blank-select.correct {
+      border-color: #06d6a0;
+      color: #06d6a0;
+    }
+    .blank-select.incorrect {
+      border-color: var(--color-error);
+      color: var(--color-error);
+    }
+
+    /* --- Trace Table (Q4) --- */
+    .trace-table-wrapper {
+      overflow-x: auto;
+      margin: var(--space-md) 0;
+    }
+    .trace-table {
+      width: 100%;
+      border-collapse: collapse;
+      box-shadow: var(--shadow-sm);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+    }
+    .trace-table th {
+      background: var(--color-code-bg);
+      color: var(--color-code-text);
+      font-family: var(--font-code);
+      font-weight: 600;
+      font-size: 0.85rem;
+      padding: var(--space-sm) var(--space-md);
+      text-align: center;
+      border: 1px solid #45475a;
+    }
+    .trace-table td {
+      padding: var(--space-sm) var(--space-md);
+      text-align: center;
+      border: 1px solid #e0e0e0;
+      font-family: var(--font-code);
+      font-size: 0.9rem;
+    }
+    .trace-table .given-value {
+      background: #f0f2f5;
+      color: var(--color-text);
+      font-weight: 600;
+    }
+    .trace-table input[type="text"] {
+      font-family: var(--font-code);
+      font-size: 0.9rem;
+      padding: 4px 8px;
+      border: 2px solid #ccc;
+      border-radius: var(--radius-sm);
+      width: 70px;
+      text-align: center;
+      transition: border-color 0.2s;
+    }
+    .trace-table input[type="text"]:focus {
+      border-color: var(--color-link);
+      outline: none;
+    }
+    .trace-table input.correct {
+      border-color: #06d6a0;
+      background: #e6f9f1;
+    }
+    .trace-table input.incorrect {
+      border-color: var(--color-error);
+      background: #fff5f5;
+    }
+
+    /* --- Multiple Choice (Q5) --- */
+    .mc-group {
+      background: var(--color-white);
+      border: 2px solid #e0e0e0;
+      border-radius: var(--radius-md);
+      padding: var(--space-lg);
+      margin-bottom: var(--space-md);
+      transition: border-color 0.2s;
+    }
+    .mc-group.correct {
+      border-color: #06d6a0;
+      background: #e6f9f1;
+    }
+    .mc-group.incorrect {
+      border-color: var(--color-error);
+      background: #fff5f5;
+    }
+    .mc-group h4 {
+      margin-top: 0;
+      margin-bottom: var(--space-md);
+    }
+    .mc-option {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--space-sm);
+      padding: var(--space-sm) var(--space-md);
+      margin-bottom: var(--space-xs);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .mc-option:hover {
+      background: rgba(67,97,238,0.06);
+    }
+    .mc-option input[type="radio"] {
+      margin-top: 4px;
+      flex-shrink: 0;
+      accent-color: var(--color-link);
+    }
+    .mc-option label {
+      cursor: pointer;
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+    .mc-explanation {
+      display: none;
+      margin-top: var(--space-sm);
+      padding: var(--space-sm) var(--space-md);
+      background: rgba(67,97,238,0.06);
+      border-radius: var(--radius-sm);
+      font-size: 0.85rem;
+      color: var(--color-text-light);
+      line-height: 1.6;
+    }
+    .mc-explanation.show {
+      display: block;
+    }
+
+    /* --- Code Editor (Q6) --- */
+    .code-editor-area {
+      margin: var(--space-md) 0;
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      box-shadow: var(--shadow-md);
+    }
+    .code-editor-area .code-block-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--color-code-header);
+      padding: var(--space-sm) var(--space-md);
+    }
+    .code-editor-area pre {
+      margin: 0;
+      padding: var(--space-lg);
+      background: var(--color-code-bg);
+      overflow-x: auto;
+    }
+    .code-editor-area code[contenteditable="true"] {
+      display: block;
+      font-family: var(--font-code);
+      font-size: 0.9rem;
+      color: var(--color-code-text);
+      line-height: 1.7;
+      white-space: pre;
+      outline: none;
+      min-height: 250px;
+      cursor: text;
+    }
+    .code-editor-area code[contenteditable="true"]:focus {
+      box-shadow: inset 0 0 0 2px var(--color-idea-border);
+    }
+
+    /* --- Mark Scheme Reveal --- */
+    .mark-scheme {
+      display: none;
+      margin-top: var(--space-lg);
+      border: 2px solid #06d6a0;
+      border-radius: var(--radius-md);
+      overflow: hidden;
+    }
+    .mark-scheme.show {
+      display: block;
+      animation: fadeSlideIn 0.35s ease;
+    }
+    .mark-scheme-header {
+      background: var(--gradient-green);
+      color: var(--color-white);
+      padding: var(--space-sm) var(--space-md);
+      font-weight: 700;
+      font-size: 0.9rem;
+    }
+    .mark-scheme-body {
+      padding: var(--space-lg);
+      background: #e6f9f1;
+    }
+    .mark-scheme-body ul {
+      list-style: none;
+      padding: 0;
+    }
+    .mark-scheme-body li {
+      padding: var(--space-xs) 0;
+      padding-left: var(--space-lg);
+      position: relative;
+      line-height: 1.6;
+    }
+    .mark-scheme-body li::before {
+      content: '\2713';
+      position: absolute;
+      left: 0;
+      color: #06d6a0;
+      font-weight: 700;
+    }
+    .mark-scheme-body .ms-marks {
+      font-weight: 700;
+      color: #7209b7;
+    }
+
+    /* --- Action Buttons --- */
+    .question-actions {
+      display: flex;
+      gap: var(--space-sm);
+      flex-wrap: wrap;
+      margin-top: var(--space-lg);
+      align-items: center;
+    }
+    .check-btn {
+      background: var(--gradient-blue);
+      color: var(--color-white);
+    }
+    .reveal-btn {
+      background: var(--gradient-orange);
+      color: var(--color-white);
+    }
+    .reset-q-btn {
+      background: #777;
+      color: var(--color-white);
+    }
+    .q-score-display {
+      font-weight: 700;
+      font-size: 0.95rem;
+      margin-left: auto;
+      color: var(--color-link);
+    }
+
+    /* --- Exam Tip Box --- */
+    .paper2-tip {
+      background: linear-gradient(135deg, #e6f9f1, #d0f0e0);
+      border: 2px solid #06d6a0;
+      border-radius: var(--radius-md);
+      padding: var(--space-lg);
+      margin: var(--space-lg) 0;
+    }
+    .paper2-tip strong:first-child {
+      display: block;
+      margin-bottom: var(--space-xs);
+      color: #06a080;
+    }
+
+    /* --- Output box reuse --- */
+    .q6-output {
+      padding: var(--space-md);
+      background: var(--color-output-bg);
+      border-top: 2px solid var(--color-output-border);
+      font-family: var(--font-code);
+      font-size: 0.9rem;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      min-height: 2.5em;
+      color: var(--color-text);
+    }
+    .q6-output.empty {
+      color: #999;
+      font-style: italic;
+    }
+    .q6-output.error {
+      color: var(--color-error);
+      background: #fff0f0;
+      border-top-color: var(--color-error);
+    }
+
+    /* --- Responsive --- */
+    @media (max-width: 600px) {
+      .question-nav {
+        gap: var(--space-xs);
+      }
+      .q-nav-btn {
+        padding: var(--space-xs) var(--space-sm);
+        font-size: 0.75rem;
+      }
+      .parsons-block {
+        font-size: 0.75rem;
+        padding: var(--space-xs) var(--space-sm);
+      }
+      .trace-table input[type="text"] {
+        width: 50px;
+        font-size: 0.8rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="site-header">
+    <p><a href="../index.html">&larr; Back to Course</a></p>
+    <h1>Paper 2 Exam Practice</h1>
+    <p class="subtitle">Practice exam-style questions that mirror the real Paper 2 format</p>
+  </header>
+
+  <main>
+
+    <!-- ===== Exam Tip ===== -->
+    <div class="paper2-tip">
+      <strong>Exam Strategy: Paper 2 is about reading code, not just writing it</strong>
+      <p>The Chief Examiner's report highlights that Paper 2 tests your ability to <strong>read, analyse and refine</strong> code. You will be asked to fix errors, rearrange code, fill in blanks, complete trace tables, and design full programs. Practice each skill below.</p>
+    </div>
+
+    <!-- ===== Progress Bar ===== -->
+    <div class="exam-progress-wrapper">
+      <div class="exam-progress-bar-bg">
+        <div class="exam-progress-bar-fill" id="progressBarFill"></div>
+      </div>
+      <div class="exam-progress-text">
+        <span id="progressLabel">0 / 46 marks</span>
+        <span class="total-score" id="totalScoreDisplay">Total: 0 / 46</span>
+      </div>
+    </div>
+
+    <!-- ===== Question Navigation ===== -->
+    <div class="question-nav" id="questionNav">
+      <button class="q-nav-btn active" onclick="showQuestion(0)">Q1<span class="q-mark-badge" id="qBadge0"></span></button>
+      <button class="q-nav-btn" onclick="showQuestion(1)">Q2<span class="q-mark-badge" id="qBadge1"></span></button>
+      <button class="q-nav-btn" onclick="showQuestion(2)">Q3<span class="q-mark-badge" id="qBadge2"></span></button>
+      <button class="q-nav-btn" onclick="showQuestion(3)">Q4<span class="q-mark-badge" id="qBadge3"></span></button>
+      <button class="q-nav-btn" onclick="showQuestion(4)">Q5<span class="q-mark-badge" id="qBadge4"></span></button>
+      <button class="q-nav-btn" onclick="showQuestion(5)">Q6<span class="q-mark-badge" id="qBadge5"></span></button>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- QUESTION 1: Error Correction (8 marks)                       -->
+    <!-- ============================================================ -->
+    <div class="question-panel active" id="q0">
+      <section class="practice">
+        <div class="question-header">
+          <h2>Question 1: Error Correction</h2>
+          <span class="marks-badge">8 marks</span>
+        </div>
+        <p class="question-intro">The following Python program is intended to convert a temperature from Celsius to Fahrenheit. However, it contains <strong>4 errors</strong> (a mix of syntax and logic errors). For each error, identify the line and type the corrected version of that line.</p>
+
+        <div class="exam-code">
+          <div class="exam-code-header">
+            <span class="exam-code-label">temperature_converter.py</span>
+          </div>
+          <pre><code><span class="line-number"> 1</span>celsius = float(input("Enter temperature in Celsius: "))
+<span class="line-number"> 2</span>fahrenheit = (celsius * 9/5) + 32
+<span class="line-number"> 3</span>print("Result: " + farenheit + " degrees F")
+<span class="line-number"> 4</span>if celsius > 30
+<span class="line-number"> 5</span>    print("That is hot!")
+<span class="line-number"> 6</span>elif celsius > 20:
+<span class="line-number"> 7</span>    print("That is warm.")
+<span class="line-number"> 8</span>elif celsius = 20:
+<span class="line-number"> 9</span>    print("That is exactly 20 degrees.")
+<span class="line-number">10</span>else:
+<span class="line-number">11</span>    print("That is cool.")</code></pre>
+        </div>
+
+        <h3>Identify and correct each error:</h3>
+
+        <div class="error-item" id="err0">
+          <label>Error 1 (Line 3): The variable name is misspelled</label>
+          <p style="font-size: 0.85rem; color: var(--color-text-light);">Type the corrected version of line 3:</p>
+          <input type="text" id="err0input" placeholder='print("Result: " + ...' />
+          <div class="error-feedback" id="err0fb"></div>
+        </div>
+
+        <div class="error-item" id="err1">
+          <label>Error 2 (Line 3): Cannot concatenate string and float</label>
+          <p style="font-size: 0.85rem; color: var(--color-text-light);">Type the corrected version of line 3 (fix both issues on this line):</p>
+          <input type="text" id="err1input" placeholder='print("Result: " + str(...' />
+          <div class="error-feedback" id="err1fb"></div>
+        </div>
+
+        <div class="error-item" id="err2">
+          <label>Error 3 (Line 4): Missing colon after if statement</label>
+          <p style="font-size: 0.85rem; color: var(--color-text-light);">Type the corrected version of line 4:</p>
+          <input type="text" id="err2input" placeholder="if celsius > 30..." />
+          <div class="error-feedback" id="err2fb"></div>
+        </div>
+
+        <div class="error-item" id="err3">
+          <label>Error 4 (Line 8): Wrong comparison operator</label>
+          <p style="font-size: 0.85rem; color: var(--color-text-light);">Type the corrected version of line 8:</p>
+          <input type="text" id="err3input" placeholder="elif celsius ..." />
+          <div class="error-feedback" id="err3fb"></div>
+        </div>
+
+        <div class="question-actions">
+          <button class="check-btn" onclick="checkQ1()">Check Answers</button>
+          <button class="reveal-btn" onclick="revealQ1()">Show Mark Scheme</button>
+          <button class="reset-q-btn" onclick="resetQ1()">Reset</button>
+          <span class="q-score-display" id="q0score"></span>
+        </div>
+
+        <div class="mark-scheme" id="ms0">
+          <div class="mark-scheme-header">Mark Scheme - Question 1</div>
+          <div class="mark-scheme-body">
+            <ul>
+              <li><strong>Error 1 - Misspelled variable:</strong> <code>farenheit</code> should be <code>fahrenheit</code> <span class="ms-marks">[1 mark]</span> for identifying, <span class="ms-marks">[1 mark]</span> for correction</li>
+              <li><strong>Error 2 - Missing str():</strong> Need <code>str(fahrenheit)</code> to concatenate with string <span class="ms-marks">[1 mark]</span> for identifying, <span class="ms-marks">[1 mark]</span> for correction</li>
+              <li><strong>Error 3 - Missing colon:</strong> <code>if celsius > 30:</code> requires a colon <span class="ms-marks">[1 mark]</span> for identifying, <span class="ms-marks">[1 mark]</span> for correction</li>
+              <li><strong>Error 4 - Wrong operator:</strong> <code>=</code> should be <code>==</code> for comparison <span class="ms-marks">[1 mark]</span> for identifying, <span class="ms-marks">[1 mark]</span> for correction</li>
+            </ul>
+            <p><strong>Corrected line 3:</strong> <code>print("Result: " + str(fahrenheit) + " degrees F")</code></p>
+            <p><strong>Corrected line 4:</strong> <code>if celsius > 30:</code></p>
+            <p><strong>Corrected line 8:</strong> <code>elif celsius == 20:</code></p>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- QUESTION 2: Code Rearrangement / Parsons Problem (6 marks)   -->
+    <!-- ============================================================ -->
+    <div class="question-panel" id="q1">
+      <section class="practice">
+        <div class="question-header">
+          <h2>Question 2: Code Rearrangement</h2>
+          <span class="marks-badge">6 marks</span>
+        </div>
+        <p class="question-intro">The following lines of code should form a working <strong>password checker</strong> program. The program asks the user for a password, gives them 3 attempts, and tells them whether they got it right or ran out of tries. <strong>Drag the lines into the correct order.</strong></p>
+
+        <h4>Available Code Blocks:</h4>
+        <div class="parsons-source" id="parsonsSource"></div>
+
+        <h4>Build Your Program (drag lines here):</h4>
+        <div class="parsons-target" id="parsonsTarget"></div>
+
+        <div class="question-actions">
+          <button class="check-btn" onclick="checkQ2()">Check Answers</button>
+          <button class="reveal-btn" onclick="revealQ2()">Show Mark Scheme</button>
+          <button class="reset-q-btn" onclick="resetQ2()">Reset</button>
+          <span class="q-score-display" id="q1score"></span>
+        </div>
+
+        <div class="mark-scheme" id="ms1">
+          <div class="mark-scheme-header">Mark Scheme - Question 2</div>
+          <div class="mark-scheme-body">
+            <p><strong>Correct order (1 mark per correctly placed line, up to 6 marks):</strong></p>
+            <ul>
+              <li><code>password = "secret123"</code> <span class="ms-marks">[1 mark]</span></li>
+              <li><code>attempts = 0</code> <span class="ms-marks">[1 mark]</span></li>
+              <li><code>while attempts &lt; 3:</code> <span class="ms-marks">[1 mark]</span></li>
+              <li><code>&nbsp;&nbsp;&nbsp;&nbsp;guess = input("Enter password: ")</code> <span class="ms-marks">[1 mark]</span></li>
+              <li><code>&nbsp;&nbsp;&nbsp;&nbsp;if guess == password:</code> <span class="ms-marks">[1 mark]</span></li>
+              <li><code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;print("Access granted!")</code> <span class="ms-marks">[0 marks - free, part of structure]</span></li>
+              <li><code>&nbsp;&nbsp;&nbsp;&nbsp;attempts = attempts + 1</code> <span class="ms-marks">[1 mark]</span></li>
+              <li><code>print("No attempts remaining.")</code> <span class="ms-marks">[0 marks - free, closing statement]</span></li>
+            </ul>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- QUESTION 3: Complete the Code (6 marks)                      -->
+    <!-- ============================================================ -->
+    <div class="question-panel" id="q2">
+      <section class="practice">
+        <div class="question-header">
+          <h2>Question 3: Complete the Code</h2>
+          <span class="marks-badge">6 marks</span>
+        </div>
+        <p class="question-intro">The program below is a <strong>shopping list manager</strong>. It allows the user to keep adding items until they type "done", then displays the complete list. Some lines are incomplete. <strong>Select the correct Python statement</strong> from each dropdown to complete the program.</p>
+
+        <div class="code-with-blanks">
+          <div class="exam-code-header">
+            <span class="exam-code-label">shopping_list.py</span>
+          </div>
+          <pre><code>shopping_list = []
+item = ""
+
+<select class="blank-select" id="blank0">
+  <option value="">-- Select --</option>
+  <option value="for item in shopping_list:">for item in shopping_list:</option>
+  <option value='while item != "done":'>while item != "done":</option>
+  <option value="if item != done:">if item != done:</option>
+  <option value='for i in range("done"):'>for i in range("done"):</option>
+</select>
+    item = input("Enter an item (or 'done' to finish): ")
+    if item != "done":
+        <select class="blank-select" id="blank1">
+  <option value="">-- Select --</option>
+  <option value="shopping_list.insert(item)">shopping_list.insert(item)</option>
+  <option value="shopping_list.append(item)">shopping_list.append(item)</option>
+  <option value="shopping_list.add(item)">shopping_list.add(item)</option>
+  <option value="shopping_list.extend(item)">shopping_list.extend(item)</option>
+</select>
+
+<select class="blank-select" id="blank2">
+  <option value="">-- Select --</option>
+  <option value="if len(shopping_list) > 0:">if len(shopping_list) > 0:</option>
+  <option value="if shopping_list == True:">if shopping_list == True:</option>
+  <option value="if len(shopping_list) > 1:">if len(shopping_list) > 1:</option>
+  <option value="if count(shopping_list) >= 0:">if count(shopping_list) >= 0:</option>
+</select>
+    print("Your shopping list:")
+    for i in range(len(shopping_list)):
+        print(str(i + 1) + ". " + shopping_list[i])
+else:
+    print("Your shopping list is empty.")</code></pre>
+        </div>
+
+        <div class="question-actions">
+          <button class="check-btn" onclick="checkQ3()">Check Answers</button>
+          <button class="reveal-btn" onclick="revealQ3()">Show Mark Scheme</button>
+          <button class="reset-q-btn" onclick="resetQ3()">Reset</button>
+          <span class="q-score-display" id="q2score"></span>
+        </div>
+
+        <div class="mark-scheme" id="ms2">
+          <div class="mark-scheme-header">Mark Scheme - Question 3</div>
+          <div class="mark-scheme-body">
+            <ul>
+              <li><strong>Blank 1:</strong> <code>while item != "done":</code> &mdash; a while loop is needed because we do not know how many items the user will enter <span class="ms-marks">[2 marks]</span></li>
+              <li><strong>Blank 2:</strong> <code>shopping_list.append(item)</code> &mdash; append adds a single item to the end of a list. insert requires an index. add is for sets. extend is for adding multiple items. <span class="ms-marks">[2 marks]</span></li>
+              <li><strong>Blank 3:</strong> <code>if len(shopping_list) > 0:</code> &mdash; checks if the list has any items before displaying <span class="ms-marks">[2 marks]</span></li>
+            </ul>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- QUESTION 4: Trace Table (8 marks)                            -->
+    <!-- ============================================================ -->
+    <div class="question-panel" id="q3">
+      <section class="practice">
+        <div class="question-header">
+          <h2>Question 4: Trace Table</h2>
+          <span class="marks-badge">8 marks</span>
+        </div>
+        <p class="question-intro">The program below calculates the factorial of 5 (i.e. 5! = 5 &times; 4 &times; 3 &times; 2 &times; 1 = 120). <strong>Complete the trace table</strong> by filling in the values of each variable after each iteration of the loop.</p>
+
+        <div class="exam-code">
+          <div class="exam-code-header">
+            <span class="exam-code-label">factorial.py</span>
+          </div>
+          <pre><code><span class="line-number">1</span>number = 5
+<span class="line-number">2</span>result = 1
+<span class="line-number">3</span>counter = 1
+<span class="line-number">4</span>while counter &lt;= number:
+<span class="line-number">5</span>    result = result * counter
+<span class="line-number">6</span>    counter = counter + 1
+<span class="line-number">7</span>print(result)</code></pre>
+        </div>
+
+        <h4>Complete the trace table (fill in the blank cells):</h4>
+        <div class="trace-table-wrapper">
+          <table class="trace-table">
+            <thead>
+              <tr>
+                <th>Iteration</th>
+                <th>counter (start)</th>
+                <th>counter &lt;= number</th>
+                <th>result (after line 5)</th>
+                <th>counter (after line 6)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="given-value">1</td>
+                <td class="given-value">1</td>
+                <td class="given-value">True</td>
+                <td><input type="text" id="trace_0_0" data-answer="1" /></td>
+                <td><input type="text" id="trace_0_1" data-answer="2" /></td>
+              </tr>
+              <tr>
+                <td class="given-value">2</td>
+                <td class="given-value">2</td>
+                <td class="given-value">True</td>
+                <td><input type="text" id="trace_1_0" data-answer="2" /></td>
+                <td><input type="text" id="trace_1_1" data-answer="3" /></td>
+              </tr>
+              <tr>
+                <td class="given-value">3</td>
+                <td class="given-value">3</td>
+                <td class="given-value">True</td>
+                <td><input type="text" id="trace_2_0" data-answer="6" /></td>
+                <td><input type="text" id="trace_2_1" data-answer="4" /></td>
+              </tr>
+              <tr>
+                <td class="given-value">4</td>
+                <td class="given-value">4</td>
+                <td class="given-value">True</td>
+                <td><input type="text" id="trace_3_0" data-answer="24" /></td>
+                <td><input type="text" id="trace_3_1" data-answer="5" /></td>
+              </tr>
+              <tr>
+                <td class="given-value">5</td>
+                <td class="given-value">5</td>
+                <td class="given-value">True</td>
+                <td><input type="text" id="trace_4_0" data-answer="120" /></td>
+                <td><input type="text" id="trace_4_1" data-answer="6" /></td>
+              </tr>
+              <tr>
+                <td class="given-value">6</td>
+                <td class="given-value">6</td>
+                <td><input type="text" id="trace_5_0" data-answer="False" /></td>
+                <td class="given-value" colspan="2" style="text-align:center; font-style:italic; color:var(--color-text-light);">Loop ends &mdash; print(result) outputs 120</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="question-actions">
+          <button class="check-btn" onclick="checkQ4()">Check Answers</button>
+          <button class="reveal-btn" onclick="revealQ4()">Show Mark Scheme</button>
+          <button class="reset-q-btn" onclick="resetQ4()">Reset</button>
+          <span class="q-score-display" id="q3score"></span>
+        </div>
+
+        <div class="mark-scheme" id="ms3">
+          <div class="mark-scheme-header">Mark Scheme - Question 4</div>
+          <div class="mark-scheme-body">
+            <p><strong>1 mark per correct cell (allowing for follow-through errors):</strong></p>
+            <ul>
+              <li>Iteration 1: result = <strong>1</strong> (1*1), counter = <strong>2</strong></li>
+              <li>Iteration 2: result = <strong>2</strong> (1*2), counter = <strong>3</strong></li>
+              <li>Iteration 3: result = <strong>6</strong> (2*3), counter = <strong>4</strong></li>
+              <li>Iteration 4: result = <strong>24</strong> (6*4), counter = <strong>5</strong></li>
+              <li>Iteration 5: result = <strong>120</strong> (24*5), counter = <strong>6</strong></li>
+              <li>Iteration 6: condition = <strong>False</strong> (6 &lt;= 5 is False, so loop ends)</li>
+            </ul>
+            <p><strong>Note:</strong> Accept "false" (case insensitive) for the final condition. The printed output is <strong>120</strong>.</p>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- QUESTION 5: Code Improvement / Refactoring (6 marks)         -->
+    <!-- ============================================================ -->
+    <div class="question-panel" id="q4">
+      <section class="practice">
+        <div class="question-header">
+          <h2>Question 5: Code Improvement</h2>
+          <span class="marks-badge">6 marks</span>
+        </div>
+        <p class="question-intro">The program below works correctly but is <strong>poorly written</strong>. A good programmer would refactor it to be more readable, efficient, and maintainable. Read the code and answer the questions below.</p>
+
+        <div class="exam-code">
+          <div class="exam-code-header">
+            <span class="exam-code-label">area_calculator.py</span>
+          </div>
+          <pre><code><span class="line-number"> 1</span>x = float(input("Enter rectangle length: "))
+<span class="line-number"> 2</span>y = float(input("Enter rectangle width: "))
+<span class="line-number"> 3</span>a = x * y
+<span class="line-number"> 4</span>print("Rectangle area: " + str(a))
+<span class="line-number"> 5</span>
+<span class="line-number"> 6</span>x2 = float(input("Enter triangle base: "))
+<span class="line-number"> 7</span>y2 = float(input("Enter triangle height: "))
+<span class="line-number"> 8</span>a2 = x2 * y2 * 0.5
+<span class="line-number"> 9</span>print("Triangle area: " + str(a2))
+<span class="line-number">10</span>
+<span class="line-number">11</span>x3 = float(input("Enter circle radius: "))
+<span class="line-number">12</span>a3 = x3 * x3 * 3.14159
+<span class="line-number">13</span>print("Circle area: " + str(a3))</code></pre>
+        </div>
+
+        <h3>Identify 3 improvements that should be made:</h3>
+
+        <div class="mc-group" id="mc0">
+          <h4>Improvement 1: How should the repetitive structure be improved?</h4>
+          <div class="mc-option">
+            <input type="radio" name="mc0" id="mc0a" value="a" />
+            <label for="mc0a">Add more comments to each section</label>
+          </div>
+          <div class="mc-option">
+            <input type="radio" name="mc0" id="mc0b" value="b" />
+            <label for="mc0b">Use functions to avoid repeating similar patterns (e.g. <code>def calculate_rectangle_area(length, width)</code>)</label>
+          </div>
+          <div class="mc-option">
+            <input type="radio" name="mc0" id="mc0c" value="c" />
+            <label for="mc0c">Combine all calculations into a single line</label>
+          </div>
+          <div class="mc-option">
+            <input type="radio" name="mc0" id="mc0d" value="d" />
+            <label for="mc0d">Remove the print statements to make it shorter</label>
+          </div>
+          <div class="mc-explanation" id="mc0exp">
+            <strong>Correct: B.</strong> Using functions avoids repeating the input-calculate-output pattern. Each shape's area calculation can be its own function, making the code easier to test, reuse, and modify.
+          </div>
+        </div>
+
+        <div class="mc-group" id="mc1">
+          <h4>Improvement 2: What should be done about the value 3.14159 on line 12?</h4>
+          <div class="mc-option">
+            <input type="radio" name="mc1" id="mc1a" value="a" />
+            <label for="mc1a">Replace it with 3.14 to make it simpler</label>
+          </div>
+          <div class="mc-option">
+            <input type="radio" name="mc1" id="mc1b" value="b" />
+            <label for="mc1b">Move it inside a function parameter</label>
+          </div>
+          <div class="mc-option">
+            <input type="radio" name="mc1" id="mc1c" value="c" />
+            <label for="mc1c">Define it as a constant at the top of the program (e.g. <code>PI = 3.14159</code>) or use <code>math.pi</code></label>
+          </div>
+          <div class="mc-option">
+            <input type="radio" name="mc1" id="mc1d" value="d" />
+            <label for="mc1d">It is fine as it is &mdash; no change needed</label>
+          </div>
+          <div class="mc-explanation" id="mc1exp">
+            <strong>Correct: C.</strong> Magic numbers (unnamed numeric values) should be defined as named constants. This makes the code more readable, and if the value ever needs to change, you only update it in one place. Using <code>import math</code> and <code>math.pi</code> is even better.
+          </div>
+        </div>
+
+        <div class="mc-group" id="mc2">
+          <h4>Improvement 3: What is wrong with the variable names?</h4>
+          <div class="mc-option">
+            <input type="radio" name="mc2" id="mc2a" value="a" />
+            <label for="mc2a">They should all be UPPER CASE</label>
+          </div>
+          <div class="mc-option">
+            <input type="radio" name="mc2" id="mc2b" value="b" />
+            <label for="mc2b">Names like <code>x</code>, <code>y</code>, <code>a</code>, <code>x2</code>, <code>a3</code> are not meaningful &mdash; they should be descriptive (e.g. <code>length</code>, <code>width</code>, <code>rectangle_area</code>)</label>
+          </div>
+          <div class="mc-option">
+            <input type="radio" name="mc2" id="mc2c" value="c" />
+            <label for="mc2c">They are too short and Python requires at least 3 characters</label>
+          </div>
+          <div class="mc-option">
+            <input type="radio" name="mc2" id="mc2d" value="d" />
+            <label for="mc2d">They should start with the data type (e.g. <code>float_x</code>)</label>
+          </div>
+          <div class="mc-explanation" id="mc2exp">
+            <strong>Correct: B.</strong> Variable names should be meaningful and describe what data they hold. <code>x</code>, <code>y</code>, <code>a</code> tell us nothing about the purpose. Names like <code>length</code>, <code>width</code>, and <code>rectangle_area</code> make the code self-documenting and much easier for another programmer to understand.
+          </div>
+        </div>
+
+        <div class="question-actions">
+          <button class="check-btn" onclick="checkQ5()">Check Answers</button>
+          <button class="reveal-btn" onclick="revealQ5()">Show Mark Scheme</button>
+          <button class="reset-q-btn" onclick="resetQ5()">Reset</button>
+          <span class="q-score-display" id="q4score"></span>
+        </div>
+
+        <div class="mark-scheme" id="ms4">
+          <div class="mark-scheme-header">Mark Scheme - Question 5</div>
+          <div class="mark-scheme-body">
+            <ul>
+              <li><strong>Improvement 1 (Functions):</strong> Use subroutines/functions to avoid repetitive code <span class="ms-marks">[1 mark]</span> identification + <span class="ms-marks">[1 mark]</span> explanation of why</li>
+              <li><strong>Improvement 2 (Constants):</strong> Use named constants or import math.pi instead of magic numbers <span class="ms-marks">[1 mark]</span> identification + <span class="ms-marks">[1 mark]</span> explanation of why</li>
+              <li><strong>Improvement 3 (Variable names):</strong> Use meaningful, descriptive variable names <span class="ms-marks">[1 mark]</span> identification + <span class="ms-marks">[1 mark]</span> explanation of why</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- QUESTION 6: Program Design (12 marks)                        -->
+    <!-- ============================================================ -->
+    <div class="question-panel" id="q5">
+      <section class="practice">
+        <div class="question-header">
+          <h2>Question 6: Program Design</h2>
+          <span class="marks-badge">12 marks</span>
+        </div>
+        <p class="question-intro"><strong>Scenario:</strong> A teacher wants a program that stores student names and their test scores. The program should allow the teacher to enter names and scores for the class, then calculate the average score and find the student with the highest score.</p>
+
+        <p><strong>Your program must:</strong></p>
+        <ul>
+          <li>Ask how many students are in the class</li>
+          <li>Use a loop to collect each student's name and score</li>
+          <li>Store the data in appropriate data structures (lists)</li>
+          <li>Calculate and display the average score</li>
+          <li>Find and display the student with the highest score</li>
+          <li>Include appropriate input validation (score must be 0&ndash;100)</li>
+        </ul>
+
+        <p>Write your solution in the editor below. Comment scaffolding has been provided to guide your structure.</p>
+
+        <div class="code-editor-area code-block" id="q6editor">
+          <div class="code-block-header">
+            <span class="code-block-label">student_scores.py</span>
+            <div>
+              <button class="copy-button" style="font-size:0.8rem; padding:4px 12px;">Copy</button>
+              <button class="reset-button" style="font-size:0.8rem; padding:4px 12px;">Reset</button>
+              <button class="run-button" style="font-size:0.8rem; padding:4px 12px;" disabled>Run Code</button>
+            </div>
+          </div>
+          <pre><code contenteditable="true" spellcheck="false"># Student Score Tracker
+# --------------------
+
+# Step 1: Set up empty lists for names and scores
+names = []
+scores = []
+
+# Step 2: Ask how many students are in the class
+num_students = int(input("How many students? "))
+
+# Step 3: Use a loop to collect each student's name and score
+for i in range(num_students):
+    name = input("Enter student name: ")
+    # Add input validation for score (must be 0-100)
+    score = int(input("Enter score for " + name + ": "))
+    while score < 0 or score > 100:
+        print("Score must be between 0 and 100.")
+        score = int(input("Enter score for " + name + ": "))
+    # Store the data in the lists
+    names.append(name)
+    scores.append(score)
+
+# Step 4: Calculate the average score
+total = 0
+for s in scores:
+    total = total + s
+average = total / num_students
+print("Average score: " + str(average))
+
+# Step 5: Find the student with the highest score
+highest = scores[0]
+best_student = names[0]
+for i in range(len(scores)):
+    if scores[i] > highest:
+        highest = scores[i]
+        best_student = names[i]
+print("Highest score: " + best_student + " with " + str(highest))</code></pre>
+          <div class="q6-output empty" id="q6output">(click "Run Code" to see output)</div>
+        </div>
+
+        <div class="question-actions">
+          <button class="check-btn" onclick="checkQ6()">Self-Assess &amp; Show Mark Scheme</button>
+          <button class="reset-q-btn" onclick="resetQ6()">Reset Code</button>
+          <span class="q-score-display" id="q5score"></span>
+        </div>
+
+        <div class="mark-scheme" id="ms5">
+          <div class="mark-scheme-header">Mark Scheme - Question 6 (12 marks)</div>
+          <div class="mark-scheme-body">
+            <p><strong>Award marks as follows:</strong></p>
+            <ul>
+              <li>Creating two lists (names and scores) <span class="ms-marks">[1 mark]</span></li>
+              <li>Asking for the number of students <span class="ms-marks">[1 mark]</span></li>
+              <li>Using a loop to collect names and scores <span class="ms-marks">[2 marks]</span></li>
+              <li>Appending name and score to the correct lists <span class="ms-marks">[1 mark]</span></li>
+              <li>Input validation: checking score is between 0 and 100 <span class="ms-marks">[2 marks]</span></li>
+              <li>Calculating the total and average of scores <span class="ms-marks">[2 marks]</span></li>
+              <li>Finding the highest score and corresponding student name <span class="ms-marks">[2 marks]</span></li>
+              <li>Displaying results with appropriate messages <span class="ms-marks">[1 mark]</span></li>
+            </ul>
+            <p><strong>Note:</strong> Accept alternative valid approaches (e.g. using <code>sum()</code>, <code>max()</code>, dictionaries, etc.). The scaffolded code above is a model answer.</p>
+          </div>
+        </div>
+
+        <div class="paper2-tip" style="margin-top: var(--space-xl);">
+          <strong>Exam Tip: Program Design Questions</strong>
+          <p>In the real exam, program design questions carry the most marks. Plan your answer before you write. Use comments to show the examiner your thinking even if your code has small errors. Marks are awarded for structure and logic, not just syntax.</p>
+        </div>
+      </section>
+    </div>
+
+  </main>
+
+  <footer class="site-footer">
+    <p>Python Fundamentals &mdash; A KS4 Learning Platform</p>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/pyodide/v0.24.0/full/pyodide.js"></script>
+  <script src="../js/pyodide-runner.js"></script>
+
+  <script>
+  (function() {
+    'use strict';
+
+    /* ============================
+       STATE
+    ============================ */
+    const TOTAL_MARKS = 46;
+    const Q_MAX = [8, 6, 6, 8, 6, 12];
+    const qScores = [0, 0, 0, 0, 0, 0];
+    const qChecked = [false, false, false, false, false, false];
+
+    /* ============================
+       NAVIGATION
+    ============================ */
+    window.showQuestion = function(idx) {
+      document.querySelectorAll('.question-panel').forEach(function(p, i) {
+        p.classList.toggle('active', i === idx);
+      });
+      document.querySelectorAll('.q-nav-btn').forEach(function(btn, i) {
+        btn.classList.toggle('active', i === idx);
+      });
+    };
+
+    function updateTotalScore() {
+      var total = 0;
+      for (var i = 0; i < qScores.length; i++) total += qScores[i];
+      var pct = Math.round((total / TOTAL_MARKS) * 100);
+      document.getElementById('progressBarFill').style.width = pct + '%';
+      document.getElementById('progressLabel').textContent = total + ' / ' + TOTAL_MARKS + ' marks';
+      document.getElementById('totalScoreDisplay').textContent = 'Total: ' + total + ' / ' + TOTAL_MARKS;
+    }
+
+    function setQScore(qIdx, score) {
+      qScores[qIdx] = score;
+      qChecked[qIdx] = true;
+      var el = document.getElementById('q' + qIdx + 'score');
+      if (el) el.textContent = score + ' / ' + Q_MAX[qIdx];
+      var badge = document.getElementById('qBadge' + qIdx);
+      if (badge) {
+        badge.textContent = score;
+        badge.parentElement.classList.add('answered');
+      }
+      updateTotalScore();
+    }
+
+    /* ============================
+       Q1: ERROR CORRECTION (8 marks)
+    ============================ */
+    var q1Answers = [
+      // Error 0+1 are combined: line 3 has misspelled var + missing str()
+      // We check err0 for the variable fix and err1 for the full corrected line
+      { id: 'err0', check: function(v) {
+          var s = v.replace(/\s+/g, '').toLowerCase();
+          return s.indexOf('fahrenheit') !== -1 && s.indexOf('farenheit') === -1;
+        }
+      },
+      { id: 'err1', check: function(v) {
+          var s = v.replace(/\s+/g, '').toLowerCase();
+          return s.indexOf('str(fahrenheit)') !== -1 || s.indexOf('str(fahrenheit)') !== -1;
+        }
+      },
+      { id: 'err2', check: function(v) {
+          var s = v.replace(/\s+/g, '').toLowerCase();
+          return s.indexOf('ifcelsius>30:') !== -1 || s.indexOf('celsius>30:') !== -1;
+        }
+      },
+      { id: 'err3', check: function(v) {
+          var s = v.replace(/\s+/g, '').toLowerCase();
+          return s.indexOf('celsius==20:') !== -1;
+        }
+      }
+    ];
+
+    window.checkQ1 = function() {
+      var score = 0;
+      q1Answers.forEach(function(a, i) {
+        var input = document.getElementById(a.id + 'input');
+        var fb = document.getElementById(a.id + 'fb');
+        var item = document.getElementById(a.id);
+        var val = input ? input.value.trim() : '';
+        var correct = a.check(val);
+
+        item.classList.remove('correct', 'incorrect');
+        fb.classList.remove('correct', 'incorrect');
+
+        if (val === '') {
+          fb.textContent = 'Please enter your answer.';
+          fb.className = 'error-feedback show incorrect';
+          item.classList.add('incorrect');
+        } else if (correct) {
+          // 2 marks per error (identify + correct)
+          score += 2;
+          fb.textContent = 'Correct! (2 marks)';
+          fb.className = 'error-feedback show correct';
+          item.classList.add('correct');
+        } else {
+          fb.textContent = 'Not quite. Check the mark scheme for guidance.';
+          fb.className = 'error-feedback show incorrect';
+          item.classList.add('incorrect');
+        }
+      });
+      setQScore(0, score);
+    };
+
+    window.revealQ1 = function() {
+      document.getElementById('ms0').classList.add('show');
+    };
+
+    window.resetQ1 = function() {
+      for (var i = 0; i < 4; i++) {
+        var inp = document.getElementById('err' + i + 'input');
+        var fb = document.getElementById('err' + i + 'fb');
+        var item = document.getElementById('err' + i);
+        if (inp) inp.value = '';
+        if (fb) { fb.className = 'error-feedback'; fb.textContent = ''; }
+        if (item) item.classList.remove('correct', 'incorrect');
+      }
+      document.getElementById('ms0').classList.remove('show');
+      document.getElementById('q0score').textContent = '';
+      qScores[0] = 0;
+      qChecked[0] = false;
+      document.getElementById('qBadge0').parentElement.classList.remove('answered');
+      updateTotalScore();
+    };
+
+    /* ============================
+       Q2: PARSONS PROBLEM (6 marks)
+    ============================ */
+    var parsonsCorrectOrder = [
+      'password = "secret123"',
+      'attempts = 0',
+      'while attempts < 3:',
+      '    guess = input("Enter password: ")',
+      '    if guess == password:',
+      '        print("Access granted!")',
+      '    attempts = attempts + 1',
+      'print("No attempts remaining.")'
+    ];
+
+    // Scored lines (indices in the correct order): 0, 1, 2, 3, 4, 6
+    var parsonsScoredIndices = [0, 1, 2, 3, 4, 6];
+
+    var draggedParsonsEl = null;
+    var touchClone = null;
+
+    function shuffleArray(arr) {
+      var a = arr.slice();
+      for (var i = a.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var tmp = a[i];
+        a[i] = a[j];
+        a[j] = tmp;
+      }
+      return a;
+    }
+
+    function createParsonsBlock(text) {
+      var el = document.createElement('div');
+      el.className = 'parsons-block';
+      el.setAttribute('draggable', 'true');
+      el.setAttribute('data-text', text);
+      el.textContent = text;
+
+      // HTML5 Drag events
+      el.addEventListener('dragstart', function(e) {
+        draggedParsonsEl = el;
+        el.classList.add('dragging');
+        e.dataTransfer.effectAllowed = 'move';
+        e.dataTransfer.setData('text/plain', '');
+      });
+      el.addEventListener('dragend', function() {
+        el.classList.remove('dragging');
+        draggedParsonsEl = null;
+        clearParsonsHover();
+      });
+
+      // Touch events
+      el.addEventListener('touchstart', pTouchStart, { passive: false });
+      el.addEventListener('touchmove', pTouchMove, { passive: false });
+      el.addEventListener('touchend', pTouchEnd, { passive: false });
+
+      return el;
+    }
+
+    function pTouchStart(e) {
+      e.preventDefault();
+      var el = e.currentTarget;
+      draggedParsonsEl = el;
+      var rect = el.getBoundingClientRect();
+      var touch = e.touches[0];
+
+      touchClone = el.cloneNode(true);
+      touchClone.style.position = 'fixed';
+      touchClone.style.zIndex = '9999';
+      touchClone.style.width = rect.width + 'px';
+      touchClone.style.pointerEvents = 'none';
+      touchClone.style.opacity = '0.85';
+      touchClone.style.left = (touch.clientX - rect.width / 2) + 'px';
+      touchClone.style.top = (touch.clientY - 30) + 'px';
+      document.body.appendChild(touchClone);
+      el.classList.add('dragging');
+    }
+
+    function pTouchMove(e) {
+      e.preventDefault();
+      if (!touchClone) return;
+      var touch = e.touches[0];
+      var rect = touchClone.getBoundingClientRect();
+      touchClone.style.left = (touch.clientX - rect.width / 2) + 'px';
+      touchClone.style.top = (touch.clientY - 30) + 'px';
+
+      clearParsonsHover();
+      var target = document.elementFromPoint(touch.clientX, touch.clientY);
+      if (target) {
+        var slot = target.closest('.parsons-slot');
+        var src = target.closest('.parsons-source');
+        if (slot) slot.classList.add('drag-over');
+        if (src) src.classList.add('drag-over');
+      }
+    }
+
+    function pTouchEnd(e) {
+      e.preventDefault();
+      if (touchClone) {
+        document.body.removeChild(touchClone);
+        touchClone = null;
+      }
+      if (!draggedParsonsEl) return;
+
+      var touch = e.changedTouches[0];
+      var target = document.elementFromPoint(touch.clientX, touch.clientY);
+      clearParsonsHover();
+      draggedParsonsEl.classList.remove('dragging');
+
+      if (target) {
+        var slot = target.closest('.parsons-slot');
+        var sourceZone = target.closest('#parsonsSource');
+
+        if (slot && !slot.querySelector('.parsons-block')) {
+          slot.appendChild(draggedParsonsEl);
+        } else if (slot && slot.querySelector('.parsons-block') && slot.querySelector('.parsons-block') !== draggedParsonsEl) {
+          var existing = slot.querySelector('.parsons-block');
+          var fromSlot = draggedParsonsEl.parentElement.classList.contains('parsons-slot') ? draggedParsonsEl.parentElement : null;
+          if (fromSlot) {
+            fromSlot.appendChild(existing);
+          } else {
+            document.getElementById('parsonsSource').appendChild(existing);
+          }
+          slot.appendChild(draggedParsonsEl);
+        } else if (sourceZone) {
+          document.getElementById('parsonsSource').appendChild(draggedParsonsEl);
+        }
+      }
+
+      draggedParsonsEl = null;
+    }
+
+    function clearParsonsHover() {
+      document.querySelectorAll('.parsons-slot.drag-over, .parsons-source.drag-over').forEach(function(el) {
+        el.classList.remove('drag-over');
+      });
+    }
+
+    function setupParsonsSlot(slot) {
+      slot.addEventListener('dragover', function(e) {
+        e.preventDefault();
+        e.dataTransfer.dropEffect = 'move';
+        slot.classList.add('drag-over');
+      });
+      slot.addEventListener('dragleave', function() {
+        slot.classList.remove('drag-over');
+      });
+      slot.addEventListener('drop', function(e) {
+        e.preventDefault();
+        slot.classList.remove('drag-over');
+        if (!draggedParsonsEl) return;
+        var existing = slot.querySelector('.parsons-block');
+        if (existing && existing !== draggedParsonsEl) {
+          var fromSlot = draggedParsonsEl.parentElement.classList.contains('parsons-slot') ? draggedParsonsEl.parentElement : null;
+          if (fromSlot) {
+            fromSlot.appendChild(existing);
+            fromSlot.classList.remove('correct', 'incorrect');
+          } else {
+            document.getElementById('parsonsSource').appendChild(existing);
+          }
+        }
+        slot.appendChild(draggedParsonsEl);
+        slot.classList.remove('correct', 'incorrect');
+      });
+    }
+
+    function buildParsons() {
+      var source = document.getElementById('parsonsSource');
+      var target = document.getElementById('parsonsTarget');
+      source.innerHTML = '';
+      target.innerHTML = '';
+
+      // Source zone drop handling
+      source.addEventListener('dragover', function(e) { e.preventDefault(); e.dataTransfer.dropEffect = 'move'; });
+      source.addEventListener('drop', function(e) {
+        e.preventDefault();
+        if (!draggedParsonsEl) return;
+        var oldParent = draggedParsonsEl.parentElement;
+        source.appendChild(draggedParsonsEl);
+        if (oldParent && oldParent.classList.contains('parsons-slot')) {
+          oldParent.classList.remove('correct', 'incorrect');
+        }
+      });
+
+      var shuffled = shuffleArray(parsonsCorrectOrder);
+      shuffled.forEach(function(text) {
+        source.appendChild(createParsonsBlock(text));
+      });
+
+      parsonsCorrectOrder.forEach(function(_, i) {
+        var slot = document.createElement('div');
+        slot.className = 'parsons-slot';
+        slot.setAttribute('data-slot', 'Line ' + (i + 1));
+        slot.setAttribute('data-index', i);
+        setupParsonsSlot(slot);
+        target.appendChild(slot);
+      });
+    }
+
+    window.checkQ2 = function() {
+      var slots = document.querySelectorAll('#parsonsTarget .parsons-slot');
+      var score = 0;
+      slots.forEach(function(slot, i) {
+        var block = slot.querySelector('.parsons-block');
+        slot.classList.remove('correct', 'incorrect');
+        if (!block) {
+          slot.classList.add('incorrect');
+          return;
+        }
+        var text = block.getAttribute('data-text');
+        if (text === parsonsCorrectOrder[i]) {
+          slot.classList.add('correct');
+          if (parsonsScoredIndices.indexOf(i) !== -1) score++;
+        } else {
+          slot.classList.add('incorrect');
+        }
+      });
+      setQScore(1, score);
+    };
+
+    window.revealQ2 = function() {
+      document.getElementById('ms1').classList.add('show');
+    };
+
+    window.resetQ2 = function() {
+      buildParsons();
+      document.getElementById('ms1').classList.remove('show');
+      document.getElementById('q1score').textContent = '';
+      qScores[1] = 0;
+      qChecked[1] = false;
+      document.getElementById('qBadge1').parentElement.classList.remove('answered');
+      updateTotalScore();
+    };
+
+    /* ============================
+       Q3: COMPLETE THE CODE (6 marks)
+    ============================ */
+    var q3Answers = {
+      blank0: 'while item != "done":',
+      blank1: 'shopping_list.append(item)',
+      blank2: 'if len(shopping_list) > 0:'
+    };
+
+    window.checkQ3 = function() {
+      var score = 0;
+      Object.keys(q3Answers).forEach(function(id) {
+        var sel = document.getElementById(id);
+        sel.classList.remove('correct', 'incorrect');
+        if (sel.value === q3Answers[id]) {
+          sel.classList.add('correct');
+          score += 2;
+        } else if (sel.value === '') {
+          // no selection
+        } else {
+          sel.classList.add('incorrect');
+        }
+      });
+      setQScore(2, score);
+    };
+
+    window.revealQ3 = function() {
+      document.getElementById('ms2').classList.add('show');
+    };
+
+    window.resetQ3 = function() {
+      Object.keys(q3Answers).forEach(function(id) {
+        var sel = document.getElementById(id);
+        sel.value = '';
+        sel.classList.remove('correct', 'incorrect');
+      });
+      document.getElementById('ms2').classList.remove('show');
+      document.getElementById('q2score').textContent = '';
+      qScores[2] = 0;
+      qChecked[2] = false;
+      document.getElementById('qBadge2').parentElement.classList.remove('answered');
+      updateTotalScore();
+    };
+
+    /* ============================
+       Q4: TRACE TABLE (8 marks)
+    ============================ */
+    // 11 blank cells total but we award 1 mark per cell up to 8 (there are 11 cells, but
+    // some are trivial; let's use 1 mark per cell for the first 8 non-trivial, so we need
+    // to map properly. We have: trace_0_0 through trace_4_1 (10 cells) + trace_5_0 (1 cell) = 11 cells.
+    // We score: iterations 2-5 result and counter (8 cells) = 8 marks. Iteration 1 is essentially given.
+    // Actually let's just score all 11 but cap at 8.
+
+    var traceIds = [
+      'trace_0_0', 'trace_0_1',
+      'trace_1_0', 'trace_1_1',
+      'trace_2_0', 'trace_2_1',
+      'trace_3_0', 'trace_3_1',
+      'trace_4_0', 'trace_4_1',
+      'trace_5_0'
+    ];
+
+    window.checkQ4 = function() {
+      var score = 0;
+      traceIds.forEach(function(id) {
+        var inp = document.getElementById(id);
+        if (!inp) return;
+        var answer = inp.getAttribute('data-answer');
+        var val = inp.value.trim();
+        inp.classList.remove('correct', 'incorrect');
+        if (val.toLowerCase() === answer.toLowerCase()) {
+          inp.classList.add('correct');
+          score++;
+        } else if (val !== '') {
+          inp.classList.add('incorrect');
+        }
+      });
+      // Cap at 8
+      if (score > 8) score = 8;
+      setQScore(3, score);
+    };
+
+    window.revealQ4 = function() {
+      document.getElementById('ms3').classList.add('show');
+    };
+
+    window.resetQ4 = function() {
+      traceIds.forEach(function(id) {
+        var inp = document.getElementById(id);
+        if (inp) {
+          inp.value = '';
+          inp.classList.remove('correct', 'incorrect');
+        }
+      });
+      document.getElementById('ms3').classList.remove('show');
+      document.getElementById('q3score').textContent = '';
+      qScores[3] = 0;
+      qChecked[3] = false;
+      document.getElementById('qBadge3').parentElement.classList.remove('answered');
+      updateTotalScore();
+    };
+
+    /* ============================
+       Q5: CODE IMPROVEMENT (6 marks)
+    ============================ */
+    var q5Answers = { mc0: 'b', mc1: 'c', mc2: 'b' };
+
+    window.checkQ5 = function() {
+      var score = 0;
+      Object.keys(q5Answers).forEach(function(name) {
+        var group = document.getElementById(name);
+        var exp = document.getElementById(name + 'exp');
+        var selected = document.querySelector('input[name="' + name + '"]:checked');
+        group.classList.remove('correct', 'incorrect');
+
+        if (selected && selected.value === q5Answers[name]) {
+          score += 2;
+          group.classList.add('correct');
+        } else if (selected) {
+          group.classList.add('incorrect');
+        }
+        exp.classList.add('show');
+      });
+      setQScore(4, score);
+    };
+
+    window.revealQ5 = function() {
+      document.getElementById('ms4').classList.add('show');
+    };
+
+    window.resetQ5 = function() {
+      ['mc0', 'mc1', 'mc2'].forEach(function(name) {
+        document.querySelectorAll('input[name="' + name + '"]').forEach(function(r) { r.checked = false; });
+        document.getElementById(name).classList.remove('correct', 'incorrect');
+        document.getElementById(name + 'exp').classList.remove('show');
+      });
+      document.getElementById('ms4').classList.remove('show');
+      document.getElementById('q4score').textContent = '';
+      qScores[4] = 0;
+      qChecked[4] = false;
+      document.getElementById('qBadge4').parentElement.classList.remove('answered');
+      updateTotalScore();
+    };
+
+    /* ============================
+       Q6: PROGRAM DESIGN (12 marks)
+    ============================ */
+    window.checkQ6 = function() {
+      // Self-assessed: just reveal the mark scheme
+      document.getElementById('ms5').classList.add('show');
+      // Give full marks by default (self-assessed)
+      setQScore(5, 12);
+      document.getElementById('q5score').textContent = 'Self-assessed: 12 / 12';
+    };
+
+    window.resetQ6 = function() {
+      // Use the pyodide-runner's reset mechanism
+      var block = document.getElementById('q6editor');
+      var codeEl = block.querySelector('code');
+      var outputBox = document.getElementById('q6output');
+      var original = block.getAttribute('data-original');
+      if (original && codeEl) {
+        codeEl.textContent = original;
+      }
+      if (outputBox) {
+        outputBox.textContent = '(click "Run Code" to see output)';
+        outputBox.className = 'q6-output empty';
+      }
+      document.getElementById('ms5').classList.remove('show');
+      document.getElementById('q5score').textContent = '';
+      qScores[5] = 0;
+      qChecked[5] = false;
+      document.getElementById('qBadge5').parentElement.classList.remove('answered');
+      updateTotalScore();
+    };
+
+    /* ============================
+       INIT
+    ============================ */
+    function init() {
+      buildParsons();
+      updateTotalScore();
+
+      // Store original code for Q6 reset
+      var q6Block = document.getElementById('q6editor');
+      var q6Code = q6Block.querySelector('code');
+      if (q6Code) {
+        q6Block.setAttribute('data-original', q6Code.innerText || q6Code.textContent);
+      }
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init);
+    } else {
+      init();
+    }
+
+  })();
+  </script>
+</body>
+</html>

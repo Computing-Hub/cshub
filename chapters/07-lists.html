@@ -60,6 +60,13 @@
       <h3>Example 1: Creating and Accessing Lists</h3>
       <p>A list is created using <strong>square brackets</strong> <code>[]</code> with items separated by commas. Each item has a position number called an <strong>index</strong>, starting from <strong>0</strong>.</p>
 
+      <div class="predict-box">
+        <strong>Predict First!</strong>
+        The list has three items: "apple", "banana", "cherry". What will <code>fruits[0]</code> print? What about <code>fruits[2]</code>? Remember: Python indexes start from 0, not 1 &mdash; this is a very common exam question!
+        <button class="predict-toggle" onclick="this.nextElementSibling.classList.toggle('visible')">Reveal Answer</button>
+        <div class="predict-answer">['apple', 'banana', 'cherry']<br>apple<br>banana<br>cherry<br>Number of fruits: 3<br><br>Index 0 = "apple" (first item), index 1 = "banana", index 2 = "cherry" (last item). The list has 3 items, but the highest index is 2.</div>
+      </div>
+
       <div class="code-block">
         <div class="code-block-header">
           <span class="code-block-label">Python Code</span>
@@ -90,6 +97,13 @@ print("Number of fruits:", len(fruits))</code></pre>
 
       <h3>Example 2: Modifying Lists</h3>
       <p>Lists are <strong>mutable</strong>, which means you can change them after they have been created. You can add new items, remove existing ones, or change an item at a specific position.</p>
+
+      <div class="predict-box">
+        <strong>Predict First!</strong>
+        This code starts with <code>["red", "green", "blue"]</code> and then performs four changes: append, change index 1, remove, and pop. Trace through each operation &mdash; what will the final list contain after all four changes?
+        <button class="predict-toggle" onclick="this.nextElementSibling.classList.toggle('visible')">Reveal Answer</button>
+        <div class="predict-answer">Original list: ['red', 'green', 'blue']<br>After append: ['red', 'green', 'blue', 'yellow']<br>After changing index 1: ['red', 'purple', 'blue', 'yellow']<br>After removing blue: ['red', 'purple', 'yellow']<br>Popped item: yellow<br>Final list: ['red', 'purple']</div>
+      </div>
 
       <div class="code-block">
         <div class="code-block-header">

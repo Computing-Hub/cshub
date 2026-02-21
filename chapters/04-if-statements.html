@@ -56,6 +56,14 @@
       <!-- Example 1: Simple If -->
       <h3>Example 1: A Simple If Statement</h3>
       <p>This program checks whether someone is old enough to drive. If the condition is <code>True</code>, the indented line runs. If it is <code>False</code>, the indented line is skipped entirely.</p>
+
+      <div class="predict-box">
+        <strong>Predict First!</strong>
+        The code checks if <code>age >= 16</code>. There are two <code>print()</code> statements &mdash; one indented inside the <code>if</code>, and one not indented. How many lines of output will there be? Will "Thanks for checking." always appear?
+        <button class="predict-toggle" onclick="this.nextElementSibling.classList.toggle('visible')">Reveal Answer</button>
+        <div class="predict-answer">You can drive!<br>Thanks for checking.<br><br>Both lines print because age is 16. The second print is NOT inside the if block, so it always runs regardless of the condition.</div>
+      </div>
+
       <div class="code-block">
         <div class="code-block-header">
           <span class="code-block-label">Python Code</span>
@@ -104,6 +112,14 @@ else:
       <!-- Example 3: If/Elif/Else -->
       <h3>Example 3: If / Elif / Else &mdash; Multiple Conditions</h3>
       <p>When there are more than two possible outcomes, use <code>elif</code> (short for "else if") to check additional conditions. Python works through them from top to bottom and runs the <strong>first</strong> one that is true.</p>
+
+      <div class="predict-box">
+        <strong>Predict First!</strong>
+        The score is 75. Python checks conditions from top to bottom. Is <code>75 >= 90</code>? Is <code>75 >= 70</code>? Is <code>75 >= 50</code>? Which branch will run &mdash; and will Python keep checking after it finds a match?
+        <button class="predict-toggle" onclick="this.nextElementSibling.classList.toggle('visible')">Reveal Answer</button>
+        <div class="predict-answer">Your score is 75<br>Your grade is B<br><br>Python stops at the FIRST true condition. 75 >= 70 is True, so grade = "B". It does NOT continue to check 75 >= 50, even though that is also true.</div>
+      </div>
+
       <div class="code-block">
         <div class="code-block-header">
           <span class="code-block-label">Python Code</span>

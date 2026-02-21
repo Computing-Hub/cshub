@@ -54,6 +54,14 @@
       <!-- Example 1: Defining and Calling -->
       <h3>Example 1 &mdash; Defining and Calling a Function</h3>
       <p>The simplest possible function: it takes no information in and just does one thing.</p>
+
+      <div class="predict-box">
+        <strong>Predict First!</strong>
+        This code defines a function called <code>greet()</code> and then calls it. What is the difference between <em>defining</em> a function and <em>calling</em> it? Will anything happen when the <code>def</code> line runs, or only when <code>greet()</code> is called?
+        <button class="predict-toggle" onclick="this.nextElementSibling.classList.toggle('visible')">Reveal Answer</button>
+        <div class="predict-answer">Hello!<br><br>Defining a function (the def block) just saves the instructions &mdash; nothing is printed yet. Only when greet() is called does the code inside run and "Hello!" appears.</div>
+      </div>
+
       <div class="code-block">
         <div class="code-block-header">
           <span class="code-block-label">Python Code</span>
@@ -106,6 +114,14 @@ greet("Charlie")</code></pre>
       <!-- Example 3: Return Values -->
       <h3>Example 3 &mdash; Return Values</h3>
       <p>Sometimes you want a function to <em>give a value back</em> rather than just printing something. That is what <code>return</code> does.</p>
+
+      <div class="predict-box">
+        <strong>Predict First!</strong>
+        This function uses <code>return</code> instead of <code>print()</code>. What is the difference? When line <code>result = add(3, 4)</code> runs, what value gets stored in <code>result</code>?
+        <button class="predict-toggle" onclick="this.nextElementSibling.classList.toggle('visible')">Reveal Answer</button>
+        <div class="predict-answer">7<br><br>The function calculates 3 + 4 = 7 and returns it. The value 7 is stored in the variable result. Unlike print(), return sends a value back to the caller so it can be used later.</div>
+      </div>
+
       <div class="code-block">
         <div class="code-block-header">
           <span class="code-block-label">Python Code</span>

@@ -84,6 +84,13 @@
       <h3>Example 1: Print Formatting with f-strings</h3>
       <p>An <strong>f-string</strong> (formatted string literal) lets you embed variables directly inside a string. Just put an <code>f</code> before the opening quote, and wrap any variable name in curly braces <code>{}</code>. Python fills in the values for you.</p>
 
+      <div class="predict-box">
+        <strong>Predict First!</strong>
+        Look at the three <code>print()</code> statements below. The third one contains <code>{age + 1}</code> inside the f-string. What will the third line print &mdash; will Python do the maths inside the curly braces, or will it print the text literally?
+        <button class="predict-toggle" onclick="this.nextElementSibling.classList.toggle('visible')">Reveal Answer</button>
+        <div class="predict-answer">My name is Alice and I am 15 years old.<br>I attend Greenwood Academy.<br>Next year I will be 16!</div>
+      </div>
+
       <div class="code-block">
         <div class="code-block-header">
           <span class="code-block-label">Python Code</span>
@@ -109,6 +116,13 @@ print(f"Next year I will be {age + 1}!")</code></pre>
 
       <h3>Example 2: String Concatenation</h3>
       <p>Before f-strings existed, programmers joined strings together using the <code>+</code> operator. This is called <strong>concatenation</strong> (from the Latin word meaning &ldquo;to chain together&rdquo;). It still works perfectly and you will see it in lots of existing code.</p>
+
+      <div class="predict-box">
+        <strong>Predict First!</strong>
+        Look at the code below. When <code>first_name + " " + surname</code> runs, what will <code>full_name</code> contain? Why is the <code>" "</code> in the middle important &mdash; what would happen without it?
+        <button class="predict-toggle" onclick="this.nextElementSibling.classList.toggle('visible')">Reveal Answer</button>
+        <div class="predict-answer">Full name: Priya Sharma<br>Hello, Priya Sharma! Welcome to Python.<br><br>Without the " ", full_name would be "PriyaSharma" &mdash; no space between the names!</div>
+      </div>
 
       <div class="code-block">
         <div class="code-block-header">

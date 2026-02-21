@@ -1,0 +1,1046 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Compare &amp; Critique Code - Python Fundamentals</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <style>
+    /* === Page-specific styles === */
+
+    /* Override body max-width for this wider layout */
+    body {
+      max-width: 960px;
+    }
+
+    /* Progress bar */
+    .progress-strip {
+      display: flex;
+      gap: 6px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: var(--space-lg);
+    }
+
+    .progress-pip {
+      width: 32px;
+      height: 8px;
+      border-radius: 4px;
+      background: #e0e0e0;
+      border: 1px solid #ccc;
+      transition: background 0.3s, border-color 0.3s;
+      cursor: pointer;
+    }
+
+    .progress-pip.active {
+      background: var(--color-link);
+      border-color: var(--color-link);
+    }
+
+    .progress-pip.completed {
+      background: #06d6a0;
+      border-color: #06d6a0;
+    }
+
+    /* Score display */
+    .score-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+      margin-bottom: var(--space-lg);
+      padding: var(--space-sm) var(--space-lg);
+      background: var(--color-white);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-sm);
+      border: 2px solid #e0e0e0;
+    }
+
+    .score-bar .score-label {
+      font-weight: 700;
+      font-size: 0.9rem;
+      color: var(--color-text);
+    }
+
+    .score-bar .score-value {
+      font-family: var(--font-code);
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--color-link);
+    }
+
+    /* Challenge card */
+    .challenge-card {
+      background: var(--color-white);
+      border: 2px solid #e0e0e0;
+      border-radius: var(--radius-lg);
+      padding: var(--space-xl);
+      margin-bottom: var(--space-lg);
+      box-shadow: var(--shadow-sm);
+      transition: border-color 0.2s;
+    }
+
+    .challenge-card:hover {
+      border-color: var(--color-link);
+    }
+
+    .challenge-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+      margin-bottom: var(--space-lg);
+    }
+
+    .challenge-number {
+      font-size: 0.8rem;
+      font-weight: 800;
+      color: var(--color-link);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    .challenge-title {
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: var(--color-text);
+      margin: var(--space-xs) 0 0 0;
+    }
+
+    .challenge-theme {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 800;
+      padding: var(--space-xs) var(--space-md);
+      border-radius: 50px;
+      color: var(--color-white);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .theme-readability { background: var(--gradient-blue); }
+    .theme-efficiency { background: var(--gradient-orange); }
+    .theme-structure { background: var(--gradient-green); }
+    .theme-robustness { background: var(--gradient-pink); }
+    .theme-comments { background: var(--gradient-purple); }
+    .theme-layout { background: linear-gradient(135deg, #e63946, #d62828); }
+    .theme-maintainability { background: linear-gradient(135deg, #0077b6, #00b4d8); }
+    .theme-pythonic { background: linear-gradient(135deg, #2d6a4f, #40916c); }
+
+    .challenge-scenario {
+      font-size: 0.95rem;
+      color: var(--color-text-light);
+      margin-bottom: var(--space-lg);
+      padding: var(--space-md);
+      background: var(--color-idea);
+      border-left: 4px solid var(--color-idea-border);
+      border-radius: var(--radius-sm);
+    }
+
+    /* Side-by-side code panels */
+    .code-comparison {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-md);
+      margin-bottom: var(--space-lg);
+    }
+
+    @media (max-width: 700px) {
+      .code-comparison {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .code-solution {
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      box-shadow: var(--shadow-md);
+    }
+
+    .code-solution-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--color-code-header);
+      padding: var(--space-sm) var(--space-md);
+    }
+
+    .code-solution-label {
+      color: #ccc;
+      font-size: 0.85rem;
+      font-family: var(--font-code);
+      font-weight: 600;
+    }
+
+    .code-solution-label.label-a {
+      color: #ff6b6b;
+    }
+
+    .code-solution-label.label-b {
+      color: #51cf66;
+    }
+
+    .code-solution pre {
+      margin: 0;
+      padding: var(--space-lg);
+      background: var(--color-code-bg);
+      overflow-x: auto;
+    }
+
+    .code-solution code {
+      font-family: var(--font-code);
+      font-size: 0.85rem;
+      color: var(--color-code-text);
+      line-height: 1.7;
+      white-space: pre;
+    }
+
+    /* Multiple choice options */
+    .choice-section {
+      margin-bottom: var(--space-lg);
+    }
+
+    .choice-section h4 {
+      margin-top: 0;
+      margin-bottom: var(--space-md);
+      font-size: 1rem;
+      color: var(--color-text);
+    }
+
+    .choice-options {
+      display: flex;
+      gap: var(--space-sm);
+      flex-wrap: wrap;
+      margin-bottom: var(--space-md);
+    }
+
+    .choice-btn {
+      font-family: var(--font-body);
+      font-size: 0.9rem;
+      font-weight: 700;
+      padding: var(--space-sm) var(--space-lg);
+      border: 2px solid #d0d0d0;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      background: var(--color-white);
+      color: var(--color-text);
+      transition: border-color 0.2s, background 0.2s, transform 0.15s;
+    }
+
+    .choice-btn:hover {
+      border-color: var(--color-link);
+      background: var(--color-idea);
+      transform: translateY(-1px);
+    }
+
+    .choice-btn.selected {
+      border-color: var(--color-link);
+      background: var(--color-idea);
+      color: var(--color-link);
+    }
+
+    .choice-btn.correct {
+      border-color: #06d6a0;
+      background: #e6f9f1;
+      color: #087f5b;
+    }
+
+    .choice-btn.incorrect {
+      border-color: #e63946;
+      background: #fff5f5;
+      color: #c92a2a;
+    }
+
+    .choice-btn:disabled {
+      cursor: default;
+      transform: none;
+    }
+
+    .choice-btn:disabled:hover {
+      transform: none;
+    }
+
+    /* Reasoning textarea */
+    .reasoning-section {
+      margin-bottom: var(--space-lg);
+    }
+
+    .reasoning-section label {
+      display: block;
+      font-weight: 700;
+      font-size: 0.95rem;
+      margin-bottom: var(--space-sm);
+      color: var(--color-text);
+    }
+
+    .reasoning-textarea {
+      width: 100%;
+      min-height: 100px;
+      padding: var(--space-md);
+      border: 2px solid #d0d0d0;
+      border-radius: var(--radius-md);
+      font-family: var(--font-body);
+      font-size: 0.9rem;
+      line-height: 1.6;
+      color: var(--color-text);
+      background: var(--color-white);
+      resize: vertical;
+      transition: border-color 0.2s;
+    }
+
+    .reasoning-textarea:focus {
+      outline: none;
+      border-color: var(--color-link);
+    }
+
+    .reasoning-textarea::placeholder {
+      color: #aaa;
+    }
+
+    /* Action buttons */
+    .action-row {
+      display: flex;
+      gap: var(--space-sm);
+      flex-wrap: wrap;
+      align-items: center;
+      margin-bottom: var(--space-md);
+    }
+
+    .submit-btn {
+      background: var(--gradient-blue);
+      color: var(--color-white);
+      font-family: var(--font-body);
+      font-size: 0.9rem;
+      font-weight: 700;
+      padding: var(--space-sm) var(--space-xl);
+      border: none;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+
+    .submit-btn:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .submit-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .reveal-btn {
+      background: var(--gradient-purple);
+      color: var(--color-white);
+      font-family: var(--font-body);
+      font-size: 0.9rem;
+      font-weight: 700;
+      padding: var(--space-sm) var(--space-xl);
+      border: none;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+
+    .reveal-btn:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .reveal-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* Feedback box */
+    .feedback-box {
+      padding: var(--space-md) var(--space-lg);
+      border-radius: var(--radius-md);
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-bottom: var(--space-md);
+      display: none;
+      animation: fadeSlideIn 0.3s ease;
+    }
+
+    .feedback-box.show {
+      display: block;
+    }
+
+    .feedback-box.correct {
+      background: #e6f9f1;
+      color: #087f5b;
+      border: 2px solid #06d6a0;
+    }
+
+    .feedback-box.incorrect {
+      background: #fff5f5;
+      color: #c92a2a;
+      border: 2px solid #e63946;
+    }
+
+    .feedback-box.info {
+      background: var(--color-idea);
+      color: var(--color-link);
+      border: 2px solid var(--color-link);
+    }
+
+    /* Expert analysis panel */
+    .analysis-panel {
+      display: none;
+      background: linear-gradient(135deg, #f3e8ff, #ede5ff);
+      border: 2px solid #7209b7;
+      border-radius: var(--radius-md);
+      padding: var(--space-lg);
+      margin-top: var(--space-md);
+      animation: fadeSlideIn 0.4s ease;
+    }
+
+    .analysis-panel.show {
+      display: block;
+    }
+
+    .analysis-panel h4 {
+      margin-top: 0;
+      margin-bottom: var(--space-sm);
+      color: #7209b7;
+      font-size: 1rem;
+    }
+
+    .analysis-panel p {
+      font-size: 0.9rem;
+      color: var(--color-text);
+      line-height: 1.7;
+      margin-bottom: var(--space-sm);
+    }
+
+    .analysis-panel p:last-child {
+      margin-bottom: 0;
+    }
+
+    .analysis-panel .exam-link {
+      display: inline-block;
+      margin-top: var(--space-sm);
+      padding: var(--space-xs) var(--space-md);
+      background: var(--gradient-green);
+      color: var(--color-white);
+      border-radius: 50px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    /* Navigation buttons */
+    .nav-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--space-md);
+      margin-top: var(--space-lg);
+    }
+
+    .nav-btn {
+      background: var(--gradient-blue);
+      color: var(--color-white);
+      font-family: var(--font-body);
+      font-size: 0.9rem;
+      font-weight: 700;
+      padding: var(--space-sm) var(--space-xl);
+      border: none;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      transition: transform 0.15s, box-shadow 0.15s;
+      text-decoration: none;
+    }
+
+    .nav-btn:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+      color: var(--color-white);
+    }
+
+    .nav-btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .nav-btn.secondary {
+      background: linear-gradient(135deg, #4a4a6a, #3a3a5a);
+    }
+
+    /* Completion panel */
+    .completion-panel {
+      display: none;
+      text-align: center;
+      padding: var(--space-2xl);
+      background: var(--color-white);
+      border: 2px solid #06d6a0;
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-lg);
+      animation: fadeSlideIn 0.5s ease;
+    }
+
+    .completion-panel.show {
+      display: block;
+    }
+
+    .completion-panel h2 {
+      margin-top: 0;
+      color: #087f5b;
+    }
+
+    .completion-panel .final-score {
+      font-size: 2.5rem;
+      font-weight: 800;
+      background: var(--gradient-hero);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin: var(--space-md) 0;
+    }
+
+    .completion-panel p {
+      color: var(--color-text-light);
+      font-size: 1rem;
+    }
+
+    .restart-btn {
+      margin-top: var(--space-lg);
+      background: var(--gradient-green);
+      color: var(--color-white);
+      font-family: var(--font-body);
+      font-size: 1rem;
+      font-weight: 700;
+      padding: var(--space-md) var(--space-2xl);
+      border: none;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+
+    .restart-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+
+    /* Animations */
+    @keyframes fadeSlideIn {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="site-header">
+    <p><a href="../index.html">&larr; Back to Course</a></p>
+    <h1>Compare &amp; Critique Code</h1>
+    <p class="subtitle">Evaluate different solutions and develop your code review skills</p>
+  </header>
+
+  <main>
+
+    <!-- Score Bar -->
+    <div class="score-bar" id="scoreBar">
+      <span class="score-label">Challenge <span id="currentNum">1</span> of 8</span>
+      <span class="score-value">Score: <span id="scoreDisplay">0</span> / 8</span>
+    </div>
+
+    <!-- Progress Pips -->
+    <div class="progress-strip" id="progressStrip"></div>
+
+    <!-- Challenge Container (dynamically populated) -->
+    <div id="challengeContainer"></div>
+
+    <!-- Completion Panel -->
+    <div class="completion-panel" id="completionPanel">
+      <h2>Activity Complete</h2>
+      <div class="final-score" id="finalScore"></div>
+      <p id="completionMsg"></p>
+      <button class="restart-btn" onclick="restartAll()">Try Again</button>
+    </div>
+
+  </main>
+
+  <footer class="site-footer">
+    <p>Python Fundamentals &mdash; A KS4 Learning Platform</p>
+  </footer>
+
+<script>
+// ============================================================
+//  Challenge Data
+// ============================================================
+const CHALLENGES = [
+  {
+    id: 1,
+    theme: "Readability",
+    themeClass: "theme-readability",
+    title: "Variable Naming",
+    scenario: "Both programs calculate the final price after applying a discount to a quantity of items. They produce the exact same output. Which solution is better and why?",
+    codeA: `x = 5\ny = 12.99\nz = 0.1\na = x * y\nb = a - (a * z)\nprint(b)`,
+    codeB: `quantity = 5\nunit_price = 12.99\ndiscount = 0.1\ntotal_price = quantity * unit_price\nfinal_price = total_price - (total_price * discount)\nprint(final_price)`,
+    labelA: "Solution A",
+    labelB: "Solution B",
+    correctAnswer: "B",
+    options: [
+      { value: "A", text: "Solution A is better" },
+      { value: "B", text: "Solution B is better" },
+      { value: "both", text: "Both have merits" }
+    ],
+    analysis: [
+      "Solution B is significantly better. Meaningful variable names like <code>quantity</code>, <code>unit_price</code>, and <code>discount</code> make the code self-documenting. Anyone reading it immediately understands what the program does.",
+      "Solution A uses single-letter names (<code>x</code>, <code>y</code>, <code>z</code>) which give no indication of what the values represent. In an exam, this would lose marks for poor readability and maintainability.",
+      "<strong>Exam tip:</strong> Pearson examiners specifically penalise non-descriptive variable names. Always use names that explain the purpose of the data they hold."
+    ]
+  },
+  {
+    id: 2,
+    theme: "Efficiency",
+    themeClass: "theme-efficiency",
+    title: "Loop vs Direct Calculation",
+    scenario: "Both programs calculate the sum of all integers from 1 to n. They produce the same result but use very different approaches. Which is better?",
+    codeA: `n = 1000\ntotal = 0\nfor i in range(1, n + 1):\n    total = total + i\nprint(total)`,
+    codeB: `n = 1000\ntotal = n * (n + 1) // 2\nprint(total)`,
+    labelA: "Solution A (Loop)",
+    labelB: "Solution B (Formula)",
+    correctAnswer: "both",
+    options: [
+      { value: "A", text: "Solution A is better" },
+      { value: "B", text: "Solution B is better" },
+      { value: "both", text: "Both have merits" }
+    ],
+    analysis: [
+      "Both solutions have genuine merits. Solution B is far more <strong>efficient</strong> &mdash; it calculates the answer in a single step regardless of the size of <code>n</code>, whereas Solution A must iterate through every number (O(n) vs O(1) time complexity).",
+      "However, Solution A is more <strong>readable</strong> for a beginner. The loop clearly shows the accumulation pattern that many GCSE students are expected to demonstrate. Solution B uses Gauss&rsquo;s formula, which requires mathematical knowledge.",
+      "<strong>Exam tip:</strong> In an exam, if asked to write a program to sum numbers, either approach is acceptable. However, if asked about <em>efficiency</em>, the formula approach is superior. Knowing both methods demonstrates strong computational thinking."
+    ]
+  },
+  {
+    id: 3,
+    theme: "Structure",
+    themeClass: "theme-structure",
+    title: "Flat Code vs Functions",
+    scenario: "Both programs calculate the area of a rectangle and a circle. Compare how they are structured.",
+    codeA: `length = 10\nwidth = 5\nrect_area = length * width\nprint("Rectangle area:", rect_area)\n\nradius = 7\npi = 3.14159\ncirc_area = pi * radius * radius\nprint("Circle area:", circ_area)`,
+    codeB: `def rectangle_area(length, width):\n    return length * width\n\ndef circle_area(radius):\n    pi = 3.14159\n    return pi * radius * radius\n\nprint("Rectangle area:", rectangle_area(10, 5))\nprint("Circle area:", circle_area(7))`,
+    labelA: "Solution A (Flat Script)",
+    labelB: "Solution B (Functions)",
+    correctAnswer: "B",
+    options: [
+      { value: "A", text: "Solution A is better" },
+      { value: "B", text: "Solution B is better" },
+      { value: "both", text: "Both have merits" }
+    ],
+    analysis: [
+      "Solution B is better because it uses <strong>decomposition</strong> &mdash; breaking the problem into smaller, reusable sub-programs. Each function has a single, clear responsibility.",
+      "The functions in Solution B can be <strong>reused</strong> anywhere in the program without repeating code. If you needed to calculate 50 different rectangle areas, Solution A would require duplicating the formula 50 times, whereas Solution B just calls <code>rectangle_area()</code> with different arguments.",
+      "Solution A works but is harder to maintain and scale. This is a common weakness Pearson examiners note: candidates who write &lsquo;flat&rsquo; scripts without using subprograms.",
+      "<strong>Exam tip:</strong> Always use functions for repeated or logically distinct operations. Examiners award marks for demonstrating decomposition and abstraction."
+    ]
+  },
+  {
+    id: 4,
+    theme: "Robustness",
+    themeClass: "theme-robustness",
+    title: "With vs Without Input Validation",
+    scenario: "Both programs ask the user for their age and display a message. What happens if the user types something that is not a number?",
+    codeA: `age = int(input("Enter your age: "))\nif age >= 18:\n    print("You can vote!")\nelse:\n    print("Too young to vote.")`,
+    codeB: `while True:\n    try:\n        age = int(input("Enter your age: "))\n        break\n    except ValueError:\n        print("Please enter a valid number.")\n\nif age >= 18:\n    print("You can vote!")\nelse:\n    print("Too young to vote.")`,
+    labelA: "Solution A (No Validation)",
+    labelB: "Solution B (With Validation)",
+    correctAnswer: "B",
+    options: [
+      { value: "A", text: "Solution A is better" },
+      { value: "B", text: "Solution B is better" },
+      { value: "both", text: "Both have merits" }
+    ],
+    analysis: [
+      "Solution B is better because it is <strong>robust</strong>. If the user enters \"hello\" instead of a number, Solution A crashes with a <code>ValueError</code>. Solution B catches that error and asks again.",
+      "The <code>try/except</code> pattern is essential for writing real-world programs that handle unexpected input gracefully. The <code>while True</code> loop keeps asking until valid input is provided.",
+      "Solution A is simpler and might be acceptable for a very basic task, but in any exam question about <strong>validation</strong> or <strong>defensive design</strong>, the examiner expects error handling.",
+      "<strong>Exam tip:</strong> Pearson papers frequently ask candidates to add validation to programs. Learn the <code>try/except</code> pattern &mdash; it comes up in almost every series."
+    ]
+  },
+  {
+    id: 5,
+    theme: "Comments",
+    themeClass: "theme-comments",
+    title: "Over-commenting vs Under-commenting",
+    scenario: "Both programs calculate the average of a list of scores. Compare their commenting styles.",
+    codeA: `# Create a list called scores\nscores = [85, 92, 78, 95, 88]\n# Create a variable called total\ntotal = 0\n# Use a for loop to go through scores\nfor score in scores:\n    # Add score to total\n    total = total + score\n# Calculate average by dividing total by length\naverage = total / len(scores)\n# Print the average\nprint("Average:", average)`,
+    codeB: `scores = [85, 92, 78, 95, 88]\ntotal = 0\n\nfor score in scores:\n    total = total + score\n\n# Calculate mean average across all test scores\naverage = total / len(scores)\nprint("Average:", average)`,
+    labelA: "Solution A (Every Line)",
+    labelB: "Solution B (Key Logic Only)",
+    correctAnswer: "B",
+    options: [
+      { value: "A", text: "Solution A is better" },
+      { value: "B", text: "Solution B is better" },
+      { value: "both", text: "Both have merits" }
+    ],
+    analysis: [
+      "Solution B has better commenting practice. Comments should explain <strong>why</strong> something is done or clarify complex logic, not restate what the code already says.",
+      "Solution A's comments are redundant &mdash; <code># Create a variable called total</code> adds no value when the next line literally says <code>total = 0</code>. This is called &lsquo;over-commenting&rsquo; and actually makes code harder to read by adding visual noise.",
+      "Solution B comments only on the non-obvious calculation, which is exactly the right approach. The rest of the code is clear enough through good variable naming.",
+      "<strong>Exam tip:</strong> Examiners want to see meaningful comments that demonstrate understanding, not comments on every line. One well-placed comment is worth more than ten obvious ones."
+    ]
+  },
+  {
+    id: 6,
+    theme: "Layout",
+    themeClass: "theme-layout",
+    title: "Indentation and Layout",
+    scenario: "Both programs check whether a number is positive, negative, or zero. One follows PEP 8 conventions; the other does not. Which is better?",
+    codeA: `number=int(input("Enter number:"))\nif number>0:\n print("Positive")\n  if number>100:\n  print("Big number")\nelif number<0:\n   print("Negative")\nelse:\n      print("Zero")`,
+    codeB: `number = int(input("Enter a number: "))\n\nif number > 0:\n    print("Positive")\n    if number > 100:\n        print("Big number")\nelif number < 0:\n    print("Negative")\nelse:\n    print("Zero")`,
+    labelA: "Solution A (Messy Layout)",
+    labelB: "Solution B (PEP 8 Style)",
+    correctAnswer: "B",
+    options: [
+      { value: "A", text: "Solution A is better" },
+      { value: "B", text: "Solution B is better" },
+      { value: "both", text: "Both have merits" }
+    ],
+    analysis: [
+      "Solution B is clearly better. Consistent indentation is not just about style in Python &mdash; it is part of the <strong>syntax</strong>. Incorrect indentation causes <code>IndentationError</code> or changes the program&rsquo;s logic entirely.",
+      "Solution A has inconsistent indentation (1 space, 2 spaces, 3 spaces, 6 spaces) which makes the code structure ambiguous. The nested <code>if</code> block is not properly indented, so it would actually produce incorrect behaviour or errors.",
+      "Solution B follows PEP 8: 4 spaces per indentation level, spaces around operators, and blank lines to separate logical sections. This is the standard every Python developer follows.",
+      "<strong>Exam tip:</strong> In written exams, indentation matters. Examiners have noted that messy indentation is one of the most common reasons candidates lose marks on code-writing questions."
+    ]
+  },
+  {
+    id: 7,
+    theme: "Maintainability",
+    themeClass: "theme-maintainability",
+    title: "Constants vs Magic Numbers",
+    scenario: "Both programs calculate prices with VAT added. Compare how they handle the VAT rate.",
+    codeA: `item1 = 29.99\nitem1_with_vat = item1 + (item1 * 0.2)\nprint("Item 1:", item1_with_vat)\n\nitem2 = 49.99\nitem2_with_vat = item2 + (item2 * 0.2)\nprint("Item 2:", item2_with_vat)\n\ntotal = item1_with_vat + item2_with_vat\ndelivery = 5.99 + (5.99 * 0.2)\nprint("Total:", total + delivery)`,
+    codeB: `VAT_RATE = 0.2\nDELIVERY_CHARGE = 5.99\n\ndef add_vat(price):\n    return price + (price * VAT_RATE)\n\nitem1 = add_vat(29.99)\nitem2 = add_vat(49.99)\ndelivery = add_vat(DELIVERY_CHARGE)\n\nprint("Item 1:", item1)\nprint("Item 2:", item2)\nprint("Total:", item1 + item2 + delivery)`,
+    labelA: "Solution A (Magic Numbers)",
+    labelB: "Solution B (Named Constants)",
+    correctAnswer: "B",
+    options: [
+      { value: "A", text: "Solution A is better" },
+      { value: "B", text: "Solution B is better" },
+      { value: "both", text: "Both have merits" }
+    ],
+    analysis: [
+      "Solution B is better because it uses <strong>named constants</strong> (<code>VAT_RATE</code>, <code>DELIVERY_CHARGE</code>) instead of &lsquo;magic numbers&rsquo; scattered throughout the code.",
+      "If the VAT rate changes (e.g. from 20% to 15%), Solution A requires finding and updating <code>0.2</code> in three different places &mdash; and missing even one would introduce a bug. Solution B only needs one change at the top.",
+      "Constants named in UPPER_CASE signal to other developers that these values should not be modified during execution. This is a widely-used Python convention.",
+      "<strong>Exam tip:</strong> Examiners explicitly look for the use of constants vs magic numbers. Using named constants demonstrates understanding of maintainability &mdash; a key principle of good programming practice."
+    ]
+  },
+  {
+    id: 8,
+    theme: "Pythonic",
+    themeClass: "theme-pythonic",
+    title: "Manual Loop vs Built-in Functions",
+    scenario: "Both programs find the largest number in a list. Compare the two approaches.",
+    codeA: `numbers = [34, 67, 23, 89, 12, 45, 78]\nlargest = numbers[0]\nfor num in numbers:\n    if num > largest:\n        largest = num\nprint("Largest:", largest)`,
+    codeB: `numbers = [34, 67, 23, 89, 12, 45, 78]\nlargest = max(numbers)\nprint("Largest:", largest)`,
+    labelA: "Solution A (Manual Loop)",
+    labelB: "Solution B (Built-in max())",
+    correctAnswer: "both",
+    options: [
+      { value: "A", text: "Solution A is better" },
+      { value: "B", text: "Solution B is better" },
+      { value: "both", text: "Both have merits" }
+    ],
+    analysis: [
+      "Both solutions have genuine merits in different contexts. Solution B is more <strong>concise</strong> and <strong>Pythonic</strong> &mdash; it uses the built-in <code>max()</code> function, which is optimised and less error-prone.",
+      "Solution A demonstrates <strong>algorithmic understanding</strong>. It shows you understand <em>how</em> finding a maximum works: start with the first element, compare each subsequent element, and keep track of the largest. This is the kind of logic examiners want to see in algorithm questions.",
+      "In a real-world Python project, Solution B is preferred. But in an exam question that asks you to &lsquo;write an algorithm&rsquo; or &lsquo;use a loop&rsquo; to find the maximum, Solution A is what the examiner expects.",
+      "<strong>Exam tip:</strong> Read the question carefully. If it says &lsquo;write a program&rsquo;, using <code>max()</code> is fine. If it says &lsquo;write an algorithm to find the largest value&rsquo;, you must show the loop logic. Both skills are important."
+    ]
+  }
+];
+
+// ============================================================
+//  State
+// ============================================================
+let currentChallenge = 0;
+let score = 0;
+let answered = new Array(CHALLENGES.length).fill(false);
+let userAnswers = new Array(CHALLENGES.length).fill(null);
+
+// ============================================================
+//  Rendering
+// ============================================================
+function renderProgressStrip() {
+  const strip = document.getElementById('progressStrip');
+  strip.innerHTML = '';
+  CHALLENGES.forEach((ch, i) => {
+    const pip = document.createElement('div');
+    pip.className = 'progress-pip';
+    if (i === currentChallenge) pip.classList.add('active');
+    if (answered[i]) pip.classList.add('completed');
+    pip.title = 'Challenge ' + (i + 1) + ': ' + ch.title;
+    pip.addEventListener('click', () => navigateTo(i));
+    strip.appendChild(pip);
+  });
+}
+
+function renderChallenge(index) {
+  const ch = CHALLENGES[index];
+  const container = document.getElementById('challengeContainer');
+  const isAnswered = answered[index];
+
+  container.innerHTML = `
+    <div class="challenge-card">
+      <div class="challenge-header">
+        <div>
+          <span class="challenge-number">Challenge ${ch.id} of ${CHALLENGES.length}</span>
+          <h3 class="challenge-title">${ch.title}</h3>
+        </div>
+        <span class="challenge-theme ${ch.themeClass}">${ch.theme}</span>
+      </div>
+
+      <div class="challenge-scenario">
+        ${ch.scenario}
+      </div>
+
+      <div class="code-comparison">
+        <div class="code-solution">
+          <div class="code-solution-header">
+            <span class="code-solution-label label-a">${ch.labelA}</span>
+          </div>
+          <pre><code>${escapeHtml(ch.codeA)}</code></pre>
+        </div>
+        <div class="code-solution">
+          <div class="code-solution-header">
+            <span class="code-solution-label label-b">${ch.labelB}</span>
+          </div>
+          <pre><code>${escapeHtml(ch.codeB)}</code></pre>
+        </div>
+      </div>
+
+      <div class="choice-section">
+        <h4>Which solution is better?</h4>
+        <div class="choice-options" id="choiceOptions">
+          ${ch.options.map(opt => `
+            <button class="choice-btn${userAnswers[index] === opt.value ? (isAnswered ? (opt.value === ch.correctAnswer ? ' correct' : ' incorrect') : ' selected') : (isAnswered && opt.value === ch.correctAnswer ? ' correct' : '')}"
+                    data-value="${opt.value}"
+                    ${isAnswered ? 'disabled' : ''}
+                    onclick="selectChoice('${opt.value}')">
+              ${opt.text}
+            </button>
+          `).join('')}
+        </div>
+      </div>
+
+      <div class="reasoning-section">
+        <label for="reasoning">Explain your reasoning:</label>
+        <textarea class="reasoning-textarea" id="reasoning" placeholder="Why did you choose this answer? Think about readability, efficiency, maintainability..." ${isAnswered ? 'disabled' : ''}>${getStoredReasoning(index)}</textarea>
+      </div>
+
+      <div class="action-row">
+        <button class="submit-btn" id="submitBtn" onclick="submitAnswer()" ${isAnswered || !userAnswers[index] ? 'disabled' : ''}>Submit Answer</button>
+        <button class="reveal-btn" id="revealBtn" onclick="revealAnalysis()">Reveal Analysis</button>
+      </div>
+
+      <div class="feedback-box" id="feedbackBox"></div>
+
+      <div class="analysis-panel" id="analysisPanel">
+        <h4>Expert Analysis</h4>
+        ${ch.analysis.map(p => `<p>${p}</p>`).join('')}
+      </div>
+
+      <div class="nav-row">
+        <button class="nav-btn secondary" onclick="navigateTo(${index - 1})" ${index === 0 ? 'disabled' : ''}>&larr; Previous</button>
+        ${index < CHALLENGES.length - 1
+          ? `<button class="nav-btn" onclick="navigateTo(${index + 1})">Next &rarr;</button>`
+          : `<button class="nav-btn" onclick="showCompletion()" style="background: var(--gradient-green);">Finish Activity</button>`
+        }
+      </div>
+    </div>
+  `;
+
+  // If already answered, show analysis too
+  if (isAnswered) {
+    document.getElementById('analysisPanel').classList.add('show');
+    const fb = document.getElementById('feedbackBox');
+    if (userAnswers[index] === ch.correctAnswer) {
+      fb.className = 'feedback-box correct show';
+      fb.textContent = 'Correct! Well done.';
+    } else {
+      fb.className = 'feedback-box incorrect show';
+      fb.textContent = 'Not quite. The recommended answer is: ' + getAnswerLabel(ch, ch.correctAnswer) + '.';
+    }
+  }
+}
+
+function getAnswerLabel(ch, value) {
+  const opt = ch.options.find(o => o.value === value);
+  return opt ? opt.text : value;
+}
+
+// ============================================================
+//  Stored reasoning per challenge
+// ============================================================
+const reasoningStore = {};
+
+function getStoredReasoning(index) {
+  return reasoningStore[index] || '';
+}
+
+function storeReasoning(index) {
+  const el = document.getElementById('reasoning');
+  if (el) reasoningStore[index] = el.value;
+}
+
+// ============================================================
+//  Interaction
+// ============================================================
+function selectChoice(value) {
+  if (answered[currentChallenge]) return;
+  storeReasoning(currentChallenge);
+  userAnswers[currentChallenge] = value;
+
+  // Update button states visually
+  const btns = document.querySelectorAll('.choice-btn');
+  btns.forEach(btn => {
+    btn.classList.remove('selected');
+    if (btn.dataset.value === value) {
+      btn.classList.add('selected');
+    }
+  });
+
+  // Enable submit button
+  document.getElementById('submitBtn').disabled = false;
+}
+
+function submitAnswer() {
+  const index = currentChallenge;
+  const ch = CHALLENGES[index];
+  const userAnswer = userAnswers[index];
+  if (!userAnswer || answered[index]) return;
+
+  storeReasoning(index);
+  answered[index] = true;
+
+  const isCorrect = userAnswer === ch.correctAnswer;
+  if (isCorrect) score++;
+
+  // Update score display
+  document.getElementById('scoreDisplay').textContent = score;
+
+  // Show feedback
+  const fb = document.getElementById('feedbackBox');
+  if (isCorrect) {
+    fb.className = 'feedback-box correct show';
+    fb.textContent = 'Correct! Well done.';
+  } else {
+    fb.className = 'feedback-box incorrect show';
+    fb.textContent = 'Not quite. The recommended answer is: ' + getAnswerLabel(ch, ch.correctAnswer) + '.';
+  }
+
+  // Disable buttons
+  document.querySelectorAll('.choice-btn').forEach(btn => {
+    btn.disabled = true;
+    btn.classList.remove('selected');
+    if (btn.dataset.value === ch.correctAnswer) {
+      btn.classList.add('correct');
+    } else if (btn.dataset.value === userAnswer && !isCorrect) {
+      btn.classList.add('incorrect');
+    }
+  });
+
+  document.getElementById('submitBtn').disabled = true;
+  document.getElementById('reasoning').disabled = true;
+
+  // Show analysis
+  document.getElementById('analysisPanel').classList.add('show');
+
+  // Update progress
+  renderProgressStrip();
+}
+
+function revealAnalysis() {
+  storeReasoning(currentChallenge);
+  document.getElementById('analysisPanel').classList.add('show');
+}
+
+function navigateTo(index) {
+  if (index < 0 || index >= CHALLENGES.length) return;
+  storeReasoning(currentChallenge);
+  currentChallenge = index;
+  document.getElementById('currentNum').textContent = index + 1;
+  document.getElementById('completionPanel').classList.remove('show');
+  document.getElementById('challengeContainer').style.display = 'block';
+  renderProgressStrip();
+  renderChallenge(index);
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function showCompletion() {
+  storeReasoning(currentChallenge);
+  document.getElementById('challengeContainer').style.display = 'none';
+
+  const panel = document.getElementById('completionPanel');
+  const answeredCount = answered.filter(Boolean).length;
+
+  document.getElementById('finalScore').textContent = score + ' / ' + CHALLENGES.length;
+
+  let msg;
+  if (score === CHALLENGES.length) {
+    msg = 'Perfect score! You have an excellent understanding of code quality principles.';
+  } else if (score >= CHALLENGES.length * 0.75) {
+    msg = 'Great work! You have a strong grasp of what makes code good. Review the challenges you missed to strengthen your understanding.';
+  } else if (score >= CHALLENGES.length * 0.5) {
+    msg = 'Good effort! Review the expert analysis for each challenge to improve your code evaluation skills.';
+  } else {
+    msg = 'Keep practising! Go through each challenge again and read the expert analysis carefully. These skills are essential for your exam.';
+  }
+
+  if (answeredCount < CHALLENGES.length) {
+    msg += ' Note: You skipped ' + (CHALLENGES.length - answeredCount) + ' challenge(s). Go back and try them all for the full experience.';
+  }
+
+  document.getElementById('completionMsg').textContent = msg;
+  panel.classList.add('show');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function restartAll() {
+  currentChallenge = 0;
+  score = 0;
+  answered = new Array(CHALLENGES.length).fill(false);
+  userAnswers = new Array(CHALLENGES.length).fill(null);
+  Object.keys(reasoningStore).forEach(k => delete reasoningStore[k]);
+
+  document.getElementById('scoreDisplay').textContent = '0';
+  document.getElementById('currentNum').textContent = '1';
+  document.getElementById('completionPanel').classList.remove('show');
+  document.getElementById('challengeContainer').style.display = 'block';
+
+  renderProgressStrip();
+  renderChallenge(0);
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ============================================================
+//  Utilities
+// ============================================================
+function escapeHtml(text) {
+  const div = document.createElement('div');
+  div.textContent = text;
+  return div.innerHTML;
+}
+
+// ============================================================
+//  Initialise
+// ============================================================
+renderProgressStrip();
+renderChallenge(0);
+</script>
+
+</body>
+</html>

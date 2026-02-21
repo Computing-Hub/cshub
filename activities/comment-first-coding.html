@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Comment-First Coding - Python Fundamentals</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <script src="https://cdn.jsdelivr.net/pyodide/v0.24.0/full/pyodide.js"></script>
+</head>
+<body>
+
+  <header class="site-header">
+    <p><a href="../index.html">&larr; Back to Course</a></p>
+    <h1>Comment-First Coding</h1>
+    <p class="subtitle">Learn to plan with comments before writing code &mdash; a key exam skill</p>
+  </header>
+
+  <main>
+
+    <!-- ==================== THE IDEA ==================== -->
+    <section class="idea">
+      <span class="section-label">The Idea</span>
+      <h2>What Is Comment-First Coding?</h2>
+
+      <p>Comment-first coding is a simple but powerful strategy: <strong>before you write a single line of Python, you write your plan as comments.</strong> Each comment describes one step your program needs to take. Once your plan is in place, you fill in the actual code underneath each comment.</p>
+
+      <p>This technique directly addresses one of the most common reasons students lose marks in their GCSE Computer Science exams. The Chief Examiner has repeatedly noted:</p>
+
+      <div class="warning">
+        <strong>Examiner Feedback:</strong> &ldquo;Students fail to use scaffolding and comments effectively&rdquo; and &ldquo;Students struggle to plan, break down and structure programs.&rdquo; Students who plan their programs before coding consistently score higher marks.
+      </div>
+
+      <p>Think of it like building a house. No builder starts laying bricks without a blueprint. Comments are your blueprint &mdash; they show the examiner (and yourself) that you understand the problem and have a clear plan for solving it.</p>
+
+      <h3>The Process</h3>
+      <ol>
+        <li><strong>Read the task carefully</strong> &mdash; understand exactly what the program needs to do</li>
+        <li><strong>Break it into steps</strong> &mdash; identify the individual actions your program must perform</li>
+        <li><strong>Write comments for each step</strong> &mdash; describe what each part of the code should do</li>
+        <li><strong>Fill in the code</strong> &mdash; write the Python code underneath each comment</li>
+      </ol>
+
+      <div class="key-concept">
+        <strong>Why This Matters for Your Exam</strong>
+        The Pearson Edexcel GCSE mark scheme rewards clear program structure. Comments show the examiner your thought process, which can earn you marks even if your code contains minor errors. A well-commented program with a small bug will often score higher than an uncommented program that happens to work. Comments prove you understand the problem, even when your syntax is not perfect.
+      </div>
+
+      <p>Comment-first coding also helps you avoid one of the biggest traps in programming: <strong>trying to solve the whole problem at once.</strong> By breaking the task into small, manageable steps, each step becomes much easier to code. You stop staring at a blank screen wondering where to start, and instead work through a clear checklist.</p>
+    </section>
+
+    <!-- ==================== EXPLORE: WORKED EXAMPLE ==================== -->
+    <section class="explore">
+      <span class="section-label">Explore</span>
+      <h2>Worked Example</h2>
+
+      <p>Let us work through a complete example to see comment-first coding in action.</p>
+
+      <div class="exam-tip">
+        <strong>The Task:</strong> Create a program that asks for 5 test scores and calculates the average.
+      </div>
+
+      <h3>Step 1: Write the Comments (Your Plan)</h3>
+      <p>Before writing any code, we break the problem down into logical steps and write each one as a comment. This is your plan &mdash; your blueprint. Notice how each comment describes <strong>what</strong> needs to happen, not <strong>how</strong> to do it in Python.</p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">The Plan (Comments Only)</span>
+          <div>
+            <button class="copy-button">Copy Code</button>
+            <button class="run-button">Run Code</button>
+          </div>
+        </div>
+        <pre><code contenteditable="true"># Step 1: Create an empty list to store scores
+# Step 2: Use a loop to ask for 5 scores
+# Step 3: Add each score to the list
+# Step 4: Calculate the total of all scores
+# Step 5: Calculate the average
+# Step 6: Display the result</code></pre>
+        <div class="output-box empty">(click "Run Code" to see output)</div>
+      </div>
+
+      <p>If you run the code above, nothing happens &mdash; and that is exactly right. Comments are ignored by Python. But look at what we have achieved: a clear, step-by-step plan that anyone can follow. An examiner reading this would already know that you understand the problem.</p>
+
+      <h3>Step 2: Fill in the Code</h3>
+      <p>Now we write the Python code underneath each comment. Each comment tells us exactly what to write. The hard part (thinking about the logic) is already done.</p>
+
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Complete Solution</span>
+          <div>
+            <button class="copy-button">Copy Code</button>
+            <button class="run-button">Run Code</button>
+          </div>
+        </div>
+        <pre><code contenteditable="true"># Step 1: Create an empty list to store scores
+scores = []
+
+# Step 2: Use a loop to ask for 5 scores
+for i in range(5):
+    # Step 3: Add each score to the list
+    score = int(input("Enter score " + str(i + 1) + ": "))
+    scores.append(score)
+
+# Step 4: Calculate the total of all scores
+total = sum(scores)
+
+# Step 5: Calculate the average
+average = total / len(scores)
+
+# Step 6: Display the result
+print("Scores entered: " + str(scores))
+print("Total: " + str(total))
+print("Average: " + str(average))</code></pre>
+        <div class="output-box empty">(click "Run Code" to see output)</div>
+      </div>
+
+      <div class="try-this">
+        <strong>Notice:</strong> Every single line of code sits directly below its corresponding comment. The examiner can see your plan AND your implementation. If you make a small mistake in the code, the comment shows you knew what you were trying to do &mdash; and that can still earn marks.
+      </div>
+
+      <div class="key-concept">
+        <strong>Key Insight:</strong>
+        The comments did not change between Step 1 and Step 2. The plan stayed the same &mdash; we just added the code to carry it out. This is the power of comment-first coding: you separate <strong>thinking</strong> from <strong>typing</strong>.
+      </div>
+    </section>
+
+    <!-- ==================== PRACTICE ==================== -->
+    <section class="practice">
+      <span class="section-label">Practice</span>
+      <h2>Your Turn</h2>
+      <p>In each challenge below, the comments (your plan) have already been written. Your job is to write the Python code underneath each comment. Start with the guided challenges and work your way up to the open-ended one.</p>
+
+      <!-- Challenge 1: Greeting Generator -->
+      <div class="exercise">
+        <div class="exercise-title">Challenge 1: Greeting Generator</div>
+        <div class="exercise-difficulty difficulty-1">Guided</div>
+        <p>Ask for the user's name and age, then display a personalised greeting.</p>
+        <p>Expected output example: <em>"Hello, Alex! You are 15 years old."</em></p>
+
+        <div class="code-block">
+          <div class="code-block-header">
+            <span class="code-block-label">Your Code</span>
+            <div>
+              <button class="copy-button">Copy Code</button>
+              <button class="reset-button">Reset</button>
+              <button class="run-button">Run Code</button>
+            </div>
+          </div>
+          <pre><code contenteditable="true"># Ask the user for their name
+
+# Ask the user for their age (as a whole number)
+
+# Create a greeting message
+
+# Display the greeting
+</code></pre>
+          <div class="output-box empty">(click "Run Code" to see output)</div>
+        </div>
+
+        <div class="hint">
+          <div class="hint-title">Need a hint?</div>
+          <div class="hint-content">
+            <p>For the first comment, use <code>input()</code> to get the name: <code>name = input("What is your name? ")</code></p>
+            <p>For the age, remember to wrap <code>input()</code> in <code>int()</code> to convert it to a whole number.</p>
+            <p>To create the greeting, join strings together with <code>+</code>. Remember to convert the age back to a string with <code>str()</code> when joining.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Challenge 2: Even or Odd Checker -->
+      <div class="exercise">
+        <div class="exercise-title">Challenge 2: Even or Odd Checker</div>
+        <div class="exercise-difficulty difficulty-1">Guided</div>
+        <p>Ask the user for a number and tell them whether it is even or odd.</p>
+        <p>Expected output example: <em>"7 is odd"</em> or <em>"12 is even"</em></p>
+
+        <div class="code-block">
+          <div class="code-block-header">
+            <span class="code-block-label">Your Code</span>
+            <div>
+              <button class="copy-button">Copy Code</button>
+              <button class="reset-button">Reset</button>
+              <button class="run-button">Run Code</button>
+            </div>
+          </div>
+          <pre><code contenteditable="true"># Ask the user for a number
+
+# Convert the input to an integer
+
+# Check if the number is even using modulus
+
+# Display whether it is even or odd
+</code></pre>
+          <div class="output-box empty">(click "Run Code" to see output)</div>
+        </div>
+
+        <div class="hint">
+          <div class="hint-title">Need a hint?</div>
+          <div class="hint-content">
+            <p>You can combine the first two comments into one line: <code>number = int(input("Enter a number: "))</code></p>
+            <p>The modulus operator <code>%</code> gives the remainder after division. If <code>number % 2 == 0</code>, the number is even. Otherwise, it is odd.</p>
+            <p>Use an <code>if/else</code> statement to check and print the result.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Challenge 3: Times Table Generator -->
+      <div class="exercise">
+        <div class="exercise-title">Challenge 3: Times Table Generator</div>
+        <div class="exercise-difficulty difficulty-2">Partially Guided</div>
+        <p>Ask the user for a number and display its times table from 1 to 12.</p>
+        <p>Expected output example (for 5):</p>
+        <p><em>5 x 1 = 5<br />5 x 2 = 10<br />5 x 3 = 15<br />... and so on up to 12</em></p>
+
+        <div class="code-block">
+          <div class="code-block-header">
+            <span class="code-block-label">Your Code</span>
+            <div>
+              <button class="copy-button">Copy Code</button>
+              <button class="reset-button">Reset</button>
+              <button class="run-button">Run Code</button>
+            </div>
+          </div>
+          <pre><code contenteditable="true"># Get the number from the user
+
+# Loop from 1 to 12
+    # Calculate the result
+    # Display in format: 5 x 1 = 5
+</code></pre>
+          <div class="output-box empty">(click "Run Code" to see output)</div>
+        </div>
+
+        <div class="hint">
+          <div class="hint-title">Need a hint?</div>
+          <div class="hint-content">
+            <p>Use <code>for i in range(1, 13)</code> to loop from 1 to 12. Remember that <code>range()</code> stops before the end value, so you need 13 to include 12.</p>
+            <p>Inside the loop, calculate <code>result = number * i</code> and then print using: <code>print(str(number) + " x " + str(i) + " = " + str(result))</code></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Challenge 4: Password Strength Checker -->
+      <div class="exercise">
+        <div class="exercise-title">Challenge 4: Password Strength Checker</div>
+        <div class="exercise-difficulty difficulty-2">Partially Guided</div>
+        <p>Check if a password is at least 8 characters long and contains at least one digit. Rate it as strong, medium, or weak.</p>
+        <p>Rules: <strong>Strong</strong> = 8+ characters AND contains a digit. <strong>Medium</strong> = meets one condition. <strong>Weak</strong> = meets neither condition.</p>
+
+        <div class="code-block">
+          <div class="code-block-header">
+            <span class="code-block-label">Your Code</span>
+            <div>
+              <button class="copy-button">Copy Code</button>
+              <button class="reset-button">Reset</button>
+              <button class="run-button">Run Code</button>
+            </div>
+          </div>
+          <pre><code contenteditable="true"># Ask the user to enter a password
+
+# Check the length of the password
+
+# Check if the password contains at least one digit
+
+# Display the result: strong, medium, or weak
+</code></pre>
+          <div class="output-box empty">(click "Run Code" to see output)</div>
+        </div>
+
+        <div class="hint">
+          <div class="hint-title">Need a hint?</div>
+          <div class="hint-content">
+            <p>Use <code>len(password)</code> to check the length. Store the result of the check in a boolean variable: <code>long_enough = len(password) >= 8</code></p>
+            <p>To check for a digit, you can use a boolean variable and a loop:</p>
+            <pre style="background: rgba(0,0,0,0.05); padding: 8px; border-radius: 6px; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem;">has_digit = False
+for char in password:
+    if char.isdigit():
+        has_digit = True</pre>
+            <p>Then use <code>if</code>/<code>elif</code>/<code>else</code> to check the combinations: both true = strong, one true = medium, neither = weak.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Challenge 5: Write Your Own Comments First -->
+      <div class="exercise">
+        <div class="exercise-title">Challenge 5: Write Your Own Comments First</div>
+        <div class="exercise-difficulty difficulty-3">Open-Ended</div>
+        <p>This time, you write the comments AND the code. Read the task carefully, plan your steps as comments, then fill in the code.</p>
+
+        <div class="exam-tip">
+          <strong>The Task:</strong> A shop needs a program that calculates the total cost of items including a 20% VAT. The program should ask how many items the customer is buying, then ask for the price of each item, calculate the subtotal, add VAT, and display a receipt.
+        </div>
+
+        <p>Start by writing your comments (your plan), then write the code underneath each one. This is exactly what you should do in the exam.</p>
+
+        <div class="code-block">
+          <div class="code-block-header">
+            <span class="code-block-label">Your Code</span>
+            <div>
+              <button class="copy-button">Copy Code</button>
+              <button class="reset-button">Reset</button>
+              <button class="run-button">Run Code</button>
+            </div>
+          </div>
+          <pre><code contenteditable="true"># Write your comments first, then add code beneath each one
+
+</code></pre>
+          <div class="output-box empty">(click "Run Code" to see output)</div>
+        </div>
+
+        <div class="hint">
+          <div class="hint-title">Suggested comment structure (try writing your own first!)</div>
+          <div class="hint-content">
+            <p>Here is one way you could structure your comments:</p>
+            <pre style="background: rgba(0,0,0,0.05); padding: 8px; border-radius: 6px; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem;"># Ask how many items the customer is buying
+# Create a variable to store the subtotal
+# Use a loop to ask for the price of each item
+    # Add each price to the subtotal
+# Calculate the VAT (20% of the subtotal)
+# Calculate the total (subtotal + VAT)
+# Display the receipt with subtotal, VAT, and total</pre>
+            <p>Remember: <code>VAT = subtotal * 0.2</code> and <code>total = subtotal + VAT</code>.</p>
+            <p>Use <code>round(value, 2)</code> to round money values to 2 decimal places.</p>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <p>Python Fundamentals &mdash; A KS4 Learning Platform</p>
+  </footer>
+
+  <script src="../js/pyodide-runner.js"></script>
+</body>
+</html>
