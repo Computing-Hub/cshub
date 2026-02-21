@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Linked List</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #1e2a4a 50%, #1a1a2e 100%);
+            color: #fff;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #6366f1, #4f46e5);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin: 0 0 8px 0;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #888;
+            font-size: 0.95rem;
+            margin-bottom: 24px;
+        }
+
+        /* Controls */
+        .controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+
+        .input-field {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            padding: 10px 16px;
+            border-radius: 12px;
+            border: 2px solid #3a3a6a;
+            background: #1a1a2e;
+            color: #fff;
+            width: 140px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .input-field:focus {
+            border-color: #6366f1;
+        }
+
+        .btn {
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 600;
+            padding: 10px 18px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: #fff;
+        }
+
+        .btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+
+        .btn:active:not(:disabled) { transform: translateY(0); }
+        .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+        .btn-add-head { background: linear-gradient(135deg, #6366f1, #4f46e5); }
+        .btn-add-tail { background: linear-gradient(135deg, #8b5cf6, #7c3aed); }
+        .btn-remove { background: linear-gradient(135deg, #f7797d, #c471ed); }
+        .btn-search { background: linear-gradient(135deg, #43e97b, #38f9d7); color: #1a1a2e; }
+
+        /* Speed slider */
+        .speed-control {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-size: 0.85rem;
+            color: #888;
+            margin-bottom: 20px;
+        }
+
+        .speed-control input[type="range"] {
+            width: 120px;
+            accent-color: #6366f1;
+        }
+
+        /* Node counter */
+        .node-counter {
+            text-align: center;
+            font-size: 0.9rem;
+            color: #aaa;
+            margin-bottom: 20px;
+        }
+
+        .node-counter span {
+            color: #6366f1;
+            font-family: 'Fira Code', monospace;
+            font-weight: 600;
+        }
+
+        /* Linked list visual */
+        .list-viewport {
+            background: rgba(255,255,255,0.03);
+            border: 2px solid #2a2a4a;
+            border-radius: 16px;
+            padding: 30px 20px;
+            min-height: 140px;
+            overflow-x: auto;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+        }
+
+        .list-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0;
+            min-height: 80px;
+            flex-wrap: nowrap;
+        }
+
+        /* Node */
+        .node {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            animation: popIn 0.3s ease;
+        }
+
+        .node.removing {
+            animation: fadeOutNode 0.3s ease forwards;
+        }
+
+        .node-box {
+            display: flex;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+        }
+
+        .node.highlighted .node-box {
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.6);
+            transform: scale(1.1);
+        }
+
+        .node.search-found .node-box {
+            box-shadow: 0 0 20px rgba(67, 233, 123, 0.6);
+            transform: scale(1.1);
+        }
+
+        .node-data {
+            background: #6366f1;
+            color: #fff;
+            font-family: 'Fira Code', monospace;
+            font-size: 1rem;
+            font-weight: 600;
+            padding: 12px 16px;
+            min-width: 50px;
+            text-align: center;
+        }
+
+        .node-pointer {
+            background: #4f46e5;
+            color: #a5b4fc;
+            font-size: 0.7rem;
+            padding: 12px 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .node-label {
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: #6366f1;
+            margin-top: 6px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        /* Arrow between nodes */
+        .arrow {
+            display: flex;
+            align-items: center;
+            padding: 0 4px;
+        }
+
+        .arrow-line {
+            width: 30px;
+            height: 3px;
+            background: linear-gradient(90deg, #6366f1, #8b5cf6);
+            border-radius: 2px;
+            position: relative;
+        }
+
+        .arrow-line::after {
+            content: '';
+            position: absolute;
+            right: -6px;
+            top: -4px;
+            width: 0;
+            height: 0;
+            border-top: 6px solid transparent;
+            border-bottom: 6px solid transparent;
+            border-left: 8px solid #8b5cf6;
+        }
+
+        /* NULL terminator */
+        .null-node {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .null-box {
+            border: 2px dashed #4a4a6a;
+            border-radius: 12px;
+            padding: 12px 16px;
+            color: #666;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .empty-label {
+            color: #555;
+            font-size: 0.95rem;
+            font-style: italic;
+            text-align: center;
+            padding: 20px;
+        }
+
+        /* Feedback */
+        .feedback {
+            text-align: center;
+            min-height: 50px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .feedback-msg {
+            padding: 10px 20px;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            animation: slideInUp 0.3s ease;
+        }
+
+        .feedback-msg.success {
+            background: rgba(67, 233, 123, 0.15);
+            border: 1px solid rgba(67, 233, 123, 0.3);
+            color: #43e97b;
+        }
+
+        .feedback-msg.error {
+            background: rgba(247, 121, 125, 0.15);
+            border: 1px solid rgba(247, 121, 125, 0.3);
+            color: #f7797d;
+        }
+
+        .feedback-msg.info {
+            background: rgba(102, 126, 234, 0.15);
+            border: 1px solid rgba(102, 126, 234, 0.3);
+            color: #667eea;
+        }
+
+        .explanation {
+            margin-top: 8px;
+            font-size: 0.82rem;
+            color: #888;
+            max-width: 500px;
+            text-align: center;
+        }
+
+        /* Animations */
+        @keyframes slideInUp {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes popIn {
+            0% { opacity: 0; transform: scale(0.5); }
+            70% { transform: scale(1.05); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes fadeOutNode {
+            0% { opacity: 1; transform: scale(1); }
+            100% { opacity: 0; transform: scale(0.3); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Interactive Linked List</h1>
+        <p class="subtitle">Add, remove, and search through a singly linked list</p>
+
+        <!-- Controls -->
+        <div class="controls">
+            <input type="text" class="input-field" id="valueInput" placeholder="Enter a value" maxlength="8">
+            <button class="btn btn-add-head" onclick="addNodeAtHead()">Add at Head</button>
+            <button class="btn btn-add-tail" onclick="addNodeAtTail()">Add at Tail</button>
+            <button class="btn btn-remove" onclick="removeNodeFromHead()">Remove Head</button>
+            <button class="btn btn-remove" onclick="removeSpecificNode()">Remove Value</button>
+            <button class="btn btn-search" onclick="searchNode()">Search</button>
+        </div>
+
+        <!-- Speed control -->
+        <div class="speed-control">
+            <span>Traversal speed:</span>
+            <input type="range" id="speedSlider" min="100" max="1000" value="400" step="100">
+            <span id="speedLabel">400ms</span>
+        </div>
+
+        <!-- Node counter -->
+        <div class="node-counter">Nodes: <span id="nodeCount">0</span></div>
+
+        <!-- Linked list display -->
+        <div class="list-viewport">
+            <div class="list-container" id="linkedListContainer">
+                <div class="empty-label">Linked list is empty — add a node to start</div>
+            </div>
+        </div>
+
+        <!-- Feedback -->
+        <div class="feedback">
+            <div id="feedback"></div>
+            <div class="explanation" id="explanation"></div>
+        </div>
+    </div>
+
+    <script>
+        let linkedList = [];
+        let isAnimating = false;
+
+        const listContainer = document.getElementById('linkedListContainer');
+        const feedbackEl = document.getElementById('feedback');
+        const explanationEl = document.getElementById('explanation');
+        const nodeCountEl = document.getElementById('nodeCount');
+        const valueInput = document.getElementById('valueInput');
+        const speedSlider = document.getElementById('speedSlider');
+        const speedLabel = document.getElementById('speedLabel');
+
+        speedSlider.addEventListener('input', () => {
+            speedLabel.textContent = speedSlider.value + 'ms';
+        });
+
+        function getSpeed() {
+            return parseInt(speedSlider.value);
+        }
+
+        function showFeedback(msg, type) {
+            feedbackEl.innerHTML = `<div class="feedback-msg ${type}">${msg}</div>`;
+        }
+
+        function showExplanation(text) {
+            explanationEl.textContent = text;
+        }
+
+        function clearFeedback() {
+            feedbackEl.innerHTML = '';
+            explanationEl.textContent = '';
+        }
+
+        function renderLinkedList(highlightIndex = -1, searchFoundIndex = -1) {
+            nodeCountEl.textContent = linkedList.length;
+
+            if (linkedList.length === 0) {
+                listContainer.innerHTML = '<div class="empty-label">Linked list is empty — add a node to start</div>';
+                return;
+            }
+
+            listContainer.innerHTML = '';
+            linkedList.forEach((value, index) => {
+                // Node
+                const node = document.createElement('div');
+                node.className = 'node';
+                if (index === highlightIndex) node.classList.add('highlighted');
+                if (index === searchFoundIndex) node.classList.add('search-found');
+
+                const nodeBox = document.createElement('div');
+                nodeBox.className = 'node-box';
+
+                const dataDiv = document.createElement('div');
+                dataDiv.className = 'node-data';
+                dataDiv.textContent = value;
+
+                const pointerDiv = document.createElement('div');
+                pointerDiv.className = 'node-pointer';
+                pointerDiv.textContent = index < linkedList.length - 1 ? '●→' : 'NULL';
+
+                nodeBox.appendChild(dataDiv);
+                nodeBox.appendChild(pointerDiv);
+                node.appendChild(nodeBox);
+
+                // Labels for HEAD and TAIL
+                let label = '';
+                if (linkedList.length === 1) {
+                    label = 'HEAD / TAIL';
+                } else if (index === 0) {
+                    label = 'HEAD';
+                } else if (index === linkedList.length - 1) {
+                    label = 'TAIL';
+                }
+                if (label) {
+                    const labelDiv = document.createElement('div');
+                    labelDiv.className = 'node-label';
+                    labelDiv.textContent = label;
+                    node.appendChild(labelDiv);
+                }
+
+                listContainer.appendChild(node);
+
+                // Arrow after every node (before NULL)
+                if (index < linkedList.length - 1) {
+                    const arrow = document.createElement('div');
+                    arrow.className = 'arrow';
+                    arrow.innerHTML = '<div class="arrow-line"></div>';
+                    listContainer.appendChild(arrow);
+                }
+            });
+
+            // NULL terminator at end
+            const arrow = document.createElement('div');
+            arrow.className = 'arrow';
+            arrow.innerHTML = '<div class="arrow-line"></div>';
+            listContainer.appendChild(arrow);
+
+            const nullNode = document.createElement('div');
+            nullNode.className = 'null-node';
+            nullNode.innerHTML = '<div class="null-box">NULL</div>';
+            listContainer.appendChild(nullNode);
+        }
+
+        function addNodeAtHead() {
+            if (isAnimating) return;
+            const value = valueInput.value.trim();
+            if (!value) {
+                showFeedback('Please enter a value to add', 'error');
+                return;
+            }
+            linkedList.unshift(value);
+            valueInput.value = '';
+            valueInput.focus();
+            showFeedback(`Added "${value}" at the head`, 'success');
+            showExplanation('The new node becomes the head, and its pointer links to the previous first node.');
+            renderLinkedList();
+        }
+
+        function addNodeAtTail() {
+            if (isAnimating) return;
+            const value = valueInput.value.trim();
+            if (!value) {
+                showFeedback('Please enter a value to add', 'error');
+                return;
+            }
+            linkedList.push(value);
+            valueInput.value = '';
+            valueInput.focus();
+            showFeedback(`Added "${value}" at the tail`, 'success');
+            showExplanation('The new node is appended at the end. The previous tail now points to this new node.');
+            renderLinkedList();
+        }
+
+        function removeNodeFromHead() {
+            if (isAnimating) return;
+            if (linkedList.length === 0) {
+                showFeedback('The linked list is empty', 'error');
+                return;
+            }
+            const removed = linkedList.shift();
+            showFeedback(`Removed "${removed}" from the head`, 'success');
+            showExplanation('The head pointer is updated to the next node in the list.');
+            renderLinkedList();
+        }
+
+        async function removeSpecificNode() {
+            if (isAnimating) return;
+            const value = valueInput.value.trim();
+            if (!value) {
+                showFeedback('Enter a value to remove', 'error');
+                return;
+            }
+
+            isAnimating = true;
+            showFeedback(`Searching for "${value}" to remove...`, 'info');
+            showExplanation('Traversing node by node, looking for the value to remove.');
+
+            let found = false;
+            for (let i = 0; i < linkedList.length; i++) {
+                renderLinkedList(i);
+                await new Promise(r => setTimeout(r, getSpeed()));
+
+                if (linkedList[i] === value) {
+                    linkedList.splice(i, 1);
+                    found = true;
+                    showFeedback(`Removed "${value}" from the list`, 'success');
+                    showExplanation(`Found at position ${i}. The previous node's pointer now skips over this node.`);
+                    renderLinkedList();
+                    break;
+                }
+            }
+
+            if (!found) {
+                showFeedback(`"${value}" not found in the list`, 'error');
+                showExplanation('The entire list was traversed without finding a match.');
+                renderLinkedList();
+            }
+
+            valueInput.value = '';
+            isAnimating = false;
+        }
+
+        async function searchNode() {
+            if (isAnimating) return;
+            const value = valueInput.value.trim();
+            if (!value) {
+                showFeedback('Enter a value to search for', 'error');
+                return;
+            }
+
+            isAnimating = true;
+            showFeedback(`Searching for "${value}"...`, 'info');
+            showExplanation('Starting at the head, traversing node by node.');
+
+            let found = false;
+            for (let i = 0; i < linkedList.length; i++) {
+                renderLinkedList(i);
+                await new Promise(r => setTimeout(r, getSpeed()));
+
+                if (linkedList[i] === value) {
+                    found = true;
+                    showFeedback(`Found "${value}" at position ${i}`, 'success');
+                    showExplanation(`Value found after checking ${i + 1} node${i > 0 ? 's' : ''}.`);
+                    renderLinkedList(-1, i);
+                    break;
+                }
+            }
+
+            if (!found) {
+                showFeedback(`"${value}" not found in the list`, 'error');
+                showExplanation(`Traversed all ${linkedList.length} nodes — value not present.`);
+                renderLinkedList();
+            }
+
+            isAnimating = false;
+        }
+
+        // Enter key triggers add at head
+        valueInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !isAnimating) {
+                e.preventDefault();
+                addNodeAtHead();
+            }
+        });
+
+        renderLinkedList();
+    </script>
+</body>
+</html>

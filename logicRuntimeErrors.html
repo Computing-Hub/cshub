@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Logic & Runtime Errors — Python Debugging</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+body {
+  margin: 0; padding: 20px;
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(135deg, #1a1a2e 0%, #2e2a1a 50%, #1a1a2e 100%);
+  min-height: 100vh; color: #e0e0e0;
+}
+h1 {
+  font-size: 2rem; font-weight: 700; text-align: center; margin: 0 0 4px 0;
+  background: linear-gradient(135deg, #f59e0b, #fbbf24);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+.subtitle { text-align: center; font-size: 0.95rem; color: #888; margin-bottom: 20px; }
+.container { max-width: 820px; margin: 0 auto; }
+
+.intro-panel { background:#16213e; border-radius:16px; border:1px solid #2a2a4a; padding:20px; margin-bottom:20px; }
+.intro-panel h2 { margin:0 0 12px; font-size:1.05rem; color:#f59e0b; }
+.error-types { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+.etype { padding:14px; border-radius:12px; font-size:0.82rem; line-height:1.5; }
+.etype.runtime { background:rgba(239,68,68,0.1); border:1px solid rgba(239,68,68,0.25); }
+.etype.runtime strong { color:#ef4444; }
+.etype.logic { background:rgba(245,158,11,0.1); border:1px solid rgba(245,158,11,0.25); }
+.etype.logic strong { color:#f59e0b; }
+.etype code { font-family:'Fira Code',monospace; font-size:0.78rem; background:rgba(0,0,0,0.3); padding:1px 5px; border-radius:4px; }
+.toggle-intro { display:block; margin:0 auto 16px; background:none; border:1px solid #3a3a5a; color:#888; font-family:'Poppins',sans-serif; font-size:0.8rem; padding:6px 18px; border-radius:8px; cursor:pointer; transition:color 0.2s,border-color 0.2s; }
+.toggle-intro:hover { color:#f59e0b; border-color:#f59e0b; }
+
+/* Progress bar */
+.top-bar {
+  display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;
+  margin-bottom: 16px;
+}
+.challenge-badge {
+  background: linear-gradient(135deg, #f59e0b, #d97706); color: #1a1a2e;
+  font-weight: 700; font-size: 0.82rem; padding: 5px 14px; border-radius: 20px;
+}
+.score-badge { font-size: 0.85rem; color: #aaa; }
+.score-badge span { color: #f59e0b; font-weight: 600; font-family: 'Fira Code', monospace; }
+.best-badge { font-size: 0.8rem; color: #666; margin-left: 8px; }
+.best-badge span { color: #fbbf24; }
+
+/* Main panel */
+.panel {
+  background: #16213e; border-radius: 16px; border: 1px solid #2a2a4a;
+  padding: 24px; margin-bottom: 20px;
+}
+
+/* Description */
+.task-desc {
+  font-size: 0.9rem; color: #ccc; margin-bottom: 16px; padding: 12px 16px;
+  background: rgba(245,158,11,0.06); border: 1px solid rgba(245,158,11,0.15); border-radius: 10px;
+}
+.task-desc strong { color: #fbbf24; }
+
+/* Code panel */
+.code-panel {
+  background: #0d1117; border-radius: 12px; border: 1px solid #2a2a4a;
+  padding: 16px; overflow-x: auto; margin-bottom: 16px;
+}
+.code-line {
+  display: flex; align-items: flex-start; min-height: 28px; line-height: 1.7;
+  font-family: 'Fira Code', monospace; font-size: 0.85rem;
+  border-radius: 4px; transition: background 0.3s; cursor: default;
+  padding: 0 4px;
+}
+.code-line.clickable { cursor: pointer; }
+.code-line.clickable:hover { background: rgba(245,158,11,0.08); }
+.code-line.selected { background: rgba(245,158,11,0.18); }
+.code-line.correct-line { background: rgba(67,233,123,0.12); }
+.code-line.wrong-line { background: rgba(247,121,125,0.12); animation: shake 0.4s ease; }
+.line-num {
+  color: #555; min-width: 32px; text-align: right; padding-right: 16px;
+  user-select: none; font-family: 'Fira Code', monospace; font-size: 0.85rem;
+}
+.line-content { flex: 1; white-space: pre; }
+
+/* Output panels */
+.output-panel {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px;
+}
+.output-box {
+  padding: 12px; border-radius: 10px; font-size: 0.82rem;
+  font-family: 'Fira Code', monospace; line-height: 1.6;
+}
+.output-box .label {
+  font-family: 'Poppins', sans-serif; font-size: 0.75rem; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;
+}
+.output-box.expected { background: rgba(67,233,123,0.08); border: 1px solid rgba(67,233,123,0.2); }
+.output-box.expected .label { color: #43e97b; }
+.output-box.actual { background: rgba(247,121,125,0.08); border: 1px solid rgba(247,121,125,0.2); }
+.output-box.actual .label { color: #f7797d; }
+.error-msg-box {
+  padding: 12px; border-radius: 10px; font-size: 0.82rem;
+  font-family: 'Fira Code', monospace; line-height: 1.5;
+  background: rgba(239,68,68,0.08); border: 1px solid rgba(239,68,68,0.2);
+  margin-bottom: 16px; color: #fca5a5;
+}
+.error-msg-box .label {
+  font-family: 'Poppins', sans-serif; font-size: 0.75rem; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; color: #ef4444;
+}
+
+/* Step indicators */
+.steps-row {
+  display: flex; gap: 8px; margin-bottom: 16px; align-items: center; flex-wrap: wrap;
+}
+.step-pill {
+  font-size: 0.78rem; font-weight: 600; padding: 5px 14px; border-radius: 20px;
+  border: 1px solid #3a3a5a; color: #666; transition: all 0.3s;
+}
+.step-pill.active { border-color: #f59e0b; color: #f59e0b; background: rgba(245,158,11,0.1); }
+.step-pill.done { border-color: #43e97b; color: #43e97b; background: rgba(67,233,123,0.1); }
+
+/* Type buttons */
+.type-btns { display: flex; gap: 12px; margin-bottom: 12px; flex-wrap: wrap; }
+.type-btn {
+  font-family: 'Poppins', sans-serif; font-size: 0.88rem; font-weight: 600;
+  border: 2px solid; padding: 12px 24px; border-radius: 12px; cursor: pointer;
+  transition: all 0.2s ease; background: transparent; flex: 1; min-width: 140px;
+}
+.type-btn:hover:not(:disabled) { transform: translateY(-2px); }
+.type-btn:active:not(:disabled) { transform: translateY(0); }
+.type-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+.type-btn.runtime { border-color: #ef4444; color: #ef4444; }
+.type-btn.runtime:hover:not(:disabled) { background: rgba(239,68,68,0.1); box-shadow: 0 6px 20px rgba(239,68,68,0.2); }
+.type-btn.logic { border-color: #f59e0b; color: #f59e0b; }
+.type-btn.logic:hover:not(:disabled) { background: rgba(245,158,11,0.1); box-shadow: 0 6px 20px rgba(245,158,11,0.2); }
+.type-btn.correct-pick { background: rgba(67,233,123,0.15); border-color: #43e97b; color: #43e97b; }
+.type-btn.wrong-pick { background: rgba(247,121,125,0.15); border-color: #f7797d; color: #f7797d; animation: shake 0.4s ease; }
+
+/* Fix options */
+.fix-options { display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px; }
+.fix-btn {
+  font-family: 'Fira Code', monospace; font-size: 0.82rem;
+  text-align: left; padding: 12px 16px; border-radius: 10px;
+  border: 1px solid #3a3a5a; background: rgba(255,255,255,0.03);
+  color: #ccc; cursor: pointer; transition: all 0.2s; line-height: 1.4;
+}
+.fix-btn:hover:not(:disabled) { border-color: #f59e0b; background: rgba(245,158,11,0.06); }
+.fix-btn:disabled { cursor: not-allowed; }
+.fix-btn.correct-fix { border-color: #43e97b; background: rgba(67,233,123,0.12); color: #43e97b; }
+.fix-btn.wrong-fix { border-color: #f7797d; background: rgba(247,121,125,0.1); color: #f7797d; animation: shake 0.4s ease; }
+
+/* Explanation */
+.explanation-box {
+  padding: 14px 16px; border-radius: 10px; font-size: 0.88rem; line-height: 1.5;
+  background: rgba(67,233,123,0.08); border: 1px solid rgba(67,233,123,0.2);
+  color: #a8e6cf; margin-bottom: 14px; animation: slideInUp 0.3s ease; display: none;
+}
+.explanation-box.show { display: block; }
+.explanation-box strong { color: #43e97b; }
+
+/* Buttons */
+.btn {
+  font-family: 'Poppins', sans-serif; font-size: 0.88rem; font-weight: 600;
+  padding: 10px 22px; border: none; border-radius: 12px; cursor: pointer;
+  color: #fff; transition: all 0.2s ease;
+}
+.btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.3); }
+.btn:active:not(:disabled) { transform: translateY(0); }
+.btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.btn-next { background: linear-gradient(135deg, #f59e0b, #d97706); color: #1a1a2e; }
+.btn-reset { background: linear-gradient(135deg, #888, #666); }
+.btn-show { background: linear-gradient(135deg, #667eea, #5a67d8); }
+.btn-row { display: flex; gap: 10px; flex-wrap: wrap; }
+
+/* Feedback */
+.feedback {
+  padding: 12px 18px; border-radius: 10px; font-size: 0.88rem; font-weight: 500;
+  margin-top: 10px; animation: slideInUp 0.3s ease; display: none;
+}
+.feedback.success { background: rgba(67,233,123,0.15); color: #43e97b; border: 1px solid rgba(67,233,123,0.3); }
+.feedback.error { background: rgba(247,121,125,0.15); color: #f7797d; border: 1px solid rgba(247,121,125,0.3); }
+.feedback.info { background: rgba(102,126,234,0.15); color: #99b3ff; border: 1px solid rgba(102,126,234,0.3); }
+.feedback.show { display: block; }
+
+/* Summary */
+.summary-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.7); z-index:100; align-items:center; justify-content:center; padding:20px; }
+.summary-overlay.show { display:flex; }
+.summary-card { background:#16213e; border-radius:16px; border:1px solid #2a2a4a; padding:32px; max-width:450px; width:100%; text-align:center; animation:popIn 0.4s ease; }
+.summary-card h2 { color:#f59e0b; margin:0 0 8px; font-size:1.3rem; }
+.summary-score { font-size:2.5rem; font-weight:700; color:#fbbf24; margin:16px 0; font-family:'Fira Code',monospace; }
+.summary-detail { font-size:0.9rem; color:#aaa; margin-bottom:20px; line-height:1.6; }
+.summary-breakdown { text-align:left; margin-bottom:20px; }
+.summary-row { display:flex; justify-content:space-between; padding:6px 0; font-size:0.85rem; border-bottom:1px solid #2a2a4a; }
+.summary-row .label { color:#aaa; }
+.summary-row .value { font-weight:600; font-family:'Fira Code',monospace; }
+.summary-row .value.good { color:#43e97b; }
+.summary-row .value.mid { color:#fbbf24; }
+.summary-row .value.bad { color:#f7797d; }
+
+@keyframes slideInUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes popIn {
+  0% { opacity: 0; transform: scale(0.6); }
+  70% { transform: scale(1.05); }
+  100% { opacity: 1; transform: scale(1); }
+}
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-4px); }
+  40% { transform: translateX(4px); }
+  60% { transform: translateX(-3px); }
+  80% { transform: translateX(3px); }
+}
+@media (max-width: 600px) {
+  body { padding: 12px; }
+  h1 { font-size: 1.5rem; }
+  .panel { padding: 16px; }
+  .error-types { grid-template-columns: 1fr; }
+  .output-panel { grid-template-columns: 1fr; }
+  .type-btns { flex-direction: column; }
+  .code-line { font-size: 0.76rem; }
+  .line-num { min-width: 24px; padding-right: 10px; font-size: 0.76rem; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>Logic & Runtime Errors</h1>
+  <p class="subtitle">Identify, locate, and fix errors that Python can't catch for you</p>
+
+  <button class="toggle-intro" id="toggleIntro" onclick="toggleIntro()">Show error type guide</button>
+  <div class="intro-panel" id="introPanel" style="display:none;">
+    <h2>Two Types of Errors You Need to Know</h2>
+    <div class="error-types">
+      <div class="etype runtime">
+        <strong>Runtime Errors</strong><br>
+        Code starts running but <em>crashes</em> partway through. Python shows an error message like <code>TypeError</code>, <code>IndexError</code>, or <code>ZeroDivisionError</code>.<br><br>
+        Example: dividing by zero, accessing a list index that doesn't exist, or adding a string to a number.
+      </div>
+      <div class="etype logic">
+        <strong>Logic Errors</strong><br>
+        Code runs without crashing but gives the <em>wrong answer</em>. Python won't warn you — you have to spot the mistake yourself.<br><br>
+        Example: using <code>*</code> instead of <code>/</code>, a loop that runs one too few times, or comparing with <code>></code> instead of <code>>=</code>.
+      </div>
+    </div>
+  </div>
+
+  <div class="top-bar">
+    <span class="challenge-badge" id="challengeBadge">Challenge 1 / 8</span>
+    <span class="score-badge">Score: <span id="scoreDisplay">0</span> / 24<span class="best-badge">Best: <span id="bestDisplay">0</span></span></span>
+  </div>
+
+  <div class="panel" id="gamePanel">
+    <div class="task-desc" id="taskDesc"></div>
+    <div class="code-panel" id="codePanel"></div>
+    <div id="outputArea"></div>
+
+    <div class="steps-row">
+      <div class="step-pill active" id="step1Pill">Step 1: Identify type</div>
+      <div class="step-pill" id="step2Pill">Step 2: Find the line</div>
+      <div class="step-pill" id="step3Pill">Step 3: Choose the fix</div>
+    </div>
+
+    <div id="interactionArea"></div>
+    <div class="explanation-box" id="explanationBox"></div>
+    <div class="feedback" id="feedback"></div>
+
+    <div class="btn-row" id="btnRow" style="margin-top:14px;">
+      <button class="btn btn-show" id="showBtn" onclick="showAnswer()">Show Answer</button>
+      <button class="btn btn-next" id="nextBtn" onclick="nextChallenge()" style="display:none;">Next Challenge</button>
+    </div>
+  </div>
+</div>
+
+<div class="summary-overlay" id="summaryOverlay">
+  <div class="summary-card">
+    <h2>Session Complete!</h2>
+    <div class="summary-score" id="summaryScore"></div>
+    <div class="summary-detail" id="summaryDetail"></div>
+    <div class="summary-breakdown" id="summaryBreakdown"></div>
+    <button class="btn btn-next" onclick="restartGame()">Play Again</button>
+  </div>
+</div>
+
+<script>
+const CHALLENGES = [
+  {
+    desc: 'This program asks for the user\'s age and calculates their age next year.',
+    type: 'runtime',
+    lines: [
+      'age = input("Enter your age: ")',
+      'next_year = age + 1',
+      'print("Next year you will be " + str(next_year))'
+    ],
+    errorDisplay: { kind: 'error', text: 'TypeError: can only concatenate str (not "int") to str' },
+    bugLine: 1,
+    fixes: [
+      { text: 'age = int(input("Enter your age: "))', correct: true },
+      { text: 'next_year = age + "1"' },
+      { text: 'next_year = str(age) + 1' }
+    ],
+    explanation: '<strong>input()</strong> always returns a string. You cannot add a number to a string — convert it with <strong>int()</strong> first.'
+  },
+  {
+    desc: 'This program prints each day of the school week.',
+    type: 'runtime',
+    lines: [
+      'days = ["Mon", "Tue", "Wed", "Thu", "Fri"]',
+      'for i in range(1, 6):',
+      '    print("Day " + str(i) + ": " + days[i])'
+    ],
+    errorDisplay: { kind: 'error', text: 'IndexError: list index out of range\n  (crashes when i = 5)' },
+    bugLine: 1,
+    fixes: [
+      { text: 'for i in range(0, 5):', correct: true },
+      { text: 'for i in range(1, 7):' },
+      { text: 'for i in range(5, 0, -1):' }
+    ],
+    explanation: 'Lists are indexed from <strong>0</strong>. <code>days[5]</code> doesn\'t exist — the last valid index is 4. Use <strong>range(0, 5)</strong> to go from index 0 to 4.'
+  },
+  {
+    desc: 'This program divides sweets equally among children.',
+    type: 'runtime',
+    lines: [
+      'sweets = 20',
+      'children = int(input("How many children? "))',
+      'each = sweets / children',
+      'print("Each child gets " + str(each))'
+    ],
+    errorDisplay: { kind: 'error', text: 'ZeroDivisionError: division by zero\n  (crashes when user enters 0)' },
+    bugLine: 2,
+    fixes: [
+      { text: 'if children > 0:\n    each = sweets / children', correct: true },
+      { text: 'each = sweets * children' },
+      { text: 'each = sweets / (children + children)' }
+    ],
+    explanation: 'If the user enters <strong>0</strong>, Python cannot divide by zero. Always <strong>validate input</strong> before using it in division.'
+  },
+  {
+    desc: 'This program calculates the average of three test scores.',
+    type: 'logic',
+    lines: [
+      'score1 = 80',
+      'score2 = 70',
+      'score3 = 90',
+      'total = score1 + score2 + score3',
+      'average = total * 3',
+      'print("Average score:", average)'
+    ],
+    errorDisplay: { kind: 'output', expected: 'Average score: 80.0', actual: 'Average score: 720' },
+    bugLine: 4,
+    fixes: [
+      { text: 'average = total / 3', correct: true },
+      { text: 'average = total - 3' },
+      { text: 'average = total + 3' }
+    ],
+    explanation: 'To calculate an average, <strong>divide</strong> the total by the count. Using <code>*</code> instead of <code>/</code> gives 240 × 3 = 720 instead of 240 / 3 = 80.'
+  },
+  {
+    desc: 'This program should print the numbers 1 to 10.',
+    type: 'logic',
+    lines: [
+      'for i in range(1, 10):',
+      '    print(i)'
+    ],
+    errorDisplay: { kind: 'output', expected: '1, 2, 3, 4, 5, 6, 7, 8, 9, 10', actual: '1, 2, 3, 4, 5, 6, 7, 8, 9' },
+    bugLine: 0,
+    fixes: [
+      { text: 'for i in range(1, 11):', correct: true },
+      { text: 'for i in range(0, 10):' },
+      { text: 'for i in range(10, 1):' }
+    ],
+    explanation: '<code>range(1, 10)</code> goes from 1 to <strong>9</strong>. The end value is <em>exclusive</em>. Use <strong>range(1, 11)</strong> to include 10.'
+  },
+  {
+    desc: 'This program checks if a student has passed. The pass mark is 50.',
+    type: 'logic',
+    lines: [
+      'def check_pass(score):',
+      '    if score > 50:',
+      '        return "Pass"',
+      '    else:',
+      '        return "Fail"',
+      '',
+      'print(check_pass(50))'
+    ],
+    errorDisplay: { kind: 'output', expected: 'Pass', actual: 'Fail' },
+    bugLine: 1,
+    fixes: [
+      { text: '    if score >= 50:', correct: true },
+      { text: '    if score == 50:' },
+      { text: '    if score < 50:' }
+    ],
+    explanation: '<code>></code> means "greater than" and does <strong>not</strong> include 50 itself. Use <strong>>=</strong> (greater than or equal to) to include the boundary value.'
+  },
+  {
+    desc: 'This program calculates the area of a rectangle (width = 8, height = 5).',
+    type: 'logic',
+    lines: [
+      'width = 8',
+      'height = 5',
+      'area = width * width',
+      'print("The area is:", area)'
+    ],
+    errorDisplay: { kind: 'output', expected: 'The area is: 40', actual: 'The area is: 64' },
+    bugLine: 2,
+    fixes: [
+      { text: 'area = width * height', correct: true },
+      { text: 'area = width + height' },
+      { text: 'area = height * height' }
+    ],
+    explanation: 'The code uses <code>width * width</code> (8 × 8 = 64) instead of <strong>width * height</strong> (8 × 5 = 40). Using the <strong>wrong variable</strong> is a common logic error.'
+  },
+  {
+    desc: 'This program finds the largest number in a list.',
+    type: 'logic',
+    lines: [
+      'def find_max(numbers):',
+      '    maximum = 0',
+      '    for num in numbers:',
+      '        if num > maximum:',
+      '            maximum = num',
+      '    return maximum',
+      '',
+      'result = find_max([-3, -7, -1, -5])',
+      'print("Maximum:", result)'
+    ],
+    errorDisplay: { kind: 'output', expected: 'Maximum: -1', actual: 'Maximum: 0' },
+    bugLine: 1,
+    fixes: [
+      { text: '    maximum = numbers[0]', correct: true },
+      { text: '    maximum = -1' },
+      { text: '    maximum = min(numbers)' }
+    ],
+    explanation: 'Starting <code>maximum</code> at <strong>0</strong> fails when all numbers are negative — none of them are greater than 0. Initialise with the <strong>first element</strong> of the list instead.'
+  }
+];
+
+let current = 0;
+let step = 0; // 0=type, 1=line, 2=fix
+let score = 0;
+let stepScores = []; // per challenge: 0-3 points
+let best = 0;
+let feedbackTimeout = null;
+
+function loadBest() {
+  try { best = parseInt(localStorage.getItem('logicRuntimeBest')) || 0; } catch(e) {}
+  document.getElementById('bestDisplay').textContent = best;
+}
+function saveBest() {
+  if (score > best) { best = score; localStorage.setItem('logicRuntimeBest', best); }
+  document.getElementById('bestDisplay').textContent = best;
+}
+
+function toggleIntro() {
+  const p = document.getElementById('introPanel');
+  const b = document.getElementById('toggleIntro');
+  if (p.style.display === 'none') { p.style.display = 'block'; b.textContent = 'Hide error type guide'; }
+  else { p.style.display = 'none'; b.textContent = 'Show error type guide'; }
+}
+
+function renderChallenge() {
+  const ch = CHALLENGES[current];
+  document.getElementById('challengeBadge').textContent = 'Challenge ' + (current + 1) + ' / ' + CHALLENGES.length;
+  document.getElementById('scoreDisplay').textContent = score;
+  document.getElementById('taskDesc').innerHTML = '<strong>Task:</strong> ' + ch.desc;
+
+  // Code
+  const cp = document.getElementById('codePanel');
+  cp.innerHTML = '';
+  ch.lines.forEach((line, i) => {
+    const div = document.createElement('div');
+    div.className = 'code-line';
+    div.dataset.idx = i;
+    const num = document.createElement('span');
+    num.className = 'line-num';
+    num.textContent = i + 1;
+    const content = document.createElement('span');
+    content.className = 'line-content';
+    content.textContent = line || ' ';
+    div.appendChild(num);
+    div.appendChild(content);
+    cp.appendChild(div);
+  });
+
+  // Output area
+  const oa = document.getElementById('outputArea');
+  if (ch.errorDisplay.kind === 'error') {
+    oa.innerHTML = '<div class="error-msg-box"><div class="label">Python Error Message</div>' +
+      ch.errorDisplay.text.replace(/\n/g, '<br>') + '</div>';
+  } else {
+    oa.innerHTML = '<div class="output-panel">' +
+      '<div class="output-box expected"><div class="label">Expected Output</div>' + ch.errorDisplay.expected + '</div>' +
+      '<div class="output-box actual"><div class="label">Actual Output</div>' + ch.errorDisplay.actual + '</div></div>';
+  }
+
+  // Reset steps
+  step = 0;
+  updateStepPills();
+  renderStep();
+  document.getElementById('explanationBox').className = 'explanation-box';
+  document.getElementById('nextBtn').style.display = 'none';
+  document.getElementById('showBtn').style.display = '';
+  document.getElementById('showBtn').disabled = false;
+  clearFeedback();
+}
+
+function updateStepPills() {
+  [1, 2, 3].forEach(s => {
+    const pill = document.getElementById('step' + s + 'Pill');
+    pill.className = 'step-pill' + (step === s - 1 ? ' active' : '') + (step > s - 1 ? ' done' : '');
+  });
+}
+
+function renderStep() {
+  const area = document.getElementById('interactionArea');
+  const ch = CHALLENGES[current];
+
+  if (step === 0) {
+    area.innerHTML = '<div class="type-btns">' +
+      '<button class="type-btn runtime" onclick="pickType(\'runtime\')">Runtime Error</button>' +
+      '<button class="type-btn logic" onclick="pickType(\'logic\')">Logic Error</button></div>';
+  } else if (step === 1) {
+    area.innerHTML = '<p style="font-size:0.88rem;color:#aaa;margin:0 0 8px 0;">Click the line that contains the error:</p>';
+    document.querySelectorAll('.code-line').forEach(el => {
+      if (ch.lines[el.dataset.idx] !== '') {
+        el.classList.add('clickable');
+        el.onclick = () => pickLine(parseInt(el.dataset.idx));
+      }
+    });
+  } else if (step === 2) {
+    let html = '<p style="font-size:0.88rem;color:#aaa;margin:0 0 8px 0;">Choose the correct fix:</p><div class="fix-options">';
+    const shuffled = ch.fixes.map((f, i) => ({ ...f, origIdx: i }));
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    shuffled.forEach((f, i) => {
+      html += '<button class="fix-btn" data-correct="' + (f.correct ? '1' : '0') + '" data-idx="' + i +
+        '" onclick="pickFix(this)">' + f.text.replace(/\n/g, '\n') + '</button>';
+    });
+    html += '</div>';
+    area.innerHTML = html;
+  } else {
+    area.innerHTML = '';
+  }
+}
+
+let challengePoints = 0;
+
+function pickType(type) {
+  const ch = CHALLENGES[current];
+  const btns = document.querySelectorAll('.type-btn');
+  btns.forEach(b => b.disabled = true);
+
+  if (type === ch.type) {
+    document.querySelector('.type-btn.' + type).classList.add('correct-pick');
+    showFeedback('success', 'Correct! It\'s a ' + (type === 'runtime' ? 'runtime' : 'logic') + ' error.');
+    challengePoints = 1;
+    setTimeout(() => { step = 1; updateStepPills(); renderStep(); clearFeedback(); }, 1000);
+  } else {
+    document.querySelector('.type-btn.' + type).classList.add('wrong-pick');
+    document.querySelector('.type-btn.' + ch.type).classList.add('correct-pick');
+    showFeedback('error', 'Not quite — it\'s a ' + (ch.type === 'runtime' ? 'runtime' : 'logic') + ' error.');
+    challengePoints = 0;
+    setTimeout(() => { step = 1; updateStepPills(); renderStep(); clearFeedback(); }, 1500);
+  }
+}
+
+function pickLine(idx) {
+  const ch = CHALLENGES[current];
+  document.querySelectorAll('.code-line').forEach(el => {
+    el.classList.remove('clickable');
+    el.onclick = null;
+  });
+
+  const clickedLine = document.querySelector('.code-line[data-idx="' + idx + '"]');
+
+  if (idx === ch.bugLine) {
+    clickedLine.classList.add('correct-line');
+    showFeedback('success', 'Correct! Line ' + (idx + 1) + ' contains the error.');
+    challengePoints++;
+    setTimeout(() => { step = 2; updateStepPills(); renderStep(); clearFeedback(); }, 1000);
+  } else {
+    clickedLine.classList.add('wrong-line');
+    const correctLine = document.querySelector('.code-line[data-idx="' + ch.bugLine + '"]');
+    setTimeout(() => { correctLine.classList.add('correct-line'); }, 400);
+    showFeedback('error', 'Not quite — the error is on line ' + (ch.bugLine + 1) + '.');
+    setTimeout(() => { step = 2; updateStepPills(); renderStep(); clearFeedback(); }, 1500);
+  }
+}
+
+function pickFix(btn) {
+  const ch = CHALLENGES[current];
+  const allBtns = document.querySelectorAll('.fix-btn');
+  allBtns.forEach(b => b.disabled = true);
+
+  if (btn.dataset.correct === '1') {
+    btn.classList.add('correct-fix');
+    challengePoints++;
+    showFeedback('success', 'Correct fix!');
+  } else {
+    btn.classList.add('wrong-fix');
+    allBtns.forEach(b => { if (b.dataset.correct === '1') b.classList.add('correct-fix'); });
+    showFeedback('error', 'Not quite — the correct fix is highlighted in green.');
+  }
+
+  score += challengePoints;
+  stepScores.push(challengePoints);
+  document.getElementById('scoreDisplay').textContent = score;
+
+  step = 3;
+  updateStepPills();
+
+  const expBox = document.getElementById('explanationBox');
+  expBox.innerHTML = '<strong>Explanation:</strong> ' + ch.explanation;
+  expBox.className = 'explanation-box show';
+
+  document.getElementById('nextBtn').style.display = '';
+  document.getElementById('showBtn').style.display = 'none';
+  saveBest();
+}
+
+function showAnswer() {
+  const ch = CHALLENGES[current];
+  const btns = document.querySelectorAll('.type-btn');
+  btns.forEach(b => b.disabled = true);
+
+  // Show correct type
+  if (step === 0) {
+    const correctBtn = document.querySelector('.type-btn.' + ch.type);
+    if (correctBtn) correctBtn.classList.add('correct-pick');
+  }
+
+  // Show correct line
+  document.querySelectorAll('.code-line').forEach(el => {
+    el.classList.remove('clickable');
+    el.onclick = null;
+  });
+  const correctLine = document.querySelector('.code-line[data-idx="' + ch.bugLine + '"]');
+  if (correctLine) correctLine.classList.add('correct-line');
+
+  // Show fix options with correct one highlighted
+  const fixBtns = document.querySelectorAll('.fix-btn');
+  fixBtns.forEach(b => { b.disabled = true; if (b.dataset.correct === '1') b.classList.add('correct-fix'); });
+
+  // If fixes aren't rendered yet, show them
+  if (fixBtns.length === 0) {
+    const area = document.getElementById('interactionArea');
+    let html = '<p style="font-size:0.88rem;color:#aaa;margin:0 0 4px;">Error type: <strong style="color:' +
+      (ch.type === 'runtime' ? '#ef4444' : '#f59e0b') + '">' + (ch.type === 'runtime' ? 'Runtime Error' : 'Logic Error') +
+      '</strong></p><p style="font-size:0.88rem;color:#aaa;margin:0 0 4px;">Error line: <strong style="color:#43e97b">' +
+      (ch.bugLine + 1) + '</strong></p><p style="font-size:0.88rem;color:#aaa;margin:0 0 8px;">Correct fix:</p><div class="fix-options">';
+    ch.fixes.forEach(f => {
+      html += '<button class="fix-btn' + (f.correct ? ' correct-fix' : '') + '" disabled>' + f.text.replace(/\n/g, '\n') + '</button>';
+    });
+    html += '</div>';
+    area.innerHTML = html;
+  }
+
+  step = 3;
+  [1, 2, 3].forEach(s => document.getElementById('step' + s + 'Pill').className = 'step-pill done');
+
+  challengePoints = 0;
+  stepScores.push(0);
+  document.getElementById('scoreDisplay').textContent = score;
+
+  const expBox = document.getElementById('explanationBox');
+  expBox.innerHTML = '<strong>Explanation:</strong> ' + ch.explanation;
+  expBox.className = 'explanation-box show';
+
+  showFeedback('info', 'Answer revealed — no points awarded. Try the next one!');
+  document.getElementById('nextBtn').style.display = '';
+  document.getElementById('showBtn').style.display = 'none';
+}
+
+function nextChallenge() {
+  current++;
+  if (current >= CHALLENGES.length) {
+    showSummary();
+    return;
+  }
+  challengePoints = 0;
+  renderChallenge();
+}
+
+function showSummary() {
+  const maxScore = CHALLENGES.length * 3;
+  const pct = Math.round(score / maxScore * 100);
+  document.getElementById('summaryScore').textContent = score + ' / ' + maxScore;
+
+  let msg = '';
+  if (pct >= 90) msg = 'Outstanding! You really understand error types!';
+  else if (pct >= 70) msg = 'Great work! You have a solid grasp of debugging.';
+  else if (pct >= 50) msg = 'Good effort! Review the explanations to improve.';
+  else msg = 'Keep practising! Try again and read the explanations carefully.';
+  document.getElementById('summaryDetail').textContent = msg;
+
+  let breakdown = '';
+  const typeCorrect = stepScores.filter((s, i) => s >= 1 || (CHALLENGES[i] && false)).length;
+  let typeCount = 0, lineCount = 0, fixCount = 0;
+  stepScores.forEach((pts, i) => {
+    if (pts >= 1) typeCount++;
+    if (pts >= 2) lineCount++;
+    if (pts >= 3) fixCount++;
+  });
+  const total = CHALLENGES.length;
+  breakdown += '<div class="summary-row"><span class="label">Identified error type correctly</span><span class="value ' +
+    (typeCount >= total * 0.7 ? 'good' : typeCount >= total * 0.4 ? 'mid' : 'bad') + '">' + typeCount + ' / ' + total + '</span></div>';
+  breakdown += '<div class="summary-row"><span class="label">Found the correct line</span><span class="value ' +
+    (lineCount >= total * 0.7 ? 'good' : lineCount >= total * 0.4 ? 'mid' : 'bad') + '">' + lineCount + ' / ' + total + '</span></div>';
+  breakdown += '<div class="summary-row"><span class="label">Chose the correct fix</span><span class="value ' +
+    (fixCount >= total * 0.7 ? 'good' : fixCount >= total * 0.4 ? 'mid' : 'bad') + '">' + fixCount + ' / ' + total + '</span></div>';
+  document.getElementById('summaryBreakdown').innerHTML = breakdown;
+
+  document.getElementById('summaryOverlay').classList.add('show');
+  saveBest();
+}
+
+function restartGame() {
+  current = 0; score = 0; stepScores = []; challengePoints = 0;
+  document.getElementById('summaryOverlay').classList.remove('show');
+  renderChallenge();
+}
+
+function showFeedback(type, msg) {
+  clearTimeout(feedbackTimeout);
+  const el = document.getElementById('feedback');
+  el.className = 'feedback ' + type + ' show';
+  el.textContent = msg;
+}
+function clearFeedback() {
+  document.getElementById('feedback').className = 'feedback';
+}
+
+loadBest();
+renderChallenge();
+</script>
+</body>
+</html>

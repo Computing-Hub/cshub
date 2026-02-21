@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cookie Baking Step Sequencing</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #2e1e0e 50%, #1a1a2e 100%);
+            color: #fff;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #f97316, #ea580c);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin: 0 0 8px 0;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #888;
+            font-size: 0.95rem;
+            margin-bottom: 30px;
+        }
+
+        /* Panels */
+        .panel {
+            background: #16213e;
+            border-radius: 16px;
+            border: 1px solid #2a2a4a;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .panel-title {
+            font-size: 1rem;
+            font-weight: 600;
+            margin: 0 0 14px 0;
+            color: #ccc;
+        }
+
+        /* Source zone */
+        .source-zone {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            min-height: 60px;
+            padding: 10px;
+            border-radius: 12px;
+            background: rgba(255,255,255,0.03);
+            border: 2px dashed #2a2a4a;
+            transition: border-color 0.3s;
+        }
+
+        .source-zone.drag-over {
+            border-color: #f97316;
+            background: rgba(249,115,22,0.05);
+        }
+
+        /* Draggable cards */
+        .card {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.82rem;
+            line-height: 1.4;
+            padding: 10px 14px;
+            background: linear-gradient(135deg, #1e2a4a, #1a2240);
+            border: 1px solid #3a3a5a;
+            border-radius: 10px;
+            cursor: grab;
+            user-select: none;
+            -webkit-user-select: none;
+            transition: transform 0.2s, box-shadow 0.2s, border-color 0.3s;
+            touch-action: none;
+            max-width: 100%;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(249,115,22,0.2);
+            border-color: #f97316;
+        }
+
+        .card.dragging {
+            opacity: 0.5;
+            transform: scale(0.95);
+        }
+
+        .card.correct {
+            border-color: #43e97b;
+            background: linear-gradient(135deg, #1a2e1a, #1a2a20);
+        }
+
+        .card.incorrect {
+            border-color: #f7797d;
+            background: linear-gradient(135deg, #2e1a1a, #2a1a20);
+            animation: shake 0.4s ease;
+        }
+
+        /* Target zone */
+        .target-zone {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .slot {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            min-height: 52px;
+            padding: 6px 10px;
+            border: 2px dashed #2a2a4a;
+            border-radius: 12px;
+            background: rgba(255,255,255,0.02);
+            transition: border-color 0.3s, background 0.3s;
+        }
+
+        .slot.drag-over {
+            border-color: #f97316;
+            background: rgba(249,115,22,0.08);
+        }
+
+        .slot.filled {
+            border-style: solid;
+            border-color: #3a3a5a;
+            background: rgba(255,255,255,0.03);
+        }
+
+        .slot.correct {
+            border-color: #43e97b;
+            background: rgba(67,233,123,0.06);
+        }
+
+        .slot.incorrect {
+            border-color: #f7797d;
+            background: rgba(247,121,125,0.06);
+        }
+
+        .slot-number {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #f97316;
+            min-width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(249,115,22,0.12);
+            border-radius: 8px;
+            flex-shrink: 0;
+        }
+
+        .slot-content {
+            flex: 1;
+            min-height: 36px;
+            display: flex;
+            align-items: center;
+        }
+
+        .slot-content .card {
+            margin: 0;
+            animation: popIn 0.3s ease;
+        }
+
+        .slot-indicator {
+            font-size: 1.1rem;
+            flex-shrink: 0;
+            width: 24px;
+            text-align: center;
+        }
+
+        .slot-placeholder {
+            color: #555;
+            font-size: 0.8rem;
+            font-style: italic;
+        }
+
+        /* Buttons */
+        .controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.88rem;
+            font-weight: 600;
+            padding: 10px 22px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: #fff;
+        }
+
+        .btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+
+        .btn:active:not(:disabled) { transform: translateY(0); }
+        .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+        .btn-check {
+            background: linear-gradient(135deg, #f97316, #ea580c);
+            color: #1a1a2e;
+        }
+
+        .btn-reset {
+            background: linear-gradient(135deg, #4a4a6a, #3a3a5a);
+        }
+
+        /* Progress & Score */
+        .status-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .progress-text {
+            font-size: 0.9rem;
+            color: #aaa;
+        }
+
+        .progress-text span {
+            color: #f97316;
+            font-weight: 700;
+        }
+
+        .best-score {
+            font-size: 0.85rem;
+            color: #888;
+            background: rgba(249,115,22,0.1);
+            padding: 4px 12px;
+            border-radius: 8px;
+        }
+
+        .best-score span {
+            color: #f97316;
+            font-weight: 600;
+        }
+
+        /* Feedback message */
+        .feedback {
+            text-align: center;
+            font-size: 0.92rem;
+            font-weight: 600;
+            padding: 12px 20px;
+            border-radius: 12px;
+            margin-top: 16px;
+            animation: slideInUp 0.4s ease;
+            display: none;
+        }
+
+        .feedback.success {
+            display: block;
+            background: rgba(67,233,123,0.12);
+            color: #43e97b;
+            border: 1px solid rgba(67,233,123,0.3);
+        }
+
+        .feedback.error {
+            display: block;
+            background: rgba(247,121,125,0.12);
+            color: #f7797d;
+            border: 1px solid rgba(247,121,125,0.3);
+        }
+
+        .feedback.info {
+            display: block;
+            background: rgba(102,126,234,0.12);
+            color: #667eea;
+            border: 1px solid rgba(102,126,234,0.3);
+        }
+
+        /* Touch drag ghost */
+        .touch-ghost {
+            position: fixed;
+            pointer-events: none;
+            z-index: 1000;
+            opacity: 0.9;
+            transform: rotate(2deg) scale(1.04);
+        }
+
+        /* Animations */
+        @keyframes slideInUp {
+            from { opacity: 0; transform: translateY(16px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes popIn {
+            0% { opacity: 0; transform: scale(0.85); }
+            60% { transform: scale(1.05); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20% { transform: translateX(-6px); }
+            40% { transform: translateX(6px); }
+            60% { transform: translateX(-4px); }
+            80% { transform: translateX(4px); }
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .container { padding: 18px 10px; }
+            h1 { font-size: 1.5rem; }
+            .card { font-size: 0.76rem; padding: 8px 10px; }
+            .panel { padding: 14px; }
+            .slot { padding: 5px 8px; gap: 8px; min-height: 46px; }
+            .slot-number { font-size: 0.85rem; min-width: 24px; height: 24px; }
+            .btn { padding: 9px 16px; font-size: 0.82rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Cookie Baking Sequencing</h1>
+        <p class="subtitle">Drag each step into the correct order to bake the perfect cookies</p>
+
+        <div class="status-bar">
+            <div class="progress-text"><span id="placedCount">0</span>/8 steps placed</div>
+            <div class="best-score">Best score: <span id="bestScore">--</span></div>
+        </div>
+
+        <div class="panel" id="sourcePanel">
+            <p class="panel-title">Steps (drag from here)</p>
+            <div class="source-zone" id="sourceZone"></div>
+        </div>
+
+        <div class="panel" id="targetPanel">
+            <p class="panel-title">Correct Order (drop here)</p>
+            <div class="target-zone" id="targetZone"></div>
+        </div>
+
+        <div class="controls">
+            <button class="btn btn-check" id="checkBtn" disabled>Check Order</button>
+            <button class="btn btn-reset" id="resetBtn">Reset</button>
+        </div>
+
+        <div class="feedback" id="feedback"></div>
+    </div>
+
+    <script>
+        const STEPS = [
+            "Gather ingredients: flour, sugar, butter, eggs, vanilla, and chocolate chips",
+            "Preheat the oven to 180\u00B0C (350\u00B0F)",
+            "Mix butter and sugar together until light and fluffy",
+            "Beat in the eggs one at a time, then add vanilla extract",
+            "Gradually stir in the flour until just combined",
+            "Fold in the chocolate chips evenly",
+            "Scoop rounded tablespoons of dough onto a lined baking tray",
+            "Bake for 10\u201312 minutes until golden brown, then cool on a wire rack"
+        ];
+
+        const LS_KEY = 'recipeSeq_bestScore';
+        let slots = new Array(8).fill(null);
+        let touchGhost = null;
+        let touchDragId = null;
+        let touchOrigin = null;
+
+        // Fisher-Yates shuffle
+        function shuffle(arr) {
+            const a = [...arr];
+            for (let i = a.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [a[i], a[j]] = [a[j], a[i]];
+            }
+            return a;
+        }
+
+        function loadBestScore() {
+            try {
+                const v = localStorage.getItem(LS_KEY);
+                return v !== null ? parseInt(v, 10) : null;
+            } catch { return null; }
+        }
+
+        function saveBestScore(score) {
+            try { localStorage.setItem(LS_KEY, score); } catch {}
+        }
+
+        function displayBestScore() {
+            const best = loadBestScore();
+            document.getElementById('bestScore').textContent = best !== null ? best + '/8' : '--';
+        }
+
+        function createCard(stepIndex) {
+            const card = document.createElement('div');
+            card.className = 'card';
+            card.draggable = true;
+            card.dataset.step = stepIndex;
+            card.textContent = STEPS[stepIndex];
+            card.id = 'card-' + stepIndex;
+
+            // Desktop drag events
+            card.addEventListener('dragstart', onDragStart);
+            card.addEventListener('dragend', onDragEnd);
+
+            // Touch events
+            card.addEventListener('touchstart', onTouchStart, { passive: false });
+            card.addEventListener('touchmove', onTouchMove, { passive: false });
+            card.addEventListener('touchend', onTouchEnd, { passive: false });
+
+            return card;
+        }
+
+        function buildSourceZone() {
+            const zone = document.getElementById('sourceZone');
+            zone.innerHTML = '';
+            const indices = shuffle([0, 1, 2, 3, 4, 5, 6, 7]);
+            indices.forEach(i => {
+                if (!slots.includes(i)) {
+                    zone.appendChild(createCard(i));
+                }
+            });
+        }
+
+        function buildTargetZone() {
+            const zone = document.getElementById('targetZone');
+            zone.innerHTML = '';
+            for (let i = 0; i < 8; i++) {
+                const slot = document.createElement('div');
+                slot.className = 'slot';
+                slot.dataset.slot = i;
+
+                const num = document.createElement('div');
+                num.className = 'slot-number';
+                num.textContent = i + 1;
+
+                const content = document.createElement('div');
+                content.className = 'slot-content';
+
+                const indicator = document.createElement('div');
+                indicator.className = 'slot-indicator';
+
+                if (slots[i] !== null) {
+                    content.appendChild(createCard(slots[i]));
+                    slot.classList.add('filled');
+                } else {
+                    const ph = document.createElement('span');
+                    ph.className = 'slot-placeholder';
+                    ph.textContent = 'Drop step ' + (i + 1) + ' here';
+                    content.appendChild(ph);
+                }
+
+                slot.appendChild(num);
+                slot.appendChild(content);
+                slot.appendChild(indicator);
+
+                // Drop events for desktop
+                slot.addEventListener('dragover', onDragOver);
+                slot.addEventListener('dragenter', onDragEnter);
+                slot.addEventListener('dragleave', onDragLeave);
+                slot.addEventListener('drop', onDrop);
+
+                zone.appendChild(slot);
+            }
+        }
+
+        function updateProgress() {
+            const placed = slots.filter(s => s !== null).length;
+            document.getElementById('placedCount').textContent = placed;
+            document.getElementById('checkBtn').disabled = placed < 8;
+        }
+
+        function clearFeedback() {
+            const fb = document.getElementById('feedback');
+            fb.className = 'feedback';
+            fb.textContent = '';
+        }
+
+        function showFeedback(msg, type) {
+            const fb = document.getElementById('feedback');
+            fb.className = 'feedback ' + type;
+            fb.textContent = msg;
+        }
+
+        function clearValidation() {
+            document.querySelectorAll('.slot').forEach(s => {
+                s.classList.remove('correct', 'incorrect');
+                s.querySelector('.slot-indicator').textContent = '';
+            });
+            document.querySelectorAll('.card').forEach(c => {
+                c.classList.remove('correct', 'incorrect');
+            });
+        }
+
+        // --- Desktop Drag & Drop ---
+        let dragStepId = null;
+        let dragFromSlot = null;
+
+        function onDragStart(e) {
+            const card = e.target.closest('.card');
+            if (!card) return;
+            dragStepId = parseInt(card.dataset.step, 10);
+            const slotEl = card.closest('.slot');
+            dragFromSlot = slotEl ? parseInt(slotEl.dataset.slot, 10) : null;
+            card.classList.add('dragging');
+            e.dataTransfer.effectAllowed = 'move';
+            e.dataTransfer.setData('text/plain', dragStepId);
+            clearFeedback();
+            clearValidation();
+        }
+
+        function onDragEnd(e) {
+            document.querySelectorAll('.card.dragging').forEach(c => c.classList.remove('dragging'));
+            document.querySelectorAll('.drag-over').forEach(el => el.classList.remove('drag-over'));
+        }
+
+        function onDragOver(e) {
+            e.preventDefault();
+            e.dataTransfer.dropEffect = 'move';
+        }
+
+        function onDragEnter(e) {
+            e.preventDefault();
+            const slot = e.target.closest('.slot');
+            if (slot) slot.classList.add('drag-over');
+        }
+
+        function onDragLeave(e) {
+            const slot = e.target.closest('.slot');
+            if (slot && !slot.contains(e.relatedTarget)) {
+                slot.classList.remove('drag-over');
+            }
+        }
+
+        function onDrop(e) {
+            e.preventDefault();
+            const slot = e.target.closest('.slot');
+            if (!slot) return;
+            slot.classList.remove('drag-over');
+            const slotIdx = parseInt(slot.dataset.slot, 10);
+
+            if (dragStepId === null) return;
+
+            // If slot already has a card, move it back
+            if (slots[slotIdx] !== null && slots[slotIdx] !== dragStepId) {
+                const displaced = slots[slotIdx];
+                slots[slotIdx] = null;
+                // If dragged card came from another slot, put displaced card there
+                if (dragFromSlot !== null && dragFromSlot !== slotIdx) {
+                    slots[dragFromSlot] = displaced;
+                }
+                // Otherwise displaced goes back to source
+            } else if (dragFromSlot !== null && dragFromSlot !== slotIdx) {
+                slots[dragFromSlot] = null;
+            }
+
+            slots[slotIdx] = dragStepId;
+            dragStepId = null;
+            dragFromSlot = null;
+
+            rebuild();
+        }
+
+        // Source zone as drop target (return cards)
+        const sourceZone = document.getElementById('sourceZone');
+        sourceZone.addEventListener('dragover', e => { e.preventDefault(); e.dataTransfer.dropEffect = 'move'; });
+        sourceZone.addEventListener('dragenter', e => { e.preventDefault(); sourceZone.classList.add('drag-over'); });
+        sourceZone.addEventListener('dragleave', e => { if (!sourceZone.contains(e.relatedTarget)) sourceZone.classList.remove('drag-over'); });
+        sourceZone.addEventListener('drop', e => {
+            e.preventDefault();
+            sourceZone.classList.remove('drag-over');
+            if (dragStepId !== null && dragFromSlot !== null) {
+                slots[dragFromSlot] = null;
+                dragStepId = null;
+                dragFromSlot = null;
+                rebuild();
+            }
+        });
+
+        // --- Touch Drag & Drop ---
+        function onTouchStart(e) {
+            const card = e.target.closest('.card');
+            if (!card) return;
+            e.preventDefault();
+            clearFeedback();
+            clearValidation();
+
+            touchDragId = parseInt(card.dataset.step, 10);
+            const slotEl = card.closest('.slot');
+            touchOrigin = slotEl ? parseInt(slotEl.dataset.slot, 10) : null;
+
+            // Create ghost
+            const rect = card.getBoundingClientRect();
+            touchGhost = card.cloneNode(true);
+            touchGhost.className = 'card touch-ghost';
+            touchGhost.style.width = rect.width + 'px';
+            document.body.appendChild(touchGhost);
+
+            const touch = e.touches[0];
+            touchGhost.style.left = (touch.clientX - rect.width / 2) + 'px';
+            touchGhost.style.top = (touch.clientY - 20) + 'px';
+
+            card.classList.add('dragging');
+        }
+
+        function onTouchMove(e) {
+            if (touchGhost === null) return;
+            e.preventDefault();
+            const touch = e.touches[0];
+            const gw = touchGhost.offsetWidth;
+            touchGhost.style.left = (touch.clientX - gw / 2) + 'px';
+            touchGhost.style.top = (touch.clientY - 20) + 'px';
+
+            // Highlight slot under finger
+            document.querySelectorAll('.slot.drag-over, .source-zone.drag-over').forEach(el => el.classList.remove('drag-over'));
+            const el = document.elementFromPoint(touch.clientX, touch.clientY);
+            if (el) {
+                const slot = el.closest('.slot');
+                const src = el.closest('.source-zone');
+                if (slot) slot.classList.add('drag-over');
+                else if (src) src.classList.add('drag-over');
+            }
+        }
+
+        function onTouchEnd(e) {
+            if (touchGhost === null || touchDragId === null) return;
+            e.preventDefault();
+
+            // Remove ghost
+            touchGhost.remove();
+            touchGhost = null;
+
+            document.querySelectorAll('.card.dragging').forEach(c => c.classList.remove('dragging'));
+            document.querySelectorAll('.drag-over').forEach(el => el.classList.remove('drag-over'));
+
+            // Find drop target
+            const touch = e.changedTouches[0];
+            const el = document.elementFromPoint(touch.clientX, touch.clientY);
+            if (!el) { touchDragId = null; touchOrigin = null; return; }
+
+            const slot = el.closest('.slot');
+            const src = el.closest('.source-zone');
+
+            if (slot) {
+                const slotIdx = parseInt(slot.dataset.slot, 10);
+                if (slots[slotIdx] !== null && slots[slotIdx] !== touchDragId) {
+                    const displaced = slots[slotIdx];
+                    slots[slotIdx] = null;
+                    if (touchOrigin !== null && touchOrigin !== slotIdx) {
+                        slots[touchOrigin] = displaced;
+                    }
+                } else if (touchOrigin !== null && touchOrigin !== slotIdx) {
+                    slots[touchOrigin] = null;
+                }
+                slots[slotIdx] = touchDragId;
+            } else if (src && touchOrigin !== null) {
+                slots[touchOrigin] = null;
+            }
+
+            touchDragId = null;
+            touchOrigin = null;
+            rebuild();
+        }
+
+        // --- Check Order ---
+        document.getElementById('checkBtn').addEventListener('click', () => {
+            let correct = 0;
+            const slotEls = document.querySelectorAll('.slot');
+
+            slotEls.forEach((slotEl, i) => {
+                const indicator = slotEl.querySelector('.slot-indicator');
+                const card = slotEl.querySelector('.card');
+                if (slots[i] === i) {
+                    correct++;
+                    slotEl.classList.add('correct');
+                    if (card) card.classList.add('correct');
+                    indicator.textContent = '\u2713';
+                    indicator.style.color = '#43e97b';
+                } else {
+                    slotEl.classList.add('incorrect');
+                    if (card) card.classList.add('incorrect');
+                    indicator.textContent = '\u2717';
+                    indicator.style.color = '#f7797d';
+                }
+            });
+
+            if (correct === 8) {
+                showFeedback('Perfect! You placed all 8 steps in the correct order!', 'success');
+            } else if (correct >= 5) {
+                showFeedback(correct + '/8 correct \u2014 almost there! Try rearranging the highlighted steps.', 'info');
+            } else {
+                showFeedback(correct + '/8 correct \u2014 keep trying! Look for the red-highlighted steps.', 'error');
+            }
+
+            // Save best score
+            const best = loadBestScore();
+            if (best === null || correct > best) {
+                saveBestScore(correct);
+                displayBestScore();
+            }
+        });
+
+        // --- Reset ---
+        document.getElementById('resetBtn').addEventListener('click', () => {
+            slots = new Array(8).fill(null);
+            clearFeedback();
+            rebuild();
+        });
+
+        function rebuild() {
+            buildSourceZone();
+            buildTargetZone();
+            updateProgress();
+            clearValidation();
+        }
+
+        // --- Init ---
+        displayBestScore();
+        rebuild();
+    </script>
+</body>
+</html>

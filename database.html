@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SQL Practice Activity</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/alasql/4.3.3/alasql.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #1a2a3e 50%, #1a1a2e 100%);
+            color: #e0e0e0;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #60a5fa, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin: 0 0 8px 0;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #888;
+            font-size: 0.95rem;
+            margin-bottom: 12px;
+        }
+
+        /* Progress bar */
+        .progress-wrapper {
+            margin-bottom: 24px;
+        }
+
+        .progress-text {
+            text-align: center;
+            font-size: 0.85rem;
+            color: #888;
+            margin-bottom: 8px;
+        }
+
+        .progress-text span {
+            color: #60a5fa;
+            font-weight: 600;
+        }
+
+        .progress-track {
+            width: 100%;
+            height: 8px;
+            background: #2a2a4a;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #60a5fa, #3b82f6);
+            border-radius: 4px;
+            transition: width 0.4s ease;
+        }
+
+        /* Products table section */
+        .table-section {
+            background: #16213e;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+            border: 1px solid #2a2a4a;
+            margin-bottom: 24px;
+        }
+
+        .table-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .table-header h2 {
+            margin: 0;
+            font-size: 1.1rem;
+            color: #60a5fa;
+        }
+
+        .toggle-icon {
+            color: #60a5fa;
+            font-size: 1.2rem;
+            transition: transform 0.3s;
+        }
+
+        .toggle-icon.collapsed {
+            transform: rotate(-90deg);
+        }
+
+        .table-content {
+            margin-top: 16px;
+            overflow-x: auto;
+            transition: all 0.3s ease;
+        }
+
+        .table-content.hidden {
+            display: none;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.82rem;
+        }
+
+        th {
+            background: #1a1a3e;
+            color: #60a5fa;
+            font-weight: 600;
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 10px 12px;
+            text-align: left;
+            border-bottom: 2px solid #2a2a4a;
+            white-space: nowrap;
+        }
+
+        td {
+            padding: 8px 12px;
+            border-bottom: 1px solid #1e1e3e;
+            color: #c0c0d0;
+        }
+
+        tr:hover td {
+            background: rgba(96, 165, 250, 0.05);
+        }
+
+        /* Activity card */
+        .activity-card {
+            background: #16213e;
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+            border: 1px solid #2a2a4a;
+            transition: border-color 0.3s;
+        }
+
+        .activity-card.completed {
+            border-color: rgba(67, 233, 123, 0.3);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .card-header h3 {
+            margin: 0;
+            font-size: 0.95rem;
+            color: #60a5fa;
+            flex: 1;
+        }
+
+        .card-badge {
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 20px;
+            background: rgba(67, 233, 123, 0.15);
+            color: #43e97b;
+            border: 1px solid rgba(67, 233, 123, 0.3);
+        }
+
+        /* Dark code editor */
+        .code-editor {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.88rem;
+            width: 100%;
+            height: 70px;
+            padding: 12px 14px;
+            background: #0d1117;
+            color: #79c0ff;
+            border: 2px solid #2a2a4a;
+            border-radius: 10px;
+            resize: vertical;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .code-editor:focus {
+            border-color: #60a5fa;
+        }
+
+        /* Button row */
+        .btn-row {
+            display: flex;
+            gap: 10px;
+            margin-top: 12px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 600;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: #fff;
+        }
+
+        .btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+
+        .btn:active:not(:disabled) { transform: translateY(0); }
+        .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+        .btn-check { background: linear-gradient(135deg, #60a5fa, #3b82f6); }
+        .btn-hint { background: linear-gradient(135deg, #667eea, #764ba2); }
+
+        /* Feedback message */
+        .feedback-area {
+            margin-top: 12px;
+            min-height: 20px;
+        }
+
+        .feedback-msg {
+            padding: 10px 16px;
+            border-radius: 10px;
+            font-size: 0.88rem;
+            font-weight: 600;
+            animation: slideInUp 0.3s ease;
+        }
+
+        .feedback-msg.success {
+            background: rgba(67, 233, 123, 0.12);
+            border: 1px solid rgba(67, 233, 123, 0.25);
+            color: #43e97b;
+        }
+
+        .feedback-msg.error {
+            background: rgba(247, 121, 125, 0.12);
+            border: 1px solid rgba(247, 121, 125, 0.25);
+            color: #f7797d;
+        }
+
+        .feedback-msg.sql-error {
+            background: rgba(247, 121, 125, 0.08);
+            border: 1px solid rgba(247, 121, 125, 0.2);
+            color: #f7797d;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.82rem;
+            font-weight: 400;
+        }
+
+        /* Query results table */
+        .results-area {
+            margin-top: 12px;
+        }
+
+        .results-table-wrapper {
+            overflow-x: auto;
+            max-height: 250px;
+            overflow-y: auto;
+            border-radius: 10px;
+            border: 1px solid #2a2a4a;
+            animation: slideInUp 0.3s ease;
+        }
+
+        .results-table-wrapper table {
+            margin: 0;
+        }
+
+        .results-table-wrapper th {
+            position: sticky;
+            top: 0;
+            z-index: 1;
+        }
+
+        .results-label {
+            font-size: 0.78rem;
+            color: #666;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Hint */
+        .hint-box {
+            margin-top: 10px;
+            padding: 12px 16px;
+            background: rgba(102, 126, 234, 0.1);
+            border: 1px solid rgba(102, 126, 234, 0.25);
+            border-radius: 10px;
+            font-size: 0.85rem;
+            color: #a5b4fc;
+            animation: slideInUp 0.3s ease;
+        }
+
+        /* Celebration */
+        .celebration {
+            text-align: center;
+            padding: 24px;
+            background: linear-gradient(135deg, rgba(67, 233, 123, 0.1), rgba(56, 249, 215, 0.1));
+            border: 2px solid rgba(67, 233, 123, 0.3);
+            border-radius: 16px;
+            margin-top: 24px;
+            animation: popIn 0.5s ease;
+        }
+
+        .celebration h2 {
+            color: #43e97b;
+            margin: 0 0 8px 0;
+            font-size: 1.5rem;
+        }
+
+        .celebration p {
+            color: #999;
+            margin: 0;
+        }
+
+        /* Animations */
+        @keyframes slideInUp {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes popIn {
+            0% { opacity: 0; transform: scale(0.8); }
+            70% { transform: scale(1.02); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>SQL Practice Activity</h1>
+        <p class="subtitle">Write SQL queries to retrieve data from the products table</p>
+
+        <!-- Progress -->
+        <div class="progress-wrapper">
+            <div class="progress-text"><span id="progressCount">0</span>/10 completed</div>
+            <div class="progress-track">
+                <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+            </div>
+        </div>
+
+        <!-- Products table (collapsible) -->
+        <div class="table-section">
+            <div class="table-header" onclick="toggleTable()">
+                <h2>Products Table</h2>
+                <span class="toggle-icon" id="toggleIcon">▼</span>
+            </div>
+            <div class="table-content" id="tableContent">
+                <div id="tableDisplay"></div>
+            </div>
+        </div>
+
+        <!-- Activities -->
+        <div id="activitiesContainer"></div>
+        <div id="celebrationArea"></div>
+    </div>
+
+    <script>
+        const STORAGE_KEY = 'sql_practice_progress';
+
+        const data = [
+            { id: 1, name: "Laptop", category: "Electronics", price: 999, in_stock: true, last_updated: '2025-05-01' },
+            { id: 2, name: "Smartphone", category: "Electronics", price: 599, in_stock: true, last_updated: '2025-04-15' },
+            { id: 3, name: "Desk", category: "Furniture", price: 200, in_stock: false, last_updated: '2025-04-20' },
+            { id: 4, name: "Printer", category: "Electronics", price: 150, in_stock: true, last_updated: '2025-04-28' },
+            { id: 5, name: "Monitor", category: "Electronics", price: 130, in_stock: true, last_updated: '2025-05-02' },
+            { id: 6, name: "Keyboard", category: "Electronics", price: 20, in_stock: true, last_updated: '2025-04-25' },
+            { id: 7, name: "Mouse", category: "Electronics", price: 10, in_stock: true, last_updated: '2025-04-30' },
+            { id: 8, name: "Webcam", category: "Electronics", price: 74, in_stock: true, last_updated: '2025-05-01' },
+            { id: 9, name: "Microphone", category: "Electronics", price: 55, in_stock: false, last_updated: '2025-04-15' },
+            { id: 10, name: "Headphones", category: "Electronics", price: 45, in_stock: false, last_updated: '2025-05-03' },
+            { id: 11, name: "Lamp", category: "Furniture", price: 22, in_stock: true, last_updated: '2025-04-20' },
+            { id: 12, name: "Stool", category: "Furniture", price: 35, in_stock: true, last_updated: '2025-04-29' },
+            { id: 13, name: "Rug", category: "Furniture", price: 89, in_stock: false, last_updated: '2025-05-04' },
+            { id: 14, name: "Bookcase", category: "Furniture", price: 123, in_stock: true, last_updated: '2025-04-26' },
+            { id: 15, name: "Sofa", category: "Furniture", price: 550, in_stock: true, last_updated: '2025-04-27' },
+            { id: 16, name: "Chair", category: "Furniture", price: 120, in_stock: true, last_updated: '2025-04-21' },
+            { id: 17, name: "Picture Frame", category: "Decor", price: 19, in_stock: true, last_updated: '2025-04-22' },
+            { id: 18, name: "Vase", category: "Decor", price: 47, in_stock: true, last_updated: '2025-05-05' },
+            { id: 19, name: "Desk Organizer", category: "Office Supplies", price: 5, in_stock: true, last_updated: '2025-04-18' },
+            { id: 20, name: "Stapler", category: "Office Supplies", price: 9, in_stock: false, last_updated: '2025-04-23' },
+            { id: 21, name: "Notepad", category: "Office Supplies", price: 3, in_stock: false, last_updated: '2025-05-06' },
+            { id: 22, name: "Calendar", category: "Office Supplies", price: 7, in_stock: true, last_updated: '2025-04-24' },
+            { id: 23, name: "Binder", category: "Office Supplies", price: 2, in_stock: false, last_updated: '2025-04-17' }
+        ];
+
+        const activities = [
+            { id: 1, description: "Select all records from the products table.", correctQuery: "SELECT * FROM products", hints: ["Use SELECT * to get all columns", "SELECT * FROM tablename"] },
+            { id: 2, description: "Select the name and price of each product.", correctQuery: "SELECT name, price FROM products", hints: ["List the column names after SELECT", "SELECT column1, column2 FROM tablename"] },
+            { id: 3, description: "Find all products where the category is 'Electronics'.", correctQuery: "SELECT * FROM products WHERE category = 'Electronics'", hints: ["Use WHERE to filter rows", "WHERE category = 'Electronics'"] },
+            { id: 4, description: "Find products priced more than £100 but less than £600.", correctQuery: "SELECT * FROM products WHERE price > 100 AND price < 600", hints: ["Use AND to combine conditions", "WHERE price > 100 AND price < 600"] },
+            { id: 5, description: "Find all products whose name begins with the letter 'S'.", correctQuery: "SELECT * FROM products WHERE name LIKE 'S%'", hints: ["Use LIKE with a wildcard %", "WHERE name LIKE 'S%' — the % matches any characters after S"] },
+            { id: 6, description: "Find all products that are in stock and were last updated after April 15, 2025.", correctQuery: "SELECT * FROM products WHERE in_stock = true AND last_updated > '2025-04-15'", hints: ["Combine two conditions with AND", "Dates are compared as strings: '2025-04-15'"] },
+            { id: 7, description: "Find all products in either 'Electronics' or 'Office Supplies' categories.", correctQuery: "SELECT * FROM products WHERE category = 'Electronics' OR category = 'Office Supplies'", hints: ["Use OR to match either condition", "You can also use IN: WHERE category IN ('Electronics', 'Office Supplies')"] },
+            { id: 8, description: "Find all products whose name contains the word 'Desk'.", correctQuery: "SELECT * FROM products WHERE name LIKE '%Desk%'", hints: ["Use LIKE with % on both sides", "WHERE name LIKE '%Desk%'"] },
+            { id: 9, description: "Find products priced less than £50.", correctQuery: "SELECT * FROM products WHERE price < 50", hints: ["Use < for less than", "WHERE price < 50"] },
+            { id: 10, description: "Find all products that were last updated on April 20, 2025.", correctQuery: "SELECT * FROM products WHERE last_updated = '2025-04-20'", hints: ["Match the exact date string", "WHERE last_updated = '2025-04-20'"] }
+        ];
+
+        // Setup AlaSQL
+        alasql("CREATE TABLE products (id INT, name STRING, category STRING, price INT, in_stock BOOLEAN, last_updated DATE)");
+        alasql.tables.products.data = data;
+
+        // Progress
+        function loadProgress() {
+            try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; }
+            catch { return {}; }
+        }
+
+        function saveProgress(p) {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(p));
+        }
+
+        let progress = loadProgress();
+
+        function getCompletedCount() {
+            return activities.filter(a => progress[a.id]).length;
+        }
+
+        function updateProgressBar() {
+            const count = getCompletedCount();
+            document.getElementById('progressCount').textContent = count;
+            document.getElementById('progressFill').style.width = (count / activities.length * 100) + '%';
+
+            activities.forEach(a => {
+                const card = document.getElementById('card-' + a.id);
+                if (card) {
+                    if (progress[a.id]) card.classList.add('completed');
+                    else card.classList.remove('completed');
+                }
+            });
+
+            if (count === activities.length) {
+                document.getElementById('celebrationArea').innerHTML = `
+                    <div class="celebration">
+                        <h2>All 10 Activities Complete!</h2>
+                        <p>Excellent work — you've mastered basic SQL queries.</p>
+                    </div>`;
+            } else {
+                document.getElementById('celebrationArea').innerHTML = '';
+            }
+        }
+
+        // Display products table
+        function displayTable() {
+            const result = alasql("SELECT * FROM products");
+            const headers = Object.keys(result[0]);
+            const html = '<table><thead><tr>' +
+                headers.map(h => `<th>${h}</th>`).join('') +
+                '</tr></thead><tbody>' +
+                result.map(row => '<tr>' + headers.map(h => `<td>${row[h]}</td>`).join('') + '</tr>').join('') +
+                '</tbody></table>';
+            document.getElementById('tableDisplay').innerHTML = html;
+        }
+
+        // Toggle table visibility
+        let tableVisible = true;
+        function toggleTable() {
+            tableVisible = !tableVisible;
+            const content = document.getElementById('tableContent');
+            const icon = document.getElementById('toggleIcon');
+            if (tableVisible) {
+                content.classList.remove('hidden');
+                icon.classList.remove('collapsed');
+            } else {
+                content.classList.add('hidden');
+                icon.classList.add('collapsed');
+            }
+        }
+
+        // Render activities
+        function renderActivities() {
+            const container = document.getElementById('activitiesContainer');
+            container.innerHTML = activities.map(a => `
+                <div class="activity-card" id="card-${a.id}">
+                    <div class="card-header">
+                        <h3>Activity ${a.id}: ${a.description}</h3>
+                        ${progress[a.id] ? '<span class="card-badge">Complete</span>' : ''}
+                    </div>
+                    <textarea class="code-editor" id="sql-${a.id}" placeholder="Type your SQL query here..." spellcheck="false"></textarea>
+                    <div class="btn-row">
+                        <button class="btn btn-check" onclick="submitQuery(${a.id})">Check Answer</button>
+                        <button class="btn btn-hint" onclick="showHint(${a.id})">Show Hint</button>
+                    </div>
+                    <div class="feedback-area" id="feedback-${a.id}"></div>
+                    <div class="results-area" id="results-${a.id}"></div>
+                    <div id="hint-${a.id}"></div>
+                </div>
+            `).join('');
+        }
+
+        // Hint system
+        const hintState = {};
+        function showHint(id) {
+            const activity = activities.find(a => a.id === id);
+            if (!hintState[id]) hintState[id] = 0;
+            else hintState[id] = Math.min(hintState[id] + 1, activity.hints.length - 1);
+
+            const hintIdx = hintState[id];
+            document.getElementById('hint-' + id).innerHTML =
+                `<div class="hint-box">Hint ${hintIdx + 1}: ${activity.hints[hintIdx]}</div>`;
+        }
+
+        // Render query results as table
+        function renderResultsTable(results, containerId) {
+            const container = document.getElementById(containerId);
+            if (!results || results.length === 0) {
+                container.innerHTML = '<div class="results-label">No results returned</div>';
+                return;
+            }
+
+            const headers = Object.keys(results[0]);
+            const maxRows = Math.min(results.length, 50);
+            let html = '<div class="results-label">Query Results (' + results.length + ' rows)</div>';
+            html += '<div class="results-table-wrapper"><table><thead><tr>' +
+                headers.map(h => `<th>${h}</th>`).join('') +
+                '</tr></thead><tbody>';
+
+            for (let i = 0; i < maxRows; i++) {
+                html += '<tr>' + headers.map(h => `<td>${results[i][h]}</td>`).join('') + '</tr>';
+            }
+
+            if (results.length > maxRows) {
+                html += `<tr><td colspan="${headers.length}" style="text-align:center;color:#666;">... and ${results.length - maxRows} more rows</td></tr>`;
+            }
+
+            html += '</tbody></table></div>';
+            container.innerHTML = html;
+        }
+
+        // Submit query
+        function submitQuery(activityId) {
+            const activity = activities.find(a => a.id === activityId);
+            const studentQuery = document.getElementById('sql-' + activityId).value.trim();
+            const feedbackEl = document.getElementById('feedback-' + activityId);
+            const resultsEl = document.getElementById('results-' + activityId);
+
+            if (!studentQuery) {
+                feedbackEl.innerHTML = '<div class="feedback-msg error">Please enter a SQL query</div>';
+                resultsEl.innerHTML = '';
+                return;
+            }
+
+            try {
+                const studentResults = alasql(studentQuery);
+                const correctResults = alasql(activity.correctQuery);
+
+                // Show query results
+                renderResultsTable(studentResults, 'results-' + activityId);
+
+                if (JSON.stringify(studentResults) === JSON.stringify(correctResults)) {
+                    feedbackEl.innerHTML = '<div class="feedback-msg success">Correct! Well done.</div>';
+                    progress[activityId] = true;
+                    saveProgress(progress);
+                    updateProgressBar();
+                    // Update badge
+                    const header = document.querySelector('#card-' + activityId + ' .card-header');
+                    if (!header.querySelector('.card-badge')) {
+                        const badge = document.createElement('span');
+                        badge.className = 'card-badge';
+                        badge.textContent = 'Complete';
+                        header.appendChild(badge);
+                    }
+                } else {
+                    feedbackEl.innerHTML = '<div class="feedback-msg error">Not quite right — check your results and try again.</div>';
+                }
+            } catch (error) {
+                feedbackEl.innerHTML = `<div class="feedback-msg sql-error">SQL Error: ${error.message}</div>`;
+                resultsEl.innerHTML = '';
+            }
+        }
+
+        // Initialize
+        window.onload = function() {
+            displayTable();
+            renderActivities();
+            updateProgressBar();
+        };
+    </script>
+</body>
+</html>

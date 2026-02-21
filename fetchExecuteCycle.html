@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Fetch-Decode-Execute Cycle</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+body { margin: 0; padding: 20px; font-family: 'Poppins', sans-serif; background: linear-gradient(135deg, #1a1a2e 0%, #2e1a2e 50%, #1a1a2e 100%); color: #e0e0e0; min-height: 100vh; }
+h1 { font-size: 2rem; font-weight: 700; background: linear-gradient(135deg, #d946ef, #a855f7, #d946ef); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin: 0 0 4px 0; text-align: center; }
+.subtitle { font-size: 0.95rem; color: #888; text-align: center; margin-bottom: 18px; }
+.panel { background: #16213e; border-radius: 16px; border: 1px solid #2a2a4a; padding: 20px; margin-bottom: 16px; }
+button { font-family: 'Poppins', sans-serif; font-size: 0.88rem; font-weight: 600; border: none; border-radius: 10px; padding: 10px 20px; cursor: pointer; color: #fff; transition: transform 0.15s, box-shadow 0.15s, opacity 0.2s; }
+button:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(217,70,239,0.3); }
+button:active:not(:disabled) { transform: translateY(0); }
+button:disabled { opacity: 0.4; cursor: not-allowed; }
+.btn-primary { background: linear-gradient(135deg, #d946ef, #a855f7); }
+.btn-secondary { background: linear-gradient(135deg, #4a5568, #2d3748); }
+.btn-success { background: linear-gradient(135deg, #10b981, #059669); }
+.btn-danger { background: linear-gradient(135deg, #f7797d, #e74c3c); }
+
+@keyframes slideInUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes popIn { 0% { transform: scale(0.7); opacity: 0; } 60% { transform: scale(1.1); } 100% { transform: scale(1); opacity: 1; } }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes flashGold { 0% { background: rgba(250,204,21,0.5); } 100% { background: transparent; } }
+@keyframes glowPulse { 0%, 100% { box-shadow: 0 0 8px var(--glow-color); } 50% { box-shadow: 0 0 22px var(--glow-color), 0 0 40px var(--glow-color); } }
+
+.phase-badge { display: inline-flex; align-items: center; gap: 8px; padding: 8px 22px; border-radius: 50px; font-weight: 700; font-size: 0.95rem; letter-spacing: 0.5px; color: #fff; }
+.phase-fetch { background: #d946ef; animation: popIn 0.35s ease; }
+.phase-decode { background: #f59e0b; animation: popIn 0.35s ease; }
+.phase-execute { background: #10b981; animation: popIn 0.35s ease; }
+
+.top-bar { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 16px; margin-bottom: 14px; }
+.step-counter { font-size: 0.95rem; color: #aaa; font-weight: 500; }
+
+.controls { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 10px; margin-bottom: 16px; }
+.speed-group { display: flex; align-items: center; gap: 8px; font-size: 0.82rem; color: #888; }
+.speed-group input[type=range] { width: 100px; accent-color: #d946ef; }
+
+.main-area { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+
+/* CPU Diagram */
+.cpu-wrapper { position: relative; }
+.cpu-box { background: #0f1a30; border: 2px solid #d946ef44; border-radius: 14px; padding: 18px; position: relative; }
+.cpu-label { position: absolute; top: -12px; left: 20px; background: #16213e; padding: 0 10px; font-weight: 700; font-size: 0.85rem; color: #d946ef; letter-spacing: 1px; }
+.reg-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 8px; }
+.register { background: #1a2744; border: 1.5px solid #2a2a4a; border-radius: 10px; padding: 10px 12px; text-align: center; position: relative; transition: border-color 0.3s, box-shadow 0.3s; }
+.register.active { border-color: var(--glow-color, #d946ef); animation: glowPulse 1s ease infinite; }
+.register.flash .reg-value { animation: flashGold 0.6s ease; }
+.reg-label { font-size: 0.72rem; color: #888; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+.reg-value { font-family: 'Fira Code', monospace; font-size: 1rem; font-weight: 500; color: #f0f0f0; min-height: 1.3em; padding: 2px 4px; border-radius: 4px; }
+
+.bus-bar { margin-top: 14px; background: linear-gradient(90deg, #d946ef33, #a855f733, #d946ef33); border: 1px solid #d946ef44; border-radius: 8px; padding: 8px; text-align: center; font-size: 0.75rem; color: #aaa; font-weight: 500; display: flex; justify-content: center; gap: 20px; }
+.bus-bar span { opacity: 0.7; }
+
+.ram-box { background: #0f1a30; border: 2px solid #2a2a4a; border-radius: 14px; padding: 14px 18px; margin-top: 14px; position: relative; }
+.ram-label { position: absolute; top: -12px; left: 20px; background: #16213e; padding: 0 10px; font-weight: 700; font-size: 0.85rem; color: #10b981; letter-spacing: 1px; }
+.ram-row { display: flex; justify-content: space-between; padding: 6px 10px; border-radius: 6px; font-family: 'Fira Code', monospace; font-size: 0.82rem; margin-top: 4px; transition: background 0.3s; }
+.ram-row.highlight { background: rgba(217,70,239,0.2); border: 1px solid #d946ef55; }
+.ram-addr { color: #888; }
+.ram-data { color: #e0e0e0; }
+
+/* Explanation Panel */
+.explanation-panel { display: flex; flex-direction: column; }
+.explanation-text { font-size: 0.95rem; line-height: 1.65; animation: slideInUp 0.35s ease; min-height: 80px; }
+.decode-split { display: flex; gap: 16px; justify-content: center; margin-top: 16px; animation: popIn 0.4s ease; }
+.decode-part { background: #1a2744; border-radius: 10px; padding: 12px 22px; text-align: center; }
+.decode-part .label { font-size: 0.72rem; color: #888; text-transform: uppercase; font-weight: 600; margin-bottom: 4px; }
+.decode-part .value { font-family: 'Fira Code', monospace; font-size: 1.15rem; font-weight: 600; }
+.decode-part.opcode { border: 2px solid #f59e0b; }
+.decode-part.opcode .value { color: #f59e0b; }
+.decode-part.operand { border: 2px solid #10b981; }
+.decode-part.operand .value { color: #10b981; }
+
+.success-msg { margin-top: 14px; background: rgba(67,233,123,0.12); border: 1px solid #43e97b55; border-radius: 10px; padding: 12px 16px; color: #43e97b; font-weight: 600; font-size: 0.88rem; animation: slideInUp 0.4s ease; }
+
+/* Pseudocode Panel */
+.pseudo-panel { font-family: 'Fira Code', monospace; font-size: 0.78rem; line-height: 1.9; }
+.pseudo-line { padding: 2px 10px; border-radius: 6px; transition: background 0.3s, color 0.3s; color: #777; }
+.pseudo-line.active-fetch { background: rgba(217,70,239,0.18); color: #e0b0ff; }
+.pseudo-line.active-decode { background: rgba(245,158,11,0.18); color: #fcd34d; }
+.pseudo-line.active-execute { background: rgba(16,185,129,0.18); color: #6ee7b7; }
+
+/* Data Packet */
+.data-packet { position: fixed; width: 16px; height: 16px; border-radius: 50%; z-index: 100; pointer-events: none; transition: left 0.5s ease-in-out, top 0.5s ease-in-out, opacity 0.15s; opacity: 0; }
+.data-packet.visible { opacity: 1; }
+.data-packet.fetch-color { background: #d946ef; box-shadow: 0 0 12px #d946ef; }
+.data-packet.decode-color { background: #f59e0b; box-shadow: 0 0 12px #f59e0b; }
+.data-packet.execute-color { background: #10b981; box-shadow: 0 0 12px #10b981; }
+
+@media (max-width: 700px) {
+  body { padding: 12px; }
+  h1 { font-size: 1.45rem; }
+  .main-area { grid-template-columns: 1fr; }
+  .reg-grid { gap: 8px; }
+  .register { padding: 8px; }
+  .reg-value { font-size: 0.85rem; }
+  button { padding: 8px 14px; font-size: 0.8rem; }
+  .controls { gap: 6px; }
+  .pseudo-panel { font-size: 0.7rem; }
+}
+</style>
+</head>
+<body>
+
+<h1>The Fetch-Decode-Execute Cycle</h1>
+<p class="subtitle">Watch how the CPU processes the instruction LOAD 5 step by step</p>
+
+<div class="top-bar">
+  <div id="phaseBadge" class="phase-badge phase-fetch">&#9881; FETCH</div>
+  <div class="step-counter">Step <span id="stepNum">1</span>/12</div>
+</div>
+
+<div class="controls">
+  <button id="btnPrev" class="btn-secondary" disabled>&#9664; Previous</button>
+  <button id="btnNext" class="btn-primary">Next &#9654;</button>
+  <button id="btnAuto" class="btn-success">&#9654; Auto-Play</button>
+  <button id="btnReset" class="btn-danger">&#8634; Reset</button>
+  <div class="speed-group">
+    <label for="speedSlider">Speed:</label>
+    <input type="range" id="speedSlider" min="500" max="3000" value="1500" step="100">
+    <span id="speedLabel">1.5s</span>
+  </div>
+</div>
+
+<div class="main-area">
+  <div class="cpu-wrapper">
+    <div class="cpu-box">
+      <div class="cpu-label">CPU</div>
+      <div class="reg-grid">
+        <div class="register" id="regPC" data-reg="PC">
+          <div class="reg-label">Program Counter (PC)</div>
+          <div class="reg-value" id="valPC">-</div>
+        </div>
+        <div class="register" id="regCIR" data-reg="CIR">
+          <div class="reg-label">Current Instruction Reg (CIR)</div>
+          <div class="reg-value" id="valCIR">-</div>
+        </div>
+        <div class="register" id="regMAR" data-reg="MAR">
+          <div class="reg-label">Memory Address Reg (MAR)</div>
+          <div class="reg-value" id="valMAR">-</div>
+        </div>
+        <div class="register" id="regMDR" data-reg="MDR">
+          <div class="reg-label">Memory Data Reg (MDR)</div>
+          <div class="reg-value" id="valMDR">-</div>
+        </div>
+        <div class="register" id="regACC" data-reg="ACC">
+          <div class="reg-label">Accumulator (ACC)</div>
+          <div class="reg-value" id="valACC">0</div>
+        </div>
+        <div class="register" id="regCU" data-reg="CU">
+          <div class="reg-label">Control Unit (CU)</div>
+          <div class="reg-value" id="valCU">Idle</div>
+        </div>
+      </div>
+      <div class="bus-bar">
+        <span id="addrBus">&#8596; Address Bus</span>
+        <span id="dataBus">&#8596; Data Bus</span>
+      </div>
+    </div>
+    <div class="ram-box">
+      <div class="ram-label">RAM</div>
+      <div class="ram-row" id="ram5">
+        <span class="ram-addr">Address 5:</span>
+        <span class="ram-data">42</span>
+      </div>
+      <div class="ram-row" id="ram100">
+        <span class="ram-addr">Address 100:</span>
+        <span class="ram-data">LOAD 5</span>
+      </div>
+      <div class="ram-row" id="ram101">
+        <span class="ram-addr">Address 101:</span>
+        <span class="ram-data">ADD 3</span>
+      </div>
+      <div class="ram-row" id="ram102">
+        <span class="ram-addr">Address 102:</span>
+        <span class="ram-data">STORE 8</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="explanation-panel panel" id="explPanel">
+    <div class="explanation-text" id="explText"></div>
+    <div id="extraContent"></div>
+  </div>
+</div>
+
+<div class="panel pseudo-panel" id="pseudoPanel"></div>
+
+<div class="data-packet" id="dataPacket"></div>
+
+<script>
+const pseudoLines = [
+  "1.  PC holds address of next instruction",
+  "2.  MAR \u2190 PC (copy address)",
+  "3.  PC \u2190 PC + 1 (increment)",
+  "4.  Send MAR to RAM via address bus",
+  "5.  MDR \u2190 RAM[MAR] (fetch data)",
+  "6.  CIR \u2190 MDR (copy instruction)",
+  "7.  CU decodes CIR",
+  "8.  CU identifies opcode and operand",
+  "9.  MAR \u2190 operand",
+  "10. MDR \u2190 RAM[MAR]",
+  "11. ACC \u2190 MDR",
+  "12. Cycle complete"
+];
+
+const steps = [
+  { phase: "fetch", regs: { PC:"100", MAR:"-", MDR:"-", CIR:"-", ACC:"0", CU:"Idle" }, active:"PC", flash:[], text:"The Program Counter (PC) holds the address of the next instruction: <strong>100</strong>.", ramHL:[], anim:null },
+  { phase: "fetch", regs: { PC:"100", MAR:"100", MDR:"-", CIR:"-", ACC:"0", CU:"Idle" }, active:"MAR", flash:["MAR"], text:"The address in the PC is copied to the MAR via the address bus.", ramHL:[], anim:{ from:"regPC", to:"regMAR" } },
+  { phase: "fetch", regs: { PC:"101", MAR:"100", MDR:"-", CIR:"-", ACC:"0", CU:"Idle" }, active:"PC", flash:["PC"], text:"The PC is incremented by 1, ready for the next instruction.", ramHL:[], anim:null },
+  { phase: "fetch", regs: { PC:"101", MAR:"100", MDR:"-", CIR:"-", ACC:"0", CU:"Idle" }, active:"MAR", flash:[], text:"The CPU sends the address (<strong>100</strong>) from the MAR to RAM via the address bus.", ramHL:["ram100"], anim:{ from:"regMAR", to:"ram100" } },
+  { phase: "fetch", regs: { PC:"101", MAR:"100", MDR:"LOAD 5", CIR:"-", ACC:"0", CU:"Idle" }, active:"MDR", flash:["MDR"], text:"RAM sends the data (<strong>LOAD 5</strong>) back to the MDR via the data bus.", ramHL:["ram100"], anim:{ from:"ram100", to:"regMDR" } },
+  { phase: "fetch", regs: { PC:"101", MAR:"100", MDR:"LOAD 5", CIR:"LOAD 5", ACC:"0", CU:"Idle" }, active:"CIR", flash:["CIR"], text:"The instruction in the MDR is copied to the CIR for decoding.", ramHL:[], anim:{ from:"regMDR", to:"regCIR" } },
+  { phase: "decode", regs: { PC:"101", MAR:"100", MDR:"LOAD 5", CIR:"LOAD 5", ACC:"0", CU:"Decoding..." }, active:"CU", flash:["CU"], text:"The Control Unit decodes the instruction in the CIR. It splits the instruction into <strong>opcode</strong> (LOAD) and <strong>operand</strong> (5).", ramHL:[], anim:null },
+  { phase: "decode", regs: { PC:"101", MAR:"100", MDR:"LOAD 5", CIR:"LOAD 5", ACC:"0", CU:"Decoded" }, active:"CU", flash:[], text:"The CU identifies <strong>LOAD</strong> as the operation and <strong>5</strong> as the memory address to load from.", ramHL:[], anim:null, showSplit:true },
+  { phase: "execute", regs: { PC:"101", MAR:"5", MDR:"LOAD 5", CIR:"LOAD 5", ACC:"0", CU:"Executing" }, active:"MAR", flash:["MAR"], text:"The operand (address <strong>5</strong>) is sent to the MAR.", ramHL:[], anim:{ from:"regCIR", to:"regMAR" } },
+  { phase: "execute", regs: { PC:"101", MAR:"5", MDR:"42", CIR:"LOAD 5", ACC:"0", CU:"Executing" }, active:"MDR", flash:["MDR"], text:"The data at memory address 5 is fetched into the MDR. RAM address 5 contains the value <strong>42</strong>.", ramHL:["ram5"], anim:{ from:"ram5", to:"regMDR" } },
+  { phase: "execute", regs: { PC:"101", MAR:"5", MDR:"42", CIR:"LOAD 5", ACC:"42", CU:"Executing" }, active:"ACC", flash:["ACC"], text:"The data from the MDR is loaded into the Accumulator (ACC).", ramHL:[], anim:{ from:"regMDR", to:"regACC" } },
+  { phase: "execute", regs: { PC:"101", MAR:"5", MDR:"42", CIR:"LOAD 5", ACC:"42", CU:"Done" }, active:null, flash:[], text:"<strong>LOAD 5</strong> is complete! The value <strong>42</strong> from address 5 is now in the ACC. The cycle repeats for the next instruction at address 101.", ramHL:[], anim:null, showSuccess:true }
+];
+
+const phaseIcons = { fetch:"\u2B07", decode:"\uD83D\uDD0D", execute:"\u26A1" };
+const phaseColors = { fetch:"#d946ef", decode:"#f59e0b", execute:"#10b981" };
+
+let currentStep = 0;
+let autoInterval = null;
+let animating = false;
+
+const $ = id => document.getElementById(id);
+const btnPrev = $("btnPrev"), btnNext = $("btnNext"), btnAuto = $("btnAuto"), btnReset = $("btnReset");
+const speedSlider = $("speedSlider"), speedLabel = $("speedLabel");
+const phaseBadge = $("phaseBadge"), stepNum = $("stepNum");
+const explText = $("explText"), extraContent = $("extraContent");
+const pseudoPanel = $("pseudoPanel");
+const dataPacket = $("dataPacket");
+
+function buildPseudo() {
+  pseudoPanel.innerHTML = pseudoLines.map((l, i) =>
+    `<div class="pseudo-line" data-idx="${i}">${l}</div>`
+  ).join("");
+}
+
+function getSpeed() { return parseInt(speedSlider.value); }
+
+speedSlider.addEventListener("input", () => {
+  speedLabel.textContent = (getSpeed()/1000).toFixed(1) + "s";
+  if (autoInterval) { stopAuto(); startAuto(); }
+});
+
+function renderStep(stepIdx, doAnimate) {
+  const s = steps[stepIdx];
+  stepNum.textContent = stepIdx + 1;
+
+  // Phase badge
+  const pClass = "phase-" + s.phase;
+  phaseBadge.className = "phase-badge " + pClass;
+  phaseBadge.innerHTML = phaseIcons[s.phase] + " " + s.phase.toUpperCase();
+
+  // Registers
+  const regIds = ["PC","MAR","MDR","CIR","ACC","CU"];
+  regIds.forEach(r => {
+    const el = $("reg" + r);
+    const valEl = $("val" + r);
+    const newVal = s.regs[r];
+    // Flash
+    el.classList.remove("flash","active");
+    void el.offsetWidth;
+    if (s.flash.includes(r) && doAnimate) el.classList.add("flash");
+    // Active glow
+    if (s.active === r) {
+      el.style.setProperty("--glow-color", phaseColors[s.phase]);
+      el.classList.add("active");
+    }
+    valEl.textContent = newVal;
+  });
+
+  // RAM highlights
+  ["ram5","ram100","ram101","ram102"].forEach(id => {
+    $(id).classList.toggle("highlight", s.ramHL.includes(id));
+  });
+
+  // Explanation
+  explText.innerHTML = s.text;
+  explText.style.animation = "none";
+  void explText.offsetWidth;
+  explText.style.animation = "slideInUp 0.35s ease";
+
+  // Extra content
+  extraContent.innerHTML = "";
+  if (s.showSplit) {
+    extraContent.innerHTML = `<div class="decode-split">
+      <div class="decode-part opcode"><div class="label">Opcode</div><div class="value">LOAD</div></div>
+      <div class="decode-part operand"><div class="label">Operand</div><div class="value">5</div></div>
+    </div>`;
+  }
+  if (s.showSuccess) {
+    extraContent.innerHTML = `<div class="success-msg">\u2705 Cycle complete! The CPU will now fetch the next instruction from address 101.</div>`;
+  }
+
+  // Pseudocode highlight
+  const lines = pseudoPanel.querySelectorAll(".pseudo-line");
+  lines.forEach((l, i) => {
+    l.className = "pseudo-line";
+    if (i === stepIdx) l.classList.add("active-" + s.phase);
+  });
+
+  // Buttons
+  btnPrev.disabled = stepIdx === 0;
+  btnNext.disabled = stepIdx === steps.length - 1;
+
+  // Packet animation
+  if (doAnimate && s.anim) {
+    animatePacket(s.anim.from, s.anim.to, s.phase);
+  }
+}
+
+function animatePacket(fromId, toId, phase) {
+  const fromEl = document.getElementById(fromId);
+  const toEl = document.getElementById(toId);
+  if (!fromEl || !toEl) return;
+  const fromR = fromEl.getBoundingClientRect();
+  const toR = toEl.getBoundingClientRect();
+  const sx = fromR.left + fromR.width / 2 - 8;
+  const sy = fromR.top + fromR.height / 2 - 8;
+  const ex = toR.left + toR.width / 2 - 8;
+  const ey = toR.top + toR.height / 2 - 8;
+
+  dataPacket.className = "data-packet";
+  dataPacket.style.left = sx + "px";
+  dataPacket.style.top = sy + "px";
+  dataPacket.style.transition = "none";
+  void dataPacket.offsetWidth;
+
+  const colorClass = phase === "fetch" ? "fetch-color" : phase === "decode" ? "decode-color" : "execute-color";
+  dataPacket.classList.add(colorClass, "visible");
+
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      dataPacket.style.transition = "left 0.5s ease-in-out, top 0.5s ease-in-out, opacity 0.15s";
+      dataPacket.style.left = ex + "px";
+      dataPacket.style.top = ey + "px";
+    });
+  });
+
+  setTimeout(() => {
+    dataPacket.classList.remove("visible");
+  }, 600);
+}
+
+function goNext() {
+  if (currentStep < steps.length - 1 && !animating) {
+    animating = true;
+    currentStep++;
+    renderStep(currentStep, true);
+    setTimeout(() => { animating = false; }, 550);
+  }
+}
+
+function goPrev() {
+  if (currentStep > 0 && !animating) {
+    currentStep--;
+    renderStep(currentStep, false);
+  }
+}
+
+function reset() {
+  stopAuto();
+  currentStep = 0;
+  renderStep(currentStep, false);
+}
+
+function startAuto() {
+  if (autoInterval) return;
+  btnAuto.innerHTML = "\u25A0 Stop";
+  btnAuto.className = "btn-danger";
+  autoInterval = setInterval(() => {
+    if (currentStep < steps.length - 1) {
+      goNext();
+    } else {
+      stopAuto();
+    }
+  }, getSpeed());
+}
+
+function stopAuto() {
+  if (autoInterval) { clearInterval(autoInterval); autoInterval = null; }
+  btnAuto.innerHTML = "&#9654; Auto-Play";
+  btnAuto.className = "btn-success";
+}
+
+function toggleAuto() {
+  autoInterval ? stopAuto() : startAuto();
+}
+
+btnNext.addEventListener("click", goNext);
+btnPrev.addEventListener("click", goPrev);
+btnAuto.addEventListener("click", toggleAuto);
+btnReset.addEventListener("click", reset);
+
+document.addEventListener("keydown", e => {
+  if (e.key === "ArrowRight") { e.preventDefault(); goNext(); }
+  else if (e.key === "ArrowLeft") { e.preventDefault(); goPrev(); }
+  else if (e.key === " ") { e.preventDefault(); toggleAuto(); }
+});
+
+buildPseudo();
+renderStep(0, false);
+</script>
+</body>
+</html>

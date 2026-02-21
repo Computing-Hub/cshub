@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Stack Visualizer</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #2d1b4e 50%, #1a1a2e 100%);
+            color: #fff;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #a855f7, #7c3aed);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin: 0 0 8px 0;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #888;
+            font-size: 0.95rem;
+            margin-bottom: 30px;
+        }
+
+        /* Layout */
+        .main-layout {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 24px;
+            align-items: start;
+        }
+
+        @media (max-width: 700px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Left column */
+        .left-col {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        /* Controls */
+        .controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            width: 100%;
+        }
+
+        .input-field {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            padding: 10px 16px;
+            border-radius: 12px;
+            border: 2px solid #4a3a6a;
+            background: #1a1a2e;
+            color: #fff;
+            width: 140px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .input-field:focus {
+            border-color: #a855f7;
+        }
+
+        .btn {
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.88rem;
+            font-weight: 600;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: #fff;
+        }
+
+        .btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+
+        .btn:active:not(:disabled) {
+            transform: translateY(0);
+        }
+
+        .btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .btn-push { background: linear-gradient(135deg, #a855f7, #7c3aed); }
+        .btn-pop { background: linear-gradient(135deg, #f7797d, #c471ed); }
+        .btn-peek { background: linear-gradient(135deg, #667eea, #764ba2); }
+        .btn-clear { background: linear-gradient(135deg, #4a4a6a, #3a3a5a); }
+
+        /* Size counter */
+        .size-counter {
+            text-align: center;
+            font-size: 0.9rem;
+            color: #aaa;
+            font-weight: 600;
+        }
+
+        .size-counter span {
+            color: #a855f7;
+            font-family: 'Fira Code', monospace;
+        }
+
+        /* Stack container */
+        .stack-wrapper {
+            position: relative;
+            width: 220px;
+        }
+
+        .stack-container {
+            display: flex;
+            flex-direction: column-reverse;
+            align-items: center;
+            width: 220px;
+            min-height: 320px;
+            padding: 16px;
+            background: rgba(255,255,255,0.03);
+            border: 2px solid #3a2a5a;
+            border-radius: 16px;
+            border-top: 2px dashed #4a3a6a;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+        }
+
+        .stack-item {
+            width: 180px;
+            padding: 12px 16px;
+            margin: 4px 0;
+            border-radius: 10px;
+            font-family: 'Fira Code', monospace;
+            font-size: 1.1rem;
+            font-weight: 600;
+            text-align: center;
+            color: #fff;
+            position: relative;
+            animation: popIn 0.3s ease;
+        }
+
+        .stack-item.removing {
+            animation: slideOut 0.3s ease forwards;
+        }
+
+        .top-badge {
+            position: absolute;
+            right: -40px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #a855f7;
+            color: #fff;
+            font-size: 0.65rem;
+            font-weight: 700;
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-family: 'Poppins', sans-serif;
+            letter-spacing: 1px;
+        }
+
+        .empty-label {
+            color: #555;
+            font-size: 0.9rem;
+            font-style: italic;
+            padding: 40px 0;
+        }
+
+        /* Feedback */
+        .feedback {
+            text-align: center;
+            min-height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .feedback-msg {
+            padding: 10px 20px;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            animation: slideInUp 0.3s ease;
+        }
+
+        .feedback-msg.success {
+            background: rgba(67, 233, 123, 0.15);
+            border: 1px solid rgba(67, 233, 123, 0.3);
+            color: #43e97b;
+        }
+
+        .feedback-msg.error {
+            background: rgba(247, 121, 125, 0.15);
+            border: 1px solid rgba(247, 121, 125, 0.3);
+            color: #f7797d;
+        }
+
+        .feedback-msg.info {
+            background: rgba(102, 126, 234, 0.15);
+            border: 1px solid rgba(102, 126, 234, 0.3);
+            color: #667eea;
+        }
+
+        /* History log */
+        .history-panel {
+            background: #16213e;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+            border: 1px solid #2a2a4a;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        .history-panel h3 {
+            margin: 0 0 12px 0;
+            font-size: 0.95rem;
+            color: #a855f7;
+        }
+
+        .history-entry {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.82rem;
+            padding: 6px 10px;
+            margin: 4px 0;
+            border-radius: 8px;
+            background: rgba(255,255,255,0.03);
+            animation: slideInUp 0.2s ease;
+        }
+
+        .history-entry .op-push { color: #43e97b; }
+        .history-entry .op-pop { color: #f7797d; }
+        .history-entry .op-peek { color: #667eea; }
+        .history-entry .op-clear { color: #ffcb6b; }
+        .history-entry .timestamp { color: #555; font-size: 0.72rem; }
+
+        .no-history {
+            color: #555;
+            font-size: 0.85rem;
+            font-style: italic;
+        }
+
+        /* Animations */
+        @keyframes slideInUp {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes popIn {
+            0% { opacity: 0; transform: scale(0.5) translateY(-20px); }
+            70% { transform: scale(1.08) translateY(0); }
+            100% { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        @keyframes slideOut {
+            0% { opacity: 1; transform: scale(1) translateX(0); }
+            100% { opacity: 0; transform: scale(0.5) translateX(80px); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Interactive Stack Visualizer</h1>
+        <p class="subtitle">Push, pop, and explore how a LIFO stack works</p>
+
+        <div class="main-layout">
+            <div class="left-col">
+                <!-- Controls -->
+                <div class="controls">
+                    <input type="text" class="input-field" id="valueInput" placeholder="Enter a value" maxlength="12">
+                    <button class="btn btn-push" onclick="pushValue()">Push</button>
+                    <button class="btn btn-pop" onclick="popValue()">Pop</button>
+                    <button class="btn btn-peek" onclick="peekValue()">Peek</button>
+                    <button class="btn btn-clear" onclick="clearStack()">Clear</button>
+                </div>
+
+                <!-- Size counter -->
+                <div class="size-counter">Size: <span id="sizeDisplay">0/10</span></div>
+
+                <!-- Stack visual -->
+                <div class="stack-wrapper">
+                    <div class="stack-container" id="stackContainer">
+                        <div class="empty-label">Stack is empty</div>
+                    </div>
+                </div>
+
+                <!-- Feedback -->
+                <div class="feedback" id="feedback"></div>
+            </div>
+
+            <!-- History log -->
+            <div class="history-panel">
+                <h3>Operation History</h3>
+                <div id="historyLog">
+                    <div class="no-history">No operations yet</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const MAX_SIZE = 10;
+        const COLORS = ['#a855f7', '#7c3aed', '#6366f1', '#8b5cf6', '#c084fc', '#a78bfa'];
+
+        const stack = [];
+        const history = [];
+        const stackContainer = document.getElementById('stackContainer');
+        const feedbackEl = document.getElementById('feedback');
+        const historyLog = document.getElementById('historyLog');
+        const sizeDisplay = document.getElementById('sizeDisplay');
+        const valueInput = document.getElementById('valueInput');
+
+        function getColor(index) {
+            return COLORS[index % COLORS.length];
+        }
+
+        function showFeedback(msg, type) {
+            feedbackEl.innerHTML = `<div class="feedback-msg ${type}">${msg}</div>`;
+            setTimeout(() => { feedbackEl.innerHTML = ''; }, 3000);
+        }
+
+        function addHistory(operation, value, result) {
+            const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            let opClass, text;
+            if (operation === 'PUSH') {
+                opClass = 'op-push';
+                text = `PUSH "${value}"`;
+            } else if (operation === 'POP') {
+                opClass = 'op-pop';
+                text = `POP → "${result}"`;
+            } else if (operation === 'PEEK') {
+                opClass = 'op-peek';
+                text = `PEEK → "${result}"`;
+            } else if (operation === 'CLEAR') {
+                opClass = 'op-clear';
+                text = `CLEAR (${value} items removed)`;
+            }
+            history.unshift({ opClass, text, time });
+            renderHistory();
+        }
+
+        function renderHistory() {
+            if (history.length === 0) {
+                historyLog.innerHTML = '<div class="no-history">No operations yet</div>';
+                return;
+            }
+            historyLog.innerHTML = history.map(h =>
+                `<div class="history-entry"><span class="${h.opClass}">${h.text}</span> <span class="timestamp">${h.time}</span></div>`
+            ).join('');
+        }
+
+        function renderStack() {
+            sizeDisplay.textContent = `${stack.length}/${MAX_SIZE}`;
+
+            if (stack.length === 0) {
+                stackContainer.innerHTML = '<div class="empty-label">Stack is empty</div>';
+                return;
+            }
+
+            stackContainer.innerHTML = '';
+            stack.forEach((value, index) => {
+                const item = document.createElement('div');
+                item.className = 'stack-item';
+                item.style.background = getColor(index);
+                item.textContent = value;
+
+                // TOP badge on the last (topmost) item
+                if (index === stack.length - 1) {
+                    const badge = document.createElement('span');
+                    badge.className = 'top-badge';
+                    badge.textContent = 'TOP';
+                    item.appendChild(badge);
+                }
+
+                stackContainer.appendChild(item);
+            });
+        }
+
+        function pushValue() {
+            const value = valueInput.value.trim();
+            if (!value) {
+                showFeedback('Please enter a value to push', 'error');
+                return;
+            }
+            if (stack.length >= MAX_SIZE) {
+                showFeedback(`Stack is full! Maximum size is ${MAX_SIZE}`, 'error');
+                return;
+            }
+            stack.push(value);
+            valueInput.value = '';
+            valueInput.focus();
+            showFeedback(`Pushed "${value}" onto the stack`, 'success');
+            addHistory('PUSH', value);
+            renderStack();
+        }
+
+        function popValue() {
+            if (stack.length === 0) {
+                showFeedback('Stack is empty — nothing to pop', 'error');
+                return;
+            }
+            // Animate removal
+            const items = stackContainer.querySelectorAll('.stack-item');
+            const topItem = items[items.length - 1];
+            topItem.classList.add('removing');
+
+            const poppedValue = stack.pop();
+            setTimeout(() => {
+                showFeedback(`Popped "${poppedValue}" from the stack`, 'success');
+                addHistory('POP', null, poppedValue);
+                renderStack();
+            }, 280);
+        }
+
+        function peekValue() {
+            if (stack.length === 0) {
+                showFeedback('Stack is empty — nothing to peek', 'error');
+                return;
+            }
+            const topValue = stack[stack.length - 1];
+            showFeedback(`Top of stack: "${topValue}"`, 'info');
+            addHistory('PEEK', null, topValue);
+        }
+
+        function clearStack() {
+            if (stack.length === 0) {
+                showFeedback('Stack is already empty', 'error');
+                return;
+            }
+            const count = stack.length;
+            stack.length = 0;
+            showFeedback(`Cleared ${count} item${count > 1 ? 's' : ''} from the stack`, 'success');
+            addHistory('CLEAR', count);
+            renderStack();
+        }
+
+        // Enter key triggers push
+        valueInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                pushValue();
+            }
+        });
+
+        renderStack();
+    </script>
+</body>
+</html>

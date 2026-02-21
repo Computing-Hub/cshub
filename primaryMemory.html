@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Primary Memory</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(135deg, #1a1a2e 0%, #1a2e1e 50%, #1a1a2e 100%);
+  color: #e0e0e0;
+  min-height: 100vh;
+  padding: 20px;
+}
+.container { max-width: 900px; margin: 0 auto; }
+h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  text-align: center;
+  background: linear-gradient(135deg, #10b981, #43e97b);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 4px;
+}
+.subtitle { text-align: center; font-size: 0.95rem; color: #888; margin-bottom: 20px; }
+.best-badge {
+  text-align: center; font-size: 0.82rem; color: #10b981;
+  margin-bottom: 10px; display: none;
+}
+.best-badge.visible { display: block; }
+.tabs { display: flex; gap: 8px; justify-content: center; margin-bottom: 24px; }
+.tab-btn {
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.88rem; font-weight: 600;
+  padding: 10px 28px; border: none; border-radius: 10px;
+  cursor: pointer; transition: all 0.25s;
+  background: linear-gradient(135deg, #2a2a4a, #1e1e3a);
+  color: #888;
+}
+.tab-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(16,185,129,0.2); }
+.tab-btn:active { transform: translateY(0); }
+.tab-btn.active {
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: #fff;
+  box-shadow: 0 4px 15px rgba(16,185,129,0.35);
+}
+.panel {
+  background: #16213e; border-radius: 16px;
+  border: 1px solid #2a2a4a; padding: 24px;
+  animation: fadeIn 0.4s ease;
+}
+.mode { display: none; }
+.mode.active { display: block; }
+
+/* LEARN MODE */
+.diagram-area { position: relative; width: 100%; min-height: 320px; display: flex; flex-direction: column; align-items: center; gap: 0; padding: 10px 0 0; }
+.diagram-row { display: flex; justify-content: center; align-items: center; gap: 30px; position: relative; }
+.arrow-down { width: 2px; height: 32px; background: #10b981; position: relative; margin: 0 auto; }
+.arrow-down::after {
+  content: ''; position: absolute; bottom: -6px; left: 50%; transform: translateX(-50%);
+  border-left: 6px solid transparent; border-right: 6px solid transparent;
+  border-top: 8px solid #10b981;
+}
+.arrow-container { display: flex; flex-direction: column; align-items: center; }
+.arrow-split { display: flex; justify-content: center; gap: 80px; margin-top: 0; position: relative; }
+.arrow-split::before {
+  content: ''; position: absolute; top: 0; left: calc(50% - 55px);
+  width: 110px; height: 2px; background: #10b981;
+}
+.drop-zone {
+  width: 140px; height: 60px;
+  border: 2px dashed #3a3a6a; border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Fira Code', monospace; font-size: 0.9rem;
+  color: #555; transition: all 0.3s;
+  background: rgba(16,185,129,0.03);
+}
+.drop-zone.drag-over { border-color: #10b981; background: rgba(16,185,129,0.1); }
+.drop-zone.correct {
+  border-color: #43e97b; background: rgba(67,233,123,0.1);
+  box-shadow: 0 0 20px rgba(67,233,123,0.2);
+  color: #43e97b; font-weight: 600;
+  animation: popIn 0.4s ease;
+}
+.drop-zone.shake { animation: shake 0.5s ease; }
+.drop-zone-large { width: 170px; height: 65px; }
+.drop-zone-small { width: 120px; height: 55px; }
+
+.label-bank {
+  display: flex; flex-wrap: wrap; gap: 12px;
+  justify-content: center; margin-top: 24px; padding: 16px;
+  background: rgba(42,42,74,0.3); border-radius: 12px;
+  min-height: 56px;
+}
+.label-bank-title { text-align: center; font-size: 0.82rem; color: #666; margin-top: 20px; margin-bottom: 6px; }
+.drag-label {
+  padding: 10px 22px; border-radius: 10px;
+  font-family: 'Fira Code', monospace; font-size: 0.88rem; font-weight: 500;
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: #fff; cursor: grab; user-select: none;
+  transition: all 0.25s; touch-action: none;
+}
+.drag-label:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(16,185,129,0.35); }
+.drag-label:active { cursor: grabbing; transform: translateY(0); }
+.drag-label.dragging { opacity: 0.5; }
+.drag-label.placed { display: none; }
+
+.info-panel {
+  margin-top: 20px; padding: 18px; border-radius: 12px;
+  background: rgba(16,185,129,0.06); border: 1px solid rgba(16,185,129,0.15);
+  min-height: 60px;
+}
+.info-panel h3 { color: #10b981; font-size: 0.95rem; margin-bottom: 6px; }
+.info-panel p { font-size: 0.88rem; color: #b0b0b0; line-height: 1.6; }
+.info-item { animation: slideInUp 0.35s ease; margin-bottom: 10px; }
+.info-item:last-child { margin-bottom: 0; }
+
+.learn-success {
+  text-align: center; padding: 16px; margin-top: 16px;
+  animation: slideInUp 0.4s ease; display: none;
+}
+.learn-success.visible { display: block; }
+.learn-success p { color: #43e97b; font-size: 1rem; font-weight: 600; margin-bottom: 12px; }
+
+/* QUIZ MODE */
+.progress-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; }
+.progress-text { font-size: 0.88rem; color: #888; }
+.progress-track { flex: 1; height: 6px; background: #2a2a4a; border-radius: 3px; margin: 0 14px; }
+.progress-fill { height: 100%; background: linear-gradient(90deg, #10b981, #43e97b); border-radius: 3px; transition: width 0.4s ease; }
+.question-text { font-size: 1.05rem; font-weight: 600; margin-bottom: 18px; line-height: 1.5; }
+.options { display: flex; flex-direction: column; gap: 10px; }
+.option-btn {
+  font-family: 'Poppins', sans-serif; font-size: 0.88rem;
+  padding: 14px 18px; border: 1px solid #2a2a4a; border-radius: 12px;
+  background: rgba(42,42,74,0.3); color: #e0e0e0;
+  cursor: pointer; text-align: left; transition: all 0.25s;
+}
+.option-btn:hover:not(.disabled) { border-color: #10b981; background: rgba(16,185,129,0.08); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(16,185,129,0.15); }
+.option-btn:active:not(.disabled) { transform: translateY(0); }
+.option-btn.disabled { pointer-events: none; opacity: 0.7; }
+.option-btn.correct-answer { border-color: #43e97b; background: rgba(67,233,123,0.15); color: #43e97b; }
+.option-btn.wrong-answer { border-color: #f7797d; background: rgba(247,121,125,0.12); color: #f7797d; }
+
+.next-btn, .restart-btn, .try-quiz-btn {
+  font-family: 'Poppins', sans-serif; font-size: 0.88rem; font-weight: 600;
+  padding: 12px 30px; border: none; border-radius: 10px;
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: #fff; cursor: pointer; transition: all 0.25s;
+  margin-top: 16px; display: none;
+}
+.next-btn:hover, .restart-btn:hover, .try-quiz-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(16,185,129,0.35); }
+.next-btn:active, .restart-btn:active, .try-quiz-btn:active { transform: translateY(0); }
+.next-btn.visible, .restart-btn.visible, .try-quiz-btn.visible { display: inline-block; }
+.btn-disabled { opacity: 0.4; pointer-events: none; }
+
+.quiz-result {
+  text-align: center; animation: slideInUp 0.4s ease; display: none;
+}
+.quiz-result.visible { display: block; }
+.score-big { font-size: 2.5rem; font-weight: 700; color: #10b981; }
+.score-label { font-size: 0.95rem; color: #888; margin-top: 4px; }
+
+.feedback {
+  padding: 12px 16px; border-radius: 10px; margin-top: 12px;
+  font-size: 0.85rem; animation: slideInUp 0.35s ease; display: none;
+}
+.feedback.visible { display: block; }
+.feedback.success { background: rgba(67,233,123,0.1); border: 1px solid rgba(67,233,123,0.2); color: #43e97b; }
+.feedback.error { background: rgba(247,121,125,0.1); border: 1px solid rgba(247,121,125,0.2); color: #f7797d; }
+.feedback.info { background: rgba(102,126,234,0.1); border: 1px solid rgba(102,126,234,0.2); color: #667eea; }
+
+/* Diagram layout */
+.diagram-wrapper { display: flex; gap: 20px; align-items: flex-start; }
+.diagram-col { flex: 1; }
+.info-col { flex: 1; min-width: 260px; }
+
+@keyframes slideInUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes popIn { 0% { transform: scale(0.85); } 50% { transform: scale(1.08); } 100% { transform: scale(1); } }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes shake { 0%,100% { transform: translateX(0); } 20% { transform: translateX(-8px); } 40% { transform: translateX(8px); } 60% { transform: translateX(-6px); } 80% { transform: translateX(6px); } }
+
+@media (max-width: 700px) {
+  .diagram-wrapper { flex-direction: column; }
+  .info-col { min-width: unset; }
+  .arrow-split { gap: 40px; }
+  .arrow-split::before { left: calc(50% - 35px); width: 70px; }
+  .drop-zone { width: 110px; height: 50px; font-size: 0.8rem; }
+  .drop-zone-large { width: 130px; height: 55px; }
+  .drop-zone-small { width: 100px; height: 48px; }
+  h1 { font-size: 1.6rem; }
+  .panel { padding: 16px; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>Primary Memory</h1>
+  <p class="subtitle">Learn about the different types of primary memory in a computer</p>
+  <div class="best-badge" id="bestBadge"></div>
+
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchMode('learn')">Learn</button>
+    <button class="tab-btn" onclick="switchMode('quiz')">Quiz</button>
+  </div>
+
+  <!-- LEARN MODE -->
+  <div class="mode active" id="learnMode">
+    <div class="panel">
+      <div class="diagram-wrapper">
+        <div class="diagram-col">
+          <div class="diagram-area">
+            <!-- CPU zone -->
+            <div class="diagram-row">
+              <div class="drop-zone" id="zone-cpu" data-target="CPU">CPU</div>
+            </div>
+            <div class="arrow-down"></div>
+            <!-- Cache zone -->
+            <div class="diagram-row">
+              <div class="drop-zone drop-zone-small" id="zone-cache" data-target="Cache">Cache</div>
+            </div>
+            <div class="arrow-down"></div>
+            <!-- RAM and ROM split -->
+            <div class="arrow-split">
+              <div class="arrow-container">
+                <div class="arrow-down"></div>
+                <div class="drop-zone drop-zone-large" id="zone-ram" data-target="RAM">RAM</div>
+              </div>
+              <div class="arrow-container">
+                <div class="arrow-down"></div>
+                <div class="drop-zone" id="zone-rom" data-target="ROM">ROM</div>
+              </div>
+            </div>
+          </div>
+
+          <p class="label-bank-title">Drag the labels to the correct positions</p>
+          <div class="label-bank" id="labelBank">
+            <div class="drag-label" draggable="true" data-label="RAM" id="label-RAM">RAM</div>
+            <div class="drag-label" draggable="true" data-label="CPU" id="label-CPU">CPU</div>
+            <div class="drag-label" draggable="true" data-label="Cache" id="label-Cache">Cache</div>
+            <div class="drag-label" draggable="true" data-label="ROM" id="label-ROM">ROM</div>
+          </div>
+        </div>
+
+        <div class="info-col">
+          <div class="info-panel" id="infoPanel">
+            <p style="color:#555; font-style:italic; font-size:0.85rem;">Drop a label onto the diagram to learn about each component...</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="learn-success" id="learnSuccess">
+        <p>Excellent! You identified all primary memory components!</p>
+        <button class="try-quiz-btn visible" onclick="switchMode('quiz')">Try the Quiz!</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- QUIZ MODE -->
+  <div class="mode" id="quizMode">
+    <div class="panel">
+      <div id="quizContent">
+        <div class="progress-bar">
+          <span class="progress-text" id="progressText">Question 1/8</span>
+          <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:12.5%"></div></div>
+          <span class="progress-text" id="scoreText">Score: 0</span>
+        </div>
+        <div id="questionArea">
+          <p class="question-text" id="questionText"></p>
+          <div class="options" id="optionsArea"></div>
+          <div class="feedback" id="quizFeedback"></div>
+          <button class="next-btn" id="nextBtn" onclick="nextQuestion()">Next</button>
+        </div>
+      </div>
+      <div class="quiz-result" id="quizResult">
+        <div class="score-big" id="finalScore"></div>
+        <p class="score-label" id="scoreLabel"></p>
+        <div class="feedback info visible" id="bestScoreMsg" style="display:none; margin-top:14px;"></div>
+        <button class="restart-btn visible" onclick="restartQuiz()">Try Again</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const componentInfo = {
+  CPU: { title: "CPU (Central Processing Unit)", desc: "The Central Processing Unit \u2014 the brain of the computer. It processes instructions and performs calculations." },
+  RAM: { title: "RAM (Random Access Memory)", desc: "Random Access Memory \u2014 volatile memory that stores data and programs currently in use. Fast but loses data when power is off." },
+  ROM: { title: "ROM (Read-Only Memory)", desc: "Read-Only Memory \u2014 non-volatile memory containing permanent instructions (firmware/BIOS). Cannot be easily modified." },
+  Cache: { title: "Cache Memory", desc: "A small, ultra-fast memory between the CPU and RAM. Stores frequently used data for quick access." }
+};
+
+const questions = [
+  { q: "What type of memory loses its contents when the power is turned off?", opts: ["RAM", "ROM", "Cache", "Hard Drive"], correct: 0 },
+  { q: "What does RAM stand for?", opts: ["Random Access Memory", "Read Access Memory", "Rapid Active Memory", "Real Application Memory"], correct: 0 },
+  { q: "Which memory stores the BIOS/firmware?", opts: ["ROM", "RAM", "Cache", "SSD"], correct: 0 },
+  { q: "Which is the fastest type of primary memory?", opts: ["Cache", "RAM", "ROM", "Register"], correct: 0 },
+  { q: "What is the main purpose of cache memory?", opts: ["Store frequently accessed data for faster retrieval", "Store the operating system", "Back up important files", "Connect to the internet"], correct: 0 },
+  { q: "Which statement about ROM is TRUE?", opts: ["It is non-volatile", "It can be easily rewritten", "It is faster than cache", "It stores user documents"], correct: 0 },
+  { q: "What happens to data in RAM when you shut down the computer?", opts: ["It is lost", "It is saved automatically", "It moves to ROM", "It stays until deleted"], correct: 0 },
+  { q: "Which of these is NOT a type of primary memory?", opts: ["Hard Drive", "RAM", "ROM", "Cache"], correct: 0 }
+];
+
+// Shuffle options for each question while tracking correct answer
+const shuffledQuestions = questions.map(q => {
+  const correctText = q.opts[q.correct];
+  const shuffled = [...q.opts];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return { q: q.q, opts: shuffled, correct: shuffled.indexOf(correctText) };
+});
+
+let currentQ = 0, score = 0, answered = false;
+let placedCount = 0;
+const placed = {};
+
+// --- MODE SWITCHING ---
+function switchMode(mode) {
+  document.querySelectorAll('.mode').forEach(m => m.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  if (mode === 'learn') {
+    document.getElementById('learnMode').classList.add('active');
+    document.querySelectorAll('.tab-btn')[0].classList.add('active');
+  } else {
+    document.getElementById('quizMode').classList.add('active');
+    document.querySelectorAll('.tab-btn')[1].classList.add('active');
+    if (currentQ === 0 && !answered) renderQuestion();
+  }
+}
+
+// --- LEARN MODE: DRAG & DROP ---
+let draggedLabel = null;
+
+function initDragDrop() {
+  const labels = document.querySelectorAll('.drag-label');
+  const zones = document.querySelectorAll('.drop-zone');
+
+  labels.forEach(label => {
+    label.addEventListener('dragstart', e => {
+      draggedLabel = label;
+      label.classList.add('dragging');
+      e.dataTransfer.setData('text/plain', label.dataset.label);
+      e.dataTransfer.effectAllowed = 'move';
+    });
+    label.addEventListener('dragend', () => {
+      label.classList.remove('dragging');
+      draggedLabel = null;
+    });
+
+    // Touch support
+    let touchClone = null, startX, startY;
+    label.addEventListener('touchstart', e => {
+      if (label.classList.contains('placed')) return;
+      draggedLabel = label;
+      const t = e.touches[0];
+      startX = t.clientX; startY = t.clientY;
+      label.classList.add('dragging');
+
+      touchClone = label.cloneNode(true);
+      touchClone.style.position = 'fixed';
+      touchClone.style.zIndex = '9999';
+      touchClone.style.pointerEvents = 'none';
+      touchClone.style.opacity = '0.85';
+      touchClone.style.width = label.offsetWidth + 'px';
+      touchClone.style.left = (t.clientX - label.offsetWidth / 2) + 'px';
+      touchClone.style.top = (t.clientY - 25) + 'px';
+      document.body.appendChild(touchClone);
+      e.preventDefault();
+    }, { passive: false });
+
+    label.addEventListener('touchmove', e => {
+      if (!touchClone) return;
+      const t = e.touches[0];
+      touchClone.style.left = (t.clientX - label.offsetWidth / 2) + 'px';
+      touchClone.style.top = (t.clientY - 25) + 'px';
+
+      zones.forEach(z => {
+        const r = z.getBoundingClientRect();
+        if (t.clientX >= r.left && t.clientX <= r.right && t.clientY >= r.top && t.clientY <= r.bottom) {
+          z.classList.add('drag-over');
+        } else {
+          z.classList.remove('drag-over');
+        }
+      });
+      e.preventDefault();
+    }, { passive: false });
+
+    label.addEventListener('touchend', e => {
+      if (!touchClone) return;
+      const t = e.changedTouches[0];
+      let dropped = false;
+      zones.forEach(z => {
+        z.classList.remove('drag-over');
+        const r = z.getBoundingClientRect();
+        if (t.clientX >= r.left && t.clientX <= r.right && t.clientY >= r.top && t.clientY <= r.bottom) {
+          handleDrop(z, label.dataset.label, label);
+          dropped = true;
+        }
+      });
+      label.classList.remove('dragging');
+      if (touchClone.parentNode) touchClone.parentNode.removeChild(touchClone);
+      touchClone = null;
+      draggedLabel = null;
+    });
+  });
+
+  zones.forEach(zone => {
+    zone.addEventListener('dragover', e => {
+      e.preventDefault();
+      e.dataTransfer.dropEffect = 'move';
+      zone.classList.add('drag-over');
+    });
+    zone.addEventListener('dragleave', () => zone.classList.remove('drag-over'));
+    zone.addEventListener('drop', e => {
+      e.preventDefault();
+      zone.classList.remove('drag-over');
+      const labelName = e.dataTransfer.getData('text/plain');
+      const labelEl = document.getElementById('label-' + labelName);
+      handleDrop(zone, labelName, labelEl);
+    });
+  });
+}
+
+function handleDrop(zone, labelName, labelEl) {
+  if (zone.classList.contains('correct')) return;
+  if (zone.dataset.target === labelName) {
+    // Correct
+    zone.textContent = labelName;
+    zone.classList.add('correct');
+    labelEl.classList.add('placed');
+    placed[labelName] = true;
+    placedCount++;
+    showInfo(labelName);
+    if (placedCount === 4) {
+      document.getElementById('learnSuccess').classList.add('visible');
+    }
+  } else {
+    // Wrong
+    zone.classList.add('shake');
+    setTimeout(() => zone.classList.remove('shake'), 500);
+  }
+}
+
+function showInfo(component) {
+  const panel = document.getElementById('infoPanel');
+  const info = componentInfo[component];
+  // Check if first real item
+  if (Object.keys(placed).length === 1 && placed[component]) {
+    panel.innerHTML = '';
+  }
+  const div = document.createElement('div');
+  div.className = 'info-item';
+  div.innerHTML = `<h3>${info.title}</h3><p>${info.desc}</p>`;
+  panel.appendChild(div);
+}
+
+// --- QUIZ MODE ---
+function renderQuestion() {
+  const q = shuffledQuestions[currentQ];
+  document.getElementById('questionText').textContent = q.q;
+  document.getElementById('progressText').textContent = `Question ${currentQ + 1}/8`;
+  document.getElementById('progressFill').style.width = ((currentQ + 1) / 8 * 100) + '%';
+  document.getElementById('scoreText').textContent = `Score: ${score}`;
+  document.getElementById('nextBtn').classList.remove('visible');
+  document.getElementById('quizFeedback').classList.remove('visible');
+  answered = false;
+
+  const area = document.getElementById('optionsArea');
+  area.innerHTML = '';
+  q.opts.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'option-btn';
+    btn.textContent = opt;
+    btn.onclick = () => selectAnswer(i);
+    area.appendChild(btn);
+  });
+}
+
+function selectAnswer(idx) {
+  if (answered) return;
+  answered = true;
+  const q = shuffledQuestions[currentQ];
+  const btns = document.querySelectorAll('.option-btn');
+  const fb = document.getElementById('quizFeedback');
+
+  btns.forEach(b => b.classList.add('disabled'));
+  btns[q.correct].classList.add('correct-answer');
+
+  if (idx === q.correct) {
+    score++;
+    document.getElementById('scoreText').textContent = `Score: ${score}`;
+    fb.textContent = 'Correct! Well done.';
+    fb.className = 'feedback success visible';
+  } else {
+    btns[idx].classList.add('wrong-answer');
+    fb.textContent = `Incorrect. The answer is: ${q.opts[q.correct]}`;
+    fb.className = 'feedback error visible';
+  }
+
+  if (currentQ < 7) {
+    document.getElementById('nextBtn').classList.add('visible');
+  } else {
+    setTimeout(showResult, 1200);
+  }
+}
+
+function nextQuestion() {
+  currentQ++;
+  renderQuestion();
+}
+
+function showResult() {
+  document.getElementById('quizContent').style.display = 'none';
+  const result = document.getElementById('quizResult');
+  result.classList.add('visible');
+  document.getElementById('finalScore').textContent = `${score}/8`;
+
+  let label = '';
+  if (score === 8) label = 'Perfect score! Outstanding!';
+  else if (score >= 6) label = 'Great job! You know your primary memory well.';
+  else if (score >= 4) label = 'Good effort! Review the Learn tab and try again.';
+  else label = 'Keep studying! Check the Learn tab for help.';
+  document.getElementById('scoreLabel').textContent = label;
+
+  // Best score
+  const best = localStorage.getItem('primaryMemoryBest');
+  const bestMsg = document.getElementById('bestScoreMsg');
+  if (!best || score > parseInt(best)) {
+    localStorage.setItem('primaryMemoryBest', score);
+    bestMsg.textContent = 'New best score!';
+    bestMsg.className = 'feedback success visible';
+    bestMsg.style.display = 'block';
+  } else {
+    bestMsg.textContent = `Your best score: ${best}/8`;
+    bestMsg.className = 'feedback info visible';
+    bestMsg.style.display = 'block';
+  }
+  updateBestBadge();
+}
+
+function restartQuiz() {
+  currentQ = 0; score = 0; answered = false;
+  // Re-shuffle
+  shuffledQuestions.forEach((sq, i) => {
+    const correctText = sq.opts[sq.correct];
+    const shuffled = [...sq.opts];
+    for (let j = shuffled.length - 1; j > 0; j--) {
+      const k = Math.floor(Math.random() * (j + 1));
+      [shuffled[j], shuffled[k]] = [shuffled[k], shuffled[j]];
+    }
+    sq.opts = shuffled;
+    sq.correct = shuffled.indexOf(correctText);
+  });
+  document.getElementById('quizContent').style.display = 'block';
+  document.getElementById('quizResult').classList.remove('visible');
+  renderQuestion();
+}
+
+function updateBestBadge() {
+  const best = localStorage.getItem('primaryMemoryBest');
+  const badge = document.getElementById('bestBadge');
+  if (best) {
+    badge.textContent = `Best Quiz Score: ${best}/8`;
+    badge.classList.add('visible');
+  }
+}
+
+// Init
+initDragDrop();
+updateBestBadge();
+</script>
+</body>
+</html>

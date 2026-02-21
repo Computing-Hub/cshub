@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Binary Search — Interactive</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+body {
+  margin: 0;
+  padding: 20px;
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(135deg, #1a1a2e 0%, #1a2e2e 50%, #1a1a2e 100%);
+  color: #e0e0e0;
+  min-height: 100vh;
+}
+h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  text-align: center;
+  margin: 0 0 4px 0;
+  background: linear-gradient(135deg, #06b6d4, #67e8f9);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.subtitle {
+  text-align: center;
+  font-size: 0.95rem;
+  color: #888;
+  margin: 0 0 20px 0;
+}
+.panel {
+  background: #16213e;
+  border-radius: 16px;
+  border: 1px solid #2a2a4a;
+  padding: 20px;
+}
+.main-grid {
+  display: grid;
+  grid-template-columns: 1fr 280px;
+  gap: 16px;
+  max-width: 960px;
+  margin: 0 auto;
+}
+.top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  max-width: 960px;
+  margin: 0 auto 16px auto;
+}
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(6, 182, 212, 0.15);
+  border: 1px solid #06b6d4;
+  border-radius: 10px;
+  padding: 8px 18px;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #06b6d4;
+}
+.badge span {
+  font-family: 'Fira Code', monospace;
+  font-size: 1.2rem;
+  color: #67e8f9;
+}
+.counters {
+  display: flex;
+  gap: 16px;
+  font-size: 0.88rem;
+  color: #aaa;
+}
+.counters strong {
+  color: #06b6d4;
+}
+.btn {
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.88rem;
+  font-weight: 600;
+  padding: 9px 20px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  background: linear-gradient(135deg, #06b6d4, #0891b2);
+  color: #fff;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(6, 182, 212, 0.35);
+}
+.btn:active { transform: translateY(0); }
+.btn:disabled { opacity: 0.4; cursor: default; transform: none; box-shadow: none; }
+.array-wrapper { margin-bottom: 8px; overflow-x: auto; }
+.array-row {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  min-width: max-content;
+  margin: 0 auto;
+}
+.cell {
+  width: 52px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  border: 2px solid #2a2a4a;
+  font-family: 'Fira Code', monospace;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: opacity 0.35s, border-color 0.25s, transform 0.15s, background 0.25s;
+  background: #1a1a2e;
+  user-select: none;
+}
+.cell.active {
+  border-color: #06b6d4;
+  color: #fff;
+}
+.cell.eliminated {
+  opacity: 0.25;
+  cursor: default;
+  border-color: #2a2a4a;
+}
+.cell.found {
+  border-color: #43e97b;
+  box-shadow: 0 0 18px rgba(67, 233, 123, 0.5);
+  background: rgba(67, 233, 123, 0.12);
+  color: #43e97b;
+}
+.cell:hover:not(.eliminated):not(.found) {
+  transform: translateY(-2px);
+}
+.markers-row {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  min-width: max-content;
+  margin: 6px auto 0 auto;
+}
+.marker-slot {
+  width: 52px;
+  text-align: center;
+  font-size: 0.7rem;
+  font-weight: 600;
+  line-height: 1.1;
+  min-height: 28px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 1px;
+}
+.marker-slot .lbl { color: #06b6d4; }
+.marker-slot .lbl.low { color: #667eea; }
+.marker-slot .lbl.high { color: #f7797d; }
+.marker-slot .lbl.mid { color: #43e97b; }
+.marker-slot .idx { color: #666; font-size: 0.62rem; }
+.pseudocode-panel h3 {
+  margin: 0 0 10px 0;
+  font-size: 0.92rem;
+  color: #06b6d4;
+}
+.pseudo-line {
+  font-family: 'Fira Code', monospace;
+  font-size: 0.75rem;
+  padding: 3px 8px;
+  border-radius: 4px;
+  white-space: pre;
+  transition: background 0.25s;
+  line-height: 1.6;
+  color: #b0b0c8;
+}
+.pseudo-line.highlight {
+  background: rgba(6, 182, 212, 0.18);
+  color: #67e8f9;
+}
+.history-panel {
+  max-width: 960px;
+  margin: 16px auto 0 auto;
+}
+.history-panel h3 {
+  margin: 0 0 8px 0;
+  font-size: 0.92rem;
+  color: #06b6d4;
+}
+.history-list {
+  max-height: 150px;
+  overflow-y: auto;
+  font-family: 'Fira Code', monospace;
+  font-size: 0.78rem;
+  color: #aaa;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.history-list::-webkit-scrollbar { width: 4px; }
+.history-list::-webkit-scrollbar-thumb { background: #2a2a4a; border-radius: 4px; }
+.history-entry {
+  padding: 4px 8px;
+  border-radius: 6px;
+  background: rgba(255,255,255,0.03);
+  animation: fadeIn 0.3s;
+}
+.history-entry .go-left { color: #667eea; }
+.history-entry .go-right { color: #f7797d; }
+.history-entry .found-label { color: #43e97b; font-weight: 600; }
+.feedback {
+  text-align: center;
+  font-size: 0.92rem;
+  font-weight: 600;
+  min-height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 10px 0 4px 0;
+}
+.feedback.show { animation: slideInUp 0.35s; }
+.feedback.success { color: #43e97b; }
+.feedback.error { color: #f7797d; }
+.feedback.info { color: #667eea; }
+.summary-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  animation: fadeIn 0.3s;
+}
+.summary-box {
+  background: #16213e;
+  border: 1px solid #2a2a4a;
+  border-radius: 16px;
+  padding: 32px;
+  text-align: center;
+  max-width: 380px;
+  width: 90%;
+  animation: popIn 0.4s;
+}
+.summary-box h2 {
+  margin: 0 0 8px 0;
+  font-size: 1.4rem;
+  background: linear-gradient(135deg, #06b6d4, #67e8f9);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.summary-box .stat {
+  font-size: 0.95rem;
+  color: #aaa;
+  margin: 6px 0;
+}
+.summary-box .stat strong { color: #06b6d4; }
+.summary-box .best { color: #43e97b; font-size: 0.85rem; margin-top: 10px; }
+.summary-box .btn { margin-top: 18px; }
+@keyframes slideInUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes popIn {
+  0% { opacity: 0; transform: scale(0.85); }
+  60% { transform: scale(1.03); }
+  100% { opacity: 1; transform: scale(1); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-6px); }
+  40% { transform: translateX(6px); }
+  60% { transform: translateX(-4px); }
+  80% { transform: translateX(4px); }
+}
+.shake { animation: shake 0.4s; }
+@media (max-width: 700px) {
+  body { padding: 12px; }
+  h1 { font-size: 1.5rem; }
+  .main-grid { grid-template-columns: 1fr; }
+  .cell { width: 42px; height: 42px; font-size: 0.85rem; }
+  .marker-slot { width: 42px; font-size: 0.62rem; }
+  .top-bar { flex-direction: column; align-items: flex-start; }
+}
+</style>
+</head>
+<body>
+
+<h1>Binary Search &mdash; Interactive</h1>
+<p class="subtitle">Click the middle element to perform each step of binary search</p>
+
+<div class="top-bar">
+  <div class="badge">Find: <span id="targetDisplay">—</span></div>
+  <div class="counters">
+    <div>Round: <strong id="roundDisplay">1/5</strong></div>
+    <div>Comparisons: <strong id="compDisplay">0</strong></div>
+    <div>Total: <strong id="totalDisplay">0</strong></div>
+  </div>
+  <button class="btn" id="newRoundBtn" disabled>New Round</button>
+</div>
+
+<div class="main-grid">
+  <div class="panel">
+    <div class="array-wrapper">
+      <div class="array-row" id="arrayRow"></div>
+      <div class="markers-row" id="markersRow"></div>
+    </div>
+    <div class="feedback" id="feedback"></div>
+  </div>
+  <div class="panel pseudocode-panel">
+    <h3>Pseudocode</h3>
+    <div id="pseudocode">
+      <div class="pseudo-line" data-line="0">low = 0</div>
+      <div class="pseudo-line" data-line="1">high = length - 1</div>
+      <div class="pseudo-line" data-line="2">while low &lt;= high:</div>
+      <div class="pseudo-line" data-line="3">    mid = (low + high) // 2</div>
+      <div class="pseudo-line" data-line="4">    if array[mid] == target:</div>
+      <div class="pseudo-line" data-line="5">        return mid</div>
+      <div class="pseudo-line" data-line="6">    elif array[mid] &lt; target:</div>
+      <div class="pseudo-line" data-line="7">        low = mid + 1</div>
+      <div class="pseudo-line" data-line="8">    else:</div>
+      <div class="pseudo-line" data-line="9">        high = mid - 1</div>
+      <div class="pseudo-line" data-line="10">return -1</div>
+    </div>
+  </div>
+</div>
+
+<div class="history-panel panel" style="margin-top:16px">
+  <h3>Step History</h3>
+  <div class="history-list" id="historyList"></div>
+</div>
+
+<div class="summary-overlay" id="summaryOverlay" style="display:none">
+  <div class="summary-box">
+    <h2>Session Complete</h2>
+    <p class="stat">Total comparisons: <strong id="sumTotal">0</strong></p>
+    <p class="stat">Average per round: <strong id="sumAvg">0</strong></p>
+    <p class="best" id="sumBest"></p>
+    <button class="btn" id="restartBtn">Play Again</button>
+  </div>
+</div>
+
+<script>
+(function() {
+  const ROUNDS = 5;
+  const SIZE = 12;
+  let arr = [], target = 0, low = 0, high = 0, mid = 0;
+  let comparisons = 0, totalComparisons = 0, round = 1, stepNum = 0;
+  let roundDone = false, sessionDone = false;
+
+  const $ = id => document.getElementById(id);
+  const arrayRow = $('arrayRow');
+  const markersRow = $('markersRow');
+  const feedback = $('feedback');
+  const historyList = $('historyList');
+  const pseudoLines = document.querySelectorAll('.pseudo-line');
+
+  function generateArray() {
+    const set = new Set();
+    while (set.size < SIZE) set.add(Math.floor(Math.random() * 99) + 1);
+    return [...set].sort((a, b) => a - b);
+  }
+
+  function pickTarget(array) {
+    if (Math.random() < 0.8) {
+      return array[Math.floor(Math.random() * array.length)];
+    }
+    let t;
+    do { t = Math.floor(Math.random() * 99) + 1; } while (array.includes(t));
+    return t;
+  }
+
+  function highlightLine(lineNum) {
+    pseudoLines.forEach(el => el.classList.remove('highlight'));
+    if (lineNum >= 0) {
+      const el = document.querySelector(`.pseudo-line[data-line="${lineNum}"]`);
+      if (el) el.classList.add('highlight');
+    }
+  }
+
+  function renderArray() {
+    arrayRow.innerHTML = '';
+    markersRow.innerHTML = '';
+    for (let i = 0; i < SIZE; i++) {
+      const cell = document.createElement('div');
+      cell.className = 'cell';
+      cell.textContent = arr[i];
+      cell.dataset.index = i;
+      if (!roundDone) {
+        if (i >= low && i <= high) {
+          cell.classList.add('active');
+        } else {
+          cell.classList.add('eliminated');
+        }
+      }
+      cell.addEventListener('click', () => handleClick(i));
+      arrayRow.appendChild(cell);
+
+      const slot = document.createElement('div');
+      slot.className = 'marker-slot';
+      if (!roundDone && low <= high) {
+        const labels = [];
+        if (i === low) labels.push('<span class="lbl low">L</span>');
+        if (i === mid) labels.push('<span class="lbl mid">M</span>');
+        if (i === high) labels.push('<span class="lbl high">H</span>');
+        if (labels.length) {
+          slot.innerHTML = labels.join('') + `<span class="idx">[${i}]</span>`;
+        }
+      }
+      markersRow.appendChild(slot);
+    }
+  }
+
+  function showFeedback(msg, type) {
+    feedback.className = 'feedback show ' + type;
+    feedback.textContent = msg;
+  }
+
+  function clearFeedback() {
+    feedback.className = 'feedback';
+    feedback.textContent = '';
+  }
+
+  function addHistory(text, cls) {
+    const entry = document.createElement('div');
+    entry.className = 'history-entry';
+    entry.innerHTML = text;
+    historyList.appendChild(entry);
+    historyList.scrollTop = historyList.scrollHeight;
+  }
+
+  function updateCounters() {
+    $('roundDisplay').textContent = `${round}/${ROUNDS}`;
+    $('compDisplay').textContent = comparisons;
+    $('totalDisplay').textContent = totalComparisons;
+  }
+
+  function computeMid() {
+    mid = Math.floor((low + high) / 2);
+  }
+
+  function handleClick(index) {
+    if (roundDone || sessionDone) return;
+    const cell = arrayRow.children[index];
+    if (cell.classList.contains('eliminated')) return;
+
+    if (index !== mid) {
+      cell.classList.add('shake');
+      setTimeout(() => cell.classList.remove('shake'), 400);
+      showFeedback(`Not the middle! The middle element is at index ${mid}.`, 'error');
+      return;
+    }
+
+    comparisons++;
+    totalComparisons++;
+    stepNum++;
+    updateCounters();
+    highlightLine(4);
+
+    const val = arr[mid];
+    if (val === target) {
+      highlightLine(5);
+      cell.classList.remove('active');
+      cell.classList.add('found');
+      addHistory(`Step ${stepNum}: Compare array[${mid}]=${val} with target ${target} &rarr; <span class="found-label">Found!</span>`);
+      showFeedback(`Found ${target} at index ${mid}!`, 'success');
+      endRound();
+    } else if (target < val) {
+      highlightLine(9);
+      addHistory(`Step ${stepNum}: Compare array[${mid}]=${val} with target ${target} &rarr; <span class="go-left">Go Left</span>`);
+      showFeedback(`${target} < ${val} — eliminate right half`, 'info');
+      high = mid - 1;
+      if (low > high) {
+        setTimeout(() => {
+          highlightLine(10);
+          showFeedback(`${target} is not in the array!`, 'error');
+          addHistory(`Step ${stepNum + 1}: low > high &rarr; <span class="go-left">Not Found</span>`);
+          endRound();
+          renderArray();
+        }, 500);
+      } else {
+        computeMid();
+        highlightLine(3);
+        renderArray();
+      }
+    } else {
+      highlightLine(7);
+      addHistory(`Step ${stepNum}: Compare array[${mid}]=${val} with target ${target} &rarr; <span class="go-right">Go Right</span>`);
+      showFeedback(`${target} > ${val} — eliminate left half`, 'info');
+      low = mid + 1;
+      if (low > high) {
+        setTimeout(() => {
+          highlightLine(10);
+          showFeedback(`${target} is not in the array!`, 'error');
+          addHistory(`Step ${stepNum + 1}: low > high &rarr; <span class="go-right">Not Found</span>`);
+          endRound();
+          renderArray();
+        }, 500);
+      } else {
+        computeMid();
+        highlightLine(3);
+        renderArray();
+      }
+    }
+    if (!roundDone) renderArray();
+  }
+
+  function endRound() {
+    roundDone = true;
+    if (round >= ROUNDS) {
+      $('newRoundBtn').disabled = true;
+      setTimeout(showSummary, 900);
+    } else {
+      $('newRoundBtn').disabled = false;
+    }
+  }
+
+  function showSummary() {
+    sessionDone = true;
+    $('sumTotal').textContent = totalComparisons;
+    $('sumAvg').textContent = (totalComparisons / ROUNDS).toFixed(1);
+    let best = localStorage.getItem('bsearch_best');
+    best = best ? parseInt(best) : null;
+    if (!best || totalComparisons < best) {
+      localStorage.setItem('bsearch_best', totalComparisons);
+      $('sumBest').textContent = 'New personal best!';
+    } else {
+      $('sumBest').textContent = `Personal best: ${best} comparisons`;
+    }
+    $('summaryOverlay').style.display = 'flex';
+  }
+
+  function startRound() {
+    arr = generateArray();
+    target = pickTarget(arr);
+    low = 0;
+    high = SIZE - 1;
+    comparisons = 0;
+    stepNum = 0;
+    roundDone = false;
+    computeMid();
+    $('targetDisplay').textContent = target;
+    $('newRoundBtn').disabled = true;
+    clearFeedback();
+    historyList.innerHTML = '';
+    highlightLine(3);
+    updateCounters();
+    renderArray();
+  }
+
+  function startSession() {
+    round = 1;
+    totalComparisons = 0;
+    sessionDone = false;
+    $('summaryOverlay').style.display = 'none';
+    startRound();
+  }
+
+  $('newRoundBtn').addEventListener('click', () => {
+    if (roundDone && round < ROUNDS) {
+      round++;
+      startRound();
+    }
+  });
+
+  $('restartBtn').addEventListener('click', startSession);
+
+  startSession();
+})();
+</script>
+</body>
+</html>

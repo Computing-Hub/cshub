@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Merge Sort Visualization</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #2a2a1e 50%, #1a1a2e 100%);
+            color: #fff;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 950px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin: 0 0 8px 0;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #888;
+            font-size: 0.95rem;
+            margin-bottom: 24px;
+        }
+
+        /* Controls */
+        .controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.88rem;
+            font-weight: 600;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: #fff;
+        }
+
+        .btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+
+        .btn:active:not(:disabled) { transform: translateY(0); }
+        .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+        .btn-generate { background: linear-gradient(135deg, #f59e0b, #d97706); color: #1a1a2e; }
+        .btn-prev { background: linear-gradient(135deg, #4a4a6a, #3a3a5a); }
+        .btn-next { background: linear-gradient(135deg, #f59e0b, #d97706); color: #1a1a2e; }
+        .btn-auto { background: linear-gradient(135deg, #43e97b, #38f9d7); color: #1a1a2e; }
+        .btn-stop { background: linear-gradient(135deg, #f7797d, #c471ed); }
+
+        /* Speed control */
+        .speed-control {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-size: 0.85rem;
+            color: #888;
+            margin-bottom: 20px;
+        }
+
+        .speed-control input[type="range"] {
+            width: 100px;
+            accent-color: #f59e0b;
+        }
+
+        /* Progress */
+        .progress-bar {
+            text-align: center;
+            font-size: 0.85rem;
+            color: #888;
+            margin-bottom: 20px;
+        }
+
+        .progress-bar span {
+            color: #f59e0b;
+            font-weight: 600;
+        }
+
+        /* Original array display */
+        .original-array {
+            text-align: center;
+            margin-bottom: 24px;
+            padding: 16px;
+            background: rgba(245, 158, 11, 0.08);
+            border: 1px solid rgba(245, 158, 11, 0.2);
+            border-radius: 12px;
+        }
+
+        .original-array .label {
+            font-size: 0.82rem;
+            color: #888;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .original-array .pills {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        /* Step display area */
+        .step-area {
+            background: #16213e;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+            border: 1px solid #2a2a4a;
+            min-height: 200px;
+        }
+
+        /* Level badge */
+        .level-badge {
+            display: inline-block;
+            padding: 4px 14px;
+            border-radius: 20px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            margin-bottom: 16px;
+        }
+
+        .level-badge.divide { background: rgba(99, 102, 241, 0.2); color: #818cf8; border: 1px solid rgba(99, 102, 241, 0.3); }
+        .level-badge.conquer { background: rgba(52, 211, 153, 0.2); color: #34d399; border: 1px solid rgba(52, 211, 153, 0.3); }
+
+        /* Sublist rows */
+        .sublists-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            animation: slideInUp 0.4s ease;
+        }
+
+        .sublist {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 10px 16px;
+            background: rgba(255,255,255,0.03);
+            border-radius: 12px;
+            border: 1px solid #2a2a4a;
+        }
+
+        /* Number pills */
+        .pill {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            font-family: 'Fira Code', monospace;
+            font-size: 1rem;
+            font-weight: 700;
+            color: #fff;
+            animation: popIn 0.3s ease;
+        }
+
+        /* Divide colors (blues/purples) */
+        .pill.divide-0 { background: #6366f1; }
+        .pill.divide-1 { background: #818cf8; }
+        .pill.divide-2 { background: #a78bfa; }
+        .pill.divide-3 { background: #c4b5fd; color: #1a1a2e; }
+
+        /* Conquer colors (greens) */
+        .pill.conquer-1 { background: #34d399; color: #1a1a2e; }
+        .pill.conquer-2 { background: #6ee7b7; color: #1a1a2e; }
+        .pill.conquer-3 { background: #a7f3d0; color: #1a1a2e; }
+
+        /* Step explanation */
+        .step-explanation {
+            text-align: center;
+            margin-top: 16px;
+            font-size: 0.88rem;
+            color: #999;
+        }
+
+        /* Animations */
+        @keyframes slideInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes popIn {
+            0% { opacity: 0; transform: scale(0.5); }
+            70% { transform: scale(1.05); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .complete-msg {
+            text-align: center;
+            padding: 16px;
+            background: linear-gradient(135deg, rgba(67, 233, 123, 0.1), rgba(56, 249, 215, 0.1));
+            border: 1px solid rgba(67, 233, 123, 0.3);
+            border-radius: 12px;
+            margin-top: 16px;
+            animation: popIn 0.4s ease;
+            color: #43e97b;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Merge Sort Visualization</h1>
+        <p class="subtitle">Step through the divide-and-conquer process</p>
+
+        <!-- Controls -->
+        <div class="controls">
+            <button class="btn btn-generate" onclick="generateNew()">New List</button>
+            <button class="btn btn-prev" id="prevBtn" onclick="prevStep()" disabled>Previous</button>
+            <button class="btn btn-next" id="nextBtn" onclick="nextStep()">Next</button>
+            <button class="btn btn-auto" id="autoBtn" onclick="toggleAuto()">Auto-Play</button>
+        </div>
+
+        <div class="speed-control">
+            <span>Speed:</span>
+            <input type="range" id="speedSlider" min="300" max="2000" value="800" step="100">
+            <span id="speedLabel">800ms</span>
+        </div>
+
+        <!-- Progress -->
+        <div class="progress-bar" id="progressBar">Step <span>0</span> of <span>0</span></div>
+
+        <!-- Original array -->
+        <div class="original-array">
+            <div class="label">Original Array</div>
+            <div class="pills" id="originalPills"></div>
+        </div>
+
+        <!-- Step display -->
+        <div class="step-area" id="stepArea">
+            <p style="text-align:center; color:#666;">Click "New List" or "Next" to begin</p>
+        </div>
+    </div>
+
+    <script>
+        let allSteps = [];
+        let currentStep = -1;
+        let autoPlaying = false;
+        let autoTimer = null;
+        let originalArray = [];
+
+        const originalPills = document.getElementById('originalPills');
+        const stepArea = document.getElementById('stepArea');
+        const progressBar = document.getElementById('progressBar');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const autoBtn = document.getElementById('autoBtn');
+        const speedSlider = document.getElementById('speedSlider');
+        const speedLabel = document.getElementById('speedLabel');
+
+        speedSlider.addEventListener('input', () => {
+            speedLabel.textContent = speedSlider.value + 'ms';
+        });
+
+        function generateRandomList() {
+            return Array.from({ length: 8 }, () => Math.floor(Math.random() * 99) + 1);
+        }
+
+        function merge(left, right) {
+            const result = [];
+            let i = 0, j = 0;
+            while (i < left.length && j < right.length) {
+                if (left[i] <= right[j]) { result.push(left[i]); i++; }
+                else { result.push(right[j]); j++; }
+            }
+            return result.concat(left.slice(i)).concat(right.slice(j));
+        }
+
+        function computeSteps(arr) {
+            const steps = [];
+            const divideLevels = [];
+
+            function divide(array, level) {
+                if (!divideLevels[level]) divideLevels[level] = [];
+                divideLevels[level].push([...array]);
+                if (array.length <= 1) return array;
+                const mid = Math.floor(array.length / 2);
+                const left = divide(array.slice(0, mid), level + 1);
+                const right = divide(array.slice(mid), level + 1);
+                return merge(left, right);
+            }
+
+            divide(arr, 0);
+
+            // Add divide steps
+            divideLevels.forEach((sublists, level) => {
+                steps.push({
+                    type: 'divide',
+                    level: level,
+                    sublists: sublists,
+                    explanation: level === 0 ? 'Start with the full array' :
+                        `Divide each sublist into halves (level ${level})`
+                });
+            });
+
+            // Compute conquer steps
+            let currentLevel = divideLevels[divideLevels.length - 1];
+            let conquerNum = 1;
+            while (currentLevel.length > 1) {
+                const merged = [];
+                for (let i = 0; i < currentLevel.length; i += 2) {
+                    if (i + 1 < currentLevel.length) {
+                        merged.push(merge(currentLevel[i], currentLevel[i + 1]));
+                    } else {
+                        merged.push(currentLevel[i]);
+                    }
+                }
+                steps.push({
+                    type: 'conquer',
+                    level: conquerNum,
+                    sublists: merged,
+                    explanation: `Merge pairs of sorted sublists (conquer level ${conquerNum})`
+                });
+                currentLevel = merged;
+                conquerNum++;
+            }
+
+            return steps;
+        }
+
+        function renderOriginalArray(arr) {
+            originalPills.innerHTML = arr.map(n =>
+                `<div class="pill divide-0">${n}</div>`
+            ).join('');
+        }
+
+        function getPillClass(step) {
+            if (step.type === 'divide') {
+                return 'divide-' + Math.min(step.level, 3);
+            } else {
+                return 'conquer-' + Math.min(step.level, 3);
+            }
+        }
+
+        function renderStep() {
+            if (currentStep < 0 || currentStep >= allSteps.length) {
+                stepArea.innerHTML = '<p style="text-align:center; color:#666;">Click "Next" to begin</p>';
+                return;
+            }
+
+            const step = allSteps[currentStep];
+            const pillClass = getPillClass(step);
+            const badgeClass = step.type === 'divide' ? 'divide' : 'conquer';
+            const badgeText = step.type === 'divide'
+                ? `Divide — Level ${step.level}`
+                : `Conquer — Level ${step.level}`;
+
+            let html = `<div class="level-badge ${badgeClass}">${badgeText}</div>`;
+            html += '<div class="sublists-row">';
+
+            step.sublists.forEach(sublist => {
+                html += '<div class="sublist">';
+                sublist.forEach(n => {
+                    html += `<div class="pill ${pillClass}">${n}</div>`;
+                });
+                html += '</div>';
+            });
+
+            html += '</div>';
+            html += `<div class="step-explanation">${step.explanation}</div>`;
+
+            // Show completion on last step
+            if (currentStep === allSteps.length - 1) {
+                html += '<div class="complete-msg">Sorted! Merge sort complete.</div>';
+            }
+
+            stepArea.innerHTML = html;
+        }
+
+        function updateUI() {
+            renderStep();
+            const spans = progressBar.querySelectorAll('span');
+            spans[0].textContent = currentStep + 1;
+            spans[1].textContent = allSteps.length;
+            prevBtn.disabled = currentStep <= 0;
+            nextBtn.disabled = currentStep >= allSteps.length - 1;
+        }
+
+        function nextStep() {
+            if (currentStep < allSteps.length - 1) {
+                currentStep++;
+                updateUI();
+            }
+        }
+
+        function prevStep() {
+            if (currentStep > 0) {
+                currentStep--;
+                updateUI();
+            }
+        }
+
+        function toggleAuto() {
+            if (autoPlaying) stopAuto();
+            else startAuto();
+        }
+
+        function startAuto() {
+            autoPlaying = true;
+            autoBtn.textContent = 'Stop';
+            autoBtn.classList.remove('btn-auto');
+            autoBtn.classList.add('btn-stop');
+            autoTick();
+        }
+
+        function stopAuto() {
+            autoPlaying = false;
+            clearTimeout(autoTimer);
+            autoBtn.textContent = 'Auto-Play';
+            autoBtn.classList.remove('btn-stop');
+            autoBtn.classList.add('btn-auto');
+        }
+
+        function autoTick() {
+            if (!autoPlaying) return;
+            if (currentStep < allSteps.length - 1) {
+                nextStep();
+                autoTimer = setTimeout(autoTick, parseInt(speedSlider.value));
+            } else {
+                stopAuto();
+            }
+        }
+
+        function generateNew() {
+            stopAuto();
+            originalArray = generateRandomList();
+            allSteps = computeSteps(originalArray);
+            currentStep = 0;
+            renderOriginalArray(originalArray);
+            updateUI();
+        }
+
+        // Initialize on load
+        generateNew();
+    </script>
+</body>
+</html>

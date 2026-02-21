@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CPU Registers &amp; Components</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(135deg, #1a1a2e 0%, #2e2a1a 50%, #1a1a2e 100%);
+  color: #e0e0e0;
+  min-height: 100vh;
+  padding: 24px 16px;
+}
+@keyframes slideInUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes popIn {
+  0% { transform: scale(0.8); opacity: 0; }
+  60% { transform: scale(1.05); }
+  100% { transform: scale(1); opacity: 1; }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.container { max-width: 1100px; margin: 0 auto; }
+h1 {
+  font-size: 2rem; font-weight: 700; text-align: center;
+  background: linear-gradient(135deg, #eab308, #f5d060, #eab308);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text; margin-bottom: 4px;
+}
+.subtitle { text-align: center; font-size: 0.95rem; color: #888; margin-bottom: 24px; }
+.tabs { display: flex; gap: 8px; justify-content: center; margin-bottom: 24px; }
+.tab-btn {
+  font-family: 'Poppins', sans-serif; font-size: 0.88rem; font-weight: 600;
+  padding: 10px 28px; border: none; border-radius: 10px; cursor: pointer;
+  background: linear-gradient(135deg, #2a2a4a, #1e1e3a); color: #aaa;
+  transition: all 0.25s ease;
+}
+.tab-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(234,179,8,0.15); color: #ddd; }
+.tab-btn:active { transform: translateY(0); }
+.tab-btn.active {
+  background: linear-gradient(135deg, #eab308, #d4a006); color: #1a1a2e;
+  box-shadow: 0 4px 20px rgba(234,179,8,0.3);
+}
+.panel {
+  background: #16213e; border-radius: 16px; border: 1px solid #2a2a4a; padding: 24px;
+}
+.mode { display: none; animation: fadeIn 0.4s ease; }
+.mode.active { display: block; }
+
+/* EXPLORE MODE */
+.explore-layout { display: flex; gap: 24px; flex-wrap: wrap; }
+.diagram-col { flex: 1 1 480px; min-width: 0; }
+.info-col { flex: 0 1 320px; min-width: 280px; }
+
+.cpu-box {
+  border: 2px dashed #eab308; border-radius: 16px; padding: 20px 16px;
+  position: relative; background: rgba(234,179,8,0.03);
+}
+.cpu-label {
+  position: absolute; top: -13px; left: 24px; background: #16213e;
+  padding: 0 10px; font-weight: 700; font-size: 0.95rem; color: #eab308;
+  font-family: 'Fira Code', monospace;
+}
+.section-box {
+  border: 1px solid #2a2a4a; border-radius: 12px; padding: 14px;
+  margin-bottom: 14px; position: relative; background: rgba(22,33,62,0.6);
+}
+.section-label {
+  font-size: 0.78rem; font-weight: 600; color: #888;
+  margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.5px;
+}
+.component {
+  display: inline-flex; align-items: center; justify-content: center;
+  padding: 10px 18px; border-radius: 10px; cursor: pointer;
+  font-family: 'Fira Code', monospace; font-size: 0.85rem; font-weight: 500;
+  border: 1px solid #3a3a5a; background: #1a1a2e; color: #e0e0e0;
+  transition: all 0.25s ease; position: relative; user-select: none;
+}
+.component:hover {
+  border-color: #eab308; box-shadow: 0 0 16px rgba(234,179,8,0.25);
+  transform: translateY(-2px); color: #eab308;
+}
+.component.selected {
+  border-color: #eab308; box-shadow: 0 0 20px rgba(234,179,8,0.35);
+  color: #eab308; background: rgba(234,179,8,0.08);
+}
+.component .check {
+  position: absolute; top: -6px; right: -6px; width: 16px; height: 16px;
+  background: #43e97b; border-radius: 50%; display: none;
+  align-items: center; justify-content: center; font-size: 9px; color: #1a1a2e;
+}
+.component.explored .check { display: flex; }
+
+/* CU section layout */
+.cu-inner { display: flex; align-items: center; justify-content: center; gap: 16px; flex-wrap: wrap; }
+.cu-arrow {
+  width: 40px; height: 2px; background: #3a3a5a; position: relative;
+}
+.cu-arrow::after {
+  content: ''; position: absolute; right: -1px; top: -4px;
+  border: 5px solid transparent; border-left: 6px solid #3a3a5a;
+}
+
+/* ALU section layout */
+.alu-inner { display: flex; align-items: center; justify-content: center; }
+
+/* Bus row */
+.bus-row {
+  display: flex; align-items: center; justify-content: center; gap: 0;
+}
+.bus-line {
+  flex: 1; height: 2px; background: linear-gradient(90deg, #3a3a5a, #eab30855, #3a3a5a);
+  position: relative; margin: 0 8px; max-width: 200px; min-width: 60px;
+}
+.bus-label {
+  position: absolute; top: -18px; left: 50%; transform: translateX(-50%);
+  font-size: 0.7rem; color: #666; font-family: 'Fira Code', monospace;
+  white-space: nowrap;
+}
+
+/* Vertical connection lines */
+.v-connect {
+  display: flex; justify-content: center; padding: 4px 0;
+}
+.v-line {
+  width: 2px; height: 14px; background: #3a3a5a;
+}
+
+/* Info panel */
+.info-panel { min-height: 200px; }
+.info-panel.has-info { animation: slideInUp 0.35s ease; }
+.info-placeholder { text-align: center; padding: 48px 16px; color: #555; font-size: 0.9rem; }
+.info-name {
+  font-size: 1.15rem; font-weight: 700; color: #eab308; margin-bottom: 4px;
+}
+.info-full { font-size: 0.82rem; color: #888; margin-bottom: 14px; font-style: italic; }
+.info-desc { font-size: 0.9rem; line-height: 1.6; margin-bottom: 16px; color: #ccc; }
+.info-fact {
+  background: rgba(234,179,8,0.08); border-left: 3px solid #eab308;
+  padding: 10px 14px; border-radius: 0 8px 8px 0; font-size: 0.84rem;
+  color: #ddd; line-height: 1.5;
+}
+.info-fact strong { color: #eab308; }
+.explore-progress {
+  margin-top: 16px; text-align: center; font-size: 0.82rem; color: #666;
+}
+.explore-progress .count { color: #eab308; font-weight: 600; }
+.all-done {
+  color: #43e97b; font-weight: 600; animation: popIn 0.4s ease;
+}
+
+/* QUIZ MODE */
+.quiz-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; flex-wrap: wrap; gap: 8px; }
+.quiz-progress { font-size: 0.85rem; color: #888; }
+.quiz-progress span { color: #eab308; font-weight: 600; }
+.quiz-best { font-size: 0.8rem; color: #555; }
+.quiz-best span { color: #eab308; }
+.quiz-question {
+  font-size: 1.05rem; font-weight: 600; margin-bottom: 18px; line-height: 1.5;
+}
+.quiz-options { display: flex; flex-direction: column; gap: 10px; margin-bottom: 18px; }
+.quiz-opt {
+  font-family: 'Poppins', sans-serif; font-size: 0.88rem; font-weight: 500;
+  padding: 14px 18px; border-radius: 10px; cursor: pointer;
+  border: 1px solid #2a2a4a; background: #1a1a2e; color: #ddd;
+  text-align: left; transition: all 0.25s ease;
+}
+.quiz-opt:hover:not(:disabled) {
+  border-color: #eab308; transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(234,179,8,0.12);
+}
+.quiz-opt:active:not(:disabled) { transform: translateY(0); }
+.quiz-opt:disabled { cursor: default; opacity: 0.85; }
+.quiz-opt.correct {
+  border-color: #43e97b; background: rgba(67,233,123,0.1); color: #43e97b;
+}
+.quiz-opt.wrong {
+  border-color: #f7797d; background: rgba(247,121,125,0.1); color: #f7797d;
+}
+.quiz-feedback {
+  font-size: 0.88rem; padding: 12px 16px; border-radius: 10px;
+  margin-bottom: 14px; animation: slideInUp 0.3s ease; display: none;
+}
+.quiz-feedback.success { display: block; background: rgba(67,233,123,0.1); color: #43e97b; border: 1px solid rgba(67,233,123,0.2); }
+.quiz-feedback.error { display: block; background: rgba(247,121,125,0.1); color: #f7797d; border: 1px solid rgba(247,121,125,0.2); }
+.quiz-feedback.info { display: block; background: rgba(102,126,234,0.1); color: #667eea; border: 1px solid rgba(102,126,234,0.2); }
+.quiz-next {
+  font-family: 'Poppins', sans-serif; font-size: 0.88rem; font-weight: 600;
+  padding: 10px 28px; border: none; border-radius: 10px; cursor: pointer;
+  background: linear-gradient(135deg, #eab308, #d4a006); color: #1a1a2e;
+  transition: all 0.25s ease; display: none;
+}
+.quiz-next:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(234,179,8,0.3); }
+.quiz-next:active { transform: translateY(0); }
+.quiz-result {
+  text-align: center; padding: 32px 16px; animation: popIn 0.4s ease; display: none;
+}
+.quiz-score { font-size: 2.4rem; font-weight: 700; color: #eab308; }
+.quiz-msg { font-size: 1rem; color: #aaa; margin: 8px 0 20px; }
+.quiz-restart {
+  font-family: 'Poppins', sans-serif; font-size: 0.88rem; font-weight: 600;
+  padding: 10px 28px; border: none; border-radius: 10px; cursor: pointer;
+  background: linear-gradient(135deg, #eab308, #d4a006); color: #1a1a2e;
+  transition: all 0.25s ease;
+}
+.quiz-restart:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(234,179,8,0.3); }
+.quiz-restart:active { transform: translateY(0); }
+
+@media (max-width: 700px) {
+  body { padding: 16px 8px; }
+  h1 { font-size: 1.5rem; }
+  .explore-layout { flex-direction: column; }
+  .info-col { flex: 1 1 100%; }
+  .panel { padding: 16px; }
+  .cpu-box { padding: 14px 10px; }
+  .component { padding: 8px 12px; font-size: 0.78rem; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>CPU Registers &amp; Components</h1>
+  <p class="subtitle">Click each component to learn about its role in the CPU</p>
+
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchMode('explore')">Explore</button>
+    <button class="tab-btn" onclick="switchMode('quiz')">Quiz</button>
+  </div>
+
+  <!-- EXPLORE MODE -->
+  <div id="exploreMode" class="mode active">
+    <div class="explore-layout">
+      <div class="diagram-col">
+        <div class="panel">
+          <div class="cpu-box">
+            <span class="cpu-label">CPU</span>
+
+            <!-- Control Unit -->
+            <div class="section-box">
+              <div class="section-label">Control Unit (CU)</div>
+              <div style="display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:8px;">
+                <div class="component" data-comp="cu" onclick="selectComp('cu')" style="width:100%;margin-bottom:8px;">
+                  CU<span class="check">&#10003;</span>
+                </div>
+                <div class="cu-inner">
+                  <div class="component" data-comp="pc" onclick="selectComp('pc')">
+                    PC<span class="check">&#10003;</span>
+                  </div>
+                  <div class="cu-arrow"></div>
+                  <div class="component" data-comp="cir" onclick="selectComp('cir')">
+                    CIR<span class="check">&#10003;</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- ALU -->
+            <div class="section-box">
+              <div class="section-label">Arithmetic Logic Unit (ALU)</div>
+              <div style="display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:8px;">
+                <div class="component" data-comp="alu" onclick="selectComp('alu')" style="width:100%;margin-bottom:8px;">
+                  ALU<span class="check">&#10003;</span>
+                </div>
+                <div class="alu-inner">
+                  <div class="component" data-comp="acc" onclick="selectComp('acc')">
+                    ACC<span class="check">&#10003;</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Vertical connection -->
+            <div class="v-connect"><div class="v-line"></div></div>
+
+            <!-- Bus row: MAR - Bus - MDR -->
+            <div class="bus-row">
+              <div class="component" data-comp="mar" onclick="selectComp('mar')">
+                MAR<span class="check">&#10003;</span>
+              </div>
+              <div class="bus-line"><span class="bus-label">Bus</span></div>
+              <div class="component" data-comp="mdr" onclick="selectComp('mdr')">
+                MDR<span class="check">&#10003;</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="explore-progress" id="exploreProgress">
+          <span class="count" id="exploredCount">0</span> / 7 components explored
+        </div>
+      </div>
+
+      <div class="info-col">
+        <div class="panel info-panel" id="infoPanel">
+          <div class="info-placeholder" id="infoPlaceholder">
+            &#9432; Select a component from the diagram to learn about it
+          </div>
+          <div id="infoContent" style="display:none;"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- QUIZ MODE -->
+  <div id="quizMode" class="mode">
+    <div class="panel">
+      <div id="quizBody">
+        <div class="quiz-header">
+          <div class="quiz-progress">Question <span id="qNum">1</span> / 10</div>
+          <div class="quiz-best">Best: <span id="bestScore">--</span></div>
+        </div>
+        <div class="quiz-question" id="qText"></div>
+        <div class="quiz-options" id="qOpts"></div>
+        <div class="quiz-feedback" id="qFeedback"></div>
+        <button class="quiz-next" id="qNext" onclick="nextQuestion()">Next</button>
+      </div>
+      <div class="quiz-result" id="quizResult">
+        <div class="quiz-score" id="finalScore"></div>
+        <div class="quiz-msg" id="finalMsg"></div>
+        <button class="quiz-restart" onclick="restartQuiz()">Try Again</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const COMPONENTS = {
+  pc: {
+    abbr: 'PC',
+    name: 'Program Counter',
+    desc: 'Holds the memory address of the next instruction to be fetched. It automatically increments after each fetch.',
+    fact: 'The PC is updated during the fetch stage of the FDE cycle.'
+  },
+  mar: {
+    abbr: 'MAR',
+    name: 'Memory Address Register',
+    desc: 'Holds the address of the memory location that is about to be read from or written to.',
+    fact: 'The address from the PC is copied to the MAR before fetching.'
+  },
+  mdr: {
+    abbr: 'MDR',
+    name: 'Memory Data Register',
+    desc: 'Holds the data that has just been read from memory, or data that is about to be written to memory. Also called the MBR (Memory Buffer Register).',
+    fact: 'Data travels between the MDR and RAM via the data bus.'
+  },
+  cir: {
+    abbr: 'CIR',
+    name: 'Current Instruction Register',
+    desc: 'Holds the instruction currently being decoded and executed by the CPU.',
+    fact: 'The instruction from the MDR is copied to the CIR for decoding.'
+  },
+  acc: {
+    abbr: 'ACC',
+    name: 'Accumulator',
+    desc: 'A special register in the ALU that stores the result of calculations and logic operations.',
+    fact: 'The result of any arithmetic or logic operation ends up in the ACC.'
+  },
+  alu: {
+    abbr: 'ALU',
+    name: 'Arithmetic Logic Unit',
+    desc: 'Performs all arithmetic (add, subtract, multiply, divide) and logic (AND, OR, NOT, comparisons) operations.',
+    fact: "The ALU doesn\u2019t store data itself \u2014 it uses the ACC for results."
+  },
+  cu: {
+    abbr: 'CU',
+    name: 'Control Unit',
+    desc: 'Directs and coordinates all CPU operations. It sends control signals to other components and decodes instructions.',
+    fact: 'The CU uses the system clock to synchronise all operations.'
+  }
+};
+
+const QUESTIONS = [
+  { q: 'What does PC stand for?', opts: ['Program Counter','Process Controller','Primary Cache','Pixel Counter'], ans: 0 },
+  { q: 'Which register holds the address of the next instruction to be fetched?', opts: ['PC','MAR','MDR','CIR'], ans: 0 },
+  { q: 'What is the role of the MAR?', opts: ['Hold the address of memory being accessed','Store calculation results','Decode instructions','Perform arithmetic'], ans: 0 },
+  { q: 'Where is data stored immediately after being fetched from RAM?', opts: ['MDR','CIR','ACC','PC'], ans: 0 },
+  { q: 'Which component performs addition and comparison operations?', opts: ['ALU','CU','ACC','MDR'], ans: 0 },
+  { q: 'What does the CIR hold?', opts: ['The instruction currently being executed','The next memory address','The result of a calculation','The clock speed'], ans: 0 },
+  { q: 'The Accumulator is part of which component?', opts: ['ALU','CU','RAM','ROM'], ans: 0 },
+  { q: 'Which component sends control signals to coordinate CPU operations?', opts: ['CU','ALU','PC','MDR'], ans: 0 },
+  { q: 'During the fetch stage, the address in the PC is copied to which register?', opts: ['MAR','MDR','CIR','ACC'], ans: 0 },
+  { q: 'Which register is also known as the Memory Buffer Register (MBR)?', opts: ['MDR','MAR','CIR','ACC'], ans: 0 }
+];
+
+let explored = new Set();
+let selectedComp = null;
+let currentQ = 0;
+let score = 0;
+let answered = false;
+let shuffledQs = [];
+
+function switchMode(mode) {
+  document.querySelectorAll('.tab-btn').forEach((b, i) => {
+    b.classList.toggle('active', (mode === 'explore' && i === 0) || (mode === 'quiz' && i === 1));
+  });
+  document.getElementById('exploreMode').classList.toggle('active', mode === 'explore');
+  document.getElementById('quizMode').classList.toggle('active', mode === 'quiz');
+  if (mode === 'quiz' && shuffledQs.length === 0) restartQuiz();
+}
+
+function selectComp(key) {
+  document.querySelectorAll('.component').forEach(el => el.classList.remove('selected'));
+  document.querySelectorAll(`.component[data-comp="${key}"]`).forEach(el => {
+    el.classList.add('selected');
+    el.classList.add('explored');
+  });
+
+  explored.add(key);
+  selectedComp = key;
+  updateProgress();
+  showInfo(key);
+}
+
+function showInfo(key) {
+  const c = COMPONENTS[key];
+  const panel = document.getElementById('infoPanel');
+  const placeholder = document.getElementById('infoPlaceholder');
+  const content = document.getElementById('infoContent');
+
+  placeholder.style.display = 'none';
+  content.style.display = 'block';
+  content.innerHTML = `
+    <div class="info-name">${c.abbr}</div>
+    <div class="info-full">${c.name}</div>
+    <div class="info-desc">${c.desc}</div>
+    <div class="info-fact"><strong>Key fact:</strong> ${c.fact}</div>
+  `;
+  panel.classList.remove('has-info');
+  void panel.offsetWidth;
+  panel.classList.add('has-info');
+}
+
+function updateProgress() {
+  const count = explored.size;
+  const el = document.getElementById('exploredCount');
+  el.textContent = count;
+  if (count === 7) {
+    document.getElementById('exploreProgress').innerHTML =
+      '<span class="all-done">All components explored! Try the quiz.</span>';
+  }
+}
+
+/* QUIZ */
+function shuffleOpts(q) {
+  const correct = q.opts[q.ans];
+  const shuffled = [...q.opts];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return { opts: shuffled, ans: shuffled.indexOf(correct) };
+}
+
+function restartQuiz() {
+  currentQ = 0;
+  score = 0;
+  answered = false;
+  shuffledQs = QUESTIONS.map(q => {
+    const s = shuffleOpts(q);
+    return { q: q.q, opts: s.opts, ans: s.ans };
+  });
+  document.getElementById('quizBody').style.display = 'block';
+  document.getElementById('quizResult').style.display = 'none';
+  loadBest();
+  renderQuestion();
+}
+
+function loadBest() {
+  const b = localStorage.getItem('cpuRegistersBest');
+  document.getElementById('bestScore').textContent = b !== null ? b + '/10' : '--';
+}
+
+function renderQuestion() {
+  const q = shuffledQs[currentQ];
+  document.getElementById('qNum').textContent = currentQ + 1;
+  document.getElementById('qText').textContent = q.q;
+  const container = document.getElementById('qOpts');
+  container.innerHTML = '';
+  q.opts.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'quiz-opt';
+    btn.textContent = opt;
+    btn.onclick = () => answerQuestion(i);
+    container.appendChild(btn);
+  });
+  document.getElementById('qFeedback').className = 'quiz-feedback';
+  document.getElementById('qFeedback').textContent = '';
+  document.getElementById('qNext').style.display = 'none';
+  answered = false;
+}
+
+function answerQuestion(idx) {
+  if (answered) return;
+  answered = true;
+  const q = shuffledQs[currentQ];
+  const btns = document.querySelectorAll('.quiz-opt');
+  btns.forEach(b => b.disabled = true);
+
+  const fb = document.getElementById('qFeedback');
+  if (idx === q.ans) {
+    score++;
+    btns[idx].classList.add('correct');
+    fb.className = 'quiz-feedback success';
+    fb.textContent = 'Correct! Well done.';
+  } else {
+    btns[idx].classList.add('wrong');
+    btns[q.ans].classList.add('correct');
+    fb.className = 'quiz-feedback error';
+    fb.textContent = 'Not quite. The correct answer is: ' + q.opts[q.ans];
+  }
+
+  if (currentQ < 9) {
+    document.getElementById('qNext').style.display = 'inline-block';
+  } else {
+    setTimeout(showResult, 1200);
+  }
+}
+
+function nextQuestion() {
+  currentQ++;
+  renderQuestion();
+}
+
+function showResult() {
+  document.getElementById('quizBody').style.display = 'none';
+  const result = document.getElementById('quizResult');
+  result.style.display = 'block';
+  document.getElementById('finalScore').textContent = score + ' / 10';
+
+  let msg = '';
+  if (score === 10) msg = 'Perfect score! Outstanding knowledge!';
+  else if (score >= 8) msg = 'Excellent work! You really know your CPU components.';
+  else if (score >= 6) msg = 'Good effort! Review the explore section for the ones you missed.';
+  else if (score >= 4) msg = 'Not bad! Try exploring all components before retaking the quiz.';
+  else msg = 'Keep learning! Use the Explore tab to study each component.';
+  document.getElementById('finalMsg').textContent = msg;
+
+  const prev = localStorage.getItem('cpuRegistersBest');
+  if (prev === null || score > parseInt(prev)) {
+    localStorage.setItem('cpuRegistersBest', score);
+  }
+  loadBest();
+}
+loadBest();
+</script>
+</body>
+</html>

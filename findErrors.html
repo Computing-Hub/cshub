@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Find the Errors - Python Debugging Game</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+body {
+  margin: 0; padding: 20px;
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(135deg, #1a1a2e 0%, #2e1a1a 50%, #1a1a2e 100%);
+  min-height: 100vh; color: #e0e0e0;
+}
+h1 {
+  font-size: 2rem; font-weight: 700; text-align: center; margin: 0 0 4px 0;
+  background: linear-gradient(135deg, #f43f5e, #ff6b8a);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.subtitle { text-align: center; font-size: 0.95rem; color: #888; margin-bottom: 24px; }
+.container { max-width: 800px; margin: 0 auto; }
+.panel {
+  background: #16213e; border-radius: 16px; border: 1px solid #2a2a4a;
+  padding: 24px; margin-bottom: 20px;
+}
+.level-selector { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-bottom: 20px; }
+.level-btn {
+  font-family: 'Poppins', sans-serif; font-size: 0.88rem; font-weight: 600;
+  border: none; padding: 10px 22px; border-radius: 10px; cursor: pointer;
+  color: #fff; transition: transform 0.2s, box-shadow 0.2s, opacity 0.2s;
+  display: flex; align-items: center; gap: 6px;
+  background: linear-gradient(135deg, #f43f5e, #c0223a);
+}
+.level-btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(244,63,94,0.4); }
+.level-btn:active:not(:disabled) { transform: translateY(0); }
+.level-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.level-btn.active { box-shadow: 0 0 0 3px rgba(244,63,94,0.6); }
+.level-btn .lock { font-size: 0.8rem; }
+.level-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 16px; }
+.level-title { font-size: 1.1rem; font-weight: 600; color: #f43f5e; }
+.progress-text { font-size: 0.85rem; color: #aaa; }
+.progress-bar-bg {
+  width: 100%; height: 8px; background: #2a2a4a; border-radius: 4px; margin-bottom: 18px; overflow: hidden;
+}
+.progress-bar-fill {
+  height: 100%; background: linear-gradient(90deg, #f43f5e, #ff6b8a); border-radius: 4px;
+  transition: width 0.4s ease;
+}
+.code-panel {
+  background: #0d1117; border-radius: 12px; border: 1px solid #2a2a4a;
+  padding: 16px; overflow-x: auto; margin-bottom: 16px;
+}
+.code-line {
+  display: flex; align-items: flex-start; min-height: 28px; line-height: 1.7;
+  font-family: 'Fira Code', monospace; font-size: 0.88rem;
+  transition: background 0.3s;
+}
+.code-line.hint-glow {
+  background: rgba(251, 191, 36, 0.12); border-radius: 4px;
+}
+.line-num {
+  color: #555; min-width: 32px; text-align: right; padding-right: 16px;
+  user-select: none; font-family: 'Fira Code', monospace; font-size: 0.88rem;
+}
+.line-content { flex: 1; white-space: pre; }
+.token {
+  cursor: pointer; padding: 1px 2px; border-radius: 3px;
+  transition: background 0.2s; display: inline;
+}
+.token:hover { background: rgba(244,63,94,0.15); }
+.token.found {
+  text-decoration: line-through; color: #f7797d; opacity: 0.6; cursor: default;
+}
+.token.found:hover { background: transparent; }
+.correction {
+  color: #43e97b; font-weight: 500; margin-left: 4px;
+  animation: popIn 0.35s ease; display: inline;
+}
+.token.shake { animation: shake 0.4s ease; }
+.action-row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+.hint-btn, .reset-btn {
+  font-family: 'Poppins', sans-serif; font-size: 0.88rem; font-weight: 600;
+  border: none; padding: 10px 20px; border-radius: 10px; cursor: pointer;
+  color: #fff; transition: transform 0.2s, box-shadow 0.2s, opacity 0.2s;
+}
+.hint-btn {
+  background: linear-gradient(135deg, #667eea, #5a67d8);
+}
+.hint-btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(102,126,234,0.4); }
+.hint-btn:active:not(:disabled) { transform: translateY(0); }
+.hint-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.reset-btn { background: linear-gradient(135deg, #888, #666); }
+.reset-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 14px rgba(0,0,0,0.3); }
+.reset-btn:active { transform: translateY(0); }
+.show-btn {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+}
+.show-btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(245,158,11,0.4); }
+.show-btn:active:not(:disabled) { transform: translateY(0); }
+.show-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.feedback {
+  padding: 12px 18px; border-radius: 10px; font-size: 0.88rem; font-weight: 500;
+  margin-top: 14px; animation: slideInUp 0.3s ease; display: none;
+}
+.feedback.success { background: rgba(67,233,123,0.15); color: #43e97b; border: 1px solid rgba(67,233,123,0.3); }
+.feedback.error { background: rgba(247,121,125,0.15); color: #f7797d; border: 1px solid rgba(247,121,125,0.3); }
+.feedback.info { background: rgba(102,126,234,0.15); color: #99b3ff; border: 1px solid rgba(102,126,234,0.3); }
+.feedback.show { display: block; }
+.corrected-panel {
+  background: rgba(67,233,123,0.07); border: 1px solid rgba(67,233,123,0.25);
+  border-radius: 12px; padding: 16px; margin-top: 16px; animation: fadeIn 0.5s ease;
+  display: none;
+}
+.corrected-panel.show { display: block; }
+.corrected-title { color: #43e97b; font-weight: 600; font-size: 0.95rem; margin-bottom: 10px; }
+.corrected-code {
+  font-family: 'Fira Code', monospace; font-size: 0.85rem; color: #a8e6cf;
+  white-space: pre; line-height: 1.7;
+}
+@keyframes slideInUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes popIn {
+  0% { opacity: 0; transform: scale(0.6); }
+  70% { transform: scale(1.1); }
+  100% { opacity: 1; transform: scale(1); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-4px); }
+  40% { transform: translateX(4px); }
+  60% { transform: translateX(-3px); }
+  80% { transform: translateX(3px); }
+}
+@media (max-width: 600px) {
+  body { padding: 12px; }
+  h1 { font-size: 1.5rem; }
+  .panel { padding: 16px; }
+  .code-panel { padding: 10px; }
+  .code-line { font-size: 0.78rem; }
+  .line-num { min-width: 24px; padding-right: 10px; font-size: 0.78rem; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>Find the Errors</h1>
+  <p class="subtitle">Click on the bugs in Python code to fix them!</p>
+
+  <div class="level-selector" id="levelSelector"></div>
+
+  <div class="panel" id="gamePanel">
+    <div class="level-header">
+      <span class="level-title" id="levelTitle"></span>
+      <span class="progress-text" id="progressText"></span>
+    </div>
+    <div class="progress-bar-bg">
+      <div class="progress-bar-fill" id="progressBar" style="width:0%"></div>
+    </div>
+    <div class="code-panel" id="codePanel"></div>
+    <div class="action-row">
+      <button class="hint-btn" id="hintBtn" onclick="giveHint()">Hint</button>
+      <button class="show-btn" id="showBtn" onclick="showAnswers()">Show Answers</button>
+      <button class="reset-btn" onclick="resetLevel()">Reset</button>
+    </div>
+    <div class="feedback" id="feedback"></div>
+    <div class="corrected-panel" id="correctedPanel">
+      <div class="corrected-title">Corrected Code</div>
+      <div class="corrected-code" id="correctedCode"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const LEVELS = [
+  {
+    id: 1,
+    title: 'Level 1: Syntax Errors',
+    bugCount: 3,
+    lines: [
+      { num: 1, text: 'name = input("Enter your name: ")' },
+      { num: 2, text: 'print("Hello, " + name)' },
+      { num: 3, text: 'age = int(input("Enter your age: "))' },
+      { num: 4, text: 'print("You are " + age + " years old")' },
+      { num: 5, text: 'print("Welcome to Python!)' },
+      { num: 6, text: 'pritn("Goodbye!")' }
+    ],
+    bugs: [
+      { line: 4, token: 'age', fix: 'str(age)', explanation: 'Cannot concatenate int with string — wrap in str()' },
+      { line: 5, token: '"Welcome to Python!)', fix: '"Welcome to Python!")', explanation: 'Missing closing quote before the parenthesis' },
+      { line: 6, token: 'pritn', fix: 'print', explanation: 'Typo in function name: pritn should be print' }
+    ],
+    corrected: 'name = input("Enter your name: ")\nprint("Hello, " + name)\nage = int(input("Enter your age: "))\nprint("You are " + str(age) + " years old")\nprint("Welcome to Python!")\nprint("Goodbye!")'
+  },
+  {
+    id: 2,
+    title: 'Level 2: Loop Errors',
+    bugCount: 4,
+    lines: [
+      { num: 1, text: 'numbers = [3, 7, 1, 9, 4]' },
+      { num: 2, text: 'for num in numbers' },
+      { num: 3, text: '    if num > 5' },
+      { num: 4, text: '        print(num + " is big")' },
+      { num: 5, text: '    else:' },
+      { num: 6, text: '        print(str(num) + " is small")' },
+      { num: 7, text: 'primt("Done checking!")' }
+    ],
+    bugs: [
+      { line: 2, token: 'numbers', fix: 'numbers:', explanation: 'Missing colon at end of for loop' },
+      { line: 3, token: '5', fix: '5:', explanation: 'Missing colon at end of if statement' },
+      { line: 4, token: 'num', fix: 'str(num)', explanation: 'Cannot concatenate int with string — wrap in str()' },
+      { line: 7, token: 'primt', fix: 'print', explanation: 'Typo in function name: primt should be print' }
+    ],
+    corrected: 'numbers = [3, 7, 1, 9, 4]\nfor num in numbers:\n    if num > 5:\n        print(str(num) + " is big")\n    else:\n        print(str(num) + " is small")\nprint("Done checking!")'
+  },
+  {
+    id: 3,
+    title: 'Level 3: Function Errors',
+    bugCount: 5,
+    lines: [
+      { num: 1, text: 'def calculate_area(length, width)' },
+      { num: 2, text: '    area = length * width' },
+      { num: 3, text: '    return Area' },
+      { num: 4, text: '' },
+      { num: 5, text: 'result = calculate_area(5, 3)' },
+      { num: 6, text: 'print("Area is: " + str(resalt))' },
+      { num: 7, text: '' },
+      { num: 8, text: 'def greet(name)' },
+      { num: 9, text: '    messge = "Hello, " + name' },
+      { num: 10, text: '    retrun messge' }
+    ],
+    bugs: [
+      { line: 1, token: ')', fix: '):', explanation: 'Missing colon at end of function definition' },
+      { line: 3, token: 'Area', fix: 'area', explanation: 'Python is case-sensitive: Area should be area' },
+      { line: 6, token: 'resalt', fix: 'result', explanation: 'Typo in variable name: resalt should be result' },
+      { line: 8, token: ')', fix: '):', explanation: 'Missing colon at end of function definition' },
+      { line: 10, token: 'retrun', fix: 'return', explanation: 'Typo in keyword: retrun should be return' }
+    ],
+    corrected: 'def calculate_area(length, width):\n    area = length * width\n    return area\n\nresult = calculate_area(5, 3)\nprint("Area is: " + str(result))\n\ndef greet(name):\n    message = "Hello, " + name\n    return message'
+  },
+  {
+    id: 4,
+    title: 'Level 4: List & String Errors',
+    bugCount: 4,
+    lines: [
+      { num: 1, text: 'fruits = ["apple", "banana", "cherry"]' },
+      { num: 2, text: 'print(fruits[3])' },
+      { num: 3, text: 'fruits.appen("mango")' },
+      { num: 4, text: 'for fruit in fruits:' },
+      { num: 5, text: '    print("I like " + fruut)' },
+      { num: 6, text: 'message = "Hello World"' },
+      { num: 7, text: 'print(mesage.upper())' }
+    ],
+    bugs: [
+      { line: 2, token: '3', fix: '2', explanation: 'Index out of range: list has 3 items so the max index is 2, not 3' },
+      { line: 3, token: 'fruits.appen', fix: 'fruits.append', explanation: 'Typo in method name: appen should be append' },
+      { line: 5, token: 'fruut', fix: 'fruit', explanation: 'Typo in variable name: fruut should be fruit (defined on line 4)' },
+      { line: 7, token: 'mesage.upper', fix: 'message.upper', explanation: 'Typo in variable name: mesage should be message' }
+    ],
+    corrected: 'fruits = ["apple", "banana", "cherry"]\nprint(fruits[2])\nfruits.append("mango")\nfor fruit in fruits:\n    print("I like " + fruit)\nmessage = "Hello World"\nprint(message.upper())'
+  },
+  {
+    id: 5,
+    title: 'Level 5: While Loop & Input Errors',
+    bugCount: 5,
+    lines: [
+      { num: 1, text: 'count = 0' },
+      { num: 2, text: 'while count < 5' },
+      { num: 3, text: '    print("Count is: " + str(count))' },
+      { num: 4, text: '    count = count' },
+      { num: 5, text: '' },
+      { num: 6, text: 'answer = input("Enter yes or no: ")' },
+      { num: 7, text: 'if answer == "yes"' },
+      { num: 8, text: '    print("You said yes!")' },
+      { num: 9, text: 'elif answer = "no":' },
+      { num: 10, text: '    print("You said no!")' },
+      { num: 11, text: 'esle:' },
+      { num: 12, text: '    print("Invalid answer")' }
+    ],
+    bugs: [
+      { line: 2, token: '5', fix: '5:', explanation: 'Missing colon at the end of the while statement' },
+      { line: 4, token: 'count', occurrence: 2, fix: 'count + 1', explanation: 'count never changes — this causes an infinite loop! Should be count + 1' },
+      { line: 7, token: '"yes"', fix: '"yes":', explanation: 'Missing colon at end of if statement' },
+      { line: 9, token: '=', fix: '==', explanation: 'Single = is assignment, not comparison — use == to compare values' },
+      { line: 11, token: 'esle', fix: 'else', explanation: 'Typo in keyword: esle should be else' }
+    ],
+    corrected: 'count = 0\nwhile count < 5:\n    print("Count is: " + str(count))\n    count = count + 1\n\nanswer = input("Enter yes or no: ")\nif answer == "yes":\n    print("You said yes!")\nelif answer == "no":\n    print("You said no!")\nelse:\n    print("Invalid answer")'
+  },
+  {
+    id: 6,
+    title: 'Level 6: Mixed Challenge',
+    bugCount: 6,
+    lines: [
+      { num: 1, text: 'def is_even(number):' },
+      { num: 2, text: '    if number % 2 = 0:' },
+      { num: 3, text: '        return True' },
+      { num: 4, text: '    else:' },
+      { num: 5, text: '        return Flase' },
+      { num: 6, text: '' },
+      { num: 7, text: 'scores = [85, 92, 78, 95, 88]' },
+      { num: 8, text: 'total = 0' },
+      { num: 9, text: 'for score in scores' },
+      { num: 10, text: '    total = total + score' },
+      { num: 11, text: 'average = total / len(scores)' },
+      { num: 12, text: 'print("Average: " + str(averege))' },
+      { num: 13, text: '' },
+      { num: 14, text: 'if is_even(4)' },
+      { num: 15, text: '    pritn("4 is even")' }
+    ],
+    bugs: [
+      { line: 2, token: '=', fix: '==', explanation: 'Single = is assignment — use == to compare values in a condition' },
+      { line: 5, token: 'Flase', fix: 'False', explanation: 'Typo in boolean: Flase should be False (capital F, no typo)' },
+      { line: 9, token: 'scores', fix: 'scores:', explanation: 'Missing colon at end of for loop' },
+      { line: 12, token: 'averege', fix: 'average', explanation: 'Typo in variable name: averege should match average on line 11' },
+      { line: 14, token: ')', fix: '):', explanation: 'Missing colon at end of if statement' },
+      { line: 15, token: 'pritn', fix: 'print', explanation: 'Typo in function name: pritn should be print' }
+    ],
+    corrected: 'def is_even(number):\n    if number % 2 == 0:\n        return True\n    else:\n        return False\n\nscores = [85, 92, 78, 95, 88]\ntotal = 0\nfor score in scores:\n    total = total + score\naverage = total / len(scores)\nprint("Average: " + str(average))\n\nif is_even(4):\n    print("4 is even")'
+  }
+];
+
+let currentLevel = 0;
+let foundBugs = [];
+let unlocked = [true, false, false, false, false, false];
+let completed = [false, false, false, false, false, false];
+let hintTimeout = null;
+let feedbackTimeout = null;
+
+function loadState() {
+  try {
+    const s = JSON.parse(localStorage.getItem('findErrors_state'));
+    if (s) {
+      unlocked = s.unlocked || [true, false, false, false, false, false];
+      completed = s.completed || [false, false, false, false, false, false];
+      // Ensure arrays match current level count
+      while (unlocked.length < LEVELS.length) { unlocked.push(false); completed.push(false); }
+    }
+  } catch(e) {}
+}
+
+function saveState() {
+  localStorage.setItem('findErrors_state', JSON.stringify({ unlocked, completed }));
+}
+
+function renderLevelSelector() {
+  const el = document.getElementById('levelSelector');
+  el.innerHTML = '';
+  LEVELS.forEach((lv, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'level-btn' + (i === currentLevel ? ' active' : '');
+    btn.disabled = !unlocked[i];
+    const lockIcon = unlocked[i] ? '' : '<span class="lock">&#128274;</span>';
+    const checkIcon = completed[i] ? ' &#10003;' : '';
+    btn.innerHTML = 'Level ' + (i + 1) + checkIcon + lockIcon;
+    btn.addEventListener('click', () => { loadLevel(i); });
+    el.appendChild(btn);
+  });
+}
+
+function tokenizeLine(text) {
+  const tokens = [];
+  let current = '';
+  let inString = false;
+  let stringChar = '';
+  const delims = new Set(['(', ')', '[', ']', ',', '+', '-', '*', '/', '%', '>', '<', ':']);
+
+  for (let i = 0; i < text.length; i++) {
+    const ch = text[i];
+
+    if (inString) {
+      current += ch;
+      if (ch === stringChar && (i === 0 || text[i-1] !== '\\')) {
+        tokens.push(current);
+        current = '';
+        inString = false;
+      }
+      continue;
+    }
+
+    if (ch === '"' || ch === "'") {
+      if (current) tokens.push(current);
+      current = ch;
+      inString = true;
+      stringChar = ch;
+      continue;
+    }
+
+    if (ch === ' ') {
+      if (current) tokens.push(current);
+      tokens.push(' ');
+      current = '';
+    } else if (ch === '=' && i + 1 < text.length && text[i+1] === '=') {
+      if (current) tokens.push(current);
+      tokens.push('==');
+      current = '';
+      i++;
+    } else if (ch === '=' || delims.has(ch)) {
+      if (current) tokens.push(current);
+      tokens.push(ch);
+      current = '';
+    } else {
+      current += ch;
+    }
+  }
+  if (current) tokens.push(current);
+  return tokens;
+}
+
+function renderCode(level) {
+  const panel = document.getElementById('codePanel');
+  panel.innerHTML = '';
+  level.lines.forEach(line => {
+    const lineDiv = document.createElement('div');
+    lineDiv.className = 'code-line';
+    lineDiv.dataset.linenum = line.num;
+
+    const numSpan = document.createElement('span');
+    numSpan.className = 'line-num';
+    numSpan.textContent = line.num;
+    lineDiv.appendChild(numSpan);
+
+    const contentDiv = document.createElement('span');
+    contentDiv.className = 'line-content';
+
+    if (!line.text) {
+      contentDiv.innerHTML = '&nbsp;';
+      lineDiv.appendChild(contentDiv);
+      panel.appendChild(lineDiv);
+      return;
+    }
+
+    const tokens = tokenizeLine(line.text);
+    const occurrenceCount = {};
+
+    tokens.forEach(t => {
+      if (t === ' ') {
+        contentDiv.appendChild(document.createTextNode(' '));
+        return;
+      }
+
+      const span = document.createElement('span');
+      span.className = 'token';
+      span.textContent = t;
+
+      // Track occurrences for this line
+      const key = line.num + ':' + t;
+      occurrenceCount[key] = (occurrenceCount[key] || 0) + 1;
+
+      // Check if this token is a bug
+      const bug = level.bugs.find(b => {
+        if (b.line !== line.num) return false;
+        if (b.token !== t) return false;
+        const occ = b.occurrence || 1;
+        return occurrenceCount[key] === occ;
+      });
+
+      if (bug) {
+        span.dataset.bug = 'true';
+        span.dataset.fix = bug.fix;
+        span.dataset.explanation = bug.explanation;
+        span.dataset.bugIndex = level.bugs.indexOf(bug);
+      }
+
+      span.addEventListener('click', () => handleTokenClick(span));
+      contentDiv.appendChild(span);
+    });
+
+    lineDiv.appendChild(contentDiv);
+    panel.appendChild(lineDiv);
+  });
+}
+
+function handleTokenClick(span) {
+  if (span.classList.contains('found')) return;
+
+  const level = LEVELS[currentLevel];
+
+  if (span.dataset.bug === 'true') {
+    const bugIdx = parseInt(span.dataset.bugIndex);
+    if (foundBugs.includes(bugIdx)) return;
+
+    foundBugs.push(bugIdx);
+    span.classList.add('found');
+
+    const corr = document.createElement('span');
+    corr.className = 'correction';
+    corr.textContent = ' ' + span.dataset.fix;
+    span.parentNode.insertBefore(corr, span.nextSibling);
+
+    updateProgress();
+    showFeedback('success', span.dataset.explanation);
+
+    if (foundBugs.length === level.bugCount) {
+      setTimeout(() => levelComplete(), 600);
+    }
+  } else {
+    span.classList.remove('shake');
+    void span.offsetWidth;
+    span.classList.add('shake');
+    showFeedback('error', "That's not a bug! Try again.");
+  }
+}
+
+function updateProgress() {
+  const level = LEVELS[currentLevel];
+  const found = foundBugs.length;
+  const total = level.bugCount;
+  document.getElementById('progressText').textContent = found + '/' + total + ' errors found';
+  document.getElementById('progressBar').style.width = (found / total * 100) + '%';
+}
+
+function showFeedback(type, msg) {
+  clearTimeout(feedbackTimeout);
+  const el = document.getElementById('feedback');
+  el.className = 'feedback ' + type + ' show';
+  el.textContent = msg;
+  if (type !== 'success' || foundBugs.length < LEVELS[currentLevel].bugCount) {
+    feedbackTimeout = setTimeout(() => { el.classList.remove('show'); }, 2500);
+  }
+}
+
+function giveHint() {
+  const level = LEVELS[currentLevel];
+  const nextBug = level.bugs.find((b, i) => !foundBugs.includes(i));
+  if (!nextBug) return;
+
+  // Clear previous hint glows
+  document.querySelectorAll('.code-line.hint-glow').forEach(el => el.classList.remove('hint-glow'));
+
+  const lineEl = document.querySelector('.code-line[data-linenum="' + nextBug.line + '"]');
+  if (lineEl) {
+    lineEl.classList.add('hint-glow');
+    clearTimeout(hintTimeout);
+    hintTimeout = setTimeout(() => lineEl.classList.remove('hint-glow'), 3000);
+  }
+
+  showFeedback('info', 'Check line ' + nextBug.line + ' carefully...');
+}
+
+function levelComplete() {
+  completed[currentLevel] = true;
+  if (currentLevel < LEVELS.length - 1) {
+    unlocked[currentLevel + 1] = true;
+  }
+  saveState();
+  renderLevelSelector();
+
+  const isLast = currentLevel === LEVELS.length - 1;
+  showFeedback('success', 'Excellent! You found all the bugs! ' + (isLast ? 'You completed all levels!' : 'Level ' + (currentLevel + 2) + ' is now unlocked!'));
+
+  const cp = document.getElementById('correctedPanel');
+  document.getElementById('correctedCode').textContent = LEVELS[currentLevel].corrected;
+  cp.classList.add('show');
+
+  document.getElementById('hintBtn').disabled = true;
+  document.getElementById('showBtn').disabled = true;
+}
+
+function showAnswers() {
+  const level = LEVELS[currentLevel];
+  const tokens = document.querySelectorAll('#codePanel .token[data-bug="true"]');
+  tokens.forEach(span => {
+    const bugIdx = parseInt(span.dataset.bugIndex);
+    if (foundBugs.includes(bugIdx)) return;
+    foundBugs.push(bugIdx);
+    span.classList.add('found');
+    const corr = document.createElement('span');
+    corr.className = 'correction';
+    corr.textContent = ' ' + span.dataset.fix;
+    span.parentNode.insertBefore(corr, span.nextSibling);
+  });
+  updateProgress();
+  showFeedback('info', 'All answers revealed. Try resetting to attempt it yourself!');
+  const cp = document.getElementById('correctedPanel');
+  document.getElementById('correctedCode').textContent = level.corrected;
+  cp.classList.add('show');
+  document.getElementById('hintBtn').disabled = true;
+  document.getElementById('showBtn').disabled = true;
+}
+
+function loadLevel(idx) {
+  if (!unlocked[idx]) return;
+  currentLevel = idx;
+  foundBugs = [];
+  clearTimeout(hintTimeout);
+  clearTimeout(feedbackTimeout);
+
+  const level = LEVELS[idx];
+  document.getElementById('levelTitle').textContent = level.title;
+  document.getElementById('feedback').className = 'feedback';
+  document.getElementById('correctedPanel').classList.remove('show');
+  document.getElementById('hintBtn').disabled = false;
+  document.getElementById('showBtn').disabled = false;
+
+  renderLevelSelector();
+  renderCode(level);
+  updateProgress();
+}
+
+function resetLevel() {
+  loadLevel(currentLevel);
+}
+
+// Init
+loadState();
+renderLevelSelector();
+loadLevel(0);
+</script>
+</body>
+</html>

@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tree Traversal Visualization</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #2a1a3e 50%, #1a1a2e 100%);
+            color: #fff;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #f472b6, #e879a8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin: 0 0 8px 0;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #888;
+            font-size: 0.95rem;
+            margin-bottom: 24px;
+        }
+
+        /* Buttons */
+        .controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.88rem;
+            font-weight: 600;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: #fff;
+        }
+
+        .btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+
+        .btn:active:not(:disabled) { transform: translateY(0); }
+        .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+        .btn-inorder { background: linear-gradient(135deg, #f472b6, #ec4899); }
+        .btn-preorder { background: linear-gradient(135deg, #a78bfa, #8b5cf6); }
+        .btn-postorder { background: linear-gradient(135deg, #34d399, #10b981); }
+        .btn-stop { background: linear-gradient(135deg, #f7797d, #c471ed); }
+        .btn-reset { background: linear-gradient(135deg, #4a4a6a, #3a3a5a); }
+
+        /* Speed control */
+        .speed-control {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-size: 0.85rem;
+            color: #888;
+            margin-bottom: 20px;
+        }
+
+        .speed-control input[type="range"] {
+            width: 120px;
+            accent-color: #f472b6;
+        }
+
+        /* Step counter */
+        .step-counter {
+            text-align: center;
+            font-size: 0.85rem;
+            color: #888;
+            margin-bottom: 16px;
+        }
+
+        .step-counter span {
+            color: #f472b6;
+            font-weight: 600;
+        }
+
+        /* Tree canvas */
+        .tree-viewport {
+            background: rgba(255,255,255,0.03);
+            border: 2px solid #2a2a4a;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+            margin-bottom: 20px;
+        }
+
+        .tree-container {
+            position: relative;
+            width: 100%;
+            height: 300px;
+        }
+
+        .tree-container svg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .tree-node {
+            position: absolute;
+            width: 48px;
+            height: 48px;
+            border: 3px solid #4a4a6a;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #1a1a2e;
+            font-family: 'Fira Code', monospace;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #e0e0e0;
+            transform: translate(-50%, -50%);
+            transition: all 0.3s ease;
+            z-index: 2;
+        }
+
+        .tree-node.highlight {
+            background: #f472b6;
+            border-color: #f472b6;
+            color: #fff;
+            box-shadow: 0 0 20px rgba(244, 114, 182, 0.6);
+            transform: translate(-50%, -50%) scale(1.2);
+        }
+
+        .tree-node.visited {
+            background: rgba(244, 114, 182, 0.2);
+            border-color: #f472b6;
+            color: #f472b6;
+        }
+
+        /* Traversal output */
+        .output-panel {
+            background: #16213e;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+            border: 1px solid #2a2a4a;
+            margin-bottom: 20px;
+        }
+
+        .output-panel h3 {
+            margin: 0 0 12px 0;
+            font-size: 0.95rem;
+            color: #f472b6;
+        }
+
+        .output-sequence {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+            min-height: 44px;
+        }
+
+        .output-circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #fff;
+            animation: popIn 0.3s ease;
+        }
+
+        .output-arrow {
+            color: #555;
+            font-size: 1rem;
+        }
+
+        .output-empty {
+            color: #555;
+            font-size: 0.9rem;
+            font-style: italic;
+        }
+
+        /* Algorithm explanation */
+        .algo-panel {
+            background: #16213e;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+            border: 1px solid #2a2a4a;
+        }
+
+        .algo-panel h3 {
+            margin: 0 0 8px 0;
+            font-size: 0.95rem;
+            color: #f472b6;
+        }
+
+        .algo-panel p {
+            margin: 0;
+            font-size: 0.88rem;
+            color: #999;
+            line-height: 1.6;
+        }
+
+        .algo-panel code {
+            font-family: 'Fira Code', monospace;
+            background: rgba(244, 114, 182, 0.1);
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: #f472b6;
+            font-size: 0.82rem;
+        }
+
+        /* Animations */
+        @keyframes slideInUp {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes popIn {
+            0% { opacity: 0; transform: scale(0.5); }
+            70% { transform: scale(1.1); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Tree Traversal Visualization</h1>
+        <p class="subtitle">Watch in-order, pre-order, and post-order traversals step by step</p>
+
+        <!-- Controls -->
+        <div class="controls">
+            <button class="btn btn-inorder" id="btnInorder" onclick="startTraversal('inorder')">In-order</button>
+            <button class="btn btn-preorder" id="btnPreorder" onclick="startTraversal('preorder')">Pre-order</button>
+            <button class="btn btn-postorder" id="btnPostorder" onclick="startTraversal('postorder')">Post-order</button>
+            <button class="btn btn-stop" id="btnStop" onclick="stopTraversal()" disabled>Stop</button>
+            <button class="btn btn-reset" id="btnReset" onclick="resetTree()">Reset</button>
+        </div>
+
+        <!-- Speed control -->
+        <div class="speed-control">
+            <span>Speed:</span>
+            <input type="range" id="speedSlider" min="200" max="2000" value="800" step="200">
+            <span id="speedLabel">800ms</span>
+        </div>
+
+        <!-- Step counter -->
+        <div class="step-counter" id="stepCounter">Select a traversal to begin</div>
+
+        <!-- Tree display -->
+        <div class="tree-viewport">
+            <div class="tree-container" id="treeContainer"></div>
+        </div>
+
+        <!-- Traversal output -->
+        <div class="output-panel">
+            <h3>Traversal Output</h3>
+            <div class="output-sequence" id="outputSequence">
+                <span class="output-empty">Start a traversal to see the visited order</span>
+            </div>
+        </div>
+
+        <!-- Algorithm explanation -->
+        <div class="algo-panel" id="algoPanel">
+            <h3>Algorithm</h3>
+            <p id="algoText">Choose a traversal type above to see how it works.</p>
+        </div>
+    </div>
+
+    <script>
+        // Tree structure
+        const tree = {
+            A: { left: 'B', right: 'C' },
+            B: { left: 'D', right: 'E' },
+            C: { left: null, right: 'F' },
+            D: { left: null, right: null },
+            E: { left: null, right: null },
+            F: { left: null, right: null }
+        };
+
+        // Colors for output circles
+        const nodeColors = {
+            A: '#f472b6', B: '#a78bfa', C: '#34d399',
+            D: '#fbbf24', E: '#60a5fa', F: '#f87171'
+        };
+
+        let traversalSteps = [];
+        let currentStep = -1;
+        let isRunning = false;
+        let animTimer = null;
+        let visitedNodes = [];
+
+        const treeContainer = document.getElementById('treeContainer');
+        const outputSequence = document.getElementById('outputSequence');
+        const stepCounter = document.getElementById('stepCounter');
+        const algoText = document.getElementById('algoText');
+        const speedSlider = document.getElementById('speedSlider');
+        const speedLabel = document.getElementById('speedLabel');
+
+        speedSlider.addEventListener('input', () => {
+            speedLabel.textContent = speedSlider.value + 'ms';
+        });
+
+        function getSpeed() { return parseInt(speedSlider.value); }
+
+        // Calculate responsive positions
+        function getNodePositions() {
+            const w = treeContainer.offsetWidth;
+            const h = treeContainer.offsetHeight;
+            const cx = w / 2;
+            return {
+                A: { x: cx, y: h * 0.15 },
+                B: { x: cx - w * 0.25, y: h * 0.5 },
+                C: { x: cx + w * 0.25, y: h * 0.5 },
+                D: { x: cx - w * 0.37, y: h * 0.85 },
+                E: { x: cx - w * 0.13, y: h * 0.85 },
+                F: { x: cx + w * 0.37, y: h * 0.85 }
+            };
+        }
+
+        function renderTree() {
+            const pos = getNodePositions();
+            treeContainer.innerHTML = '';
+
+            // SVG for arrows
+            const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+            svg.setAttribute('width', '100%');
+            svg.setAttribute('height', '100%');
+
+            // Define arrowhead marker
+            const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
+            const marker = document.createElementNS('http://www.w3.org/2000/svg', 'marker');
+            marker.setAttribute('id', 'arrowhead');
+            marker.setAttribute('markerWidth', '8');
+            marker.setAttribute('markerHeight', '6');
+            marker.setAttribute('refX', '8');
+            marker.setAttribute('refY', '3');
+            marker.setAttribute('orient', 'auto');
+            const polygon = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+            polygon.setAttribute('points', '0 0, 8 3, 0 6');
+            polygon.setAttribute('fill', '#6a6a8a');
+            marker.appendChild(polygon);
+            defs.appendChild(marker);
+            svg.appendChild(defs);
+
+            // Draw edges
+            const edges = [
+                ['A', 'B'], ['A', 'C'], ['B', 'D'], ['B', 'E'], ['C', 'F']
+            ];
+
+            edges.forEach(([from, to]) => {
+                const p1 = pos[from];
+                const p2 = pos[to];
+                // Offset from center of node (radius ~24px)
+                const dx = p2.x - p1.x;
+                const dy = p2.y - p1.y;
+                const dist = Math.sqrt(dx * dx + dy * dy);
+                const offsetStart = 24 / dist;
+                const offsetEnd = 28 / dist;
+
+                const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                line.setAttribute('x1', p1.x + dx * offsetStart);
+                line.setAttribute('y1', p1.y + dy * offsetStart);
+                line.setAttribute('x2', p2.x - dx * offsetEnd);
+                line.setAttribute('y2', p2.y - dy * offsetEnd);
+                line.setAttribute('stroke', '#4a4a6a');
+                line.setAttribute('stroke-width', '2');
+                line.setAttribute('marker-end', 'url(#arrowhead)');
+                svg.appendChild(line);
+            });
+
+            treeContainer.appendChild(svg);
+
+            // Draw nodes
+            Object.keys(pos).forEach(nodeId => {
+                const p = pos[nodeId];
+                const el = document.createElement('div');
+                el.className = 'tree-node';
+                el.id = 'node-' + nodeId;
+                el.textContent = nodeId;
+                el.style.left = p.x + 'px';
+                el.style.top = p.y + 'px';
+
+                if (visitedNodes.includes(nodeId)) {
+                    el.classList.add('visited');
+                }
+
+                treeContainer.appendChild(el);
+            });
+        }
+
+        // Traversal algorithms
+        function inorder(node) {
+            if (!node) return;
+            inorder(tree[node].left);
+            traversalSteps.push(node);
+            inorder(tree[node].right);
+        }
+
+        function preorder(node) {
+            if (!node) return;
+            traversalSteps.push(node);
+            preorder(tree[node].left);
+            preorder(tree[node].right);
+        }
+
+        function postorder(node) {
+            if (!node) return;
+            postorder(tree[node].left);
+            postorder(tree[node].right);
+            traversalSteps.push(node);
+        }
+
+        const algoDescriptions = {
+            inorder: 'In-order traversal visits: <code>Left subtree → Root → Right subtree</code>. It processes the left child first, then the current node, then the right child. For a BST, this gives nodes in ascending order.',
+            preorder: 'Pre-order traversal visits: <code>Root → Left subtree → Right subtree</code>. It processes the current node first, then recursively visits left and right children. Useful for copying a tree.',
+            postorder: 'Post-order traversal visits: <code>Left subtree → Right subtree → Root</code>. It processes children before the parent. Useful for deleting a tree or evaluating expressions.'
+        };
+
+        function setButtons(running) {
+            document.getElementById('btnInorder').disabled = running;
+            document.getElementById('btnPreorder').disabled = running;
+            document.getElementById('btnPostorder').disabled = running;
+            document.getElementById('btnStop').disabled = !running;
+        }
+
+        function startTraversal(type) {
+            if (isRunning) return;
+
+            // Reset
+            traversalSteps = [];
+            currentStep = -1;
+            visitedNodes = [];
+            isRunning = true;
+
+            if (type === 'inorder') inorder('A');
+            else if (type === 'preorder') preorder('A');
+            else if (type === 'postorder') postorder('A');
+
+            algoText.innerHTML = algoDescriptions[type];
+            outputSequence.innerHTML = '';
+            setButtons(true);
+            renderTree();
+
+            animateNext();
+        }
+
+        function animateNext() {
+            if (!isRunning) return;
+            currentStep++;
+
+            if (currentStep >= traversalSteps.length) {
+                stepCounter.innerHTML = `Traversal complete — visited all <span>${traversalSteps.length}</span> nodes`;
+                isRunning = false;
+                setButtons(false);
+                // Remove highlight, keep visited
+                document.querySelectorAll('.tree-node').forEach(n => n.classList.remove('highlight'));
+                return;
+            }
+
+            const nodeId = traversalSteps[currentStep];
+            visitedNodes.push(nodeId);
+
+            stepCounter.innerHTML = `Visiting node <span>${currentStep + 1} of ${traversalSteps.length}</span>`;
+
+            // Update tree highlights
+            document.querySelectorAll('.tree-node').forEach(n => n.classList.remove('highlight'));
+            const nodeEl = document.getElementById('node-' + nodeId);
+            if (nodeEl) {
+                nodeEl.classList.add('highlight');
+                nodeEl.classList.add('visited');
+            }
+
+            // Add to output sequence
+            if (currentStep > 0) {
+                const arrow = document.createElement('span');
+                arrow.className = 'output-arrow';
+                arrow.textContent = '→';
+                outputSequence.appendChild(arrow);
+            }
+            const circle = document.createElement('div');
+            circle.className = 'output-circle';
+            circle.style.background = nodeColors[nodeId];
+            circle.textContent = nodeId;
+            outputSequence.appendChild(circle);
+
+            animTimer = setTimeout(animateNext, getSpeed());
+        }
+
+        function stopTraversal() {
+            isRunning = false;
+            clearTimeout(animTimer);
+            stepCounter.innerHTML = `Stopped at node <span>${currentStep + 1} of ${traversalSteps.length}</span>`;
+            setButtons(false);
+            document.querySelectorAll('.tree-node').forEach(n => n.classList.remove('highlight'));
+        }
+
+        function resetTree() {
+            isRunning = false;
+            clearTimeout(animTimer);
+            traversalSteps = [];
+            currentStep = -1;
+            visitedNodes = [];
+            stepCounter.textContent = 'Select a traversal to begin';
+            outputSequence.innerHTML = '<span class="output-empty">Start a traversal to see the visited order</span>';
+            algoText.textContent = 'Choose a traversal type above to see how it works.';
+            setButtons(false);
+            renderTree();
+        }
+
+        // Re-render on resize for responsive positions
+        window.addEventListener('resize', () => {
+            if (!isRunning) renderTree();
+        });
+
+        renderTree();
+    </script>
+</body>
+</html>

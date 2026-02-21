@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Input Exercises</title>
+    <script src="https://skulpt.org/js/skulpt.min.js" type="text/javascript"></script>
+    <script src="https://skulpt.org/js/skulpt-stdlib.js" type="text/javascript"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #1a2e1a 0%, #1a2e2a 50%, #1a2e1a 100%);
+            color: #e0e0e0;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #43e97b, #38f9d7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin: 0 0 8px 0;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #888;
+            font-size: 0.95rem;
+            margin-bottom: 12px;
+        }
+
+        /* Progress bar */
+        .progress-wrapper {
+            margin-bottom: 28px;
+        }
+
+        .progress-text {
+            text-align: center;
+            font-size: 0.85rem;
+            color: #888;
+            margin-bottom: 8px;
+        }
+
+        .progress-text span {
+            color: #43e97b;
+            font-weight: 600;
+        }
+
+        .progress-track {
+            width: 100%;
+            height: 8px;
+            background: #2a2a4a;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #43e97b, #38f9d7);
+            border-radius: 4px;
+            transition: width 0.4s ease;
+        }
+
+        /* Activity card */
+        .activity-card {
+            background: #16213e;
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+            border: 1px solid #2a2a4a;
+            transition: border-color 0.3s;
+        }
+
+        .activity-card.completed {
+            border-color: rgba(67, 233, 123, 0.3);
+        }
+
+        .activity-card.completed .card-header::after {
+            content: '✓';
+            color: #43e97b;
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .card-header h3 {
+            margin: 0;
+            font-size: 0.95rem;
+            color: #43e97b;
+            flex: 1;
+        }
+
+        /* Dark code editor */
+        .code-editor {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+            width: 100%;
+            height: 130px;
+            padding: 14px;
+            background: #0d1117;
+            color: #c9d1d9;
+            border: 2px solid #2a2a4a;
+            border-radius: 10px;
+            resize: vertical;
+            outline: none;
+            transition: border-color 0.2s;
+            tab-size: 4;
+        }
+
+        .code-editor:focus {
+            border-color: #43e97b;
+        }
+
+        /* Button row */
+        .btn-row {
+            display: flex;
+            gap: 10px;
+            margin-top: 12px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 600;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: #fff;
+        }
+
+        .btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+
+        .btn:active:not(:disabled) { transform: translateY(0); }
+        .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+        .btn-run { background: linear-gradient(135deg, #43e97b, #38f9d7); color: #1a1a2e; }
+        .btn-hint { background: linear-gradient(135deg, #667eea, #764ba2); }
+
+        /* Terminal-style output */
+        .output-area {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.85rem;
+            margin-top: 12px;
+            padding: 14px;
+            background: #0d1117;
+            color: #43e97b;
+            border-radius: 10px;
+            min-height: 44px;
+            white-space: pre-wrap;
+            border: 1px solid #1e1e3e;
+        }
+
+        .output-area.error {
+            color: #f7797d;
+        }
+
+        .output-area.success {
+            color: #43e97b;
+        }
+
+        /* Hint box */
+        .hint-box {
+            margin-top: 10px;
+            padding: 12px 16px;
+            background: rgba(102, 126, 234, 0.1);
+            border: 1px solid rgba(102, 126, 234, 0.25);
+            border-radius: 10px;
+            font-size: 0.85rem;
+            color: #a5b4fc;
+            animation: slideInUp 0.3s ease;
+        }
+
+        /* Explanation */
+        .explanation {
+            margin-top: 12px;
+            padding: 12px 16px;
+            background: rgba(255,255,255,0.03);
+            border-radius: 10px;
+            border-left: 3px solid #667eea;
+            font-size: 0.85rem;
+            color: #999;
+            font-style: italic;
+        }
+
+        /* Celebration */
+        .celebration {
+            text-align: center;
+            padding: 24px;
+            background: linear-gradient(135deg, rgba(67, 233, 123, 0.1), rgba(56, 249, 215, 0.1));
+            border: 2px solid rgba(67, 233, 123, 0.3);
+            border-radius: 16px;
+            margin-top: 24px;
+            animation: popIn 0.5s ease;
+        }
+
+        .celebration h2 {
+            color: #43e97b;
+            margin: 0 0 8px 0;
+        }
+
+        .celebration p {
+            color: #999;
+            margin: 0;
+        }
+
+        /* Animations */
+        @keyframes slideInUp {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes popIn {
+            0% { opacity: 0; transform: scale(0.8); }
+            70% { transform: scale(1.02); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Python Input Exercises</h1>
+        <p class="subtitle">Write Python code to solve each challenge</p>
+
+        <!-- Progress -->
+        <div class="progress-wrapper">
+            <div class="progress-text"><span id="progressCount">0</span>/5 completed</div>
+            <div class="progress-track">
+                <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+            </div>
+        </div>
+
+        <div id="activitiesContainer"></div>
+        <div id="celebrationArea"></div>
+    </div>
+
+    <script>
+        const STORAGE_KEY = 'python_exercises_progress';
+
+        const exercises = [
+            {
+                id: 11,
+                title: 'Activity 1: Ask for the user\'s name and print a personalized greeting.',
+                explanation: 'Use the <code>input()</code> function to get the user\'s name, then use <code>print()</code> to display a greeting. The input() call will trigger a browser prompt.',
+                expectedOutput: 'Hello, Alice!',
+                inputValues: ['Alice'],
+                hints: [
+                    'Use name = input("Enter your name: ") to get the name',
+                    'Then print("Hello, " + name + "!") to greet them'
+                ]
+            },
+            {
+                id: 12,
+                title: 'Activity 2: Convert user input string of numbers into an integer and double it.',
+                explanation: 'Use <code>int()</code> to convert the input string to a number, then multiply by 2 and print the result.',
+                expectedOutput: '20',
+                inputValues: ['10'],
+                hints: [
+                    'Use int(input(...)) to get a number from the user',
+                    'Multiply by 2 and print the result: print(num * 2)'
+                ]
+            },
+            {
+                id: 13,
+                title: 'Activity 3: Ask for two numbers, add them, and display the result.',
+                explanation: 'Gather two numbers using <code>input()</code> and <code>int()</code>, add them with <code>+</code>, and print the result.',
+                expectedOutput: 'The result is 15',
+                inputValues: ['7', '8'],
+                hints: [
+                    'Get each number: a = int(input("...")) and b = int(input("..."))',
+                    'Print: print("The result is", a + b)'
+                ]
+            },
+            {
+                id: 14,
+                title: 'Activity 4: Get a year of birth from the user and calculate their age in 2026.',
+                explanation: 'Subtract the year of birth from 2026 to calculate the age. Remember to convert input to an integer.',
+                expectedOutput: 'You are 26 years old.',
+                inputValues: ['2000'],
+                hints: [
+                    'Get the year: year = int(input("..."))',
+                    'Calculate: age = 2026 - year, then print("You are", age, "years old.")'
+                ]
+            },
+            {
+                id: 15,
+                title: 'Activity 5: Input a list of comma-separated values, convert them to integers, and print the sum.',
+                explanation: 'Use <code>.split(",")</code> to break the string into parts, convert each to <code>int</code>, then use <code>sum()</code> to add them.',
+                expectedOutput: 'The sum is 10',
+                inputValues: ['1,2,3,4'],
+                hints: [
+                    'Use .split(",") to break the input into a list',
+                    'Convert each to int: nums = [int(x) for x in values.split(",")]',
+                    'Print: print("The sum is", sum(nums))'
+                ]
+            }
+        ];
+
+        // Load progress from localStorage
+        function loadProgress() {
+            try {
+                return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+            } catch { return {}; }
+        }
+
+        function saveProgress(progress) {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
+        }
+
+        let progress = loadProgress();
+
+        function getCompletedCount() {
+            return exercises.filter(e => progress[e.id]).length;
+        }
+
+        function updateProgressBar() {
+            const count = getCompletedCount();
+            document.getElementById('progressCount').textContent = count;
+            document.getElementById('progressFill').style.width = (count / exercises.length * 100) + '%';
+
+            // Mark completed cards
+            exercises.forEach(e => {
+                const card = document.getElementById('card-' + e.id);
+                if (card) {
+                    if (progress[e.id]) card.classList.add('completed');
+                    else card.classList.remove('completed');
+                }
+            });
+
+            // Celebration
+            if (count === exercises.length) {
+                document.getElementById('celebrationArea').innerHTML = `
+                    <div class="celebration">
+                        <h2>All Exercises Complete!</h2>
+                        <p>Great work — you've mastered Python input handling.</p>
+                    </div>`;
+            } else {
+                document.getElementById('celebrationArea').innerHTML = '';
+            }
+        }
+
+        function renderActivities() {
+            const container = document.getElementById('activitiesContainer');
+            container.innerHTML = exercises.map(ex => `
+                <div class="activity-card" id="card-${ex.id}">
+                    <div class="card-header">
+                        <h3>${ex.title}</h3>
+                    </div>
+                    <textarea class="code-editor" id="code-${ex.id}" placeholder="Write your Python code here..."
+                        spellcheck="false"></textarea>
+                    <div class="btn-row">
+                        <button class="btn btn-run" onclick="runCode(${ex.id})">Run Code</button>
+                        <button class="btn btn-hint" onclick="showHint(${ex.id})">Show Hint</button>
+                    </div>
+                    <div class="output-area" id="output-${ex.id}">>>> Waiting for code...</div>
+                    <div id="hint-${ex.id}"></div>
+                    <div class="explanation">${ex.explanation}</div>
+                </div>
+            `).join('');
+
+            // Add tab key support to all editors
+            exercises.forEach(ex => {
+                const editor = document.getElementById('code-' + ex.id);
+                editor.addEventListener('keydown', (e) => {
+                    if (e.key === 'Tab') {
+                        e.preventDefault();
+                        const start = editor.selectionStart;
+                        const end = editor.selectionEnd;
+                        editor.value = editor.value.substring(0, start) + '    ' + editor.value.substring(end);
+                        editor.selectionStart = editor.selectionEnd = start + 4;
+                    }
+                });
+            });
+        }
+
+        // Hint system
+        const hintState = {};
+        function showHint(id) {
+            const ex = exercises.find(e => e.id === id);
+            if (!hintState[id]) hintState[id] = 0;
+            else hintState[id]++;
+
+            const hintIdx = Math.min(hintState[id], ex.hints.length - 1);
+            const hintEl = document.getElementById('hint-' + id);
+            hintEl.innerHTML = `<div class="hint-box">Hint ${hintIdx + 1}: ${ex.hints[hintIdx]}</div>`;
+        }
+
+        function runCode(activityId) {
+            const ex = exercises.find(e => e.id === activityId);
+            const code = document.getElementById('code-' + activityId).value;
+            const outputEl = document.getElementById('output-' + activityId);
+            outputEl.textContent = '';
+            outputEl.className = 'output-area';
+
+            let outputText = '';
+            let inputIndex = 0;
+
+            Sk.configure({
+                output: function(text) {
+                    outputText += text;
+                },
+                read: function(builtinName) {
+                    if (Sk.builtinFiles === undefined || Sk.builtinFiles["files"][builtinName] === undefined)
+                        throw "File not found: '" + builtinName + "'";
+                    return Sk.builtinFiles["files"][builtinName];
+                },
+                inputfun: function() {
+                    if (inputIndex < ex.inputValues.length) {
+                        return ex.inputValues[inputIndex++];
+                    }
+                    return prompt("Enter input:") || '';
+                },
+                inputfunTakesPrompt: true
+            });
+
+            Sk.misceval.asyncToPromise(function() {
+                return Sk.importMainWithBody("<stdin>", false, code, true);
+            }).then(function() {
+                const trimmedOutput = outputText.trim();
+                const trimmedExpected = ex.expectedOutput.trim();
+                if (trimmedOutput === trimmedExpected) {
+                    outputEl.textContent = trimmedOutput + '\n\n✓ Correct!';
+                    outputEl.classList.add('success');
+                    progress[activityId] = true;
+                    saveProgress(progress);
+                    updateProgressBar();
+                } else {
+                    outputEl.textContent = trimmedOutput + '\n\n✗ Output doesn\'t match expected. Try again!\nExpected: ' + trimmedExpected;
+                    outputEl.classList.add('error');
+                }
+            }, function(err) {
+                outputEl.textContent = 'Error: ' + err.toString();
+                outputEl.classList.add('error');
+            });
+        }
+
+        renderActivities();
+        updateProgressBar();
+    </script>
+</body>
+</html>

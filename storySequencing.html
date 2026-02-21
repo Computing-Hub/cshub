@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Story Sequencing - Knight Adventure</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+body {
+  margin: 0;
+  padding: 20px;
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(135deg, #1a1a2e 0%, #2e1e3e 50%, #1a1a2e 100%);
+  min-height: 100vh;
+  color: #e0e0e0;
+}
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  text-align: center;
+  margin: 0 0 4px 0;
+  background: linear-gradient(135deg, #8b5cf6, #c084fc);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.subtitle {
+  text-align: center;
+  font-size: 0.95rem;
+  color: #888;
+  margin: 0 0 24px 0;
+}
+.panel {
+  background: #16213e;
+  border-radius: 16px;
+  border: 1px solid #2a2a4a;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+.panel-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #c084fc;
+  margin: 0 0 14px 0;
+}
+.source-zone {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  min-height: 80px;
+  padding: 4px 0;
+}
+.card {
+  background: linear-gradient(135deg, #1e2a4a, #24305e);
+  border: 2px solid #2a2a4a;
+  border-radius: 12px;
+  padding: 14px 16px;
+  cursor: grab;
+  user-select: none;
+  -webkit-user-select: none;
+  transition: transform 0.2s, box-shadow 0.2s, border-color 0.3s;
+  flex: 1 1 calc(50% - 12px);
+  min-width: 260px;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  position: relative;
+  touch-action: none;
+}
+.card:active { cursor: grabbing; }
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(139, 92, 246, 0.2);
+  border-color: #8b5cf6;
+}
+.card.dragging {
+  opacity: 0.5;
+  transform: scale(0.95);
+}
+.card-icon {
+  font-size: 1.8rem;
+  flex-shrink: 0;
+  line-height: 1;
+}
+.card-text {
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: #ccc;
+}
+.target-zone {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.drop-slot {
+  border: 2px dashed #3a3a5a;
+  border-radius: 12px;
+  min-height: 72px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 12px;
+  transition: border-color 0.3s, background 0.3s, transform 0.3s;
+  position: relative;
+}
+.drop-slot.drag-over {
+  border-color: #8b5cf6;
+  background: rgba(139, 92, 246, 0.08);
+}
+.drop-slot .slot-number {
+  font-family: 'Fira Code', monospace;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #8b5cf6;
+  min-width: 28px;
+  text-align: center;
+  flex-shrink: 0;
+}
+.drop-slot .card {
+  flex: 1;
+  margin: 0;
+  min-width: 0;
+  animation: popIn 0.3s ease;
+}
+.drop-slot.correct {
+  border-color: #43e97b;
+  background: rgba(67, 233, 123, 0.06);
+}
+.drop-slot.correct::after {
+  content: '\2713';
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #43e97b;
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+.drop-slot.wrong {
+  border-color: #f7797d;
+  background: rgba(247, 121, 125, 0.06);
+  animation: shake 0.5s ease;
+}
+.drop-slot.wrong::after {
+  content: '\2717';
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #f7797d;
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+.btn-row {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+.btn {
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.88rem;
+  font-weight: 600;
+  padding: 10px 28px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s, opacity 0.2s;
+  color: #fff;
+}
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(139, 92, 246, 0.35);
+}
+.btn:active { transform: translateY(0); }
+.btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; box-shadow: none; }
+.btn-check {
+  background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+}
+.btn-reset {
+  background: linear-gradient(135deg, #3b3b5c, #2a2a4a);
+}
+.feedback {
+  text-align: center;
+  padding: 14px;
+  border-radius: 12px;
+  font-size: 0.92rem;
+  font-weight: 600;
+  margin-top: 16px;
+  animation: slideInUp 0.4s ease;
+  display: none;
+}
+.feedback.success {
+  display: block;
+  background: rgba(67, 233, 123, 0.1);
+  border: 1px solid #43e97b;
+  color: #43e97b;
+}
+.feedback.error {
+  display: block;
+  background: rgba(247, 121, 125, 0.1);
+  border: 1px solid #f7797d;
+  color: #f7797d;
+}
+.feedback.info {
+  display: block;
+  background: rgba(102, 126, 234, 0.1);
+  border: 1px solid #667eea;
+  color: #667eea;
+}
+.score-panel {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.score-item {
+  font-size: 0.9rem;
+  color: #aaa;
+}
+.score-item span {
+  color: #8b5cf6;
+  font-weight: 600;
+  font-family: 'Fira Code', monospace;
+}
+.progress-bar-wrapper {
+  width: 100%;
+  height: 6px;
+  background: #2a2a4a;
+  border-radius: 3px;
+  margin-top: 10px;
+  overflow: hidden;
+}
+.progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #8b5cf6, #43e97b);
+  border-radius: 3px;
+  transition: width 0.4s ease;
+  width: 0%;
+}
+.touch-clone {
+  position: fixed;
+  z-index: 9999;
+  pointer-events: none;
+  opacity: 0.85;
+  transform: rotate(2deg) scale(1.04);
+}
+
+@keyframes slideInUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes popIn {
+  0% { transform: scale(0.85); opacity: 0; }
+  60% { transform: scale(1.04); }
+  100% { transform: scale(1); opacity: 1; }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-6px); }
+  40% { transform: translateX(6px); }
+  60% { transform: translateX(-4px); }
+  80% { transform: translateX(4px); }
+}
+
+@media (max-width: 600px) {
+  body { padding: 12px; }
+  h1 { font-size: 1.5rem; }
+  .card { flex: 1 1 100%; min-width: 0; padding: 12px; }
+  .panel { padding: 14px; }
+  .btn { padding: 10px 20px; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>Story Sequencing</h1>
+  <p class="subtitle">Drag the cards into the correct order to complete the knight's adventure</p>
+
+  <div class="panel">
+    <div class="score-panel">
+      <div class="score-item">Progress: <span id="progressText">0/6</span> in correct position</div>
+      <div class="score-item">Best score: <span id="bestScore">--</span></div>
+    </div>
+    <div class="progress-bar-wrapper">
+      <div class="progress-bar" id="progressBar"></div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <p class="panel-title">Story Cards</p>
+    <div class="source-zone" id="sourceZone"></div>
+  </div>
+
+  <div class="panel">
+    <p class="panel-title">Drop cards in order (1 = first event)</p>
+    <div class="target-zone" id="targetZone"></div>
+  </div>
+
+  <div class="btn-row">
+    <button class="btn btn-check" id="checkBtn" disabled>Check Order</button>
+    <button class="btn btn-reset" id="resetBtn">Reset</button>
+  </div>
+
+  <div class="feedback" id="feedback"></div>
+</div>
+
+<script>
+(function() {
+  const STORIES = [
+    { id: 1, icon: "\u{1F3F0}", text: "In a faraway kingdom, a young knight named Sir Cedric received a quest from the King to find the stolen Dragon Crystal." },
+    { id: 2, icon: "\u{1F5FA}\uFE0F", text: "Sir Cedric studied the ancient map and packed his sword, shield, and provisions for the dangerous journey ahead." },
+    { id: 3, icon: "\u{1F332}", text: "He rode through the Dark Forest, solving riddles from a mysterious old wizard who guarded the only safe path." },
+    { id: 4, icon: "\u{1F409}", text: "At the mouth of the dragon\u2019s cave, Sir Cedric bravely faced the fearsome dragon and discovered it was guarding its baby." },
+    { id: 5, icon: "\u{1F48E}", text: "Sir Cedric offered to help protect the baby dragon, and in return, the dragon peacefully returned the Crystal." },
+    { id: 6, icon: "\u{1F451}", text: "Sir Cedric returned to the kingdom as a hero, and the King declared a day of celebration in his honour." }
+  ];
+
+  const sourceZone = document.getElementById('sourceZone');
+  const targetZone = document.getElementById('targetZone');
+  const checkBtn = document.getElementById('checkBtn');
+  const resetBtn = document.getElementById('resetBtn');
+  const feedbackEl = document.getElementById('feedback');
+  const progressText = document.getElementById('progressText');
+  const progressBar = document.getElementById('progressBar');
+  const bestScoreEl = document.getElementById('bestScore');
+
+  let slots = [null, null, null, null, null, null];
+  let draggedCardId = null;
+  let dragSource = null; // 'source' or slot index
+  let touchClone = null;
+  let touchDragId = null;
+  let touchDragSource = null;
+
+  function fisherYatesShuffle(arr) {
+    const a = arr.slice();
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+
+  function getStoryById(id) {
+    return STORIES.find(s => s.id === id);
+  }
+
+  function loadBestScore() {
+    const b = localStorage.getItem('storySeq_bestScore');
+    if (b !== null) {
+      bestScoreEl.textContent = b + '/6';
+    }
+  }
+
+  function saveBestScore(score) {
+    const prev = parseInt(localStorage.getItem('storySeq_bestScore') || '0', 10);
+    if (score > prev) {
+      localStorage.setItem('storySeq_bestScore', score);
+      bestScoreEl.textContent = score + '/6';
+    }
+  }
+
+  function createCardEl(story) {
+    const div = document.createElement('div');
+    div.className = 'card';
+    div.setAttribute('draggable', 'true');
+    div.dataset.id = story.id;
+    div.innerHTML = '<div class="card-icon">' + story.icon + '</div><div class="card-text">' + story.text + '</div>';
+
+    // Desktop drag
+    div.addEventListener('dragstart', onDragStart);
+    div.addEventListener('dragend', onDragEnd);
+
+    // Touch
+    div.addEventListener('touchstart', onTouchStart, { passive: false });
+
+    return div;
+  }
+
+  function buildSourceCards(shuffled) {
+    sourceZone.innerHTML = '';
+    shuffled.forEach(story => {
+      sourceZone.appendChild(createCardEl(story));
+    });
+  }
+
+  function buildSlots() {
+    targetZone.innerHTML = '';
+    for (let i = 0; i < 6; i++) {
+      const slot = document.createElement('div');
+      slot.className = 'drop-slot';
+      slot.dataset.slot = i;
+      slot.innerHTML = '<div class="slot-number">' + (i + 1) + '</div>';
+
+      slot.addEventListener('dragover', onDragOver);
+      slot.addEventListener('dragenter', onDragEnter);
+      slot.addEventListener('dragleave', onDragLeave);
+      slot.addEventListener('drop', onDrop);
+
+      targetZone.appendChild(slot);
+    }
+  }
+
+  function updateCheckBtn() {
+    const filled = slots.filter(s => s !== null).length;
+    checkBtn.disabled = filled === 0;
+  }
+
+  function clearFeedback() {
+    feedbackEl.className = 'feedback';
+    feedbackEl.style.display = 'none';
+    feedbackEl.textContent = '';
+    document.querySelectorAll('.drop-slot').forEach(s => {
+      s.classList.remove('correct', 'wrong');
+    });
+  }
+
+  function updateProgress(correctCount) {
+    progressText.textContent = correctCount + '/6';
+    progressBar.style.width = ((correctCount / 6) * 100) + '%';
+  }
+
+  // --- Desktop Drag & Drop ---
+  function onDragStart(e) {
+    draggedCardId = parseInt(e.target.closest('.card').dataset.id, 10);
+    const card = e.target.closest('.card');
+    card.classList.add('dragging');
+
+    const parentSlot = card.parentElement.closest('.drop-slot');
+    if (parentSlot) {
+      dragSource = parseInt(parentSlot.dataset.slot, 10);
+    } else {
+      dragSource = 'source';
+    }
+    e.dataTransfer.effectAllowed = 'move';
+  }
+
+  function onDragEnd(e) {
+    e.target.closest('.card') && e.target.closest('.card').classList.remove('dragging');
+    document.querySelectorAll('.drop-slot').forEach(s => s.classList.remove('drag-over'));
+  }
+
+  function onDragOver(e) {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+  }
+
+  function onDragEnter(e) {
+    e.preventDefault();
+    const slot = e.currentTarget;
+    slot.classList.add('drag-over');
+  }
+
+  function onDragLeave(e) {
+    const slot = e.currentTarget;
+    if (!slot.contains(e.relatedTarget)) {
+      slot.classList.remove('drag-over');
+    }
+  }
+
+  function onDrop(e) {
+    e.preventDefault();
+    const slotEl = e.currentTarget;
+    slotEl.classList.remove('drag-over');
+    const slotIdx = parseInt(slotEl.dataset.slot, 10);
+
+    if (draggedCardId === null) return;
+
+    placeCard(draggedCardId, slotIdx, dragSource);
+    draggedCardId = null;
+    dragSource = null;
+  }
+
+  // Allow dragging back to source
+  sourceZone.addEventListener('dragover', function(e) { e.preventDefault(); });
+  sourceZone.addEventListener('drop', function(e) {
+    e.preventDefault();
+    if (draggedCardId === null) return;
+    if (typeof dragSource === 'number') {
+      removeCardFromSlot(dragSource);
+    }
+    draggedCardId = null;
+    dragSource = null;
+  });
+
+  function placeCard(cardId, slotIdx, fromSource) {
+    clearFeedback();
+
+    // If target slot occupied, move that card back to source
+    if (slots[slotIdx] !== null) {
+      returnCardToSource(slots[slotIdx]);
+      slots[slotIdx] = null;
+    }
+
+    // Remove from previous slot if dragged from slot
+    if (typeof fromSource === 'number' && fromSource !== slotIdx) {
+      slots[fromSource] = null;
+      const prevSlot = targetZone.children[fromSource];
+      const prevCard = prevSlot.querySelector('.card');
+      if (prevCard) prevCard.remove();
+    }
+
+    // Remove from source zone
+    const srcCard = sourceZone.querySelector('.card[data-id="' + cardId + '"]');
+    if (srcCard) srcCard.remove();
+
+    // Place in slot
+    slots[slotIdx] = cardId;
+    const story = getStoryById(cardId);
+    const slotEl = targetZone.children[slotIdx];
+    const existingCard = slotEl.querySelector('.card');
+    if (existingCard) existingCard.remove();
+    slotEl.appendChild(createCardEl(story));
+
+    updateCheckBtn();
+  }
+
+  function removeCardFromSlot(slotIdx) {
+    const cardId = slots[slotIdx];
+    if (cardId === null) return;
+    slots[slotIdx] = null;
+    const slotEl = targetZone.children[slotIdx];
+    const card = slotEl.querySelector('.card');
+    if (card) card.remove();
+    returnCardToSource(cardId);
+    updateCheckBtn();
+  }
+
+  function returnCardToSource(cardId) {
+    const story = getStoryById(cardId);
+    if (!sourceZone.querySelector('.card[data-id="' + cardId + '"]')) {
+      sourceZone.appendChild(createCardEl(story));
+    }
+  }
+
+  // --- Touch Support ---
+  function onTouchStart(e) {
+    if (e.touches.length !== 1) return;
+    e.preventDefault();
+    const card = e.target.closest('.card');
+    if (!card) return;
+
+    touchDragId = parseInt(card.dataset.id, 10);
+    const parentSlot = card.parentElement.closest('.drop-slot');
+    touchDragSource = parentSlot ? parseInt(parentSlot.dataset.slot, 10) : 'source';
+
+    // Create floating clone
+    const rect = card.getBoundingClientRect();
+    touchClone = card.cloneNode(true);
+    touchClone.className = 'card touch-clone';
+    touchClone.style.width = rect.width + 'px';
+    touchClone.style.left = rect.left + 'px';
+    touchClone.style.top = rect.top + 'px';
+    document.body.appendChild(touchClone);
+
+    card.classList.add('dragging');
+
+    document.addEventListener('touchmove', onTouchMove, { passive: false });
+    document.addEventListener('touchend', onTouchEnd, { passive: false });
+  }
+
+  function onTouchMove(e) {
+    if (!touchClone) return;
+    e.preventDefault();
+    const t = e.touches[0];
+    touchClone.style.left = (t.clientX - touchClone.offsetWidth / 2) + 'px';
+    touchClone.style.top = (t.clientY - touchClone.offsetHeight / 2) + 'px';
+
+    // Highlight hovered slot
+    document.querySelectorAll('.drop-slot').forEach(s => s.classList.remove('drag-over'));
+    const el = document.elementFromPoint(t.clientX, t.clientY);
+    if (el) {
+      const slot = el.closest('.drop-slot');
+      if (slot) slot.classList.add('drag-over');
+    }
+  }
+
+  function onTouchEnd(e) {
+    if (!touchClone) return;
+    e.preventDefault();
+
+    document.removeEventListener('touchmove', onTouchMove);
+    document.removeEventListener('touchend', onTouchEnd);
+
+    document.querySelectorAll('.card.dragging').forEach(c => c.classList.remove('dragging'));
+
+    const t = e.changedTouches[0];
+    const el = document.elementFromPoint(t.clientX, t.clientY);
+
+    touchClone.remove();
+    touchClone = null;
+
+    if (el) {
+      const slot = el.closest('.drop-slot');
+      const src = el.closest('#sourceZone') || el === sourceZone;
+
+      if (slot) {
+        const slotIdx = parseInt(slot.dataset.slot, 10);
+        placeCard(touchDragId, slotIdx, touchDragSource);
+      } else if (src && typeof touchDragSource === 'number') {
+        removeCardFromSlot(touchDragSource);
+      }
+    }
+
+    document.querySelectorAll('.drop-slot').forEach(s => s.classList.remove('drag-over'));
+    touchDragId = null;
+    touchDragSource = null;
+  }
+
+  // --- Check Order ---
+  checkBtn.addEventListener('click', function() {
+    clearFeedback();
+    let correct = 0;
+    const slotEls = targetZone.querySelectorAll('.drop-slot');
+
+    for (let i = 0; i < 6; i++) {
+      slotEls[i].classList.remove('correct', 'wrong');
+      if (slots[i] === null) continue;
+      if (slots[i] === i + 1) {
+        correct++;
+        slotEls[i].classList.add('correct');
+      } else {
+        slotEls[i].classList.add('wrong');
+      }
+    }
+
+    updateProgress(correct);
+    saveBestScore(correct);
+
+    if (correct === 6) {
+      feedbackEl.className = 'feedback success';
+      feedbackEl.textContent = 'Excellent! You sequenced the story perfectly!';
+      feedbackEl.style.display = 'block';
+    } else if (correct >= 4) {
+      feedbackEl.className = 'feedback info';
+      feedbackEl.textContent = 'Good progress! ' + correct + '/6 correct. Keep trying!';
+      feedbackEl.style.display = 'block';
+    } else {
+      feedbackEl.className = 'feedback error';
+      feedbackEl.textContent = correct + '/6 correct. Read the story carefully and try again!';
+      feedbackEl.style.display = 'block';
+    }
+  });
+
+  // --- Reset ---
+  resetBtn.addEventListener('click', function() {
+    init();
+  });
+
+  function init() {
+    slots = [null, null, null, null, null, null];
+    clearFeedback();
+    updateProgress(0);
+    const shuffled = fisherYatesShuffle(STORIES);
+    buildSourceCards(shuffled);
+    buildSlots();
+    updateCheckBtn();
+    loadBestScore();
+  }
+
+  init();
+})();
+</script>
+</body>
+</html>

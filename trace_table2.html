@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trace Table with Outputs (Python Version)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #1a1a2e;
+            color: #e0e0e0;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin: 0 0 8px 0;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #888;
+            font-size: 0.95rem;
+            margin-bottom: 24px;
+        }
+
+        /* Controls bar */
+        .controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+            padding: 10px 22px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: #fff;
+        }
+
+        .btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+
+        .btn:active:not(:disabled) {
+            transform: translateY(0);
+        }
+
+        .btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .btn-primary { background: linear-gradient(135deg, #667eea, #764ba2); }
+        .btn-secondary { background: linear-gradient(135deg, #4a4a6a, #3a3a5a); }
+        .btn-success { background: linear-gradient(135deg, #43e97b, #38f9d7); color: #1a1a2e; }
+        .btn-danger { background: linear-gradient(135deg, #f7797d, #c471ed); }
+
+        /* Speed slider */
+        .speed-control {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.85rem;
+            color: #aaa;
+        }
+
+        .speed-control input[type="range"] {
+            width: 100px;
+            accent-color: #764ba2;
+        }
+
+        /* Step progress dots */
+        .step-dots {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .step-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #2a2a4a;
+            border: 2px solid #4a4a6a;
+            transition: all 0.3s ease;
+        }
+
+        .step-dot.completed {
+            background: #667eea;
+            border-color: #667eea;
+            box-shadow: 0 0 8px rgba(102, 126, 234, 0.5);
+        }
+
+        .step-dot.current {
+            background: #43e97b;
+            border-color: #43e97b;
+            box-shadow: 0 0 12px rgba(67, 233, 123, 0.6);
+            transform: scale(1.3);
+        }
+
+        .step-counter {
+            text-align: center;
+            font-size: 0.85rem;
+            color: #888;
+            margin-bottom: 20px;
+        }
+
+        /* Two-column layout */
+        .main-layout {
+            display: grid;
+            grid-template-columns: 380px 1fr;
+            gap: 24px;
+            align-items: start;
+        }
+
+        @media (max-width: 850px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Code panel */
+        .code-panel {
+            position: sticky;
+            top: 20px;
+            background: #16213e;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+            border: 1px solid #2a2a4a;
+        }
+
+        .code-panel h3 {
+            margin: 0 0 12px 0;
+            font-size: 1rem;
+            color: #667eea;
+        }
+
+        .code-line {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.88rem;
+            padding: 6px 12px;
+            border-radius: 6px;
+            margin: 2px 0;
+            transition: all 0.3s ease;
+            display: flex;
+            gap: 12px;
+        }
+
+        .code-line .line-num {
+            color: #555;
+            min-width: 20px;
+            user-select: none;
+        }
+
+        .code-line .line-text { color: #b8c0e0; }
+
+        .code-line.active {
+            background: rgba(102, 126, 234, 0.2);
+            border-left: 3px solid #667eea;
+        }
+
+        .code-line.active .line-text { color: #fff; }
+        .code-line.active .line-num { color: #667eea; }
+
+        .kw { color: #c792ea; }
+        .fn { color: #82aaff; }
+        .num { color: #f78c6c; }
+        .str { color: #c3e88d; }
+        .op { color: #89ddff; }
+        .var { color: #ffcb6b; }
+
+        /* Right column */
+        .right-column {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* Trace table */
+        .table-panel {
+            background: #16213e;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+            border: 1px solid #2a2a4a;
+            overflow-x: auto;
+        }
+
+        .table-panel h3 {
+            margin: 0 0 12px 0;
+            font-size: 1rem;
+            color: #667eea;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: #1a1a3e;
+            color: #667eea;
+            font-weight: 600;
+            font-size: 0.82rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 12px 14px;
+            text-align: left;
+            border-bottom: 2px solid #2a2a4a;
+        }
+
+        td {
+            padding: 10px 14px;
+            font-size: 0.88rem;
+            border-bottom: 1px solid #1e1e3e;
+            color: #c0c0d0;
+        }
+
+        tr.new-row {
+            animation: slideInUp 0.3s ease;
+        }
+
+        tr:last-child td { border-bottom: none; }
+
+        td:nth-child(3), td:nth-child(4) {
+            font-family: 'Fira Code', monospace;
+            font-weight: 500;
+            color: #ffcb6b;
+        }
+
+        /* Output column styling */
+        td.output-cell {
+            font-family: 'Fira Code', monospace;
+            color: #43e97b;
+            font-size: 0.82rem;
+        }
+
+        td:last-child {
+            font-size: 0.8rem;
+            color: #999;
+        }
+
+        /* Console output panel */
+        .console-panel {
+            background: #0d1117;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+            border: 1px solid #2a2a4a;
+        }
+
+        .console-panel h3 {
+            margin: 0 0 12px 0;
+            font-size: 1rem;
+            color: #43e97b;
+        }
+
+        .console-output {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.88rem;
+            color: #43e97b;
+            min-height: 60px;
+            white-space: pre-wrap;
+            line-height: 1.6;
+        }
+
+        .console-output .prompt {
+            color: #555;
+        }
+
+        .console-line {
+            animation: fadeIn 0.3s ease;
+        }
+
+        /* Animations */
+        @keyframes slideInUp {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes popIn {
+            0% { opacity: 0; transform: scale(0.8); }
+            70% { transform: scale(1.05); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .keyboard-hint {
+            text-align: center;
+            font-size: 0.78rem;
+            color: #555;
+            margin-top: 16px;
+        }
+
+        kbd {
+            background: #2a2a4a;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.75rem;
+            border: 1px solid #3a3a5a;
+        }
+
+        .complete-msg {
+            text-align: center;
+            padding: 16px;
+            background: linear-gradient(135deg, rgba(67, 233, 123, 0.1), rgba(56, 249, 215, 0.1));
+            border: 1px solid rgba(67, 233, 123, 0.3);
+            border-radius: 12px;
+            margin-top: 20px;
+            animation: popIn 0.4s ease;
+            color: #43e97b;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Trace Table with Outputs</h1>
+        <p class="subtitle">Step through the Python code — watch variables and console output change</p>
+
+        <!-- Controls -->
+        <div class="controls">
+            <button class="btn btn-secondary" id="prevBtn" onclick="prevStep()" disabled>Previous</button>
+            <button class="btn btn-primary" id="nextBtn" onclick="nextStep()">Next Step</button>
+            <button class="btn btn-danger" id="resetBtn" onclick="resetAll()">Reset</button>
+            <button class="btn btn-success" id="autoBtn" onclick="toggleAutoPlay()">Auto-Play</button>
+            <div class="speed-control">
+                <span>Speed:</span>
+                <input type="range" id="speedSlider" min="100" max="1000" value="500" step="100">
+                <span id="speedLabel">500ms</span>
+            </div>
+        </div>
+
+        <!-- Step dots -->
+        <div class="step-dots" id="stepDots"></div>
+        <div class="step-counter" id="stepCounter">Step 0 of 16</div>
+
+        <!-- Main layout -->
+        <div class="main-layout">
+            <!-- Code panel (left, sticky) -->
+            <div class="code-panel">
+                <h3>Python Code</h3>
+                <div class="code-line" id="codeLine1">
+                    <span class="line-num">1</span>
+                    <span class="line-text"><span class="var">sum</span> <span class="op">=</span> <span class="num">0</span></span>
+                </div>
+                <div class="code-line" id="codeLine2">
+                    <span class="line-num">2</span>
+                    <span class="line-text"><span class="kw">for</span> <span class="var">i</span> <span class="kw">in</span> <span class="fn">range</span><span class="op">(</span><span class="num">1</span><span class="op">,</span> <span class="num">6</span><span class="op">)</span><span class="op">:</span></span>
+                </div>
+                <div class="code-line" id="codeLine3">
+                    <span class="line-num">3</span>
+                    <span class="line-text">&nbsp;&nbsp;&nbsp;&nbsp;<span class="var">sum</span> <span class="op">=</span> <span class="var">sum</span> <span class="op">+</span> <span class="var">i</span></span>
+                </div>
+                <div class="code-line" id="codeLine4">
+                    <span class="line-num">4</span>
+                    <span class="line-text">&nbsp;&nbsp;&nbsp;&nbsp;<span class="fn">print</span><span class="op">(</span><span class="str">"After adding"</span><span class="op">,</span> <span class="var">i</span><span class="op">,</span> <span class="str">"sum is"</span><span class="op">,</span> <span class="var">sum</span><span class="op">)</span></span>
+                </div>
+                <div class="code-line" id="codeLine5">
+                    <span class="line-num">5</span>
+                    <span class="line-text"><span class="fn">print</span><span class="op">(</span><span class="str">"The total sum is:"</span><span class="op">,</span> <span class="var">sum</span><span class="op">)</span></span>
+                </div>
+            </div>
+
+            <!-- Right column -->
+            <div class="right-column">
+                <!-- Trace table -->
+                <div class="table-panel">
+                    <h3>Trace Table</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Step</th>
+                                <th>Line</th>
+                                <th>i</th>
+                                <th>sum</th>
+                                <th>Output</th>
+                                <th>Explanation</th>
+                            </tr>
+                        </thead>
+                        <tbody id="traceBody"></tbody>
+                    </table>
+                    <div id="completeMsg"></div>
+                </div>
+
+                <!-- Console output panel -->
+                <div class="console-panel">
+                    <h3>Console Output</h3>
+                    <div class="console-output" id="consoleOutput"><span class="prompt">>>> Run program...</span></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="keyboard-hint">
+            <kbd>&larr;</kbd> Previous &nbsp; <kbd>&rarr;</kbd> Next &nbsp; <kbd>Space</kbd> Auto-play
+        </div>
+    </div>
+
+    <script>
+        // Pre-computed trace steps
+        const steps = [
+            { line: 1, i: '-', sum: 0,  output: '', explanation: 'Initialize sum to 0' },
+            { line: 2, i: 1,   sum: 0,  output: '', explanation: 'Start loop: i = 1' },
+            { line: 3, i: 1,   sum: 1,  output: '', explanation: 'sum = 0 + 1 = 1' },
+            { line: 4, i: 1,   sum: 1,  output: 'After adding 1 sum is 1', explanation: 'Print current state' },
+            { line: 2, i: 2,   sum: 1,  output: '', explanation: 'Next iteration: i = 2' },
+            { line: 3, i: 2,   sum: 3,  output: '', explanation: 'sum = 1 + 2 = 3' },
+            { line: 4, i: 2,   sum: 3,  output: 'After adding 2 sum is 3', explanation: 'Print current state' },
+            { line: 2, i: 3,   sum: 3,  output: '', explanation: 'Next iteration: i = 3' },
+            { line: 3, i: 3,   sum: 6,  output: '', explanation: 'sum = 3 + 3 = 6' },
+            { line: 4, i: 3,   sum: 6,  output: 'After adding 3 sum is 6', explanation: 'Print current state' },
+            { line: 2, i: 4,   sum: 6,  output: '', explanation: 'Next iteration: i = 4' },
+            { line: 3, i: 4,   sum: 10, output: '', explanation: 'sum = 6 + 4 = 10' },
+            { line: 4, i: 4,   sum: 10, output: 'After adding 4 sum is 10', explanation: 'Print current state' },
+            { line: 2, i: 5,   sum: 10, output: '', explanation: 'Next iteration: i = 5' },
+            { line: 3, i: 5,   sum: 15, output: '', explanation: 'sum = 10 + 5 = 15' },
+            { line: 4, i: 5,   sum: 15, output: 'After adding 5 sum is 15', explanation: 'Print current state' },
+            { line: 5, i: '-', sum: 15, output: 'The total sum is: 15', explanation: 'Print final result' }
+        ];
+
+        let currentStep = -1;
+        let autoPlaying = false;
+        let autoTimer = null;
+        let consoleLines = [];
+
+        const traceBody = document.getElementById('traceBody');
+        const stepDots = document.getElementById('stepDots');
+        const stepCounter = document.getElementById('stepCounter');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const autoBtn = document.getElementById('autoBtn');
+        const speedSlider = document.getElementById('speedSlider');
+        const speedLabel = document.getElementById('speedLabel');
+        const consoleOutput = document.getElementById('consoleOutput');
+
+        function initDots() {
+            stepDots.innerHTML = '';
+            for (let i = 0; i < steps.length; i++) {
+                const dot = document.createElement('span');
+                dot.className = 'step-dot';
+                stepDots.appendChild(dot);
+            }
+        }
+
+        function updateDots() {
+            const dots = stepDots.querySelectorAll('.step-dot');
+            dots.forEach((dot, idx) => {
+                dot.className = 'step-dot';
+                if (idx < currentStep) dot.classList.add('completed');
+                else if (idx === currentStep) dot.classList.add('current');
+            });
+        }
+
+        function highlightCodeLine(lineNum) {
+            for (let i = 1; i <= 5; i++) {
+                document.getElementById('codeLine' + i).classList.remove('active');
+            }
+            if (lineNum >= 1 && lineNum <= 5) {
+                document.getElementById('codeLine' + lineNum).classList.add('active');
+            }
+        }
+
+        function buildConsoleLines() {
+            consoleLines = [];
+            for (let i = 0; i <= currentStep; i++) {
+                if (steps[i].output) {
+                    consoleLines.push(steps[i].output);
+                }
+            }
+        }
+
+        function renderConsole() {
+            buildConsoleLines();
+            if (consoleLines.length === 0) {
+                consoleOutput.innerHTML = '<span class="prompt">>>> Run program...</span>';
+            } else {
+                consoleOutput.innerHTML = consoleLines.map(
+                    (line, idx) => `<div class="console-line">${line}</div>`
+                ).join('');
+            }
+        }
+
+        function renderTable() {
+            traceBody.innerHTML = '';
+            for (let i = 0; i <= currentStep; i++) {
+                const s = steps[i];
+                const row = document.createElement('tr');
+                if (i === currentStep) row.classList.add('new-row');
+                row.innerHTML = `<td>${i + 1}</td><td>${s.line}</td><td>${s.i}</td><td>${s.sum}</td><td class="output-cell">${s.output || '-'}</td><td>${s.explanation}</td>`;
+                traceBody.appendChild(row);
+            }
+        }
+
+        function updateUI() {
+            renderTable();
+            renderConsole();
+            updateDots();
+            stepCounter.textContent = `Step ${currentStep + 1} of ${steps.length}`;
+
+            if (currentStep >= 0) {
+                highlightCodeLine(steps[currentStep].line);
+            } else {
+                highlightCodeLine(-1);
+            }
+
+            prevBtn.disabled = currentStep < 0;
+            nextBtn.disabled = currentStep >= steps.length - 1;
+
+            const completeMsg = document.getElementById('completeMsg');
+            if (currentStep === steps.length - 1) {
+                completeMsg.innerHTML = '<div class="complete-msg">Trace complete! The total sum is 15.</div>';
+                stopAutoPlay();
+            } else {
+                completeMsg.innerHTML = '';
+            }
+        }
+
+        function nextStep() {
+            if (currentStep < steps.length - 1) {
+                currentStep++;
+                updateUI();
+            }
+        }
+
+        function prevStep() {
+            if (currentStep >= 0) {
+                currentStep--;
+                updateUI();
+            }
+        }
+
+        function resetAll() {
+            stopAutoPlay();
+            currentStep = -1;
+            updateUI();
+            highlightCodeLine(-1);
+            stepCounter.textContent = `Step 0 of ${steps.length}`;
+        }
+
+        function toggleAutoPlay() {
+            if (autoPlaying) stopAutoPlay();
+            else startAutoPlay();
+        }
+
+        function startAutoPlay() {
+            autoPlaying = true;
+            autoBtn.textContent = 'Stop';
+            autoBtn.classList.remove('btn-success');
+            autoBtn.classList.add('btn-danger');
+            autoTick();
+        }
+
+        function stopAutoPlay() {
+            autoPlaying = false;
+            clearTimeout(autoTimer);
+            autoBtn.textContent = 'Auto-Play';
+            autoBtn.classList.remove('btn-danger');
+            autoBtn.classList.add('btn-success');
+        }
+
+        function autoTick() {
+            if (!autoPlaying) return;
+            if (currentStep < steps.length - 1) {
+                nextStep();
+                autoTimer = setTimeout(autoTick, parseInt(speedSlider.value));
+            } else {
+                stopAutoPlay();
+            }
+        }
+
+        speedSlider.addEventListener('input', () => {
+            speedLabel.textContent = speedSlider.value + 'ms';
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') { e.preventDefault(); nextStep(); }
+            if (e.key === 'ArrowLeft') { e.preventDefault(); prevStep(); }
+            if (e.key === ' ') { e.preventDefault(); toggleAutoPlay(); }
+        });
+
+        initDots();
+        updateUI();
+        stepCounter.textContent = `Step 0 of ${steps.length}`;
+    </script>
+</body>
+</html>

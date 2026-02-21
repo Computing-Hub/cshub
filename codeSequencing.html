@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Code Sequencing Challenge</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+body {
+  margin: 0; padding: 20px;
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(135deg, #1a1a2e 0%, #1e2e1a 50%, #1a1a2e 100%);
+  min-height: 100vh; color: #e0e0e0;
+}
+h1 {
+  font-size: 2rem; font-weight: 700; text-align: center; margin: 0 0 4px;
+  background: linear-gradient(135deg, #84cc16, #43e97b);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.subtitle { text-align: center; font-size: 0.95rem; color: #888; margin: 0 0 24px; }
+.panel {
+  background: #16213e; border-radius: 16px; border: 1px solid #2a2a4a;
+  padding: 20px; margin-bottom: 18px;
+}
+.challenge-nav { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-bottom: 10px; }
+.nav-btn {
+  font-family: 'Poppins', sans-serif; font-size: 0.88rem; font-weight: 600;
+  padding: 8px 20px; border: none; border-radius: 10px; cursor: pointer;
+  background: linear-gradient(135deg, #2a2a4a, #1a1a2e); color: #aaa;
+  transition: transform 0.15s, box-shadow 0.15s, background 0.2s;
+  position: relative;
+}
+.nav-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(132,204,22,0.2); }
+.nav-btn:active { transform: translateY(0); }
+.nav-btn.active {
+  background: linear-gradient(135deg, #84cc16, #65a30d); color: #fff;
+  box-shadow: 0 4px 18px rgba(132,204,22,0.35);
+}
+.nav-btn .badge {
+  position: absolute; top: -6px; right: -6px; width: 18px; height: 18px;
+  background: #43e97b; border-radius: 50%; font-size: 0.6rem; color: #000;
+  display: flex; align-items: center; justify-content: center; font-weight: 700;
+}
+.progress-bar { text-align: center; font-size: 0.85rem; color: #888; margin-bottom: 6px; }
+.zone-label { font-size: 0.82rem; font-weight: 600; color: #84cc16; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px; }
+.source-zone { min-height: 60px; display: flex; flex-wrap: wrap; gap: 10px; padding: 10px 0; }
+.target-zone { display: flex; flex-direction: column; gap: 10px; }
+.code-block {
+  font-family: 'Fira Code', monospace; font-size: 0.85rem; font-weight: 400;
+  background: #0d1117; border: 1px solid #30363d; border-radius: 8px;
+  padding: 10px 14px 10px 40px; cursor: grab; user-select: none;
+  position: relative; color: #c9d1d9; transition: transform 0.15s, box-shadow 0.15s, border-color 0.2s;
+  white-space: pre; line-height: 1.5;
+}
+.code-block::before {
+  content: attr(data-gutter); position: absolute; left: 0; top: 0; bottom: 0; width: 32px;
+  background: #161b22; border-radius: 8px 0 0 8px; display: flex; align-items: center;
+  justify-content: center; font-size: 0.72rem; color: #484f58;
+}
+.code-block:hover { border-color: #84cc16; box-shadow: 0 2px 10px rgba(132,204,22,0.15); }
+.code-block.dragging { opacity: 0.4; }
+.drop-slot {
+  min-height: 46px; border: 2px dashed #2a2a4a; border-radius: 8px;
+  display: flex; align-items: center; padding: 4px;
+  position: relative; transition: border-color 0.2s, background 0.2s;
+}
+.drop-slot::before {
+  content: attr(data-slot); position: absolute; left: 10px; font-size: 0.75rem;
+  color: #484f58; font-family: 'Fira Code', monospace; pointer-events: none;
+}
+.drop-slot.drag-over { border-color: #84cc16; background: rgba(132,204,22,0.06); }
+.drop-slot .code-block { width: 100%; animation: popIn 0.25s ease; margin: 0; }
+.drop-slot.correct { border-color: #43e97b; background: rgba(67,233,123,0.06); }
+.drop-slot.correct::after {
+  content: '\2713'; position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+  color: #43e97b; font-size: 1.1rem; font-weight: 700;
+}
+.drop-slot.wrong { border-color: #f7797d; background: rgba(247,121,125,0.06); }
+.drop-slot.wrong .code-block { animation: shake 0.4s ease; }
+.btn-row { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 16px; }
+.btn {
+  font-family: 'Poppins', sans-serif; font-size: 0.88rem; font-weight: 600;
+  padding: 10px 24px; border: none; border-radius: 10px; cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s; color: #fff;
+}
+.btn:hover { transform: translateY(-2px); }
+.btn:active { transform: translateY(0); }
+.btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+.btn-check { background: linear-gradient(135deg, #84cc16, #65a30d); }
+.btn-check:hover:not(:disabled) { box-shadow: 0 4px 18px rgba(132,204,22,0.4); }
+.btn-reset { background: linear-gradient(135deg, #667eea, #764ba2); }
+.btn-reset:hover:not(:disabled) { box-shadow: 0 4px 18px rgba(102,126,234,0.4); }
+.feedback {
+  text-align: center; font-size: 0.9rem; font-weight: 600; padding: 12px;
+  border-radius: 10px; margin-top: 14px; animation: slideInUp 0.35s ease;
+}
+.feedback.success { background: rgba(67,233,123,0.12); color: #43e97b; border: 1px solid rgba(67,233,123,0.25); }
+.feedback.error { background: rgba(247,121,125,0.12); color: #f7797d; border: 1px solid rgba(247,121,125,0.25); }
+.feedback.info { background: rgba(102,126,234,0.12); color: #667eea; border: 1px solid rgba(102,126,234,0.25); }
+.output-panel {
+  margin-top: 14px; background: #0d1117; border-radius: 10px; border: 1px solid #30363d;
+  padding: 16px; font-family: 'Fira Code', monospace; font-size: 0.82rem;
+  color: #43e97b; line-height: 1.7; white-space: pre-wrap; animation: fadeIn 0.4s ease;
+  min-height: 40px;
+}
+.output-label { font-family: 'Poppins', sans-serif; font-size: 0.75rem; color: #888; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 1px; }
+.hidden { display: none; }
+@keyframes slideInUp { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
+@keyframes popIn { 0% { transform:scale(0.85); opacity:0; } 100% { transform:scale(1); opacity:1; } }
+@keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+@keyframes shake { 0%,100% { transform:translateX(0); } 20% { transform:translateX(-6px); } 40% { transform:translateX(6px); } 60% { transform:translateX(-4px); } 80% { transform:translateX(4px); } }
+@media (max-width: 600px) {
+  body { padding: 12px; }
+  h1 { font-size: 1.5rem; }
+  .code-block { font-size: 0.75rem; padding: 8px 10px 8px 34px; }
+  .panel { padding: 14px; }
+}
+</style>
+</head>
+<body>
+
+<h1>Code Sequencing Challenge</h1>
+<p class="subtitle">Drag the code blocks into the correct order to build a working Python program</p>
+
+<div class="panel">
+  <div class="challenge-nav" id="challengeNav"></div>
+  <div class="progress-bar" id="progressBar"></div>
+</div>
+
+<div class="panel">
+  <div class="zone-label">Available Code Blocks</div>
+  <div class="source-zone" id="sourceZone"></div>
+</div>
+
+<div class="panel">
+  <div class="zone-label">Build Your Program</div>
+  <div class="target-zone" id="targetZone"></div>
+</div>
+
+<div class="btn-row">
+  <button class="btn btn-check" id="btnCheck" disabled>Check Order</button>
+  <button class="btn btn-reset" id="btnReset">Reset Challenge</button>
+</div>
+
+<div id="feedbackArea"></div>
+
+<div id="outputWrapper" class="hidden">
+  <div class="panel" style="margin-top:14px;">
+    <div class="output-label">Program Output</div>
+    <div class="output-panel" id="outputPanel"></div>
+  </div>
+</div>
+
+<script>
+const challenges = [
+  {
+    title: "Hello Name",
+    blocks: [
+      'name = input("What is your name? ")',
+      'greeting = "Hello, " + name + "!"',
+      'print(greeting)',
+      'print("Welcome to Python!")'
+    ],
+    output: 'What is your name? Alice\nHello, Alice!\nWelcome to Python!'
+  },
+  {
+    title: "Sum Calculator",
+    blocks: [
+      'num1 = int(input("Enter first number: "))',
+      'num2 = int(input("Enter second number: "))',
+      'total = num1 + num2',
+      'print("The sum is:", total)',
+      'print("Calculation complete!")'
+    ],
+    output: 'Enter first number: 7\nEnter second number: 3\nThe sum is: 10\nCalculation complete!'
+  },
+  {
+    title: "Countdown",
+    blocks: [
+      'start = 5',
+      'print("Countdown starting!")',
+      'for i in range(start, 0, -1):',
+      '    print(i)',
+      'print("Blast off!")',
+      'print("Program finished.")'
+    ],
+    output: 'Countdown starting!\n5\n4\n3\n2\n1\nBlast off!\nProgram finished.'
+  }
+];
+
+let current = 0;
+let completed = JSON.parse(localStorage.getItem('codeSeqCompleted') || '[]');
+let draggedEl = null;
+let touchClone = null;
+let touchSource = null;
+
+function fisherYates(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function buildNav() {
+  const nav = document.getElementById('challengeNav');
+  nav.innerHTML = '';
+  challenges.forEach((c, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'nav-btn' + (i === current ? ' active' : '');
+    btn.textContent = (i + 1) + '. ' + c.title;
+    if (completed.includes(i)) {
+      const badge = document.createElement('span');
+      badge.className = 'badge';
+      badge.textContent = '\u2713';
+      btn.appendChild(badge);
+    }
+    btn.addEventListener('click', () => { current = i; loadChallenge(); });
+    nav.appendChild(btn);
+  });
+}
+
+function updateProgress() {
+  const ch = challenges[current];
+  const slots = document.querySelectorAll('#targetZone .drop-slot');
+  let filled = 0;
+  slots.forEach(s => { if (s.querySelector('.code-block')) filled++; });
+  document.getElementById('progressBar').textContent =
+    'Challenge ' + (current + 1) + '/3  |  ' + filled + '/' + ch.blocks.length + ' blocks placed';
+  document.getElementById('btnCheck').disabled = filled < ch.blocks.length;
+}
+
+function createCodeBlock(text, idx) {
+  const el = document.createElement('div');
+  el.className = 'code-block';
+  el.setAttribute('draggable', 'true');
+  el.setAttribute('data-gutter', idx !== undefined ? idx : '');
+  el.setAttribute('data-text', text);
+  el.textContent = text;
+
+  el.addEventListener('dragstart', e => {
+    draggedEl = el;
+    el.classList.add('dragging');
+    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('text/plain', '');
+  });
+  el.addEventListener('dragend', () => {
+    el.classList.remove('dragging');
+    draggedEl = null;
+    clearDragOver();
+  });
+
+  // Touch events
+  el.addEventListener('touchstart', handleTouchStart, { passive: false });
+  el.addEventListener('touchmove', handleTouchMove, { passive: false });
+  el.addEventListener('touchend', handleTouchEnd, { passive: false });
+
+  return el;
+}
+
+function handleTouchStart(e) {
+  e.preventDefault();
+  const el = e.currentTarget;
+  draggedEl = el;
+  touchSource = el.parentElement;
+  const rect = el.getBoundingClientRect();
+  const touch = e.touches[0];
+
+  touchClone = el.cloneNode(true);
+  touchClone.style.position = 'fixed';
+  touchClone.style.zIndex = '9999';
+  touchClone.style.width = rect.width + 'px';
+  touchClone.style.pointerEvents = 'none';
+  touchClone.style.opacity = '0.85';
+  touchClone.style.left = (touch.clientX - rect.width / 2) + 'px';
+  touchClone.style.top = (touch.clientY - 30) + 'px';
+  document.body.appendChild(touchClone);
+  el.classList.add('dragging');
+}
+
+function handleTouchMove(e) {
+  e.preventDefault();
+  if (!touchClone) return;
+  const touch = e.touches[0];
+  const rect = touchClone.getBoundingClientRect();
+  touchClone.style.left = (touch.clientX - rect.width / 2) + 'px';
+  touchClone.style.top = (touch.clientY - 30) + 'px';
+
+  clearDragOver();
+  const target = document.elementFromPoint(touch.clientX, touch.clientY);
+  if (target) {
+    const slot = target.closest('.drop-slot');
+    const source = target.closest('.source-zone');
+    if (slot) slot.classList.add('drag-over');
+    if (source) source.classList.add('drag-over');
+  }
+}
+
+function handleTouchEnd(e) {
+  e.preventDefault();
+  if (touchClone) {
+    document.body.removeChild(touchClone);
+    touchClone = null;
+  }
+  if (!draggedEl) return;
+
+  const touch = e.changedTouches[0];
+  const target = document.elementFromPoint(touch.clientX, touch.clientY);
+  clearDragOver();
+  draggedEl.classList.remove('dragging');
+
+  if (target) {
+    const slot = target.closest('.drop-slot');
+    const sourceZone = target.closest('#sourceZone');
+
+    if (slot && !slot.querySelector('.code-block')) {
+      moveToSlot(draggedEl, slot);
+    } else if (slot && slot.querySelector('.code-block') && slot.querySelector('.code-block') !== draggedEl) {
+      // Slot occupied: swap
+      const existing = slot.querySelector('.code-block');
+      const fromSlot = draggedEl.parentElement.classList.contains('drop-slot') ? draggedEl.parentElement : null;
+      if (fromSlot) {
+        fromSlot.appendChild(existing);
+      } else {
+        document.getElementById('sourceZone').appendChild(existing);
+      }
+      moveToSlot(draggedEl, slot);
+    } else if (sourceZone) {
+      returnToSource(draggedEl);
+    }
+  }
+
+  draggedEl = null;
+  touchSource = null;
+  clearFeedback();
+  updateProgress();
+}
+
+function clearDragOver() {
+  document.querySelectorAll('.drag-over').forEach(el => el.classList.remove('drag-over'));
+}
+
+function moveToSlot(block, slot) {
+  slot.appendChild(block);
+  block.style.animation = 'none';
+  block.offsetHeight;
+  block.style.animation = '';
+  slot.classList.remove('correct', 'wrong');
+}
+
+function returnToSource(block) {
+  document.getElementById('sourceZone').appendChild(block);
+  if (block.parentElement && block.parentElement.classList.contains('drop-slot')) {
+    block.parentElement.classList.remove('correct', 'wrong');
+  }
+}
+
+function setupDropSlot(slot) {
+  slot.addEventListener('dragover', e => { e.preventDefault(); e.dataTransfer.dropEffect = 'move'; slot.classList.add('drag-over'); });
+  slot.addEventListener('dragleave', () => { slot.classList.remove('drag-over'); });
+  slot.addEventListener('drop', e => {
+    e.preventDefault();
+    slot.classList.remove('drag-over');
+    if (!draggedEl) return;
+    const existing = slot.querySelector('.code-block');
+    if (existing && existing !== draggedEl) {
+      const fromSlot = draggedEl.parentElement.classList.contains('drop-slot') ? draggedEl.parentElement : null;
+      if (fromSlot) {
+        fromSlot.appendChild(existing);
+        fromSlot.classList.remove('correct', 'wrong');
+      } else {
+        document.getElementById('sourceZone').appendChild(existing);
+      }
+    }
+    moveToSlot(draggedEl, slot);
+    clearFeedback();
+    updateProgress();
+  });
+}
+
+function setupSourceZone() {
+  const sz = document.getElementById('sourceZone');
+  sz.addEventListener('dragover', e => { e.preventDefault(); e.dataTransfer.dropEffect = 'move'; });
+  sz.addEventListener('drop', e => {
+    e.preventDefault();
+    if (!draggedEl) return;
+    const oldParent = draggedEl.parentElement;
+    sz.appendChild(draggedEl);
+    if (oldParent && oldParent.classList.contains('drop-slot')) {
+      oldParent.classList.remove('correct', 'wrong');
+    }
+    clearFeedback();
+    updateProgress();
+  });
+}
+
+function loadChallenge() {
+  const ch = challenges[current];
+  const sourceZone = document.getElementById('sourceZone');
+  const targetZone = document.getElementById('targetZone');
+  sourceZone.innerHTML = '';
+  targetZone.innerHTML = '';
+  document.getElementById('feedbackArea').innerHTML = '';
+  document.getElementById('outputWrapper').classList.add('hidden');
+
+  // Shuffled blocks
+  const shuffled = fisherYates(ch.blocks.map((b, i) => ({ text: b, origIdx: i })));
+  shuffled.forEach(item => {
+    sourceZone.appendChild(createCodeBlock(item.text, '~'));
+  });
+
+  // Drop slots
+  ch.blocks.forEach((_, i) => {
+    const slot = document.createElement('div');
+    slot.className = 'drop-slot';
+    slot.setAttribute('data-slot', 'Line ' + (i + 1));
+    slot.setAttribute('data-index', i);
+    setupDropSlot(slot);
+    targetZone.appendChild(slot);
+  });
+
+  buildNav();
+  updateProgress();
+}
+
+function clearFeedback() {
+  document.getElementById('feedbackArea').innerHTML = '';
+  document.getElementById('outputWrapper').classList.add('hidden');
+  document.querySelectorAll('.drop-slot').forEach(s => s.classList.remove('correct', 'wrong'));
+}
+
+function checkOrder() {
+  const ch = challenges[current];
+  const slots = document.querySelectorAll('#targetZone .drop-slot');
+  let allCorrect = true;
+  let correctCount = 0;
+
+  slots.forEach((slot, i) => {
+    const block = slot.querySelector('.code-block');
+    if (!block) { allCorrect = false; return; }
+    const text = block.getAttribute('data-text');
+    if (text === ch.blocks[i]) {
+      slot.classList.add('correct');
+      slot.classList.remove('wrong');
+      correctCount++;
+    } else {
+      slot.classList.add('wrong');
+      slot.classList.remove('correct');
+      allCorrect = false;
+    }
+  });
+
+  const fb = document.getElementById('feedbackArea');
+
+  if (allCorrect) {
+    fb.innerHTML = '<div class="feedback success">All correct! Your program runs perfectly!</div>';
+    if (!completed.includes(current)) {
+      completed.push(current);
+      localStorage.setItem('codeSeqCompleted', JSON.stringify(completed));
+    }
+    buildNav();
+    showOutput(ch.output);
+  } else {
+    fb.innerHTML = '<div class="feedback error">' + correctCount + '/' + ch.blocks.length + ' blocks correct. Check the red lines and try again!</div>';
+  }
+
+  updateProgress();
+}
+
+function showOutput(text) {
+  const wrapper = document.getElementById('outputWrapper');
+  const panel = document.getElementById('outputPanel');
+  wrapper.classList.remove('hidden');
+  panel.textContent = '';
+  let i = 0;
+  function typeChar() {
+    if (i < text.length) {
+      panel.textContent += text[i];
+      i++;
+      setTimeout(typeChar, 30);
+    }
+  }
+  typeChar();
+}
+
+document.getElementById('btnCheck').addEventListener('click', checkOrder);
+document.getElementById('btnReset').addEventListener('click', () => { clearFeedback(); loadChallenge(); });
+
+setupSourceZone();
+loadChallenge();
+</script>
+</body>
+</html>
