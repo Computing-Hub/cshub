@@ -1,0 +1,1132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>6-Mark Answer Builder - Python Fundamentals</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <style>
+    /* ========== Page-specific styles ========== */
+
+    /* --- Levels table --- */
+    .levels-table th {
+      text-align: center;
+      font-weight: 800;
+    }
+    .levels-table .level-header {
+      color: var(--color-white);
+      border: none;
+    }
+    .level-1-bg { background: var(--gradient-orange); }
+    .level-2-bg { background: var(--gradient-blue); }
+    .level-3-bg { background: var(--gradient-green); }
+
+    .levels-table td {
+      vertical-align: top;
+      line-height: 1.6;
+    }
+
+    /* --- PEAC cards --- */
+    .peac-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: var(--space-md);
+      margin: var(--space-lg) 0;
+    }
+    .peac-card {
+      background: var(--color-white);
+      border-radius: var(--radius-md);
+      padding: var(--space-lg);
+      box-shadow: var(--shadow-sm);
+      border-top: 4px solid #ccc;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .peac-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+    .peac-card.peac-p { border-top-color: #4361ee; }
+    .peac-card.peac-e { border-top-color: #06d6a0; }
+    .peac-card.peac-a { border-top-color: #f77f00; }
+    .peac-card.peac-c { border-top-color: #f72585; }
+
+    .peac-letter {
+      font-size: 2rem;
+      font-weight: 800;
+      margin-bottom: var(--space-xs);
+    }
+    .peac-p .peac-letter { color: #4361ee; }
+    .peac-e .peac-letter { color: #06d6a0; }
+    .peac-a .peac-letter { color: #f77f00; }
+    .peac-c .peac-letter { color: #f72585; }
+
+    .peac-card h4 {
+      margin-top: 0;
+      margin-bottom: var(--space-xs);
+      font-size: 1rem;
+    }
+    .peac-card p {
+      font-size: 0.9rem;
+      color: var(--color-text-light);
+      margin-bottom: 0;
+    }
+
+    /* --- Example level comparison --- */
+    .level-examples {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: var(--space-md);
+      margin: var(--space-lg) 0;
+    }
+    .level-example-card {
+      background: var(--color-white);
+      border: 2px solid #e0e0e0;
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+    }
+    .level-example-header {
+      padding: var(--space-sm) var(--space-md);
+      color: var(--color-white);
+      font-weight: 800;
+      font-size: 0.9rem;
+    }
+    .level-example-header.lev1 { background: var(--gradient-orange); }
+    .level-example-header.lev2 { background: var(--gradient-blue); }
+    .level-example-header.lev3 { background: var(--gradient-green); }
+
+    .level-example-body {
+      padding: var(--space-md);
+      font-size: 0.9rem;
+      line-height: 1.7;
+    }
+    .level-example-body p {
+      margin-bottom: var(--space-sm);
+    }
+    .level-annotation {
+      font-size: 0.8rem;
+      font-weight: 700;
+      padding: var(--space-sm) var(--space-md);
+      border-top: 1px solid #e0e0e0;
+      background: #f8f8fa;
+      color: var(--color-text-light);
+      line-height: 1.5;
+    }
+
+    /* --- Command word badges --- */
+    .command-words {
+      display: flex;
+      gap: var(--space-md);
+      flex-wrap: wrap;
+      margin: var(--space-md) 0;
+    }
+    .command-badge {
+      background: var(--color-white);
+      border: 2px solid #e0e0e0;
+      border-radius: var(--radius-md);
+      padding: var(--space-md) var(--space-lg);
+      flex: 1;
+      min-width: 180px;
+      box-shadow: var(--shadow-sm);
+    }
+    .command-badge h4 {
+      margin-top: 0;
+      margin-bottom: var(--space-xs);
+      color: var(--color-link);
+      font-size: 1.05rem;
+    }
+    .command-badge p {
+      font-size: 0.9rem;
+      color: var(--color-text-light);
+      margin-bottom: 0;
+    }
+
+    /* --- Question scenario box --- */
+    .scenario-box {
+      background: linear-gradient(135deg, #f3e8ff, #ede5ff);
+      border: 2px solid #7209b7;
+      border-radius: var(--radius-md);
+      padding: var(--space-lg);
+      margin: var(--space-lg) 0;
+      font-size: 1rem;
+      line-height: 1.7;
+    }
+    .scenario-box strong:first-child {
+      display: block;
+      margin-bottom: var(--space-xs);
+      color: #7209b7;
+    }
+
+    /* --- Practice question cards --- */
+    .practice-question {
+      background: var(--color-white);
+      border: 2px solid #e0e0e0;
+      border-radius: var(--radius-lg);
+      padding: var(--space-xl);
+      margin: var(--space-xl) 0;
+      transition: border-color 0.2s;
+    }
+    .practice-question:hover {
+      border-color: var(--color-link);
+    }
+    .pq-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+      margin-bottom: var(--space-md);
+    }
+    .pq-header h3 {
+      margin: 0;
+      font-size: 1.2rem;
+    }
+    .pq-topic-badge {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 800;
+      padding: var(--space-xs) var(--space-md);
+      border-radius: 50px;
+      color: var(--color-white);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      white-space: nowrap;
+    }
+    .topic-issues { background: var(--gradient-pink); }
+    .topic-algorithms { background: var(--gradient-blue); }
+    .topic-networks { background: var(--gradient-purple); }
+    .topic-computers { background: var(--gradient-orange); }
+    .topic-data { background: var(--gradient-green); }
+
+    .pq-scenario {
+      background: #f8f8fa;
+      border-left: 4px solid #7209b7;
+      border-radius: var(--radius-sm);
+      padding: var(--space-md);
+      margin-bottom: var(--space-lg);
+      font-size: 0.95rem;
+      line-height: 1.7;
+    }
+    .pq-marks {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+      background: var(--gradient-purple);
+      color: var(--color-white);
+      font-size: 0.8rem;
+      font-weight: 700;
+      padding: var(--space-xs) var(--space-md);
+      border-radius: 50px;
+      margin-top: var(--space-sm);
+    }
+
+    /* --- Answer textareas --- */
+    .answer-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-md);
+      margin: var(--space-md) 0;
+    }
+    @media (max-width: 600px) {
+      .answer-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    .answer-box label {
+      display: block;
+      font-weight: 700;
+      font-size: 0.9rem;
+      margin-bottom: var(--space-xs);
+      color: var(--color-text);
+    }
+    .answer-box textarea {
+      width: 100%;
+      min-height: 120px;
+      padding: var(--space-md);
+      border: 2px solid #d0d0d0;
+      border-radius: var(--radius-md);
+      font-family: var(--font-body);
+      font-size: 0.9rem;
+      line-height: 1.6;
+      color: var(--color-text);
+      background: var(--color-white);
+      resize: vertical;
+      transition: border-color 0.2s;
+    }
+    .answer-box textarea:focus {
+      outline: none;
+      border-color: var(--color-link);
+    }
+    .answer-box textarea::placeholder {
+      color: #aaa;
+    }
+
+    /* --- Self-assessment checklist --- */
+    .checklist {
+      list-style: none;
+      padding: 0;
+      margin: var(--space-md) 0;
+    }
+    .checklist li {
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+      padding: var(--space-sm) 0;
+      font-size: 0.95rem;
+      margin-bottom: 0;
+    }
+    .checklist input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+      flex-shrink: 0;
+      accent-color: var(--color-link);
+      cursor: pointer;
+    }
+    .checklist label {
+      cursor: pointer;
+      line-height: 1.4;
+    }
+
+    /* --- Action buttons row --- */
+    .action-row {
+      display: flex;
+      gap: var(--space-sm);
+      flex-wrap: wrap;
+      align-items: center;
+      margin: var(--space-md) 0;
+    }
+    .btn-model {
+      background: var(--gradient-purple);
+      color: var(--color-white);
+      font-family: var(--font-body);
+      font-size: 0.85rem;
+      font-weight: 700;
+      padding: var(--space-sm) var(--space-lg);
+      border: none;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .btn-model:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+    .btn-level {
+      background: var(--gradient-green);
+      color: var(--color-white);
+      font-family: var(--font-body);
+      font-size: 0.85rem;
+      font-weight: 700;
+      padding: var(--space-sm) var(--space-lg);
+      border: none;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .btn-level:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+    .btn-reset {
+      background: #777;
+      color: var(--color-white);
+      font-family: var(--font-body);
+      font-size: 0.85rem;
+      font-weight: 700;
+      padding: var(--space-sm) var(--space-lg);
+      border: none;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .btn-reset:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+
+    /* --- Model answer panel --- */
+    .model-answer {
+      display: none;
+      margin-top: var(--space-md);
+      border: 2px solid #06d6a0;
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      animation: fadeSlideIn 0.35s ease;
+    }
+    .model-answer.show {
+      display: block;
+    }
+    .model-answer-header {
+      background: var(--gradient-green);
+      color: var(--color-white);
+      padding: var(--space-sm) var(--space-md);
+      font-weight: 700;
+      font-size: 0.9rem;
+    }
+    .model-answer-body {
+      padding: var(--space-lg);
+      background: #e6f9f1;
+      font-size: 0.95rem;
+      line-height: 1.7;
+    }
+    .model-answer-body p {
+      margin-bottom: var(--space-sm);
+    }
+
+    /* --- Level result badge --- */
+    .level-result {
+      display: none;
+      margin-top: var(--space-md);
+      padding: var(--space-lg);
+      border-radius: var(--radius-md);
+      font-weight: 700;
+      font-size: 1rem;
+      text-align: center;
+      animation: fadeSlideIn 0.35s ease;
+    }
+    .level-result.show {
+      display: block;
+    }
+    .level-result.result-1 {
+      background: linear-gradient(135deg, #fff4e6, #ffe8cc);
+      border: 2px solid #f77f00;
+      color: #b35600;
+    }
+    .level-result.result-2 {
+      background: linear-gradient(135deg, #eef0ff, #dce1ff);
+      border: 2px solid #4361ee;
+      color: #2b3ea0;
+    }
+    .level-result.result-3 {
+      background: linear-gradient(135deg, #e6f9f1, #ccf2e0);
+      border: 2px solid #06d6a0;
+      color: #087f5b;
+    }
+
+    /* --- Formula highlight --- */
+    .formula-box {
+      background: linear-gradient(135deg, #fff9e6, #fff3cd);
+      border: 2px solid #ffc107;
+      border-radius: var(--radius-md);
+      padding: var(--space-lg);
+      margin: var(--space-lg) 0;
+      text-align: center;
+      font-size: 1.15rem;
+      font-weight: 700;
+    }
+
+    /* --- Rotation table --- */
+    .rotation-table th {
+      text-align: center;
+      font-size: 0.85rem;
+    }
+    .rotation-table td {
+      text-align: center;
+      font-size: 0.9rem;
+    }
+
+    /* --- Animations --- */
+    @keyframes fadeSlideIn {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* --- Responsive --- */
+    @media (max-width: 600px) {
+      .peac-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+      .level-examples {
+        grid-template-columns: 1fr;
+      }
+      .command-words {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="site-header">
+    <p><a href="../index.html">&larr; Back to Course</a></p>
+    <h1>6-Mark Answer Builder</h1>
+    <p class="subtitle">Master the extended response questions that separate good grades from great ones</p>
+  </header>
+
+  <main>
+
+    <!-- ==================== SECTION 1: THE IDEA ==================== -->
+    <section class="idea">
+      <span class="section-label">The Idea</span>
+      <h2>What Are 6-Mark Questions?</h2>
+
+      <p>The 6-mark extended response is the <strong>highest-tariff question on Paper 1</strong> of your Pearson Edexcel GCSE Computer Science exam. Unlike short-answer questions where you list facts, here you need to build a <strong>sustained, coherent argument</strong> that demonstrates deep understanding.</p>
+
+      <p>These questions always use a specific command word &mdash; most commonly <strong>"Discuss"</strong> &mdash; and are set within a <strong>real-world scenario</strong>. They are marked using a <strong>levels-based mark scheme</strong>, which means the examiner reads your entire answer and decides which level it fits into, rather than ticking off individual points.</p>
+
+      <h3>The Levels-Based Mark Scheme</h3>
+
+      <table class="levels-table">
+        <thead>
+          <tr>
+            <th class="level-header level-3-bg">Level 3 (5&ndash;6 marks)</th>
+            <th class="level-header level-2-bg">Level 2 (3&ndash;4 marks)</th>
+            <th class="level-header level-1-bg">Level 1 (1&ndash;2 marks)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <strong>Comprehensive</strong> and <strong>well-developed</strong> discussion with <strong>sustained reasoning</strong> applied to the specific context. Both sides are considered. Technical terminology is used accurately throughout.
+            </td>
+            <td>
+              <strong>Reasonable</strong> discussion with <strong>some developed</strong> points. Some application to the context. Technical terms are used but not always accurately or consistently.
+            </td>
+            <td>
+              <strong>Basic</strong> or <strong>limited</strong> understanding. Points are listed rather than explained. Little or no reference to the scenario. Technical language is absent or inaccurate.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>The Command Words</h3>
+      <p>Understanding what the command word is asking you to do is essential. Getting this wrong means your entire answer misses the point.</p>
+
+      <div class="command-words">
+        <div class="command-badge">
+          <h4>Discuss</h4>
+          <p>Present <strong>both sides</strong> of an argument (advantages and disadvantages, for and against). The most common 6-mark command word.</p>
+        </div>
+        <div class="command-badge">
+          <h4>Evaluate</h4>
+          <p>Consider the evidence and reach a <strong>judgement</strong>. You must give a conclusion about which option is better and <strong>justify why</strong>.</p>
+        </div>
+        <div class="command-badge">
+          <h4>Explain</h4>
+          <p>Give <strong>detailed reasons</strong> for something. Go beyond describing <em>what</em> happens to explaining <em>why</em> and <em>how</em>.</p>
+        </div>
+      </div>
+
+      <div class="formula-box">
+        Point + Explain + Apply to Context = Full Marks
+      </div>
+
+      <div class="warning">
+        <strong>Chief Examiner Feedback &mdash; What Goes Wrong</strong>
+        <p>The Chief Examiner reports that students consistently lose marks because they:</p>
+        <ul>
+          <li><strong>Give generic answers</strong> &mdash; writing "it is faster" without saying <em>what</em> is faster or <em>why</em> speed matters in this scenario</li>
+          <li><strong>Lack structure</strong> &mdash; writing a single block of text with no paragraphs, no logical flow, and no clear argument</li>
+          <li><strong>Only present one side</strong> &mdash; listing advantages without any disadvantages (or vice versa) in a "discuss" question</li>
+          <li><strong>Avoid technical terminology</strong> &mdash; writing "the information goes through the internet" instead of "data is transmitted via a WAN using TCP/IP protocols"</li>
+          <li><strong>List rather than develop</strong> &mdash; writing bullet-point lists instead of developed paragraphs that explain and contextualise each point</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ==================== SECTION 2: THE PEAC FRAMEWORK ==================== -->
+    <section class="explore">
+      <span class="section-label">Explore</span>
+      <h2>The PEAC Framework</h2>
+
+      <p>Use this structured approach to ensure every paragraph in your answer hits all the criteria for Level 3. Think of each paragraph as following the <strong>PEAC</strong> pattern:</p>
+
+      <div class="peac-grid">
+        <div class="peac-card peac-p">
+          <div class="peac-letter">P</div>
+          <h4>Point</h4>
+          <p>State a clear, specific technical point. This is your topic sentence &mdash; it tells the examiner exactly what this paragraph is about.</p>
+        </div>
+        <div class="peac-card peac-e">
+          <div class="peac-letter">E</div>
+          <h4>Explain</h4>
+          <p>Develop the point with technical detail. Explain <em>how</em> or <em>why</em> this point is true. Use accurate terminology.</p>
+        </div>
+        <div class="peac-card peac-a">
+          <div class="peac-letter">A</div>
+          <h4>Apply</h4>
+          <p>Link it directly to the scenario in the question. Name the organisation, refer to the specific situation, explain why this matters <em>for them</em>.</p>
+        </div>
+        <div class="peac-card peac-c">
+          <div class="peac-letter">C</div>
+          <h4>Counterpoint</h4>
+          <p>Present the other side. For "discuss" questions, every advantage should have a corresponding disadvantage, and vice versa.</p>
+        </div>
+      </div>
+
+      <h3>Worked Example</h3>
+
+      <div class="scenario-box">
+        <strong>Exam Question:</strong>
+        A school is considering switching from a wired star network to a wireless mesh network. Discuss the advantages and disadvantages of this change. (6 marks)
+      </div>
+
+      <p>Below are three sample answers to the same question. Read each one carefully and note how the quality of argument, use of terminology, and application to context improve at each level.</p>
+
+      <div class="level-examples">
+        <div class="level-example-card">
+          <div class="level-example-header lev1">Level 1 Answer (1&ndash;2 marks)</div>
+          <div class="level-example-body">
+            <p>Wireless is good because you don't need wires. It is easier to use. But it might be slower. Wired is more reliable. The school should think about what they need.</p>
+          </div>
+          <div class="level-annotation">
+            <strong>Why Level 1:</strong> Generic points with no technical detail. No explanation of <em>why</em> wireless is easier or wired is more reliable. No specific reference to the school or its needs. No technical terminology (star topology, bandwidth, mesh, etc.). Points are listed, not developed.
+          </div>
+        </div>
+
+        <div class="level-example-card">
+          <div class="level-example-header lev2">Level 2 Answer (3&ndash;4 marks)</div>
+          <div class="level-example-body">
+            <p>One advantage of switching to a wireless mesh network is that devices can connect without cables, which means laptops and tablets can be used anywhere in the school. This gives teachers more flexibility for lessons.</p>
+            <p>However, wireless networks can suffer from interference and may have lower bandwidth than wired connections, which could be a problem if many students are online at once.</p>
+          </div>
+          <div class="level-annotation">
+            <strong>Why Level 2:</strong> Two developed points with some context (school, teachers, students). Uses some technical terms (bandwidth, interference). Considers both sides. However, lacks detail on mesh topology specifically, does not explain <em>how</em> a mesh differs from the current star topology, and the reasoning could be more sustained.
+          </div>
+        </div>
+
+        <div class="level-example-card">
+          <div class="level-example-header lev3">Level 3 Answer (5&ndash;6 marks)</div>
+          <div class="level-example-body">
+            <p>One significant advantage of switching to a wireless mesh network is increased mobility for devices. In their current wired star network, every device must be physically connected via Ethernet cables to a central switch, which restricts where computers can be located. A mesh network uses multiple wireless access points that communicate with each other, meaning students and teachers can use laptops and tablets anywhere on the school site. This is particularly beneficial for the school because it allows flexible learning spaces without the cost and disruption of running new cabling to every classroom.</p>
+            <p>However, a key disadvantage is that wireless connections generally offer lower bandwidth and higher latency than wired Ethernet. In a wired star topology, each device has a dedicated cable to the switch, providing consistent speeds of up to 1 Gbps. In a wireless mesh network, bandwidth is shared between devices and degrades as data "hops" between access points. For the school, this could cause slow connections when hundreds of students are streaming educational videos or downloading resources simultaneously, potentially disrupting lessons rather than improving them.</p>
+            <p>Additionally, while a mesh network provides redundancy &mdash; if one access point fails, data can be rerouted through others &mdash; the initial setup cost of purchasing multiple access points and configuring the mesh may exceed the school&rsquo;s budget compared to maintaining the existing wired infrastructure.</p>
+          </div>
+          <div class="level-annotation">
+            <strong>Why Level 3:</strong> Comprehensive discussion with sustained reasoning. Accurate technical terminology throughout (star topology, Ethernet, switch, bandwidth, latency, access points, hops, redundancy). Every point is explained in depth and explicitly applied to the school context. Both advantages and disadvantages are developed, not just listed. The argument flows logically from one paragraph to the next.
+          </div>
+        </div>
+      </div>
+
+      <div class="exam-tip">
+        <strong>Exam Tip: Quality Over Quantity</strong>
+        <p>Notice that the Level 3 answer has fewer distinct points than you might expect, but each one is <strong>thoroughly developed</strong>. It is far better to write two or three well-explained, contextualised points than to list six shallow ones. The examiner is looking for depth of reasoning, not a checklist of facts.</p>
+      </div>
+    </section>
+
+    <!-- ==================== SECTION 3: PRACTICE QUESTIONS ==================== -->
+    <section class="practice">
+      <span class="section-label">Practice</span>
+      <h2>Practice Questions</h2>
+
+      <p>These five questions cover the topics that appear (or are predicted to appear) in the 6-mark slot on Paper 1, following the rotation pattern across Topics 1&ndash;5. For each question, use the structured text boxes to build your PEAC-style answer, then check your work against the model answer and self-assessment checklist.</p>
+
+      <!-- ===== QUESTION 1: Topic 5 - Issues ===== -->
+      <div class="practice-question" id="pq1">
+        <div class="pq-header">
+          <div>
+            <h3>Question 1</h3>
+            <span class="pq-topic-badge topic-issues">Topic 5 &mdash; Issues</span>
+          </div>
+          <span class="pq-marks">6 marks</span>
+        </div>
+
+        <div class="pq-scenario">
+          A supermarket chain wants to replace all its checkout staff with self-service machines. Discuss the impact of this decision on different stakeholders. (6 marks)
+        </div>
+
+        <h4>Build your answer:</h4>
+        <div class="answer-grid">
+          <div class="answer-box">
+            <label for="q1a1">Advantage / Point 1 (with context)</label>
+            <textarea id="q1a1" placeholder="e.g. One advantage for the supermarket is..."></textarea>
+          </div>
+          <div class="answer-box">
+            <label for="q1a2">Advantage / Point 2 (with context)</label>
+            <textarea id="q1a2" placeholder="e.g. Another benefit for customers would be..."></textarea>
+          </div>
+          <div class="answer-box">
+            <label for="q1d1">Disadvantage / Counterpoint 1 (with context)</label>
+            <textarea id="q1d1" placeholder="e.g. However, a significant disadvantage is..."></textarea>
+          </div>
+          <div class="answer-box">
+            <label for="q1d2">Disadvantage / Counterpoint 2 (with context)</label>
+            <textarea id="q1d2" placeholder="e.g. Furthermore, there is a concern that..."></textarea>
+          </div>
+        </div>
+
+        <h4>Self-Assessment Checklist:</h4>
+        <ul class="checklist">
+          <li><input type="checkbox" id="q1c1" /><label for="q1c1">I used technical terminology</label></li>
+          <li><input type="checkbox" id="q1c2" /><label for="q1c2">I linked my points to the scenario</label></li>
+          <li><input type="checkbox" id="q1c3" /><label for="q1c3">I explained both sides</label></li>
+          <li><input type="checkbox" id="q1c4" /><label for="q1c4">I structured my answer clearly</label></li>
+          <li><input type="checkbox" id="q1c5" /><label for="q1c5">I developed my points (not just listed them)</label></li>
+        </ul>
+
+        <div class="action-row">
+          <button class="btn-model" onclick="toggleModel(1)">Show Model Answer</button>
+          <button class="btn-level" onclick="checkLevel(1)">Check My Level</button>
+          <button class="btn-reset" onclick="resetQuestion(1)">Reset</button>
+        </div>
+
+        <div class="level-result" id="levelResult1"></div>
+
+        <div class="model-answer" id="model1">
+          <div class="model-answer-header">Model Answer &mdash; Level 3</div>
+          <div class="model-answer-body">
+            <p>One significant advantage for the supermarket chain is a reduction in long-term operational costs. Checkout staff require salaries, pensions, training, and holiday cover, whereas self-service machines require only a one-off capital investment and ongoing maintenance. By automating the checkout process using barcode scanners and integrated payment systems, the supermarket can reduce its wage bill significantly, potentially allowing it to offer lower prices to customers or increase profit margins.</p>
+            <p>For customers, self-service machines may reduce queue times during peak shopping periods because the supermarket can install more self-service terminals in the same floor space that previously held a single staffed checkout. Customers who are purchasing only a few items can scan and pay quickly without waiting behind customers with full trolleys.</p>
+            <p>However, this decision will have a severe negative impact on the existing checkout staff, who face redundancy and unemployment. In areas where the supermarket is a major employer, this could have a wider economic effect on the local community, reducing disposable income and affecting other local businesses. This raises ethical concerns about whether the company is prioritising profit over its social responsibility to employees.</p>
+            <p>Additionally, not all customers will benefit equally. Elderly customers, those with disabilities, or those who are not confident with technology may find self-service machines difficult or stressful to use. These stakeholders may feel excluded from the shopping experience and may choose to shop elsewhere, potentially losing the supermarket a loyal customer base. The supermarket would need to consider keeping some staffed checkouts or providing dedicated assistance to avoid discrimination issues under the Equality Act.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== QUESTION 2: Topic 1 - Algorithms ===== -->
+      <div class="practice-question" id="pq2">
+        <div class="pq-header">
+          <div>
+            <h3>Question 2</h3>
+            <span class="pq-topic-badge topic-algorithms">Topic 1 &mdash; Algorithms</span>
+          </div>
+          <span class="pq-marks">6 marks</span>
+        </div>
+
+        <div class="pq-scenario">
+          A programmer needs to search a large sorted database of customer records. Discuss the advantages and disadvantages of using a binary search compared to a linear search for this task. (6 marks)
+        </div>
+
+        <h4>Build your answer:</h4>
+        <div class="answer-grid">
+          <div class="answer-box">
+            <label for="q2a1">Advantage / Point 1 (with context)</label>
+            <textarea id="q2a1" placeholder="e.g. A key advantage of binary search is..."></textarea>
+          </div>
+          <div class="answer-box">
+            <label for="q2a2">Advantage / Point 2 (with context)</label>
+            <textarea id="q2a2" placeholder="e.g. Another advantage is..."></textarea>
+          </div>
+          <div class="answer-box">
+            <label for="q2d1">Disadvantage / Counterpoint 1 (with context)</label>
+            <textarea id="q2d1" placeholder="e.g. However, one disadvantage is..."></textarea>
+          </div>
+          <div class="answer-box">
+            <label for="q2d2">Disadvantage / Counterpoint 2 (with context)</label>
+            <textarea id="q2d2" placeholder="e.g. Additionally, linear search has the advantage of..."></textarea>
+          </div>
+        </div>
+
+        <h4>Self-Assessment Checklist:</h4>
+        <ul class="checklist">
+          <li><input type="checkbox" id="q2c1" /><label for="q2c1">I used technical terminology</label></li>
+          <li><input type="checkbox" id="q2c2" /><label for="q2c2">I linked my points to the scenario</label></li>
+          <li><input type="checkbox" id="q2c3" /><label for="q2c3">I explained both sides</label></li>
+          <li><input type="checkbox" id="q2c4" /><label for="q2c4">I structured my answer clearly</label></li>
+          <li><input type="checkbox" id="q2c5" /><label for="q2c5">I developed my points (not just listed them)</label></li>
+        </ul>
+
+        <div class="action-row">
+          <button class="btn-model" onclick="toggleModel(2)">Show Model Answer</button>
+          <button class="btn-level" onclick="checkLevel(2)">Check My Level</button>
+          <button class="btn-reset" onclick="resetQuestion(2)">Reset</button>
+        </div>
+
+        <div class="level-result" id="levelResult2"></div>
+
+        <div class="model-answer" id="model2">
+          <div class="model-answer-header">Model Answer &mdash; Level 3</div>
+          <div class="model-answer-body">
+            <p>A major advantage of using binary search for this task is its efficiency with large datasets. Binary search works by repeatedly dividing the search space in half: it compares the target value with the middle element and eliminates half of the remaining records with each comparison. This gives it a time complexity of O(log n), meaning that even in a database of one million customer records, the algorithm would need at most approximately 20 comparisons to find a record. In contrast, a linear search checks each record sequentially from the beginning, giving it a time complexity of O(n), which could mean checking all one million records in the worst case. For the programmer working with a large customer database, this difference in speed is critical for maintaining system responsiveness.</p>
+            <p>Furthermore, binary search is particularly well-suited to this scenario because the database is already sorted. Binary search requires the data to be in a sorted order to function correctly, and since the customer records are already sorted, the programmer does not need to perform any additional preprocessing. This means the algorithm can be implemented immediately without the overhead of sorting the data first.</p>
+            <p>However, a disadvantage of binary search is that it requires the data to remain sorted at all times. If customer records are frequently added, removed, or modified, the database must be re-sorted after each change to maintain binary search functionality. This ongoing maintenance overhead could slow down write operations on the database. A linear search, by contrast, works on both sorted and unsorted data, making it more flexible when data changes frequently.</p>
+            <p>Additionally, while linear search is less efficient for large datasets, it is simpler to implement and debug. The algorithm is straightforward and has no prerequisite conditions on the data structure. For the programmer, this means less development time and fewer potential bugs, which could be relevant if the database is small enough that the performance difference is negligible, or if the search functionality is needed quickly for a prototype.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== QUESTION 3: Topic 4 - Networks ===== -->
+      <div class="practice-question" id="pq3">
+        <div class="pq-header">
+          <div>
+            <h3>Question 3</h3>
+            <span class="pq-topic-badge topic-networks">Topic 4 &mdash; Networks</span>
+          </div>
+          <span class="pq-marks">6 marks</span>
+        </div>
+
+        <div class="pq-scenario">
+          A company currently stores all its data on local servers. It is considering moving to cloud storage. Discuss the advantages and disadvantages of moving to cloud storage. (6 marks)
+        </div>
+
+        <h4>Build your answer:</h4>
+        <div class="answer-grid">
+          <div class="answer-box">
+            <label for="q3a1">Advantage / Point 1 (with context)</label>
+            <textarea id="q3a1" placeholder="e.g. One advantage for the company is..."></textarea>
+          </div>
+          <div class="answer-box">
+            <label for="q3a2">Advantage / Point 2 (with context)</label>
+            <textarea id="q3a2" placeholder="e.g. A further advantage is..."></textarea>
+          </div>
+          <div class="answer-box">
+            <label for="q3d1">Disadvantage / Counterpoint 1 (with context)</label>
+            <textarea id="q3d1" placeholder="e.g. However, a key disadvantage is..."></textarea>
+          </div>
+          <div class="answer-box">
+            <label for="q3d2">Disadvantage / Counterpoint 2 (with context)</label>
+            <textarea id="q3d2" placeholder="e.g. Another risk is that..."></textarea>
+          </div>
+        </div>
+
+        <h4>Self-Assessment Checklist:</h4>
+        <ul class="checklist">
+          <li><input type="checkbox" id="q3c1" /><label for="q3c1">I used technical terminology</label></li>
+          <li><input type="checkbox" id="q3c2" /><label for="q3c2">I linked my points to the scenario</label></li>
+          <li><input type="checkbox" id="q3c3" /><label for="q3c3">I explained both sides</label></li>
+          <li><input type="checkbox" id="q3c4" /><label for="q3c4">I structured my answer clearly</label></li>
+          <li><input type="checkbox" id="q3c5" /><label for="q3c5">I developed my points (not just listed them)</label></li>
+        </ul>
+
+        <div class="action-row">
+          <button class="btn-model" onclick="toggleModel(3)">Show Model Answer</button>
+          <button class="btn-level" onclick="checkLevel(3)">Check My Level</button>
+          <button class="btn-reset" onclick="resetQuestion(3)">Reset</button>
+        </div>
+
+        <div class="level-result" id="levelResult3"></div>
+
+        <div class="model-answer" id="model3">
+          <div class="model-answer-header">Model Answer &mdash; Level 3</div>
+          <div class="model-answer-body">
+            <p>One significant advantage of moving to cloud storage is scalability. With local servers, the company has a fixed storage capacity; if data needs grow, it must purchase, install, and configure additional hardware, which is expensive and time-consuming. Cloud storage providers such as AWS, Microsoft Azure, or Google Cloud allow the company to increase or decrease its storage capacity on demand, paying only for what it uses. This is particularly beneficial if the company experiences seasonal fluctuations in data usage, as it avoids paying for idle hardware during quiet periods.</p>
+            <p>A further advantage is accessibility. Data stored in the cloud can be accessed from any location with an internet connection via a web browser or API, meaning employees can work remotely or from different office branches. This also facilitates real-time collaboration, as multiple users can access and modify the same files simultaneously. For the company, this could improve productivity and support modern flexible working practices.</p>
+            <p>However, a key disadvantage is the dependency on a reliable internet connection. If the company&rsquo;s internet service goes down, employees will be unable to access any data stored in the cloud, potentially halting business operations entirely. With local servers, data remains accessible via the company&rsquo;s local area network (LAN) regardless of whether the external internet connection is functioning. The company would need to invest in redundant internet connections to mitigate this risk, adding to the overall cost.</p>
+            <p>Additionally, moving sensitive company data to a third-party cloud provider raises security and privacy concerns. The company is entrusting its data to an external organisation and must rely on the provider&rsquo;s security measures, such as encryption, firewalls, and access controls. If the cloud provider suffers a data breach, the company&rsquo;s confidential data could be compromised. There are also legal implications under the Data Protection Act 2018 and UK GDPR, as the company must ensure that its data is stored and processed in compliance with these regulations, particularly if the cloud provider stores data in servers located outside the UK.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== QUESTION 4: Topic 3 - Computers ===== -->
+      <div class="practice-question" id="pq4">
+        <div class="pq-header">
+          <div>
+            <h3>Question 4</h3>
+            <span class="pq-topic-badge topic-computers">Topic 3 &mdash; Computers</span>
+          </div>
+          <span class="pq-marks">6 marks</span>
+        </div>
+
+        <div class="pq-scenario">
+          A software company needs to decide whether to use a compiled language or an interpreted language for their new application. Discuss the factors they should consider when making this decision. (6 marks)
+        </div>
+
+        <h4>Build your answer:</h4>
+        <div class="answer-grid">
+          <div class="answer-box">
+            <label for="q4a1">Advantage / Point 1 (with context)</label>
+            <textarea id="q4a1" placeholder="e.g. One advantage of using a compiled language is..."></textarea>
+          </div>
+          <div class="answer-box">
+            <label for="q4a2">Advantage / Point 2 (with context)</label>
+            <textarea id="q4a2" placeholder="e.g. Another factor to consider is..."></textarea>
+          </div>
+          <div class="answer-box">
+            <label for="q4d1">Disadvantage / Counterpoint 1 (with context)</label>
+            <textarea id="q4d1" placeholder="e.g. However, an interpreted language offers..."></textarea>
+          </div>
+          <div class="answer-box">
+            <label for="q4d2">Disadvantage / Counterpoint 2 (with context)</label>
+            <textarea id="q4d2" placeholder="e.g. On the other hand, a compiled language would mean..."></textarea>
+          </div>
+        </div>
+
+        <h4>Self-Assessment Checklist:</h4>
+        <ul class="checklist">
+          <li><input type="checkbox" id="q4c1" /><label for="q4c1">I used technical terminology</label></li>
+          <li><input type="checkbox" id="q4c2" /><label for="q4c2">I linked my points to the scenario</label></li>
+          <li><input type="checkbox" id="q4c3" /><label for="q4c3">I explained both sides</label></li>
+          <li><input type="checkbox" id="q4c4" /><label for="q4c4">I structured my answer clearly</label></li>
+          <li><input type="checkbox" id="q4c5" /><label for="q4c5">I developed my points (not just listed them)</label></li>
+        </ul>
+
+        <div class="action-row">
+          <button class="btn-model" onclick="toggleModel(4)">Show Model Answer</button>
+          <button class="btn-level" onclick="checkLevel(4)">Check My Level</button>
+          <button class="btn-reset" onclick="resetQuestion(4)">Reset</button>
+        </div>
+
+        <div class="level-result" id="levelResult4"></div>
+
+        <div class="model-answer" id="model4">
+          <div class="model-answer-header">Model Answer &mdash; Level 3</div>
+          <div class="model-answer-body">
+            <p>One important factor is execution speed. A compiled language translates the entire source code into machine code (object code) before the program is run, using a compiler. This means the resulting executable file runs directly on the processor without any further translation, making it significantly faster at runtime. For the software company, if their application needs to perform computationally intensive tasks &mdash; such as processing large datasets, rendering graphics, or handling real-time input &mdash; a compiled language like C++ would offer the performance advantage needed to ensure the application runs smoothly for end users.</p>
+            <p>Another consideration is portability and platform compatibility. An interpreted language runs the source code through an interpreter line by line at runtime, which means the same source code can potentially run on any platform that has the appropriate interpreter installed. For the company, if they plan to release their application on multiple operating systems (Windows, macOS, Linux), using an interpreted language like Python could save significant development time, as they would not need to compile separate versions for each platform. A compiled language, by contrast, typically produces platform-specific machine code, requiring the company to compile and test separate builds for each target operating system.</p>
+            <p>However, an interpreted language generally executes more slowly than a compiled language because each line must be translated to machine code during runtime. For a performance-critical application, this overhead could result in noticeable lag or reduced responsiveness, which would negatively affect the user experience. The company would need to weigh whether the convenience of interpretation outweighs the performance cost.</p>
+            <p>A further factor is the development and debugging process. Interpreted languages allow developers to test code immediately without waiting for a compilation step, which speeds up the development cycle. Errors can be identified and fixed quickly because the interpreter reports the exact line where an error occurs, and developers can make changes and re-run instantly. For the software company, if they are working to a tight deadline or using an agile development methodology with frequent iterations, an interpreted language would support faster prototyping and testing. However, a compiled language catches many errors at compile time (such as type mismatches and syntax errors), which means bugs are identified before the program is ever executed, potentially leading to more robust final code.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== QUESTION 5: Topic 2 - Data ===== -->
+      <div class="practice-question" id="pq5">
+        <div class="pq-header">
+          <div>
+            <h3>Question 5</h3>
+            <span class="pq-topic-badge topic-data">Topic 2 &mdash; Data</span>
+          </div>
+          <span class="pq-marks">6 marks</span>
+        </div>
+
+        <div class="pq-scenario">
+          A photographer is deciding whether to use lossy or lossless compression when storing their images. Discuss the advantages and disadvantages of each method. (6 marks)
+        </div>
+
+        <h4>Build your answer:</h4>
+        <div class="answer-grid">
+          <div class="answer-box">
+            <label for="q5a1">Advantage / Point 1 (with context)</label>
+            <textarea id="q5a1" placeholder="e.g. One advantage of lossy compression for the photographer is..."></textarea>
+          </div>
+          <div class="answer-box">
+            <label for="q5a2">Advantage / Point 2 (with context)</label>
+            <textarea id="q5a2" placeholder="e.g. Lossless compression has the advantage of..."></textarea>
+          </div>
+          <div class="answer-box">
+            <label for="q5d1">Disadvantage / Counterpoint 1 (with context)</label>
+            <textarea id="q5d1" placeholder="e.g. However, a disadvantage of lossy compression is..."></textarea>
+          </div>
+          <div class="answer-box">
+            <label for="q5d2">Disadvantage / Counterpoint 2 (with context)</label>
+            <textarea id="q5d2" placeholder="e.g. On the other hand, a downside of lossless compression is..."></textarea>
+          </div>
+        </div>
+
+        <h4>Self-Assessment Checklist:</h4>
+        <ul class="checklist">
+          <li><input type="checkbox" id="q5c1" /><label for="q5c1">I used technical terminology</label></li>
+          <li><input type="checkbox" id="q5c2" /><label for="q5c2">I linked my points to the scenario</label></li>
+          <li><input type="checkbox" id="q5c3" /><label for="q5c3">I explained both sides</label></li>
+          <li><input type="checkbox" id="q5c4" /><label for="q5c4">I structured my answer clearly</label></li>
+          <li><input type="checkbox" id="q5c5" /><label for="q5c5">I developed my points (not just listed them)</label></li>
+        </ul>
+
+        <div class="action-row">
+          <button class="btn-model" onclick="toggleModel(5)">Show Model Answer</button>
+          <button class="btn-level" onclick="checkLevel(5)">Check My Level</button>
+          <button class="btn-reset" onclick="resetQuestion(5)">Reset</button>
+        </div>
+
+        <div class="level-result" id="levelResult5"></div>
+
+        <div class="model-answer" id="model5">
+          <div class="model-answer-header">Model Answer &mdash; Level 3</div>
+          <div class="model-answer-body">
+            <p>One major advantage of lossy compression for the photographer is that it produces significantly smaller file sizes. Lossy compression works by permanently removing data that is deemed less important or less noticeable to the human eye &mdash; for example, subtle colour variations between adjacent pixels. Formats such as JPEG can reduce an image file to a fraction of its original size. For the photographer, this means they can store thousands of images on a memory card or hard drive, and uploading images to a website or sending them to clients via email will be much faster due to the reduced file size and lower bandwidth requirements.</p>
+            <p>Lossless compression, on the other hand, has the advantage of preserving every single bit of the original data. When a losslessly compressed file (such as PNG or TIFF) is decompressed, the resulting image is identical to the original. For a professional photographer, this is crucial when editing images, because each time a lossy file is opened, edited, and re-saved, further data is lost through a process called generational loss. This cumulative degradation can visibly reduce image quality, making lossless formats essential for the photographer&rsquo;s master copies and post-processing workflow.</p>
+            <p>However, a significant disadvantage of lossy compression is that the data removal is irreversible. Once an image has been compressed using lossy compression, the discarded detail cannot be recovered. If the photographer compresses their only copy of an image using a high level of lossy compression, fine details such as individual strands of hair or subtle textures may be permanently lost. At high compression ratios, visible artefacts &mdash; blocky areas or colour banding &mdash; can appear in the image, which would be unacceptable for professional print work.</p>
+            <p>Conversely, the main disadvantage of lossless compression is that the resulting files are considerably larger than those produced by lossy compression. A lossless PNG file of a high-resolution photograph could be several times larger than the same image saved as a JPEG. For the photographer, this means they will need significantly more storage space, backups will take longer, and transferring large batches of images to clients will require more time and bandwidth. The photographer would need to weigh the importance of image quality against the practical costs of additional storage and slower transfer speeds.</p>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ==================== SECTION 4: REFLECT ==================== -->
+    <section class="reflect">
+      <span class="section-label">Reflect</span>
+      <h2>Exam Day Tips and Revision Strategy</h2>
+
+      <h3>Tips for the 6-Mark Question</h3>
+      <ol>
+        <li><strong>Read the question twice.</strong> Underline the command word and the scenario. Identify exactly what you are being asked to discuss, evaluate, or explain.</li>
+        <li><strong>Plan before you write.</strong> Spend 2&ndash;3 minutes jotting down your key points on the question paper. Decide which points go on each side (advantages vs disadvantages) before you start writing.</li>
+        <li><strong>Use the PEAC framework.</strong> For each paragraph: state your Point, Explain with technical detail, Apply to the context, then Counterpoint with the other side.</li>
+        <li><strong>Name the scenario.</strong> Do not write "the company should..." when the question says "a school". Use the specific context from the question in every paragraph.</li>
+        <li><strong>Use technical terminology accurately.</strong> Do not say "the thing that connects computers" when you mean "a switch" or "a router". Correct terminology signals to the examiner that you understand the topic.</li>
+        <li><strong>Aim for 3&ndash;4 developed paragraphs.</strong> This is typically 15&ndash;20 minutes of writing time. Quality of argument matters far more than quantity of points.</li>
+        <li><strong>Write in paragraphs, not bullet points.</strong> The mark scheme rewards "sustained reasoning" and "coherent line of discussion", which requires connected prose, not a list.</li>
+      </ol>
+
+      <h3>Common Mistakes to Avoid</h3>
+      <div class="warning">
+        <strong>Do Not:</strong>
+        <ul>
+          <li>Write a list of one-line bullet points &mdash; this caps your answer at Level 1</li>
+          <li>Only give advantages OR disadvantages for a "discuss" question &mdash; you must present both sides</li>
+          <li>Use vague phrases like "it is better", "it is faster", "it is easier" without saying <em>what</em>, <em>why</em>, and <em>for whom</em></li>
+          <li>Ignore the scenario &mdash; a generic answer not linked to the context cannot achieve Level 3</li>
+          <li>Spend too long on this question at the expense of shorter questions that may be easier marks</li>
+          <li>Repeat the same point in different words &mdash; the examiner will only credit a point once</li>
+        </ul>
+      </div>
+
+      <h3>The 6-Mark Topic Rotation Pattern</h3>
+      <p>Pearson Edexcel rotates which topic area the 6-mark question is drawn from. Understanding this pattern can help you prioritise your revision. The table below shows the historical and predicted pattern:</p>
+
+      <table class="rotation-table">
+        <thead>
+          <tr>
+            <th>Year / Series</th>
+            <th>6-Mark Topic</th>
+            <th>Topic Area</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>2019</td>
+            <td>Environmental impact of technology</td>
+            <td>Topic 5 &mdash; Issues</td>
+          </tr>
+          <tr>
+            <td>2022</td>
+            <td>Network topologies</td>
+            <td>Topic 4 &mdash; Networks</td>
+          </tr>
+          <tr>
+            <td>2023</td>
+            <td>Translators (compilers vs interpreters)</td>
+            <td>Topic 3 &mdash; Computers</td>
+          </tr>
+          <tr>
+            <td>2024</td>
+            <td>Compression methods</td>
+            <td>Topic 2 &mdash; Data</td>
+          </tr>
+          <tr>
+            <td>2025 (predicted)</td>
+            <td>Search / sort algorithms</td>
+            <td>Topic 1 &mdash; Algorithms</td>
+          </tr>
+          <tr>
+            <td>2026 (predicted)</td>
+            <td>Ethical / social / legal issues</td>
+            <td>Topic 5 &mdash; Issues</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="exam-tip">
+        <strong>Revision Strategy</strong>
+        <p>While the rotation pattern gives you a useful guide, do not rely on it exclusively &mdash; Pearson can break the pattern at any time. Instead, practise writing 6-mark answers across <strong>all five topic areas</strong>. The skill of structuring an extended response transfers across topics; if you can write a Level 3 answer on cloud storage, you can apply the same technique to an algorithms question.</p>
+      </div>
+
+      <div class="key-concept">
+        <strong>Remember: The Secret to 6 Marks</strong>
+        The difference between Level 1 and Level 3 is not about knowing more facts. It is about how you <strong>present</strong> those facts: with structure, with technical language, with reference to the scenario, and with a balanced, developed argument. Every student in the exam hall knows the same content &mdash; the ones who score 6 marks are the ones who communicate it effectively.
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <p>Python Fundamentals &mdash; A KS4 Learning Platform</p>
+  </footer>
+
+  <script>
+  (function() {
+    'use strict';
+
+    /* ============================
+       TOGGLE MODEL ANSWER
+    ============================ */
+    window.toggleModel = function(qNum) {
+      var model = document.getElementById('model' + qNum);
+      if (!model) return;
+      var isShowing = model.classList.contains('show');
+      model.classList.toggle('show');
+
+      // Update button text
+      var btn = model.previousElementSibling;
+      while (btn && !btn.classList.contains('action-row')) {
+        btn = btn.previousElementSibling;
+      }
+      if (btn) {
+        var modelBtn = btn.querySelector('.btn-model');
+        if (modelBtn) {
+          modelBtn.textContent = isShowing ? 'Show Model Answer' : 'Hide Model Answer';
+        }
+      }
+    };
+
+    /* ============================
+       CHECK LEVEL BASED ON CHECKLIST
+    ============================ */
+    window.checkLevel = function(qNum) {
+      // Count checked items
+      var checked = 0;
+      for (var i = 1; i <= 5; i++) {
+        var cb = document.getElementById('q' + qNum + 'c' + i);
+        if (cb && cb.checked) checked++;
+      }
+
+      // Check if any text has been written
+      var hasText = false;
+      var textareas = document.querySelectorAll('#pq' + qNum + ' textarea');
+      textareas.forEach(function(ta) {
+        if (ta.value.trim().length > 20) hasText = true;
+      });
+
+      var resultEl = document.getElementById('levelResult' + qNum);
+      if (!resultEl) return;
+
+      // Remove previous classes
+      resultEl.classList.remove('result-1', 'result-2', 'result-3', 'show');
+
+      if (!hasText) {
+        resultEl.textContent = 'Please write your answer in the text boxes above before checking your level.';
+        resultEl.classList.add('result-1', 'show');
+        return;
+      }
+
+      var level, message;
+
+      if (checked >= 5) {
+        level = 3;
+        message = 'Level 3 (5\u20136 marks) \u2014 Excellent! You have ticked all five criteria. Your answer likely contains comprehensive discussion with sustained reasoning, technical terminology, and strong contextual application. Compare with the model answer to verify your self-assessment.';
+      } else if (checked >= 3) {
+        level = 2;
+        message = 'Level 2 (3\u20134 marks) \u2014 Good effort, but there are gaps. You ticked ' + checked + ' out of 5 criteria. Review the unchecked items \u2014 these are the areas that would prevent your answer from reaching Level 3. Look at the model answer for guidance on how to strengthen your response.';
+      } else {
+        level = 1;
+        message = 'Level 1 (1\u20132 marks) \u2014 Your answer needs significant improvement. You only ticked ' + checked + ' out of 5 criteria. Focus on: using technical terms, linking to the scenario, and developing your points into full paragraphs rather than simple statements. Study the model answer carefully.';
+      }
+
+      resultEl.textContent = message;
+      resultEl.classList.add('result-' + level, 'show');
+    };
+
+    /* ============================
+       RESET QUESTION
+    ============================ */
+    window.resetQuestion = function(qNum) {
+      // Clear textareas
+      var textareas = document.querySelectorAll('#pq' + qNum + ' textarea');
+      textareas.forEach(function(ta) {
+        ta.value = '';
+      });
+
+      // Uncheck checkboxes
+      for (var i = 1; i <= 5; i++) {
+        var cb = document.getElementById('q' + qNum + 'c' + i);
+        if (cb) cb.checked = false;
+      }
+
+      // Hide model answer
+      var model = document.getElementById('model' + qNum);
+      if (model) model.classList.remove('show');
+
+      // Hide level result
+      var result = document.getElementById('levelResult' + qNum);
+      if (result) {
+        result.classList.remove('show', 'result-1', 'result-2', 'result-3');
+        result.textContent = '';
+      }
+
+      // Reset button text
+      var pq = document.getElementById('pq' + qNum);
+      if (pq) {
+        var modelBtn = pq.querySelector('.btn-model');
+        if (modelBtn) modelBtn.textContent = 'Show Model Answer';
+      }
+    };
+
+  })();
+  </script>
+
+</body>
+</html>

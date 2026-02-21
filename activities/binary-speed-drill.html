@@ -1,0 +1,1812 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Binary Maths Speed Drill - Python Fundamentals</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <style>
+    /* ===== Binary Speed Drill - Page-specific styles ===== */
+
+    /* --- Setup Panel --- */
+    .drill-setup {
+      background: var(--color-white);
+      border: 2px solid #e0e0e0;
+      border-radius: var(--radius-lg);
+      padding: var(--space-xl);
+      margin-bottom: var(--space-xl);
+      animation: fadeSlideIn 0.4s ease;
+    }
+    .drill-setup h2 {
+      margin-top: 0;
+      font-size: 1.4rem;
+    }
+
+    /* --- Category Grid --- */
+    .category-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: var(--space-sm);
+      margin: var(--space-md) 0 var(--space-lg) 0;
+    }
+    .category-option {
+      position: relative;
+    }
+    .category-option input[type="radio"] {
+      position: absolute;
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    .category-option label {
+      display: block;
+      padding: var(--space-sm) var(--space-md);
+      border: 2px solid #e0e0e0;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-align: center;
+      transition: all 0.2s;
+      background: var(--color-white);
+    }
+    .category-option label:hover {
+      border-color: var(--color-link);
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-sm);
+    }
+    .category-option input[type="radio"]:checked + label {
+      background: var(--gradient-blue);
+      color: var(--color-white);
+      border-color: transparent;
+      box-shadow: var(--shadow-md);
+    }
+    .category-option input[type="radio"]:focus-visible + label {
+      outline: 3px solid var(--color-idea-border);
+      outline-offset: 3px;
+    }
+    .category-option.mixed-option label {
+      background: linear-gradient(135deg, #f0f2f5, #e8e8ee);
+      font-weight: 800;
+    }
+    .category-option.mixed-option input[type="radio"]:checked + label {
+      background: var(--gradient-hero);
+      color: var(--color-white);
+    }
+
+    /* --- Difficulty Buttons --- */
+    .setting-row {
+      display: flex;
+      align-items: center;
+      gap: var(--space-md);
+      margin: var(--space-md) 0;
+      flex-wrap: wrap;
+    }
+    .setting-label {
+      font-weight: 700;
+      font-size: 0.9rem;
+      min-width: 80px;
+    }
+    .btn-group {
+      display: flex;
+      gap: var(--space-xs);
+      flex-wrap: wrap;
+    }
+    .btn-group .btn-option {
+      font-family: var(--font-body);
+      font-size: 0.85rem;
+      font-weight: 700;
+      padding: var(--space-sm) var(--space-lg);
+      border: 2px solid #e0e0e0;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      background: var(--color-white);
+      color: var(--color-text);
+      transition: all 0.2s;
+    }
+    .btn-group .btn-option:hover {
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-sm);
+    }
+    .btn-group .btn-option.active {
+      color: var(--color-white);
+      border-color: transparent;
+      box-shadow: var(--shadow-md);
+    }
+    .btn-option.diff-easy.active { background: var(--gradient-green); }
+    .btn-option.diff-medium.active { background: var(--gradient-orange); }
+    .btn-option.diff-hard.active { background: var(--gradient-pink); }
+    .btn-option.mode-speed.active { background: var(--gradient-blue); }
+    .btn-option.mode-countdown.active { background: var(--gradient-purple); }
+
+    /* --- Start Button --- */
+    .start-btn {
+      display: block;
+      width: 100%;
+      max-width: 300px;
+      margin: var(--space-lg) auto 0;
+      padding: var(--space-md) var(--space-xl);
+      font-family: var(--font-body);
+      font-size: 1.1rem;
+      font-weight: 800;
+      background: var(--gradient-green);
+      color: var(--color-white);
+      border: none;
+      border-radius: var(--radius-lg);
+      cursor: pointer;
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .start-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-lg);
+    }
+    .start-btn:active {
+      transform: translateY(0) scale(0.98);
+    }
+
+    /* --- Game Area --- */
+    .game-area {
+      display: none;
+      animation: fadeSlideIn 0.4s ease;
+    }
+    .game-area.visible { display: block; }
+
+    /* --- HUD (heads-up display) --- */
+    .game-hud {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+      background: var(--color-white);
+      border: 2px solid #e0e0e0;
+      border-radius: var(--radius-lg);
+      padding: var(--space-md) var(--space-lg);
+      margin-bottom: var(--space-lg);
+      box-shadow: var(--shadow-sm);
+    }
+    .hud-item {
+      text-align: center;
+    }
+    .hud-label {
+      font-size: 0.7rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--color-text-light);
+      display: block;
+    }
+    .hud-value {
+      font-size: 1.5rem;
+      font-weight: 800;
+      font-family: var(--font-code);
+      background: var(--gradient-hero);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hud-timer {
+      font-size: 1.8rem;
+      font-weight: 800;
+      font-family: var(--font-code);
+      color: var(--color-text);
+      min-width: 80px;
+      text-align: center;
+    }
+    .hud-timer.warning {
+      color: var(--color-error);
+      animation: timerPulse 0.5s ease infinite alternate;
+    }
+
+    @keyframes timerPulse {
+      from { opacity: 1; }
+      to { opacity: 0.5; }
+    }
+
+    /* --- Progress Dots --- */
+    .progress-dots {
+      display: flex;
+      gap: 6px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: var(--space-lg);
+    }
+    .progress-dot {
+      width: 28px;
+      height: 8px;
+      border-radius: 4px;
+      background: #e0e0e0;
+      transition: background 0.3s;
+    }
+    .progress-dot.correct { background: #06d6a0; }
+    .progress-dot.incorrect { background: var(--color-error); }
+    .progress-dot.current {
+      background: var(--color-link);
+      box-shadow: 0 0 8px rgba(67,97,238,0.4);
+    }
+
+    /* --- Question Card --- */
+    .question-card {
+      background: var(--color-white);
+      border: 2px solid #e0e0e0;
+      border-radius: var(--radius-lg);
+      padding: var(--space-xl);
+      margin-bottom: var(--space-lg);
+      text-align: center;
+      animation: fadeSlideIn 0.3s ease;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+    .question-card.flash-correct {
+      border-color: #06d6a0;
+      box-shadow: 0 0 20px rgba(6,214,160,0.3);
+    }
+    .question-card.flash-incorrect {
+      border-color: var(--color-error);
+      box-shadow: 0 0 20px rgba(230,57,70,0.3);
+    }
+
+    .question-type-badge {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: var(--space-xs) var(--space-md);
+      border-radius: 50px;
+      color: var(--color-white);
+      background: var(--gradient-blue);
+      margin-bottom: var(--space-md);
+    }
+
+    /* --- Place Value Header --- */
+    .place-value-row {
+      display: flex;
+      justify-content: center;
+      gap: 0;
+      margin-bottom: var(--space-xs);
+    }
+    .place-value-cell {
+      width: 36px;
+      text-align: center;
+      font-size: 0.65rem;
+      font-weight: 700;
+      color: var(--color-text-light);
+      font-family: var(--font-code);
+    }
+
+    /* --- Binary / Hex Display --- */
+    .question-display {
+      font-family: var(--font-code);
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: var(--color-text);
+      margin: var(--space-sm) 0 var(--space-xs) 0;
+      letter-spacing: 0.12em;
+      word-break: break-all;
+    }
+    .question-display .binary-digit {
+      display: inline-block;
+      width: 36px;
+      text-align: center;
+    }
+    .question-hint {
+      font-size: 0.85rem;
+      color: var(--color-text-light);
+      margin-bottom: var(--space-md);
+    }
+    .question-operator {
+      font-family: var(--font-code);
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--color-link);
+      margin: var(--space-xs) 0;
+    }
+
+    /* --- Answer Area --- */
+    .answer-row {
+      display: flex;
+      gap: var(--space-sm);
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+      margin: var(--space-md) 0;
+    }
+    .answer-input {
+      font-family: var(--font-code);
+      font-size: 1.4rem;
+      font-weight: 700;
+      padding: var(--space-sm) var(--space-md);
+      border: 3px solid #ccc;
+      border-radius: var(--radius-md);
+      text-align: center;
+      width: 260px;
+      max-width: 100%;
+      transition: border-color 0.2s;
+      background: var(--color-white);
+      color: var(--color-text);
+    }
+    .answer-input:focus {
+      border-color: var(--color-link);
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(67,97,238,0.15);
+    }
+    .answer-input.correct { border-color: #06d6a0; background: #e6f9f1; }
+    .answer-input.incorrect { border-color: var(--color-error); background: #fff5f5; }
+
+    .submit-btn {
+      font-family: var(--font-body);
+      font-size: 1rem;
+      font-weight: 700;
+      padding: var(--space-sm) var(--space-lg);
+      border: none;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      background: var(--gradient-blue);
+      color: var(--color-white);
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .submit-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-md);
+    }
+    .submit-btn:active {
+      transform: translateY(0) scale(0.98);
+    }
+
+    /* --- Feedback Line --- */
+    .feedback-line {
+      font-size: 0.95rem;
+      font-weight: 700;
+      margin-top: var(--space-sm);
+      min-height: 1.5em;
+    }
+    .feedback-line.correct { color: #087f5b; }
+    .feedback-line.incorrect { color: #c92a2a; }
+
+    /* --- Show Working Button + Panel --- */
+    .working-btn {
+      font-family: var(--font-body);
+      font-size: 0.8rem;
+      font-weight: 700;
+      padding: var(--space-xs) var(--space-md);
+      border: 2px solid #e0e0e0;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      background: var(--color-white);
+      color: var(--color-text-light);
+      transition: all 0.2s;
+      margin-top: var(--space-sm);
+    }
+    .working-btn:hover {
+      border-color: var(--color-link);
+      color: var(--color-link);
+    }
+    .working-panel {
+      display: none;
+      text-align: left;
+      background: #f8f8fa;
+      border: 2px solid #e0e0e0;
+      border-radius: var(--radius-md);
+      padding: var(--space-md);
+      margin-top: var(--space-md);
+      font-size: 0.85rem;
+      line-height: 1.8;
+      animation: fadeSlideIn 0.3s ease;
+    }
+    .working-panel.visible { display: block; }
+    .working-panel h4 {
+      margin-top: 0;
+      margin-bottom: var(--space-sm);
+      font-size: 0.9rem;
+      color: var(--color-link);
+    }
+    .working-panel code {
+      background: rgba(67,97,238,0.1);
+      padding: 0.1em 0.4em;
+      border-radius: var(--radius-sm);
+      font-family: var(--font-code);
+      font-size: 0.85em;
+      color: #4361ee;
+      font-weight: 600;
+    }
+    .working-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: var(--space-sm) 0;
+      font-family: var(--font-code);
+      font-size: 0.85rem;
+    }
+    .working-table th,
+    .working-table td {
+      border: 1px solid #ddd;
+      padding: 4px 8px;
+      text-align: center;
+    }
+    .working-table th {
+      background: var(--color-idea);
+      font-weight: 700;
+      font-size: 0.75rem;
+    }
+
+    /* --- End Screen --- */
+    .end-screen {
+      display: none;
+      animation: fadeSlideIn 0.4s ease;
+    }
+    .end-screen.visible { display: block; }
+
+    .results-card {
+      background: var(--color-white);
+      border: 2px solid #e0e0e0;
+      border-radius: var(--radius-lg);
+      padding: var(--space-xl);
+      text-align: center;
+      margin-bottom: var(--space-xl);
+    }
+    .results-big-score {
+      font-size: 3.5rem;
+      font-weight: 800;
+      background: var(--gradient-hero);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin: var(--space-md) 0;
+    }
+    .results-message {
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin-bottom: var(--space-sm);
+    }
+    .results-stats {
+      display: flex;
+      justify-content: center;
+      gap: var(--space-xl);
+      flex-wrap: wrap;
+      margin: var(--space-lg) 0;
+    }
+    .results-stat {
+      text-align: center;
+    }
+    .results-stat-value {
+      font-size: 1.6rem;
+      font-weight: 800;
+      font-family: var(--font-code);
+      color: var(--color-link);
+      display: block;
+    }
+    .results-stat-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--color-text-light);
+    }
+    .personal-best-badge {
+      display: none;
+      margin: var(--space-md) auto;
+      padding: var(--space-sm) var(--space-lg);
+      background: var(--gradient-hero);
+      color: var(--color-white);
+      border-radius: 50px;
+      font-weight: 800;
+      font-size: 0.95rem;
+      animation: celebrationPop 0.6s ease;
+    }
+    .personal-best-badge.visible {
+      display: inline-block;
+    }
+
+    @keyframes celebrationPop {
+      0% { transform: scale(0); opacity: 0; }
+      50% { transform: scale(1.2); }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    .end-btn-row {
+      display: flex;
+      gap: var(--space-sm);
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: var(--space-lg);
+    }
+    .end-btn {
+      font-family: var(--font-body);
+      font-size: 0.95rem;
+      font-weight: 700;
+      padding: var(--space-sm) var(--space-xl);
+      border: none;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      color: var(--color-white);
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .end-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-md);
+    }
+    .end-btn.play-again { background: var(--gradient-green); }
+    .end-btn.change-cat { background: var(--gradient-purple); }
+
+    /* --- Reference Section --- */
+    .reference-section {
+      margin-top: var(--space-xl);
+    }
+    .reference-section h2 {
+      margin-top: var(--space-lg);
+    }
+    .ref-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: var(--space-lg);
+      margin: var(--space-md) 0;
+    }
+    .ref-card {
+      background: var(--color-white);
+      border: 2px solid #e0e0e0;
+      border-radius: var(--radius-md);
+      padding: var(--space-lg);
+      box-shadow: var(--shadow-sm);
+    }
+    .ref-card h3 {
+      margin-top: 0;
+      margin-bottom: var(--space-sm);
+      font-size: 1rem;
+    }
+    .ref-card table {
+      width: 100%;
+      border-collapse: collapse;
+      font-family: var(--font-code);
+      font-size: 0.8rem;
+    }
+    .ref-card th,
+    .ref-card td {
+      border: 1px solid #e0e0e0;
+      padding: 4px 6px;
+      text-align: center;
+    }
+    .ref-card th {
+      background: var(--color-idea);
+      font-weight: 700;
+    }
+    .addition-rules {
+      font-family: var(--font-code);
+      font-size: 0.9rem;
+      line-height: 2;
+    }
+    .addition-rules li {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    /* --- Animations --- */
+    @keyframes fadeSlideIn {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* --- Responsive --- */
+    @media (max-width: 600px) {
+      .question-display {
+        font-size: 1.5rem;
+        letter-spacing: 0.06em;
+      }
+      .place-value-cell {
+        width: 28px;
+        font-size: 0.55rem;
+      }
+      .question-display .binary-digit {
+        width: 28px;
+      }
+      .answer-input {
+        width: 100%;
+        font-size: 1.1rem;
+      }
+      .category-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+      .results-big-score {
+        font-size: 2.4rem;
+      }
+      .game-hud {
+        gap: var(--space-xs);
+        padding: var(--space-sm);
+      }
+      .hud-value {
+        font-size: 1.2rem;
+      }
+      .hud-timer {
+        font-size: 1.4rem;
+      }
+    }
+
+    /* --- Reduced Motion --- */
+    @media (prefers-reduced-motion: reduce) {
+      .question-card,
+      .game-area,
+      .end-screen,
+      .drill-setup,
+      .working-panel,
+      .personal-best-badge {
+        animation: none !important;
+      }
+      .hud-timer.warning {
+        animation: none !important;
+        opacity: 1;
+      }
+      .progress-dot,
+      .question-card {
+        transition: none !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="site-header">
+    <p><a href="../index.html">&larr; Back to Course</a></p>
+    <h1>Binary Maths Speed Drill</h1>
+    <p class="subtitle">No calculator allowed &mdash; practise the skills you need for Paper 1</p>
+  </header>
+
+  <main>
+
+    <!-- ===== SETUP PANEL ===== -->
+    <div class="drill-setup" id="setupPanel">
+      <h2>Choose Your Drill</h2>
+
+      <h3>Category</h3>
+      <div class="category-grid" id="categoryGrid">
+        <div class="category-option">
+          <input type="radio" name="category" id="catBinDen" value="bin2den" checked />
+          <label for="catBinDen">Binary to Denary</label>
+        </div>
+        <div class="category-option">
+          <input type="radio" name="category" id="catDenBin" value="den2bin" />
+          <label for="catDenBin">Denary to Binary</label>
+        </div>
+        <div class="category-option">
+          <input type="radio" name="category" id="catBinHex" value="bin2hex" />
+          <label for="catBinHex">Binary to Hex</label>
+        </div>
+        <div class="category-option">
+          <input type="radio" name="category" id="catHexBin" value="hex2bin" />
+          <label for="catHexBin">Hex to Binary</label>
+        </div>
+        <div class="category-option">
+          <input type="radio" name="category" id="catDenHex" value="den2hex" />
+          <label for="catDenHex">Denary to Hex</label>
+        </div>
+        <div class="category-option">
+          <input type="radio" name="category" id="catHexDen" value="hex2den" />
+          <label for="catHexDen">Hex to Denary</label>
+        </div>
+        <div class="category-option">
+          <input type="radio" name="category" id="catBinAdd" value="binadd" />
+          <label for="catBinAdd">Binary Addition</label>
+        </div>
+        <div class="category-option">
+          <input type="radio" name="category" id="catLShift" value="lshift" />
+          <label for="catLShift">Binary Left Shift</label>
+        </div>
+        <div class="category-option">
+          <input type="radio" name="category" id="catRShift" value="rshift" />
+          <label for="catRShift">Binary Right Shift</label>
+        </div>
+        <div class="category-option mixed-option">
+          <input type="radio" name="category" id="catMixed" value="mixed" />
+          <label for="catMixed">Mixed (All Types)</label>
+        </div>
+      </div>
+
+      <div class="setting-row">
+        <span class="setting-label">Difficulty:</span>
+        <div class="btn-group" id="difficultyGroup">
+          <button class="btn-option diff-easy" data-diff="easy" onclick="setDifficulty('easy')">Easy (4-bit)</button>
+          <button class="btn-option diff-medium active" data-diff="medium" onclick="setDifficulty('medium')">Medium (8-bit)</button>
+          <button class="btn-option diff-hard" data-diff="hard" onclick="setDifficulty('hard')">Hard (8-bit+)</button>
+        </div>
+      </div>
+
+      <div class="setting-row">
+        <span class="setting-label">Mode:</span>
+        <div class="btn-group" id="modeGroup">
+          <button class="btn-option mode-speed active" data-mode="speed" onclick="setMode('speed')">Speed Round (10 Qs)</button>
+          <button class="btn-option mode-countdown" data-mode="countdown" onclick="setMode('countdown')">Countdown (60s)</button>
+        </div>
+      </div>
+
+      <button class="start-btn" id="startBtn" onclick="startDrill()">Start Drill</button>
+    </div>
+
+    <!-- ===== GAME AREA ===== -->
+    <div class="game-area" id="gameArea">
+      <!-- HUD -->
+      <div class="game-hud">
+        <div class="hud-item">
+          <span class="hud-label">Score</span>
+          <span class="hud-value" id="hudScore">0</span>
+        </div>
+        <div class="hud-item">
+          <span class="hud-label" id="hudQLabel">Question</span>
+          <span class="hud-value" id="hudQuestion">1/10</span>
+        </div>
+        <div class="hud-item">
+          <span class="hud-label">Time</span>
+          <span class="hud-timer" id="hudTimer">0.0</span>
+        </div>
+        <div class="hud-item">
+          <span class="hud-label">Streak</span>
+          <span class="hud-value" id="hudStreak">0</span>
+        </div>
+      </div>
+
+      <!-- Progress dots (speed mode) -->
+      <div class="progress-dots" id="progressDots"></div>
+
+      <!-- Question -->
+      <div class="question-card" id="questionCard">
+        <div class="question-type-badge" id="questionBadge">Binary to Denary</div>
+
+        <div class="place-value-row" id="placeValueRow"></div>
+        <div class="question-display" id="questionDisplay"></div>
+        <div class="question-operator" id="questionOperator"></div>
+        <div class="place-value-row" id="placeValueRow2"></div>
+        <div class="question-display" id="questionDisplay2"></div>
+        <div class="question-hint" id="questionHint"></div>
+
+        <div class="answer-row">
+          <input type="text" class="answer-input" id="answerInput" placeholder="Your answer..." autocomplete="off" spellcheck="false" />
+          <button class="submit-btn" id="submitBtn" onclick="submitAnswer()">Submit</button>
+        </div>
+
+        <div class="feedback-line" id="feedbackLine"></div>
+
+        <button class="working-btn" id="workingBtn" onclick="toggleWorking()">Show Working</button>
+        <div class="working-panel" id="workingPanel"></div>
+      </div>
+    </div>
+
+    <!-- ===== END SCREEN ===== -->
+    <div class="end-screen" id="endScreen">
+      <div class="results-card">
+        <div class="question-type-badge" style="background: var(--gradient-green);">Drill Complete</div>
+        <div class="results-big-score" id="endScore">8 / 10</div>
+        <div class="results-message" id="endMessage">Great work!</div>
+
+        <div class="personal-best-badge" id="pbBadge">New Personal Best!</div>
+
+        <div class="results-stats">
+          <div class="results-stat">
+            <span class="results-stat-value" id="endTime">0.0s</span>
+            <span class="results-stat-label">Time</span>
+          </div>
+          <div class="results-stat">
+            <span class="results-stat-value" id="endAccuracy">80%</span>
+            <span class="results-stat-label">Accuracy</span>
+          </div>
+          <div class="results-stat">
+            <span class="results-stat-value" id="endBestStreak">0</span>
+            <span class="results-stat-label">Best Streak</span>
+          </div>
+          <div class="results-stat">
+            <span class="results-stat-value" id="endPB">--</span>
+            <span class="results-stat-label">Personal Best</span>
+          </div>
+        </div>
+
+        <div class="end-btn-row">
+          <button class="end-btn play-again" onclick="playAgain()">Play Again</button>
+          <button class="end-btn change-cat" onclick="changeCategory()">Change Category</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== REFERENCE SECTION ===== -->
+    <div class="reference-section" id="referenceSection">
+      <h2>Quick Reference</h2>
+      <div class="ref-grid">
+        <div class="ref-card">
+          <h3>Binary Place Values</h3>
+          <table>
+            <thead>
+              <tr><th>128</th><th>64</th><th>32</th><th>16</th><th>8</th><th>4</th><th>2</th><th>1</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>2<sup>7</sup></td><td>2<sup>6</sup></td><td>2<sup>5</sup></td><td>2<sup>4</sup></td><td>2<sup>3</sup></td><td>2<sup>2</sup></td><td>2<sup>1</sup></td><td>2<sup>0</sup></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="ref-card">
+          <h3>Hexadecimal Values</h3>
+          <table>
+            <thead>
+              <tr><th>Dec</th><th>Hex</th><th>Dec</th><th>Hex</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>0</td><td>0</td><td>8</td><td>8</td></tr>
+              <tr><td>1</td><td>1</td><td>9</td><td>9</td></tr>
+              <tr><td>2</td><td>2</td><td>10</td><td>A</td></tr>
+              <tr><td>3</td><td>3</td><td>11</td><td>B</td></tr>
+              <tr><td>4</td><td>4</td><td>12</td><td>C</td></tr>
+              <tr><td>5</td><td>5</td><td>13</td><td>D</td></tr>
+              <tr><td>6</td><td>6</td><td>14</td><td>E</td></tr>
+              <tr><td>7</td><td>7</td><td>15</td><td>F</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="ref-card">
+          <h3>Binary Addition Rules</h3>
+          <ul class="addition-rules">
+            <li><code>0 + 0 = 0</code></li>
+            <li><code>0 + 1 = 1</code></li>
+            <li><code>1 + 0 = 1</code></li>
+            <li><code>1 + 1 = 10</code> (0 carry 1)</li>
+            <li><code>1 + 1 + 1 = 11</code> (1 carry 1)</li>
+          </ul>
+          <h3 style="margin-top: var(--space-md);">Shift Rules</h3>
+          <ul class="addition-rules">
+            <li>Left shift by 1 = multiply by 2</li>
+            <li>Left shift by 2 = multiply by 4</li>
+            <li>Right shift by 1 = divide by 2</li>
+            <li>Right shift by 2 = divide by 4</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <footer class="site-footer">
+    <p>Python Fundamentals &mdash; A KS4 Learning Platform</p>
+  </footer>
+
+<script>
+// ============================================================
+//  Binary Maths Speed Drill
+//  Pearson Edexcel GCSE Computer Science — Paper 1 Practice
+// ============================================================
+(function() {
+  'use strict';
+
+  // ============================================================
+  //  STATE
+  // ============================================================
+  var config = {
+    category: 'bin2den',
+    difficulty: 'medium',
+    mode: 'speed'
+  };
+
+  var ALL_CATEGORIES = [
+    'bin2den', 'den2bin', 'bin2hex', 'hex2bin',
+    'den2hex', 'hex2den', 'binadd', 'lshift', 'rshift'
+  ];
+
+  var CATEGORY_LABELS = {
+    bin2den: 'Binary to Denary',
+    den2bin: 'Denary to Binary',
+    bin2hex: 'Binary to Hex',
+    hex2bin: 'Hex to Binary',
+    den2hex: 'Denary to Hex',
+    hex2den: 'Hex to Denary',
+    binadd: 'Binary Addition',
+    lshift: 'Binary Left Shift',
+    rshift: 'Binary Right Shift'
+  };
+
+  var game = {
+    active: false,
+    questions: [],
+    currentIndex: 0,
+    score: 0,
+    totalAnswered: 0,
+    streak: 0,
+    bestStreak: 0,
+    timerInterval: null,
+    elapsed: 0,
+    remaining: 60,
+    answered: false,
+    currentQuestion: null
+  };
+
+  // ============================================================
+  //  DOM REFERENCES
+  // ============================================================
+  var setupPanel = document.getElementById('setupPanel');
+  var gameArea = document.getElementById('gameArea');
+  var endScreen = document.getElementById('endScreen');
+  var referenceSection = document.getElementById('referenceSection');
+
+  var hudScore = document.getElementById('hudScore');
+  var hudQuestion = document.getElementById('hudQuestion');
+  var hudQLabel = document.getElementById('hudQLabel');
+  var hudTimer = document.getElementById('hudTimer');
+  var hudStreak = document.getElementById('hudStreak');
+  var progressDots = document.getElementById('progressDots');
+
+  var questionCard = document.getElementById('questionCard');
+  var questionBadge = document.getElementById('questionBadge');
+  var placeValueRow = document.getElementById('placeValueRow');
+  var placeValueRow2 = document.getElementById('placeValueRow2');
+  var questionDisplay = document.getElementById('questionDisplay');
+  var questionDisplay2 = document.getElementById('questionDisplay2');
+  var questionOperator = document.getElementById('questionOperator');
+  var questionHint = document.getElementById('questionHint');
+  var answerInput = document.getElementById('answerInput');
+  var submitBtn = document.getElementById('submitBtn');
+  var feedbackLine = document.getElementById('feedbackLine');
+  var workingBtn = document.getElementById('workingBtn');
+  var workingPanel = document.getElementById('workingPanel');
+
+  // ============================================================
+  //  SETUP CONTROLS
+  // ============================================================
+  window.setDifficulty = function(diff) {
+    config.difficulty = diff;
+    document.querySelectorAll('#difficultyGroup .btn-option').forEach(function(b) {
+      b.classList.toggle('active', b.getAttribute('data-diff') === diff);
+    });
+  };
+
+  window.setMode = function(mode) {
+    config.mode = mode;
+    document.querySelectorAll('#modeGroup .btn-option').forEach(function(b) {
+      b.classList.toggle('active', b.getAttribute('data-mode') === mode);
+    });
+  };
+
+  // ============================================================
+  //  UTILITY FUNCTIONS
+  // ============================================================
+  function randInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
+
+  function toBin(n, bits) {
+    var s = n.toString(2);
+    while (s.length < bits) s = '0' + s;
+    return s;
+  }
+
+  function toHex(n) {
+    return n.toString(16).toUpperCase();
+  }
+
+  function padHex(h) {
+    return h.length < 2 ? '0' + h : h;
+  }
+
+  function getBitCount() {
+    return config.difficulty === 'easy' ? 4 : 8;
+  }
+
+  function getMaxVal() {
+    return config.difficulty === 'easy' ? 15 : 255;
+  }
+
+  function formatBinaryHTML(binStr) {
+    return binStr.split('').map(function(d) {
+      return '<span class="binary-digit">' + d + '</span>';
+    }).join('');
+  }
+
+  function placeValueHTML(bits) {
+    var vals = [];
+    for (var i = bits - 1; i >= 0; i--) {
+      vals.push(Math.pow(2, i));
+    }
+    return vals.map(function(v) {
+      return '<span class="place-value-cell">' + v + '</span>';
+    }).join('');
+  }
+
+  // ============================================================
+  //  QUESTION GENERATORS
+  // ============================================================
+  function genBin2Den() {
+    var bits = getBitCount();
+    var val = randInt(1, getMaxVal());
+    var bin = toBin(val, bits);
+    return {
+      type: 'bin2den',
+      label: 'Binary to Denary',
+      prompt: bin,
+      promptIsBinary: true,
+      answer: val.toString(),
+      answerDisplay: val.toString(),
+      hint: 'Convert this binary number to denary',
+      bits: bits,
+      val: val,
+      bin: bin
+    };
+  }
+
+  function genDen2Bin() {
+    var bits = getBitCount();
+    var val = randInt(1, getMaxVal());
+    var bin = toBin(val, bits);
+    return {
+      type: 'den2bin',
+      label: 'Denary to Binary',
+      prompt: val.toString(),
+      promptIsBinary: false,
+      answer: bin,
+      answerDisplay: bin,
+      hint: 'Convert this denary number to ' + bits + '-bit binary',
+      bits: bits,
+      val: val,
+      bin: bin
+    };
+  }
+
+  function genBin2Hex() {
+    var bits = getBitCount();
+    var val = randInt(1, getMaxVal());
+    var bin = toBin(val, bits);
+    var hex = padHex(toHex(val));
+    if (bits === 4) hex = toHex(val);
+    return {
+      type: 'bin2hex',
+      label: 'Binary to Hex',
+      prompt: bin,
+      promptIsBinary: true,
+      answer: hex.toUpperCase(),
+      answerDisplay: hex.toUpperCase(),
+      hint: 'Convert this binary number to hexadecimal',
+      bits: bits,
+      val: val,
+      bin: bin
+    };
+  }
+
+  function genHex2Bin() {
+    var bits = getBitCount();
+    var val = randInt(1, getMaxVal());
+    var bin = toBin(val, bits);
+    var hex = padHex(toHex(val));
+    if (bits === 4) hex = toHex(val);
+    return {
+      type: 'hex2bin',
+      label: 'Hex to Binary',
+      prompt: hex.toUpperCase(),
+      promptIsBinary: false,
+      answer: bin,
+      answerDisplay: bin,
+      hint: 'Convert this hexadecimal number to ' + bits + '-bit binary',
+      bits: bits,
+      val: val,
+      bin: bin
+    };
+  }
+
+  function genDen2Hex() {
+    var bits = getBitCount();
+    var val = randInt(1, getMaxVal());
+    var hex = padHex(toHex(val));
+    if (bits === 4) hex = toHex(val);
+    return {
+      type: 'den2hex',
+      label: 'Denary to Hex',
+      prompt: val.toString(),
+      promptIsBinary: false,
+      answer: hex.toUpperCase(),
+      answerDisplay: hex.toUpperCase(),
+      hint: 'Convert this denary number to hexadecimal',
+      bits: bits,
+      val: val
+    };
+  }
+
+  function genHex2Den() {
+    var bits = getBitCount();
+    var val = randInt(1, getMaxVal());
+    var hex = padHex(toHex(val));
+    if (bits === 4) hex = toHex(val);
+    return {
+      type: 'hex2den',
+      label: 'Hex to Denary',
+      prompt: hex.toUpperCase(),
+      promptIsBinary: false,
+      answer: val.toString(),
+      answerDisplay: val.toString(),
+      hint: 'Convert this hexadecimal number to denary',
+      bits: bits,
+      val: val
+    };
+  }
+
+  function genBinAdd() {
+    var bits = getBitCount();
+    var maxEach = Math.floor(getMaxVal() / 2);
+    var a, b;
+    if (config.difficulty === 'hard') {
+      // Allow overflow scenarios
+      a = randInt(Math.floor(getMaxVal() * 0.3), getMaxVal());
+      b = randInt(Math.floor(getMaxVal() * 0.3), getMaxVal());
+    } else {
+      a = randInt(1, maxEach);
+      b = randInt(1, maxEach);
+    }
+    var sum = a + b;
+    var overflow = sum > getMaxVal();
+    var resultBits = overflow ? bits + 1 : bits;
+    var resultBin = toBin(sum, resultBits);
+    var binA = toBin(a, bits);
+    var binB = toBin(b, bits);
+    return {
+      type: 'binadd',
+      label: 'Binary Addition',
+      prompt: binA,
+      prompt2: binB,
+      promptIsBinary: true,
+      answer: resultBin,
+      answerDisplay: resultBin + (overflow ? ' (overflow!)' : ''),
+      hint: overflow ? 'Add these binary numbers (overflow may occur!)' : 'Add these two binary numbers',
+      bits: bits,
+      a: a,
+      b: b,
+      sum: sum,
+      overflow: overflow,
+      binA: binA,
+      binB: binB
+    };
+  }
+
+  function genLShift() {
+    var bits = getBitCount();
+    var places = config.difficulty === 'hard' ? randInt(1, 2) : 1;
+    var maxStart = Math.floor(getMaxVal() / Math.pow(2, places));
+    var val = randInt(1, Math.max(1, maxStart));
+    var bin = toBin(val, bits);
+    var result = val * Math.pow(2, places);
+    var overflow = result > getMaxVal();
+    var resultBin = toBin(result % (getMaxVal() + 1), bits);
+    return {
+      type: 'lshift',
+      label: 'Binary Left Shift',
+      prompt: bin,
+      promptIsBinary: true,
+      answer: resultBin,
+      answerDisplay: resultBin + ' (denary: ' + (result % (getMaxVal() + 1)) + ')',
+      hint: 'Shift left by ' + places + ' place' + (places > 1 ? 's' : '') + ' (multiply by ' + Math.pow(2, places) + ')',
+      bits: bits,
+      val: val,
+      places: places,
+      result: result,
+      resultMod: result % (getMaxVal() + 1),
+      overflow: overflow,
+      bin: bin
+    };
+  }
+
+  function genRShift() {
+    var bits = getBitCount();
+    var places = config.difficulty === 'hard' ? randInt(1, 2) : 1;
+    var val = randInt(Math.pow(2, places), getMaxVal());
+    var bin = toBin(val, bits);
+    var result = Math.floor(val / Math.pow(2, places));
+    var resultBin = toBin(result, bits);
+    return {
+      type: 'rshift',
+      label: 'Binary Right Shift',
+      prompt: bin,
+      promptIsBinary: true,
+      answer: resultBin,
+      answerDisplay: resultBin + ' (denary: ' + result + ')',
+      hint: 'Shift right by ' + places + ' place' + (places > 1 ? 's' : '') + ' (divide by ' + Math.pow(2, places) + ')',
+      bits: bits,
+      val: val,
+      places: places,
+      result: result,
+      bin: bin
+    };
+  }
+
+  var generators = {
+    bin2den: genBin2Den,
+    den2bin: genDen2Bin,
+    bin2hex: genBin2Hex,
+    hex2bin: genHex2Bin,
+    den2hex: genDen2Hex,
+    hex2den: genHex2Den,
+    binadd: genBinAdd,
+    lshift: genLShift,
+    rshift: genRShift
+  };
+
+  function generateQuestion() {
+    var cat = config.category;
+    if (cat === 'mixed') {
+      cat = ALL_CATEGORIES[randInt(0, ALL_CATEGORIES.length - 1)];
+    }
+    return generators[cat]();
+  }
+
+  // ============================================================
+  //  WORKING/EXPLANATION GENERATORS
+  // ============================================================
+  function getWorking(q) {
+    var html = '';
+    var bits, i, pv;
+
+    switch (q.type) {
+      case 'bin2den':
+        bits = q.bin.split('');
+        html = '<h4>Step-by-step: Binary to Denary</h4>';
+        html += '<table class="working-table"><thead><tr>';
+        for (i = bits.length - 1; i >= 0; i--) {
+          html += '<th>' + Math.pow(2, i) + '</th>';
+        }
+        html += '</tr></thead><tbody><tr>';
+        for (i = 0; i < bits.length; i++) {
+          html += '<td>' + bits[i] + '</td>';
+        }
+        html += '</tr></tbody></table>';
+        html += '<p>Add up the place values where there is a <code>1</code>:</p><p>';
+        var parts = [];
+        for (i = 0; i < bits.length; i++) {
+          if (bits[i] === '1') {
+            pv = Math.pow(2, bits.length - 1 - i);
+            parts.push(pv);
+          }
+        }
+        html += parts.join(' + ') + ' = <strong>' + q.val + '</strong></p>';
+        break;
+
+      case 'den2bin':
+        html = '<h4>Step-by-step: Denary to Binary</h4>';
+        html += '<p>Starting with <strong>' + q.val + '</strong>, try subtracting each place value from left to right:</p>';
+        var remaining = q.val;
+        html += '<table class="working-table"><thead><tr><th>Place Value</th><th>Fits?</th><th>Bit</th><th>Remaining</th></tr></thead><tbody>';
+        for (i = q.bits - 1; i >= 0; i--) {
+          pv = Math.pow(2, i);
+          var fits = remaining >= pv;
+          html += '<tr><td>' + pv + '</td><td>' + (fits ? 'Yes' : 'No') + '</td><td><strong>' + (fits ? '1' : '0') + '</strong></td><td>' + (fits ? remaining - pv : remaining) + '</td></tr>';
+          if (fits) remaining -= pv;
+        }
+        html += '</tbody></table>';
+        html += '<p>Result: <code>' + q.bin + '</code></p>';
+        break;
+
+      case 'bin2hex':
+        html = '<h4>Step-by-step: Binary to Hexadecimal</h4>';
+        html += '<p>Split the binary into nibbles (groups of 4 bits), then convert each nibble:</p>';
+        var binStr = q.bin;
+        while (binStr.length % 4 !== 0) binStr = '0' + binStr;
+        html += '<table class="working-table"><thead><tr><th>Nibble</th><th>Denary</th><th>Hex</th></tr></thead><tbody>';
+        for (i = 0; i < binStr.length; i += 4) {
+          var nibble = binStr.substring(i, i + 4);
+          var nibbleVal = parseInt(nibble, 2);
+          html += '<tr><td><code>' + nibble + '</code></td><td>' + nibbleVal + '</td><td><strong>' + toHex(nibbleVal) + '</strong></td></tr>';
+        }
+        html += '</tbody></table>';
+        html += '<p>Result: <code>' + q.answerDisplay + '</code></p>';
+        break;
+
+      case 'hex2bin':
+        html = '<h4>Step-by-step: Hexadecimal to Binary</h4>';
+        html += '<p>Convert each hex digit to its 4-bit binary equivalent:</p>';
+        html += '<table class="working-table"><thead><tr><th>Hex Digit</th><th>Denary</th><th>Binary (4-bit)</th></tr></thead><tbody>';
+        for (i = 0; i < q.prompt.length; i++) {
+          var hexDigit = q.prompt[i];
+          var hexVal = parseInt(hexDigit, 16);
+          html += '<tr><td><strong>' + hexDigit + '</strong></td><td>' + hexVal + '</td><td><code>' + toBin(hexVal, 4) + '</code></td></tr>';
+        }
+        html += '</tbody></table>';
+        html += '<p>Combined: <code>' + q.answer + '</code></p>';
+        break;
+
+      case 'den2hex':
+        html = '<h4>Step-by-step: Denary to Hexadecimal</h4>';
+        html += '<p>Method: Divide by 16 repeatedly.</p>';
+        var d = q.val;
+        var quot = Math.floor(d / 16);
+        var rem = d % 16;
+        html += '<p><code>' + d + ' / 16 = ' + quot + ' remainder ' + rem + '</code> (' + rem + ' in hex = <strong>' + toHex(rem) + '</strong>)</p>';
+        if (quot > 0) {
+          var quot2 = Math.floor(quot / 16);
+          var rem2 = quot % 16;
+          html += '<p><code>' + quot + ' / 16 = ' + quot2 + ' remainder ' + rem2 + '</code> (' + rem2 + ' in hex = <strong>' + toHex(rem2) + '</strong>)</p>';
+        }
+        html += '<p>Read remainders bottom-to-top: <code>' + q.answerDisplay + '</code></p>';
+        break;
+
+      case 'hex2den':
+        html = '<h4>Step-by-step: Hexadecimal to Denary</h4>';
+        html += '<p>Multiply each hex digit by its place value (powers of 16):</p>';
+        var hexStr = q.prompt;
+        var total = 0;
+        var hexParts = [];
+        for (i = 0; i < hexStr.length; i++) {
+          var hd = hexStr[i];
+          var hv = parseInt(hd, 16);
+          var power = Math.pow(16, hexStr.length - 1 - i);
+          hexParts.push(hv + ' x ' + power);
+          total += hv * power;
+        }
+        html += '<p><code>' + hexParts.join(' + ') + ' = ' + total + '</code></p>';
+        html += '<p>Result: <strong>' + q.val + '</strong></p>';
+        break;
+
+      case 'binadd':
+        html = '<h4>Step-by-step: Binary Addition</h4>';
+        html += '<p>Add column by column from right to left, carrying as needed:</p>';
+        var aStr = q.binA;
+        var bStr = q.binB;
+        var carry = 0;
+        var resultDigits = [];
+        var carries = [];
+        for (i = aStr.length - 1; i >= 0; i--) {
+          var da = parseInt(aStr[i]);
+          var db = parseInt(bStr[i]);
+          var colSum = da + db + carry;
+          var digit = colSum % 2;
+          carry = Math.floor(colSum / 2);
+          resultDigits.unshift(digit);
+          carries.unshift(carry);
+        }
+        if (carry) {
+          resultDigits.unshift(carry);
+        }
+
+        html += '<table class="working-table"><thead><tr><th></th>';
+        for (i = 0; i < aStr.length; i++) {
+          html += '<th>' + Math.pow(2, aStr.length - 1 - i) + '</th>';
+        }
+        html += '</tr></thead><tbody>';
+        html += '<tr><td>A</td>';
+        for (i = 0; i < aStr.length; i++) html += '<td>' + aStr[i] + '</td>';
+        html += '</tr><tr><td>B</td>';
+        for (i = 0; i < bStr.length; i++) html += '<td>' + bStr[i] + '</td>';
+        html += '</tr><tr><td>Carry</td>';
+        for (i = 0; i < carries.length; i++) html += '<td style="color:var(--color-link);font-weight:700;">' + carries[i] + '</td>';
+        html += '</tr></tbody></table>';
+        html += '<p>Result: <code>' + q.answer + '</code> (denary: ' + q.sum + ')</p>';
+        if (q.overflow) {
+          html += '<p style="color:var(--color-error);font-weight:700;">Overflow detected! The result exceeds ' + q.bits + ' bits.</p>';
+        }
+        break;
+
+      case 'lshift':
+        html = '<h4>Step-by-step: Left Shift by ' + q.places + '</h4>';
+        html += '<p>Original: <code>' + q.bin + '</code> (denary: ' + q.val + ')</p>';
+        html += '<p>Shift all bits <strong>' + q.places + ' place' + (q.places > 1 ? 's' : '') + '</strong> to the left. Fill in <code>0</code>s on the right.</p>';
+        html += '<p>This is equivalent to <strong>multiplying by ' + Math.pow(2, q.places) + '</strong>.</p>';
+        html += '<p><code>' + q.val + ' x ' + Math.pow(2, q.places) + ' = ' + q.result + '</code></p>';
+        if (q.overflow) {
+          html += '<p style="color:var(--color-error);font-weight:700;">Overflow! ' + q.result + ' does not fit in ' + q.bits + ' bits, so the leftmost bit(s) are lost. Result stored: ' + q.resultMod + '</p>';
+        }
+        html += '<p>Result: <code>' + q.answer + '</code></p>';
+        break;
+
+      case 'rshift':
+        html = '<h4>Step-by-step: Right Shift by ' + q.places + '</h4>';
+        html += '<p>Original: <code>' + q.bin + '</code> (denary: ' + q.val + ')</p>';
+        html += '<p>Shift all bits <strong>' + q.places + ' place' + (q.places > 1 ? 's' : '') + '</strong> to the right. Fill in <code>0</code>s on the left. Rightmost bits are lost.</p>';
+        html += '<p>This is equivalent to <strong>integer-dividing by ' + Math.pow(2, q.places) + '</strong>.</p>';
+        html += '<p><code>' + q.val + ' / ' + Math.pow(2, q.places) + ' = ' + q.result + '</code> (integer division)</p>';
+        html += '<p>Result: <code>' + q.answer + '</code></p>';
+        break;
+    }
+    return html;
+  }
+
+  // ============================================================
+  //  DISPLAY QUESTION
+  // ============================================================
+  function showQuestion(q) {
+    game.currentQuestion = q;
+    game.answered = false;
+    questionBadge.textContent = q.label;
+
+    // Reset UI
+    questionCard.classList.remove('flash-correct', 'flash-incorrect');
+    answerInput.value = '';
+    answerInput.classList.remove('correct', 'incorrect');
+    answerInput.disabled = false;
+    submitBtn.disabled = false;
+    feedbackLine.textContent = '';
+    feedbackLine.className = 'feedback-line';
+    workingPanel.classList.remove('visible');
+    workingPanel.innerHTML = '';
+    workingBtn.textContent = 'Show Working';
+    questionOperator.textContent = '';
+    questionDisplay2.innerHTML = '';
+    placeValueRow2.innerHTML = '';
+
+    var bits = q.bits || getBitCount();
+
+    // Set place values and display
+    if (q.promptIsBinary) {
+      placeValueRow.innerHTML = placeValueHTML(q.prompt.length);
+      questionDisplay.innerHTML = formatBinaryHTML(q.prompt);
+    } else {
+      placeValueRow.innerHTML = '';
+      questionDisplay.innerHTML = '<span style="letter-spacing:0.05em;">' + q.prompt + '</span>';
+    }
+
+    // Second line for addition
+    if (q.type === 'binadd' && q.prompt2) {
+      questionOperator.textContent = '+';
+      placeValueRow2.innerHTML = '';
+      questionDisplay2.innerHTML = formatBinaryHTML(q.prompt2);
+    }
+
+    // Shift indicator
+    if (q.type === 'lshift') {
+      questionOperator.textContent = '<< ' + q.places;
+    }
+    if (q.type === 'rshift') {
+      questionOperator.textContent = '>> ' + q.places;
+    }
+
+    questionHint.textContent = q.hint || '';
+
+    // Set placeholder based on expected answer type
+    if (['den2bin', 'hex2bin', 'binadd', 'lshift', 'rshift'].indexOf(q.type) !== -1) {
+      answerInput.placeholder = 'Enter binary (e.g. 10110011)';
+    } else if (['bin2hex', 'den2hex'].indexOf(q.type) !== -1) {
+      answerInput.placeholder = 'Enter hex (e.g. A3)';
+    } else {
+      answerInput.placeholder = 'Enter denary (e.g. 179)';
+    }
+
+    answerInput.focus();
+
+    // Generate working now so it is ready
+    workingPanel.innerHTML = getWorking(q);
+
+    // Update HUD
+    updateHUD();
+  }
+
+  // ============================================================
+  //  ANSWER CHECKING
+  // ============================================================
+  function normalizeAnswer(str) {
+    return str.trim().replace(/\s+/g, '').toUpperCase();
+  }
+
+  function checkCorrect(q, raw) {
+    var userAnswer = normalizeAnswer(raw);
+    var correctAnswer = normalizeAnswer(q.answer);
+
+    // For binary answers, strip leading zeros for comparison
+    if (['den2bin', 'hex2bin', 'binadd', 'lshift', 'rshift'].indexOf(q.type) !== -1) {
+      // Must match exact bit count, so compare directly
+      // But allow leading zeros or not
+      var userDen = parseInt(userAnswer, 2);
+      var correctDen = parseInt(correctAnswer, 2);
+      // Also accept if the binary strings match after padding
+      var bits = q.bits || getBitCount();
+      var userPadded = userAnswer;
+      while (userPadded.length < bits) userPadded = '0' + userPadded;
+
+      // For addition overflow, the result may be longer than bits
+      if (q.type === 'binadd' && q.overflow) {
+        var expectedLen = correctAnswer.length;
+        while (userPadded.length < expectedLen) userPadded = '0' + userPadded;
+      }
+
+      return userPadded === correctAnswer || userAnswer === correctAnswer || (!isNaN(userDen) && !isNaN(correctDen) && userDen === correctDen && userAnswer.match(/^[01]+$/));
+    }
+
+    // For hex answers
+    if (['bin2hex', 'den2hex'].indexOf(q.type) !== -1) {
+      // Strip leading zero from user if single digit answer expected
+      var userHex = userAnswer.replace(/^0+/, '') || '0';
+      var correctHex = correctAnswer.replace(/^0+/, '') || '0';
+      return userHex === correctHex || userAnswer === correctAnswer;
+    }
+
+    // For denary answers
+    return userAnswer === correctAnswer;
+  }
+
+  window.submitAnswer = function() {
+    if (game.answered || !game.active) return;
+
+    var raw = answerInput.value.trim();
+    if (!raw) {
+      answerInput.style.borderColor = 'var(--color-error)';
+      setTimeout(function() { answerInput.style.borderColor = ''; }, 500);
+      return;
+    }
+
+    game.answered = true;
+    game.totalAnswered++;
+
+    var q = game.currentQuestion;
+    var isCorrect = checkCorrect(q, raw);
+
+    if (isCorrect) {
+      game.score++;
+      game.streak++;
+      if (game.streak > game.bestStreak) game.bestStreak = game.streak;
+      questionCard.classList.add('flash-correct');
+      answerInput.classList.add('correct');
+      feedbackLine.textContent = 'Correct!';
+      feedbackLine.className = 'feedback-line correct';
+    } else {
+      game.streak = 0;
+      questionCard.classList.add('flash-incorrect');
+      answerInput.classList.add('incorrect');
+      feedbackLine.innerHTML = 'Incorrect. The answer is: <strong>' + q.answerDisplay + '</strong>';
+      feedbackLine.className = 'feedback-line incorrect';
+    }
+
+    answerInput.disabled = true;
+    submitBtn.disabled = true;
+
+    // Update progress dots
+    if (config.mode === 'speed') {
+      var dots = progressDots.querySelectorAll('.progress-dot');
+      if (dots[game.currentIndex]) {
+        dots[game.currentIndex].classList.remove('current');
+        dots[game.currentIndex].classList.add(isCorrect ? 'correct' : 'incorrect');
+      }
+    }
+
+    updateHUD();
+
+    // Auto-advance after a brief delay
+    var delay = isCorrect ? 600 : 1800;
+    setTimeout(function() {
+      if (!game.active) return;
+      advanceQuestion();
+    }, delay);
+  };
+
+  function advanceQuestion() {
+    game.currentIndex++;
+
+    if (config.mode === 'speed' && game.currentIndex >= 10) {
+      endDrill();
+      return;
+    }
+
+    if (config.mode === 'countdown' && game.remaining <= 0) {
+      endDrill();
+      return;
+    }
+
+    var q = generateQuestion();
+    game.questions.push(q);
+    showQuestion(q);
+
+    // Mark current dot
+    if (config.mode === 'speed') {
+      var dots = progressDots.querySelectorAll('.progress-dot');
+      if (dots[game.currentIndex]) {
+        dots[game.currentIndex].classList.add('current');
+      }
+    }
+  }
+
+  // ============================================================
+  //  HUD UPDATE
+  // ============================================================
+  function updateHUD() {
+    hudScore.textContent = game.score;
+    hudStreak.textContent = game.streak;
+
+    if (config.mode === 'speed') {
+      hudQuestion.textContent = (game.currentIndex + 1) + '/10';
+      hudQLabel.textContent = 'Question';
+    } else {
+      hudQuestion.textContent = game.totalAnswered.toString();
+      hudQLabel.textContent = 'Answered';
+    }
+  }
+
+  // ============================================================
+  //  TIMER
+  // ============================================================
+  function startTimer() {
+    var startTime = Date.now();
+
+    if (config.mode === 'speed') {
+      game.elapsed = 0;
+      game.timerInterval = setInterval(function() {
+        game.elapsed = (Date.now() - startTime) / 1000;
+        hudTimer.textContent = game.elapsed.toFixed(1);
+        hudTimer.classList.remove('warning');
+      }, 100);
+    } else {
+      game.remaining = 60;
+      hudTimer.textContent = '60.0';
+      game.timerInterval = setInterval(function() {
+        game.remaining = 60 - (Date.now() - startTime) / 1000;
+        if (game.remaining <= 0) {
+          game.remaining = 0;
+          hudTimer.textContent = '0.0';
+          clearInterval(game.timerInterval);
+          endDrill();
+          return;
+        }
+        hudTimer.textContent = game.remaining.toFixed(1);
+        hudTimer.classList.toggle('warning', game.remaining <= 10);
+      }, 100);
+    }
+  }
+
+  function stopTimer() {
+    if (game.timerInterval) {
+      clearInterval(game.timerInterval);
+      game.timerInterval = null;
+    }
+  }
+
+  // ============================================================
+  //  TOGGLE WORKING
+  // ============================================================
+  window.toggleWorking = function() {
+    var isVisible = workingPanel.classList.toggle('visible');
+    workingBtn.textContent = isVisible ? 'Hide Working' : 'Show Working';
+  };
+
+  // ============================================================
+  //  START DRILL
+  // ============================================================
+  window.startDrill = function() {
+    // Read category from radio
+    var selected = document.querySelector('input[name="category"]:checked');
+    config.category = selected ? selected.value : 'bin2den';
+
+    // Reset game state
+    game.active = true;
+    game.questions = [];
+    game.currentIndex = 0;
+    game.score = 0;
+    game.totalAnswered = 0;
+    game.streak = 0;
+    game.bestStreak = 0;
+    game.elapsed = 0;
+    game.remaining = 60;
+    game.answered = false;
+
+    // Show/hide panels
+    setupPanel.style.display = 'none';
+    endScreen.classList.remove('visible');
+    gameArea.classList.add('visible');
+    referenceSection.style.display = 'none';
+
+    // Build progress dots (speed mode)
+    progressDots.innerHTML = '';
+    if (config.mode === 'speed') {
+      progressDots.style.display = 'flex';
+      for (var i = 0; i < 10; i++) {
+        var dot = document.createElement('div');
+        dot.className = 'progress-dot';
+        if (i === 0) dot.classList.add('current');
+        progressDots.appendChild(dot);
+      }
+    } else {
+      progressDots.style.display = 'none';
+    }
+
+    // Generate first question
+    var q = generateQuestion();
+    game.questions.push(q);
+    showQuestion(q);
+
+    // Start timer
+    startTimer();
+  };
+
+  // ============================================================
+  //  END DRILL
+  // ============================================================
+  function endDrill() {
+    game.active = false;
+    stopTimer();
+
+    gameArea.classList.remove('visible');
+    endScreen.classList.add('visible');
+    referenceSection.style.display = '';
+
+    var total = config.mode === 'speed' ? 10 : game.totalAnswered;
+    var accuracy = total > 0 ? Math.round((game.score / total) * 100) : 0;
+    var timeStr = config.mode === 'speed' ? game.elapsed.toFixed(1) + 's' : '60s';
+
+    document.getElementById('endScore').textContent = game.score + ' / ' + total;
+    document.getElementById('endTime').textContent = timeStr;
+    document.getElementById('endAccuracy').textContent = accuracy + '%';
+    document.getElementById('endBestStreak').textContent = game.bestStreak;
+
+    // Message
+    var msg = '';
+    if (accuracy === 100) msg = 'Perfect score! Outstanding work!';
+    else if (accuracy >= 80) msg = 'Excellent! Nearly flawless.';
+    else if (accuracy >= 60) msg = 'Good effort! Keep practising.';
+    else if (accuracy >= 40) msg = 'Getting there. Try again!';
+    else msg = 'Keep practising - use the reference below.';
+    document.getElementById('endMessage').textContent = msg;
+
+    // Personal best
+    var pbKey = 'bsd_pb_' + config.category + '_' + config.difficulty + '_' + config.mode;
+    var stored = localStorage.getItem(pbKey);
+    var isNewPB = false;
+
+    if (config.mode === 'speed') {
+      // PB is fastest time at 10/10 or best score then time
+      var pbData = stored ? JSON.parse(stored) : null;
+      if (!pbData || game.score > pbData.score || (game.score === pbData.score && game.elapsed < pbData.time)) {
+        isNewPB = true;
+        localStorage.setItem(pbKey, JSON.stringify({ score: game.score, time: game.elapsed }));
+      }
+      if (pbData && !isNewPB) {
+        document.getElementById('endPB').textContent = pbData.score + '/10 in ' + pbData.time.toFixed(1) + 's';
+      } else if (isNewPB) {
+        document.getElementById('endPB').textContent = game.score + '/10 in ' + game.elapsed.toFixed(1) + 's';
+      } else {
+        document.getElementById('endPB').textContent = '--';
+      }
+    } else {
+      // Countdown PB is highest score
+      var pbScore = stored ? parseInt(stored) : 0;
+      if (game.score > pbScore) {
+        isNewPB = true;
+        localStorage.setItem(pbKey, game.score.toString());
+        pbScore = game.score;
+      }
+      document.getElementById('endPB').textContent = pbScore > 0 ? pbScore + ' correct' : '--';
+    }
+
+    var pbBadge = document.getElementById('pbBadge');
+    pbBadge.classList.toggle('visible', isNewPB);
+  }
+
+  // ============================================================
+  //  PLAY AGAIN / CHANGE CATEGORY
+  // ============================================================
+  window.playAgain = function() {
+    endScreen.classList.remove('visible');
+    startDrill();
+  };
+
+  window.changeCategory = function() {
+    endScreen.classList.remove('visible');
+    setupPanel.style.display = '';
+    referenceSection.style.display = '';
+  };
+
+  // ============================================================
+  //  KEYBOARD: ENTER TO SUBMIT
+  // ============================================================
+  answerInput.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      if (!game.answered && game.active) {
+        submitAnswer();
+      }
+    }
+  });
+
+  // ============================================================
+  //  INIT
+  // ============================================================
+  function init() {
+    // Ensure setup panel is visible on load
+    setupPanel.style.display = '';
+    gameArea.classList.remove('visible');
+    endScreen.classList.remove('visible');
+    referenceSection.style.display = '';
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+
+})();
+</script>
+
+</body>
+</html>

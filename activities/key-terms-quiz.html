@@ -1,0 +1,1519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Key Terms Precision Quiz - Python Fundamentals</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <style>
+    /* ---- Key Terms Quiz - page-specific styles ---- */
+    .quiz-container {
+      max-width: 740px;
+      margin: 0 auto;
+    }
+
+    /* Topic filter buttons */
+    .topic-filter {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+      margin: var(--space-lg) 0;
+    }
+    .topic-btn {
+      font-family: var(--font-body);
+      font-size: 0.82rem;
+      font-weight: 700;
+      padding: var(--space-sm) var(--space-md);
+      border: 2px solid #e0e0e0;
+      border-radius: 50px;
+      cursor: pointer;
+      background: var(--color-white);
+      color: var(--color-text);
+      transition: border-color 0.2s, background 0.2s, color 0.2s, transform 0.15s;
+    }
+    .topic-btn:hover {
+      border-color: var(--color-link);
+      transform: translateY(-1px);
+    }
+    .topic-btn.active {
+      background: var(--gradient-blue);
+      color: var(--color-white);
+      border-color: transparent;
+    }
+    .topic-btn .term-count {
+      display: inline-block;
+      background: rgba(0,0,0,0.12);
+      padding: 1px 7px;
+      border-radius: 50px;
+      font-size: 0.75rem;
+      margin-left: 4px;
+    }
+    .topic-btn.active .term-count {
+      background: rgba(255,255,255,0.3);
+    }
+
+    /* Progress bar */
+    .progress-wrapper {
+      margin-bottom: var(--space-lg);
+    }
+    .progress-stats {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: var(--space-sm);
+      font-size: 0.9rem;
+      font-weight: 700;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+    }
+    .progress-counts {
+      display: flex;
+      gap: var(--space-md);
+      font-size: 0.82rem;
+    }
+    .count-nailed { color: #087f5b; }
+    .count-close { color: #e67700; }
+    .count-needs { color: #c92a2a; }
+    .progress-counter {
+      color: var(--color-text-light);
+    }
+    .progress-bar-track {
+      width: 100%;
+      height: 10px;
+      background: #e0e0e0;
+      border-radius: 50px;
+      overflow: hidden;
+    }
+    .progress-bar-fill {
+      height: 100%;
+      background: var(--gradient-blue);
+      border-radius: 50px;
+      transition: width 0.5s ease;
+      width: 0%;
+    }
+
+    /* Topic badge */
+    .topic-badge {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: var(--space-xs) var(--space-md);
+      border-radius: 50px;
+      color: var(--color-white);
+      margin-bottom: var(--space-md);
+    }
+    .topic-badge.topic-1 { background: var(--gradient-blue); }
+    .topic-badge.topic-2 { background: var(--gradient-green); }
+    .topic-badge.topic-3 { background: var(--gradient-orange); }
+    .topic-badge.topic-4 { background: var(--gradient-purple); }
+    .topic-badge.topic-5 { background: var(--gradient-pink); }
+    .topic-badge.topic-all { background: var(--gradient-hero); }
+
+    /* Flashcard */
+    .flashcard {
+      background: var(--color-white);
+      border: 2px solid #e0e0e0;
+      border-radius: var(--radius-lg);
+      padding: var(--space-xl);
+      margin-bottom: var(--space-lg);
+      animation: slideInUp 0.4s ease;
+    }
+    .flashcard-number {
+      font-size: 0.85rem;
+      font-weight: 800;
+      color: var(--color-text-light);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: var(--space-sm);
+    }
+    .flashcard-term {
+      font-size: 1.6rem;
+      font-weight: 800;
+      margin-bottom: var(--space-xs);
+      line-height: 1.3;
+      color: var(--color-text);
+    }
+    .flashcard-prompt {
+      font-size: 0.95rem;
+      color: var(--color-text-light);
+      margin-bottom: var(--space-lg);
+      font-style: italic;
+    }
+
+    /* Answer area */
+    .answer-textarea {
+      width: 100%;
+      min-height: 80px;
+      font-family: var(--font-body);
+      font-size: 0.95rem;
+      padding: var(--space-md);
+      border: 2px solid #ccc;
+      border-radius: var(--radius-md);
+      resize: vertical;
+      transition: border-color 0.2s;
+      background: var(--color-white);
+      color: var(--color-text);
+      line-height: 1.6;
+    }
+    .answer-textarea:focus {
+      border-color: var(--color-link);
+      outline: none;
+    }
+    .answer-textarea:disabled {
+      background: #f5f5f5;
+      color: #888;
+    }
+
+    .btn-row {
+      display: flex;
+      gap: var(--space-sm);
+      margin-top: var(--space-md);
+      flex-wrap: wrap;
+    }
+    .quiz-btn {
+      font-family: var(--font-body);
+      font-size: 0.9rem;
+      font-weight: 700;
+      padding: var(--space-sm) var(--space-lg);
+      border: none;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      transition: transform 0.15s, box-shadow 0.15s;
+      color: var(--color-white);
+    }
+    .quiz-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-md);
+    }
+    .quiz-btn:active {
+      transform: translateY(0) scale(0.98);
+    }
+    .quiz-btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+    .btn-reveal { background: var(--gradient-blue); }
+    .btn-hint {
+      background: transparent;
+      color: var(--color-link);
+      border: 2px solid var(--color-link);
+    }
+    .btn-hint:hover {
+      background: var(--color-link);
+      color: var(--color-white);
+    }
+    .btn-hint:disabled {
+      border-color: #ccc;
+      color: #aaa;
+    }
+
+    /* Hint display */
+    .hint-display {
+      display: none;
+      margin-top: var(--space-md);
+      padding: var(--space-sm) var(--space-md);
+      background: linear-gradient(135deg, #fff9e6, #fff3cd);
+      border: 2px solid #ffc107;
+      border-radius: var(--radius-md);
+      font-size: 0.9rem;
+      font-weight: 600;
+      animation: slideInUp 0.3s ease;
+    }
+    .hint-display.visible { display: block; }
+
+    /* Comparison panel */
+    .comparison-panel {
+      display: none;
+      margin-top: var(--space-lg);
+      animation: slideInUp 0.3s ease;
+    }
+    .comparison-panel.visible { display: block; }
+    .comparison-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-md);
+      margin-bottom: var(--space-lg);
+    }
+    .comparison-col {
+      padding: var(--space-md);
+      border-radius: var(--radius-md);
+      font-size: 0.92rem;
+      line-height: 1.6;
+    }
+    .comparison-col.student {
+      background: #f8f8fa;
+      border: 2px solid #e0e0e0;
+    }
+    .comparison-col.markscheme {
+      background: linear-gradient(135deg, #e6f9f1, #d0f0e0);
+      border: 2px solid #06d6a0;
+    }
+    .comparison-col-label {
+      font-size: 0.75rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: var(--space-sm);
+      color: var(--color-text-light);
+    }
+    .comparison-col.markscheme .comparison-col-label {
+      color: #087f5b;
+    }
+
+    /* Self-assessment buttons */
+    .self-assess-label {
+      font-weight: 700;
+      margin-bottom: var(--space-sm);
+      font-size: 0.95rem;
+    }
+    .self-assess-btns {
+      display: flex;
+      gap: var(--space-sm);
+      flex-wrap: wrap;
+    }
+    .assess-btn {
+      font-family: var(--font-body);
+      font-size: 0.88rem;
+      font-weight: 700;
+      padding: var(--space-sm) var(--space-lg);
+      border: 2px solid transparent;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      color: var(--color-white);
+      transition: transform 0.15s, box-shadow 0.15s, opacity 0.2s;
+    }
+    .assess-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-md);
+    }
+    .assess-btn:active {
+      transform: translateY(0) scale(0.98);
+    }
+    .assess-btn.nailed { background: #06d6a0; }
+    .assess-btn.close-btn { background: #f77f00; }
+    .assess-btn.needs { background: #e63946; }
+    .assess-btn.selected {
+      box-shadow: 0 0 0 3px rgba(0,0,0,0.2);
+    }
+
+    /* Summary card */
+    .summary-card {
+      background: var(--color-white);
+      border: 2px solid #e0e0e0;
+      border-radius: var(--radius-lg);
+      padding: var(--space-xl);
+      text-align: center;
+      animation: slideInUp 0.4s ease;
+    }
+    .summary-title {
+      font-size: 0.85rem;
+      font-weight: 800;
+      color: var(--color-text-light);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: var(--space-md);
+    }
+    .summary-score-row {
+      display: flex;
+      justify-content: center;
+      gap: var(--space-xl);
+      margin: var(--space-lg) 0;
+      flex-wrap: wrap;
+    }
+    .summary-stat {
+      text-align: center;
+    }
+    .summary-stat-number {
+      font-size: 2.4rem;
+      font-weight: 800;
+      display: block;
+    }
+    .summary-stat-number.green {
+      color: #087f5b;
+    }
+    .summary-stat-number.orange {
+      color: #e67700;
+    }
+    .summary-stat-number.red {
+      color: #c92a2a;
+    }
+    .summary-stat-label {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--color-text-light);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .summary-message {
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin-bottom: var(--space-lg);
+      color: var(--color-text);
+    }
+
+    /* Topic breakdown table */
+    .breakdown-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: var(--space-lg) 0;
+      text-align: left;
+    }
+    .breakdown-table th {
+      background: var(--color-idea);
+      font-weight: 700;
+      padding: var(--space-sm) var(--space-md);
+      border: 1px solid #e0e0e0;
+    }
+    .breakdown-table td {
+      padding: var(--space-sm) var(--space-md);
+      border: 1px solid #e0e0e0;
+    }
+    .breakdown-table tr:nth-child(even) {
+      background: #f8f8fa;
+    }
+    .breakdown-score {
+      font-weight: 700;
+      font-family: var(--font-code);
+    }
+    .breakdown-bar {
+      display: inline-block;
+      height: 8px;
+      border-radius: 4px;
+      margin-left: var(--space-sm);
+      vertical-align: middle;
+      transition: width 0.5s ease;
+    }
+
+    /* Weak terms list */
+    .weak-terms-list {
+      text-align: left;
+      margin: var(--space-lg) auto;
+      max-width: 550px;
+    }
+    .weak-term-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: var(--space-sm) var(--space-md);
+      border-bottom: 1px solid #eee;
+      font-size: 0.92rem;
+    }
+    .weak-term-item:last-child { border-bottom: none; }
+    .weak-term-name { font-weight: 700; }
+    .weak-term-rating {
+      font-size: 0.78rem;
+      font-weight: 700;
+      padding: 2px 10px;
+      border-radius: 50px;
+      color: var(--color-white);
+    }
+    .weak-term-rating.close-rating { background: #f77f00; }
+    .weak-term-rating.needs-rating { background: #e63946; }
+
+    /* Summary buttons */
+    .summary-btns {
+      display: flex;
+      gap: var(--space-md);
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: var(--space-lg);
+    }
+    .summary-btn {
+      font-family: var(--font-body);
+      font-size: 0.95rem;
+      font-weight: 700;
+      padding: var(--space-md) var(--space-xl);
+      border: none;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      color: var(--color-white);
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .summary-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-md);
+    }
+    .summary-btn:active {
+      transform: translateY(0) scale(0.98);
+    }
+    .summary-btn.retry-btn { background: var(--gradient-orange); }
+    .summary-btn.restart-btn { background: var(--gradient-purple); }
+    .summary-btn.new-topic-btn { background: var(--gradient-blue); }
+    .summary-btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* Example answer boxes */
+    .example-answer {
+      padding: var(--space-md);
+      border-radius: var(--radius-md);
+      margin: var(--space-sm) 0;
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+    .example-answer.bad {
+      background: #fff5f5;
+      border: 2px solid #e63946;
+    }
+    .example-answer.good {
+      background: #e6f9f1;
+      border: 2px solid #06d6a0;
+    }
+    .example-answer-label {
+      font-weight: 800;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: var(--space-xs);
+    }
+    .example-answer.bad .example-answer-label { color: #c92a2a; }
+    .example-answer.good .example-answer-label { color: #087f5b; }
+
+    /* Retry mode banner */
+    .retry-banner {
+      background: linear-gradient(135deg, #fff4e6, #ffe8cc);
+      border: 2px solid #f77f00;
+      border-radius: var(--radius-md);
+      padding: var(--space-md);
+      margin-bottom: var(--space-lg);
+      text-align: center;
+      font-weight: 700;
+      animation: slideInUp 0.3s ease;
+    }
+
+    /* Animations */
+    @keyframes slideInUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 600px) {
+      .flashcard-term {
+        font-size: 1.3rem;
+      }
+      .comparison-grid {
+        grid-template-columns: 1fr;
+      }
+      .summary-score-row {
+        gap: var(--space-md);
+      }
+      .summary-stat-number {
+        font-size: 1.8rem;
+      }
+      .self-assess-btns {
+        flex-direction: column;
+      }
+      .assess-btn {
+        width: 100%;
+        text-align: center;
+      }
+      .topic-filter {
+        justify-content: center;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .flashcard,
+      .summary-card,
+      .comparison-panel,
+      .hint-display,
+      .retry-banner {
+        animation: none !important;
+      }
+      .progress-bar-fill {
+        transition: none !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="site-header">
+    <p><a href="../index.html">&larr; Back to Course</a></p>
+    <h1>Key Terms Precision Quiz</h1>
+    <p class="subtitle">Can you give mark-scheme-quality definitions? The examiner demands precision.</p>
+  </header>
+
+  <main>
+
+    <!-- ==================== WHY PRECISION MATTERS ==================== -->
+    <section class="idea">
+      <span class="section-label">The Idea</span>
+      <h2>Why Precision Matters</h2>
+
+      <p>The Chief Examiner has repeatedly highlighted a common problem: students give vague, generic definitions and score zero. The mark scheme requires <strong>specific technical keywords</strong> to award marks. A definition that sounds roughly correct but misses the key terms will not earn you a single mark.</p>
+
+      <div class="warning">
+        <strong>Examiner Feedback:</strong> &ldquo;Students who give vague definitions like &lsquo;it connects things&rsquo; or &lsquo;it stores stuff&rsquo; consistently score 0 marks. The mark scheme requires precise technical language, not everyday English.&rdquo;
+      </div>
+
+      <p>Here is a concrete example to show you the difference:</p>
+
+      <div class="key-concept">
+        <strong>Example: &ldquo;Define a router&rdquo; [1 mark]</strong>
+
+        <div class="example-answer bad">
+          <div class="example-answer-label">Bad Answer (0 marks)</div>
+          &ldquo;A router connects devices together&rdquo;
+        </div>
+        <div class="example-answer good">
+          <div class="example-answer-label">Good Answer (1 mark)</div>
+          &ldquo;A router forwards data packets between different networks using IP addresses to determine the best route&rdquo;
+        </div>
+
+        <p style="margin-top: var(--space-md); margin-bottom: 0;">The bad answer describes what a switch or a cable does. The good answer uses the precise terms <strong>data packets</strong>, <strong>different networks</strong>, and <strong>IP addresses</strong> &mdash; exactly what the mark scheme requires.</p>
+      </div>
+
+      <p>This quiz will train you to recall the <strong>exact</strong> mark-scheme definitions for 60 key terms across all Paper 1 topics. You type your definition, then compare it against the mark scheme and honestly self-assess. Terms you struggle with are saved so you can retry them later.</p>
+    </section>
+
+    <!-- ==================== QUIZ ==================== -->
+    <section class="practice">
+      <span class="section-label">Practice</span>
+      <h2>Key Terms Quiz</h2>
+      <p>Choose a topic to focus on, or test yourself on all 60 terms mixed together.</p>
+
+      <div class="quiz-container">
+
+        <!-- Topic filter -->
+        <div class="topic-filter" id="topicFilter">
+          <button class="topic-btn active" data-topic="all" onclick="selectTopic('all')">All Topics Mixed <span class="term-count">60</span></button>
+          <button class="topic-btn" data-topic="1" onclick="selectTopic('1')">Computational Thinking <span class="term-count">10</span></button>
+          <button class="topic-btn" data-topic="2" onclick="selectTopic('2')">Data Representation <span class="term-count">10</span></button>
+          <button class="topic-btn" data-topic="3" onclick="selectTopic('3')">Computer Systems <span class="term-count">15</span></button>
+          <button class="topic-btn" data-topic="4" onclick="selectTopic('4')">Networks <span class="term-count">15</span></button>
+          <button class="topic-btn" data-topic="5" onclick="selectTopic('5')">Issues &amp; Impact <span class="term-count">10</span></button>
+        </div>
+
+        <!-- Progress -->
+        <div class="progress-wrapper" id="progressWrapper" style="display:none;">
+          <div class="progress-stats">
+            <span class="progress-counter" id="questionCounter">Term 1 of 60</span>
+            <div class="progress-counts">
+              <span class="count-nailed" id="countNailed">Nailed: 0</span>
+              <span class="count-close" id="countClose">Close: 0</span>
+              <span class="count-needs" id="countNeeds">Needs work: 0</span>
+            </div>
+          </div>
+          <div class="progress-bar-track">
+            <div class="progress-bar-fill" id="progressBar"></div>
+          </div>
+        </div>
+
+        <!-- Retry banner -->
+        <div id="retryBanner" style="display:none;"></div>
+
+        <!-- Flashcard area -->
+        <div id="flashcardArea"></div>
+
+        <!-- Summary area -->
+        <div id="summaryArea" style="display:none;"></div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <p>Python Fundamentals &mdash; A KS4 Learning Platform</p>
+  </footer>
+
+<script>
+// ============================================================
+//  KEY TERMS DATA — 60 terms across 5 topics
+// ============================================================
+const ALL_TERMS = [
+  // ---- Topic 1: Computational Thinking (10) ----
+  {
+    term: "Decomposition",
+    definition: "Breaking a complex problem into smaller, more manageable sub-problems",
+    keywords: ["breaking", "smaller", "sub-problems"],
+    topic: "1",
+    topicName: "Computational Thinking"
+  },
+  {
+    term: "Abstraction",
+    definition: "Removing unnecessary detail to focus on the important aspects of a problem",
+    keywords: ["removing", "unnecessary detail", "important"],
+    topic: "1",
+    topicName: "Computational Thinking"
+  },
+  {
+    term: "Algorithm",
+    definition: "A step-by-step set of instructions to solve a problem or complete a task",
+    keywords: ["step-by-step", "instructions", "solve"],
+    topic: "1",
+    topicName: "Computational Thinking"
+  },
+  {
+    term: "Linear search",
+    definition: "Checking each item in a list one by one from start to end until the target is found or the list ends",
+    keywords: ["each item", "one by one", "target"],
+    topic: "1",
+    topicName: "Computational Thinking"
+  },
+  {
+    term: "Binary search",
+    definition: "Repeatedly dividing a sorted list in half, comparing the middle item with the target, and discarding the half that cannot contain the target",
+    keywords: ["sorted", "dividing in half", "middle item"],
+    topic: "1",
+    topicName: "Computational Thinking"
+  },
+  {
+    term: "Bubble sort",
+    definition: "Repeatedly comparing adjacent pairs of items, swapping them if they are in the wrong order, until no more swaps are needed",
+    keywords: ["adjacent", "swapping", "no more swaps"],
+    topic: "1",
+    topicName: "Computational Thinking"
+  },
+  {
+    term: "Merge sort",
+    definition: "Recursively splitting a list into individual items, then merging them back together in the correct order",
+    keywords: ["splitting", "merging", "correct order"],
+    topic: "1",
+    topicName: "Computational Thinking"
+  },
+  {
+    term: "Trace table",
+    definition: "A table used to track the values of variables as each line of code is executed",
+    keywords: ["track", "variables", "each line"],
+    topic: "1",
+    topicName: "Computational Thinking"
+  },
+  {
+    term: "Syntax error",
+    definition: "An error where the rules of the programming language have been broken, preventing the code from running",
+    keywords: ["rules", "language", "preventing"],
+    topic: "1",
+    topicName: "Computational Thinking"
+  },
+  {
+    term: "Logic error",
+    definition: "An error where the program runs but produces incorrect or unexpected results",
+    keywords: ["runs", "incorrect", "unexpected results"],
+    topic: "1",
+    topicName: "Computational Thinking"
+  },
+
+  // ---- Topic 2: Data Representation (10) ----
+  {
+    term: "Binary",
+    definition: "A base-2 number system that uses only the digits 0 and 1",
+    keywords: ["base-2", "digits", "0 and 1"],
+    topic: "2",
+    topicName: "Data Representation"
+  },
+  {
+    term: "Denary",
+    definition: "A base-10 number system that uses the digits 0 to 9 (also called decimal)",
+    keywords: ["base-10", "0 to 9", "decimal"],
+    topic: "2",
+    topicName: "Data Representation"
+  },
+  {
+    term: "Hexadecimal",
+    definition: "A base-16 number system that uses the digits 0-9 and letters A-F",
+    keywords: ["base-16", "0-9", "A-F"],
+    topic: "2",
+    topicName: "Data Representation"
+  },
+  {
+    term: "Overflow error",
+    definition: "An error that occurs when a calculation produces a result that is too large to be stored in the available number of bits",
+    keywords: ["too large", "stored", "bits"],
+    topic: "2",
+    topicName: "Data Representation"
+  },
+  {
+    term: "ASCII",
+    definition: "A 7-bit character encoding standard that represents 128 different characters including letters, digits, and symbols",
+    keywords: ["7-bit", "128 characters", "encoding"],
+    topic: "2",
+    topicName: "Data Representation"
+  },
+  {
+    term: "Unicode",
+    definition: "A character encoding standard that can represent every character in every language using up to 32 bits per character",
+    keywords: ["every character", "every language", "32 bits"],
+    topic: "2",
+    topicName: "Data Representation"
+  },
+  {
+    term: "Lossy compression",
+    definition: "Compression that permanently removes some data to reduce file size, meaning the original cannot be fully restored",
+    keywords: ["permanently removes", "reduce file size", "cannot be restored"],
+    topic: "2",
+    topicName: "Data Representation"
+  },
+  {
+    term: "Lossless compression",
+    definition: "Compression that reduces file size without any loss of data, so the original can be perfectly restored",
+    keywords: ["no loss", "reduces file size", "perfectly restored"],
+    topic: "2",
+    topicName: "Data Representation"
+  },
+  {
+    term: "Colour depth",
+    definition: "The number of bits used to represent the colour of each pixel in an image",
+    keywords: ["bits", "colour", "pixel"],
+    topic: "2",
+    topicName: "Data Representation"
+  },
+  {
+    term: "Sample rate",
+    definition: "The number of times per second that a sound wave is measured (sampled), measured in Hertz (Hz)",
+    keywords: ["times per second", "sound wave", "Hertz"],
+    topic: "2",
+    topicName: "Data Representation"
+  },
+
+  // ---- Topic 3: Computer Systems (15) ----
+  {
+    term: "CPU (Central Processing Unit)",
+    definition: "The main processing unit of a computer that fetches, decodes, and executes instructions",
+    keywords: ["fetches", "decodes", "executes"],
+    topic: "3",
+    topicName: "Computer Systems"
+  },
+  {
+    term: "ALU (Arithmetic Logic Unit)",
+    definition: "The part of the CPU that performs arithmetic calculations and logical comparisons",
+    keywords: ["CPU", "arithmetic", "logical comparisons"],
+    topic: "3",
+    topicName: "Computer Systems"
+  },
+  {
+    term: "Control Unit",
+    definition: "The part of the CPU that manages the fetch-decode-execute cycle and sends control signals to other components",
+    keywords: ["fetch-decode-execute", "control signals", "components"],
+    topic: "3",
+    topicName: "Computer Systems"
+  },
+  {
+    term: "Cache",
+    definition: "A small, fast memory inside the CPU that stores frequently used data and instructions for quick access",
+    keywords: ["small", "fast", "frequently used"],
+    topic: "3",
+    topicName: "Computer Systems"
+  },
+  {
+    term: "RAM (Random Access Memory)",
+    definition: "Volatile memory that temporarily stores data and instructions currently in use; contents are lost when power is off",
+    keywords: ["volatile", "temporarily", "lost when power off"],
+    topic: "3",
+    topicName: "Computer Systems"
+  },
+  {
+    term: "ROM (Read Only Memory)",
+    definition: "Non-volatile memory that permanently stores the boot-up instructions (BIOS/UEFI); cannot be easily modified",
+    keywords: ["non-volatile", "boot-up", "cannot be modified"],
+    topic: "3",
+    topicName: "Computer Systems"
+  },
+  {
+    term: "Virtual memory",
+    definition: "A section of the hard drive used as an extension of RAM when RAM is full, which is slower than actual RAM",
+    keywords: ["hard drive", "extension of RAM", "slower"],
+    topic: "3",
+    topicName: "Computer Systems"
+  },
+  {
+    term: "Embedded system",
+    definition: "A computer system designed for a specific dedicated function within a larger device, e.g. a washing machine controller",
+    keywords: ["specific", "dedicated function", "larger device"],
+    topic: "3",
+    topicName: "Computer Systems"
+  },
+  {
+    term: "Compiler",
+    definition: "A translator that converts an entire high-level language program into machine code in one go before execution",
+    keywords: ["entire program", "machine code", "one go"],
+    topic: "3",
+    topicName: "Computer Systems"
+  },
+  {
+    term: "Interpreter",
+    definition: "A translator that converts and executes a high-level language program one line at a time",
+    keywords: ["one line at a time", "converts", "executes"],
+    topic: "3",
+    topicName: "Computer Systems"
+  },
+  {
+    term: "Operating system",
+    definition: "System software that manages hardware resources, provides a user interface, and handles file management and security",
+    keywords: ["hardware resources", "user interface", "file management"],
+    topic: "3",
+    topicName: "Computer Systems"
+  },
+  {
+    term: "Utility software",
+    definition: "System software that performs specific maintenance or optimisation tasks, such as antivirus scanning or disk defragmentation",
+    keywords: ["maintenance", "optimisation", "system software"],
+    topic: "3",
+    topicName: "Computer Systems"
+  },
+  {
+    term: "Fetch-decode-execute cycle",
+    definition: "The process by which the CPU fetches an instruction from memory, decodes it to determine the operation, and then executes it",
+    keywords: ["fetches", "decodes", "executes"],
+    topic: "3",
+    topicName: "Computer Systems"
+  },
+  {
+    term: "Register",
+    definition: "A small, high-speed storage location inside the CPU used to hold data, addresses, or instructions temporarily during processing",
+    keywords: ["high-speed", "inside the CPU", "temporarily"],
+    topic: "3",
+    topicName: "Computer Systems"
+  },
+  {
+    term: "Magnetic storage",
+    definition: "A storage medium that uses magnetised particles on a spinning disk to store data, e.g. HDD",
+    keywords: ["magnetised", "spinning disk", "storage"],
+    topic: "3",
+    topicName: "Computer Systems"
+  },
+
+  // ---- Topic 4: Networks (15) ----
+  {
+    term: "LAN (Local Area Network)",
+    definition: "A network that covers a small geographical area, such as a building, usually owned and managed by a single organisation",
+    keywords: ["small geographical area", "building", "single organisation"],
+    topic: "4",
+    topicName: "Networks"
+  },
+  {
+    term: "WAN (Wide Area Network)",
+    definition: "A network that covers a large geographical area, connecting multiple LANs, often using third-party communication links",
+    keywords: ["large geographical area", "multiple LANs", "third-party"],
+    topic: "4",
+    topicName: "Networks"
+  },
+  {
+    term: "Router",
+    definition: "A device that forwards data packets between different networks using IP addresses to determine the best route",
+    keywords: ["data packets", "different networks", "IP addresses"],
+    topic: "4",
+    topicName: "Networks"
+  },
+  {
+    term: "Switch",
+    definition: "A device that connects devices within a LAN and forwards data to the correct device using MAC addresses",
+    keywords: ["within a LAN", "correct device", "MAC addresses"],
+    topic: "4",
+    topicName: "Networks"
+  },
+  {
+    term: "Protocol",
+    definition: "A set of rules that govern how data is transmitted and received across a network",
+    keywords: ["rules", "transmitted", "received"],
+    topic: "4",
+    topicName: "Networks"
+  },
+  {
+    term: "IP address",
+    definition: "A unique numerical address assigned to each device on a network, used to identify and locate devices",
+    keywords: ["unique", "numerical", "identify"],
+    topic: "4",
+    topicName: "Networks"
+  },
+  {
+    term: "MAC address",
+    definition: "A unique hardware address permanently assigned to a network interface card (NIC) by the manufacturer",
+    keywords: ["hardware", "permanent", "manufacturer"],
+    topic: "4",
+    topicName: "Networks"
+  },
+  {
+    term: "Packet switching",
+    definition: "A method of data transmission where data is broken into packets, each sent independently across the network and reassembled at the destination",
+    keywords: ["broken into packets", "independently", "reassembled"],
+    topic: "4",
+    topicName: "Networks"
+  },
+  {
+    term: "Star topology",
+    definition: "A network layout where all devices are connected to a central switch or hub",
+    keywords: ["all devices", "central switch", "connected"],
+    topic: "4",
+    topicName: "Networks"
+  },
+  {
+    term: "Encryption",
+    definition: "The process of converting plain text data into an unreadable coded form (ciphertext) to prevent unauthorised access",
+    keywords: ["plain text", "ciphertext", "unauthorised access"],
+    topic: "4",
+    topicName: "Networks"
+  },
+  {
+    term: "Firewall",
+    definition: "Security software or hardware that monitors and filters incoming and outgoing network traffic based on predetermined rules",
+    keywords: ["monitors", "filters", "network traffic"],
+    topic: "4",
+    topicName: "Networks"
+  },
+  {
+    term: "DNS (Domain Name System)",
+    definition: "A system that translates human-readable domain names (e.g. google.com) into IP addresses",
+    keywords: ["translates", "domain names", "IP addresses"],
+    topic: "4",
+    topicName: "Networks"
+  },
+  {
+    term: "TCP/IP",
+    definition: "A set of layered protocols that governs how data is formatted, addressed, transmitted, and received across the internet",
+    keywords: ["layered protocols", "formatted", "internet"],
+    topic: "4",
+    topicName: "Networks"
+  },
+  {
+    term: "Cloud storage",
+    definition: "Storing data on remote servers accessed via the internet, rather than on local storage devices",
+    keywords: ["remote servers", "internet", "local storage"],
+    topic: "4",
+    topicName: "Networks"
+  },
+  {
+    term: "Bandwidth",
+    definition: "The maximum amount of data that can be transmitted over a network connection in a given time period",
+    keywords: ["maximum", "data", "time period"],
+    topic: "4",
+    topicName: "Networks"
+  },
+
+  // ---- Topic 5: Issues & Impact (10) ----
+  {
+    term: "Data Protection Act",
+    definition: "UK legislation that regulates how personal data is collected, stored, and used by organisations",
+    keywords: ["UK legislation", "personal data", "collected, stored, used"],
+    topic: "5",
+    topicName: "Issues & Impact"
+  },
+  {
+    term: "Computer Misuse Act",
+    definition: "UK legislation that makes it illegal to gain unauthorised access to computer systems or data",
+    keywords: ["UK legislation", "unauthorised access", "illegal"],
+    topic: "5",
+    topicName: "Issues & Impact"
+  },
+  {
+    term: "Copyright",
+    definition: "Legal protection that gives creators exclusive rights over their original works, preventing unauthorised copying",
+    keywords: ["exclusive rights", "original works", "unauthorised copying"],
+    topic: "5",
+    topicName: "Issues & Impact"
+  },
+  {
+    term: "Open source software",
+    definition: "Software whose source code is freely available for anyone to view, modify, and distribute",
+    keywords: ["source code", "freely available", "modify"],
+    topic: "5",
+    topicName: "Issues & Impact"
+  },
+  {
+    term: "Proprietary software",
+    definition: "Software that is owned by an individual or company, with restrictions on use, modification, and distribution",
+    keywords: ["owned", "restrictions", "modification"],
+    topic: "5",
+    topicName: "Issues & Impact"
+  },
+  {
+    term: "Digital divide",
+    definition: "The gap between those who have access to modern technology and the internet and those who do not",
+    keywords: ["gap", "access", "technology"],
+    topic: "5",
+    topicName: "Issues & Impact"
+  },
+  {
+    term: "E-waste",
+    definition: "Discarded electronic devices that can cause environmental damage if not recycled properly",
+    keywords: ["discarded", "electronic", "environmental damage"],
+    topic: "5",
+    topicName: "Issues & Impact"
+  },
+  {
+    term: "Phishing",
+    definition: "A social engineering attack where fraudulent emails or websites trick users into revealing personal information",
+    keywords: ["social engineering", "fraudulent", "personal information"],
+    topic: "5",
+    topicName: "Issues & Impact"
+  },
+  {
+    term: "Malware",
+    definition: "Malicious software designed to damage, disrupt, or gain unauthorised access to a computer system",
+    keywords: ["malicious software", "damage", "unauthorised access"],
+    topic: "5",
+    topicName: "Issues & Impact"
+  },
+  {
+    term: "Penetration testing",
+    definition: "Authorised simulated attacks on a computer system to identify security vulnerabilities before they can be exploited",
+    keywords: ["authorised", "simulated attacks", "vulnerabilities"],
+    topic: "5",
+    topicName: "Issues & Impact"
+  }
+];
+
+// ============================================================
+//  QUIZ STATE
+// ============================================================
+let currentTopic = 'all';
+let quizTerms = [];          // current set of terms for this quiz run
+let currentIndex = 0;
+let results = [];             // { term, topic, topicName, rating } for each answered term
+let retryMode = false;
+let hintUsed = false;
+
+// Counts
+let nailedCount = 0;
+let closeCount = 0;
+let needsCount = 0;
+
+// ============================================================
+//  DOM REFERENCES
+// ============================================================
+const topicFilter = document.getElementById('topicFilter');
+const progressWrapper = document.getElementById('progressWrapper');
+const progressBar = document.getElementById('progressBar');
+const questionCounter = document.getElementById('questionCounter');
+const countNailedEl = document.getElementById('countNailed');
+const countCloseEl = document.getElementById('countClose');
+const countNeedsEl = document.getElementById('countNeeds');
+const flashcardArea = document.getElementById('flashcardArea');
+const summaryArea = document.getElementById('summaryArea');
+const retryBannerEl = document.getElementById('retryBanner');
+
+// ============================================================
+//  TOPIC SELECTION
+// ============================================================
+function selectTopic(topic) {
+  currentTopic = topic;
+
+  // Update active button
+  document.querySelectorAll('.topic-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.topic === topic);
+  });
+
+  startQuiz();
+}
+
+// ============================================================
+//  START QUIZ
+// ============================================================
+function startQuiz() {
+  // Filter terms by topic
+  if (currentTopic === 'all') {
+    quizTerms = [...ALL_TERMS];
+  } else {
+    quizTerms = ALL_TERMS.filter(t => t.topic === currentTopic);
+  }
+
+  // Shuffle
+  shuffleArray(quizTerms);
+
+  // Reset state
+  currentIndex = 0;
+  results = [];
+  nailedCount = 0;
+  closeCount = 0;
+  needsCount = 0;
+  retryMode = false;
+  hintUsed = false;
+
+  // Show progress, hide summary
+  progressWrapper.style.display = '';
+  summaryArea.style.display = 'none';
+  retryBannerEl.style.display = 'none';
+  topicFilter.style.display = 'flex';
+
+  renderFlashcard();
+}
+
+// ============================================================
+//  START RETRY
+// ============================================================
+function startRetry() {
+  // Get weak terms from results
+  const weakTerms = results.filter(r => r.rating === 'close' || r.rating === 'needs');
+  if (weakTerms.length === 0) return;
+
+  // Build quiz terms from the weak results
+  quizTerms = weakTerms.map(r => ALL_TERMS.find(t => t.term === r.term)).filter(Boolean);
+  shuffleArray(quizTerms);
+
+  // Reset state
+  currentIndex = 0;
+  results = [];
+  nailedCount = 0;
+  closeCount = 0;
+  needsCount = 0;
+  retryMode = true;
+  hintUsed = false;
+
+  // Show UI
+  progressWrapper.style.display = '';
+  summaryArea.style.display = 'none';
+  topicFilter.style.display = 'none';
+  retryBannerEl.innerHTML = '<div class="retry-banner">Retry Mode: Reviewing ' + quizTerms.length + ' term' + (quizTerms.length === 1 ? '' : 's') + ' you found tricky</div>';
+  retryBannerEl.style.display = '';
+
+  renderFlashcard();
+}
+
+// ============================================================
+//  RENDER FLASHCARD
+// ============================================================
+function renderFlashcard() {
+  if (currentIndex >= quizTerms.length) {
+    showSummary();
+    return;
+  }
+
+  const t = quizTerms[currentIndex];
+  const topicClass = 'topic-' + t.topic;
+  hintUsed = false;
+
+  const html = `
+    <div class="flashcard" id="currentCard">
+      <span class="topic-badge ${topicClass}">${t.topicName}</span>
+      <div class="flashcard-number">Term ${currentIndex + 1} of ${quizTerms.length}</div>
+      <div class="flashcard-term">${t.term}</div>
+      <div class="flashcard-prompt">Define this term with mark-scheme precision.</div>
+
+      <textarea class="answer-textarea" id="studentAnswer" placeholder="Type your definition here..." rows="3"></textarea>
+
+      <div class="btn-row">
+        <button class="quiz-btn btn-reveal" id="revealBtn" onclick="revealAnswer()">Reveal Mark Scheme</button>
+        <button class="quiz-btn btn-hint" id="hintBtn" onclick="showHint()">Show Key Words Hint</button>
+      </div>
+
+      <div class="hint-display" id="hintBox"></div>
+
+      <div class="comparison-panel" id="comparisonPanel">
+        <div class="comparison-grid">
+          <div class="comparison-col student">
+            <div class="comparison-col-label">Your Answer</div>
+            <div id="studentAnswerDisplay"></div>
+          </div>
+          <div class="comparison-col markscheme">
+            <div class="comparison-col-label">Mark Scheme Definition</div>
+            <div id="markSchemeDisplay"></div>
+          </div>
+        </div>
+        <div class="self-assess-label">How did you do? Be honest &mdash; the examiner would be.</div>
+        <div class="self-assess-btns">
+          <button class="assess-btn nailed" onclick="selfAssess('nailed')">Nailed It</button>
+          <button class="assess-btn close-btn" onclick="selfAssess('close')">Close</button>
+          <button class="assess-btn needs" onclick="selfAssess('needs')">Needs Work</button>
+        </div>
+      </div>
+    </div>
+  `;
+
+  flashcardArea.innerHTML = html;
+  summaryArea.style.display = 'none';
+  updateProgress();
+
+  // Focus textarea
+  const ta = document.getElementById('studentAnswer');
+  ta.focus();
+
+  // Allow Ctrl+Enter to reveal
+  ta.addEventListener('keydown', (e) => {
+    if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+      const revealBtn = document.getElementById('revealBtn');
+      if (!revealBtn.disabled) {
+        revealAnswer();
+      }
+    }
+  });
+}
+
+// ============================================================
+//  SHOW HINT (Key words only)
+// ============================================================
+function showHint() {
+  const t = quizTerms[currentIndex];
+  const hintBox = document.getElementById('hintBox');
+  const hintBtn = document.getElementById('hintBtn');
+
+  hintBox.innerHTML = '<strong>Key words to include:</strong> ' + t.keywords.join(', ');
+  hintBox.classList.add('visible');
+  hintBtn.disabled = true;
+  hintUsed = true;
+}
+
+// ============================================================
+//  REVEAL ANSWER
+// ============================================================
+function revealAnswer() {
+  const t = quizTerms[currentIndex];
+  const ta = document.getElementById('studentAnswer');
+  const revealBtn = document.getElementById('revealBtn');
+  const hintBtn = document.getElementById('hintBtn');
+  const panel = document.getElementById('comparisonPanel');
+  const studentDisp = document.getElementById('studentAnswerDisplay');
+  const markDisp = document.getElementById('markSchemeDisplay');
+
+  const studentText = ta.value.trim();
+
+  // Show comparison
+  studentDisp.textContent = studentText || '(No answer given)';
+  markDisp.textContent = t.definition;
+
+  // Disable inputs
+  ta.disabled = true;
+  revealBtn.disabled = true;
+  hintBtn.disabled = true;
+
+  // Show panel
+  panel.classList.add('visible');
+}
+
+// ============================================================
+//  SELF-ASSESS
+// ============================================================
+function selfAssess(rating) {
+  const t = quizTerms[currentIndex];
+
+  // Record result
+  results.push({
+    term: t.term,
+    topic: t.topic,
+    topicName: t.topicName,
+    rating: rating
+  });
+
+  // Update counts
+  if (rating === 'nailed') nailedCount++;
+  else if (rating === 'close') closeCount++;
+  else needsCount++;
+
+  // Save weak terms to localStorage
+  saveWeakTerms();
+
+  // Move to next
+  currentIndex++;
+  if (currentIndex >= quizTerms.length) {
+    showSummary();
+  } else {
+    renderFlashcard();
+  }
+}
+
+// ============================================================
+//  UPDATE PROGRESS
+// ============================================================
+function updateProgress() {
+  const answered = results.length;
+  const total = quizTerms.length;
+  const pct = total > 0 ? (answered / total) * 100 : 0;
+
+  progressBar.style.width = pct + '%';
+  questionCounter.textContent = 'Term ' + (currentIndex + 1) + ' of ' + total;
+  countNailedEl.textContent = 'Nailed: ' + nailedCount;
+  countCloseEl.textContent = 'Close: ' + closeCount;
+  countNeedsEl.textContent = 'Needs work: ' + needsCount;
+}
+
+// ============================================================
+//  SHOW SUMMARY
+// ============================================================
+function showSummary() {
+  flashcardArea.innerHTML = '';
+  progressWrapper.style.display = 'none';
+  retryBannerEl.style.display = 'none';
+
+  const total = results.length;
+  const weakTerms = results.filter(r => r.rating === 'close' || r.rating === 'needs');
+  const hasWeak = weakTerms.length > 0;
+
+  // Message
+  let message = '';
+  if (needsCount === 0 && closeCount === 0) {
+    message = 'Perfect precision! You defined every term to mark-scheme standard.';
+  } else if (nailedCount >= total * 0.7) {
+    message = 'Strong knowledge! Just a few terms to sharpen up.';
+  } else if (nailedCount >= total * 0.4) {
+    message = 'Good effort, but the examiner would want more precision. Retry your weak terms.';
+  } else {
+    message = 'Keep revising! Use the retry feature to drill the terms you found tricky.';
+  }
+
+  // Topic breakdown
+  const topicStats = {};
+  results.forEach(r => {
+    if (!topicStats[r.topicName]) {
+      topicStats[r.topicName] = { nailed: 0, close: 0, needs: 0, total: 0, topic: r.topic };
+    }
+    topicStats[r.topicName].total++;
+    topicStats[r.topicName][r.rating]++;
+  });
+
+  let breakdownRows = '';
+  for (const [name, data] of Object.entries(topicStats)) {
+    const pct = Math.round((data.nailed / data.total) * 100);
+    const barColor = pct >= 80 ? '#06d6a0' : pct >= 50 ? '#f77f00' : '#e63946';
+    breakdownRows += `
+      <tr>
+        <td><span class="topic-badge topic-${data.topic}" style="font-size:0.7rem;margin:0;">${name}</span></td>
+        <td><span class="breakdown-score" style="color:#087f5b;">${data.nailed}</span></td>
+        <td><span class="breakdown-score" style="color:#e67700;">${data.close}</span></td>
+        <td><span class="breakdown-score" style="color:#c92a2a;">${data.needs}</span></td>
+        <td>
+          <span class="breakdown-score">${data.total}</span>
+          <span class="breakdown-bar" style="width:${pct}px;max-width:100px;background:${barColor};"></span>
+        </td>
+      </tr>`;
+  }
+
+  // Weak terms list
+  let weakListHTML = '';
+  if (hasWeak) {
+    weakListHTML = '<div class="weak-terms-list"><h3 style="text-align:center;margin-bottom:var(--space-md);">Terms to Revise</h3>';
+    weakTerms.forEach(r => {
+      const ratingClass = r.rating === 'close' ? 'close-rating' : 'needs-rating';
+      const ratingLabel = r.rating === 'close' ? 'Close' : 'Needs Work';
+      weakListHTML += `
+        <div class="weak-term-item">
+          <span class="weak-term-name">${r.term}</span>
+          <span class="weak-term-rating ${ratingClass}">${ratingLabel}</span>
+        </div>`;
+    });
+    weakListHTML += '</div>';
+  }
+
+  summaryArea.innerHTML = `
+    <div class="summary-card">
+      <div class="summary-title">${retryMode ? 'Retry Complete' : 'Quiz Complete'}</div>
+      <div class="summary-score-row">
+        <div class="summary-stat">
+          <span class="summary-stat-number green">${nailedCount}</span>
+          <span class="summary-stat-label">Nailed It</span>
+        </div>
+        <div class="summary-stat">
+          <span class="summary-stat-number orange">${closeCount}</span>
+          <span class="summary-stat-label">Close</span>
+        </div>
+        <div class="summary-stat">
+          <span class="summary-stat-number red">${needsCount}</span>
+          <span class="summary-stat-label">Needs Work</span>
+        </div>
+      </div>
+      <div class="summary-message">${message}</div>
+
+      <table class="breakdown-table">
+        <thead><tr><th>Topic</th><th>Nailed</th><th>Close</th><th>Needs Work</th><th>Total</th></tr></thead>
+        <tbody>${breakdownRows}</tbody>
+      </table>
+
+      ${weakListHTML}
+
+      <div class="summary-btns">
+        ${hasWeak ? '<button class="summary-btn retry-btn" onclick="startRetry()">Retry Weak Terms (' + weakTerms.length + ')</button>' : ''}
+        <button class="summary-btn new-topic-btn" onclick="backToTopics()">Choose Topic</button>
+        <button class="summary-btn restart-btn" onclick="startQuiz()">Restart Same Quiz</button>
+      </div>
+    </div>
+  `;
+  summaryArea.style.display = 'block';
+}
+
+// ============================================================
+//  BACK TO TOPICS
+// ============================================================
+function backToTopics() {
+  flashcardArea.innerHTML = '';
+  summaryArea.style.display = 'none';
+  summaryArea.innerHTML = '';
+  progressWrapper.style.display = 'none';
+  retryBannerEl.style.display = 'none';
+  topicFilter.style.display = 'flex';
+}
+
+// ============================================================
+//  LOCALSTORAGE - Persist weak terms
+// ============================================================
+const STORAGE_KEY = 'keyTermsQuiz_weakTerms';
+
+function saveWeakTerms() {
+  try {
+    // Get all weak terms from current results
+    const currentWeak = results
+      .filter(r => r.rating === 'close' || r.rating === 'needs')
+      .map(r => ({ term: r.term, rating: r.rating, timestamp: Date.now() }));
+
+    // Get previously stored weak terms
+    let stored = [];
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) stored = JSON.parse(raw);
+    } catch (e) { /* ignore parse errors */ }
+
+    // Merge: update existing, add new, remove ones now nailed
+    const nailedTerms = results.filter(r => r.rating === 'nailed').map(r => r.term);
+
+    // Remove nailed terms from stored
+    stored = stored.filter(s => !nailedTerms.includes(s.term));
+
+    // Update/add current weak terms
+    currentWeak.forEach(cw => {
+      const existing = stored.findIndex(s => s.term === cw.term);
+      if (existing >= 0) {
+        stored[existing] = cw;
+      } else {
+        stored.push(cw);
+      }
+    });
+
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(stored));
+  } catch (e) { /* localStorage not available */ }
+}
+
+function loadWeakTerms() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) return JSON.parse(raw);
+  } catch (e) { /* ignore */ }
+  return [];
+}
+
+// ============================================================
+//  UTILITY: Shuffle array (Fisher-Yates)
+// ============================================================
+function shuffleArray(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+// ============================================================
+//  On page load: check for previously saved weak terms and
+//  add a subtle indicator if there are terms to review
+// ============================================================
+(function init() {
+  const weak = loadWeakTerms();
+  if (weak.length > 0) {
+    // Show a message about saved weak terms
+    const note = document.createElement('div');
+    note.className = 'key-concept';
+    note.style.marginBottom = 'var(--space-lg)';
+    note.innerHTML = '<strong>Welcome back!</strong><p style="margin-bottom:0;">You have <strong>' + weak.length + '</strong> term' + (weak.length === 1 ? '' : 's') + ' saved from a previous session that need more practice. Choose a topic to start, or pick <strong>All Topics Mixed</strong> to include them.</p>';
+    topicFilter.parentNode.insertBefore(note, topicFilter);
+  }
+})();
+</script>
+
+</body>
+</html>
