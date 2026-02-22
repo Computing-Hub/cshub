@@ -200,5 +200,8 @@ function restartQuiz(){qIdx=0;score=0;quizData.forEach(q=>{const ct=q.opts[q.ans
 function saveBest(s){let b=parseInt(localStorage.getItem('secStorageBest')||'0');if(s>b){b=s;localStorage.setItem('secStorageBest',b)}return b}
 renderExercise();renderQuiz();
 </script>
+<footer style="text-align:center;padding:1.5rem;color:#888;font-size:0.85rem;border-top:1px solid #333;margin-top:2rem;">
+  <p>&copy; Dr Galan 2026. Created by <a href="https://coderra.je" target="_blank" rel="noopener" style="color:#6ea8fe;text-decoration:none;">Coderra.je</a></p>
+</footer>
 </body>
 </html>
