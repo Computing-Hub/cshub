@@ -52,15 +52,13 @@ button:disabled{opacity:.4;pointer-events:none}
 .vm-box.disk{border-color:#667eea;position:absolute;right:0;top:0}
 .vm-box-label{position:absolute;bottom:-22px;left:50%;transform:translateX(-50%);font-size:.75rem;font-weight:600;color:#888;font-family:'Fira Code',monospace}
 .page{width:18px;height:18px;border-radius:4px;position:absolute}
-.page.p1{background:#f7797d;top:10px;left:10px;animation:swapPage1 4s ease-in-out infinite}
-.page.p2{background:#43e97b;top:10px;left:36px;animation:swapPage2 4s ease-in-out 1s infinite}
-.page.p3{background:#667eea;top:36px;left:10px;animation:swapPage3 4s ease-in-out 2s infinite}
-.page.p4{background:#f0c27f;top:36px;left:36px;animation:swapPage4 4s ease-in-out 3s infinite}
+.page.p1{background:#f7797d;top:10px;left:10px;animation:swapToRight 4s ease-in-out infinite}
+.page.p2{background:#43e97b;top:10px;left:36px;animation:swapToRight 4s ease-in-out infinite}
+.page.p3{background:#667eea;top:10px;left:10px;animation:swapToLeft 4s ease-in-out infinite}
+.page.p4{background:#f0c27f;top:10px;left:36px;animation:swapToLeft 4s ease-in-out infinite}
 .vm-anim-wrapper{position:relative;width:280px;height:100px}
-@keyframes swapPage1{0%,40%{transform:translateX(0)}50%,90%{transform:translateX(170px)}100%{transform:translateX(0)}}
-@keyframes swapPage2{0%,40%{transform:translateX(0)}50%,90%{transform:translateX(170px)}100%{transform:translateX(0)}}
-@keyframes swapPage3{0%,40%{transform:translateX(0)}50%,90%{transform:translateX(-170px)}100%{transform:translateX(0)}}
-@keyframes swapPage4{0%,40%{transform:translateX(0)}50%,90%{transform:translateX(-170px)}100%{transform:translateX(0)}}
+@keyframes swapToRight{0%,35%{transform:translateX(0)}50%,85%{transform:translateX(170px)}100%{transform:translateX(0)}}
+@keyframes swapToLeft{0%,35%{transform:translateX(0)}50%,85%{transform:translateX(-170px)}100%{transform:translateX(0)}}
 .exercise-label{font-size:1rem;font-weight:600;color:#a78bfa;margin-bottom:14px}
 .drop-zones{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:18px}
 .drop-zone{background:#1a2544;border:2px dashed #2a2a5a;border-radius:14px;min-height:120px;padding:14px;transition:all .25s ease}
@@ -95,11 +93,9 @@ h1{font-size:1.5rem}
 .tab-btn{padding:8px 18px;font-size:.82rem}
 .vm-anim-wrapper{width:240px}
 .vm-box{width:90px;height:80px}
-.page.p1{top:10px;left:8px}.page.p2{top:10px;left:32px}.page.p3{top:36px;left:8px}.page.p4{top:36px;left:32px}
-@keyframes swapPage1{0%,40%{transform:translateX(0)}50%,90%{transform:translateX(150px)}100%{transform:translateX(0)}}
-@keyframes swapPage2{0%,40%{transform:translateX(0)}50%,90%{transform:translateX(150px)}100%{transform:translateX(0)}}
-@keyframes swapPage3{0%,40%{transform:translateX(0)}50%,90%{transform:translateX(-150px)}100%{transform:translateX(0)}}
-@keyframes swapPage4{0%,40%{transform:translateX(0)}50%,90%{transform:translateX(-150px)}100%{transform:translateX(0)}}
+.page.p1{top:10px;left:8px}.page.p2{top:10px;left:32px}.page.p3{top:10px;left:8px}.page.p4{top:10px;left:32px}
+@keyframes swapToRight{0%,35%{transform:translateX(0)}50%,85%{transform:translateX(150px)}100%{transform:translateX(0)}}
+@keyframes swapToLeft{0%,35%{transform:translateX(0)}50%,85%{transform:translateX(-150px)}100%{transform:translateX(0)}}
 }
 </style>
 </head>
