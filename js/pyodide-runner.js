@@ -102,11 +102,10 @@ builtins.input = _browser_input
       const stdout = pyodide.runPython("sys.stdout.getvalue()");
       const stderr = pyodide.runPython("sys.stderr.getvalue()");
 
-      // Reset stdout/stderr and restore original input
+      // Reset stdout/stderr
       pyodide.runPython(`
 sys.stdout = sys.__stdout__
 sys.stderr = sys.__stderr__
-__builtins__["input"] = __builtins__.get("_original_input", input)
 `);
 
       if (stderr) {
@@ -125,7 +124,6 @@ __builtins__["input"] = __builtins__.get("_original_input", input)
         pyodide.runPython(`
 sys.stdout = sys.__stdout__
 sys.stderr = sys.__stderr__
-__builtins__["input"] = __builtins__.get("_original_input", input)
 `);
       } catch (_) {}
 
