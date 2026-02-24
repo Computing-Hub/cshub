@@ -93,7 +93,8 @@ def _browser_input(prompt_text=""):
     print(str(prompt_text) + result)
     return result
 
-__builtins__["input"] = _browser_input
+import builtins
+builtins.input = _browser_input
 `);
 
       await pyodide.runPythonAsync(code);
