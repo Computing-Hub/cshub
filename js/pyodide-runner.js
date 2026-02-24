@@ -76,12 +76,24 @@
     outputBox.className = "output-box";
 
     try {
-      // Redirect stdout/stderr
+      // Redirect stdout/stderr and override input() to use browser prompt
       pyodide.runPython(`
 import sys
 from io import StringIO
 sys.stdout = StringIO()
 sys.stderr = StringIO()
+
+# Override input() to use JavaScript prompt()
+import js
+def _browser_input(prompt_text=""):
+    result = js.prompt(str(prompt_text))
+    if result is None:
+        raise EOFError("User cancelled input")
+    # Echo the prompt and response to stdout so students see it
+    print(str(prompt_text) + result)
+    return result
+
+__builtins__["input"] = _browser_input
 `);
 
       await pyodide.runPythonAsync(code);
@@ -89,10 +101,11 @@ sys.stderr = StringIO()
       const stdout = pyodide.runPython("sys.stdout.getvalue()");
       const stderr = pyodide.runPython("sys.stderr.getvalue()");
 
-      // Reset stdout/stderr
+      // Reset stdout/stderr and restore original input
       pyodide.runPython(`
 sys.stdout = sys.__stdout__
 sys.stderr = sys.__stderr__
+__builtins__["input"] = __builtins__.get("_original_input", input)
 `);
 
       if (stderr) {
@@ -111,6 +124,7 @@ sys.stderr = sys.__stderr__
         pyodide.runPython(`
 sys.stdout = sys.__stdout__
 sys.stderr = sys.__stderr__
+__builtins__["input"] = __builtins__.get("_original_input", input)
 `);
       } catch (_) {}
 
