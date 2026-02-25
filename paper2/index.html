@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edexcel GCSE CS Paper 2 — Interactive Practice</title>
+
+  <!-- CodeMirror 5 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/codemirror.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/theme/dracula.min.css">
+
+  <!-- App CSS -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Loading Overlay -->
+  <div class="loading-overlay" id="loading-overlay">
+    <div class="spinner"></div>
+    <p>Loading Python runtime...</p>
+  </div>
+
+  <!-- Header -->
+  <header class="header">
+    <h1>Edexcel GCSE Computer Science <span>Paper 2 (1CP2/02) &mdash; Summer 2025</span></h1>
+    <div id="pyodide-status">
+      <span class="dot"></span>
+      <span id="pyodide-status-text">Loading Python...</span>
+    </div>
+  </header>
+
+  <!-- Tab Bar -->
+  <nav class="tab-bar">
+    <button class="tab-btn active" data-tab="Q1">Q1 <span class="marks">(9)</span></button>
+    <button class="tab-btn" data-tab="Q2">Q2 <span class="marks">(10)</span></button>
+    <button class="tab-btn" data-tab="Q3">Q3 <span class="marks">(15)</span></button>
+    <button class="tab-btn" data-tab="Q4">Q4 <span class="marks">(11)</span></button>
+    <button class="tab-btn" data-tab="Q5">Q5 <span class="marks">(15)</span></button>
+    <button class="tab-btn" data-tab="Q6">Q6 <span class="marks">(15)</span></button>
+  </nav>
+
+  <!-- Main Content -->
+  <div class="main-content">
+
+    <!-- ═══════════════ Q1 ═══════════════ -->
+    <div class="tab-panel active" id="panel-Q1">
+      <div class="question-pane">
+        <h2>Question 1 &mdash; Bug Fixing</h2>
+        <div class="q-meta">
+          <span class="tag">9 marks</span>
+          <span class="tag">~10 min</span>
+          <span class="tag">Q01.py</span>
+        </div>
+
+        <p>A program calculates a discount based on the number of two-course meals, three-course meals and drinks ordered by the user.</p>
+
+        <p>When the total number of meals exceeds eight, a 15% discount is applied.</p>
+        <p>When the number of three-course meals exceeds four, a 10% discount is applied.</p>
+        <p>When the number of two-course meals exceeds two, a 5% discount is applied.</p>
+        <p>Only one discount can be applied.</p>
+        <p>When the number of drinks does not match the total number of meals, an error message is displayed. The total must not be calculated or displayed.</p>
+
+        <p>Open file <strong>Q01.py</strong></p>
+        <p>Amend the code to:</p>
+        <ul>
+          <li>fix the syntax error on original line 4<br><code>cost2Courses = 15.00&nbsp;&nbsp;&nbsp;Cost of meals</code></li>
+          <li>fix the syntax error on original line 6<br><code>cost Drinks = 2.00</code></li>
+          <li>fix the syntax error on original line 10<br><code>0 = numDrinks</code></li>
+          <li>fix the TypeError on original line 28<br><code>total = "num2Courses" * cost2Courses</code></li>
+          <li>fix the NameError on original line 29<br><code>total = total + num3Courses * cost33Courses</code></li>
+          <li>fix the NameError on original line 38<br><code>total = 0.95 * tatol</code></li>
+          <li>fix the logic error on original line 33<br><code>if (num2Courses - num3Courses &gt; 8):</code></li>
+          <li>fix the logic error on original line 34<br><code>total = 0.85 + total</code></li>
+          <li>fix the logic error on original line 40<br><code>print ("Total is:", total)</code></li>
+        </ul>
+
+        <p>Do <strong>not</strong> change the functionality of the given lines of code.</p>
+        <p>Do <strong>not</strong> add any additional functionality.</p>
+
+        <div class="save-note">
+          <strong>Save as:</strong> Q01FINISHED.py
+        </div>
+      </div>
+
+      <div class="editor-pane">
+        <div class="toolbar">
+          <button class="btn-run" id="btn-run-Q1" disabled>Run</button>
+          <button class="btn-reset" id="btn-reset-Q1">Reset</button>
+          <button class="btn-download" id="btn-dl-Q1">Download</button>
+          <span class="spacer"></span>
+          <span class="file-label">Q01.py</span>
+        </div>
+        <div class="editor-wrapper">
+          <textarea id="editor-Q1"></textarea>
+        </div>
+        <div class="output-panel">
+          <div class="output-header">
+            <span>Output</span>
+            <button id="btn-clear-Q1">Clear</button>
+          </div>
+          <div class="output-body" id="output-Q1"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════════ Q2 ═══════════════ -->
+    <div class="tab-panel" id="panel-Q2">
+      <div class="question-pane">
+        <h2>Question 2 &mdash; Code Completion</h2>
+        <div class="q-meta">
+          <span class="tag">10 marks</span>
+          <span class="tag">~10 min</span>
+          <span class="tag">Q02.py</span>
+        </div>
+
+        <p>A program is required to simulate the countdown to a rocket launch.</p>
+        <p>The user inputs a number between 1 and 10.</p>
+        <p>The program counts down from that number.</p>
+        <p>The wait time between each count is 1.5 seconds and is stored in the program code.</p>
+        <p>Here is the output of a functioning program, when the user enters the number 3:</p>
+
+        <div class="code-block">What is the countdown? 3
+3
+2
+1
+Ignition - lift off!</div>
+
+        <p>Open file <strong>Q02.py</strong></p>
+        <p>Amend the code to:</p>
+        <ul>
+          <li>import the time library</li>
+          <li>create a variable named <code>countDown</code> and set it to 0</li>
+          <li>take the input from the user and convert it to an integer</li>
+          <li>ensure the number inputted is valid by using two relational operators and one logical operator</li>
+          <li>ensure that the loop stops when it reaches 0</li>
+          <li>display <code>countDown</code> for the user</li>
+          <li>call a function in the time library to pause the program for the wait time</li>
+          <li>reduce <code>countDown</code> by 1</li>
+          <li>display "Ignition - lift off!" for the user</li>
+        </ul>
+
+        <p>Do <strong>not</strong> add any additional functionality.</p>
+
+        <div class="save-note">
+          <strong>Save as:</strong> Q02FINISHED.py
+        </div>
+      </div>
+
+      <div class="editor-pane">
+        <div class="toolbar">
+          <button class="btn-run" id="btn-run-Q2" disabled>Run</button>
+          <button class="btn-reset" id="btn-reset-Q2">Reset</button>
+          <button class="btn-download" id="btn-dl-Q2">Download</button>
+          <span class="spacer"></span>
+          <span class="file-label">Q02.py</span>
+        </div>
+        <div class="note-banner">
+          Note: <code>time.sleep()</code> is a no-op in the browser &mdash; the countdown numbers will appear instantly. Download and run locally to see the timed delay.
+        </div>
+        <div class="editor-wrapper">
+          <textarea id="editor-Q2"></textarea>
+        </div>
+        <div class="output-panel">
+          <div class="output-header">
+            <span>Output</span>
+            <button id="btn-clear-Q2">Clear</button>
+          </div>
+          <div class="output-body" id="output-Q2"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════════ Q3 ═══════════════ -->
+    <div class="tab-panel" id="panel-Q3">
+      <div class="question-pane">
+        <h2>Question 3 &mdash; Code Reordering</h2>
+        <div class="q-meta">
+          <span class="tag">15 marks</span>
+          <span class="tag">~20 min</span>
+          <span class="tag">Q03.py</span>
+        </div>
+
+        <p>A program allows the user to enter a string.</p>
+        <p>If the string is fewer than three characters long, an error message is displayed and the string is not processed.</p>
+        <p>Otherwise, the program adds up the ASCII values for each character in the string.</p>
+        <p>When the total is divisible by four, a four is added to the string.</p>
+        <p>When the total is divisible by five, a five is added to the string.</p>
+        <p>When the total is divisible by both four and five, a four is added to the string.</p>
+        <p>When the total is not divisible by either four or five, a zero is added to the string.</p>
+        <p>The program displays the total value and the changed string.</p>
+
+        <p>The table shows accurate test results for six inputs.</p>
+
+        <table class="test-table">
+          <thead><tr><th>Input</th><th>Output</th></tr></thead>
+          <tbody>
+            <tr><td>X</td><td>String must be three or more characters long</td></tr>
+            <tr><td>XY</td><td>String must be three or more characters long</td></tr>
+            <tr><td>cup</td><td>328 cup4</td></tr>
+            <tr><td>snow</td><td>455 snow5</td></tr>
+            <tr><td>Ian</td><td>280 Ian4</td></tr>
+            <tr><td>HAT</td><td>221 HAT0</td></tr>
+            <tr><td>&lt;empty&gt;</td><td>No output, but exits program</td></tr>
+          </tbody>
+        </table>
+
+        <p>The lines of code in the program are mixed up. The indentation has been done for you.</p>
+        <p>Open file <strong>Q03.py</strong></p>
+        <p>Amend the code to make the program work and produce the correct output. You will need to rearrange the lines.</p>
+        <p>Do <strong>not</strong> change the functionality of the given lines of code.</p>
+        <p>Do <strong>not</strong> add any additional functionality.</p>
+
+        <div class="save-note">
+          <strong>Save as:</strong> Q03FINISHED.py
+        </div>
+      </div>
+
+      <div class="editor-pane">
+        <div class="toolbar">
+          <button class="btn-run" id="btn-run-Q3" disabled>Run</button>
+          <button class="btn-reset" id="btn-reset-Q3">Reset</button>
+          <button class="btn-download" id="btn-dl-Q3">Download</button>
+          <span class="spacer"></span>
+          <span class="file-label">Q03.py</span>
+        </div>
+        <div class="editor-wrapper">
+          <textarea id="editor-Q3"></textarea>
+        </div>
+        <div class="output-panel">
+          <div class="output-header">
+            <span>Output</span>
+            <button id="btn-clear-Q3">Clear</button>
+          </div>
+          <div class="output-body" id="output-Q3"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════════ Q4 ═══════════════ -->
+    <div class="tab-panel" id="panel-Q4">
+      <div class="question-pane">
+        <h2>Question 4 &mdash; Code Completion</h2>
+        <div class="q-meta">
+          <span class="tag">11 marks</span>
+          <span class="tag">~25 min</span>
+          <span class="tag">Q04.py</span>
+        </div>
+
+        <p>A program is required to calculate the values in a multiplication square.</p>
+        <p>Here is an example of a multiplication square:</p>
+
+        <table class="test-table">
+          <thead><tr><th>&times;</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th></tr></thead>
+          <tbody>
+            <tr><td><strong>1</strong></td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td></tr>
+            <tr><td><strong>2</strong></td><td>2</td><td>4</td><td>6</td><td>8</td><td>10</td></tr>
+            <tr><td><strong>3</strong></td><td>3</td><td>6</td><td>9</td><td>12</td><td>15</td></tr>
+            <tr><td><strong>4</strong></td><td>4</td><td>8</td><td>12</td><td>16</td><td>20</td></tr>
+            <tr><td><strong>5</strong></td><td>5</td><td>10</td><td>15</td><td>20</td><td>25</td></tr>
+          </tbody>
+        </table>
+
+        <p>The number 10, at the intersection of row 2 and column 5, is the result of 2 &times; 5.</p>
+        <p>The user enters a number for the sides of the square into the program.</p>
+
+        <p>The program has these requirements:</p>
+        <ul>
+          <li>calculate the values for the multiplication square</li>
+          <li>write the values to a new file</li>
+          <li>separate values with commas</li>
+          <li>do not include the row and column labels</li>
+        </ul>
+
+        <p>Here are the contents of the output file, when the user enters the number 5:</p>
+
+        <div class="code-block">1,2,3,4,5
+2,4,6,8,10
+3,6,9,12,15
+4,8,12,16,20
+5,10,15,20,25</div>
+
+        <p>The program is partially complete.</p>
+        <p>Open file <strong>Q04.py</strong></p>
+        <p>Amend the code to meet the requirements.</p>
+        <p>Use the constants, variables and existing code provided.</p>
+        <p>Do <strong>not</strong> add any additional functionality.</p>
+
+        <div class="save-note">
+          <strong>Save as:</strong> Q04FINISHED.py
+        </div>
+      </div>
+
+      <div class="editor-pane">
+        <div class="toolbar">
+          <button class="btn-run" id="btn-run-Q4" disabled>Run</button>
+          <button class="btn-reset" id="btn-reset-Q4">Reset</button>
+          <button class="btn-download" id="btn-dl-Q4">Download</button>
+          <span class="spacer"></span>
+          <span class="file-label">Q04.py</span>
+        </div>
+        <div class="editor-wrapper">
+          <textarea id="editor-Q4"></textarea>
+        </div>
+        <div class="output-panel">
+          <div class="output-header">
+            <span>Output</span>
+            <button id="btn-clear-Q4">Clear</button>
+          </div>
+          <div class="output-body" id="output-Q4"></div>
+        </div>
+        <div class="file-output-panel" id="file-output-Q4">
+          <div class="file-header">Q04_OUTPUT.TXT (virtual file)</div>
+          <div class="file-body" id="file-body-Q4"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════════ Q5 ═══════════════ -->
+    <div class="tab-panel" id="panel-Q5">
+      <div class="question-pane">
+        <h2>Question 5 &mdash; Turtle Graphics</h2>
+        <div class="q-meta">
+          <span class="tag">15 marks</span>
+          <span class="tag">~25 min</span>
+          <span class="tag">Q05.py</span>
+        </div>
+
+        <p>A program is being developed to display nine coloured circles using turtle graphics.</p>
+        <p>Here is a greyscale image of the output produced by a fully functional program.</p>
+        <p><em>(Refer to the question paper for the reference image showing the turtle graphics output with 4 lines and 9 circles.)</em></p>
+
+        <h3>The lines</h3>
+        <ul>
+          <li>The starting point for:
+            <ul class="sub-list">
+              <li>line A is (&minus;200, 0)</li>
+              <li>line B is (0, 200)</li>
+            </ul>
+          </li>
+          <li>Lines A and B are 400 units long.</li>
+          <li>The starting point for:
+            <ul class="sub-list">
+              <li>line C is (&minus;200, &minus;200)</li>
+              <li>line D is (200, &minus;200)</li>
+            </ul>
+          </li>
+          <li>Lines C and D are at 45 degrees and 566 units long.</li>
+          <li>The lines are drawn in black with a width of three units.</li>
+        </ul>
+
+        <h3>The circles</h3>
+        <ul>
+          <li>There are nine coloured circles.</li>
+          <li>All circles have a radius of 75 units.</li>
+          <li>The position of circle 1 is stored in the variables <code>xPos</code> and <code>yPos</code>.</li>
+          <li>The second circle is located at <code>xPos + 30</code> and <code>yPos + 30</code>.</li>
+          <li>The circle colours are stored in a one-dimensional array. Each colour is used in sequence. The colours of the circles will be the same each time the program is run.</li>
+          <li>The width of the line to draw a circle is a random integer between five and ten. The width of the line may be different for each circle and may be different each time the program is run.</li>
+        </ul>
+
+        <h3>The turtle</h3>
+        <ul>
+          <li>The speed of the turtle must be as quick as possible.</li>
+        </ul>
+
+        <h3>The graphics screen</h3>
+        <ul>
+          <li>The code to create the graphics screen is provided.</li>
+          <li>The code to keep the graphics screen open is provided.</li>
+        </ul>
+
+        <p>Open file <strong>Q05.py</strong></p>
+        <p>Amend the code to create the image shown.</p>
+        <p>Use comments, white space and layout to make the program easier to read and understand.</p>
+        <p>Use the constants, variables and existing code provided.</p>
+        <p>Do <strong>not</strong> add any additional functionality.</p>
+
+        <div class="save-note">
+          <strong>Save as:</strong> Q05FINISHED.py
+        </div>
+      </div>
+
+      <div class="editor-pane">
+        <div class="toolbar">
+          <button class="btn-run" id="btn-run-Q5" disabled>Run</button>
+          <button class="btn-reset" id="btn-reset-Q5">Reset</button>
+          <button class="btn-download highlight" id="btn-dl-Q5">Download</button>
+          <span class="spacer"></span>
+          <span class="file-label">Q05.py</span>
+        </div>
+        <div class="warning-banner">
+          &#9888; Turtle graphics cannot run in the browser. Edit your code here, then <strong>Download</strong> and run it locally with Python.
+        </div>
+        <div class="editor-wrapper">
+          <textarea id="editor-Q5"></textarea>
+        </div>
+        <div class="output-panel">
+          <div class="output-header">
+            <span>Output</span>
+            <button id="btn-clear-Q5">Clear</button>
+          </div>
+          <div class="output-body" id="output-Q5">
+            <span class="info">Turtle graphics questions must be run locally. Use the Download button to save your file.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════════ Q6 ═══════════════ -->
+    <div class="tab-panel" id="panel-Q6">
+      <div class="question-pane">
+        <h2>Question 6 &mdash; Write from Scratch</h2>
+        <div class="q-meta">
+          <span class="tag">15 marks</span>
+          <span class="tag">~30 min</span>
+          <span class="tag">Q06.py</span>
+        </div>
+
+        <p>A set of records is stored in a two-dimensional array.</p>
+        <p>The fields in each record are a key and a signal reading.</p>
+
+        <p>A valid key:</p>
+        <ul>
+          <li>has a minimum length of three</li>
+          <li>is a group of letters and digits</li>
+          <li>ends with a valid check digit</li>
+        </ul>
+
+        <p>The table shows how to calculate the check digit for any key.</p>
+
+        <table class="test-table">
+          <thead><tr><th>Key</th><th>Sum the digits only in the key</th><th>Check digit = right-most digit of sum</th></tr></thead>
+          <tbody>
+            <tr><td>A2B3C5</td><td>2 + 3 = 5</td><td>5</td></tr>
+            <tr><td>A7B30</td><td>7 + 3 = 10</td><td>0</td></tr>
+            <tr><td>A11</td><td>1</td><td>1</td></tr>
+            <tr><td>A274B3</td><td>2 + 7 + 4 = 13</td><td>3</td></tr>
+          </tbody>
+        </table>
+
+        <p>A valid signal reading must be a real number:</p>
+        <ul>
+          <li>greater than or equal to 1.0</li>
+          <li>less than or equal to 5.0</li>
+        </ul>
+
+        <p>Some of the records have errors. Eight records have invalid keys. Four records have invalid signals.</p>
+
+        <p>Open file <strong>Q06.py</strong></p>
+        <p>Write a program to meet these requirements:</p>
+        <ul>
+          <li>find and display each invalid record, including the key and the signal</li>
+          <li>inform the user if a record has an invalid key (no reason required)</li>
+          <li>inform the user if a record has an invalid signal (no reason required)</li>
+          <li>work even if the number of records is changed</li>
+          <li>include at least one user-devised subprogram</li>
+        </ul>
+        <p>Use comments, white space and layout to make the program easier to read and understand.</p>
+        <p>Do <strong>not</strong> add any additional functionality.</p>
+
+        <div class="save-note">
+          <strong>Save as:</strong> Q06FINISHED.py
+        </div>
+      </div>
+
+      <div class="editor-pane">
+        <div class="toolbar">
+          <button class="btn-run" id="btn-run-Q6" disabled>Run</button>
+          <button class="btn-reset" id="btn-reset-Q6">Reset</button>
+          <button class="btn-download" id="btn-dl-Q6">Download</button>
+          <span class="spacer"></span>
+          <span class="file-label">Q06.py</span>
+        </div>
+        <div class="editor-wrapper">
+          <textarea id="editor-Q6"></textarea>
+        </div>
+        <div class="output-panel">
+          <div class="output-header">
+            <span>Output</span>
+            <button id="btn-clear-Q6">Clear</button>
+          </div>
+          <div class="output-body" id="output-Q6"></div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /main-content -->
+
+  <!-- CodeMirror 5 JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/codemirror.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/mode/python/python.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/addon/edit/matchbrackets.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/addon/edit/closebrackets.min.js"></script>
+
+  <!-- Pyodide -->
+  <script src="https://cdn.jsdelivr.net/pyodide/v0.26.4/full/pyodide.js"></script>
+
+  <!-- App JS -->
+  <script src="app.js"></script>
+
+</body>
+</html>
