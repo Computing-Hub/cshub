@@ -411,25 +411,29 @@ Ignition - lift off!</div>
         <div class="toolbar">
           <button class="btn-run" id="btn-run-Q5" disabled>Run</button>
           <button class="btn-reset" id="btn-reset-Q5">Reset</button>
-          <button class="btn-download highlight" id="btn-dl-Q5">Download</button>
+          <button class="btn-download" id="btn-dl-Q5">Download</button>
           <!-- <button class="btn-answer" id="btn-answer-Q5">Show Answer</button> -->
           <span class="spacer"></span>
           <span class="file-label">Q05.py</span>
         </div>
-        <div class="warning-banner">
-          &#9888; Turtle graphics cannot run in the browser. Edit your code here, then <strong>Download</strong> and run it locally with Python.
+        <div class="note-banner">
+          Note: Turtle graphics render on the canvas below the editor when you click <strong>Run</strong>.
         </div>
         <div class="editor-wrapper">
           <textarea id="editor-Q5"></textarea>
+        </div>
+        <div class="turtle-canvas-panel" id="turtle-panel-Q5">
+          <div class="turtle-canvas-header">Turtle Graphics Output</div>
+          <div class="turtle-canvas-body">
+            <canvas id="turtle-canvas-Q5" width="800" height="600"></canvas>
+          </div>
         </div>
         <div class="output-panel">
           <div class="output-header">
             <span>Output</span>
             <button id="btn-clear-Q5">Clear</button>
           </div>
-          <div class="output-body" id="output-Q5">
-            <span class="info">Turtle graphics questions must be run locally. Use the Download button to save your file.</span>
-          </div>
+          <div class="output-body" id="output-Q5"></div>
         </div>
         <div class="model-answer-panel" id="model-answer-Q5">
           <div class="model-answer-header">Model Answer (from Mark Scheme)</div>

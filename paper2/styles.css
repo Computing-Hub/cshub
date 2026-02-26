@@ -389,6 +389,31 @@ body {
   color: var(--text);
 }
 
+/* ===== Turtle Canvas Panel (Q5) ===== */
+.turtle-canvas-panel {
+  border-top: 1px solid var(--border);
+  background: var(--surface2);
+  display: none;
+}
+.turtle-canvas-panel .turtle-canvas-header {
+  padding: 0.3rem 0.75rem;
+  font-size: 0.75rem;
+  color: var(--green);
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  font-weight: 600;
+}
+.turtle-canvas-panel .turtle-canvas-body {
+  padding: 0.4rem;
+  text-align: center;
+  background: white;
+}
+.turtle-canvas-panel canvas {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
 /* ===== Loading Overlay ===== */
 .loading-overlay {
   position: fixed;

@@ -247,7 +247,7 @@ const QUESTIONS = {
   Q2: { marks: 10, type: 'Code Completion',   file: 'Q02', canRun: true,  needsInput: true  },
   Q3: { marks: 15, type: 'Code Reordering',   file: 'Q03', canRun: true,  needsInput: true  },
   Q4: { marks: 11, type: 'Code Completion',   file: 'Q04', canRun: true,  needsInput: true  },
-  Q5: { marks: 15, type: 'Code Completion',   file: 'Q05', canRun: false, needsInput: false },
+  Q5: { marks: 15, type: 'Code Completion',   file: 'Q05', canRun: true,  needsInput: false },
   Q6: { marks: 15, type: 'Write from Scratch',file: 'Q06', canRun: true,  needsInput: false },
 };
 
@@ -461,6 +461,25 @@ def _custom_input(p=""):
 _builtins.input = _custom_input
 `);
 
+    // For Q5: inject mock turtle module and prepare canvas
+    if (qId === 'Q5') {
+      const canvas = document.getElementById('turtle-canvas-Q5');
+      const tPanel = document.getElementById('turtle-panel-Q5');
+      if (canvas) {
+        const ctx = canvas.getContext('2d');
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = 'white';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+      }
+      if (tPanel) tPanel.style.display = 'block';
+      pyodide.FS.writeFile('/home/pyodide/turtle.py', MOCK_TURTLE_SRC);
+      pyodide.runPython(`
+import sys
+if 'turtle' in sys.modules:
+    del sys.modules['turtle']
+`);
+    }
+
     // Run the student code
     pyodide.runPython(code);
 
@@ -587,6 +606,17 @@ function clearOutput(qId) {
   if (qId === 'Q4') {
     const fp = document.getElementById('file-output-Q4');
     if (fp) fp.style.display = 'none';
+  }
+  if (qId === 'Q5') {
+    const canvas = document.getElementById('turtle-canvas-Q5');
+    if (canvas) {
+      const ctx = canvas.getContext('2d');
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = 'white';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+    }
+    const tPanel = document.getElementById('turtle-panel-Q5');
+    if (tPanel) tPanel.style.display = 'none';
   }
 }
 
@@ -930,6 +960,235 @@ for record in theRecords:
 `
 };
 
+// ───── Mock Turtle Module (for Q5 browser-based turtle graphics) ─────
+
+const MOCK_TURTLE_SRC = `
+"""Mock turtle module for Pyodide — draws on HTML5 Canvas."""
+from js import document
+import math
+
+_canvas = None
+_ctx = None
+_width = 800
+_height = 600
+
+def _ensure_canvas():
+    global _canvas, _ctx
+    if _canvas is None:
+        _canvas = document.getElementById('turtle-canvas-Q5')
+    if _canvas and _ctx is None:
+        _ctx = _canvas.getContext('2d')
+
+def _to_canvas(x, y):
+    return (x + _width / 2, _height / 2 - y)
+
+class Screen:
+    _instance = None
+
+    def __new__(cls):
+        if cls._instance is None:
+            cls._instance = super().__new__(cls)
+            cls._instance._initialized = False
+        return cls._instance
+
+    def __init__(self):
+        if not self._initialized:
+            _ensure_canvas()
+            self._initialized = True
+
+    def setup(self, width=None, height=None, startx=None, starty=None):
+        global _width, _height
+        if width is not None:
+            _width = int(width)
+        if height is not None:
+            _height = int(height)
+        if _canvas:
+            _canvas.width = _width
+            _canvas.height = _height
+            _ctx.fillStyle = 'white'
+            _ctx.fillRect(0, 0, _width, _height)
+
+    def bgcolor(self, color=None):
+        if color and _ctx:
+            _ctx.fillStyle = str(color)
+            _ctx.fillRect(0, 0, _width, _height)
+
+    def title(self, t):
+        pass
+
+    def exitonclick(self):
+        pass
+
+    def mainloop(self):
+        pass
+
+class Turtle:
+    def __init__(self):
+        _ensure_canvas()
+        self._x = 0.0
+        self._y = 0.0
+        self._heading = 0.0
+        self._pen_down = True
+        self._pen_color = 'black'
+        self._pen_size = 1
+        self._speed_val = 3
+
+    def speed(self, s=None):
+        if s is not None:
+            self._speed_val = s
+        return self._speed_val
+
+    def forward(self, distance):
+        rad = math.radians(self._heading)
+        new_x = self._x + distance * math.cos(rad)
+        new_y = self._y + distance * math.sin(rad)
+        if self._pen_down and _ctx:
+            cx1, cy1 = _to_canvas(self._x, self._y)
+            cx2, cy2 = _to_canvas(new_x, new_y)
+            _ctx.beginPath()
+            _ctx.strokeStyle = self._pen_color
+            _ctx.lineWidth = self._pen_size
+            _ctx.lineCap = 'round'
+            _ctx.moveTo(cx1, cy1)
+            _ctx.lineTo(cx2, cy2)
+            _ctx.stroke()
+        self._x = new_x
+        self._y = new_y
+    fd = forward
+
+    def backward(self, distance):
+        self.forward(-distance)
+    bk = backward
+    back = backward
+
+    def left(self, angle):
+        self._heading += angle
+    lt = left
+
+    def right(self, angle):
+        self._heading -= angle
+    rt = right
+
+    def penup(self):
+        self._pen_down = False
+    pu = penup
+    up = penup
+
+    def pendown(self):
+        self._pen_down = True
+    pd = pendown
+    down = pendown
+
+    def pencolor(self, *args):
+        if args:
+            self._pen_color = str(args[0])
+
+    def pensize(self, width=None):
+        if width is not None:
+            self._pen_size = width
+        return self._pen_size
+    width = pensize
+
+    def setposition(self, x, y=None):
+        if y is None:
+            x, y = x[0], x[1]
+        if self._pen_down and _ctx:
+            cx1, cy1 = _to_canvas(self._x, self._y)
+            cx2, cy2 = _to_canvas(x, y)
+            _ctx.beginPath()
+            _ctx.strokeStyle = self._pen_color
+            _ctx.lineWidth = self._pen_size
+            _ctx.lineCap = 'round'
+            _ctx.moveTo(cx1, cy1)
+            _ctx.lineTo(cx2, cy2)
+            _ctx.stroke()
+        self._x = float(x)
+        self._y = float(y)
+    goto = setposition
+    setpos = setposition
+
+    def setheading(self, angle):
+        self._heading = float(angle)
+    seth = setheading
+
+    def circle(self, radius, extent=360, steps=None):
+        if steps is None:
+            frac = abs(extent) / 360.0
+            steps = 1 + int(min(11 + abs(radius) / 6.0, 59.0) * frac)
+        w = 1.0 * extent / steps
+        w2 = 0.5 * w
+        l = 2.0 * radius * math.sin(math.radians(w2))
+        if radius < 0:
+            l, w, w2 = -l, -w, -w2
+        self._heading += w2
+        for _ in range(steps):
+            self.forward(l)
+            self._heading += w
+        self._heading -= w2
+
+    def hideturtle(self):
+        pass
+    ht = hideturtle
+
+    def showturtle(self):
+        pass
+    st = showturtle
+
+    def color(self, *args):
+        if args:
+            self._pen_color = str(args[0])
+
+    def begin_fill(self):
+        pass
+
+    def end_fill(self):
+        pass
+
+    def dot(self, size=None, *color):
+        pass
+
+    def write(self, arg, move=False, align="left", font=("Arial", 8, "normal")):
+        pass
+
+    def clear(self):
+        pass
+
+    def home(self):
+        self.setposition(0, 0)
+        self.setheading(0)
+
+    def xcor(self):
+        return self._x
+
+    def ycor(self):
+        return self._y
+
+    def heading(self):
+        return self._heading
+
+    def position(self):
+        return (self._x, self._y)
+    pos = position
+
+# Module-level functions
+def mode(m="standard"):
+    pass
+
+def screensize(canvwidth=None, canvheight=None, bg=None):
+    global _width, _height
+    if canvwidth is not None:
+        _width = canvwidth
+    if canvheight is not None:
+        _height = canvheight
+
+def done():
+    pass
+
+mainloop = done
+bye = done
+exitonclick = done
+`;
+
 // ───── Pyodide Loading ─────
 
 async function loadPyodide_() {
@@ -945,7 +1204,7 @@ async function loadPyodide_() {
     statusEl.classList.add('ready');
     statusText.textContent = 'Python Ready';
 
-    // Enable run buttons (except Q5)
+    // Enable run buttons for all runnable questions
     for (const qId of Object.keys(QUESTIONS)) {
       if (QUESTIONS[qId].canRun) {
         const btn = document.getElementById(`btn-run-${qId}`);
