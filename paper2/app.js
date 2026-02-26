@@ -366,6 +366,38 @@ function initButtons() {
     if (clearBtn) {
       clearBtn.addEventListener('click', () => clearOutput(qId));
     }
+
+    // Show Answer button
+    const ansBtn = document.getElementById(`btn-answer-${qId}`);
+    if (ansBtn) {
+      ansBtn.addEventListener('click', () => toggleModelAnswer(qId));
+    }
+  }
+}
+
+// ───── Toggle Model Answer ─────
+
+function toggleModelAnswer(qId) {
+  const panel = document.getElementById(`model-answer-${qId}`);
+  const btn = document.getElementById(`btn-answer-${qId}`);
+  const codePre = document.getElementById(`model-code-${qId}`);
+
+  if (!panel || !btn) return;
+
+  const isShowing = panel.classList.contains('show');
+
+  if (isShowing) {
+    panel.classList.remove('show');
+    btn.textContent = 'Show Answer';
+    btn.classList.remove('active');
+  } else {
+    // Populate the model answer code if not yet done
+    if (codePre && !codePre.textContent && MODEL_ANSWERS[qId]) {
+      codePre.textContent = MODEL_ANSWERS[qId];
+    }
+    panel.classList.add('show');
+    btn.textContent = 'Hide Answer';
+    btn.classList.add('active');
   }
 }
 
@@ -586,6 +618,317 @@ function startAutoSave() {
   // Also save on page unload
   window.addEventListener('beforeunload', saveToStorage);
 }
+
+// ───── Model Answers (from official mark scheme) ─────
+
+const MODEL_ANSWERS = {
+  Q1: `# -------------------------------------------------------------------
+# Global variables
+# -------------------------------------------------------------------
+cost2Courses = 15.00              # Cost of meals
+cost3Courses = 20.00
+costDrinks = 2.00
+
+num2Courses = 0                 # Number of meals
+num3Courses = 0
+numDrinks = 0
+
+total = 0.0                     # Total cost of all food and drink
+
+# -------------------------------------------------------------------
+# Main program
+# -------------------------------------------------------------------
+
+# Get the inputs from the user
+num2Courses = int (input ("How many 2-course dinners? "))
+num3Courses = int (input ("How many 3-course dinners? "))
+numDrinks = int (input ("How many drinks? "))
+
+# Check if everyone has a drink
+if (numDrinks != (num2Courses + num3Courses)):
+    print ("Meals and drinks don't match")
+else:
+    # Calculate the total cost of all meals and drinks
+    total = num2Courses * cost2Courses
+    total = total + num3Courses * cost3Courses
+    total = total + numDrinks * costDrinks
+
+    # Check if user gets a discount and apply it
+    if (num2Courses + num3Courses > 8):     # Get 15% discount
+        total = 0.85 * total
+    elif (num3Courses > 4):                 # Get 10% discount
+        total = 0.90 * total
+    elif (num2Courses > 2):                 # Get 5% discount
+        total = 0.95 * total
+
+    print ("Total is:", total)
+`,
+
+  Q2: `# -------------------------------------------------------------------
+# Import libraries
+# -------------------------------------------------------------------
+import time
+
+# -------------------------------------------------------------------
+# Constants
+# -------------------------------------------------------------------
+WAIT_TIME = 1.5
+
+# -------------------------------------------------------------------
+# Global variables
+# -------------------------------------------------------------------
+countDown = 0
+
+# -------------------------------------------------------------------
+# Main program
+# -------------------------------------------------------------------
+
+countDown = int (input ("What is the countdown? "))
+
+if ((countDown <= 10) and (countDown > 0)):
+
+    while (countDown != 0):
+
+        print (countDown)
+
+        time.sleep (WAIT_TIME)
+
+        countDown = countDown - 1
+
+    print ("Ignition - lift off!")
+`,
+
+  Q3: `# -------------------------------------------------------------------
+# Constants
+# -------------------------------------------------------------------
+ZERO = 0
+THREE = 3
+FOUR = 4
+FIVE = 5
+
+# -------------------------------------------------------------------
+# Global variables
+# -------------------------------------------------------------------
+inString = ""
+total = 0
+asciiValue = 0
+
+# -------------------------------------------------------------------
+# Main program
+# -------------------------------------------------------------------
+
+# Set up the input loop
+inString = input ("Enter a string (blank to exit): ")
+
+while (inString != ""):
+    if (len (inString) >= THREE):
+        total = 0                       # Reset each pass
+        for character in inString:
+            asciiValue = ord(character)
+            total = total + asciiValue
+
+        # Check if divisible by 4, 5, or neither
+        if (total % FOUR == 0):
+            inString = inString + str (FOUR)
+        elif (total % FIVE == 0):
+            inString = inString + str (FIVE)
+        else:
+            inString = inString + str (ZERO)
+
+        print (total, inString)
+    else:
+        print ("String must be three or more characters long")
+
+    inString = input ("Enter a string (blank to exit): ")
+`,
+
+  Q4: `# -------------------------------------------------------------------
+# Constants
+# -------------------------------------------------------------------
+OUT_FILE = "Q04_OUTPUT.TXT"
+COMMA = ","
+LF = "\\n"
+
+# -------------------------------------------------------------------
+# Global variables
+# -------------------------------------------------------------------
+outString = ""
+maxNum = 0
+num = 0
+row = 0
+column = 0
+
+# -------------------------------------------------------------------
+# Main program
+# -------------------------------------------------------------------
+
+# =====> Open the output file for writing
+theFile = open (OUT_FILE, "w")
+
+maxNum = int (input ("Enter a number: "))   # Get the number
+for row in range (1, maxNum + 1):           # Going down the table
+    outString = ""
+
+    for column in range (1, maxNum + 1):    # Going across the table
+        # =====> Calculate the new value
+        num = row * column
+        outString = outString + str (num)
+
+        # =====> Add a comma to all except last column
+        # =====> Add a line feed to the last column
+        if (column < maxNum):
+            outString = outString + COMMA
+        else:
+            outString = outString + LF
+
+    # =====> Write the row to the file
+    theFile.write (outString)
+
+# =====> Close the file
+theFile.close ()
+`,
+
+  Q5: `# -------------------------------------------------------------------
+# Import libraries
+# -------------------------------------------------------------------
+import turtle
+import random
+
+# -------------------------------------------------------------------
+# Constants
+# -------------------------------------------------------------------
+WIDTH = 800
+HEIGHT = 600
+
+# -------------------------------------------------------------------
+# Global variables
+# -------------------------------------------------------------------
+myColours = ["peru", "olive", "gold"]
+xPos = -120     # Location of circle 1, turtle pointing east
+yPos = -195
+
+# -------------------------------------------------------------------
+# Main program
+# -------------------------------------------------------------------
+turtle.mode ("standard")    # Turtle points to the east
+                            # Angles are counterclockwise
+screen = turtle.Screen ()
+screen.setup (WIDTH, HEIGHT)
+turtle.screensize (WIDTH, HEIGHT)
+
+# -------------------------------------------------------------------
+# =====> Prepare the turtle, including speed
+theTurtle = turtle.Turtle ()
+theTurtle.speed (0)
+theTurtle.penup ()
+
+# =====> Draw Line A and Line B
+theTurtle.pensize (3)
+theTurtle.pencolor ("Black")
+theTurtle.setposition (-200, 0)
+theTurtle.setheading (0)
+theTurtle.pendown ()
+theTurtle.forward (400)
+theTurtle.penup ()
+theTurtle.setposition (0, 200)
+theTurtle.setheading (270)
+theTurtle.pendown ()
+theTurtle.forward (400)
+theTurtle.penup ()
+
+# =====> Draw Line C and Line D
+theTurtle.setposition (-200, -200)
+theTurtle.setheading (45)
+theTurtle.pendown ()
+theTurtle.forward (566)
+theTurtle.penup ()
+theTurtle.setposition (200, -200)
+theTurtle.setheading (135)
+theTurtle.pendown ()
+theTurtle.forward (566)
+theTurtle.penup ()
+
+# =====> Draw nine coloured circles
+theTurtle.setheading (0)
+for count in range (9):
+    theTurtle.setposition (xPos, yPos)
+    theTurtle.pendown ()
+    theTurtle.pencolor (myColours[count % 3])
+    theTurtle.pensize (random.randint (5, 10))
+    theTurtle.circle (75)
+    theTurtle.penup ()
+    xPos = xPos + 30
+    yPos = yPos + 30
+
+# -------------------------------------------------------------------
+turtle.done ()
+`,
+
+  Q6: `# -------------------------------------------------------------------
+# Constants
+# -------------------------------------------------------------------
+MIN_KEY_LENGTH = 3      # A00
+MAX_SIGNAL = 5.0        # Max five
+MIN_SIGNAL = 1.0        # Min 1
+
+# -------------------------------------------------------------------
+# Global variables
+# -------------------------------------------------------------------
+theRecords = [["7JA3B1", 3.41], ["A7B", 2.33], ["Y8R4K", 2.78],
+              ["O9N1K0", 5.0], ["A1&2X3", 1.25],
+              ["A12B3", 2.47], ["B1P6Y7", -1.23], ["F8D7L5", 5.17],
+              ["AB23A5", 2.47], ["X0B9A9", 0], ["Q6B7T3", 0.5],
+              ["A15B6C2", 2.56], ["A12340", 2.5], ["P3Y1M4V7", 4.35],
+              ["J1H0Q1", 1.0], ["X", 2.3], ["W64T18B1", 1.51],
+              ["A00", 1.99], ["A3B1C14", 4.59]
+             ]
+
+# -------------------------------------------------------------------
+# Subprograms
+# -------------------------------------------------------------------
+def isValidKey (key):
+    # Check minimum length
+    if len (key) < MIN_KEY_LENGTH:
+        return False
+
+    # Check all characters are alphanumeric
+    if not key.isalnum ():
+        return False
+
+    # Check the last character is a digit
+    if not key[-1].isdigit ():
+        return False
+
+    # Calculate the check digit
+    digitTotal = 0
+    for char in key[:-1]:
+        if char.isdigit ():
+            digitTotal = digitTotal + int (char)
+
+    checkDigit = digitTotal % 10
+
+    # Compare with last character
+    if checkDigit != int (key[-1]):
+        return False
+
+    return True
+
+# -------------------------------------------------------------------
+# Main program
+# -------------------------------------------------------------------
+for record in theRecords:
+    key = record[0]
+    signal = record[1]
+
+    # Check if the key is valid
+    if not isValidKey (key):
+        print ("Invalid key", record)
+
+    # Check if the signal is valid
+    if signal < MIN_SIGNAL or signal > MAX_SIGNAL:
+        print ("Invalid signal", record)
+`
+};
 
 // ───── Pyodide Loading ─────
 

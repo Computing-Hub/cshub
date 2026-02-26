@@ -439,6 +439,55 @@ body {
   }
 }
 
+/* ===== Show Answer Button ===== */
+.btn-answer {
+  background: var(--pink);
+  color: var(--bg);
+}
+.btn-answer.active {
+  background: var(--text-dim);
+}
+
+/* ===== Model Answer Panel ===== */
+.model-answer-panel {
+  border-top: 2px solid var(--pink);
+  background: var(--surface2);
+  display: none;
+  flex-direction: column;
+  max-height: 50vh;
+  overflow: hidden;
+}
+.model-answer-panel.show {
+  display: flex;
+}
+.model-answer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.35rem 0.75rem;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  font-size: 0.78rem;
+  color: var(--pink);
+  font-weight: 600;
+}
+.model-answer-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0;
+}
+.model-answer-body pre {
+  margin: 0;
+  padding: 0.6rem 0.75rem;
+  font-family: 'Fira Code', 'Consolas', monospace;
+  font-size: 0.82rem;
+  white-space: pre;
+  color: var(--green);
+  line-height: 1.5;
+  background: var(--bg);
+  min-height: 100%;
+}
+
 /* ===== Scrollbar ===== */
 ::-webkit-scrollbar { width: 8px; height: 8px; }
 ::-webkit-scrollbar-track { background: var(--bg); }

@@ -29,6 +29,13 @@
     </div>
   </header>
 
+  <!-- Paper Navigation -->
+  <nav style="background:#313244;padding:.5rem 1.5rem;display:flex;gap:.75rem;flex-wrap:wrap;align-items:center;border-bottom:1px solid #44475a">
+    <span style="color:#6272a4;font-size:.78rem;font-weight:600">Other Papers:</span>
+    <a href="../paper1-edexcel/" style="color:#8be9fd;font-size:.82rem;text-decoration:none;padding:.25rem .6rem;border:1px solid #44475a;border-radius:4px;transition:all .2s" onmouseover="this.style.borderColor='#8be9fd'" onmouseout="this.style.borderColor='#44475a'">Edexcel Paper 1 &mdash; June 2023</a>
+    <a href="../paper1/" style="color:#8be9fd;font-size:.82rem;text-decoration:none;padding:.25rem .6rem;border:1px solid #44475a;border-radius:4px;transition:all .2s" onmouseover="this.style.borderColor='#8be9fd'" onmouseout="this.style.borderColor='#44475a'">OCR Paper 1 &mdash; June 2023</a>
+  </nav>
+
   <!-- Tab Bar -->
   <nav class="tab-bar">
     <button class="tab-btn active" data-tab="Q1">Q1 <span class="marks">(9)</span></button>
@@ -87,6 +94,7 @@
           <button class="btn-run" id="btn-run-Q1" disabled>Run</button>
           <button class="btn-reset" id="btn-reset-Q1">Reset</button>
           <button class="btn-download" id="btn-dl-Q1">Download</button>
+          <button class="btn-answer" id="btn-answer-Q1">Show Answer</button>
           <span class="spacer"></span>
           <span class="file-label">Q01.py</span>
         </div>
@@ -99,6 +107,10 @@
             <button id="btn-clear-Q1">Clear</button>
           </div>
           <div class="output-body" id="output-Q1"></div>
+        </div>
+        <div class="model-answer-panel" id="model-answer-Q1">
+          <div class="model-answer-header">Model Answer (from Mark Scheme)</div>
+          <div class="model-answer-body"><pre id="model-code-Q1"></pre></div>
         </div>
       </div>
     </div>
@@ -151,6 +163,7 @@ Ignition - lift off!</div>
           <button class="btn-run" id="btn-run-Q2" disabled>Run</button>
           <button class="btn-reset" id="btn-reset-Q2">Reset</button>
           <button class="btn-download" id="btn-dl-Q2">Download</button>
+          <button class="btn-answer" id="btn-answer-Q2">Show Answer</button>
           <span class="spacer"></span>
           <span class="file-label">Q02.py</span>
         </div>
@@ -166,6 +179,10 @@ Ignition - lift off!</div>
             <button id="btn-clear-Q2">Clear</button>
           </div>
           <div class="output-body" id="output-Q2"></div>
+        </div>
+        <div class="model-answer-panel" id="model-answer-Q2">
+          <div class="model-answer-header">Model Answer (from Mark Scheme)</div>
+          <div class="model-answer-body"><pre id="model-code-Q2"></pre></div>
         </div>
       </div>
     </div>
@@ -220,6 +237,7 @@ Ignition - lift off!</div>
           <button class="btn-run" id="btn-run-Q3" disabled>Run</button>
           <button class="btn-reset" id="btn-reset-Q3">Reset</button>
           <button class="btn-download" id="btn-dl-Q3">Download</button>
+          <button class="btn-answer" id="btn-answer-Q3">Show Answer</button>
           <span class="spacer"></span>
           <span class="file-label">Q03.py</span>
         </div>
@@ -232,6 +250,10 @@ Ignition - lift off!</div>
             <button id="btn-clear-Q3">Clear</button>
           </div>
           <div class="output-body" id="output-Q3"></div>
+        </div>
+        <div class="model-answer-panel" id="model-answer-Q3">
+          <div class="model-answer-header">Model Answer (from Mark Scheme)</div>
+          <div class="model-answer-body"><pre id="model-code-Q3"></pre></div>
         </div>
       </div>
     </div>
@@ -295,6 +317,7 @@ Ignition - lift off!</div>
           <button class="btn-run" id="btn-run-Q4" disabled>Run</button>
           <button class="btn-reset" id="btn-reset-Q4">Reset</button>
           <button class="btn-download" id="btn-dl-Q4">Download</button>
+          <button class="btn-answer" id="btn-answer-Q4">Show Answer</button>
           <span class="spacer"></span>
           <span class="file-label">Q04.py</span>
         </div>
@@ -311,6 +334,10 @@ Ignition - lift off!</div>
         <div class="file-output-panel" id="file-output-Q4">
           <div class="file-header">Q04_OUTPUT.TXT (virtual file)</div>
           <div class="file-body" id="file-body-Q4"></div>
+        </div>
+        <div class="model-answer-panel" id="model-answer-Q4">
+          <div class="model-answer-header">Model Answer (from Mark Scheme)</div>
+          <div class="model-answer-body"><pre id="model-code-Q4"></pre></div>
         </div>
       </div>
     </div>
@@ -385,6 +412,7 @@ Ignition - lift off!</div>
           <button class="btn-run" id="btn-run-Q5" disabled>Run</button>
           <button class="btn-reset" id="btn-reset-Q5">Reset</button>
           <button class="btn-download highlight" id="btn-dl-Q5">Download</button>
+          <button class="btn-answer" id="btn-answer-Q5">Show Answer</button>
           <span class="spacer"></span>
           <span class="file-label">Q05.py</span>
         </div>
@@ -402,6 +430,10 @@ Ignition - lift off!</div>
           <div class="output-body" id="output-Q5">
             <span class="info">Turtle graphics questions must be run locally. Use the Download button to save your file.</span>
           </div>
+        </div>
+        <div class="model-answer-panel" id="model-answer-Q5">
+          <div class="model-answer-header">Model Answer (from Mark Scheme)</div>
+          <div class="model-answer-body"><pre id="model-code-Q5"></pre></div>
         </div>
       </div>
     </div>
@@ -468,6 +500,7 @@ Ignition - lift off!</div>
           <button class="btn-run" id="btn-run-Q6" disabled>Run</button>
           <button class="btn-reset" id="btn-reset-Q6">Reset</button>
           <button class="btn-download" id="btn-dl-Q6">Download</button>
+          <button class="btn-answer" id="btn-answer-Q6">Show Answer</button>
           <span class="spacer"></span>
           <span class="file-label">Q06.py</span>
         </div>
@@ -480,6 +513,10 @@ Ignition - lift off!</div>
             <button id="btn-clear-Q6">Clear</button>
           </div>
           <div class="output-body" id="output-Q6"></div>
+        </div>
+        <div class="model-answer-panel" id="model-answer-Q6">
+          <div class="model-answer-header">Model Answer (from Mark Scheme)</div>
+          <div class="model-answer-body"><pre id="model-code-Q6"></pre></div>
         </div>
       </div>
     </div>
