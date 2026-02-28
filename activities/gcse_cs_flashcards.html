@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GCSE Computer Science — Paper 1 Flash Cards</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg-deep: #0c1220;
+    --bg-card: #141c2e;
+    --bg-surface: #1a2540;
+    --text-primary: #e8edf5;
+    --text-secondary: #7a88a0;
+    --text-muted: #3d4a63;
+    --accent-blue: #5b9cf6;
+    --accent-green: #3ddc84;
+    --accent-red: #f2555a;
+    --accent-amber: #f5b731;
+    --glow-blue: rgba(91,156,246,0.12);
+    --glow-green: rgba(61,220,132,0.12);
+    --glow-red: rgba(242,85,90,0.12);
+  }
+
+  body {
+    background: var(--bg-deep);
+    color: var(--text-primary);
+    font-family: 'IBM Plex Sans', system-ui, sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow-x: hidden;
+  }
+
+  /* Subtle background texture */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 20% 10%, rgba(91,156,246,0.06), transparent),
+      radial-gradient(ellipse 60% 50% at 80% 90%, rgba(139,92,246,0.05), transparent);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .app { position: relative; z-index: 1; width: 100%; max-width: 580px; padding: 24px 16px; min-height: 100vh; display: flex; flex-direction: column; }
+
+  /* Header */
+  .header { text-align: center; margin-bottom: 20px; }
+  .header h1 {
+    font-family: 'DM Serif Display', Georgia, serif;
+    font-size: 26px;
+    font-weight: 400;
+    letter-spacing: 0.01em;
+    background: linear-gradient(135deg, #5b9cf6, #a78bfa, #5b9cf6);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: shimmer 6s linear infinite;
+  }
+  @keyframes shimmer { to { background-position: 200% center; } }
+  .header .sub {
+    font-size: 11px;
+    color: var(--text-muted);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-top: 3px;
+  }
+
+  /* Topic pills */
+  .topics { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; margin-bottom: 18px; }
+  .topic-btn {
+    padding: 5px 14px;
+    border-radius: 20px;
+    border: 1px solid var(--text-muted);
+    background: transparent;
+    color: var(--text-secondary);
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    font-family: inherit;
+  }
+  .topic-btn:hover { border-color: var(--accent-blue); color: var(--accent-blue); }
+  .topic-btn.active {
+    border-color: var(--accent-blue);
+    background: var(--glow-blue);
+    color: var(--accent-blue);
+    font-weight: 700;
+  }
+
+  /* Progress bar */
+  .progress-row { display: flex; justify-content: space-between; font-size: 11px; color: var(--text-muted); margin-bottom: 5px; }
+  .progress-row .known-count { color: var(--accent-green); }
+  .progress-track { height: 4px; background: var(--bg-surface); border-radius: 4px; overflow: hidden; margin-bottom: 18px; }
+  .progress-fill {
+    height: 100%; border-radius: 4px;
+    background: linear-gradient(90deg, var(--accent-green), var(--accent-blue));
+    transition: width 0.4s ease;
+  }
+
+  /* Card container */
+  .card-stage {
+    width: 100%;
+    min-height: 360px;
+    perspective: 1200px;
+    cursor: pointer;
+    margin-bottom: 18px;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+  }
+  .card-stage.anim-left  { animation: swipeLeft 0.3s ease-in forwards; }
+  .card-stage.anim-right { animation: swipeRight 0.3s ease-in forwards; }
+  @keyframes swipeLeft  { to { transform: translateX(-130%) rotate(-10deg); opacity: 0; } }
+  @keyframes swipeRight { to { transform: translateX(130%) rotate(10deg); opacity: 0; } }
+
+  .card-inner {
+    width: 100%;
+    min-height: 360px;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .card-inner.flipped { transform: rotateY(180deg); }
+
+  .card-face {
+    position: absolute;
+    width: 100%;
+    min-height: 360px;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    padding: 28px;
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+
+  /* Front face */
+  .card-front {
+    background: linear-gradient(160deg, var(--bg-card), var(--bg-deep));
+    box-shadow: 0 8px 40px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.04);
+  }
+  .card-front .card-tag { margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
+  .card-front .tag-pill {
+    font-size: 10px; padding: 3px 10px; border-radius: 12px;
+    font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+  }
+  .card-front .card-num { font-size: 10px; color: var(--text-muted); }
+  .card-front .card-question {
+    flex: 1; display: flex; align-items: center; justify-content: center;
+    font-family: 'DM Serif Display', Georgia, serif;
+    font-size: 21px; font-weight: 400; text-align: center; line-height: 1.5;
+    color: var(--text-primary);
+  }
+  .card-front .flip-hint { text-align: center; font-size: 11px; color: var(--text-muted); }
+
+  /* Back face */
+  .card-back {
+    transform: rotateY(180deg);
+    box-shadow: 0 8px 40px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.04);
+    overflow-y: auto;
+  }
+  .card-back .ans-tag {
+    font-size: 10px; padding: 3px 10px; border-radius: 12px;
+    font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+    display: inline-block; margin-bottom: 16px;
+  }
+  .card-back .answer-text { flex: 1; }
+  .card-back .answer-text p {
+    font-size: 14px; line-height: 1.7; margin: 3px 0;
+  }
+  .card-back .answer-text p.blank { margin: 6px 0; }
+  .card-back .answer-text p.warn { color: var(--accent-amber); font-weight: 600; }
+
+  /* Topic colour theming */
+  .topic-Algorithms .card-front { border-color: rgba(91,156,246,0.2); box-shadow: 0 0 50px rgba(91,156,246,0.06), 0 8px 40px rgba(0,0,0,0.35); }
+  .topic-Algorithms .tag-pill { background: rgba(91,156,246,0.15); color: #5b9cf6; }
+  .topic-Algorithms .card-back { background: linear-gradient(160deg, #111d36, var(--bg-deep)); border-color: rgba(91,156,246,0.2); }
+  .topic-Algorithms .ans-tag { background: rgba(91,156,246,0.2); color: #5b9cf6; }
+  .topic-Algorithms .card-back .answer-text p { color: #b8d0f0; }
+
+  .topic-Systems .card-front { border-color: rgba(139,92,246,0.2); box-shadow: 0 0 50px rgba(139,92,246,0.06), 0 8px 40px rgba(0,0,0,0.35); }
+  .topic-Systems .tag-pill { background: rgba(139,92,246,0.15); color: #a78bfa; }
+  .topic-Systems .card-back { background: linear-gradient(160deg, #1a1230, var(--bg-deep)); border-color: rgba(139,92,246,0.2); }
+  .topic-Systems .ans-tag { background: rgba(139,92,246,0.2); color: #a78bfa; }
+  .topic-Systems .card-back .answer-text p { color: #cfc0f0; }
+
+  .topic-Data .card-front { border-color: rgba(245,183,49,0.2); box-shadow: 0 0 50px rgba(245,183,49,0.05), 0 8px 40px rgba(0,0,0,0.35); }
+  .topic-Data .tag-pill { background: rgba(245,183,49,0.15); color: #f5b731; }
+  .topic-Data .card-back { background: linear-gradient(160deg, #1f1a10, var(--bg-deep)); border-color: rgba(245,183,49,0.2); }
+  .topic-Data .ans-tag { background: rgba(245,183,49,0.2); color: #f5b731; }
+  .topic-Data .card-back .answer-text p { color: #e8dcc0; }
+
+  .topic-Networks .card-front { border-color: rgba(61,220,132,0.2); box-shadow: 0 0 50px rgba(61,220,132,0.05), 0 8px 40px rgba(0,0,0,0.35); }
+  .topic-Networks .tag-pill { background: rgba(61,220,132,0.15); color: #3ddc84; }
+  .topic-Networks .card-back { background: linear-gradient(160deg, #0f1f18, var(--bg-deep)); border-color: rgba(61,220,132,0.2); }
+  .topic-Networks .ans-tag { background: rgba(61,220,132,0.2); color: #3ddc84; }
+  .topic-Networks .card-back .answer-text p { color: #b8e8d0; }
+
+  .topic-Issues .card-front { border-color: rgba(242,85,90,0.2); box-shadow: 0 0 50px rgba(242,85,90,0.05), 0 8px 40px rgba(0,0,0,0.35); }
+  .topic-Issues .tag-pill { background: rgba(242,85,90,0.15); color: #f2555a; }
+  .topic-Issues .card-back { background: linear-gradient(160deg, #1f1114, var(--bg-deep)); border-color: rgba(242,85,90,0.2); }
+  .topic-Issues .ans-tag { background: rgba(242,85,90,0.2); color: #f2555a; }
+  .topic-Issues .card-back .answer-text p { color: #f0c0c0; }
+
+  /* Action buttons */
+  .actions { display: flex; gap: 14px; justify-content: center; margin-bottom: 10px; }
+  .act-btn {
+    flex: 1; max-width: 210px; padding: 13px 0; border-radius: 12px;
+    font-size: 14px; font-weight: 600; cursor: pointer;
+    font-family: inherit; transition: all 0.2s; border: 1px solid;
+  }
+  .act-btn:active { transform: scale(0.97); }
+  .btn-review { border-color: rgba(242,85,90,0.35); background: var(--glow-red); color: #f87171; }
+  .btn-review:hover { background: rgba(242,85,90,0.15); }
+  .btn-known  { border-color: rgba(61,220,132,0.35); background: var(--glow-green); color: #4ade80; }
+  .btn-known:hover  { background: rgba(61,220,132,0.15); }
+
+  .shortcuts { font-size: 10px; color: var(--text-muted); text-align: center; margin-bottom: 8px; }
+
+  /* Results screen */
+  .results {
+    width: 100%; border-radius: 16px;
+    background: linear-gradient(160deg, var(--bg-card), var(--bg-deep));
+    border: 1px solid rgba(255,255,255,0.06);
+    padding: 36px 28px; text-align: center;
+  }
+  .results .emoji { font-size: 52px; margin-bottom: 12px; }
+  .results h2 { font-family: 'DM Serif Display', Georgia, serif; font-size: 24px; font-weight: 400; margin-bottom: 6px; }
+  .results .res-sub { font-size: 13px; color: var(--text-secondary); margin-bottom: 28px; }
+  .results .stats { display: flex; justify-content: center; gap: 36px; margin-bottom: 30px; }
+  .results .stat-val { font-size: 38px; font-weight: 700; }
+  .results .stat-val.green { color: var(--accent-green); }
+  .results .stat-val.red { color: var(--accent-red); }
+  .results .stat-val.blue { color: var(--accent-blue); }
+  .results .stat-label { font-size: 11px; color: var(--text-muted); }
+  .results .res-btns { display: flex; flex-direction: column; gap: 10px; }
+  .res-btn {
+    padding: 13px 24px; border-radius: 12px;
+    font-size: 14px; font-weight: 600; cursor: pointer;
+    font-family: inherit; transition: all 0.2s; border: 1px solid;
+  }
+  .res-btn:hover { filter: brightness(1.15); }
+  .res-btn.amber  { border-color: rgba(245,183,49,0.4); background: rgba(245,183,49,0.08); color: #fbbf24; }
+  .res-btn.blue   { border-color: rgba(91,156,246,0.4); background: rgba(91,156,246,0.08); color: #93c5fd; }
+
+  .footer { margin-top: auto; padding-top: 20px; font-size: 10px; color: var(--text-muted); text-align: center; }
+
+  /* Print-friendly version */
+  .print-section { display: none; }
+
+  @media print {
+    body { background: white; color: black; }
+    body::before { display: none; }
+    .app { display: none; }
+    .print-section {
+      display: block; padding: 20px; font-family: 'IBM Plex Sans', system-ui, sans-serif;
+    }
+    .print-section h1 { font-size: 22px; text-align: center; margin-bottom: 4px; color: #1B4F72; }
+    .print-section .print-sub { font-size: 12px; text-align: center; color: #666; margin-bottom: 20px; }
+    .print-card {
+      break-inside: avoid; border: 1px solid #ccc; border-radius: 8px;
+      padding: 12px 16px; margin-bottom: 10px; page-break-inside: avoid;
+    }
+    .print-card .print-topic { font-size: 10px; font-weight: 700; text-transform: uppercase; color: #2E86C1; margin-bottom: 6px; }
+    .print-card .print-q { font-size: 14px; font-weight: 700; margin-bottom: 6px; }
+    .print-card .print-a { font-size: 12px; color: #333; line-height: 1.5; white-space: pre-line; }
+  }
+</style>
+</head>
+<body>
+
+<div class="app" id="app"></div>
+
+<!-- Print version (hidden on screen, visible when printing) -->
+<div class="print-section" id="printSection"></div>
+
+<script>
+// ══════════════════════════════════════════════════════════════
+// FLASHCARD DATA
+// ══════════════════════════════════════════════════════════════
+const FLASHCARDS = [
+  // Topic 1: Algorithms
+  { id:1, topic:"Algorithms", q:"What is Abstraction?", a:"Hiding or removing unnecessary detail to focus on the essential parts of a problem.\n\nExample: A map abstracts the real world by showing only roads and locations." },
+  { id:2, topic:"Algorithms", q:"What is Decomposition?", a:"Breaking a complex problem into smaller, manageable sub-problems that can be solved independently.\n\nExample: Game → design characters, create levels, code movement, add scoring." },
+  { id:3, topic:"Algorithms", q:"How does Linear Search work?", a:"Checks each item sequentially from the start until the target is found or the end is reached.\n\n• Works on sorted AND unsorted lists\n• Worst case: item is last or not present → n comparisons" },
+  { id:4, topic:"Algorithms", q:"How does Binary Search work?", a:"A divide and conquer algorithm on SORTED data.\n\n1. Find midpoint: (start + end) // 2\n2. Compare midpoint with target\n3. Discard the half that can't contain the target\n4. Repeat until found\n\nWorst case: log₂(n) comparisons" },
+  { id:5, topic:"Algorithms", q:"What is the best case for Bubble Sort?", a:"When the array is already sorted.\n\nThe algorithm performs ONE pass, detects NO swaps, and terminates early.\n\n⚠️ Summer 2025 focus: early termination condition is specifically tested." },
+  { id:6, topic:"Algorithms", q:"What are the four flowchart symbols?", a:"• Terminator (rounded rectangle) → Start/Stop\n• Process (rectangle) → Calculation/assignment\n• Decision (diamond) → True/False branch\n• Input/Output (parallelogram) → Data entry/display" },
+  { id:7, topic:"Algorithms", q:"Why use Constants in code?", a:"Constants are identifiers whose value does NOT change during execution.\n\nThey make code more ROBUST because the value is less likely to be changed BY ACCIDENT.\n\nIf the value needs updating, it only changes in ONE place." },
+  { id:8, topic:"Algorithms", q:"What is a Trace Table used for?", a:"Visualises step-by-step execution of an algorithm.\n\n• Each column = a variable\n• Each row = a step or pass\n• Used to find LOGIC ERRORS, verify correctness, and track variable values." },
+  { id:9, topic:"Algorithms", q:"Syntax vs Runtime vs Logic errors?", a:"Syntax Error → Breaks language rules, program WON'T RUN\n\nRuntime Error → Crashes DURING execution (e.g., divide by zero)\n\nLogic Error → Runs but produces WRONG OUTPUT (e.g., > instead of <)" },
+  { id:10, topic:"Algorithms", q:"Binary Search trace tables: what must you show? (Summer 2025)", a:"You MUST show the midpoint calculation at each step:\n\nmidpoint = (start + end) // 2\n\n⚠️ Missing this formula loses marks." },
+
+  // Topic 2: Systems
+  { id:11, topic:"Systems", q:"What two things are stored in RAM?", a:"Data AND Instructions currently in use.\n\n(Von Neumann architecture: both stored together in RAM)" },
+  { id:12, topic:"Systems", q:"Name the three CPU components.", a:"1. ALU (Arithmetic Logic Unit) → calculations and logical comparisons\n\n2. Clock → synchronises operations (speed in GHz)\n\n3. Registers → ultra-fast storage within CPU (PC, MAR, MDR, Accumulator)" },
+  { id:13, topic:"Systems", q:"What do the three system buses carry?", a:"Address Bus (unidirectional) → memory locations\n\nData Bus (bidirectional) → actual data/instructions\n\nControl Bus (bidirectional) → read/write/clock/interrupt signals" },
+  { id:14, topic:"Systems", q:"What is Virtual Memory?", a:"When RAM is full, the OS moves inactive processes to SECONDARY STORAGE (page file).\n\nWhen the CPU needs them again, they're swapped back into RAM.\n\n⚠️ Benefit: run more programs than RAM allows\n⚠️ Drawback: much slower; excessive swapping = 'thrashing'" },
+  { id:15, topic:"Systems", q:"What are Audit Trails? (Summer 2025)", a:"Records that log:\n• WHAT code was changed\n• WHO made the change\n• WHEN it was made\n\nEnsures accountability and makes version recovery easier." },
+  { id:16, topic:"Systems", q:"Code Reviews: advantages and disadvantages?", a:"Advantages:\n• Identify vulnerabilities and bugs\n• Improve code quality\n\nDisadvantages:\n• Manual reviews introduce HUMAN ERROR\n• Add significant TIME to development" },
+  { id:17, topic:"Systems", q:"What is an Embedded System?", a:"A specialised computer system within a larger machine performing DEDICATED TASKS.\n\nExample (washing machine): controls water temperature, wash cycle selection, and LOCKING THE DOOR." },
+  { id:18, topic:"Systems", q:"Compiler vs Interpreter?", a:"Compiler → translates WHOLE program at once into executable. Faster execution. Errors after full scan.\n\nInterpreter → translates and executes LINE BY LINE. Stops at first error. Easier debugging. No executable." },
+  { id:19, topic:"Systems", q:"Name five key OS functions.", a:"1. Scheduling → allocates CPU time using time slices\n2. Peripheral management → device drivers\n3. File management → directories, permissions, disk space\n4. User management → accounts, access levels\n5. User interface → GUI or CLI" },
+  { id:20, topic:"Systems", q:"How does Optical Storage work?", a:"Uses a LASER to burn tiny pits (indentations) and lands (flat areas) into a reflective surface.\n\nThe pattern of pits and lands represents binary data (1s and 0s).\n\nExamples: CD, DVD, Blu-ray" },
+
+  // Topic 3: Data
+  { id:21, topic:"Data", q:"How many values can 8 bits represent?", a:"2⁸ = 256 unique values (0 to 255).\n\n8 bits = 1 byte\n4 bits = 1 nibble\n1 hex digit = 4 bits (1 nibble)" },
+  { id:22, topic:"Data", q:"Order: KiB, GiB, MiB, TiB (smallest → largest)", a:"KiB (1,024 bytes) → MiB (1,024 KiB) → GiB (1,024 MiB) → TiB (1,024 GiB)\n\n⚠️ Summer 2025: You must know GiB > MiB > KiB" },
+  { id:23, topic:"Data", q:"How to negate a binary number using Two's Complement?", a:"Step 1: FLIP all bits (0→1, 1→0)\nStep 2: ADD 1\n\nExample: +5 = 00000101\nFlip → 11111010\nAdd 1 → 11111011 = −5\n\nMSB is sign bit (0 = positive, 1 = negative)" },
+  { id:24, topic:"Data", q:"What is Overflow?", a:"Occurs when an arithmetic result requires MORE BITS than are available.\n\nThe extra bit is lost, producing an incorrect answer.\n\nExample: Adding two 8-bit numbers that produce a 9-bit result." },
+  { id:25, topic:"Data", q:"Logical Shift vs Arithmetic Shift?", a:"Logical Shift → ALWAYS fills MSB with 0\n\nArithmetic Shift → fills MSB with COPY OF THE SIGN BIT\n\nBoth: left = ×2, right = ÷2 per position\n\nArithmetic preserves the sign of negative numbers." },
+  { id:26, topic:"Data", q:"How many characters does standard ASCII represent?", a:"128 characters using 7 bits (2⁷ = 128).\n\nIncludes: uppercase, lowercase, digits, punctuation, control chars.\n\nExtended ASCII: 8 bits → 256 characters\nUnicode: up to 32 bits → all world languages" },
+  { id:27, topic:"Data", q:"If 'A' = 65 in ASCII, what is 'D'?", a:"D = 68\n\nASCII codes are sequential:\nA = 65, B = 66, C = 67, D = 68\n\nSame logic: lowercase a = 97, digits 0 = 48\n\n⚠️ Summer 2025: calculation questions from anchor values" },
+  { id:28, topic:"Data", q:"Image file size formula (in BYTES)?", a:"File size (bytes) = (Width × Height × Colour Depth) ÷ 8\n\n⚠️ MUST divide by 8 when answer is in bytes!\n\nExample: 1920 × 1080 × 24-bit\n= (1920 × 1080 × 24) ÷ 8\n= 6,220,800 bytes" },
+  { id:29, topic:"Data", q:"Sound file size formula?", a:"File size = Sample Rate × Bit Depth × Duration (seconds)\n\nSample rate = samples per second (Hz)\nBit depth = bits per sample\nSample interval = time between measurements\n\n⚠️ Higher rate & depth = better quality BUT larger file" },
+  { id:30, topic:"Data", q:"What is the Transmission Rate formula?", a:"Transmission Rate = Total bits ÷ Time (seconds)\n\nExample: 49,766,400 bits in 5 seconds\n= 49,766,400 ÷ 5\n= 9,953,280 bits per second" },
+
+  // Topic 4: Networks
+  { id:31, topic:"Networks", q:"LAN vs WAN — two key differences?", a:"LAN: Small area (building/school), organisation OWNS the infrastructure\n\nWAN: Large area (cities/countries), uses THIRD-PARTY infrastructure (ISPs)\n\nThe Internet is the largest WAN." },
+  { id:32, topic:"Networks", q:"Key advantage of Mesh Topology?", a:"NO central point of failure.\n\nDevices connect directly to each other, so if one link fails, data takes ALTERNATIVE ROUTES.\n\nDrawback: expensive due to high cabling requirements." },
+  { id:33, topic:"Networks", q:"Name the four TCP/IP layers (top → bottom).", a:"4. Application → HTTP, FTP, SMTP, IMAP (user services)\n3. Transport → TCP (establishes connection, packets)\n2. Internet → IP (addressing and routing)\n1. Link → electrical/radio signals, MAC addresses" },
+  { id:34, topic:"Networks", q:"What does the Link Layer do? (Summer 2025)", a:"Converts data into ELECTRICAL or RADIO SIGNALS for the physical medium.\n\nAdds MAC ADDRESSES to identify devices on the local network.\n\n⚠️ This is the bottom layer of the TCP/IP model." },
+  { id:35, topic:"Networks", q:"IMAP vs POP3?", a:"IMAP: Keeps emails ON THE SERVER → accessible from MULTIPLE devices\n\nPOP3: Downloads and typically DELETES from server → one device only\n\n⚠️ Summer 2025: IMAP multi-device access is specifically tested" },
+  { id:36, topic:"Networks", q:"What is an Ethical Hacker?", a:"An individual AUTHORISED by a company to perform penetration testing.\n\nPurpose: identify vulnerabilities and recommend improvements BEFORE malicious hackers exploit them.\n\n⚠️ The word AUTHORISED is essential for full marks." },
+  { id:37, topic:"Networks", q:"What is an Acceptable Use Policy (AUP)?", a:"A document that keeps systems secure by DETERRING users from unsafe practices.\n\nClarifies what activities are PERMITTED on the network.\n\n⚠️ Key word: DETERS (prevents problems by setting clear rules)" },
+  { id:38, topic:"Networks", q:"Firewall vs Encryption?", a:"Firewall: FILTERS network traffic based on security rules. Does NOT encrypt data.\n\nEncryption: SCRAMBLES data so only someone with the decryption key can read it.\n\n⚠️ Never confuse these — different security measures!" },
+  { id:39, topic:"Networks", q:"Why is wired (Ethernet) more secure?", a:"Data is difficult to INTERCEPT on a physical cable.\n\nWireless signals travel through the air and can be intercepted more easily.\n\nWired = more reliable (no interference) but less mobile." },
+
+  // Topic 5: Issues
+  { id:40, topic:"Issues", q:"Name 5 data protection principles (Summer 2025)", a:"1. Processed LAWFULLY and TRANSPARENTLY\n2. Obtain CONSENT from individuals\n3. Collect only NECESSARY data\n4. Keep data ACCURATE and up to date\n5. Don't store LONGER THAN NECESSARY\n\n⚠️ Learn these exact phrases for marks" },
+  { id:41, topic:"Issues", q:"Open-source vs Proprietary licensing?", a:"Open-source: code can be ACCESSED, EDITED, and REDISTRIBUTED. Often free. Community-driven.\n\nProprietary: source code NOT available. Pay licence fee. Cannot modify or redistribute.\n\n⚠️ All three words (accessed, edited, redistributed) needed for full marks" },
+  { id:42, topic:"Issues", q:"What causes Algorithmic Bias?", a:"Poor algorithm design OR training with INSUFFICIENT / UNFAIR data.\n\nLeads to discriminatory outcomes.\n\nExamples: biased police deployment, unfair hiring tools, facial recognition issues.\n\n⚠️ Always mention the role of TRAINING DATA" },
+  { id:43, topic:"Issues", q:"Three types of Intellectual Property protection?", a:"Copyright → protects original creative works (including source code)\n\nPatent → protects new inventions or processes\n\nTrademark → protects brand identifiers (logos, slogans, names)" },
+  { id:44, topic:"Issues", q:"Environmental impacts of manufacturing tech?", a:"• Uses massive amounts of WATER and ENERGY\n• Can cause local resource shortages and pollution\n• Mining raw materials (rare earth metals) damages ecosystems\n\nShorter replacement cycles increase:\n• E-WASTE\n• Demand for raw METAL extraction\n\n⚠️ Summer 2025: mention both water AND metal" },
+  { id:45, topic:"Issues", q:"What is E-Waste and why is it harmful?", a:"Discarded electronic devices.\n\n• Leads to LANDFILL use\n• Releases TOXIC substances (lead, mercury, cadmium)\n• Proper recycling is essential but costly\n• Shorter replacement cycles worsen the problem" },
+];
+
+const TOPICS = ["All","Algorithms","Systems","Data","Networks","Issues"];
+
+// ══════════════════════════════════════════════════════════════
+// STATE
+// ══════════════════════════════════════════════════════════════
+let state = {
+  topic: "All",
+  cards: [],
+  idx: 0,
+  flipped: false,
+  known: new Set(),
+  reviewing: new Set(),
+  mode: "study",
+};
+
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function filterCards(t) {
+  return shuffle(t === "All" ? [...FLASHCARDS] : FLASHCARDS.filter(c => c.topic === t));
+}
+
+function setTopic(t) {
+  state.topic = t;
+  state.cards = filterCards(t);
+  state.idx = 0;
+  state.flipped = false;
+  state.known = new Set();
+  state.reviewing = new Set();
+  state.mode = "study";
+  render();
+}
+
+function flip() {
+  if (state.mode !== "study") return;
+  state.flipped = !state.flipped;
+  render();
+}
+
+function markCard(type) {
+  if (state.mode !== "study" || !state.cards[state.idx]) return;
+  const card = state.cards[state.idx];
+  const dir = type === "known" ? "right" : "left";
+
+  const stage = document.querySelector('.card-stage');
+  if (stage) {
+    stage.classList.add(`anim-${dir}`);
+    setTimeout(() => {
+      if (type === "known") state.known.add(card.id);
+      else state.reviewing.add(card.id);
+
+      if (state.idx + 1 >= state.cards.length) {
+        state.mode = "results";
+      } else {
+        state.idx++;
+      }
+      state.flipped = false;
+      render();
+    }, 300);
+  }
+}
+
+function restart(onlyReview) {
+  if (onlyReview) {
+    state.cards = shuffle(state.cards.filter(c => state.reviewing.has(c.id)));
+  } else {
+    state.cards = filterCards(state.topic);
+  }
+  state.idx = 0;
+  state.flipped = false;
+  state.known = new Set();
+  state.reviewing = new Set();
+  state.mode = "study";
+  render();
+}
+
+// ══════════════════════════════════════════════════════════════
+// RENDER
+// ══════════════════════════════════════════════════════════════
+function render() {
+  const app = document.getElementById('app');
+  const current = state.cards[state.idx];
+  const total = state.cards.length;
+  const progress = total > 0 ? ((state.known.size + state.reviewing.size) / total) * 100 : 0;
+
+  let html = `
+    <div class="header">
+      <h1>GCSE Computer Science</h1>
+      <div class="sub">Edexcel Paper 1 — Flash Cards — Summer 2025</div>
+    </div>
+    <div class="topics">
+      ${TOPICS.map(t => {
+        const count = t === "All" ? FLASHCARDS.length : FLASHCARDS.filter(c => c.topic === t).length;
+        return `<button class="topic-btn ${state.topic === t ? 'active' : ''}" onclick="setTopic('${t}')">${t} (${count})</button>`;
+      }).join('')}
+    </div>
+  `;
+
+  if (state.mode === "study" && current) {
+    html += `
+      <div class="progress-row">
+        <span>Card ${state.idx + 1} of ${total}</span>
+        <span class="known-count">✓ ${state.known.size}</span>
+      </div>
+      <div class="progress-track"><div class="progress-fill" style="width:${progress}%"></div></div>
+
+      <div class="card-stage topic-${current.topic}" onclick="flip()" ontouchstart="handleTouchStart(event)" ontouchend="handleTouchEnd(event)">
+        <div class="card-inner ${state.flipped ? 'flipped' : ''}">
+          <div class="card-face card-front">
+            <div class="card-tag">
+              <span class="tag-pill">${current.topic}</span>
+              <span class="card-num">#${current.id}</span>
+            </div>
+            <div class="card-question">${escHtml(current.q)}</div>
+            <div class="flip-hint">Tap to reveal answer</div>
+          </div>
+          <div class="card-face card-back">
+            <span class="ans-tag">Answer</span>
+            <div class="answer-text">
+              ${current.a.split('\n').map(line => {
+                if (line === '') return '<p class="blank"></p>';
+                if (line.startsWith('⚠️')) return `<p class="warn">${escHtml(line)}</p>`;
+                return `<p>${escHtml(line)}</p>`;
+              }).join('')}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="act-btn btn-review" onclick="event.stopPropagation();markCard('review')">← Review Again</button>
+        <button class="act-btn btn-known" onclick="event.stopPropagation();markCard('known')">Got It! →</button>
+      </div>
+      <div class="shortcuts">Space to flip · ← Review · → Got it · Swipe on mobile</div>
+    `;
+  } else if (state.mode === "results") {
+    const pct = total > 0 ? Math.round((state.known.size / total) * 100) : 0;
+    const emoji = state.known.size === total ? '🌟' : state.known.size > total * 0.7 ? '💪' : '📚';
+    html += `
+      <div class="results">
+        <div class="emoji">${emoji}</div>
+        <h2>Session Complete!</h2>
+        <div class="res-sub">${state.topic === "All" ? "All topics" : state.topic} — ${total} cards</div>
+        <div class="stats">
+          <div><div class="stat-val green">${state.known.size}</div><div class="stat-label">Known</div></div>
+          <div><div class="stat-val red">${state.reviewing.size}</div><div class="stat-label">To Review</div></div>
+          <div><div class="stat-val blue">${pct}%</div><div class="stat-label">Score</div></div>
+        </div>
+        <div class="res-btns">
+          ${state.reviewing.size > 0 ? `<button class="res-btn amber" onclick="restart(true)">Review ${state.reviewing.size} Missed Cards</button>` : ''}
+          <button class="res-btn blue" onclick="restart(false)">Restart All Cards</button>
+        </div>
+      </div>
+    `;
+  }
+
+  html += `<div class="footer">${FLASHCARDS.length} flashcards across 5 topics · Updated for Summer 2025 · <a href="javascript:void(0)" onclick="window.print()" style="color:var(--accent-blue);text-decoration:none;">Print all cards</a></div>`;
+  app.innerHTML = html;
+}
+
+function escHtml(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+// ══════════════════════════════════════════════════════════════
+// TOUCH / KEYBOARD
+// ══════════════════════════════════════════════════════════════
+let touchStartX = null;
+function handleTouchStart(e) { touchStartX = e.touches[0].clientX; }
+function handleTouchEnd(e) {
+  if (touchStartX === null) return;
+  const diff = e.changedTouches[0].clientX - touchStartX;
+  if (Math.abs(diff) > 60) {
+    e.preventDefault();
+    e.stopPropagation();
+    if (diff > 0) markCard('known');
+    else markCard('review');
+  }
+  touchStartX = null;
+}
+
+document.addEventListener('keydown', function(e) {
+  if (state.mode !== 'study') return;
+  if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); flip(); }
+  if (e.key === 'ArrowRight' || e.key === 'k') markCard('known');
+  if (e.key === 'ArrowLeft' || e.key === 'r') markCard('review');
+});
+
+// ══════════════════════════════════════════════════════════════
+// PRINT VERSION
+// ══════════════════════════════════════════════════════════════
+function buildPrintVersion() {
+  const ps = document.getElementById('printSection');
+  let html = '<h1>GCSE Computer Science — Paper 1 Flash Cards</h1><div class="print-sub">Edexcel · Summer 2025 · 45 Cards</div>';
+  FLASHCARDS.forEach(c => {
+    html += `<div class="print-card">
+      <div class="print-topic">${c.topic}</div>
+      <div class="print-q">${escHtml(c.q)}</div>
+      <div class="print-a">${escHtml(c.a)}</div>
+    </div>`;
+  });
+  ps.innerHTML = html;
+}
+
+// Init
+state.cards = filterCards("All");
+render();
+buildPrintVersion();
+</script>
+</body>
+</html>
