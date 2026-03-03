@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Categorise the Validation</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+body {
+  margin: 0; padding: 20px;
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(135deg, #1a1a2e 0%, #1a2e2e 50%, #1a1a2e 100%);
+  min-height: 100vh; color: #e0e0e0;
+}
+.container { max-width: 1100px; margin: 0 auto; }
+h1 {
+  font-size: 2rem; font-weight: 700; text-align: center; margin: 0 0 4px;
+  background: linear-gradient(135deg, #06b6d4, #8b5cf6);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.subtitle { text-align: center; font-size: 0.95rem; color: #888; margin: 0 0 20px; }
+.back-link { display: inline-block; margin-bottom: 14px; color: #06b6d4; text-decoration: none; font-size: 0.88rem; }
+.back-link:hover { text-decoration: underline; }
+.panel {
+  background: #16213e; border-radius: 16px; border: 1px solid #2a2a4a;
+  padding: 20px; margin-bottom: 18px;
+}
+
+/* Score bar */
+.score-bar {
+  display: flex; justify-content: center; gap: 24px; margin-bottom: 10px;
+  font-size: 0.85rem; color: #888;
+}
+.score-bar span { font-weight: 600; }
+.score-bar .score-val { color: #06b6d4; }
+
+/* Category grid */
+.category-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
+  margin-bottom: 20px;
+}
+.category-zone {
+  background: #0d1117; border-radius: 14px; border: 2px solid #2a2a4a;
+  padding: 14px; min-height: 180px;
+  transition: border-color 0.2s, background 0.2s;
+}
+.category-zone.drag-over {
+  border-color: #06b6d4; background: rgba(6,182,212,0.06);
+}
+.category-zone.correct-zone {
+  border-color: #43e97b; background: rgba(67,233,123,0.05);
+}
+.category-zone.wrong-zone {
+  border-color: #f7797d; background: rgba(247,121,125,0.05);
+}
+.category-header {
+  font-size: 0.88rem; font-weight: 700; padding: 8px 12px;
+  border-radius: 8px; margin-bottom: 8px; text-align: center;
+  color: #fff;
+}
+.category-desc {
+  font-size: 0.72rem; color: #999; text-align: center; margin-bottom: 10px;
+  line-height: 1.4;
+}
+.category-items {
+  display: flex; flex-direction: column; gap: 8px; min-height: 40px;
+}
+
+/* Category colours */
+.cat-range .category-header { background: linear-gradient(135deg, #06b6d4, #0891b2); }
+.cat-type .category-header { background: linear-gradient(135deg, #8b5cf6, #7c3aed); }
+.cat-length .category-header { background: linear-gradient(135deg, #f59e0b, #d97706); }
+.cat-presence .category-header { background: linear-gradient(135deg, #10b981, #059669); }
+.cat-format .category-header { background: linear-gradient(135deg, #ec4899, #db2777); }
+
+/* Drag items */
+.drag-item {
+  font-family: 'Fira Code', monospace; font-size: 0.78rem; font-weight: 500;
+  background: linear-gradient(135deg, #2a2a4a, #1e1e3a);
+  color: #e0e0e0; padding: 10px 14px; border-radius: 8px;
+  border: 1px solid #3a3a5a;
+  cursor: grab; user-select: none;
+  transition: transform 0.15s, box-shadow 0.15s, opacity 0.2s, border-color 0.2s;
+  touch-action: none; line-height: 1.4;
+}
+.drag-item:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(6,182,212,0.2); border-color: #06b6d4; }
+.drag-item:active { cursor: grabbing; transform: translateY(0); }
+.drag-item.dragging { opacity: 0.4; }
+.drag-item.correct-item {
+  border-color: #43e97b; background: rgba(67,233,123,0.12); color: #43e97b;
+  cursor: default;
+}
+.drag-item.wrong-item {
+  border-color: #f7797d; background: rgba(247,121,125,0.1); color: #f7797d;
+  animation: shake 0.4s ease;
+}
+
+/* Item pool */
+.pool-label { font-size: 0.82rem; font-weight: 600; color: #06b6d4; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px; }
+.item-pool {
+  display: flex; flex-wrap: wrap; gap: 10px; padding: 14px;
+  background: rgba(42,42,74,0.3); border-radius: 12px;
+  min-height: 50px; justify-content: center;
+}
+
+/* Buttons */
+.btn-row { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 16px; }
+.btn {
+  font-family: 'Poppins', sans-serif; font-size: 0.88rem; font-weight: 600;
+  padding: 10px 24px; border: none; border-radius: 10px; cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s; color: #fff;
+}
+.btn:hover { transform: translateY(-2px); }
+.btn:active { transform: translateY(0); }
+.btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+.btn-check { background: linear-gradient(135deg, #06b6d4, #0891b2); }
+.btn-check:hover:not(:disabled) { box-shadow: 0 4px 18px rgba(6,182,212,0.4); }
+.btn-reset { background: linear-gradient(135deg, #667eea, #764ba2); }
+.btn-reset:hover:not(:disabled) { box-shadow: 0 4px 18px rgba(102,126,234,0.4); }
+
+/* Feedback */
+.feedback {
+  text-align: center; font-size: 0.9rem; font-weight: 600; padding: 12px;
+  border-radius: 10px; margin-top: 14px; animation: slideInUp 0.35s ease;
+  line-height: 1.6;
+}
+.feedback.success { background: rgba(67,233,123,0.12); color: #43e97b; border: 1px solid rgba(67,233,123,0.25); }
+.feedback.error { background: rgba(247,121,125,0.12); color: #f7797d; border: 1px solid rgba(247,121,125,0.25); }
+.feedback.info { background: rgba(102,126,234,0.12); color: #667eea; border: 1px solid rgba(102,126,234,0.25); }
+
+/* Results */
+.results-panel { text-align: center; animation: slideInUp 0.4s ease; }
+.results-panel .score-big {
+  font-size: 3rem; font-weight: 700;
+  background: linear-gradient(135deg, #06b6d4, #8b5cf6);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.results-panel .score-label { color: #888; font-size: 1rem; margin-top: 4px; }
+.hidden { display: none; }
+
+@keyframes slideInUp { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
+@keyframes popIn { 0% { transform:scale(0.85); opacity:0; } 100% { transform:scale(1); opacity:1; } }
+@keyframes shake { 0%,100% { transform:translateX(0); } 20% { transform:translateX(-6px); } 40% { transform:translateX(6px); } 60% { transform:translateX(-4px); } 80% { transform:translateX(4px); } }
+
+@media (max-width: 900px) {
+  .category-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 600px) {
+  body { padding: 12px; }
+  h1 { font-size: 1.5rem; }
+  .category-grid { grid-template-columns: 1fr; }
+  .drag-item { font-size: 0.72rem; padding: 8px 10px; }
+  .panel { padding: 14px; }
+  .category-zone { min-height: 120px; padding: 10px; }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+  <a href="../index.html" class="back-link">&larr; Back to Course</a>
+  <h1>Categorise the Validation</h1>
+  <p class="subtitle">Drag each Python code snippet into the correct validation category</p>
+
+  <div class="panel">
+    <div class="score-bar">
+      <div>Placed: <span class="score-val" id="placedCount">0</span> / 15</div>
+      <div>Score: <span class="score-val" id="scoreDisplay">0</span> / 15</div>
+    </div>
+  </div>
+
+  <div id="gameArea">
+    <!-- Category zones -->
+    <div class="category-grid" id="categoryGrid"></div>
+
+    <!-- Item pool -->
+    <div class="panel">
+      <div class="pool-label">Drag snippets into the categories above</div>
+      <div class="item-pool" id="itemPool"></div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-check" id="btnCheck" disabled>Check Answers</button>
+      <button class="btn btn-reset" id="btnReset">Reset</button>
+    </div>
+
+    <div id="feedbackArea"></div>
+  </div>
+
+  <div id="resultsArea" class="hidden">
+    <div class="panel results-panel">
+      <div class="score-big" id="finalScore"></div>
+      <p class="score-label" id="finalLabel"></p>
+      <div style="margin-top:20px;">
+        <button class="btn btn-reset" id="btnRestart">Start Again</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ============================================
+   CATEGORY DATA
+   ============================================ */
+const categories = [
+  {
+    id: "range",
+    name: "Range Check",
+    desc: "Ensures a value is within an acceptable range",
+    cssClass: "cat-range",
+    items: [
+      'if age >= 0 and age <= 120:',
+      'while mark < 0 or mark > 100:',
+      'if 1 <= choice <= 5:'
+    ]
+  },
+  {
+    id: "type",
+    name: "Type Check",
+    desc: "Ensures data is the correct data type",
+    cssClass: "cat-type",
+    items: [
+      'if value.isdigit():',
+      'try: num = int(input(...))',
+      'if not price.isdigit():'
+    ]
+  },
+  {
+    id: "length",
+    name: "Length Check",
+    desc: "Ensures input meets length requirements",
+    cssClass: "cat-length",
+    items: [
+      'if len(password) >= 8:',
+      'while len(postcode) != 7:',
+      'if len(username) <= 20:'
+    ]
+  },
+  {
+    id: "presence",
+    name: "Presence Check",
+    desc: "Ensures required data has been entered",
+    cssClass: "cat-presence",
+    items: [
+      'if name != "":',
+      'while email == "":',
+      'if len(answer) > 0:'
+    ]
+  },
+  {
+    id: "format",
+    name: "Format Check",
+    desc: "Ensures data follows a specific pattern",
+    cssClass: "cat-format",
+    items: [
+      'if "@" in email and "." in email:',
+      'if phone.startswith("07"):',
+      'if date[2] == "/" and date[5] == "/":'
+    ]
+  }
+];
+
+/* ============================================
+   STATE
+   ============================================ */
+let draggedEl = null;
+let touchClone = null;
+let checked = false;
+let score = 0;
+
+// Build item-to-category lookup
+const itemToCategory = {};
+categories.forEach(cat => {
+  cat.items.forEach(item => {
+    itemToCategory[item] = cat.id;
+  });
+});
+
+/* ============================================
+   BUILD UI
+   ============================================ */
+function buildGame() {
+  checked = false;
+  score = 0;
+  document.getElementById('scoreDisplay').textContent = '0';
+  document.getElementById('placedCount').textContent = '0';
+  document.getElementById('feedbackArea').innerHTML = '';
+  document.getElementById('btnCheck').disabled = true;
+  document.getElementById('gameArea').classList.remove('hidden');
+  document.getElementById('resultsArea').classList.add('hidden');
+
+  // Build category zones
+  const grid = document.getElementById('categoryGrid');
+  grid.innerHTML = '';
+
+  categories.forEach(cat => {
+    const zone = document.createElement('div');
+    zone.className = 'category-zone ' + cat.cssClass;
+    zone.setAttribute('data-category', cat.id);
+
+    const header = document.createElement('div');
+    header.className = 'category-header';
+    header.textContent = cat.name;
+    zone.appendChild(header);
+
+    const desc = document.createElement('div');
+    desc.className = 'category-desc';
+    desc.textContent = cat.desc;
+    zone.appendChild(desc);
+
+    const items = document.createElement('div');
+    items.className = 'category-items';
+    items.setAttribute('data-category', cat.id);
+    zone.appendChild(items);
+
+    setupDropZone(zone, items);
+    grid.appendChild(zone);
+  });
+
+  // Build item pool
+  const pool = document.getElementById('itemPool');
+  pool.innerHTML = '';
+
+  // Collect all items and shuffle
+  const allItems = [];
+  categories.forEach(cat => {
+    cat.items.forEach(item => allItems.push(item));
+  });
+  const shuffled = fisherYates(allItems);
+
+  shuffled.forEach((text, idx) => {
+    const item = createDragItem(text, idx);
+    pool.appendChild(item);
+  });
+
+  setupPoolDrop();
+}
+
+function fisherYates(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+/* ============================================
+   DRAG ITEMS
+   ============================================ */
+function createDragItem(text, idx) {
+  const el = document.createElement('div');
+  el.className = 'drag-item';
+  el.setAttribute('draggable', 'true');
+  el.setAttribute('data-item-id', idx);
+  el.setAttribute('data-value', text);
+  el.textContent = text;
+
+  el.addEventListener('dragstart', e => {
+    if (checked) return;
+    draggedEl = el;
+    el.classList.add('dragging');
+    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('text/plain', '');
+  });
+  el.addEventListener('dragend', () => {
+    el.classList.remove('dragging');
+    draggedEl = null;
+    clearDragOver();
+  });
+
+  el.addEventListener('touchstart', handleTouchStart, { passive: false });
+  el.addEventListener('touchmove', handleTouchMove, { passive: false });
+  el.addEventListener('touchend', handleTouchEnd, { passive: false });
+
+  return el;
+}
+
+/* ============================================
+   DROP ZONES
+   ============================================ */
+function setupDropZone(zone, itemsContainer) {
+  zone.addEventListener('dragover', e => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+    zone.classList.add('drag-over');
+  });
+  zone.addEventListener('dragleave', e => {
+    if (!zone.contains(e.relatedTarget)) {
+      zone.classList.remove('drag-over');
+    }
+  });
+  zone.addEventListener('drop', e => {
+    e.preventDefault();
+    zone.classList.remove('drag-over');
+    if (!draggedEl || checked) return;
+    itemsContainer.appendChild(draggedEl);
+    draggedEl.classList.remove('dragging');
+    updatePlacedCount();
+  });
+}
+
+function setupPoolDrop() {
+  const pool = document.getElementById('itemPool');
+  pool.addEventListener('dragover', e => { e.preventDefault(); e.dataTransfer.dropEffect = 'move'; });
+  pool.addEventListener('drop', e => {
+    e.preventDefault();
+    if (!draggedEl || checked) return;
+    pool.appendChild(draggedEl);
+    draggedEl.classList.remove('dragging');
+    updatePlacedCount();
+  });
+}
+
+/* ============================================
+   TOUCH EVENTS
+   ============================================ */
+function handleTouchStart(e) {
+  if (checked) return;
+  e.preventDefault();
+  const el = e.currentTarget;
+  draggedEl = el;
+  const rect = el.getBoundingClientRect();
+  const touch = e.touches[0];
+
+  touchClone = el.cloneNode(true);
+  touchClone.style.position = 'fixed';
+  touchClone.style.zIndex = '9999';
+  touchClone.style.width = rect.width + 'px';
+  touchClone.style.pointerEvents = 'none';
+  touchClone.style.opacity = '0.85';
+  touchClone.style.left = (touch.clientX - rect.width / 2) + 'px';
+  touchClone.style.top = (touch.clientY - 30) + 'px';
+  document.body.appendChild(touchClone);
+  el.classList.add('dragging');
+}
+
+function handleTouchMove(e) {
+  e.preventDefault();
+  if (!touchClone) return;
+  const touch = e.touches[0];
+  const rect = touchClone.getBoundingClientRect();
+  touchClone.style.left = (touch.clientX - rect.width / 2) + 'px';
+  touchClone.style.top = (touch.clientY - 30) + 'px';
+
+  clearDragOver();
+  const target = document.elementFromPoint(touch.clientX, touch.clientY);
+  if (target) {
+    const zone = target.closest('.category-zone');
+    if (zone) zone.classList.add('drag-over');
+  }
+}
+
+function handleTouchEnd(e) {
+  e.preventDefault();
+  if (touchClone) {
+    document.body.removeChild(touchClone);
+    touchClone = null;
+  }
+  if (!draggedEl) return;
+
+  const touch = e.changedTouches[0];
+  const target = document.elementFromPoint(touch.clientX, touch.clientY);
+  clearDragOver();
+  draggedEl.classList.remove('dragging');
+
+  if (target) {
+    const zone = target.closest('.category-zone');
+    if (zone) {
+      const itemsContainer = zone.querySelector('.category-items');
+      itemsContainer.appendChild(draggedEl);
+    } else {
+      const pool = target.closest('.item-pool');
+      if (pool) {
+        pool.appendChild(draggedEl);
+      }
+    }
+  }
+
+  updatePlacedCount();
+  draggedEl = null;
+}
+
+function clearDragOver() {
+  document.querySelectorAll('.drag-over').forEach(el => el.classList.remove('drag-over'));
+}
+
+/* ============================================
+   COUNT & CHECK
+   ============================================ */
+function updatePlacedCount() {
+  const poolItems = document.querySelectorAll('#itemPool .drag-item').length;
+  const placed = 15 - poolItems;
+  document.getElementById('placedCount').textContent = placed;
+  document.getElementById('btnCheck').disabled = placed < 15;
+}
+
+function checkAnswers() {
+  if (checked) return;
+  checked = true;
+  score = 0;
+
+  categories.forEach(cat => {
+    const container = document.querySelector('.category-items[data-category="' + cat.id + '"]');
+    const zone = container.closest('.category-zone');
+    const items = container.querySelectorAll('.drag-item');
+    let zoneCorrect = true;
+
+    items.forEach(item => {
+      const value = item.getAttribute('data-value');
+      if (itemToCategory[value] === cat.id) {
+        item.classList.add('correct-item');
+        score++;
+      } else {
+        item.classList.add('wrong-item');
+        zoneCorrect = false;
+      }
+    });
+
+    if (items.length === 3 && zoneCorrect) {
+      zone.classList.add('correct-zone');
+    } else if (!zoneCorrect) {
+      zone.classList.add('wrong-zone');
+    }
+  });
+
+  document.getElementById('scoreDisplay').textContent = score;
+
+  const fb = document.getElementById('feedbackArea');
+  if (score === 15) {
+    fb.innerHTML = '<div class="feedback success">All 15 snippets correctly categorised! Outstanding!</div>';
+  } else {
+    fb.innerHTML = '<div class="feedback error">' + score + '/15 correct. Review the red items and try again!</div>';
+  }
+
+  if (score === 15) {
+    setTimeout(() => {
+      document.getElementById('gameArea').classList.add('hidden');
+      document.getElementById('resultsArea').classList.remove('hidden');
+      document.getElementById('finalScore').textContent = '15/15';
+      document.getElementById('finalLabel').textContent = 'Perfect! You can identify all five validation types!';
+    }, 2000);
+  }
+}
+
+function restartGame() {
+  buildGame();
+}
+
+/* ============================================
+   EVENT LISTENERS
+   ============================================ */
+document.getElementById('btnCheck').addEventListener('click', checkAnswers);
+document.getElementById('btnReset').addEventListener('click', restartGame);
+document.getElementById('btnRestart').addEventListener('click', restartGame);
+
+/* ============================================
+   INIT
+   ============================================ */
+buildGame();
+</script>
+
+<footer style="text-align:center;padding:1.5rem;color:#888;font-size:0.85rem;border-top:1px solid #333;margin-top:2rem;">
+  <p>&copy; Dr Galan 2026. Created by <a href="https://coderra.je" target="_blank" rel="noopener" style="color:#6ea8fe;text-decoration:none;">Coderra.je</a></p>
+</footer>
+</body>
+</html>
