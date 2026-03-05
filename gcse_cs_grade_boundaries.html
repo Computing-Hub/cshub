@@ -326,8 +326,8 @@
     }
 
     function estimateGrade(total) {
-      for (const [grade, boundary] of Object.entries(boundaries)) {
-        if (total >= boundary) return Number(grade);
+      for (let g = 9; g >= 1; g--) {
+        if (total >= boundaries[g]) return g;
       }
       return 'U';
     }
