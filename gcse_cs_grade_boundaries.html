@@ -170,9 +170,10 @@
       padding: 6px 10px;
       border-radius: 999px;
       font-weight: 700;
-      background: #ecfeff;
-      color: #155e75;
     }
+    .grade-pill.grade-low { background: #fee2e2; color: #991b1b; }
+    .grade-pill.grade-mid { background: #ffedd5; color: #9a3412; }
+    .grade-pill.grade-high { background: #dcfce7; color: #166534; }
 
     .targets {
       display: grid;
@@ -350,9 +351,13 @@
         extra = '<p class="tiny">Estimated from the 2025 overall boundaries (not a guarantee for other years).</p>';
       }
 
+      let pillClass = 'grade-low';
+      if (grade !== 'U' && grade > 4) pillClass = 'grade-high';
+      else if (grade === 4) pillClass = 'grade-mid';
+
       resultBox.innerHTML = `
         <strong>Total: ${total} / 150</strong>
-        <div class="grade-pill">Estimated grade: ${grade} ${grade !== 'U' ? '✅' : ''}</div>
+        <div class="grade-pill ${pillClass}">Estimated grade: ${grade} ${grade !== 'U' ? '✅' : ''}</div>
         ${extra}
       `;
     }
