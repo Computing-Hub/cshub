@@ -1,0 +1,1350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Truth Tables — Edexcel GCSE CS</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Barlow:wght@400;600;700;800;900&family=Barlow+Condensed:wght@700;800;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f5f0e8;
+  --surface: #ffffff;
+  --surface2: #ede8df;
+  --border: #c8bfaa;
+  --ink: #1a1612;
+  --muted: #7a6f60;
+  --zero: #2563eb;
+  --one: #dc2626;
+  --accent: #d97706;
+  --success: #16a34a;
+  --fail: #dc2626;
+  --mono: 'Share Tech Mono', monospace;
+  --sans: 'Barlow', sans-serif;
+  --cond: 'Barlow Condensed', sans-serif;
+  --shadow: 4px 4px 0px #c8bfaa;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg);
+  background-image:
+    repeating-linear-gradient(0deg, transparent, transparent 27px, rgba(180,160,120,0.15) 27px, rgba(180,160,120,0.15) 28px),
+    repeating-linear-gradient(90deg, transparent, transparent 27px, rgba(180,160,120,0.08) 27px, rgba(180,160,120,0.08) 28px);
+  font-family: var(--sans);
+  color: var(--ink);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── HEADER ── */
+header {
+  background: var(--ink);
+  color: var(--bg);
+  padding: 16px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.logo {
+  font-family: var(--cond);
+  font-size: 1.5rem;
+  font-weight: 900;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+.logo span { color: var(--accent); }
+.edexcel-tag {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  border: 1.5px solid var(--accent);
+  color: var(--accent);
+  padding: 3px 10px;
+  border-radius: 2px;
+}
+
+/* ── ACTIVITY TABS ── */
+.act-tabs {
+  display: flex;
+  background: var(--ink);
+  border-bottom: 3px solid var(--accent);
+  padding: 0 32px;
+  gap: 4px;
+}
+.act-tab {
+  padding: 12px 24px;
+  font-family: var(--cond);
+  font-weight: 800;
+  font-size: 0.9rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgba(245,240,232,0.5);
+  background: none;
+  border: none;
+  border-bottom: 3px solid transparent;
+  margin-bottom: -3px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.act-tab:hover { color: var(--bg); }
+.act-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+/* ── PANELS ── */
+.panel { display: none; padding: 32px; max-width: 1000px; margin: 0 auto; width: 100%; }
+.panel.active { display: block; }
+
+/* ── ACTIVITY HEADER ── */
+.act-header {
+  margin-bottom: 28px;
+  border-left: 5px solid var(--accent);
+  padding-left: 16px;
+}
+.act-number {
+  font-family: var(--cond);
+  font-size: 0.7rem;
+  font-weight: 900;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 4px;
+}
+.act-title {
+  font-family: var(--cond);
+  font-size: 1.6rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  line-height: 1.1;
+}
+.act-desc {
+  margin-top: 8px;
+  font-size: 0.9rem;
+  color: var(--muted);
+  line-height: 1.6;
+  max-width: 640px;
+}
+
+/* ── MARKS ── */
+.marks-badge {
+  display: inline-block;
+  background: var(--ink);
+  color: var(--bg);
+  font-family: var(--cond);
+  font-weight: 900;
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  padding: 3px 10px;
+  margin-top: 8px;
+}
+
+/* ── QUESTION LAYOUT ── */
+.question-layout {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 28px;
+  align-items: start;
+}
+
+/* ── TRUTH TABLE ── */
+.tt-wrap {
+  overflow-x: auto;
+}
+
+table.truth-table {
+  border-collapse: collapse;
+  background: var(--surface);
+  box-shadow: var(--shadow);
+  font-family: var(--mono);
+  font-size: 0.9rem;
+  min-width: 100%;
+}
+
+table.truth-table th {
+  background: var(--ink);
+  color: var(--bg);
+  font-family: var(--cond);
+  font-weight: 800;
+  font-size: 0.85rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 10px 18px;
+  text-align: center;
+  border: 1px solid var(--ink);
+  white-space: nowrap;
+}
+table.truth-table th.expr-header {
+  background: #2d2620;
+  color: var(--accent);
+  font-size: 0.78rem;
+  padding: 6px 14px;
+  border-top: none;
+}
+table.truth-table th.input-col { background: #333; }
+table.truth-table th.derived-col { background: #1a3a5c; }
+table.truth-table th.output-col { background: #3a1a1a; color: #f87171; }
+
+table.truth-table td {
+  padding: 9px 18px;
+  text-align: center;
+  border: 1px solid var(--border);
+  font-size: 0.95rem;
+}
+table.truth-table tr:nth-child(even) td { background: var(--surface2); }
+
+.val-0 { color: var(--zero); font-weight: 700; }
+.val-1 { color: var(--one); font-weight: 700; }
+
+/* ── INPUT CELLS ── */
+.tt-input {
+  width: 52px;
+  height: 34px;
+  text-align: center;
+  font-family: var(--mono);
+  font-size: 1rem;
+  font-weight: 700;
+  border: 2px solid var(--border);
+  border-radius: 3px;
+  background: #fffdf5;
+  color: var(--ink);
+  outline: none;
+  transition: border-color 0.15s;
+}
+.tt-input:focus { border-color: var(--accent); background: #fff8e8; }
+.tt-input.correct { border-color: var(--success); background: #f0fdf4; color: var(--success); }
+.tt-input.wrong   { border-color: var(--fail); background: #fef2f2; color: var(--fail); }
+
+/* expression inputs — wider */
+.expr-input {
+  width: 160px;
+  height: 34px;
+  padding: 0 10px;
+  font-family: var(--mono);
+  font-size: 0.82rem;
+  border: 2px solid var(--border);
+  border-radius: 3px;
+  background: #fffdf5;
+  color: var(--ink);
+  outline: none;
+  transition: border-color 0.15s;
+  text-transform: uppercase;
+}
+.expr-input:focus { border-color: var(--accent); background: #fff8e8; }
+.expr-input.correct { border-color: var(--success); background: #f0fdf4; color: var(--success); }
+.expr-input.wrong   { border-color: var(--fail); background: #fef2f2; color: var(--fail); }
+
+/* ── LOGIC REFERENCE CARD ── */
+.ref-card {
+  background: var(--surface);
+  border: 2px solid var(--ink);
+  box-shadow: var(--shadow);
+  padding: 18px;
+  min-width: 220px;
+  flex-shrink: 0;
+}
+.ref-title {
+  font-family: var(--cond);
+  font-weight: 900;
+  font-size: 0.8rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--muted);
+  border-bottom: 2px solid var(--border);
+  padding-bottom: 8px;
+  margin-bottom: 12px;
+}
+.ref-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px 0;
+  border-bottom: 1px solid var(--surface2);
+  font-size: 0.82rem;
+  gap: 12px;
+}
+.ref-op { font-family: var(--mono); font-weight: 700; color: var(--accent); font-size: 0.88rem; }
+.ref-desc { color: var(--muted); font-size: 0.78rem; }
+.ref-mini-table { margin-top: 8px; width: 100%; font-family: var(--mono); font-size: 0.75rem; border-collapse: collapse; }
+.ref-mini-table td { padding: 2px 6px; text-align: center; border: 1px solid var(--border); }
+.ref-mini-table th { background: var(--surface2); padding: 2px 6px; text-align: center; border: 1px solid var(--border); font-size: 0.7rem; }
+
+/* ── CONTROLS ── */
+.controls {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.btn {
+  font-family: var(--cond);
+  font-weight: 800;
+  font-size: 0.88rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 10px 22px;
+  border: 2px solid var(--ink);
+  cursor: pointer;
+  transition: all 0.15s;
+  background: var(--surface);
+  color: var(--ink);
+}
+.btn:hover { background: var(--ink); color: var(--bg); }
+.btn-check { background: var(--ink); color: var(--bg); }
+.btn-check:hover { background: #3a3020; }
+.btn-reveal { background: var(--surface2); }
+.btn-reset  { border-color: var(--border); color: var(--muted); }
+.btn-reset:hover { background: var(--border); color: var(--ink); }
+
+/* ── FEEDBACK ── */
+.feedback {
+  display: none;
+  padding: 10px 16px;
+  font-weight: 700;
+  font-size: 0.88rem;
+  border-left: 4px solid;
+  margin-top: 12px;
+  font-family: var(--cond);
+  letter-spacing: 0.03em;
+}
+.feedback.show { display: block; }
+.feedback.ok   { border-color: var(--success); background: #f0fdf4; color: var(--success); }
+.feedback.fail { border-color: var(--fail); background: #fef2f2; color: var(--fail); }
+
+/* ── SCORE ── */
+.score-row {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 20px;
+  align-items: center;
+}
+.score-chip {
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  padding: 4px 12px;
+  background: var(--surface);
+  border: 2px solid var(--border);
+}
+.score-chip span { color: var(--accent); font-weight: 700; }
+
+/* ── SECTION DIVIDER ── */
+.section-q {
+  font-family: var(--cond);
+  font-weight: 800;
+  font-size: 0.75rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 24px 0 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.section-q::after { content:''; flex:1; height:1px; background:var(--border); }
+
+/* ── EXPRESSION TASK ── */
+.expr-task {
+  background: var(--surface);
+  border: 2px solid var(--border);
+  padding: 14px 18px;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  box-shadow: 3px 3px 0 var(--border);
+}
+.expr-label {
+  font-family: var(--cond);
+  font-weight: 800;
+  font-size: 1rem;
+  min-width: 24px;
+}
+.expr-eq { font-family: var(--mono); font-size: 0.9rem; color: var(--muted); }
+.expr-hint-text { font-size: 0.78rem; color: var(--muted); }
+
+/* ── PROGRESS ── */
+.progress-bar-wrap {
+  height: 6px;
+  background: var(--surface2);
+  border-radius: 3px;
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+.progress-bar {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 3px;
+  transition: width 0.4s ease;
+}
+
+@media (max-width: 700px) {
+  .question-layout { grid-template-columns: 1fr; }
+  .panel { padding: 18px; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">Truth <span>Tables</span></div>
+  <div class="edexcel-tag">Edexcel GCSE CS</div>
+</header>
+
+<div class="act-tabs">
+  <button class="act-tab active" onclick="switchAct(0)">🟢 Warm-up: AND &amp; OR</button>
+  <button class="act-tab" onclick="switchAct(1)">🟢 Warm-up: NOT &amp; NAND</button>
+  <button class="act-tab" onclick="switchAct(2)">🟡 Activity 1 — Two Variables</button>
+  <button class="act-tab" onclick="switchAct(3)">🟡 Activity 2 — Three Variables</button>
+  <button class="act-tab" onclick="switchAct(4)">🔴 Activity 3 — Two Variables</button>
+  <button class="act-tab" onclick="switchAct(5)">🔴 Activity 4 — Three Variables</button>
+</div>
+
+<!-- ══════════════════════════════════════
+     ACTIVITY 1 — Two variables (A, B)
+     S = A AND B
+     T = A OR B
+     Q = NOT S AND T  (i.e. A XOR B behaviour)
+══════════════════════════════════════ -->
+
+<!-- ══════════════════════════════════════
+     WARM-UP 1: AND & OR (tab index 0)
+══════════════════════════════════════ -->
+<div class="panel active" id="act0">
+  <div class="act-header">
+    <div class="act-number">Warm-up · Gates 1 of 2</div>
+    <div class="act-title">AND &amp; OR Gates</div>
+    <div class="act-desc">
+      Complete the output column for each basic logic gate below.
+      Remember: <strong>AND</strong> outputs 1 only when <em>both</em> inputs are 1.
+      <strong>OR</strong> outputs 1 when <em>at least one</em> input is 1.
+    </div>
+    <div class="marks-badge">[4 marks]</div>
+  </div>
+  <div class="score-row">
+    <div class="score-chip">Score: <span id="score0">0</span> / 8</div>
+    <div style="flex:1;max-width:200px;"><div class="progress-bar-wrap"><div class="progress-bar" id="bar0" style="width:0%"></div></div></div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:28px;align-items:start;">
+    <!-- AND table -->
+    <div>
+      <div class="section-q">Table 1 — AND Gate <span></span></div>
+      <div style="margin-bottom:8px;font-size:0.82rem;color:var(--muted);">Output = A <strong>AND</strong> B</div>
+      <table class="truth-table">
+        <thead>
+          <tr><th class="input-col">A</th><th class="input-col">B</th><th class="output-col">A AND B</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><span class="val-0">0</span></td><td><span class="val-0">0</span></td><td><input class="tt-input" id="w0-and-0" maxlength="1" placeholder="?"></td></tr>
+          <tr><td><span class="val-0">0</span></td><td><span class="val-1">1</span></td><td><input class="tt-input" id="w0-and-1" maxlength="1" placeholder="?"></td></tr>
+          <tr><td><span class="val-1">1</span></td><td><span class="val-0">0</span></td><td><input class="tt-input" id="w0-and-2" maxlength="1" placeholder="?"></td></tr>
+          <tr><td><span class="val-1">1</span></td><td><span class="val-1">1</span></td><td><input class="tt-input" id="w0-and-3" maxlength="1" placeholder="?"></td></tr>
+        </tbody>
+      </table>
+      <div style="margin-top:10px;font-size:0.78rem;color:var(--muted);font-family:var(--mono);">
+        AND truth: 0,0→0 · 0,1→0 · 1,0→0 · 1,1→1
+      </div>
+    </div>
+
+    <!-- OR table -->
+    <div>
+      <div class="section-q">Table 2 — OR Gate <span></span></div>
+      <div style="margin-bottom:8px;font-size:0.82rem;color:var(--muted);">Output = A <strong>OR</strong> B</div>
+      <table class="truth-table">
+        <thead>
+          <tr><th class="input-col">A</th><th class="input-col">B</th><th class="output-col">A OR B</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><span class="val-0">0</span></td><td><span class="val-0">0</span></td><td><input class="tt-input" id="w0-or-0" maxlength="1" placeholder="?"></td></tr>
+          <tr><td><span class="val-0">0</span></td><td><span class="val-1">1</span></td><td><input class="tt-input" id="w0-or-1" maxlength="1" placeholder="?"></td></tr>
+          <tr><td><span class="val-1">1</span></td><td><span class="val-0">0</span></td><td><input class="tt-input" id="w0-or-2" maxlength="1" placeholder="?"></td></tr>
+          <tr><td><span class="val-1">1</span></td><td><span class="val-1">1</span></td><td><input class="tt-input" id="w0-or-3" maxlength="1" placeholder="?"></td></tr>
+        </tbody>
+      </table>
+      <div style="margin-top:10px;font-size:0.78rem;color:var(--muted);font-family:var(--mono);">
+        OR truth: 0,0→0 · 0,1→1 · 1,0→1 · 1,1→1
+      </div>
+    </div>
+  </div>
+
+  <div class="controls">
+    <button class="btn btn-check" onclick="checkWarmup(0)">✔ Check Answers</button>
+    <button class="btn btn-reveal" onclick="revealWarmup(0)">👁 Show Answers</button>
+    <button class="btn btn-reset" onclick="resetWarmup(0)">↺ Reset</button>
+  </div>
+  <div class="feedback" id="fb0"></div>
+</div>
+
+<!-- ══════════════════════════════════════
+     WARM-UP 2: NOT & NAND (tab index 1)
+══════════════════════════════════════ -->
+<div class="panel" id="act1">
+  <div class="act-header">
+    <div class="act-number">Warm-up · Gates 2 of 2</div>
+    <div class="act-title">NOT Gate &amp; Combined NOT + AND</div>
+    <div class="act-desc">
+      Complete the output columns below.
+      <strong>NOT</strong> flips a single input (0→1, 1→0).
+      The second table combines <strong>NOT</strong> and <strong>AND</strong> — first apply NOT to A, then AND the result with B.
+    </div>
+    <div class="marks-badge">[4 marks]</div>
+  </div>
+  <div class="score-row">
+    <div class="score-chip">Score: <span id="score1">0</span> / 6</div>
+    <div style="flex:1;max-width:200px;"><div class="progress-bar-wrap"><div class="progress-bar" id="bar1" style="width:0%"></div></div></div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:28px;align-items:start;">
+    <!-- NOT table -->
+    <div>
+      <div class="section-q">Table 3 — NOT Gate <span></span></div>
+      <div style="margin-bottom:8px;font-size:0.82rem;color:var(--muted);">Output = <strong>NOT</strong> A (single input)</div>
+      <table class="truth-table">
+        <thead>
+          <tr><th class="input-col">A</th><th class="output-col">NOT A</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><span class="val-0">0</span></td><td><input class="tt-input" id="w1-not-0" maxlength="1" placeholder="?"></td></tr>
+          <tr><td><span class="val-1">1</span></td><td><input class="tt-input" id="w1-not-1" maxlength="1" placeholder="?"></td></tr>
+        </tbody>
+      </table>
+      <div style="margin-top:10px;font-size:0.78rem;color:var(--muted);font-family:var(--mono);">
+        NOT truth: 0→1 · 1→0
+      </div>
+    </div>
+
+    <!-- (NOT A) AND B table -->
+    <div>
+      <div class="section-q">Table 4 — Combined: (NOT A) AND B <span></span></div>
+      <div style="margin-bottom:8px;font-size:0.82rem;color:var(--muted);">Step 1: NOT A &nbsp;→&nbsp; Step 2: (NOT A) <strong>AND</strong> B</div>
+      <table class="truth-table">
+        <thead>
+          <tr><th class="input-col">A</th><th class="input-col">B</th><th class="derived-col">NOT A</th><th class="output-col">(NOT A) AND B</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><span class="val-0">0</span></td><td><span class="val-0">0</span></td><td><span class="val-1">1</span></td><td><input class="tt-input" id="w1-notand-0" maxlength="1" placeholder="?"></td></tr>
+          <tr><td><span class="val-0">0</span></td><td><span class="val-1">1</span></td><td><span class="val-1">1</span></td><td><input class="tt-input" id="w1-notand-1" maxlength="1" placeholder="?"></td></tr>
+          <tr><td><span class="val-1">1</span></td><td><span class="val-0">0</span></td><td><span class="val-0">0</span></td><td><input class="tt-input" id="w1-notand-2" maxlength="1" placeholder="?"></td></tr>
+          <tr><td><span class="val-1">1</span></td><td><span class="val-1">1</span></td><td><span class="val-0">0</span></td><td><input class="tt-input" id="w1-notand-3" maxlength="1" placeholder="?"></td></tr>
+        </tbody>
+      </table>
+      <div style="margin-top:10px;font-size:0.78rem;color:var(--muted);font-family:var(--mono);">
+        Result: 0,0→0 · 0,1→1 · 1,0→0 · 1,1→0
+      </div>
+    </div>
+  </div>
+
+  <div class="controls">
+    <button class="btn btn-check" onclick="checkWarmup(1)">✔ Check Answers</button>
+    <button class="btn btn-reveal" onclick="revealWarmup(1)">👁 Show Answers</button>
+    <button class="btn btn-reset" onclick="resetWarmup(1)">↺ Reset</button>
+  </div>
+  <div class="feedback" id="fb1"></div>
+</div>
+
+<div class="panel" id="act2">
+  <div class="act-header">
+    <div class="act-number">Activity 1 · Computational Thinking</div>
+    <div class="act-title">Two-Variable Logic — AND, OR, NOT</div>
+    <div class="act-desc">
+      The table below uses two inputs <strong>A</strong> and <strong>B</strong>.
+      The logical expression for <strong>Q</strong> is already given.
+      Complete the truth table by writing the logical expressions for <strong>S</strong> and <strong>T</strong>,
+      then fill in all missing values.
+    </div>
+    <div class="marks-badge">[5 marks]</div>
+  </div>
+
+  <div class="score-row">
+    <div class="score-chip">Score: <span id="score2">0</span> / 5</div>
+    <div style="flex:1; max-width:200px;">
+      <div class="progress-bar-wrap"><div class="progress-bar" id="bar2" style="width:0%"></div></div>
+    </div>
+  </div>
+
+  <!-- Expression tasks -->
+  <div class="section-q">Part (i) — Write the logical expressions <span></span></div>
+
+  <div class="expr-task">
+    <div class="expr-label">S</div>
+    <div class="expr-eq">=</div>
+    <input class="expr-input" id="act2-exprS" placeholder="e.g. A AND B" maxlength="30">
+    <div class="expr-hint-text">Hint: look at when S = 1 in the table</div>
+  </div>
+  <div class="expr-task">
+    <div class="expr-label">T</div>
+    <div class="expr-eq">=</div>
+    <input class="expr-input" id="act2-exprT" placeholder="e.g. NOT A" maxlength="30">
+    <div class="expr-hint-text">Hint: look at when T = 1 in the table</div>
+  </div>
+
+  <div class="section-q">Part (ii) — Complete the Q column <span></span></div>
+
+  <div class="question-layout">
+    <div class="tt-wrap">
+      <table class="truth-table" id="table2">
+        <thead>
+          <tr>
+            <th class="input-col">A</th>
+            <th class="input-col">B</th>
+            <th class="derived-col">S</th>
+            <th class="derived-col">T</th>
+            <th class="output-col">Q</th>
+          </tr>
+          <tr>
+            <th class="expr-header" colspan="2">Inputs</th>
+            <th class="expr-header" id="act2-sh">?</th>
+            <th class="expr-header" id="act2-th">?</th>
+            <th class="expr-header">NOT S AND T</th>
+          </tr>
+        </thead>
+        <tbody id="tbody2"></tbody>
+      </table>
+    </div>
+
+    <div class="ref-card">
+      <div class="ref-title">🔌 Logic Reference</div>
+      <div class="ref-row"><span class="ref-op">AND</span><span class="ref-desc">1 only if BOTH inputs = 1</span></div>
+      <div class="ref-row"><span class="ref-op">OR</span><span class="ref-desc">1 if AT LEAST ONE input = 1</span></div>
+      <div class="ref-row"><span class="ref-op">NOT</span><span class="ref-desc">Flips the value (0→1, 1→0)</span></div>
+      <div class="ref-row"><span class="ref-op">NAND</span><span class="ref-desc">NOT AND — opposite of AND</span></div>
+      <div class="ref-row"><span class="ref-op">NOR</span><span class="ref-desc">NOT OR — opposite of OR</span></div>
+      <div class="ref-row"><span class="ref-op">XOR</span><span class="ref-desc">1 if inputs are DIFFERENT</span></div>
+      <table class="ref-mini-table" style="margin-top:14px;">
+        <tr><th>A</th><th>B</th><th>AND</th><th>OR</th><th>XOR</th></tr>
+        <tr><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+        <tr><td>0</td><td>1</td><td>0</td><td>1</td><td>1</td></tr>
+        <tr><td>1</td><td>0</td><td>0</td><td>1</td><td>1</td></tr>
+        <tr><td>1</td><td>1</td><td>1</td><td>1</td><td>0</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="controls">
+    <button class="btn btn-check" onclick="checkActivity(2)">✔ Check Answers</button>
+    <button class="btn btn-reveal" onclick="revealActivity(2)">👁 Show Answers</button>
+    <button class="btn btn-reset" onclick="resetActivity(2)">↺ Reset</button>
+  </div>
+  <div class="feedback" id="fb2"></div>
+</div>
+
+
+<!-- ══════════════════════════════════════
+     ACTIVITY 2 — Three variables (A, B, C)
+     Mirrors the exam question style from the screenshot
+     S = A AND C
+     T = B OR C
+     Q = NOT S AND T
+══════════════════════════════════════ -->
+<div class="panel" id="act3">
+  <div class="act-header">
+    <div class="act-number">Activity 2 · Computational Thinking</div>
+    <div class="act-title">Three-Variable Logic — Exam Style</div>
+    <div class="act-desc">
+      Here is a partially completed truth table. The logical expression for <strong>Q</strong> is complete.
+      Complete the truth table to give the logical expression for <strong>S</strong> and <strong>T</strong>,
+      and the values for <strong>Q</strong>.
+    </div>
+    <div class="marks-badge">[3 marks]</div>
+  </div>
+
+  <div class="score-row">
+    <div class="score-chip">Score: <span id="score3">0</span> / 10</div>
+    <div style="flex:1; max-width:240px;">
+      <div class="progress-bar-wrap"><div class="progress-bar" id="bar3" style="width:0%"></div></div>
+    </div>
+  </div>
+
+  <div class="section-q">Write logical expressions for S and T <span></span></div>
+
+  <div class="expr-task">
+    <div class="expr-label">S</div>
+    <div class="expr-eq">=</div>
+    <input class="expr-input" id="act3-exprS" placeholder="using A, B, C" maxlength="30">
+    <div class="expr-hint-text">When is S = 1? Look at rows 7 and 8 (A=1, C=1)</div>
+  </div>
+  <div class="expr-task">
+    <div class="expr-label">T</div>
+    <div class="expr-eq">=</div>
+    <input class="expr-input" id="act3-exprT" placeholder="using A, B, C" maxlength="30">
+    <div class="expr-hint-text">When is T = 0? Only when B=0 AND C=0</div>
+  </div>
+
+  <div class="section-q">Complete the Q column <span></span></div>
+
+  <div class="question-layout">
+    <div class="tt-wrap">
+      <table class="truth-table" id="table3">
+        <thead>
+          <tr>
+            <th class="input-col">A</th>
+            <th class="input-col">B</th>
+            <th class="input-col">C</th>
+            <th class="derived-col">S</th>
+            <th class="derived-col">T</th>
+            <th class="output-col">Q</th>
+          </tr>
+          <tr>
+            <th class="expr-header" colspan="3">Inputs</th>
+            <th class="expr-header" id="act3-sh">?</th>
+            <th class="expr-header" id="act3-th">?</th>
+            <th class="expr-header">NOT S AND T</th>
+          </tr>
+        </thead>
+        <tbody id="tbody3"></tbody>
+      </table>
+    </div>
+
+    <div class="ref-card">
+      <div class="ref-title">🔌 Logic Reference</div>
+      <div class="ref-row"><span class="ref-op">AND</span><span class="ref-desc">1 only if BOTH inputs = 1</span></div>
+      <div class="ref-row"><span class="ref-op">OR</span><span class="ref-desc">1 if AT LEAST ONE = 1</span></div>
+      <div class="ref-row"><span class="ref-op">NOT</span><span class="ref-desc">Flips the value</span></div>
+      <div style="margin-top:14px; font-size:0.75rem; color:var(--muted); font-family:var(--mono); line-height:1.8;">
+        <div><strong>NOT S AND T</strong> means:</div>
+        <div>→ First compute S</div>
+        <div>→ Then NOT S</div>
+        <div>→ Then AND with T</div>
+        <div style="margin-top:8px;color:var(--ink);">Q = (NOT S) AND T</div>
+      </div>
+      <div style="margin-top:12px; padding:10px; background:var(--surface2); font-size:0.75rem; font-family:var(--mono); border:1px solid var(--border);">
+        <div style="color:var(--muted);margin-bottom:4px;">Example: row where A=1,B=0,C=1</div>
+        <div>S = A AND C = 1 AND 1 = <strong style="color:var(--one)">1</strong></div>
+        <div>T = B OR C  = 0 OR 1  = <strong style="color:var(--one)">1</strong></div>
+        <div>NOT S = NOT 1 = <strong style="color:var(--zero)">0</strong></div>
+        <div>Q = 0 AND 1 = <strong style="color:var(--zero)">0</strong></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="controls">
+    <button class="btn btn-check" onclick="checkActivity(3)">✔ Check Answers</button>
+    <button class="btn btn-reveal" onclick="revealActivity(3)">👁 Show Answers</button>
+    <button class="btn btn-reset" onclick="resetActivity(3)">↺ Reset</button>
+  </div>
+  <div class="feedback" id="fb3"></div>
+</div>
+
+<script>
+// ══════════════════════════════════════════════════════
+//  ACTIVITY DATA
+// ══════════════════════════════════════════════════════
+
+/*
+  Activity 1 — Two variables
+  S = A AND B
+  T = A OR B
+  Q = NOT S AND T  →  (NOT (A AND B)) AND (A OR B)  →  A XOR B
+*/
+const ACT0 = {
+  inputs: ['A','B'],
+  rows: [
+    // A  B   S  T  Q(NOT S AND T)
+    [0, 0,   0, 0,  0],
+    [0, 1,   0, 1,  1],
+    [1, 0,   0, 1,  1],
+    [1, 1,   1, 1,  0],
+  ],
+  exprS: ['A AND B'],
+  exprT: ['A OR B'],
+  sCol: 2, tCol: 3, qCol: 4,
+  totalInputCols: 2,
+  maxScore: 5,
+  // which cells are blank for students to fill: [rowIndex, colIndex(0-based in full row)]
+  // S col = 2, T col = 3, Q col = 4
+  blanks: [
+    // Q column — all 4 rows
+    [0,4],[1,4],[2,4],[3,4],
+    // +1 for the expression answers
+  ]
+};
+
+/*
+  Activity 2 — Three variables (matches exam question style)
+  S = A AND C
+  T = B OR C
+  Q = NOT S AND T  =  (NOT (A AND C)) AND (B OR C)
+*/
+const ACT1 = {
+  inputs: ['A','B','C'],
+  rows: [
+    // A  B  C   S          T         Q
+    [0, 0, 0,   0,         0,        0],   // NOT 0 AND 0 = 1 AND 0 = 0
+    [0, 0, 1,   0,         1,        1],   // NOT 0 AND 1 = 1 AND 1 = 1
+    [0, 1, 0,   0,         1,        1],   // NOT 0 AND 1 = 1
+    [0, 1, 1,   0,         1,        1],   // NOT 0 AND 1 = 1
+    [1, 0, 0,   0,         0,        0],   // NOT 0 AND 0 = 0
+    [1, 0, 1,   1,         1,        0],   // NOT 1 AND 1 = 0 AND 1 = 0
+    [1, 1, 0,   0,         1,        1],   // NOT 0 AND 1 = 1
+    [1, 1, 1,   1,         1,        0],   // NOT 1 AND 1 = 0
+  ],
+  exprS: ['A AND C'],
+  exprT: ['B OR C'],
+  sCol: 3, tCol: 4, qCol: 5,
+  totalInputCols: 3,
+  maxScore: 10,
+  blanks: [] // Q column all rows = 8 blanks + 2 expressions = 10
+};
+
+// ══════════════════════════════════════════════════════
+//  BUILD TABLES
+// ══════════════════════════════════════════════════════
+function buildTable(actIdx) {
+  const ACTS = {2: ACT0, 3: ACT1}; const act = ACTS[actIdx];
+  const tbody = document.getElementById(`tbody${actIdx}`);
+  tbody.innerHTML = '';
+
+  act.rows.forEach((row, ri) => {
+    const tr = document.createElement('tr');
+    const numInputs = act.totalInputCols;
+
+    row.forEach((val, ci) => {
+      const td = document.createElement('td');
+
+      if (ci < numInputs) {
+        // Input columns — always shown
+        td.innerHTML = `<span class="val-${val}">${val}</span>`;
+      } else if (ci === act.sCol || ci === act.tCol) {
+        // S and T — shown (given in table like the exam question)
+        td.innerHTML = `<span class="val-${val}">${val}</span>`;
+      } else if (ci === act.qCol) {
+        // Q column — student fills in
+        const inp = document.createElement('input');
+        inp.type = 'text';
+        inp.className = 'tt-input';
+        inp.maxLength = 1;
+        inp.id = `act${actIdx}-r${ri}-q`;
+        inp.placeholder = '?';
+        inp.addEventListener('input', () => {
+          inp.value = inp.value.replace(/[^01]/g, '').slice(-1);
+        });
+        td.appendChild(inp);
+      }
+      tr.appendChild(td);
+    });
+    tbody.appendChild(tr);
+  });
+}
+
+buildTable(2);
+buildTable(3);
+
+// ══════════════════════════════════════════════════════
+//  CHECK
+// ══════════════════════════════════════════════════════
+function normaliseExpr(str) {
+  return str.trim().toUpperCase()
+    .replace(/\s+/g, ' ')
+    .replace(/\bAND\b/g, 'AND')
+    .replace(/\bOR\b/g, 'OR')
+    .replace(/\bNOT\b/g, 'NOT');
+}
+
+function checkActivity(actIdx) {
+  const ACTS = {2: ACT0, 3: ACT1}; const act = ACTS[actIdx];
+  let score = 0;
+  let total = 0;
+  const wrong = [];
+
+  // Check expressions
+  const exprS = document.getElementById(`act${actIdx}-exprS`);
+  const exprT = document.getElementById(`act${actIdx}-exprT`);
+
+  const sVal = normaliseExpr(exprS.value);
+  const tVal = normaliseExpr(exprT.value);
+
+  const sOk = act.exprS.some(a => normaliseExpr(a) === sVal);
+  const tOk = act.exprT.some(a => normaliseExpr(a) === tVal);
+
+  total += 2;
+  if (sOk) {
+    score++;
+    exprS.classList.add('correct'); exprS.classList.remove('wrong');
+  } else {
+    exprS.classList.add('wrong'); exprS.classList.remove('correct');
+    wrong.push('expression for S');
+  }
+  if (tOk) {
+    score++;
+    exprT.classList.add('correct'); exprT.classList.remove('wrong');
+  } else {
+    exprT.classList.add('wrong'); exprT.classList.remove('correct');
+    wrong.push('expression for T');
+  }
+
+  // Check Q values
+  act.rows.forEach((row, ri) => {
+    const inp = document.getElementById(`act${actIdx}-r${ri}-q`);
+    if (!inp) return;
+    total++;
+    const correct = row[act.qCol].toString();
+    if (inp.value === correct) {
+      score++;
+      inp.classList.add('correct'); inp.classList.remove('wrong');
+    } else {
+      inp.classList.add('wrong'); inp.classList.remove('correct');
+      wrong.push(`Q row ${ri+1}`);
+    }
+  });
+
+  // Update score display
+  document.getElementById(`score${actIdx}`).textContent = score;
+  const pct = Math.round((score / total) * 100);
+  document.getElementById(`bar${actIdx}`).style.width = pct + '%';
+
+  const fb = document.getElementById(`fb${actIdx}`);
+  if (score === total) {
+    fb.textContent = `✓ Full marks! ${score}/${total} — excellent work.`;
+    fb.className = 'feedback show ok';
+  } else {
+    fb.textContent = `${score}/${total} correct. Wrong: ${wrong.slice(0,4).join(', ')}${wrong.length > 4 ? '…' : ''}.`;
+    fb.className = 'feedback show fail';
+  }
+}
+
+// ══════════════════════════════════════════════════════
+//  REVEAL
+// ══════════════════════════════════════════════════════
+function revealActivity(actIdx) {
+  const ACTS = {2: ACT0, 3: ACT1}; const act = ACTS[actIdx];
+
+  // Fill expressions
+  const exprS = document.getElementById(`act${actIdx}-exprS`);
+  const exprT = document.getElementById(`act${actIdx}-exprT`);
+  exprS.value = act.exprS[0];
+  exprT.value = act.exprT[0];
+  exprS.classList.add('correct'); exprS.classList.remove('wrong');
+  exprT.classList.add('correct'); exprT.classList.remove('wrong');
+
+  // Update header labels
+  document.getElementById(`act${actIdx}-sh`).textContent = act.exprS[0];
+  document.getElementById(`act${actIdx}-th`).textContent = act.exprT[0];
+
+  // Fill Q values
+  act.rows.forEach((row, ri) => {
+    const inp = document.getElementById(`act${actIdx}-r${ri}-q`);
+    if (!inp) return;
+    inp.value = row[act.qCol];
+    inp.classList.add('correct'); inp.classList.remove('wrong');
+  });
+
+  document.getElementById(`score${actIdx}`).textContent = act.maxScore;
+  document.getElementById(`bar${actIdx}`).style.width = '100%';
+  const fb = document.getElementById(`fb${actIdx}`);
+  fb.textContent = '👁 Answers revealed — study the pattern carefully.';
+  fb.className = 'feedback show ok';
+}
+
+// Update expression header labels on input
+['act2-exprS','act2-exprT','act3-exprS','act3-exprT'].forEach(id => {
+  const el = document.getElementById(id);
+  if (!el) return;
+  const actIdx = id.startsWith('act2') ? 2 : 3;
+  const col = id.endsWith('exprS') ? 's' : 't';
+  el.addEventListener('input', () => {
+    const header = document.getElementById(`act${actIdx}-${col}h`);
+    if (header) header.textContent = el.value.toUpperCase() || '?';
+  });
+});
+
+// ══════════════════════════════════════════════════════
+//  RESET
+// ══════════════════════════════════════════════════════
+function resetActivity(actIdx) {
+  const ACTS = {2: ACT0, 3: ACT1}; const act = ACTS[actIdx];
+
+  document.getElementById(`act${actIdx}-exprS`).value = '';
+  document.getElementById(`act${actIdx}-exprT`).value = '';
+  ['exprS','exprT'].forEach(k => {
+    const el = document.getElementById(`act${actIdx}-${k}`);
+    el.classList.remove('correct','wrong');
+  });
+  document.getElementById(`act${actIdx}-sh`).textContent = '?';
+  document.getElementById(`act${actIdx}-th`).textContent = '?';
+
+  act.rows.forEach((_, ri) => {
+    const inp = document.getElementById(`act${actIdx}-r${ri}-q`);
+    if (!inp) return;
+    inp.value = '';
+    inp.classList.remove('correct','wrong');
+  });
+
+  document.getElementById(`score${actIdx}`).textContent = 0;
+  document.getElementById(`bar${actIdx}`).style.width = '0%';
+  const fb = document.getElementById(`fb${actIdx}`);
+  fb.className = 'feedback';
+}
+
+// ══════════════════════════════════════════════════════
+//  TAB SWITCH
+// ══════════════════════════════════════════════════════
+function switchAct(idx) {
+  document.querySelectorAll('.act-tab').forEach((t,i) => t.classList.toggle('active', i===idx));
+  document.querySelectorAll('.panel').forEach((p,i) => p.classList.toggle('active', i===idx));
+}
+
+
+// ══════════════════════════════════════════════════════
+//  WARM-UP DATA & LOGIC
+// ══════════════════════════════════════════════════════
+const WARMUP_DATA = {
+  0: {
+    answers: { and: [0,0,0,1], or: [0,1,1,1] },
+    total: 8
+  },
+  1: {
+    answers: { not: [1,0], notand: [0,1,0,0] },
+    total: 6
+  }
+};
+
+function checkWarmup(idx) {
+  const data = WARMUP_DATA[idx];
+  let score = 0; let total = data.total; const wrong = [];
+
+  if (idx === 0) {
+    data.answers.and.forEach((ans, i) => {
+      const inp = document.getElementById(`w0-and-${i}`);
+      inp.value = inp.value.replace(/[^01]/g,'').slice(-1);
+      if (inp.value === String(ans)) { score++; inp.classList.add('correct'); inp.classList.remove('wrong'); }
+      else { inp.classList.add('wrong'); inp.classList.remove('correct'); wrong.push(`AND row ${i+1}`); }
+    });
+    data.answers.or.forEach((ans, i) => {
+      const inp = document.getElementById(`w0-or-${i}`);
+      inp.value = inp.value.replace(/[^01]/g,'').slice(-1);
+      if (inp.value === String(ans)) { score++; inp.classList.add('correct'); inp.classList.remove('wrong'); }
+      else { inp.classList.add('wrong'); inp.classList.remove('correct'); wrong.push(`OR row ${i+1}`); }
+    });
+  } else {
+    data.answers.not.forEach((ans, i) => {
+      const inp = document.getElementById(`w1-not-${i}`);
+      inp.value = inp.value.replace(/[^01]/g,'').slice(-1);
+      if (inp.value === String(ans)) { score++; inp.classList.add('correct'); inp.classList.remove('wrong'); }
+      else { inp.classList.add('wrong'); inp.classList.remove('correct'); wrong.push(`NOT row ${i+1}`); }
+    });
+    data.answers.notand.forEach((ans, i) => {
+      const inp = document.getElementById(`w1-notand-${i}`);
+      inp.value = inp.value.replace(/[^01]/g,'').slice(-1);
+      if (inp.value === String(ans)) { score++; inp.classList.add('correct'); inp.classList.remove('wrong'); }
+      else { inp.classList.add('wrong'); inp.classList.remove('correct'); wrong.push(`(NOT A) AND B row ${i+1}`); }
+    });
+  }
+
+  document.getElementById(`score${idx}`).textContent = score;
+  document.getElementById(`bar${idx}`).style.width = Math.round(score/total*100) + '%';
+  const fb = document.getElementById(`fb${idx}`);
+  if (score === total) { fb.textContent = `✓ Full marks! ${score}/${total} — great start!`; fb.className = 'feedback show ok'; }
+  else { fb.textContent = `${score}/${total} correct. Wrong: ${wrong.join(', ')}.`; fb.className = 'feedback show fail'; }
+}
+
+function revealWarmup(idx) {
+  const data = WARMUP_DATA[idx];
+  if (idx === 0) {
+    data.answers.and.forEach((ans, i) => { const inp = document.getElementById(`w0-and-${i}`); inp.value = ans; inp.classList.add('correct'); inp.classList.remove('wrong'); });
+    data.answers.or.forEach((ans, i)  => { const inp = document.getElementById(`w0-or-${i}`);  inp.value = ans; inp.classList.add('correct'); inp.classList.remove('wrong'); });
+  } else {
+    data.answers.not.forEach((ans, i)    => { const inp = document.getElementById(`w1-not-${i}`);    inp.value = ans; inp.classList.add('correct'); inp.classList.remove('wrong'); });
+    data.answers.notand.forEach((ans, i) => { const inp = document.getElementById(`w1-notand-${i}`); inp.value = ans; inp.classList.add('correct'); inp.classList.remove('wrong'); });
+  }
+  document.getElementById(`score${idx}`).textContent = data.total;
+  document.getElementById(`bar${idx}`).style.width = '100%';
+  const fb = document.getElementById(`fb${idx}`);
+  fb.textContent = '👁 Answers revealed — study the pattern.';
+  fb.className = 'feedback show ok';
+}
+
+function resetWarmup(idx) {
+  const ids = idx === 0
+    ? ['w0-and-0','w0-and-1','w0-and-2','w0-and-3','w0-or-0','w0-or-1','w0-or-2','w0-or-3']
+    : ['w1-not-0','w1-not-1','w1-notand-0','w1-notand-1','w1-notand-2','w1-notand-3'];
+  ids.forEach(id => { const el = document.getElementById(id); if(el){ el.value=''; el.classList.remove('correct','wrong'); } });
+  document.getElementById(`score${idx}`).textContent = 0;
+  document.getElementById(`bar${idx}`).style.width = '0%';
+  document.getElementById(`fb${idx}`).className = 'feedback';
+}
+
+// ══════════════════════════════════════════════════════
+//  ACTIVITY 3 (act4) — S=NOT A, T=A OR B, Q=S AND T
+// ══════════════════════════════════════════════════════
+const ACT4_ANSWERS = { exprS:['NOT A'], exprT:['A OR B'], q:[0,1,0,0] };
+
+function checkAct4() {
+  let score = 0;
+  const sEl = document.getElementById('act4-exprS');
+  const tEl = document.getElementById('act4-exprT');
+  const sOk = ACT4_ANSWERS.exprS.some(a => normaliseExpr(a) === normaliseExpr(sEl.value));
+  const tOk = ACT4_ANSWERS.exprT.some(a => normaliseExpr(a) === normaliseExpr(tEl.value));
+  if (sOk) { score++; sEl.classList.add('correct'); sEl.classList.remove('wrong'); } else { sEl.classList.add('wrong'); sEl.classList.remove('correct'); }
+  if (tOk) { score++; tEl.classList.add('correct'); tEl.classList.remove('wrong'); } else { tEl.classList.add('wrong'); tEl.classList.remove('correct'); }
+  ACT4_ANSWERS.q.forEach((ans, i) => {
+    const inp = document.getElementById(`act4-r${i}-q`);
+    inp.value = inp.value.replace(/[^01]/g,'').slice(-1);
+    if (inp.value === String(ans)) { score++; inp.classList.add('correct'); inp.classList.remove('wrong'); }
+    else { inp.classList.add('wrong'); inp.classList.remove('correct'); }
+  });
+  const total = 6;
+  document.getElementById('score4').textContent = score;
+  document.getElementById('bar4').style.width = Math.round(score/total*100)+'%';
+  const fb = document.getElementById('fb4');
+  if (score===total) { fb.textContent=`✓ Perfect! ${score}/${total}`; fb.className='feedback show ok'; }
+  else { fb.textContent=`${score}/${total} correct. Check highlighted cells.`; fb.className='feedback show fail'; }
+}
+
+function revealAct4() {
+  const sEl = document.getElementById('act4-exprS'); sEl.value = ACT4_ANSWERS.exprS[0]; sEl.classList.add('correct');
+  const tEl = document.getElementById('act4-exprT'); tEl.value = ACT4_ANSWERS.exprT[0]; tEl.classList.add('correct');
+  document.getElementById('act4-sh').textContent = ACT4_ANSWERS.exprS[0];
+  document.getElementById('act4-th').textContent = ACT4_ANSWERS.exprT[0];
+  ACT4_ANSWERS.q.forEach((ans,i) => { const inp = document.getElementById(`act4-r${i}-q`); inp.value=ans; inp.classList.add('correct'); inp.classList.remove('wrong'); });
+  document.getElementById('score4').textContent = 6;
+  document.getElementById('bar4').style.width = '100%';
+  const fb = document.getElementById('fb4'); fb.textContent='👁 Answers revealed.'; fb.className='feedback show ok';
+}
+
+function resetAct4() {
+  ['act4-exprS','act4-exprT'].forEach(id => { const el=document.getElementById(id); el.value=''; el.classList.remove('correct','wrong'); });
+  document.getElementById('act4-sh').textContent='?'; document.getElementById('act4-th').textContent='?';
+  [0,1,2,3].forEach(i => { const inp=document.getElementById(`act4-r${i}-q`); inp.value=''; inp.classList.remove('correct','wrong'); });
+  document.getElementById('score4').textContent=0; document.getElementById('bar4').style.width='0%';
+  document.getElementById('fb4').className='feedback';
+}
+
+// Listen for live header updates for act4
+['act4-exprS','act4-exprT'].forEach(id => {
+  const el = document.getElementById(id);
+  if (!el) return;
+  const col = id.endsWith('exprS') ? 'sh' : 'th';
+  el.addEventListener('input', () => { document.getElementById(`act4-${col}`).textContent = el.value.toUpperCase() || '?'; });
+});
+
+// ══════════════════════════════════════════════════════
+//  ACTIVITY 4 (act5) — S=A OR B, T=NOT C, Q=S AND T
+// ══════════════════════════════════════════════════════
+const ACT5_ANSWERS = { exprS:['A OR B'], exprT:['NOT C'], q:[0,0,1,0,1,0,1,0] };
+
+function checkAct5() {
+  let score = 0;
+  const sEl = document.getElementById('act5-exprS');
+  const tEl = document.getElementById('act5-exprT');
+  const sOk = ACT5_ANSWERS.exprS.some(a => normaliseExpr(a) === normaliseExpr(sEl.value));
+  const tOk = ACT5_ANSWERS.exprT.some(a => normaliseExpr(a) === normaliseExpr(tEl.value));
+  if (sOk) { score++; sEl.classList.add('correct'); sEl.classList.remove('wrong'); } else { sEl.classList.add('wrong'); sEl.classList.remove('correct'); }
+  if (tOk) { score++; tEl.classList.add('correct'); tEl.classList.remove('wrong'); } else { tEl.classList.add('wrong'); tEl.classList.remove('correct'); }
+  ACT5_ANSWERS.q.forEach((ans, i) => {
+    const inp = document.getElementById(`act5-r${i}-q`);
+    inp.value = inp.value.replace(/[^01]/g,'').slice(-1);
+    if (inp.value === String(ans)) { score++; inp.classList.add('correct'); inp.classList.remove('wrong'); }
+    else { inp.classList.add('wrong'); inp.classList.remove('correct'); }
+  });
+  const total = 10;
+  document.getElementById('score5').textContent = score;
+  document.getElementById('bar5').style.width = Math.round(score/total*100)+'%';
+  const fb = document.getElementById('fb5');
+  if (score===total) { fb.textContent=`✓ Full marks! ${score}/${total} — excellent!`; fb.className='feedback show ok'; }
+  else { fb.textContent=`${score}/${total} correct. Check highlighted cells.`; fb.className='feedback show fail'; }
+}
+
+function revealAct5() {
+  const sEl = document.getElementById('act5-exprS'); sEl.value = ACT5_ANSWERS.exprS[0]; sEl.classList.add('correct');
+  const tEl = document.getElementById('act5-exprT'); tEl.value = ACT5_ANSWERS.exprT[0]; tEl.classList.add('correct');
+  document.getElementById('act5-sh').textContent = ACT5_ANSWERS.exprS[0];
+  document.getElementById('act5-th').textContent = ACT5_ANSWERS.exprT[0];
+  ACT5_ANSWERS.q.forEach((ans,i) => { const inp = document.getElementById(`act5-r${i}-q`); inp.value=ans; inp.classList.add('correct'); inp.classList.remove('wrong'); });
+  document.getElementById('score5').textContent = 10;
+  document.getElementById('bar5').style.width = '100%';
+  const fb = document.getElementById('fb5'); fb.textContent='👁 Answers revealed.'; fb.className='feedback show ok';
+}
+
+function resetAct5() {
+  ['act5-exprS','act5-exprT'].forEach(id => { const el=document.getElementById(id); el.value=''; el.classList.remove('correct','wrong'); });
+  document.getElementById('act5-sh').textContent='?'; document.getElementById('act5-th').textContent='?';
+  [0,1,2,3,4,5,6,7].forEach(i => { const inp=document.getElementById(`act5-r${i}-q`); inp.value=''; inp.classList.remove('correct','wrong'); });
+  document.getElementById('score5').textContent=0; document.getElementById('bar5').style.width='0%';
+  document.getElementById('fb5').className='feedback';
+}
+
+// Listen for live header updates for act5
+['act5-exprS','act5-exprT'].forEach(id => {
+  const el = document.getElementById(id);
+  if (!el) return;
+  const col = id.endsWith('exprS') ? 'sh' : 'th';
+  el.addEventListener('input', () => { document.getElementById(`act5-${col}`).textContent = el.value.toUpperCase() || '?'; });
+});
+
+</script>
+
+<!-- ══════════════════════════════════════
+     ACTIVITY 3: Two variables (tab index 4)
+     S = NOT A,  T = A OR B
+     Q = S AND T  = (NOT A) AND (A OR B)
+══════════════════════════════════════ -->
+<div class="panel" id="act4">
+  <div class="act-header">
+    <div class="act-number">Activity 3 · Computational Thinking</div>
+    <div class="act-title">Two Variables — NOT and OR Combined</div>
+    <div class="act-desc">
+      The logical expression for <strong>Q</strong> is already given.
+      Deduce the expressions for <strong>S</strong> and <strong>T</strong> from the values shown,
+      then complete the Q column.
+    </div>
+    <div class="marks-badge">[5 marks]</div>
+  </div>
+  <div class="score-row">
+    <div class="score-chip">Score: <span id="score4">0</span> / 6</div>
+    <div style="flex:1;max-width:200px;"><div class="progress-bar-wrap"><div class="progress-bar" id="bar4" style="width:0%"></div></div></div>
+  </div>
+
+  <div class="section-q">Part (i) — Write the logical expressions <span></span></div>
+  <div class="expr-task">
+    <div class="expr-label">S</div>
+    <div class="expr-eq">=</div>
+    <input class="expr-input" id="act4-exprS" placeholder="e.g. NOT A" maxlength="30">
+    <div class="expr-hint-text">Hint: S = 1 when A = 0, and S = 0 when A = 1</div>
+  </div>
+  <div class="expr-task">
+    <div class="expr-label">T</div>
+    <div class="expr-eq">=</div>
+    <input class="expr-input" id="act4-exprT" placeholder="e.g. A OR B" maxlength="30">
+    <div class="expr-hint-text">Hint: T = 0 only when both A = 0 and B = 0</div>
+  </div>
+
+  <div class="section-q">Part (ii) — Complete the Q column <span></span></div>
+  <div class="question-layout">
+    <div class="tt-wrap">
+      <table class="truth-table" id="table4">
+        <thead>
+          <tr>
+            <th class="input-col">A</th>
+            <th class="input-col">B</th>
+            <th class="derived-col">S</th>
+            <th class="derived-col">T</th>
+            <th class="output-col">Q</th>
+          </tr>
+          <tr>
+            <th class="expr-header" colspan="2">Inputs</th>
+            <th class="expr-header" id="act4-sh">?</th>
+            <th class="expr-header" id="act4-th">?</th>
+            <th class="expr-header">S AND T</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><span class="val-0">0</span></td><td><span class="val-0">0</span></td><td><span class="val-1">1</span></td><td><span class="val-0">0</span></td><td><input class="tt-input" id="act4-r0-q" maxlength="1" placeholder="?"></td></tr>
+          <tr><td><span class="val-0">0</span></td><td><span class="val-1">1</span></td><td><span class="val-1">1</span></td><td><span class="val-1">1</span></td><td><input class="tt-input" id="act4-r1-q" maxlength="1" placeholder="?"></td></tr>
+          <tr><td><span class="val-1">1</span></td><td><span class="val-0">0</span></td><td><span class="val-0">0</span></td><td><span class="val-1">1</span></td><td><input class="tt-input" id="act4-r2-q" maxlength="1" placeholder="?"></td></tr>
+          <tr><td><span class="val-1">1</span></td><td><span class="val-1">1</span></td><td><span class="val-0">0</span></td><td><span class="val-1">1</span></td><td><input class="tt-input" id="act4-r3-q" maxlength="1" placeholder="?"></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="ref-card">
+      <div class="ref-title">🔌 Reminder</div>
+      <div style="font-size:0.78rem;line-height:1.8;font-family:var(--mono);color:var(--muted);">
+        <div><strong style="color:var(--ink)">S AND T</strong> = 1 only when</div>
+        <div>both S = 1 AND T = 1</div>
+        <div style="margin-top:10px;color:var(--ink);">Step through each row:</div>
+        <div>1. Find S from A</div>
+        <div>2. Find T from A, B</div>
+        <div>3. Q = S AND T</div>
+      </div>
+    </div>
+  </div>
+  <div class="controls">
+    <button class="btn btn-check" onclick="checkAct4()">✔ Check Answers</button>
+    <button class="btn btn-reveal" onclick="revealAct4()">👁 Show Answers</button>
+    <button class="btn btn-reset" onclick="resetAct4()">↺ Reset</button>
+  </div>
+  <div class="feedback" id="fb4"></div>
+</div>
+
+<!-- ══════════════════════════════════════
+     ACTIVITY 4: Three variables (tab index 5)
+     S = A OR B,  T = NOT C
+     Q = S AND T  = (A OR B) AND (NOT C)
+══════════════════════════════════════ -->
+<div class="panel" id="act5">
+  <div class="act-header">
+    <div class="act-number">Activity 4 · Computational Thinking</div>
+    <div class="act-title">Three Variables — Exam Style</div>
+    <div class="act-desc">
+      Here is a partially completed truth table. The logical expression for <strong>Q</strong> is complete.
+      Complete the truth table to give the logical expressions for <strong>S</strong> and <strong>T</strong>,
+      and all values for <strong>Q</strong>.
+    </div>
+    <div class="marks-badge">[3 marks]</div>
+  </div>
+  <div class="score-row">
+    <div class="score-chip">Score: <span id="score5">0</span> / 10</div>
+    <div style="flex:1;max-width:240px;"><div class="progress-bar-wrap"><div class="progress-bar" id="bar5" style="width:0%"></div></div></div>
+  </div>
+
+  <div class="section-q">Write logical expressions for S and T <span></span></div>
+  <div class="expr-task">
+    <div class="expr-label">S</div>
+    <div class="expr-eq">=</div>
+    <input class="expr-input" id="act5-exprS" placeholder="using A, B, C" maxlength="30">
+    <div class="expr-hint-text">Hint: S = 0 only when A = 0 AND B = 0</div>
+  </div>
+  <div class="expr-task">
+    <div class="expr-label">T</div>
+    <div class="expr-eq">=</div>
+    <input class="expr-input" id="act5-exprT" placeholder="using A, B, C" maxlength="30">
+    <div class="expr-hint-text">Hint: T flips with every change in C</div>
+  </div>
+
+  <div class="section-q">Complete the Q column <span></span></div>
+  <div class="question-layout">
+    <div class="tt-wrap">
+      <table class="truth-table" id="table5">
+        <thead>
+          <tr>
+            <th class="input-col">A</th>
+            <th class="input-col">B</th>
+            <th class="input-col">C</th>
+            <th class="derived-col">S</th>
+            <th class="derived-col">T</th>
+            <th class="output-col">Q</th>
+          </tr>
+          <tr>
+            <th class="expr-header" colspan="3">Inputs</th>
+            <th class="expr-header" id="act5-sh">?</th>
+            <th class="expr-header" id="act5-th">?</th>
+            <th class="expr-header">S AND T</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><span class="val-0">0</span></td><td><span class="val-0">0</span></td><td><span class="val-0">0</span></td><td><span class="val-0">0</span></td><td><span class="val-1">1</span></td><td><input class="tt-input" id="act5-r0-q" maxlength="1" placeholder="?"></td></tr>
+          <tr><td><span class="val-0">0</span></td><td><span class="val-0">0</span></td><td><span class="val-1">1</span></td><td><span class="val-0">0</span></td><td><span class="val-0">0</span></td><td><input class="tt-input" id="act5-r1-q" maxlength="1" placeholder="?"></td></tr>
+          <tr><td><span class="val-0">0</span></td><td><span class="val-1">1</span></td><td><span class="val-0">0</span></td><td><span class="val-1">1</span></td><td><span class="val-1">1</span></td><td><input class="tt-input" id="act5-r2-q" maxlength="1" placeholder="?"></td></tr>
+          <tr><td><span class="val-0">0</span></td><td><span class="val-1">1</span></td><td><span class="val-1">1</span></td><td><span class="val-1">1</span></td><td><span class="val-0">0</span></td><td><input class="tt-input" id="act5-r3-q" maxlength="1" placeholder="?"></td></tr>
+          <tr><td><span class="val-1">1</span></td><td><span class="val-0">0</span></td><td><span class="val-0">0</span></td><td><span class="val-1">1</span></td><td><span class="val-1">1</span></td><td><input class="tt-input" id="act5-r4-q" maxlength="1" placeholder="?"></td></tr>
+          <tr><td><span class="val-1">1</span></td><td><span class="val-0">0</span></td><td><span class="val-1">1</span></td><td><span class="val-1">1</span></td><td><span class="val-0">0</span></td><td><input class="tt-input" id="act5-r5-q" maxlength="1" placeholder="?"></td></tr>
+          <tr><td><span class="val-1">1</span></td><td><span class="val-1">1</span></td><td><span class="val-0">0</span></td><td><span class="val-1">1</span></td><td><span class="val-1">1</span></td><td><input class="tt-input" id="act5-r6-q" maxlength="1" placeholder="?"></td></tr>
+          <tr><td><span class="val-1">1</span></td><td><span class="val-1">1</span></td><td><span class="val-1">1</span></td><td><span class="val-1">1</span></td><td><span class="val-0">0</span></td><td><input class="tt-input" id="act5-r7-q" maxlength="1" placeholder="?"></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="ref-card">
+      <div class="ref-title">🔌 Reminder</div>
+      <div style="font-size:0.75rem;font-family:var(--mono);color:var(--muted);line-height:1.9;">
+        <div><strong style="color:var(--ink)">Q = S AND T</strong></div>
+        <div>→ Q = 1 only when</div>
+        <div>   S = 1 AND T = 1</div>
+        <div style="margin-top:10px;color:var(--ink);">Worked example row 3:</div>
+        <div>A=0, B=1, C=0</div>
+        <div>S = 0 OR 1 = <strong style="color:var(--one)">1</strong></div>
+        <div>T = NOT 0  = <strong style="color:var(--one)">1</strong></div>
+        <div>Q = 1 AND 1 = <strong style="color:var(--one)">1</strong></div>
+      </div>
+    </div>
+  </div>
+  <div class="controls">
+    <button class="btn btn-check" onclick="checkAct5()">✔ Check Answers</button>
+    <button class="btn btn-reveal" onclick="revealAct5()">👁 Show Answers</button>
+    <button class="btn btn-reset" onclick="resetAct5()">↺ Reset</button>
+  </div>
+  <div class="feedback" id="fb5"></div>
+</div>
+</body>
+</html>

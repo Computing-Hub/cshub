@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PLS Function Sorter — Edexcel GCSE CS</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;800&family=Syne:wght@700;800;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:       #0b0e14;
+  --surface:  #111520;
+  --surface2: #171d2e;
+  --border:   #232a3e;
+  --ink:      #e8eaf2;
+  --muted:    #525c7a;
+  --c1: #00d9ff;  /* Built-in  — cyan    */
+  --c2: #a78bfa;  /* List      — violet  */
+  --c3: #34d399;  /* String    — emerald */
+  --c4: #fb923c;  /* Math      — orange  */
+  --c5: #f472b6;  /* Random    — pink    */
+  --c6: #facc15;  /* File      — yellow  */
+  --mono: 'JetBrains Mono', monospace;
+  --display: 'Syne', sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--mono);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* scanline overlay */
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0,0,0,0.08) 2px,
+    rgba(0,0,0,0.08) 4px
+  );
+  pointer-events: none;
+  z-index: 999;
+}
+
+/* ── HEADER ── */
+header {
+  padding: 20px 32px 16px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--surface);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.logo {
+  font-family: var(--display);
+  font-size: 1.25rem;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+}
+.logo .bracket { color: var(--c1); }
+.logo .name { color: var(--ink); }
+.logo .dot { color: var(--muted); }
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.score-display {
+  font-size: 0.75rem;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.score-val {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--c3);
+  font-family: var(--display);
+  min-width: 40px;
+  text-align: right;
+}
+
+.btn-reset {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 7px 16px;
+  background: transparent;
+  color: var(--muted);
+  border: 1px solid var(--border);
+  cursor: pointer;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transition: all 0.2s;
+}
+.btn-reset:hover { border-color: var(--c1); color: var(--c1); }
+
+.btn-check {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 7px 16px;
+  background: var(--c3);
+  color: #000;
+  border: none;
+  cursor: pointer;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transition: all 0.2s;
+}
+.btn-check:hover { filter: brightness(1.15); transform: translateY(-1px); }
+
+/* ── MAIN LAYOUT ── */
+.game-wrap {
+  padding: 24px 32px 48px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* ── INSTRUCTION BAR ── */
+.instruction {
+  margin-bottom: 24px;
+  padding: 12px 18px;
+  background: var(--surface);
+  border-left: 3px solid var(--c1);
+  font-size: 0.78rem;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.instruction .prompt { color: var(--c1); }
+
+/* ── FUNCTION BANK ── */
+.bank-label {
+  font-family: var(--display);
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 12px;
+}
+
+.function-bank {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 20px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  min-height: 80px;
+  margin-bottom: 32px;
+  transition: border-color 0.2s;
+}
+.function-bank.drag-over {
+  border-color: var(--c1);
+  background: rgba(0,217,255,0.03);
+}
+
+/* ── FUNCTION CHIPS ── */
+.fn-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 13px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  color: var(--ink);
+  cursor: grab;
+  user-select: none;
+  transition: all 0.15s;
+  white-space: nowrap;
+  position: relative;
+}
+.fn-chip::before {
+  content: '⠿';
+  color: var(--muted);
+  font-size: 0.7rem;
+}
+.fn-chip:hover {
+  border-color: var(--c1);
+  color: var(--c1);
+  background: rgba(0,217,255,0.06);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(0,217,255,0.15);
+}
+.fn-chip.dragging {
+  opacity: 0.4;
+  cursor: grabbing;
+}
+.fn-chip.correct {
+  border-color: var(--c3);
+  color: var(--c3);
+  background: rgba(52,211,153,0.08);
+  cursor: default;
+}
+.fn-chip.correct::after {
+  content: ' ✓';
+  color: var(--c3);
+}
+.fn-chip.wrong {
+  border-color: #f87171;
+  color: #f87171;
+  background: rgba(248,113,113,0.08);
+  animation: shake 0.35s ease;
+}
+
+@keyframes shake {
+  0%,100% { transform: translateX(0); }
+  20%      { transform: translateX(-6px); }
+  60%      { transform: translateX(6px); }
+}
+
+@keyframes pop-in {
+  from { transform: scale(0.8); opacity: 0; }
+  to   { transform: scale(1);   opacity: 1; }
+}
+.fn-chip.just-dropped {
+  animation: pop-in 0.2s ease;
+}
+
+/* ── BUCKETS GRID ── */
+.buckets-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+
+/* ── SINGLE BUCKET ── */
+.bucket {
+  border: 1px solid var(--border);
+  background: var(--surface);
+  display: flex;
+  flex-direction: column;
+  transition: border-color 0.2s, background 0.2s;
+  position: relative;
+  overflow: hidden;
+}
+
+/* colour accent strip */
+.bucket::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+}
+
+.bucket[data-cat="builtin"]::before  { background: var(--c1); }
+.bucket[data-cat="list"]::before     { background: var(--c2); }
+.bucket[data-cat="string"]::before   { background: var(--c3); }
+.bucket[data-cat="math"]::before     { background: var(--c4); }
+.bucket[data-cat="random"]::before   { background: var(--c5); }
+.bucket[data-cat="file"]::before     { background: var(--c6); }
+
+.bucket.drag-over {
+  border-color: currentColor;
+  background: rgba(255,255,255,0.02);
+}
+.bucket[data-cat="builtin"].drag-over  { border-color: var(--c1); background: rgba(0,217,255,0.04); }
+.bucket[data-cat="list"].drag-over     { border-color: var(--c2); background: rgba(167,139,250,0.04); }
+.bucket[data-cat="string"].drag-over   { border-color: var(--c3); background: rgba(52,211,153,0.04); }
+.bucket[data-cat="math"].drag-over     { border-color: var(--c4); background: rgba(251,146,60,0.04); }
+.bucket[data-cat="random"].drag-over   { border-color: var(--c5); background: rgba(244,114,182,0.04); }
+.bucket[data-cat="file"].drag-over     { border-color: var(--c6); background: rgba(250,204,21,0.04); }
+
+.bucket-header {
+  padding: 14px 16px 10px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.bucket-icon {
+  font-size: 1rem;
+  width: 28px;
+  text-align: center;
+}
+
+.bucket-title {
+  font-family: var(--display);
+  font-size: 0.85rem;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+.bucket[data-cat="builtin"]  .bucket-title { color: var(--c1); }
+.bucket[data-cat="list"]     .bucket-title { color: var(--c2); }
+.bucket[data-cat="string"]   .bucket-title { color: var(--c3); }
+.bucket[data-cat="math"]     .bucket-title { color: var(--c4); }
+.bucket[data-cat="random"]   .bucket-title { color: var(--c5); }
+.bucket[data-cat="file"]     .bucket-title { color: var(--c6); }
+
+.bucket-hint {
+  font-size: 0.62rem;
+  color: var(--muted);
+  margin-left: auto;
+  text-align: right;
+  line-height: 1.4;
+}
+
+.bucket-drop-zone {
+  padding: 12px;
+  min-height: 90px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  align-content: flex-start;
+}
+
+.bucket-empty-hint {
+  font-size: 0.65rem;
+  color: var(--border);
+  letter-spacing: 0.05em;
+  pointer-events: none;
+  padding: 4px;
+  align-self: center;
+  width: 100%;
+  text-align: center;
+}
+
+.bucket-count {
+  padding: 6px 16px;
+  border-top: 1px solid var(--border);
+  font-size: 0.62rem;
+  color: var(--muted);
+  display: flex;
+  justify-content: space-between;
+}
+.bucket-count .placed { color: var(--ink); font-weight: 700; }
+
+/* ── RESULTS OVERLAY ── */
+.result-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.85);
+  z-index: 500;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+.result-overlay.show { display: flex; }
+
+.result-box {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 48px 56px;
+  text-align: center;
+  max-width: 480px;
+  animation: pop-in 0.3s ease;
+}
+.result-title {
+  font-family: var(--display);
+  font-size: 2.5rem;
+  font-weight: 900;
+  margin-bottom: 8px;
+}
+.result-sub {
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin-bottom: 28px;
+  line-height: 1.6;
+}
+.result-score {
+  font-family: var(--display);
+  font-size: 3.5rem;
+  font-weight: 900;
+  margin-bottom: 24px;
+}
+.result-breakdown {
+  font-size: 0.72rem;
+  color: var(--muted);
+  margin-bottom: 32px;
+  text-align: left;
+  border-top: 1px solid var(--border);
+  padding-top: 16px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+}
+.result-breakdown .rb-row { display: contents; }
+.result-breakdown .rb-cat { color: var(--ink); }
+.result-breakdown .rb-res.ok  { color: var(--c3); }
+.result-breakdown .rb-res.bad { color: #f87171; }
+
+.btn-play-again {
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 12px 32px;
+  background: var(--c1);
+  color: #000;
+  border: none;
+  cursor: pointer;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transition: all 0.2s;
+}
+.btn-play-again:hover { filter: brightness(1.2); }
+
+/* ── ROUND SWITCHER ── */
+.round-bar {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+.round-btn {
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 5px 14px;
+  background: var(--surface);
+  color: var(--muted);
+  border: 1px solid var(--border);
+  cursor: pointer;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  transition: all 0.2s;
+}
+.round-btn.active { border-color: var(--c1); color: var(--c1); background: rgba(0,217,255,0.06); }
+.round-btn:hover  { border-color: var(--muted); color: var(--ink); }
+.round-btn.done::after { content: ' ✓'; color: var(--c3); }
+
+@media (max-width: 900px) {
+  .buckets-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 600px) {
+  .buckets-grid { grid-template-columns: 1fr; }
+  .game-wrap { padding: 16px; }
+  header { padding: 14px 16px; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <span class="bracket">[</span><span class="name">PLS</span><span class="dot">::</span><span class="name">Sorter</span><span class="bracket">]</span>
+  </div>
+  <div class="header-right">
+    <div class="score-display">
+      <span>Score</span>
+      <span class="score-val" id="scoreVal">0</span>
+      <span>/ <span id="scoreMax">0</span></span>
+    </div>
+    <button class="btn-reset" onclick="resetRound()">↺ Reset</button>
+    <button class="btn-check" onclick="checkAnswers()">✔ Check</button>
+  </div>
+</header>
+
+<div class="game-wrap">
+  <div class="instruction">
+    <span class="prompt">$&gt;</span>
+    Drag each function into its correct category bucket. All functions are from the Edexcel GCSE Python PLS.
+  </div>
+
+  <div class="round-bar" id="roundBar"></div>
+
+  <div class="bank-label">// function bank — drag from here</div>
+  <div class="function-bank" id="functionBank"
+    ondragover="event.preventDefault(); this.classList.add('drag-over')"
+    ondragleave="this.classList.remove('drag-over')"
+    ondrop="dropToBank(event)">
+  </div>
+
+  <div class="buckets-grid" id="bucketsGrid"></div>
+</div>
+
+<div class="result-overlay" id="resultOverlay">
+  <div class="result-box">
+    <div class="result-title" id="resultTitle">—</div>
+    <div class="result-score" id="resultScore">—</div>
+    <div class="result-sub" id="resultSub">—</div>
+    <div class="result-breakdown" id="resultBreakdown"></div>
+    <button class="btn-play-again" onclick="nextRound()">Next Round →</button>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════════════════════
+//  DATA — all PLS functions across rounds
+// ══════════════════════════════════════════════════════
+
+const CATEGORIES = {
+  builtin:  { label: 'Built-in Functions',  icon: '⚙',  color: '--c1', hint: 'print(), int(), len()…'  },
+  list:     { label: 'List Methods',         icon: '📋',  color: '--c2', hint: '.append(), del…'         },
+  string:   { label: 'String Methods',       icon: '📝',  color: '--c3', hint: '.upper(), .find()…'     },
+  math:     { label: 'Math Module',          icon: '∑',   color: '--c4', hint: 'import math'             },
+  random:   { label: 'Random Module',        icon: '🎲',  color: '--c5', hint: 'import random'          },
+  file:     { label: 'File Operations',      icon: '📂',  color: '--c6', hint: 'open(), .close()…'      },
+};
+
+// Each round: a subset of functions to sort
+const ROUNDS = [
+  {
+    title: "Round 1 — Core Functions",
+    fns: [
+      { name: 'print(item)',        cat: 'builtin' },
+      { name: 'input(prompt)',      cat: 'builtin' },
+      { name: 'int(item)',          cat: 'builtin' },
+      { name: 'str(item)',          cat: 'builtin' },
+      { name: 'len(object)',        cat: 'builtin' },
+      { name: 'range(start,stop)',  cat: 'builtin' },
+      { name: 'list.append(item)',  cat: 'list'    },
+      { name: 'del list[index]',    cat: 'list'    },
+      { name: 'list.insert(i,item)',cat: 'list'    },
+      { name: '.upper()',           cat: 'string'  },
+      { name: '.lower()',           cat: 'string'  },
+      { name: '.strip(char)',       cat: 'string'  },
+      { name: 'math.sqrt(x)',       cat: 'math'    },
+      { name: 'math.pi',            cat: 'math'    },
+      { name: 'random.randint(a,b)',cat: 'random'  },
+      { name: 'open(file,"r")',     cat: 'file'    },
+      { name: 'file.close()',       cat: 'file'    },
+      { name: 'file.write(str)',    cat: 'file'    },
+    ]
+  },
+  {
+    title: "Round 2 — String & Number Methods",
+    fns: [
+      { name: 'float(item)',        cat: 'builtin' },
+      { name: 'bool(item)',         cat: 'builtin' },
+      { name: 'round(x,n)',         cat: 'builtin' },
+      { name: 'chr(integer)',       cat: 'builtin' },
+      { name: 'ord(char)',          cat: 'builtin' },
+      { name: '.find(sub,s,e)',     cat: 'string'  },
+      { name: '.replace(s1,s2)',    cat: 'string'  },
+      { name: '.split(char)',       cat: 'string'  },
+      { name: '.isdigit()',         cat: 'string'  },
+      { name: '.isalpha()',         cat: 'string'  },
+      { name: '.isalnum()',         cat: 'string'  },
+      { name: '.format(values)',    cat: 'string'  },
+      { name: 'math.ceil(x)',       cat: 'math'    },
+      { name: 'math.floor(x)',      cat: 'math'    },
+      { name: 'random.random()',    cat: 'random'  },
+      { name: 'open(file,"w")',     cat: 'file'    },
+      { name: 'open(file,"a")',     cat: 'file'    },
+      { name: 'file.readline()',    cat: 'file'    },
+    ]
+  },
+  {
+    title: "Round 3 — Mixed Challenge",
+    fns: [
+      { name: 'len(object)',        cat: 'builtin' },
+      { name: 'range(s,stop,step)', cat: 'builtin' },
+      { name: 'int(item)',          cat: 'builtin' },
+      { name: '.isupper()',         cat: 'string'  },
+      { name: '.islower()',         cat: 'string'  },
+      { name: '.index(sub,s,e)',    cat: 'string'  },
+      { name: 'list.insert(i,item)',cat: 'list'    },
+      { name: 'del list[index]',    cat: 'list'    },
+      { name: 'math.sqrt(x)',       cat: 'math'    },
+      { name: 'math.pi',            cat: 'math'    },
+      { name: 'math.ceil(x)',       cat: 'math'    },
+      { name: 'random.randint(a,b)',cat: 'random'  },
+      { name: 'random.random()',    cat: 'random'  },
+      { name: 'file.readlines()',   cat: 'file'    },
+      { name: 'file.writelines(s)', cat: 'file'    },
+      { name: 'open(file,"r")',     cat: 'file'    },
+      { name: 'float(item)',        cat: 'builtin' },
+      { name: '.replace(s1,s2)',    cat: 'string'  },
+    ]
+  }
+];
+
+// ══════════════════════════════════════════════════════
+//  STATE
+// ══════════════════════════════════════════════════════
+let curRound = 0;
+let bucketContents = {}; // cat → [fnName, ...]
+let bankContents   = []; // [fnName, ...]
+let roundDone = [false, false, false];
+let totalScore = 0;
+let dragItem = null;
+let dragFrom = null; // 'bank' | cat-key
+
+// ══════════════════════════════════════════════════════
+//  INIT
+// ══════════════════════════════════════════════════════
+function initRound(idx) {
+  curRound = idx;
+  bucketContents = {};
+  Object.keys(CATEGORIES).forEach(k => bucketContents[k] = []);
+  bankContents = shuffle(ROUNDS[idx].fns.map(f => f.name));
+  render();
+  updateScoreDisplay();
+}
+
+function shuffle(arr) {
+  return [...arr].sort(() => Math.random() - 0.5);
+}
+
+// ══════════════════════════════════════════════════════
+//  RENDER
+// ══════════════════════════════════════════════════════
+function render() {
+  renderRoundBar();
+  renderBank();
+  renderBuckets();
+}
+
+function renderRoundBar() {
+  const bar = document.getElementById('roundBar');
+  bar.innerHTML = '';
+  ROUNDS.forEach((r, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'round-btn' + (i === curRound ? ' active' : '') + (roundDone[i] ? ' done' : '');
+    btn.textContent = r.title;
+    btn.onclick = () => initRound(i);
+    bar.appendChild(btn);
+  });
+}
+
+function renderBank() {
+  const bank = document.getElementById('functionBank');
+  bank.innerHTML = '';
+  if (bankContents.length === 0) {
+    bank.innerHTML = '<span style="font-size:0.7rem;color:var(--muted);">// all functions placed — check your answers!</span>';
+    return;
+  }
+  bankContents.forEach(name => {
+    bank.appendChild(makeChip(name, 'bank'));
+  });
+}
+
+function renderBuckets() {
+  const grid = document.getElementById('bucketsGrid');
+  grid.innerHTML = '';
+  Object.entries(CATEGORIES).forEach(([cat, info]) => {
+    const bucket = document.createElement('div');
+    bucket.className = 'bucket';
+    bucket.dataset.cat = cat;
+
+    // count expected
+    const expected = ROUNDS[curRound].fns.filter(f => f.cat === cat).length;
+    const placed   = bucketContents[cat].length;
+
+    bucket.innerHTML = `
+      <div class="bucket-header">
+        <div class="bucket-icon">${info.icon}</div>
+        <div class="bucket-title">${info.label}</div>
+        <div class="bucket-hint">${info.hint}</div>
+      </div>
+      <div class="bucket-drop-zone" id="zone-${cat}">
+        ${placed === 0 ? '<div class="bucket-empty-hint">// drop here</div>' : ''}
+      </div>
+      <div class="bucket-count">
+        <span>placed: <span class="placed">${placed}</span></span>
+        <span>expected: ${expected}</span>
+      </div>
+    `;
+
+    bucket.querySelector('.bucket-drop-zone').addEventListener('dragover', e => {
+      e.preventDefault();
+      bucket.classList.add('drag-over');
+    });
+    bucket.querySelector('.bucket-drop-zone').addEventListener('dragleave', () => {
+      bucket.classList.remove('drag-over');
+    });
+    bucket.querySelector('.bucket-drop-zone').addEventListener('drop', e => {
+      e.preventDefault();
+      bucket.classList.remove('drag-over');
+      dropToBucket(cat);
+    });
+
+    // Render chips already in bucket
+    bucketContents[cat].forEach(name => {
+      const chip = makeChip(name, cat);
+      bucket.querySelector('.bucket-drop-zone').appendChild(chip);
+    });
+
+    grid.appendChild(bucket);
+  });
+}
+
+function makeChip(name, zone) {
+  const chip = document.createElement('div');
+  chip.className = 'fn-chip';
+  chip.textContent = name;
+  chip.draggable = true;
+  chip.dataset.name = name;
+  chip.dataset.zone = zone;
+
+  chip.addEventListener('dragstart', e => {
+    dragItem = name;
+    dragFrom = zone;
+    setTimeout(() => chip.classList.add('dragging'), 0);
+    e.dataTransfer.effectAllowed = 'move';
+  });
+  chip.addEventListener('dragend', () => {
+    chip.classList.remove('dragging');
+  });
+
+  return chip;
+}
+
+// ══════════════════════════════════════════════════════
+//  DROP LOGIC
+// ══════════════════════════════════════════════════════
+function dropToBucket(targetCat) {
+  if (!dragItem) return;
+
+  // Remove from source
+  if (dragFrom === 'bank') {
+    bankContents = bankContents.filter(n => n !== dragItem);
+  } else if (dragFrom !== targetCat) {
+    bucketContents[dragFrom] = bucketContents[dragFrom].filter(n => n !== dragItem);
+  } else {
+    // dropped on same bucket — ignore
+    dragItem = null; dragFrom = null; return;
+  }
+
+  // Add to target bucket
+  if (!bucketContents[targetCat].includes(dragItem)) {
+    bucketContents[targetCat].push(dragItem);
+  }
+
+  dragItem = null; dragFrom = null;
+  render();
+}
+
+function dropToBank(event) {
+  event.preventDefault();
+  document.getElementById('functionBank').classList.remove('drag-over');
+  if (!dragItem) return;
+
+  // Remove from bucket
+  if (dragFrom !== 'bank') {
+    bucketContents[dragFrom] = bucketContents[dragFrom].filter(n => n !== dragItem);
+  } else {
+    dragItem = null; dragFrom = null; return;
+  }
+
+  // Add back to bank
+  if (!bankContents.includes(dragItem)) {
+    bankContents.push(dragItem);
+  }
+
+  dragItem = null; dragFrom = null;
+  render();
+}
+
+// ══════════════════════════════════════════════════════
+//  CHECK
+// ══════════════════════════════════════════════════════
+function checkAnswers() {
+  const round = ROUNDS[curRound];
+  let correct = 0;
+  let total   = round.fns.length;
+  const breakdown = {};
+
+  Object.keys(CATEGORIES).forEach(cat => {
+    let catCorrect = 0;
+    let catTotal   = round.fns.filter(f => f.cat === cat).length;
+
+    bucketContents[cat].forEach(name => {
+      const expected = round.fns.find(f => f.name === name);
+      const zone = document.getElementById(`zone-${cat}`);
+      if (zone) {
+        const chip = [...zone.querySelectorAll('.fn-chip')].find(c => c.dataset.name === name);
+        if (chip) {
+          if (expected && expected.cat === cat) {
+            chip.classList.add('correct');
+            chip.classList.remove('wrong');
+            correct++;
+            catCorrect++;
+          } else {
+            chip.classList.add('wrong');
+            chip.classList.remove('correct');
+            // animate shake
+            chip.style.animation = 'none';
+            void chip.offsetWidth;
+            chip.style.animation = '';
+          }
+        }
+      }
+    });
+
+    breakdown[cat] = { correct: catCorrect, total: catTotal };
+  });
+
+  roundDone[curRound] = correct === total;
+  totalScore = correct;
+  updateScoreDisplay(correct, total);
+  showResult(correct, total, breakdown);
+}
+
+function updateScoreDisplay(c, t) {
+  const round = ROUNDS[curRound];
+  document.getElementById('scoreMax').textContent = round.fns.length;
+  if (c !== undefined) {
+    document.getElementById('scoreVal').textContent = c;
+  }
+}
+
+function showResult(correct, total, breakdown) {
+  const overlay = document.getElementById('resultOverlay');
+  const pct = Math.round((correct / total) * 100);
+
+  const titles = correct === total ? ['🎉 Perfect!', '⚡ Flawless!', '✅ Ace!'] : correct >= total * 0.7 ? ['👍 Good work', '💪 Nearly!'] : ['🔁 Try again', '💡 Keep going'];
+  document.getElementById('resultTitle').textContent = titles[Math.floor(Math.random() * titles.length)];
+  document.getElementById('resultScore').textContent = `${correct} / ${total}`;
+  document.getElementById('resultScore').style.color = correct === total ? 'var(--c3)' : correct >= total * 0.7 ? 'var(--c4)' : '#f87171';
+
+  document.getElementById('resultSub').textContent = correct === total
+    ? 'All functions correctly categorised! Ready for the next round.'
+    : `${total - correct} function${total - correct > 1 ? 's' : ''} in the wrong bucket. Review the highlighted ones.`;
+
+  // Breakdown table
+  const bd = document.getElementById('resultBreakdown');
+  bd.innerHTML = '';
+  Object.entries(breakdown).forEach(([cat, {correct: c, total: t}]) => {
+    if (t === 0) return;
+    const info = CATEGORIES[cat];
+    const ok = c === t;
+    bd.innerHTML += `
+      <span class="rb-cat">${info.icon} ${info.label}</span>
+      <span class="rb-res ${ok ? 'ok' : 'bad'}">${c}/${t} ${ok ? '✓' : '✗'}</span>
+    `;
+  });
+
+  const nextBtn = overlay.querySelector('.btn-play-again');
+  if (curRound < ROUNDS.length - 1) {
+    nextBtn.textContent = 'Next Round →';
+    nextBtn.onclick = nextRound;
+  } else {
+    nextBtn.textContent = '↺ Play Again';
+    nextBtn.onclick = () => { overlay.classList.remove('show'); initRound(0); };
+  }
+
+  overlay.classList.add('show');
+}
+
+function nextRound() {
+  document.getElementById('resultOverlay').classList.remove('show');
+  if (curRound < ROUNDS.length - 1) {
+    initRound(curRound + 1);
+  }
+}
+
+function resetRound() {
+  document.getElementById('resultOverlay').classList.remove('show');
+  initRound(curRound);
+}
+
+// ══════════════════════════════════════════════════════
+//  KICK OFF
+// ══════════════════════════════════════════════════════
+initRound(0);
+</script>
+</body>
+</html>
