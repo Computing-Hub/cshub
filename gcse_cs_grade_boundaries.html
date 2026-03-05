@@ -1,950 +1,365 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-GB">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GCSE CS — Interactive Revision</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Sora:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<style>
-/* ══════════════════════════════════════════════════════
-   RESET & TOKENS
-══════════════════════════════════════════════════════ */
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Edexcel GCSE Computer Science 2025 Grade Boundaries (Student Guide)</title>
+  <style>
+    :root {
+      --bg: #f5f7fb;
+      --card: #ffffff;
+      --ink: #1f2937;
+      --muted: #6b7280;
+      --line: #dbe2ea;
+      --accent: #2563eb;
+      --accent-soft: #e8f0ff;
+      --good: #0f766e;
+      --warn: #b45309;
+    }
 
-:root {
-  --bg:       #0b0f1a;
-  --bg2:      #0d1117;
-  --bg3:      #0f1520;
-  --panel:    #111827;
-  --border:   #1e2535;
-  --border2:  #131929;
-  --text:     #e2e8f0;
-  --text2:    #94a3b8;
-  --text3:    #64748b;
-  --text4:    #475569;
-  --text5:    #334155;
-  --yellow:   #facc15;
-  --amber:    #fde68a;
-  --blue:     #3b82f6;
-  --green:    #34d399;
-  --purple:   #a78bfa;
-  --red:      #f87171;
-  --comment:  #2d3748;
-}
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Arial, sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      line-height: 1.5;
+    }
 
-html, body { height: 100%; background: var(--bg); color: var(--text);
-  font-family: 'Sora', sans-serif; font-size: 14px; line-height: 1.5; }
+    .wrap {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 24px 16px 48px;
+    }
 
-button { cursor: pointer; font-family: 'Sora', sans-serif; }
-::-webkit-scrollbar { width: 5px; height: 5px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: #1e2535; border-radius: 3px; }
+    .hero {
+      background: linear-gradient(135deg, #1d4ed8, #2563eb 55%, #3b82f6);
+      color: white;
+      border-radius: 18px;
+      padding: 24px;
+      box-shadow: 0 12px 30px rgba(37, 99, 235, 0.18);
+    }
 
-/* ══════════════════════════════════════════════════════
-   APP SHELL
-══════════════════════════════════════════════════════ */
-.app { display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
+    .hero h1 {
+      margin: 0 0 10px;
+      font-size: clamp(1.35rem, 2vw, 2rem);
+    }
 
-/* ── Top header ── */
-.top-header {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 12px 28px; background: var(--bg3);
-  border-bottom: 1px solid var(--border); flex-shrink: 0; gap: 12px; flex-wrap: wrap;
-}
-.logo { display: flex; align-items: center; gap: 10px; }
-.logo-badge {
-  font-family: 'JetBrains Mono', monospace; font-size: 9px; font-weight: 600;
-  letter-spacing: 1.8px; text-transform: uppercase; color: var(--yellow);
-  background: rgba(250,204,21,0.08); border: 1px solid rgba(250,204,21,0.2);
-  padding: 3px 9px; border-radius: 3px;
-}
-.logo-title { font-size: 15px; font-weight: 600; color: #f1f5f9; letter-spacing: -0.3px; }
-.logo-sub   { font-size: 11px; color: var(--text3); font-weight: 300; }
+    .hero p {
+      margin: 0;
+      opacity: 0.95;
+    }
 
-/* ── Tab nav ── */
-.tab-nav {
-  display: flex; background: var(--bg2);
-  border-bottom: 1px solid var(--border); flex-shrink: 0; overflow-x: auto;
-}
-.tab-btn {
-  display: flex; align-items: center; gap: 8px;
-  padding: 13px 22px; border: none; background: transparent;
-  color: var(--text4); font-size: 13px; font-weight: 500;
-  border-bottom: 2px solid transparent; transition: all 0.18s; white-space: nowrap;
-}
-.tab-btn:hover { color: var(--text2); }
-.tab-btn.active { color: var(--text); border-bottom-color: var(--blue); }
-.tab-num {
-  font-family: 'JetBrains Mono', monospace; font-size: 10px;
-  background: var(--panel); border: 1px solid var(--border);
-  color: var(--text3); padding: 1px 6px; border-radius: 9px;
-}
-.tab-btn.active .tab-num { background: rgba(59,130,246,0.12); border-color: rgba(59,130,246,0.3); color: var(--blue); }
+    .grid {
+      display: grid;
+      gap: 16px;
+      margin-top: 16px;
+    }
 
-/* ── Tab panels ── */
-.tab-content { flex: 1; overflow: hidden; display: flex; flex-direction: column; min-height: 0; }
-.tab-panel { display: none; flex: 1; flex-direction: column; overflow: hidden; min-height: 0; }
-.tab-panel.active { display: flex; }
+    @media (min-width: 880px) {
+      .grid.two {
+        grid-template-columns: 1.15fr 0.85fr;
+      }
+    }
 
-/* ══════════════════════════════════════════════════════
-   SHARED COMPONENTS
-══════════════════════════════════════════════════════ */
-.section-header {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 10px 20px; background: var(--panel);
-  border-bottom: 1px solid var(--border); flex-shrink: 0; flex-wrap: wrap; gap: 8px;
-}
-.section-title { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text4); }
-.window-dots { display: flex; gap: 5px; }
-.dot { width: 10px; height: 10px; border-radius: 50%; }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 18px;
+      box-shadow: 0 4px 16px rgba(17, 24, 39, 0.05);
+    }
 
-.status-bar {
-  display: flex; align-items: flex-start; gap: 12px;
-  padding: 10px 24px; background: var(--bg2);
-  border-bottom: 1px solid var(--border); min-height: 48px; flex-shrink: 0;
-}
-.status-icon {
-  flex-shrink: 0; width: 24px; height: 24px;
-  background: rgba(250,204,21,0.07); border: 1px solid rgba(250,204,21,0.18);
-  border-radius: 4px; display: flex; align-items: center; justify-content: center;
-  font-size: 9px; color: var(--yellow); margin-top: 2px;
-}
-.status-label {
-  font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--yellow);
-  font-weight: 500; min-width: 260px; flex-shrink: 0; padding-top: 2px;
-}
-.status-note { font-size: 12px; color: var(--text3); line-height: 1.55; padding-top: 2px; }
+    h2 {
+      font-size: 1.05rem;
+      margin: 0 0 10px;
+    }
 
-.controls {
-  display: flex; align-items: center; gap: 9px;
-  padding: 12px 24px; border-top: 1px solid var(--border);
-  background: var(--bg3); flex-shrink: 0; flex-wrap: wrap;
-}
-.btn {
-  font-size: 13px; font-weight: 500; padding: 7px 16px;
-  border-radius: 5px; border: none; transition: all 0.15s; line-height: 1;
-}
-.btn:disabled { opacity: 0.3; cursor: not-allowed; pointer-events: none; }
-.btn-ghost { background: transparent; color: var(--text4); border: 1px solid var(--border); }
-.btn-ghost:hover { color: var(--text2); border-color: #334155; }
-.btn-primary { background: var(--blue); color: #fff; font-weight: 600; }
-.btn-primary:hover { background: #60a5fa; }
-.btn-auto {
-  background: rgba(250,204,21,0.07); color: var(--yellow);
-  border: 1px solid rgba(250,204,21,0.25); font-weight: 600;
-}
-.btn-auto:hover, .btn-auto.playing { background: rgba(250,204,21,0.13); border-color: rgba(250,204,21,0.45); }
-.done-tag {
-  font-family: 'JetBrains Mono', monospace; font-size: 11px;
-  color: var(--green); opacity: 0; transition: opacity 0.4s; margin-left: 4px;
-}
-.done-tag.show { opacity: 1; }
+    h3 {
+      font-size: 0.98rem;
+      margin: 16px 0 8px;
+    }
 
-.progress-wrap { display: flex; align-items: center; gap: 9px; margin-left: auto; }
-.progress-bar { width: 110px; height: 3px; background: var(--border); border-radius: 2px; overflow: hidden; }
-.progress-fill {
-  height: 100%; background: linear-gradient(90deg, var(--blue), var(--green));
-  border-radius: 2px; transition: width 0.3s ease; width: 0%;
-}
-.progress-label { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text4); min-width: 40px; }
+    p, li { font-size: 0.97rem; }
+    .muted { color: var(--muted); }
 
-/* shared info/ritual box */
-.info-box {
-  border-left: 3px solid var(--blue); background: rgba(59,130,246,0.05);
-  border-radius: 0 6px 6px 0; padding: 12px 16px; margin-bottom: 16px; font-size: 12.5px;
-  color: var(--text3); line-height: 1.6;
-}
-.info-box strong { color: var(--blue); }
-.info-box.warn { border-left-color: var(--yellow); background: rgba(250,204,21,0.04); }
-.info-box.warn strong { color: var(--yellow); }
-.info-box.success { border-left-color: var(--green); background: rgba(52,211,153,0.05); }
-.info-box.success strong { color: var(--green); }
+    .highlight {
+      background: var(--accent-soft);
+      border-left: 4px solid var(--accent);
+      padding: 10px 12px;
+      border-radius: 10px;
+      margin-top: 10px;
+      font-weight: 600;
+    }
 
-/* ══════════════════════════════════════════════════════
-   TAB 1 — TRACE TABLE
-══════════════════════════════════════════════════════ */
-.trace-layout {
-  display: flex; flex: 1; overflow: hidden; min-height: 0;
-}
+    .table-wrap {
+      overflow-x: auto;
+      margin-top: 8px;
+    }
 
-/* code panel */
-.code-panel {
-  flex: 0 0 50%; display: flex; flex-direction: column;
-  border-right: 1px solid var(--border); min-width: 0;
-}
-.code-body {
-  flex: 1; overflow-y: auto; padding: 6px 0 16px;
-  background: var(--bg2); scrollbar-width: thin; scrollbar-color: #1e2535 transparent;
-}
-.code-line {
-  display: flex; align-items: center; min-height: 27px; padding: 1px 0;
-  border-left: 3px solid transparent; transition: background 0.2s;
-}
-.code-line.active {
-  background: rgba(250,204,21,0.07); border-left-color: var(--yellow);
-  animation: linePulse 1s ease-in-out infinite;
-}
-.code-line.visited { background: rgba(59,130,246,0.03); }
-@keyframes linePulse {
-  0%,100% { box-shadow: 0 0 10px rgba(250,204,21,0.1); }
-  50%      { box-shadow: 0 0 20px rgba(250,204,21,0.25); }
-}
-.line-num {
-  font-family: 'JetBrains Mono', monospace; font-size: 11.5px; color: var(--comment);
-  width: 38px; text-align: right; padding-right: 14px; flex-shrink: 0; user-select: none;
-}
-.code-line.active .line-num { color: rgba(250,204,21,0.38); }
-.line-text { font-family: 'JetBrains Mono', monospace; font-size: 13px; color: var(--text2); white-space: pre; flex: 1; }
-.code-line.active .line-text { color: var(--amber); }
-.line-text.comment { color: #28303f; }
-.exec-arrow { font-size: 11px; color: var(--yellow); padding-right: 12px; opacity: 0.75; font-family: 'JetBrains Mono', monospace; flex-shrink: 0; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 640px;
+      font-size: 0.95rem;
+    }
 
-/* right side */
-.trace-right { flex: 1; display: flex; flex-direction: column; min-width: 0; }
-.row-count-badge {
-  font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--green);
-  background: rgba(52,211,153,0.07); border: 1px solid rgba(52,211,153,0.15);
-  padding: 2px 9px; border-radius: 10px;
-}
-.table-scroll { flex: 1; overflow-y: auto; padding: 12px 16px; scrollbar-width: thin; scrollbar-color: #1e2535 transparent; }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 10px 8px;
+      text-align: left;
+      vertical-align: top;
+    }
 
-.gtable { width: 100%; border-collapse: collapse; font-family: 'JetBrains Mono', monospace; }
-.gtable thead th {
-  padding: 9px 12px; text-align: center; font-size: 10px; font-weight: 600;
-  color: var(--text3); letter-spacing: 0.9px; text-transform: uppercase;
-  border-bottom: 2px solid var(--border); background: var(--bg2);
-  font-family: 'Sora', sans-serif; position: sticky; top: 0; z-index: 1;
-}
-.gtable tbody td { padding: 9px 12px; text-align: center; font-size: 14px; color: var(--text3); border-bottom: 1px solid var(--border2); }
-.gtable tbody tr.row-new { animation: rowIn 0.35s ease forwards; }
-.gtable tbody tr.row-new td { color: var(--text); font-weight: 500; background: rgba(52,211,153,0.05); }
-.gtable tbody tr.row-new td.out-cell { color: var(--green); font-weight: 700; font-size: 16px; }
-@keyframes rowIn { from { opacity:0; transform:translateX(10px); } to { opacity:1; transform:translateX(0); } }
-.empty-hint { padding: 32px; text-align: center; color: #1e2535; font-size: 12px; font-style: italic; }
+    th {
+      background: #f8fafc;
+      font-weight: 700;
+    }
 
-/* watch */
-.watch-panel { padding: 11px 16px; border-top: 1px solid var(--border); background: var(--bg2); flex-shrink: 0; }
-.watch-title { font-size: 9px; font-weight: 600; color: var(--text5); letter-spacing: 1.6px; text-transform: uppercase; margin-bottom: 9px; }
-.watch-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; }
-.watch-var {
-  display: flex; justify-content: space-between; align-items: center;
-  background: var(--panel); border: 1px solid var(--border);
-  border-radius: 5px; padding: 5px 10px; transition: border-color 0.2s, background 0.2s;
-}
-.watch-var.changed { border-color: rgba(250,204,21,0.3); animation: varFlash 0.5s ease; }
-@keyframes varFlash { 0% { background: rgba(250,204,21,0.1); } 100% { background: var(--panel); } }
-.watch-name { font-family: 'JetBrains Mono', monospace; font-size: 11.5px; font-weight: 500; }
-.watch-val  { font-family: 'JetBrains Mono', monospace; font-size: 13px; color: var(--text); font-weight: 600; }
-.watch-undef { color: #2d3748; font-style: italic; font-size: 11px; font-weight: 400; }
+    .badge {
+      display: inline-block;
+      border-radius: 999px;
+      padding: 4px 10px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      background: #eef2ff;
+      color: #3730a3;
+    }
 
-/* ══════════════════════════════════════════════════════
-   TAB 2 — TRUTH TABLE
-══════════════════════════════════════════════════════ */
-.truth-layout { flex: 1; display: flex; flex-direction: column; overflow-y: auto; padding: 20px 28px; gap: 20px; }
+    .calc {
+      display: grid;
+      gap: 10px;
+    }
 
-.expr-row { display: flex; gap: 12px; flex-wrap: wrap; }
-.expr-card {
-  flex: 1; min-width: 140px; background: var(--panel); border: 1px solid var(--border);
-  border-radius: 6px; padding: 12px 16px;
-}
-.expr-label { font-size: 9.5px; font-weight: 600; color: var(--text4); letter-spacing: 1.2px; text-transform: uppercase; margin-bottom: 6px; }
-.expr-val { font-family: 'JetBrains Mono', monospace; font-size: 14px; color: var(--text); }
-.expr-val .op  { color: var(--yellow); }
-.expr-val .var { color: var(--blue); }
-.expr-val.hidden-val { color: #2d3748; font-style: italic; font-size: 12px; }
+    .row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      align-items: center;
+    }
 
-.truth-controls { display: flex; gap: 9px; align-items: center; flex-wrap: wrap; }
+    .row label {
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
 
-.truth-table-wrap { overflow-x: auto; }
-.truth-table { width: 100%; border-collapse: collapse; font-family: 'JetBrains Mono', monospace; }
-.truth-table th {
-  padding: 10px 14px; text-align: center; font-size: 10px; font-weight: 600;
-  color: var(--text3); letter-spacing: 0.9px; text-transform: uppercase;
-  border-bottom: 2px solid var(--border); background: var(--bg2);
-  font-family: 'Sora', sans-serif;
-}
-.truth-table td { padding: 9px 14px; text-align: center; font-size: 14px; border-bottom: 1px solid var(--border2); color: var(--text3); }
-.truth-table td.input-col { color: var(--text3); }
-.truth-table td.s-col, .truth-table td.t-col { color: var(--text2); }
-.truth-table td.q-col { font-weight: 700; }
-.truth-table td.bit-1 { color: var(--blue); }
-.truth-table td.bit-0 { color: #374151; }
-.truth-table td.q-1 { color: var(--green) !important; }
-.truth-table td.q-0 { color: var(--red) !important; }
-.truth-table td.hidden { color: #1e2535; }
-.truth-table tr.active-row { background: rgba(99,179,237,0.05); }
-.truth-table tr.active-row td { animation: rowIn 0.3s ease; }
+    .row input {
+      width: 110px;
+      padding: 9px 10px;
+      border-radius: 10px;
+      border: 1px solid var(--line);
+      font-size: 1rem;
+      text-align: center;
+    }
 
-.mark-scheme {
-  background: rgba(52,211,153,0.04); border: 1px solid rgba(52,211,153,0.12);
-  border-radius: 6px; padding: 14px 18px;
-}
-.ms-title { font-size: 10px; font-weight: 600; color: var(--green); letter-spacing: 1.4px; text-transform: uppercase; margin-bottom: 10px; }
-.ms-point { display: flex; gap: 8px; font-size: 12px; color: #5a7a6a; margin-bottom: 5px; line-height: 1.5; }
-.ms-tick  { color: var(--green); flex-shrink: 0; }
+    .result {
+      margin-top: 10px;
+      padding: 12px;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      background: #f9fafb;
+    }
 
-/* ══════════════════════════════════════════════════════
-   TAB 3 — BINARY SEARCH
-══════════════════════════════════════════════════════ */
-.bs-layout { flex: 1; display: flex; flex-direction: column; overflow-y: auto; padding: 20px 28px; gap: 18px; }
+    .result strong {
+      font-size: 1rem;
+    }
 
-/* array visualiser */
-.array-vis { display: flex; gap: 0; overflow-x: auto; }
-.array-cell {
-  flex-shrink: 0; text-align: center;
-  border: 1px solid var(--border); border-right: none; min-width: 58px;
-}
-.array-cell:last-child { border-right: 1px solid var(--border); }
-.array-cell:first-child { border-radius: 5px 0 0 5px; }
-.array-cell:last-child  { border-radius: 0 5px 5px 0; }
-.array-cell .a-idx { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--text4); padding: 4px; border-bottom: 1px solid var(--border); background: var(--panel); }
-.array-cell .a-val { font-family: 'JetBrains Mono', monospace; font-size: 14px; font-weight: 500; color: var(--text2); padding: 9px 4px; background: var(--bg2); transition: all 0.3s; }
-.array-cell.cell-active  .a-val { color: var(--yellow); background: rgba(250,204,21,0.07); font-weight: 700; }
-.array-cell.cell-active  .a-idx { color: var(--yellow); }
-.array-cell.cell-inrange .a-val { color: var(--text); background: rgba(59,130,246,0.05); }
-.array-cell.cell-inrange .a-idx { color: var(--blue); }
-.array-cell.cell-discarded .a-val { color: #2a3040; background: #0a0d14; }
-.array-cell.cell-discarded .a-idx { color: #1e2535; }
+    .grade-pill {
+      display: inline-block;
+      margin-top: 6px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-weight: 700;
+      background: #ecfeff;
+      color: #155e75;
+    }
 
-.bs-controls { display: flex; gap: 9px; align-items: center; flex-wrap: wrap; }
+    .targets {
+      display: grid;
+      gap: 10px;
+      margin-top: 8px;
+    }
 
-.bs-table { width: 100%; border-collapse: collapse; font-family: 'JetBrains Mono', monospace; }
-.bs-table th {
-  padding: 9px 12px; text-align: center; font-size: 10px; font-weight: 600;
-  color: var(--text3); letter-spacing: 0.9px; text-transform: uppercase;
-  border-bottom: 2px solid var(--border); background: var(--bg2);
-  font-family: 'Sora', sans-serif;
-}
-.bs-table td { padding: 9px 14px; text-align: center; font-size: 13px; border-bottom: 1px solid var(--border2); color: var(--text3); }
-.bs-table tr.bs-active td { background: rgba(250,204,21,0.04); color: var(--text); }
-.bs-table tr.bs-done   td { color: var(--text2); }
-.bs-table tr.bs-future td { color: #1e2535; }
-.bs-badge {
-  display: inline-block; font-size: 10px; padding: 2px 8px;
-  border-radius: 9px; font-family: 'Sora', sans-serif; font-weight: 600;
-}
-.bs-badge.N      { background: rgba(248,113,113,0.1); color: var(--red); border: 1px solid rgba(248,113,113,0.2); }
-.bs-badge.lower  { background: rgba(167,139,250,0.1); color: var(--purple); border: 1px solid rgba(167,139,250,0.2); }
-.bs-badge.higher { background: rgba(251,191,36,0.1); color: #fbbf24; border: 1px solid rgba(251,191,36,0.2); }
-.bs-badge.none   { background: rgba(52,211,153,0.1); color: var(--green); border: 1px solid rgba(52,211,153,0.2); }
+    .target {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 10px 12px;
+      background: #fff;
+    }
 
-.bs-explain {
-  background: rgba(59,130,246,0.04); border: 1px solid rgba(59,130,246,0.12);
-  border-radius: 6px; padding: 12px 16px; font-size: 12.5px; color: var(--text3); line-height: 1.6;
-}
-.bs-explain strong { color: var(--blue); }
+    .target b { color: var(--good); }
 
-/* ══════════════════════════════════════════════════════
-   RESPONSIVE
-══════════════════════════════════════════════════════ */
-@media (max-width: 680px) {
-  .trace-layout { flex-direction: column; overflow-y: auto; }
-  .code-panel { flex: none; border-right: none; border-bottom: 1px solid var(--border); }
-  .code-body { max-height: 260px; }
-  .app { height: auto; overflow: auto; }
-  .status-label { min-width: 0; }
-  .tab-btn { padding: 11px 14px; font-size: 12px; }
-}
-</style>
+    .tiny {
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin-top: 10px;
+    }
+
+    .footer-note {
+      margin-top: 16px;
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    .ok { color: var(--good); font-weight: 700; }
+    .caution { color: var(--warn); font-weight: 700; }
+  </style>
 </head>
 <body>
-<div class="app">
+  <div class="wrap">
+    <section class="hero">
+      <h1>Edexcel GCSE Computer Science (2025) Grade Boundaries</h1>
+      <p>Student-friendly guide for understanding how your <strong>Paper 1 + Paper 2</strong> marks combine into a final grade.</p>
+    </section>
 
-<!-- ── Top header ── -->
-<header class="top-header">
-  <div class="logo">
-    <span class="logo-badge">GCSE CS</span>
-    <div>
-      <div class="logo-title">Computational Thinking — Interactive Revision</div>
-      <div class="logo-sub">Edexcel 2025 Paper · Questions 5a, 5c, 5e</div>
-    </div>
-  </div>
-</header>
+    <div class="grid two">
+      <section class="card">
+        <h2>How it works (the main thing to remember)</h2>
+        <p>Your final grade is based on your <strong>combined total</strong> across both papers (out of <strong>150</strong>), not a separate grade for each paper.</p>
+        <div class="highlight">Example: <strong>32 on Paper 1 + 32 on Paper 2 = 64 total</strong> → this reaches the <strong>Grade 5</strong> boundary.</div>
 
-<!-- ── Tab nav ── -->
-<nav class="tab-nav">
-  <button class="tab-btn active" onclick="switchTab('trace')"   id="tab-trace">
-    <span class="tab-num">5c</span> Trace Table
-  </button>
-  <button class="tab-btn"        onclick="switchTab('truth')"   id="tab-truth">
-    <span class="tab-num">5a</span> Truth Table
-  </button>
-  <button class="tab-btn"        onclick="switchTab('binary')"  id="tab-binary">
-    <span class="tab-num">5e</span> Binary Search
-  </button>
-</nav>
-
-<!-- ══════════════════════════════════════════════════════
-     TAB PANELS
-══════════════════════════════════════════════════════ -->
-<div class="tab-content">
-
-<!-- ────────────────────────────────────────────────────
-     PANEL 1 · TRACE TABLE
-──────────────────────────────────────────────────── -->
-<div class="tab-panel active" id="panel-trace">
-
-  <div class="status-bar">
-    <div class="status-icon" id="t-icon">○</div>
-    <div class="status-label" id="t-label">Ready to begin</div>
-    <div class="status-note"  id="t-note">Press Next Step to start executing the code line by line.</div>
-  </div>
-
-  <div class="trace-layout">
-
-    <!-- code -->
-    <div class="code-panel">
-      <div class="section-header">
-        <span class="section-title">algorithm.py</span>
-        <div class="window-dots">
-          <span class="dot" style="background:#ff5f57"></span>
-          <span class="dot" style="background:#febc2e"></span>
-          <span class="dot" style="background:#28c840"></span>
+        <h3>Quick target table (Grades 4–6)</h3>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Grade</th>
+                <th>Overall boundary<br>(out of 150)</th>
+                <th>Equal split average<br>(per paper, out of 75)</th>
+                <th>2025 notional Paper 01</th>
+                <th>2025 notional Paper 02</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="badge">Grade 4</span></td>
+                <td><strong>49</strong></td>
+                <td>24.5 (so think <strong>25 each</strong>)</td>
+                <td>25</td>
+                <td>24</td>
+              </tr>
+              <tr>
+                <td><span class="badge">Grade 5</span></td>
+                <td><strong>64</strong></td>
+                <td><strong>32 each</strong></td>
+                <td>32</td>
+                <td>31</td>
+              </tr>
+              <tr>
+                <td><span class="badge">Grade 6</span></td>
+                <td><strong>79</strong></td>
+                <td>39.5 (so think <strong>40 each</strong>)</td>
+                <td>40</td>
+                <td>38</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
-      </div>
-      <div class="code-body" id="codeBody"></div>
-    </div>
 
-    <!-- trace table + watch -->
-    <div class="trace-right">
-      <div class="section-header">
-        <span class="section-title">Trace Table</span>
-        <span class="row-count-badge" id="t-rowcount">0 rows</span>
-      </div>
-      <div class="table-scroll" id="t-tableScroll">
-        <table class="gtable">
-          <thead><tr><th>number</th><th>remainder</th><th>total</th><th>Output</th></tr></thead>
-          <tbody id="t-tbody"><tr><td colspan="4" class="empty-hint">Rows will appear as code executes…</td></tr></tbody>
-        </table>
-      </div>
-      <div class="watch-panel">
-        <div class="watch-title">Variable Watch</div>
-        <div class="watch-grid">
-          <div class="watch-var" id="wNUM">
-            <span class="watch-name" style="color:#94a3b8">NUM</span>
-            <span class="watch-val" id="vNUM"><span class="watch-undef">—</span></span>
+        <p class="footer-note">
+          <strong>Important:</strong> Paper 01 and Paper 02 figures above are <em>notional</em> (a guide). The qualification grade is awarded from the <strong>overall total</strong>.
+        </p>
+      </section>
+
+      <section class="card">
+        <h2>Try your marks</h2>
+        <p class="muted">Type in your scores (0–75 each) to estimate where your total sits using the 2025 overall boundaries.</p>
+
+        <div class="calc" aria-label="Grade checker calculator">
+          <div class="row">
+            <label for="paper1">Paper 1 mark (out of 75)</label>
+            <input id="paper1" type="number" min="0" max="75" value="32" />
           </div>
-          <div class="watch-var" id="wNumber">
-            <span class="watch-name" style="color:#60a5fa">number</span>
-            <span class="watch-val" id="vNumber"><span class="watch-undef">undef</span></span>
+          <div class="row">
+            <label for="paper2">Paper 2 mark (out of 75)</label>
+            <input id="paper2" type="number" min="0" max="75" value="32" />
           </div>
-          <div class="watch-var" id="wRemainder">
-            <span class="watch-name" style="color:#f59e0b">remainder</span>
-            <span class="watch-val" id="vRemainder"><span class="watch-undef">undef</span></span>
-          </div>
-          <div class="watch-var" id="wTotal">
-            <span class="watch-name" style="color:#34d399">total</span>
-            <span class="watch-val" id="vTotal"><span class="watch-undef">undef</span></span>
+
+          <div class="result" id="resultBox" aria-live="polite">
+            <strong>Total: 64 / 150</strong>
+            <div class="grade-pill">Estimated grade: 5 ✅</div>
+            <p class="tiny">This is based on the June 2025 Edexcel GCSE Computer Science overall grade boundaries.</p>
           </div>
         </div>
-      </div>
+
+        <h3>Safer classroom targets (with a cushion)</h3>
+        <div class="targets">
+          <div class="target"><b>Grade 4 target:</b> aim for <strong>27+ per paper</strong> (about <strong>54 total</strong>)</div>
+          <div class="target"><b>Grade 5 target:</b> aim for <strong>35+ per paper</strong> (about <strong>70 total</strong>)</div>
+          <div class="target"><b>Grade 6 target:</b> aim for <strong>41+ per paper</strong> (about <strong>82 total</strong>)</div>
+        </div>
+
+        <p class="tiny">Why a cushion? Because sitting exactly on the boundary is risky. One silly mistake = pain. We avoid pain.</p>
+      </section>
     </div>
+
+    <section class="card" style="margin-top:16px;">
+      <h2>Frequently asked question</h2>
+      <p><strong>“If I get 32 on both papers, is that a Grade 5?”</strong></p>
+      <p class="ok">Yes. 32 + 32 = 64, and 64 is the Grade 5 boundary for the 2025 Edexcel GCSE Computer Science qualification.</p>
+      <p class="caution">Heads-up: Grade boundaries can change each year, so always check the official boundaries for your exam series.</p>
+    </section>
   </div>
 
-  <div class="controls">
-    <button class="btn btn-ghost"    onclick="tReset()">↺ Reset</button>
-    <button class="btn btn-ghost"    id="t-prev" onclick="tPrev()" disabled>← Prev</button>
-    <button class="btn btn-auto"     id="t-auto" onclick="tToggleAuto()">▶ Auto</button>
-    <button class="btn btn-primary"  id="t-next" onclick="tNext()">Next Step →</button>
-    <span class="done-tag" id="t-done">✓ Complete — output is 12</span>
-    <div class="progress-wrap">
-      <div class="progress-bar"><div class="progress-fill" id="t-prog"></div></div>
-      <span class="progress-label" id="t-progLabel">0 / 0</span>
-    </div>
-  </div>
-</div><!-- /panel-trace -->
+  <script>
+    const paper1 = document.getElementById('paper1');
+    const paper2 = document.getElementById('paper2');
+    const resultBox = document.getElementById('resultBox');
 
+    // Overall subject boundaries out of 150 (June 2025, Edexcel 1CP2)
+    const boundaries = {
+      9: 124,
+      8: 109,
+      7: 94,
+      6: 79,
+      5: 64,
+      4: 49,
+      3: 36,
+      2: 23,
+      1: 10
+    };
 
-<!-- ────────────────────────────────────────────────────
-     PANEL 2 · TRUTH TABLE
-──────────────────────────────────────────────────── -->
-<div class="tab-panel" id="panel-truth">
-  <div class="truth-layout">
-
-    <div class="info-box">
-      <strong>Q = NOT S AND T</strong> means <strong>(NOT S) AND T</strong> — the NOT applies only to S, not the whole expression.
-      Derive S and T by spotting patterns in A, B, C. Then compute Q row by row.
-    </div>
-
-    <!-- expression cards -->
-    <div class="expr-row">
-      <div class="expr-card">
-        <div class="expr-label">Expression for S</div>
-        <div class="expr-val hidden-val" id="expr-S">? — click Reveal</div>
-      </div>
-      <div class="expr-card">
-        <div class="expr-label">Expression for T</div>
-        <div class="expr-val hidden-val" id="expr-T">? — click Reveal</div>
-      </div>
-      <div class="expr-card">
-        <div class="expr-label">Given: Q</div>
-        <div class="expr-val"><span class="op">NOT </span><span class="var">S</span><span class="op"> AND </span><span class="var">T</span></div>
-      </div>
-    </div>
-
-    <!-- controls -->
-    <div class="truth-controls">
-      <button class="btn btn-ghost"   onclick="truthToggleExpr()" id="btn-expr">Reveal S &amp; T</button>
-      <button class="btn btn-primary" onclick="truthRevealNext()" id="btn-truth-next">Reveal Next Q →</button>
-      <button class="btn btn-ghost"   onclick="truthReset()">↺ Reset</button>
-      <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text4);margin-left:4px" id="truth-count">0 / 8 revealed</span>
-    </div>
-
-    <!-- truth table -->
-    <div class="truth-table-wrap">
-      <table class="truth-table" id="truth-tbl">
-        <thead>
-          <tr>
-            <th>A</th><th>B</th><th>C</th>
-            <th>S</th><th>T</th>
-            <th>Q = NOT S AND T</th>
-          </tr>
-        </thead>
-        <tbody id="truth-tbody"></tbody>
-      </table>
-    </div>
-
-    <div class="info-box warn">
-      <strong>⚠ Bracket trap:</strong> NOT S AND T = <strong>(NOT S) AND T</strong>.
-      If S=1 then NOT S = 0, so Q = 0 regardless of T.
-      If S=0 then Q simply equals T.
-    </div>
-
-    <div class="mark-scheme">
-      <div class="ms-title">Mark Scheme — 3 marks</div>
-      <div class="ms-point"><span class="ms-tick">✓</span><span>1 mark: S = A AND C (correct logical expression)</span></div>
-      <div class="ms-point"><span class="ms-tick">✓</span><span>1 mark: T = B OR C (correct logical expression)</span></div>
-      <div class="ms-point"><span class="ms-tick">✓</span><span>1 mark: All 8 Q values correct</span></div>
-      <div class="ms-point"><span class="ms-tick">✗</span><span>Common error: writing NOT(S AND T) instead of (NOT S) AND T</span></div>
-    </div>
-
-  </div>
-</div><!-- /panel-truth -->
-
-
-<!-- ────────────────────────────────────────────────────
-     PANEL 3 · BINARY SEARCH
-──────────────────────────────────────────────────── -->
-<div class="tab-panel" id="panel-binary">
-
-  <div class="status-bar">
-    <div class="status-icon">▶</div>
-    <div class="status-label" id="bs-label">Ready — target: 78</div>
-    <div class="status-note"  id="bs-note">Array: [11, 22, 33, 44, 55, 66, 77, 88, 99, 100, 101]. Press Next Step to begin.</div>
-  </div>
-
-  <div class="bs-layout">
-
-    <!-- array visualiser -->
-    <div>
-      <div style="font-size:10px;color:var(--text4);font-family:'JetBrains Mono',monospace;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;">
-        Array Visualiser — <span style="color:var(--yellow)">yellow = mid-point</span>  <span style="color:var(--blue)">blue = search range</span>  <span style="color:#2a3040">grey = discarded</span>
-      </div>
-      <div class="array-vis" id="bs-array"></div>
-    </div>
-
-    <!-- controls -->
-    <div class="bs-controls">
-      <button class="btn btn-ghost"   onclick="bsReset()">↺ Reset</button>
-      <button class="btn btn-ghost"   id="bs-prev" onclick="bsPrev()" disabled>← Prev</button>
-      <button class="btn btn-auto"    id="bs-auto" onclick="bsToggleAuto()">▶ Auto</button>
-      <button class="btn btn-primary" id="bs-next" onclick="bsNext()">Next Step →</button>
-      <span class="done-tag" id="bs-done">✓ Complete — 78 not found</span>
-      <div class="progress-wrap">
-        <div class="progress-bar"><div class="progress-fill" id="bs-prog"></div></div>
-        <span class="progress-label" id="bs-progLabel">0 / 4</span>
-      </div>
-    </div>
-
-    <!-- trace table -->
-    <div>
-      <table class="bs-table" id="bs-table">
-        <thead>
-          <tr>
-            <th>Start index</th>
-            <th>End index</th>
-            <th>Calculation of mid-point</th>
-            <th>Found Y or N</th>
-            <th>Discard lower, higher or none</th>
-          </tr>
-        </thead>
-        <tbody id="bs-tbody"></tbody>
-      </table>
-    </div>
-
-    <!-- explanation -->
-    <div class="bs-explain" id="bs-explain">
-      Click <strong>Next Step</strong> to walk through the binary search. The array is sorted so we can halve the search space each time.
-    </div>
-
-    <div class="info-box warn">
-      <strong>⚠ Mid-point rule:</strong> Always write the full calculation <strong>(start + end) // 2</strong> — the mark scheme awards the working, not just the result.
-      Integer division floors the result: (6+7)//2 = 6, not 6.5.
-    </div>
-
-    <div class="mark-scheme">
-      <div class="ms-title">Mark Scheme — 6 marks</div>
-      <div class="ms-point"><span class="ms-tick">✓</span><span>1 mark per correct row (4 rows needed)</span></div>
-      <div class="ms-point"><span class="ms-tick">✓</span><span>Mid-point calculation must show the arithmetic, not just the result</span></div>
-      <div class="ms-point"><span class="ms-tick">✓</span><span>All Found values must be N (78 is not in the array)</span></div>
-      <div class="ms-point"><span class="ms-tick">✓</span><span>Final Discard = "none" — search exhausted, start = end</span></div>
-      <div class="ms-point"><span class="ms-tick">✗</span><span>Common error: writing only the result of (start+end)//2, not the full sum</span></div>
-      <div class="ms-point"><span class="ms-tick">✗</span><span>Common error: writing "lower" or "higher" on the final row instead of "none"</span></div>
-    </div>
-
-  </div>
-</div><!-- /panel-binary -->
-
-</div><!-- /tab-content -->
-</div><!-- /app -->
-
-<script>
-// ═══════════════════════════════════════════════════════════
-// TAB SWITCHING
-// ═══════════════════════════════════════════════════════════
-function switchTab(id) {
-  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById('panel-' + id).classList.add('active');
-  document.getElementById('tab-' + id).classList.add('active');
-}
-
-// ═══════════════════════════════════════════════════════════
-// UTILITIES
-// ═══════════════════════════════════════════════════════════
-function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-
-// ═══════════════════════════════════════════════════════════
-// TAB 1 — TRACE TABLE
-// ═══════════════════════════════════════════════════════════
-const CODE_LINES = [
-  { n:1,  text:"#  ──────────────────────────────────────────────────", type:"comment" },
-  { n:2,  text:"#  Constants",                                          type:"comment" },
-  { n:3,  text:"#  ──────────────────────────────────────────────────", type:"comment" },
-  { n:4,  text:"",                                                       type:"blank"   },
-  { n:5,  text:"NUM = 6",                                                type:"code"    },
-  { n:6,  text:"",                                                       type:"blank"   },
-  { n:7,  text:"#  ──────────────────────────────────────────────────", type:"comment" },
-  { n:8,  text:"#  Global variables",                                    type:"comment" },
-  { n:9,  text:"#  ──────────────────────────────────────────────────", type:"comment" },
-  { n:10, text:"",                                                       type:"blank"   },
-  { n:11, text:"total = 0",                                              type:"code"    },
-  { n:12, text:"",                                                       type:"blank"   },
-  { n:13, text:"#  ──────────────────────────────────────────────────", type:"comment" },
-  { n:14, text:"#  Main program",                                        type:"comment" },
-  { n:15, text:"#  ──────────────────────────────────────────────────", type:"comment" },
-  { n:16, text:"",                                                       type:"blank"   },
-  { n:17, text:"for number in range (1, NUM + 1):",                      type:"code"    },
-  { n:18, text:"    remainder = NUM % number",                           type:"code"    },
-  { n:19, text:"    if (remainder == 0):",                               type:"code"    },
-  { n:20, text:"        total = total + number",                         type:"code"    },
-  { n:21, text:"print (total)",                                          type:"code"    },
-  { n:22, text:"",                                                       type:"blank"   },
-];
-
-function buildTraceSteps() {
-  const NUM = 6;
-  const steps = [];
-  steps.push({ lines:[], vars:{NUM:null,number:null,remainder:null,total:null}, label:"Program ready", note:"No lines executed yet. Click Next Step to begin.", tableRow:null });
-  steps.push({ lines:[5], vars:{NUM:6,number:null,remainder:null,total:null}, label:"Line 5: NUM = 6", note:"The constant NUM is assigned 6. Constants don't appear in the trace table.", tableRow:null });
-  steps.push({ lines:[11], vars:{NUM:6,number:null,remainder:null,total:0}, label:"Line 11: total = 0", note:"Global variable total is initialised to 0. This is our first trace table row.", tableRow:{number:"—",remainder:"—",total:0,output:"—",isOutput:false} });
-  let total = 0;
-  for (let number = 1; number <= NUM; number++) {
-    const remainder = NUM % number;
-    steps.push({ lines:[17], vars:{NUM:6,number,remainder:null,total}, label:`Line 17: number = ${number}  (iteration ${number} of ${NUM})`, note:`range(1, 7) gives values 1 to 6. Now number = ${number}.`, tableRow:null });
-    steps.push({ lines:[18], vars:{NUM:6,number,remainder,total}, label:`Line 18: remainder = 6 % ${number} = ${remainder}`, note:`6 ÷ ${number} leaves remainder ${remainder}.${remainder===0?" Divides evenly — condition will be TRUE!":" Does not divide evenly — condition will be FALSE."}`, tableRow:null });
-    const cond = remainder === 0;
-    steps.push({ lines:[19], vars:{NUM:6,number,remainder,total}, label:`Line 19: if (${remainder} == 0)  →  ${cond?"TRUE ✓":"FALSE ✗"}`, note:cond?`Condition TRUE: enter if-block, execute line 20.`:`Condition FALSE: skip line 20. Row still recorded in trace table.`, tableRow:null });
-    if (cond) {
-      total += number;
-      steps.push({ lines:[20], vars:{NUM:6,number,remainder,total}, label:`Line 20: total = total + ${number} = ${total}`, note:`total updated: ${total-number} + ${number} = ${total}.`, tableRow:{number,remainder,total,output:"—",isOutput:false} });
-    } else {
-      steps.push({ lines:[], vars:{NUM:6,number,remainder,total}, label:`Line 20 SKIPPED  (remainder ≠ 0)`, note:`total stays at ${total}. Row is still added — every iteration must appear.`, tableRow:{number,remainder,total,output:"—",isOutput:false} });
+    function clampMark(value) {
+      const n = Number(value);
+      if (Number.isNaN(n)) return 0;
+      return Math.max(0, Math.min(75, n));
     }
-  }
-  steps.push({ lines:[21], vars:{NUM:6,number:null,remainder:null,total}, label:`Line 21: print(total)  →  outputs ${total}`, note:`Loop finished. print(total) outputs ${total}. This is the only row with an Output value.`, tableRow:{number:"—",remainder:"—",total:"—",output:total,isOutput:true} });
-  return steps;
-}
 
-const TRACE = buildTraceSteps();
-let tStep = 0, tPlaying = false, tTimer = null, tPrevVars = {};
-
-function tRenderCode() {
-  document.getElementById('codeBody').innerHTML = CODE_LINES.map(l =>
-    `<div class="code-line" id="cl-${l.n}">
-       <span class="line-num">${l.n}</span>
-       <span class="line-text${l.type==='comment'?' comment':''}">${esc(l.text)||' '}</span>
-       <span class="exec-arrow" id="arr-${l.n}" style="visibility:hidden">◀</span>
-     </div>`
-  ).join('');
-}
-
-function tUpdate() {
-  const s = TRACE[tStep], tot = TRACE.length - 1;
-  document.getElementById('t-prog').style.width = `${Math.round(tStep/tot*100)}%`;
-  document.getElementById('t-progLabel').textContent = `${tStep} / ${tot}`;
-  document.getElementById('t-icon').textContent  = s.lines.length ? '▶' : '○';
-  document.getElementById('t-label').textContent = s.label;
-  document.getElementById('t-note').textContent  = s.note;
-
-  // highlight code
-  const visited = new Set();
-  for (let i = 0; i < tStep; i++) TRACE[i].lines.forEach(l => visited.add(l));
-  CODE_LINES.forEach(l => {
-    const el = document.getElementById(`cl-${l.n}`);
-    const ar = document.getElementById(`arr-${l.n}`);
-    if (!el) return;
-    const active = s.lines.includes(l.n);
-    const vis    = visited.has(l.n) && !active;
-    el.className = 'code-line' + (active?' active':'') + (vis?' visited':'');
-    ar.style.visibility = active ? 'visible' : 'hidden';
-    if (active) el.scrollIntoView({block:'nearest',behavior:'smooth'});
-  });
-
-  // trace rows
-  const rows = TRACE.slice(0, tStep+1).filter(x => x.tableRow).map(x => x.tableRow);
-  const tbody = document.getElementById('t-tbody');
-  if (!rows.length) {
-    tbody.innerHTML = '<tr><td colspan="4" class="empty-hint">Rows will appear as code executes…</td></tr>';
-    document.getElementById('t-rowcount').textContent = '0 rows';
-  } else {
-    tbody.innerHTML = rows.map((r,i) => {
-      const isNew = i === rows.length-1;
-      return `<tr class="${isNew?'row-new':''}">
-        <td>${esc(r.number)}</td><td>${esc(r.remainder)}</td><td>${esc(r.total)}</td>
-        <td class="${r.isOutput?'out-cell':''}">${esc(r.output)}</td></tr>`;
-    }).join('');
-    document.getElementById('t-rowcount').textContent = `${rows.length} row${rows.length!==1?'s':''}`;
-    setTimeout(()=>{ const w=document.getElementById('t-tableScroll'); w.scrollTop=w.scrollHeight; },80);
-  }
-
-  // watch
-  const v = s.vars;
-  tWatch('vNUM','wNUM',v.NUM,tPrevVars.NUM);
-  tWatch('vNumber','wNumber',v.number,tPrevVars.number);
-  tWatch('vRemainder','wRemainder',v.remainder,tPrevVars.remainder);
-  tWatch('vTotal','wTotal',v.total,tPrevVars.total);
-  tPrevVars = {...v};
-
-  document.getElementById('t-prev').disabled = tStep === 0;
-  document.getElementById('t-next').disabled = tStep === tot;
-  document.getElementById('t-done').className = 'done-tag' + (tStep===tot?' show':'');
-}
-
-function tWatch(vid, wid, val, prev) {
-  const el = document.getElementById(vid), wrap = document.getElementById(wid);
-  el.innerHTML = val===null ? '<span class="watch-undef">undef</span>' : esc(val);
-  if (val !== prev && val !== null) {
-    wrap.classList.add('changed');
-    setTimeout(()=>wrap.classList.remove('changed'), 600);
-  }
-}
-
-function tNext()  { if (tStep < TRACE.length-1) { tStep++; tUpdate(); } }
-function tPrev()  { if (tStep > 0) { tStep--; tUpdate(); } }
-function tReset() { tStopAuto(); tStep=0; tPrevVars={}; tUpdate(); }
-function tToggleAuto() { tPlaying ? tStopAuto() : tStartAuto(); }
-function tStartAuto() {
-  if (tStep >= TRACE.length-1) return;
-  tPlaying = true;
-  document.getElementById('t-auto').textContent = '⏸ Pause';
-  document.getElementById('t-auto').classList.add('playing');
-  tTick();
-}
-function tStopAuto() {
-  tPlaying = false; clearTimeout(tTimer);
-  document.getElementById('t-auto').textContent = '▶ Auto';
-  document.getElementById('t-auto').classList.remove('playing');
-}
-function tTick() {
-  if (!tPlaying) return;
-  if (tStep >= TRACE.length-1) { tStopAuto(); return; }
-  tNext(); tTimer = setTimeout(tTick, 1100);
-}
-
-// ═══════════════════════════════════════════════════════════
-// TAB 2 — TRUTH TABLE
-// ═══════════════════════════════════════════════════════════
-// S = A AND C,  T = B OR C,  Q = NOT S AND T = (NOT S) AND T
-const TRUTH_ROWS = [
-  {a:0,b:0,c:0, s:0,t:0, q:0},
-  {a:0,b:0,c:1, s:0,t:1, q:1},
-  {a:0,b:1,c:0, s:0,t:1, q:1},
-  {a:0,b:1,c:1, s:0,t:1, q:1},
-  {a:1,b:0,c:0, s:0,t:0, q:0},
-  {a:1,b:0,c:1, s:1,t:1, q:0},
-  {a:1,b:1,c:0, s:0,t:1, q:1},
-  {a:1,b:1,c:1, s:1,t:1, q:0},
-];
-
-let truthRevealed = 0, truthExprShown = false;
-
-function truthRenderTable() {
-  const tbody = document.getElementById('truth-tbody');
-  tbody.innerHTML = TRUTH_ROWS.map((r,i) => {
-    const isNew    = i === truthRevealed - 1;
-    const isHidden = i >= truthRevealed;
-    return `<tr class="${isNew?'active-row':''}">
-      <td class="bit-${r.a}">${r.a}</td>
-      <td class="bit-${r.b}">${r.b}</td>
-      <td class="bit-${r.c}">${r.c}</td>
-      <td class="s-col bit-${r.s}">${r.s}</td>
-      <td class="t-col bit-${r.t}">${r.t}</td>
-      <td class="q-col ${isHidden?'hidden':('q-'+r.q)}">${isHidden?'?':r.q}</td>
-    </tr>`;
-  }).join('');
-  document.getElementById('truth-count').textContent = `${truthRevealed} / 8 revealed`;
-  document.getElementById('btn-truth-next').disabled = truthRevealed >= 8;
-}
-
-function truthToggleExpr() {
-  truthExprShown = !truthExprShown;
-  const btnText = truthExprShown ? 'Hide S & T' : 'Reveal S & T';
-  document.getElementById('btn-expr').textContent = btnText;
-  document.getElementById('expr-S').innerHTML = truthExprShown
-    ? '<span class="var">S</span> = <span class="var">A</span> <span class="op">AND</span> <span class="var">C</span>'
-    : '<span style="color:#2d3748;font-style:italic;font-size:12px">? — click Reveal</span>';
-  document.getElementById('expr-T').innerHTML = truthExprShown
-    ? '<span class="var">T</span> = <span class="var">B</span> <span class="op">OR</span> <span class="var">C</span>'
-    : '<span style="color:#2d3748;font-style:italic;font-size:12px">? — click Reveal</span>';
-  document.getElementById('expr-S').className = truthExprShown ? 'expr-val' : 'expr-val hidden-val';
-  document.getElementById('expr-T').className = truthExprShown ? 'expr-val' : 'expr-val hidden-val';
-}
-
-function truthRevealNext() {
-  if (truthRevealed < 8) { truthRevealed++; truthRenderTable(); }
-}
-
-function truthReset() {
-  truthRevealed = 0;
-  if (truthExprShown) truthToggleExpr();
-  truthRenderTable();
-}
-
-// ═══════════════════════════════════════════════════════════
-// TAB 3 — BINARY SEARCH
-// ═══════════════════════════════════════════════════════════
-const BS_ARR = [11,22,33,44,55,66,77,88,99,100,101];
-const BS_TARGET = 78;
-
-const BS_STEPS = [
-  { start:0, end:10, midCalc:"(0 + 10) // 2 = 5", midIdx:5, found:"N", discard:"lower",
-    explain:`Mid-point is index 5, value = ${BS_ARR[5]}. Target 78 > 66, so discard lower half. New start = 5 + 1 = 6.` },
-  { start:6, end:10, midCalc:"(6 + 10) // 2 = 8", midIdx:8, found:"N", discard:"higher",
-    explain:`Mid-point is index 8, value = ${BS_ARR[8]}. Target 78 < 99, so discard higher half. New end = 8 − 1 = 7.` },
-  { start:6, end:7,  midCalc:"(6 + 7) // 2 = 6",  midIdx:6, found:"N", discard:"lower",
-    explain:`Mid-point is index 6, value = ${BS_ARR[6]}. Target 78 > 77, so discard lower half. New start = 6 + 1 = 7.` },
-  { start:7, end:7,  midCalc:"(7 + 7) // 2 = 7",  midIdx:7, found:"N", discard:"none",
-    explain:`Start = End = 7. Mid-point is index 7, value = ${BS_ARR[7]}. 78 ≠ 88 and the search space is exhausted. 78 is NOT in the array.` },
-];
-
-let bsStep = 0, bsPlaying = false, bsTimer = null;
-
-function bsRenderArray() {
-  const s = bsStep < BS_STEPS.length ? BS_STEPS[bsStep] : null;
-  document.getElementById('bs-array').innerHTML = BS_ARR.map((v,i) => {
-    let cls = 'array-cell';
-    if (s) {
-      if (i === s.midIdx)                        cls += ' cell-active';
-      else if (i >= s.start && i <= s.end)       cls += ' cell-inrange';
-      else                                        cls += ' cell-discarded';
+    function estimateGrade(total) {
+      for (const [grade, boundary] of Object.entries(boundaries)) {
+        if (total >= boundary) return Number(grade);
+      }
+      return 'U';
     }
-    return `<div class="${cls}"><div class="a-idx">[${i}]</div><div class="a-val">${v}</div></div>`;
-  }).join('');
-}
 
-function bsRenderTable() {
-  document.getElementById('bs-tbody').innerHTML = BS_STEPS.map((s,i) => {
-    let cls = 'bs-future';
-    if (i < bsStep)  cls = 'bs-done';
-    if (i === bsStep-1) cls = 'bs-active';
-    const show = i < bsStep;
-    return `<tr class="${cls}">
-      <td>${show?s.start:'—'}</td>
-      <td>${show?s.end:'—'}</td>
-      <td style="font-family:'JetBrains Mono',monospace">${show?esc(s.midCalc):'—'}</td>
-      <td>${show?`<span class="bs-badge N">N</span>`:'—'}</td>
-      <td>${show?`<span class="bs-badge ${s.discard}">${s.discard}</span>`:'—'}</td>
-    </tr>`;
-  }).join('');
-}
+    function updateResult() {
+      const p1 = clampMark(paper1.value);
+      const p2 = clampMark(paper2.value);
+      if (paper1.value !== String(p1)) paper1.value = p1;
+      if (paper2.value !== String(p2)) paper2.value = p2;
 
-function bsUpdate() {
-  bsRenderArray();
-  bsRenderTable();
-  const tot = BS_STEPS.length;
-  document.getElementById('bs-prog').style.width = `${Math.round(bsStep/tot*100)}%`;
-  document.getElementById('bs-progLabel').textContent = `${bsStep} / ${tot}`;
-  document.getElementById('bs-prev').disabled = bsStep === 0;
-  document.getElementById('bs-next').disabled = bsStep === tot;
-  document.getElementById('bs-done').className = 'done-tag' + (bsStep===tot?' show':'');
+      const total = p1 + p2;
+      const grade = estimateGrade(total);
 
-  if (bsStep === 0) {
-    document.getElementById('bs-label').textContent = 'Ready — target: 78';
-    document.getElementById('bs-note').textContent  = 'Array: [11,22,33,44,55,66,77,88,99,100,101] — indices 0–10.';
-    document.getElementById('bs-explain').innerHTML = 'Click <strong>Next Step</strong> to walk through the binary search.';
-  } else {
-    const s = BS_STEPS[bsStep-1];
-    document.getElementById('bs-label').textContent = `Step ${bsStep}: mid = ${s.midIdx}, arr[${s.midIdx}] = ${BS_ARR[s.midIdx]}`;
-    document.getElementById('bs-note').textContent  = `start=${s.start}  end=${s.end}  →  ${s.midCalc}`;
-    document.getElementById('bs-explain').innerHTML = s.explain;
-  }
-}
+      let extra = '';
+      if (grade === 5 && total === 64) {
+        extra = '<p class="tiny">That is exactly on the Grade 5 boundary line.</p>';
+      } else if (grade === 'U') {
+        extra = '<p class="tiny">Keep going — focus on short questions, keywords, and easy marks first.</p>';
+      } else {
+        extra = '<p class="tiny">Estimated from the 2025 overall boundaries (not a guarantee for other years).</p>';
+      }
 
-function bsNext()  { if (bsStep < BS_STEPS.length) { bsStep++; bsUpdate(); } }
-function bsPrev()  { if (bsStep > 0) { bsStep--; bsUpdate(); } }
-function bsReset() { bsStopAuto(); bsStep=0; bsUpdate(); }
-function bsToggleAuto() { bsPlaying ? bsStopAuto() : bsStartAuto(); }
-function bsStartAuto() {
-  if (bsStep >= BS_STEPS.length) return;
-  bsPlaying = true;
-  document.getElementById('bs-auto').textContent = '⏸ Pause';
-  document.getElementById('bs-auto').classList.add('playing');
-  bsTick();
-}
-function bsStopAuto() {
-  bsPlaying = false; clearTimeout(bsTimer);
-  document.getElementById('bs-auto').textContent = '▶ Auto';
-  document.getElementById('bs-auto').classList.remove('playing');
-}
-function bsTick() {
-  if (!bsPlaying) return;
-  if (bsStep >= BS_STEPS.length) { bsStopAuto(); return; }
-  bsNext(); bsTimer = setTimeout(bsTick, 1400);
-}
+      resultBox.innerHTML = `
+        <strong>Total: ${total} / 150</strong>
+        <div class="grade-pill">Estimated grade: ${grade} ${grade !== 'U' ? '✅' : ''}</div>
+        ${extra}
+      `;
+    }
 
-// ═══════════════════════════════════════════════════════════
-// KEYBOARD
-// ═══════════════════════════════════════════════════════════
-document.addEventListener('keydown', e => {
-  const active = document.querySelector('.tab-panel.active').id;
-  if (e.key === 'ArrowRight' || e.key === ' ') {
-    e.preventDefault();
-    if (active === 'panel-trace')  tNext();
-    if (active === 'panel-truth')  truthRevealNext();
-    if (active === 'panel-binary') bsNext();
-  }
-  if (e.key === 'ArrowLeft') {
-    e.preventDefault();
-    if (active === 'panel-trace')  tPrev();
-    if (active === 'panel-binary') bsPrev();
-  }
-  if (e.key === 'r' || e.key === 'R') {
-    if (active === 'panel-trace')  tReset();
-    if (active === 'panel-truth')  truthReset();
-    if (active === 'panel-binary') bsReset();
-  }
-});
-
-// ═══════════════════════════════════════════════════════════
-// INIT
-// ═══════════════════════════════════════════════════════════
-tRenderCode();
-tUpdate();
-truthRenderTable();
-bsRenderArray();
-bsUpdate();
-</script>
+    paper1.addEventListener('input', updateResult);
+    paper2.addEventListener('input', updateResult);
+    updateResult();
+  </script>
 </body>
 </html>
