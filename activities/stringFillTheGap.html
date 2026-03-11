@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fill the Gap — String Manipulation</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+body {
+  margin: 0; padding: 20px;
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(135deg, #1a1a2e 0%, #1a2e2e 50%, #1a1a2e 100%);
+  min-height: 100vh; color: #e0e0e0;
+}
+.container { max-width: 860px; margin: 0 auto; }
+h1 {
+  font-size: 2rem; font-weight: 700; text-align: center; margin: 0 0 4px;
+  background: linear-gradient(135deg, #06b6d4, #8b5cf6);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.subtitle { text-align: center; font-size: 0.95rem; color: #888; margin: 0 0 20px; }
+.back-link { display: inline-block; margin-bottom: 14px; color: #06b6d4; text-decoration: none; font-size: 0.88rem; }
+.back-link:hover { text-decoration: underline; }
+.panel {
+  background: #16213e; border-radius: 16px; border: 1px solid #2a2a4a;
+  padding: 20px; margin-bottom: 18px;
+}
+
+/* Nav */
+.challenge-nav { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-bottom: 10px; }
+.nav-btn {
+  font-family: 'Poppins', sans-serif; font-size: 0.82rem; font-weight: 600;
+  padding: 8px 16px; border: none; border-radius: 10px; cursor: pointer;
+  background: linear-gradient(135deg, #2a2a4a, #1a1a2e); color: #aaa;
+  transition: transform 0.15s, box-shadow 0.15s, background 0.2s;
+  position: relative;
+}
+.nav-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(6,182,212,0.2); }
+.nav-btn.active {
+  background: linear-gradient(135deg, #06b6d4, #8b5cf6); color: #fff;
+  box-shadow: 0 4px 18px rgba(6,182,212,0.35);
+}
+.nav-btn .badge {
+  position: absolute; top: -6px; right: -6px; width: 18px; height: 18px;
+  background: #43e97b; border-radius: 50%; font-size: 0.6rem; color: #000;
+  display: flex; align-items: center; justify-content: center; font-weight: 700;
+}
+.progress-bar { text-align: center; font-size: 0.85rem; color: #888; margin-bottom: 6px; }
+
+/* Score tracker */
+.score-bar {
+  display: flex; justify-content: center; gap: 24px; margin-bottom: 10px;
+  font-size: 0.85rem; color: #888;
+}
+.score-bar span { font-weight: 600; }
+.score-bar .score-val { color: #06b6d4; }
+
+/* Challenge description */
+.challenge-title {
+  font-size: 1.05rem; font-weight: 600; margin: 0 0 4px;
+  color: #e0e0e0;
+}
+.challenge-desc {
+  font-size: 0.88rem; color: #999; margin: 0 0 16px; line-height: 1.5;
+}
+
+/* Code display */
+.code-area {
+  background: #0d1117; border-radius: 12px; border: 1px solid #30363d;
+  padding: 20px 20px 20px 16px; font-family: 'Fira Code', monospace;
+  font-size: 0.88rem; line-height: 2.1; color: #c9d1d9;
+  overflow-x: auto; white-space: pre-wrap; word-break: break-word;
+  position: relative;
+}
+.code-line {
+  display: flex; align-items: center; flex-wrap: wrap;
+  min-height: 32px; gap: 0;
+}
+.code-line .line-num {
+  width: 32px; flex-shrink: 0; text-align: right; padding-right: 12px;
+  color: #484f58; font-size: 0.75rem; user-select: none;
+}
+.code-text { color: #c9d1d9; white-space: pre; }
+
+/* Python syntax colouring */
+.kw { color: #ff79c6; }
+.fn { color: #8be9fd; }
+.str { color: #f1fa8c; }
+.num { color: #bd93f9; }
+.op { color: #ff79c6; }
+.cm { color: #6272a4; font-style: italic; }
+
+/* Gap slots */
+.gap-slot {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 80px; height: 30px; padding: 0 10px;
+  border: 2px dashed #444c7a; border-radius: 6px;
+  background: rgba(6,182,212,0.04); color: #555;
+  font-family: 'Fira Code', monospace; font-size: 0.85rem;
+  vertical-align: middle; margin: 0 3px;
+  transition: border-color 0.2s, background 0.2s;
+  cursor: default; position: relative;
+}
+.gap-slot.drag-over { border-color: #06b6d4; background: rgba(6,182,212,0.12); }
+.gap-slot.filled {
+  border-style: solid; border-color: #06b6d4; background: rgba(6,182,212,0.1);
+  color: #e0e0e0; cursor: grab; font-weight: 500;
+}
+.gap-slot.correct {
+  border-color: #43e97b; background: rgba(67,233,123,0.1);
+  color: #43e97b; animation: popIn 0.3s ease;
+}
+.gap-slot.correct::after {
+  content: '\2713'; margin-left: 6px; font-weight: 700; font-size: 0.8rem;
+}
+.gap-slot.wrong {
+  border-color: #f7797d; background: rgba(247,121,125,0.1);
+  color: #f7797d; animation: shake 0.4s ease;
+}
+.gap-slot.wrong::after {
+  content: '\2717'; margin-left: 6px; font-weight: 700; font-size: 0.8rem;
+}
+.gap-slot .placeholder { color: #555; font-size: 0.78rem; }
+
+/* Block bank */
+.zone-label { font-size: 0.82rem; font-weight: 600; color: #06b6d4; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px; }
+.block-bank {
+  display: flex; flex-wrap: wrap; gap: 10px; padding: 12px;
+  background: rgba(42,42,74,0.3); border-radius: 12px;
+  min-height: 50px; justify-content: center;
+}
+.drag-block {
+  font-family: 'Fira Code', monospace; font-size: 0.85rem; font-weight: 500;
+  background: linear-gradient(135deg, #06b6d4, #8b5cf6);
+  color: #fff; padding: 7px 16px; border-radius: 8px;
+  cursor: grab; user-select: none;
+  transition: transform 0.15s, box-shadow 0.15s, opacity 0.2s;
+  touch-action: none;
+}
+.drag-block:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(6,182,212,0.35); }
+.drag-block:active { cursor: grabbing; transform: translateY(0); }
+.drag-block.dragging { opacity: 0.4; }
+.drag-block.placed { display: none; }
+
+/* Distractor styling */
+.drag-block.distractor {
+  background: linear-gradient(135deg, #06b6d4, #8b5cf6);
+}
+
+/* Buttons */
+.btn-row { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 16px; }
+.btn {
+  font-family: 'Poppins', sans-serif; font-size: 0.88rem; font-weight: 600;
+  padding: 10px 24px; border: none; border-radius: 10px; cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s; color: #fff;
+}
+.btn:hover { transform: translateY(-2px); }
+.btn:active { transform: translateY(0); }
+.btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+.btn-check { background: linear-gradient(135deg, #06b6d4, #0891b2); }
+.btn-check:hover:not(:disabled) { box-shadow: 0 4px 18px rgba(6,182,212,0.4); }
+.btn-reset { background: linear-gradient(135deg, #667eea, #764ba2); }
+.btn-reset:hover:not(:disabled) { box-shadow: 0 4px 18px rgba(102,126,234,0.4); }
+.btn-next { background: linear-gradient(135deg, #43e97b, #38f9d7); color: #000; display: none; }
+.btn-next:hover:not(:disabled) { box-shadow: 0 4px 18px rgba(67,233,123,0.4); }
+.btn-next.visible { display: inline-block; }
+
+/* Feedback */
+.feedback {
+  text-align: center; font-size: 0.9rem; font-weight: 600; padding: 12px;
+  border-radius: 10px; margin-top: 14px; animation: slideInUp 0.35s ease;
+}
+.feedback.success { background: rgba(67,233,123,0.12); color: #43e97b; border: 1px solid rgba(67,233,123,0.25); }
+.feedback.error { background: rgba(247,121,125,0.12); color: #f7797d; border: 1px solid rgba(247,121,125,0.25); }
+.feedback.info { background: rgba(102,126,234,0.12); color: #667eea; border: 1px solid rgba(102,126,234,0.25); }
+.hidden { display: none; }
+
+/* Final results */
+.results-panel { text-align: center; animation: slideInUp 0.4s ease; }
+.results-panel .score-big {
+  font-size: 3rem; font-weight: 700;
+  background: linear-gradient(135deg, #06b6d4, #8b5cf6);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.results-panel .score-label { color: #888; font-size: 1rem; margin-top: 4px; }
+
+@keyframes slideInUp { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
+@keyframes popIn { 0% { transform:scale(0.85); opacity:0; } 100% { transform:scale(1); opacity:1; } }
+@keyframes shake { 0%,100% { transform:translateX(0); } 20% { transform:translateX(-6px); } 40% { transform:translateX(6px); } 60% { transform:translateX(-4px); } 80% { transform:translateX(4px); } }
+@keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+
+@media (max-width: 600px) {
+  body { padding: 12px; }
+  h1 { font-size: 1.5rem; }
+  .code-area { font-size: 0.78rem; padding: 14px 10px 14px 8px; }
+  .gap-slot { min-width: 60px; height: 26px; font-size: 0.75rem; padding: 0 6px; }
+  .drag-block { font-size: 0.78rem; padding: 6px 12px; }
+  .panel { padding: 14px; }
+  .code-line .line-num { width: 24px; padding-right: 8px; font-size: 0.68rem; }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+  <a href="../index.html" class="back-link">&larr; Back to Course</a>
+  <h1>Fill the Gap &mdash; Strings</h1>
+  <p class="subtitle">Drag the correct Python blocks into the gaps to complete each string manipulation program</p>
+
+  <div class="panel">
+    <div class="challenge-nav" id="challengeNav"></div>
+    <div class="score-bar">
+      <div>Challenge: <span class="score-val" id="challengeNum">1/10</span></div>
+      <div>Score: <span class="score-val" id="totalScore">0</span></div>
+    </div>
+  </div>
+
+  <div id="challengeArea">
+    <div class="panel">
+      <div class="challenge-title" id="challengeTitle"></div>
+      <div class="challenge-desc" id="challengeDesc"></div>
+      <div class="code-area" id="codeArea"></div>
+    </div>
+
+    <div class="panel">
+      <div class="zone-label">Drag blocks into the gaps above</div>
+      <div class="block-bank" id="blockBank"></div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-check" id="btnCheck" disabled>Check Answers</button>
+      <button class="btn btn-reset" id="btnReset">Reset</button>
+      <button class="btn btn-next" id="btnNext">Next Challenge &rarr;</button>
+    </div>
+
+    <div id="feedbackArea"></div>
+  </div>
+
+  <div id="resultsArea" class="hidden">
+    <div class="panel results-panel">
+      <div class="score-big" id="finalScore"></div>
+      <p class="score-label" id="finalLabel"></p>
+      <div style="margin-top:20px;">
+        <button class="btn btn-reset" id="btnRestart">Start Again</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ============================================
+   CHALLENGES DATA — STRING MANIPULATION
+   ============================================ */
+const challenges = [
+  {
+    title: "1. Concatenation & Repetition",
+    desc: "Complete this program that joins and repeats strings.",
+    lines: [
+      [{ text: 'first = "Hello"' }],
+      [{ text: 'greeting = first ' }, { gap: "+" }, { text: ' " " ' }, { gap: "+" }, { text: ' "World"' }],
+      [{ text: "print(greeting)" }],
+      [{ text: 'laugh = "Ha" ' }, { gap: "*" }, { text: " 3" }],
+      [{ text: "print(laugh)" }]
+    ],
+    distractors: ["-", "&", "x", "//"]
+  },
+  {
+    title: "2. Indexing & len()",
+    desc: "Complete this program that accesses characters and measures a string.",
+    lines: [
+      [{ text: 'word = "Python"' }],
+      [{ text: "first = word[" }, { gap: "0" }, { text: "]" }],
+      [{ text: "last = word[" }, { gap: "-1" }, { text: "]" }],
+      [{ text: "size = " }, { gap: "len" }, { text: "(word)" }],
+      [{ text: 'print(first, last, size)' }]
+    ],
+    distractors: ["1", "-0", "size", "length"]
+  },
+  {
+    title: "3. String Slicing",
+    desc: 'Complete this program that extracts parts of "Computer Science".',
+    lines: [
+      [{ text: 'subject = "Computer Science"' }],
+      [{ text: "# Get 'Computer' (indices 0-7)" }],
+      [{ text: "part1 = subject[:" }, { gap: "8" }, { text: "]" }],
+      [{ text: "# Get 'Science' (starts at index 9)" }],
+      [{ text: "part2 = subject[" }, { gap: "9" }, { text: ":" }, { gap: "16" }, { text: "]" }],
+      [{ text: "print(part1, part2)" }]
+    ],
+    distractors: ["7", "15", "10", "17"]
+  },
+  {
+    title: "4. Case & Whitespace",
+    desc: "Complete this program that cleans and changes the case of user input.",
+    lines: [
+      [{ text: 'name = "  Alice Smith  "' }],
+      [{ text: "name = name." }, { gap: "strip()" }],
+      [{ text: "print(name." }, { gap: "upper()" }, { text: ")" }],
+      [{ text: "print(name." }, { gap: "lower()" }, { text: ")" }]
+    ],
+    distractors: ["trim()", "capitalize()", "swapcase()"]
+  },
+  {
+    title: "5. Searching with find/index",
+    desc: "Complete this program that searches for substrings.",
+    lines: [
+      [{ text: 'message = "Hello World"' }],
+      [{ text: "pos = message." }, { gap: "find" }, { text: '("World")' }],
+      [{ text: 'print("Found at:", pos)' }],
+      [{ text: "# .index() also finds substrings" }],
+      [{ text: "pos2 = message." }, { gap: "index" }, { text: '("Hello")' }],
+      [{ text: "# .find() returns -1 if not found" }],
+      [{ text: 'missing = message.' }, { gap: "find" }, { text: '("xyz")' }],
+      [{ text: "print(missing)" }]
+    ],
+    distractors: ["search", "locate", "position"]
+  },
+  {
+    title: "6. String Testing (is methods)",
+    desc: "Complete this program that tests the content of strings.",
+    lines: [
+      [{ text: 'word = "Hello"' }],
+      [{ text: "print(word." }, { gap: "isalpha()" }, { text: ")" }, { text: "  " }, { text: "" }],
+      [{ text: 'num = "12345"' }],
+      [{ text: "print(num." }, { gap: "isdigit()" }, { text: ")" }, { text: "  " }, { text: "" }],
+      [{ text: 'code = "Room101"' }],
+      [{ text: "print(code." }, { gap: "isalnum()" }, { text: ")" }]
+    ],
+    distractors: ["isnumeric()", "isletters()", "istext()"]
+  },
+  {
+    title: "7. Case Checking",
+    desc: "Complete this program that checks the case of strings.",
+    lines: [
+      [{ text: 'shout = "HELLO"' }],
+      [{ text: "print(shout." }, { gap: "isupper()" }, { text: ")" }],
+      [{ text: 'whisper = "hello"' }],
+      [{ text: "print(whisper." }, { gap: "islower()" }, { text: ")" }],
+      [{ text: '# Check if a password has uppercase' }],
+      [{ text: 'pw = "Secret123"' }],
+      [{ text: "has_upper = pw != pw.lower()" }],
+      [{ text: "print(has_upper)" }]
+    ],
+    distractors: ["isUpper()", "is_lower()", "upper()"]
+  },
+  {
+    title: "8. Replacing Text",
+    desc: "Complete this program that replaces parts of a string.",
+    lines: [
+      [{ text: 'sentence = "I like cats"' }],
+      [{ text: "new_sent = sentence." }, { gap: "replace" }, { text: '("cats", ' }, { gap: '"dogs"' }, { text: ")" }],
+      [{ text: "print(new_sent)" }],
+      [{ text: '# Replace multiple words' }],
+      [{ text: 'result = sentence.replace(' }, { gap: '"like"' }, { text: ', "love")' }],
+      [{ text: "print(result)" }]
+    ],
+    distractors: ["swap", '"cats"', '"love"', "change"]
+  },
+  {
+    title: "9. Splitting & Formatting",
+    desc: "Complete this program that splits a string and uses .format().",
+    lines: [
+      [{ text: 'csv = "red,green,blue"' }],
+      [{ text: "colours = csv." }, { gap: "split" }, { text: "(" }, { gap: '","' }, { text: ")" }],
+      [{ text: "first = colours[" }, { gap: "0" }, { text: "]" }],
+      [{ text: "print(first)" }],
+      [{ text: '# Use .format() to insert values' }],
+      [{ text: 'msg = "I have {} colours".' }, { gap: "format" }, { text: "(3)" }],
+      [{ text: "print(msg)" }]
+    ],
+    distractors: ["divide", '" "', "1", "insert"]
+  },
+  {
+    title: "10. Type Conversion & Combined",
+    desc: "Complete this program that converts types and combines string operations.",
+    lines: [
+      [{ text: "age = 15" }],
+      [{ text: 'message = "I am " ' }, { gap: "+" }, { text: " " }, { gap: "str" }, { text: "(age)" }],
+      [{ text: "print(message)" }],
+      [{ text: '# Combined: convert, strip and measure' }],
+      [{ text: 'data = "  42  "' }],
+      [{ text: "clean = data.strip()" }],
+      [{ text: "number = " }, { gap: "str" }, { text: "(clean)" }],
+      [{ text: "print(" }, { gap: "len" }, { text: "(clean))" }]
+    ],
+    distractors: ["int", "*", "string", "size"]
+  }
+];
+
+/* ============================================
+   STATE
+   ============================================ */
+let current = 0;
+let totalScore = 0;
+let completed = JSON.parse(localStorage.getItem('fillGapStrCompleted') || '[]');
+let challengeScores = JSON.parse(localStorage.getItem('fillGapStrScores') || '{}');
+let draggedEl = null;
+let touchClone = null;
+let checked = false;
+
+/* ============================================
+   RENDER
+   ============================================ */
+function buildNav() {
+  const nav = document.getElementById('challengeNav');
+  nav.innerHTML = '';
+  challenges.forEach((c, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'nav-btn' + (i === current ? ' active' : '');
+    btn.textContent = i + 1;
+    if (completed.includes(i)) {
+      const badge = document.createElement('span');
+      badge.className = 'badge';
+      badge.textContent = '\u2713';
+      btn.appendChild(badge);
+    }
+    btn.addEventListener('click', () => { if (!checked) { current = i; loadChallenge(); } });
+    nav.appendChild(btn);
+  });
+}
+
+function loadChallenge() {
+  checked = false;
+  const ch = challenges[current];
+  document.getElementById('challengeTitle').textContent = ch.title;
+  document.getElementById('challengeDesc').textContent = ch.desc;
+  document.getElementById('challengeNum').textContent = (current + 1) + '/' + challenges.length;
+  document.getElementById('totalScore').textContent = totalScore;
+  document.getElementById('feedbackArea').innerHTML = '';
+  document.getElementById('btnNext').classList.remove('visible');
+  document.getElementById('btnCheck').disabled = true;
+  document.getElementById('challengeArea').classList.remove('hidden');
+  document.getElementById('resultsArea').classList.add('hidden');
+
+  // Build code area
+  const codeArea = document.getElementById('codeArea');
+  codeArea.innerHTML = '';
+  let gapIndex = 0;
+
+  ch.lines.forEach((segments, lineIdx) => {
+    const lineDiv = document.createElement('div');
+    lineDiv.className = 'code-line';
+    const lineNum = document.createElement('span');
+    lineNum.className = 'line-num';
+    lineNum.textContent = lineIdx + 1;
+    lineDiv.appendChild(lineNum);
+
+    segments.forEach(seg => {
+      if (seg.gap !== undefined) {
+        const slot = document.createElement('span');
+        slot.className = 'gap-slot';
+        slot.setAttribute('data-answer', seg.gap);
+        slot.setAttribute('data-gap-id', gapIndex);
+        slot.innerHTML = '<span class="placeholder">?</span>';
+        setupGapSlot(slot);
+        lineDiv.appendChild(slot);
+        gapIndex++;
+      } else {
+        const span = document.createElement('span');
+        span.className = 'code-text';
+        span.textContent = seg.text;
+        lineDiv.appendChild(span);
+      }
+    });
+
+    codeArea.appendChild(lineDiv);
+  });
+
+  // Build block bank
+  const bank = document.getElementById('blockBank');
+  bank.innerHTML = '';
+
+  // Collect correct answers
+  const answers = [];
+  ch.lines.forEach(segments => {
+    segments.forEach(seg => {
+      if (seg.gap !== undefined) answers.push(seg.gap);
+    });
+  });
+
+  const allBlocks = [...answers, ...ch.distractors];
+  const shuffled = fisherYates(allBlocks);
+
+  shuffled.forEach((text, idx) => {
+    const block = createDragBlock(text, idx);
+    bank.appendChild(block);
+  });
+
+  buildNav();
+  updateCheckBtn();
+}
+
+function fisherYates(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+/* ============================================
+   DRAG & DROP — BLOCKS
+   ============================================ */
+function createDragBlock(text, idx) {
+  const el = document.createElement('div');
+  el.className = 'drag-block';
+  el.setAttribute('draggable', 'true');
+  el.setAttribute('data-block-id', idx);
+  el.setAttribute('data-value', text);
+  el.textContent = text;
+
+  // Desktop drag
+  el.addEventListener('dragstart', e => {
+    draggedEl = el;
+    el.classList.add('dragging');
+    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('text/plain', '');
+  });
+  el.addEventListener('dragend', () => {
+    el.classList.remove('dragging');
+    draggedEl = null;
+    clearDragOver();
+  });
+
+  // Touch
+  el.addEventListener('touchstart', handleTouchStart, { passive: false });
+  el.addEventListener('touchmove', handleTouchMove, { passive: false });
+  el.addEventListener('touchend', handleTouchEnd, { passive: false });
+
+  return el;
+}
+
+/* ============================================
+   DRAG & DROP — GAP SLOTS
+   ============================================ */
+function setupGapSlot(slot) {
+  slot.addEventListener('dragover', e => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+    slot.classList.add('drag-over');
+  });
+  slot.addEventListener('dragleave', () => slot.classList.remove('drag-over'));
+  slot.addEventListener('drop', e => {
+    e.preventDefault();
+    slot.classList.remove('drag-over');
+    if (!draggedEl) return;
+    placeBlock(draggedEl, slot);
+  });
+
+  // Allow clicking a filled gap to return block to bank
+  slot.addEventListener('click', () => {
+    if (checked) return;
+    if (slot.classList.contains('filled')) {
+      returnBlockFromSlot(slot);
+    }
+  });
+}
+
+function placeBlock(block, slot) {
+  if (checked) return;
+
+  // If slot already has a block, return it first
+  if (slot.classList.contains('filled')) {
+    returnBlockFromSlot(slot);
+  }
+
+  // If block was in another slot, clear that slot
+  const prevSlotId = block.getAttribute('data-in-slot');
+  if (prevSlotId !== null && prevSlotId !== '') {
+    const prevSlot = document.querySelector('.gap-slot[data-gap-id="' + prevSlotId + '"]');
+    if (prevSlot) {
+      prevSlot.classList.remove('filled');
+      prevSlot.innerHTML = '<span class="placeholder">?</span>';
+      prevSlot.removeAttribute('data-block-ref');
+    }
+  }
+
+  // Place into slot
+  slot.textContent = block.getAttribute('data-value');
+  slot.classList.add('filled');
+  slot.setAttribute('data-block-ref', block.getAttribute('data-block-id'));
+  block.setAttribute('data-in-slot', slot.getAttribute('data-gap-id'));
+  block.classList.add('placed');
+
+  updateCheckBtn();
+}
+
+function returnBlockFromSlot(slot) {
+  const blockId = slot.getAttribute('data-block-ref');
+  const block = document.querySelector('.drag-block[data-block-id="' + blockId + '"]');
+  if (block) {
+    block.classList.remove('placed');
+    block.removeAttribute('data-in-slot');
+  }
+  slot.classList.remove('filled', 'correct', 'wrong');
+  slot.innerHTML = '<span class="placeholder">?</span>';
+  slot.removeAttribute('data-block-ref');
+  updateCheckBtn();
+}
+
+/* ============================================
+   DRAG & DROP — BANK (return target)
+   ============================================ */
+function setupBankDrop() {
+  const bank = document.getElementById('blockBank');
+  bank.addEventListener('dragover', e => { e.preventDefault(); e.dataTransfer.dropEffect = 'move'; });
+  bank.addEventListener('drop', e => {
+    e.preventDefault();
+    if (!draggedEl || checked) return;
+    const slotId = draggedEl.getAttribute('data-in-slot');
+    if (slotId !== null && slotId !== '') {
+      const slot = document.querySelector('.gap-slot[data-gap-id="' + slotId + '"]');
+      if (slot) returnBlockFromSlot(slot);
+    }
+  });
+}
+
+/* ============================================
+   TOUCH EVENTS
+   ============================================ */
+function handleTouchStart(e) {
+  if (checked) return;
+  e.preventDefault();
+  const el = e.currentTarget;
+
+  if (el.classList.contains('placed')) {
+    const slotId = el.getAttribute('data-in-slot');
+    if (slotId !== null && slotId !== '') {
+      const slot = document.querySelector('.gap-slot[data-gap-id="' + slotId + '"]');
+      if (slot) {
+        slot.classList.remove('filled');
+        slot.innerHTML = '<span class="placeholder">?</span>';
+        slot.removeAttribute('data-block-ref');
+      }
+    }
+    el.classList.remove('placed');
+    el.removeAttribute('data-in-slot');
+    updateCheckBtn();
+  }
+
+  draggedEl = el;
+  const rect = el.getBoundingClientRect();
+  const touch = e.touches[0];
+
+  touchClone = el.cloneNode(true);
+  touchClone.style.position = 'fixed';
+  touchClone.style.zIndex = '9999';
+  touchClone.style.width = rect.width + 'px';
+  touchClone.style.pointerEvents = 'none';
+  touchClone.style.opacity = '0.85';
+  touchClone.style.left = (touch.clientX - rect.width / 2) + 'px';
+  touchClone.style.top = (touch.clientY - 30) + 'px';
+  document.body.appendChild(touchClone);
+  el.classList.add('dragging');
+}
+
+function handleTouchMove(e) {
+  e.preventDefault();
+  if (!touchClone) return;
+  const touch = e.touches[0];
+  const rect = touchClone.getBoundingClientRect();
+  touchClone.style.left = (touch.clientX - rect.width / 2) + 'px';
+  touchClone.style.top = (touch.clientY - 30) + 'px';
+
+  clearDragOver();
+  const target = document.elementFromPoint(touch.clientX, touch.clientY);
+  if (target) {
+    const slot = target.closest('.gap-slot');
+    if (slot) slot.classList.add('drag-over');
+  }
+}
+
+function handleTouchEnd(e) {
+  e.preventDefault();
+  if (touchClone) {
+    document.body.removeChild(touchClone);
+    touchClone = null;
+  }
+  if (!draggedEl) return;
+
+  const touch = e.changedTouches[0];
+  const target = document.elementFromPoint(touch.clientX, touch.clientY);
+  clearDragOver();
+  draggedEl.classList.remove('dragging');
+
+  if (target) {
+    const slot = target.closest('.gap-slot');
+    if (slot) {
+      placeBlock(draggedEl, slot);
+    }
+  }
+
+  draggedEl = null;
+}
+
+function clearDragOver() {
+  document.querySelectorAll('.drag-over').forEach(el => el.classList.remove('drag-over'));
+}
+
+/* ============================================
+   CHECK / RESET / NAVIGATION
+   ============================================ */
+function updateCheckBtn() {
+  const gaps = document.querySelectorAll('.gap-slot');
+  let allFilled = true;
+  gaps.forEach(g => { if (!g.classList.contains('filled')) allFilled = false; });
+  document.getElementById('btnCheck').disabled = !allFilled;
+}
+
+function checkAnswers() {
+  if (checked) return;
+  checked = true;
+
+  const gaps = document.querySelectorAll('.gap-slot');
+  let correctCount = 0;
+  const totalGaps = gaps.length;
+
+  gaps.forEach(slot => {
+    const answer = slot.getAttribute('data-answer');
+    const value = slot.textContent.replace('\u2713', '').replace('\u2717', '').trim();
+    if (value === answer) {
+      slot.classList.add('correct');
+      slot.classList.remove('wrong');
+      correctCount++;
+    } else {
+      slot.classList.add('wrong');
+      slot.classList.remove('correct');
+    }
+  });
+
+  const fb = document.getElementById('feedbackArea');
+  if (correctCount === totalGaps) {
+    fb.innerHTML = '<div class="feedback success">All gaps correct! Well done!</div>';
+    totalScore += correctCount;
+    if (!completed.includes(current)) {
+      completed.push(current);
+      localStorage.setItem('fillGapStrCompleted', JSON.stringify(completed));
+    }
+    challengeScores[current] = correctCount;
+    localStorage.setItem('fillGapStrScores', JSON.stringify(challengeScores));
+  } else {
+    fb.innerHTML = '<div class="feedback error">' + correctCount + '/' + totalGaps + ' gaps correct. Look at the red gaps and try again!</div>';
+    setTimeout(() => {
+      checked = false;
+      gaps.forEach(slot => {
+        if (slot.classList.contains('wrong')) {
+          returnBlockFromSlot(slot);
+          slot.classList.remove('wrong');
+        }
+      });
+      fb.innerHTML = '<div class="feedback info">Wrong answers returned \u2014 try again!</div>';
+    }, 1800);
+    document.getElementById('totalScore').textContent = totalScore;
+    buildNav();
+    return;
+  }
+
+  document.getElementById('totalScore').textContent = totalScore;
+  buildNav();
+
+  if (current < challenges.length - 1) {
+    document.getElementById('btnNext').classList.add('visible');
+  } else {
+    setTimeout(showResults, 1200);
+  }
+}
+
+function resetChallenge() {
+  loadChallenge();
+}
+
+function nextChallenge() {
+  current++;
+  loadChallenge();
+}
+
+function showResults() {
+  document.getElementById('challengeArea').classList.add('hidden');
+  document.getElementById('resultsArea').classList.remove('hidden');
+
+  const maxPossible = challenges.reduce((sum, ch) => {
+    let gaps = 0;
+    ch.lines.forEach(segs => segs.forEach(s => { if (s.gap !== undefined) gaps++; }));
+    return sum + gaps;
+  }, 0);
+
+  document.getElementById('finalScore').textContent = totalScore + '/' + maxPossible;
+
+  let label = '';
+  const pct = totalScore / maxPossible;
+  if (pct === 1) label = 'Perfect score! Outstanding string manipulation skills!';
+  else if (pct >= 0.8) label = 'Excellent work! You know your string methods well.';
+  else if (pct >= 0.6) label = 'Good effort! Review the string operations you missed.';
+  else label = 'Keep practising! Go through the PLS string methods and try again.';
+
+  document.getElementById('finalLabel').textContent = label;
+}
+
+function restartAll() {
+  current = 0;
+  totalScore = 0;
+  completed = [];
+  challengeScores = {};
+  localStorage.removeItem('fillGapStrCompleted');
+  localStorage.removeItem('fillGapStrScores');
+  loadChallenge();
+}
+
+/* ============================================
+   EVENT LISTENERS
+   ============================================ */
+document.getElementById('btnCheck').addEventListener('click', checkAnswers);
+document.getElementById('btnReset').addEventListener('click', resetChallenge);
+document.getElementById('btnNext').addEventListener('click', nextChallenge);
+document.getElementById('btnRestart').addEventListener('click', restartAll);
+
+/* ============================================
+   INIT
+   ============================================ */
+setupBankDrop();
+loadChallenge();
+</script>
+
+<footer style="text-align:center;padding:1.5rem;color:#888;font-size:0.85rem;border-top:1px solid #333;margin-top:2rem;">
+  <p>&copy; Dr Galan 2026. Created by <a href="https://coderra.je" target="_blank" rel="noopener" style="color:#6ea8fe;text-decoration:none;">Coderra.je</a></p>
+</footer>
+</body>
+</html>

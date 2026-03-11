@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dijkstra's Shortest Path — Interactive</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    padding: 20px;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #1a1a2e 0%, #1a2a1e 50%, #1a1a2e 100%);
+    color: #e0e0e0;
+    min-height: 100vh;
+}
+
+.container {
+    max-width: 960px;
+    margin: 0 auto;
+}
+
+h1 {
+    text-align: center;
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 0 0 4px 0;
+    background: linear-gradient(135deg, #34d399, #10b981);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.subtitle {
+    text-align: center;
+    font-size: 0.95rem;
+    color: #888;
+    margin: 0 0 24px 0;
+}
+
+/* Graph selector tabs */
+.graph-selector {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+.graph-selector label {
+    font-size: 0.85rem;
+    color: #888;
+    font-weight: 600;
+}
+
+.graph-tab {
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 600;
+    padding: 8px 18px;
+    border: 2px solid #2a4a3a;
+    border-radius: 10px;
+    cursor: pointer;
+    background: transparent;
+    color: #888;
+    transition: all 0.2s ease;
+}
+
+.graph-tab:hover { border-color: #34d399; color: #34d399; }
+
+.graph-tab.active {
+    background: linear-gradient(135deg, #34d399, #10b981);
+    border-color: #34d399;
+    color: #fff;
+}
+
+/* Controls */
+.controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+}
+
+.btn {
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.88rem;
+    font-weight: 600;
+    padding: 9px 20px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    color: #fff;
+    transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+}
+
+.btn:active:not(:disabled) { transform: translateY(0); }
+.btn:disabled { opacity: 0.4; cursor: default; transform: none; box-shadow: none; }
+
+.btn-step { background: linear-gradient(135deg, #34d399, #10b981); }
+.btn-play { background: linear-gradient(135deg, #f59e0b, #d97706); }
+.btn-reset { background: linear-gradient(135deg, #4a4a6a, #3a3a5a); }
+
+.speed-group {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.82rem;
+    color: #888;
+}
+
+.speed-group input[type="range"] {
+    width: 100px;
+    accent-color: #34d399;
+}
+
+/* Legend */
+.legend {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-bottom: 16px;
+    font-size: 0.76rem;
+    color: #888;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.legend-swatch {
+    width: 14px;
+    height: 14px;
+    border-radius: 3px;
+}
+
+/* Graph viewport */
+.graph-viewport {
+    background: rgba(255,255,255,0.03);
+    border: 2px solid #2a3a2a;
+    border-radius: 16px;
+    padding: 10px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+    margin-bottom: 16px;
+    overflow: hidden;
+}
+
+.graph-svg {
+    width: 100%;
+    display: block;
+}
+
+/* Step description */
+.step-desc {
+    font-size: 0.85rem;
+    color: #ccc;
+    min-height: 44px;
+    line-height: 1.6;
+    padding: 12px 16px;
+    background: #16213e;
+    border-radius: 12px;
+    border: 1px solid #2a2a4a;
+    margin-bottom: 16px;
+    text-align: center;
+}
+
+.step-desc .val-update {
+    color: #f59e0b;
+    font-weight: 700;
+}
+
+.step-desc .val-current {
+    color: #34d399;
+    font-weight: 700;
+}
+
+.step-desc .val-no {
+    color: #888;
+}
+
+.step-desc .val-done {
+    color: #34d399;
+    font-weight: 700;
+}
+
+/* Distance table */
+.table-panel {
+    background: #16213e;
+    border-radius: 16px;
+    padding: 20px;
+    border: 1px solid #2a2a4a;
+    margin-bottom: 16px;
+    overflow-x: auto;
+}
+
+.table-panel h3 {
+    margin: 0 0 12px 0;
+    font-size: 0.95rem;
+    color: #34d399;
+}
+
+.dist-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+}
+
+.dist-table th {
+    background: rgba(52, 211, 153, 0.1);
+    color: #34d399;
+    font-weight: 600;
+    padding: 8px 12px;
+    text-align: center;
+    border-bottom: 2px solid #2a3a3a;
+    font-size: 0.82rem;
+    letter-spacing: 0.3px;
+}
+
+.dist-table td {
+    padding: 8px 12px;
+    text-align: center;
+    border-bottom: 1px solid #1a2a3a;
+    font-family: 'Fira Code', monospace;
+    font-size: 0.85rem;
+    transition: background 0.3s;
+}
+
+.dist-table tr.row-current {
+    background: rgba(52, 211, 153, 0.08);
+}
+
+.dist-table tr.row-updated td {
+    animation: flashUpdate 0.8s ease;
+}
+
+.dist-table .cell-visited {
+    color: #34d399;
+}
+
+.dist-table .cell-unvisited {
+    color: #666;
+}
+
+.dist-table .cell-infinity {
+    color: #555;
+}
+
+.dist-table .cell-updated {
+    color: #f59e0b;
+    font-weight: 700;
+}
+
+.dist-table .old-val {
+    text-decoration: line-through;
+    color: #555;
+    font-size: 0.75rem;
+    margin-right: 4px;
+}
+
+/* Algorithm panel */
+.algo-panel {
+    background: #16213e;
+    border-radius: 16px;
+    padding: 20px;
+    border: 1px solid #2a2a4a;
+}
+
+.algo-panel h3 {
+    margin: 0 0 12px 0;
+    font-size: 0.95rem;
+    color: #34d399;
+}
+
+.algo-panel p {
+    margin: 0 0 8px 0;
+    font-size: 0.84rem;
+    color: #999;
+    line-height: 1.7;
+}
+
+.algo-panel p:last-child { margin-bottom: 0; }
+
+.algo-panel code {
+    font-family: 'Fira Code', monospace;
+    font-size: 0.78rem;
+    background: rgba(52, 211, 153, 0.1);
+    color: #34d399;
+    padding: 1px 5px;
+    border-radius: 3px;
+}
+
+.algo-panel .pseudo {
+    background: rgba(0,0,0,0.2);
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin: 12px 0;
+    font-family: 'Fira Code', monospace;
+    font-size: 0.78rem;
+    line-height: 1.8;
+    color: #b0b0c8;
+}
+
+.algo-panel .pseudo .kw { color: #c792ea; }
+.algo-panel .pseudo .fn { color: #82aaff; }
+.algo-panel .pseudo .cm { color: #555; font-style: italic; }
+
+/* Animations */
+@keyframes flashUpdate {
+    0% { background: rgba(245, 158, 11, 0.3); }
+    100% { background: transparent; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+@media (max-width: 600px) {
+    body { padding: 12px; }
+    h1 { font-size: 1.5rem; }
+    .dist-table { font-size: 0.78rem; }
+    .dist-table td, .dist-table th { padding: 6px 8px; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+<h1>Dijkstra's Shortest Path</h1>
+<p class="subtitle">Step through the algorithm and watch the distance table update when a shorter path is found</p>
+
+<!-- Graph selector -->
+<div class="graph-selector">
+    <label>Graph:</label>
+    <button class="graph-tab active" id="tabSimple" onclick="switchGraph('simple')">Simple (5 nodes)</button>
+    <button class="graph-tab" id="tabComplex" onclick="switchGraph('complex')">Complex (7 nodes)</button>
+</div>
+
+<!-- Controls -->
+<div class="controls">
+    <button class="btn btn-step" id="btnStep" onclick="step()">Step</button>
+    <button class="btn btn-play" id="btnPlay" onclick="togglePlay()">Play</button>
+    <button class="btn btn-reset" onclick="reset()">Reset</button>
+    <div class="speed-group">
+        <span>Speed:</span>
+        <input type="range" id="speedSlider" min="200" max="1500" value="700" step="100">
+        <span id="speedLabel">700ms</span>
+    </div>
+</div>
+
+<!-- Legend -->
+<div class="legend">
+    <div class="legend-item"><div class="legend-swatch" style="background:#334155"></div> Unvisited</div>
+    <div class="legend-item"><div class="legend-swatch" style="background:#34d399"></div> Current node</div>
+    <div class="legend-item"><div class="legend-swatch" style="background:#06b6d4"></div> Exploring edge</div>
+    <div class="legend-item"><div class="legend-swatch" style="background:#f59e0b"></div> Distance updated</div>
+    <div class="legend-item"><div class="legend-swatch" style="background:#10b981"></div> Visited / shortest path</div>
+</div>
+
+<!-- Graph SVG -->
+<div class="graph-viewport">
+    <svg id="graphSvg" class="graph-svg" viewBox="0 0 860 400" preserveAspectRatio="xMidYMid meet"></svg>
+</div>
+
+<!-- Step description -->
+<div class="step-desc" id="stepDesc">Press <strong>Step</strong> or <strong>Play</strong> to begin Dijkstra's algorithm from node A</div>
+
+<!-- Distance table -->
+<div class="table-panel">
+    <h3>Distance Tracking Table</h3>
+    <table class="dist-table" id="distTable"></table>
+</div>
+
+<!-- Algorithm explanation -->
+<div class="algo-panel">
+    <h3>How Dijkstra's Algorithm Works</h3>
+    <p>Dijkstra's algorithm finds the <strong>shortest path</strong> from a source node to every other node in a weighted graph. It works by always processing the <strong>unvisited node with the smallest known distance</strong>.</p>
+    <div class="pseudo">
+<span class="kw">set</span> distance[source] = 0, all others = ∞<br>
+<span class="kw">while</span> there are unvisited nodes:<br>
+&nbsp;&nbsp;current = unvisited node <span class="kw">with</span> smallest distance<br>
+&nbsp;&nbsp;<span class="fn">mark</span> current as visited<br>
+&nbsp;&nbsp;<span class="kw">for each</span> unvisited neighbour of current:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;newDist = distance[current] + edge weight<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">if</span> newDist &lt; distance[neighbour]: <span class="cm">// shorter path found!</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;distance[neighbour] = newDist <span class="cm">// update distance</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;previous[neighbour] = current <span class="cm">// remember the path</span>
+    </div>
+    <p><strong>Key insight:</strong> A node's distance may be updated multiple times before it is visited. Each update means a shorter path was found through a different route. Once a node is <em>visited</em>, its shortest distance is finalised and never changes.</p>
+    <p><strong>Time complexity:</strong> <code>O(V²)</code> with a simple array, or <code>O((V + E) log V)</code> with a priority queue, where V = vertices and E = edges.</p>
+</div>
+
+</div>
+
+<script>
+(function() {
+    // ── Graph definitions ──
+    const graphs = {
+        simple: {
+            nodes: {
+                A: { x: 86,  y: 200 },
+                B: { x: 301, y: 80  },
+                C: { x: 430, y: 280 },
+                D: { x: 645, y: 120 },
+                E: { x: 791, y: 220 }
+            },
+            edges: [
+                { from: 'A', to: 'B', weight: 2 },
+                { from: 'A', to: 'C', weight: 10 },
+                { from: 'B', to: 'C', weight: 4 },
+                { from: 'B', to: 'D', weight: 8 },
+                { from: 'C', to: 'D', weight: 3 },
+                { from: 'C', to: 'E', weight: 6 },
+                { from: 'D', to: 'E', weight: 1 }
+            ],
+            source: 'A'
+        },
+        complex: {
+            nodes: {
+                A: { x: 69,  y: 180 },
+                B: { x: 215, y: 60  },
+                C: { x: 275, y: 260 },
+                D: { x: 473, y: 340 },
+                E: { x: 473, y: 80  },
+                F: { x: 671, y: 220 },
+                G: { x: 800, y: 100 }
+            },
+            edges: [
+                { from: 'A', to: 'B', weight: 3 },
+                { from: 'A', to: 'C', weight: 7 },
+                { from: 'A', to: 'D', weight: 12 },
+                { from: 'B', to: 'C', weight: 2 },
+                { from: 'B', to: 'E', weight: 6 },
+                { from: 'C', to: 'D', weight: 4 },
+                { from: 'C', to: 'E', weight: 3 },
+                { from: 'D', to: 'F', weight: 5 },
+                { from: 'E', to: 'F', weight: 2 },
+                { from: 'E', to: 'G', weight: 8 },
+                { from: 'F', to: 'G', weight: 3 }
+            ],
+            source: 'A'
+        }
+    };
+
+    const NODE_R = 22;
+
+    // ── State ──
+    let activeGraphKey = 'simple';
+    let frames = [];
+    let frameIdx = 0;
+    let playing = false;
+    let timer = null;
+
+    // ── DOM ──
+    const svg = document.getElementById('graphSvg');
+    const stepDesc = document.getElementById('stepDesc');
+    const distTable = document.getElementById('distTable');
+    const btnStep = document.getElementById('btnStep');
+    const btnPlay = document.getElementById('btnPlay');
+    const speedSlider = document.getElementById('speedSlider');
+    const speedLabel = document.getElementById('speedLabel');
+
+    speedSlider.addEventListener('input', () => {
+        speedLabel.textContent = speedSlider.value + 'ms';
+    });
+
+    function getSpeed() { return parseInt(speedSlider.value); }
+    function getGraph() { return graphs[activeGraphKey]; }
+
+    // ── Adjacency list builder ──
+    function buildAdj(graph) {
+        const adj = {};
+        for (const n in graph.nodes) adj[n] = [];
+        graph.edges.forEach(e => {
+            adj[e.from].push({ to: e.to, w: e.weight });
+            adj[e.to].push({ to: e.from, w: e.weight });
+        });
+        return adj;
+    }
+
+    // ── Record Dijkstra frames ──
+    function recordDijkstra(graph) {
+        const nodeNames = Object.keys(graph.nodes);
+        const adj = buildAdj(graph);
+        const dist = {};
+        const prev = {};
+        const visited = new Set();
+        const fr = [];
+
+        nodeNames.forEach(n => { dist[n] = Infinity; prev[n] = null; });
+        dist[graph.source] = 0;
+
+        function snap(type, extra) {
+            fr.push({
+                type,
+                dist: { ...dist },
+                prev: { ...prev },
+                visited: new Set(visited),
+                ...extra
+            });
+        }
+
+        snap('init', { desc: `Initialise: set distance[${graph.source}] = 0, all others = \u221E` });
+
+        while (true) {
+            // Find unvisited node with smallest distance
+            let current = null;
+            let minDist = Infinity;
+            nodeNames.forEach(n => {
+                if (!visited.has(n) && dist[n] < minDist) {
+                    minDist = dist[n];
+                    current = n;
+                }
+            });
+            if (current === null) break;
+
+            snap('visit', {
+                current,
+                desc: `Visit node <span class="val-current">${current}</span> (distance = ${dist[current]}). Explore its unvisited neighbours.`
+            });
+
+            // Explore neighbours
+            adj[current].forEach(({ to, w }) => {
+                if (visited.has(to)) return;
+                const newDist = dist[current] + w;
+                const edgeKey = [current, to];
+
+                if (newDist < dist[to]) {
+                    const oldDist = dist[to];
+                    dist[to] = newDist;
+                    prev[to] = current;
+                    const oldStr = oldDist === Infinity ? '\u221E' : oldDist;
+                    snap('update', {
+                        current,
+                        exploringEdge: edgeKey,
+                        updatedNode: to,
+                        oldDist: oldDist,
+                        desc: `Edge ${current}\u2192${to} (weight ${w}): ${dist[current]} + ${w} = ${newDist} < ${oldStr} \u2014 <span class="val-update">update ${to} from ${oldStr} to ${newDist}!</span>`
+                    });
+                } else {
+                    snap('no-update', {
+                        current,
+                        exploringEdge: edgeKey,
+                        desc: `Edge ${current}\u2192${to} (weight ${w}): ${dist[current]} + ${w} = ${newDist} \u2265 ${dist[to]} \u2014 <span class="val-no">no update needed</span>`
+                    });
+                }
+            });
+
+            visited.add(current);
+            snap('visited', {
+                current,
+                desc: `Node <span class="val-done">${current}</span> is now finalised (shortest distance = ${dist[current]}).`
+            });
+        }
+
+        // Build shortest path edges
+        const pathEdges = [];
+        nodeNames.forEach(n => {
+            if (prev[n] !== null) pathEdges.push([prev[n], n]);
+        });
+
+        snap('done', {
+            pathEdges,
+            desc: `<span class="val-done">Algorithm complete!</span> All shortest distances from ${graph.source} have been found. Green edges show the shortest path tree.`
+        });
+
+        return fr;
+    }
+
+    // ── Render SVG graph ──
+    function renderGraph(frame) {
+        const g = getGraph();
+        const nodes = g.nodes;
+        const edges = g.edges;
+        let html = '';
+
+        // Determine edge states
+        const exploringFrom = frame.exploringEdge ? frame.exploringEdge[0] : null;
+        const exploringTo = frame.exploringEdge ? frame.exploringEdge[1] : null;
+        const pathEdgeSet = new Set();
+        if (frame.pathEdges) {
+            frame.pathEdges.forEach(([a, b]) => {
+                pathEdgeSet.add(a + '-' + b);
+                pathEdgeSet.add(b + '-' + a);
+            });
+        }
+
+        // Visited edges (edges between visited nodes via prev)
+        const visitedEdgeSet = new Set();
+        for (const n in frame.prev) {
+            if (frame.prev[n] && frame.visited.has(n)) {
+                visitedEdgeSet.add(frame.prev[n] + '-' + n);
+                visitedEdgeSet.add(n + '-' + frame.prev[n]);
+            }
+        }
+
+        // Draw edges
+        edges.forEach(e => {
+            const p1 = nodes[e.from];
+            const p2 = nodes[e.to];
+            const key1 = e.from + '-' + e.to;
+
+            let stroke = '#334155';
+            let strokeWidth = 2.5;
+            let opacity = 0.5;
+
+            if (pathEdgeSet.has(key1)) {
+                stroke = '#10b981';
+                strokeWidth = 4;
+                opacity = 1;
+            } else if (exploringFrom && exploringTo &&
+                       ((exploringFrom === e.from && exploringTo === e.to) ||
+                        (exploringFrom === e.to && exploringTo === e.from))) {
+                stroke = frame.type === 'update' ? '#f59e0b' : '#06b6d4';
+                strokeWidth = 4;
+                opacity = 1;
+            } else if (visitedEdgeSet.has(key1)) {
+                stroke = '#10b981';
+                strokeWidth = 3;
+                opacity = 0.7;
+            }
+
+            html += `<line x1="${p1.x}" y1="${p1.y}" x2="${p2.x}" y2="${p2.y}" stroke="${stroke}" stroke-width="${strokeWidth}" opacity="${opacity}" stroke-linecap="round"/>`;
+
+            // Weight label
+            const mx = (p1.x + p2.x) / 2;
+            const my = (p1.y + p2.y) / 2;
+            const dx = p2.x - p1.x;
+            const dy = p2.y - p1.y;
+            const len = Math.sqrt(dx * dx + dy * dy);
+            // Offset label perpendicular to edge
+            const nx = -dy / len * 14;
+            const ny = dx / len * 14;
+
+            let labelColor = '#667';
+            if (exploringFrom && exploringTo &&
+                ((exploringFrom === e.from && exploringTo === e.to) ||
+                 (exploringFrom === e.to && exploringTo === e.from))) {
+                labelColor = frame.type === 'update' ? '#f59e0b' : '#06b6d4';
+            } else if (pathEdgeSet.has(key1) || visitedEdgeSet.has(key1)) {
+                labelColor = '#34d399';
+            }
+
+            html += `<text x="${mx + nx}" y="${my + ny}" text-anchor="middle" dominant-baseline="central" fill="${labelColor}" font-family="Fira Code, monospace" font-size="13" font-weight="600">${e.weight}</text>`;
+        });
+
+        // Draw nodes
+        const nodeNames = Object.keys(nodes);
+        nodeNames.forEach(n => {
+            const p = nodes[n];
+            let fill = '#1a1a2e';
+            let strokeColor = '#4a4a6a';
+            let strokeWidth = 3;
+            let textColor = '#e0e0e0';
+            let shadow = '';
+
+            if (frame.type === 'done') {
+                fill = 'rgba(16, 185, 129, 0.15)';
+                strokeColor = '#10b981';
+                textColor = '#34d399';
+            } else if (n === frame.current && (frame.type === 'visit' || frame.type === 'update' || frame.type === 'no-update')) {
+                fill = '#34d399';
+                strokeColor = '#34d399';
+                textColor = '#fff';
+                shadow = `<circle cx="${p.x}" cy="${p.y}" r="${NODE_R + 6}" fill="none" stroke="#34d399" stroke-width="2" opacity="0.3"/>`;
+            } else if (n === frame.updatedNode && frame.type === 'update') {
+                fill = 'rgba(245, 158, 11, 0.2)';
+                strokeColor = '#f59e0b';
+                textColor = '#f59e0b';
+                shadow = `<circle cx="${p.x}" cy="${p.y}" r="${NODE_R + 6}" fill="none" stroke="#f59e0b" stroke-width="2" opacity="0.3"/>`;
+            } else if (frame.visited.has(n)) {
+                fill = 'rgba(16, 185, 129, 0.15)';
+                strokeColor = '#10b981';
+                textColor = '#34d399';
+            }
+
+            html += shadow;
+            html += `<circle cx="${p.x}" cy="${p.y}" r="${NODE_R}" fill="${fill}" stroke="${strokeColor}" stroke-width="${strokeWidth}"/>`;
+            html += `<text x="${p.x}" y="${p.y}" text-anchor="middle" dominant-baseline="central" fill="${textColor}" font-family="Fira Code, monospace" font-size="15" font-weight="700">${n}</text>`;
+
+            // Distance label below node
+            const d = frame.dist[n];
+            const dStr = d === Infinity ? '\u221E' : d;
+            let dColor = '#555';
+            if (n === frame.updatedNode && frame.type === 'update') dColor = '#f59e0b';
+            else if (frame.visited.has(n) || frame.type === 'done') dColor = '#34d399';
+            else if (d !== Infinity) dColor = '#aaa';
+
+            html += `<text x="${p.x}" y="${p.y + NODE_R + 16}" text-anchor="middle" fill="${dColor}" font-family="Fira Code, monospace" font-size="12" font-weight="600">${dStr}</text>`;
+        });
+
+        svg.innerHTML = html;
+    }
+
+    // ── Render distance table ──
+    function renderTable(frame) {
+        const g = getGraph();
+        const nodeNames = Object.keys(g.nodes);
+
+        let html = '<thead><tr><th>Node</th><th>Shortest Distance</th><th>Previous</th><th>Visited</th></tr></thead><tbody>';
+
+        nodeNames.forEach(n => {
+            const d = frame.dist[n];
+            const p = frame.prev[n];
+            const v = frame.visited.has(n);
+            const isCurrent = n === frame.current && (frame.type === 'visit' || frame.type === 'update' || frame.type === 'no-update' || frame.type === 'visited');
+            const isUpdated = n === frame.updatedNode && frame.type === 'update';
+
+            let rowClass = '';
+            if (isUpdated) rowClass = 'row-updated';
+            else if (isCurrent) rowClass = 'row-current';
+
+            // Distance cell
+            let distHtml;
+            if (isUpdated && frame.oldDist !== undefined) {
+                const oldStr = frame.oldDist === Infinity ? '\u221E' : frame.oldDist;
+                distHtml = `<span class="old-val">${oldStr}</span> <span class="cell-updated">${d}</span>`;
+            } else if (d === Infinity) {
+                distHtml = '<span class="cell-infinity">\u221E</span>';
+            } else {
+                distHtml = d;
+            }
+
+            // Previous cell
+            const prevHtml = p ? p : '<span class="cell-infinity">\u2014</span>';
+
+            // Visited cell
+            const visitHtml = v
+                ? '<span class="cell-visited">\u2713</span>'
+                : '<span class="cell-unvisited">\u2717</span>';
+
+            html += `<tr class="${rowClass}"><td>${n}</td><td>${distHtml}</td><td>${prevHtml}</td><td>${visitHtml}</td></tr>`;
+        });
+
+        html += '</tbody>';
+        distTable.innerHTML = html;
+    }
+
+    // ── Render current frame ──
+    function renderFrame() {
+        const f = frames[frameIdx];
+        renderGraph(f);
+        renderTable(f);
+        stepDesc.innerHTML = f.desc;
+
+        const allDone = frameIdx >= frames.length - 1;
+        btnStep.disabled = allDone;
+        if (allDone) stopPlay();
+    }
+
+    // ── Controls ──
+    window.step = function() {
+        if (frameIdx < frames.length - 1) {
+            frameIdx++;
+            renderFrame();
+        }
+    };
+
+    window.togglePlay = function() {
+        if (playing) {
+            stopPlay();
+        } else {
+            playing = true;
+            btnPlay.textContent = 'Pause';
+            btnPlay.style.background = 'linear-gradient(135deg, #ef4444, #dc2626)';
+            tick();
+        }
+    };
+
+    function tick() {
+        if (!playing) return;
+        if (frameIdx < frames.length - 1) {
+            frameIdx++;
+            renderFrame();
+            timer = setTimeout(tick, getSpeed());
+        } else {
+            stopPlay();
+        }
+    }
+
+    function stopPlay() {
+        playing = false;
+        clearTimeout(timer);
+        btnPlay.textContent = 'Play';
+        btnPlay.style.background = 'linear-gradient(135deg, #f59e0b, #d97706)';
+    }
+
+    window.reset = function() {
+        stopPlay();
+        frameIdx = 0;
+        frames = recordDijkstra(getGraph());
+        renderFrame();
+    };
+
+    window.switchGraph = function(key) {
+        if (playing) stopPlay();
+        activeGraphKey = key;
+        document.querySelectorAll('.graph-tab').forEach(t => t.classList.remove('active'));
+        document.getElementById(key === 'simple' ? 'tabSimple' : 'tabComplex').classList.add('active');
+        reset();
+    };
+
+    // ── Init ──
+    frames = recordDijkstra(getGraph());
+    renderFrame();
+})();
+</script>
+
+<footer style="text-align:center;padding:1.5rem;color:#888;font-size:0.85rem;border-top:1px solid #333;margin-top:2rem;">
+  <p>&copy; Dr Galan 2026. Created by <a href="https://coderra.je" target="_blank" rel="noopener" style="color:#6ea8fe;text-decoration:none;">Coderra.je</a></p>
+</footer>
+</body>
+</html>

@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Queue Visualizer</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #1b2e3a 50%, #1a1a2e 100%);
+            color: #fff;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #22d3ee, #06b6d4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin: 0 0 8px 0;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #888;
+            font-size: 0.95rem;
+            margin-bottom: 30px;
+        }
+
+        /* FIFO explainer */
+        .fifo-banner {
+            text-align: center;
+            margin-bottom: 24px;
+            padding: 12px 20px;
+            background: rgba(34, 211, 238, 0.08);
+            border: 1px solid rgba(34, 211, 238, 0.2);
+            border-radius: 12px;
+        }
+
+        .fifo-banner strong {
+            color: #22d3ee;
+            font-size: 1rem;
+        }
+
+        .fifo-banner span {
+            color: #999;
+            font-size: 0.85rem;
+            display: block;
+            margin-top: 4px;
+        }
+
+        /* Layout */
+        .main-layout {
+            display: grid;
+            grid-template-columns: 1fr 260px;
+            gap: 24px;
+            align-items: start;
+        }
+
+        @media (max-width: 700px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .left-col {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* Controls */
+        .controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .input-field {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            padding: 10px 16px;
+            border-radius: 12px;
+            border: 2px solid #2a4a5a;
+            background: #1a1a2e;
+            color: #fff;
+            width: 140px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .input-field:focus {
+            border-color: #22d3ee;
+        }
+
+        .btn {
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.88rem;
+            font-weight: 600;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: #fff;
+        }
+
+        .btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+
+        .btn:active:not(:disabled) { transform: translateY(0); }
+        .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+        .btn-enqueue { background: linear-gradient(135deg, #22d3ee, #06b6d4); }
+        .btn-dequeue { background: linear-gradient(135deg, #f7797d, #c471ed); }
+        .btn-peek { background: linear-gradient(135deg, #667eea, #764ba2); }
+        .btn-clear { background: linear-gradient(135deg, #4a4a6a, #3a3a5a); }
+
+        /* Size counter */
+        .size-counter {
+            text-align: center;
+            font-size: 0.9rem;
+            color: #aaa;
+            font-weight: 600;
+        }
+
+        .size-counter span {
+            color: #22d3ee;
+            font-family: 'Fira Code', monospace;
+        }
+
+        /* Queue container — horizontal */
+        .queue-viewport {
+            background: rgba(255,255,255,0.03);
+            border: 2px solid #2a3a4a;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .queue-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .queue-label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            padding: 3px 10px;
+            border-radius: 6px;
+        }
+
+        .queue-label.front {
+            background: rgba(34, 211, 238, 0.2);
+            color: #22d3ee;
+        }
+
+        .queue-label.back {
+            background: rgba(251, 191, 36, 0.2);
+            color: #fbbf24;
+        }
+
+        .queue-track {
+            display: flex;
+            align-items: center;
+            min-height: 72px;
+            gap: 10px;
+            overflow-x: auto;
+            padding: 28px 0 8px 0;
+        }
+
+        .queue-track::-webkit-scrollbar {
+            height: 6px;
+        }
+
+        .queue-track::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .queue-track::-webkit-scrollbar-thumb {
+            background: #3a3a5a;
+            border-radius: 3px;
+        }
+
+        .queue-item {
+            flex-shrink: 0;
+            width: 72px;
+            height: 56px;
+            border-radius: 10px;
+            font-family: 'Fira Code', monospace;
+            font-size: 1rem;
+            font-weight: 600;
+            text-align: center;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            animation: slideInRight 0.35s ease;
+        }
+
+        .queue-item.removing {
+            animation: slideOutLeft 0.35s ease forwards;
+        }
+
+        .queue-item.peeking {
+            animation: peekPulse 0.6s ease;
+        }
+
+        .front-arrow, .back-arrow {
+            position: absolute;
+            font-size: 0.55rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            font-family: 'Poppins', sans-serif;
+            padding: 2px 6px;
+            border-radius: 4px;
+            top: -18px;
+        }
+
+        .front-arrow {
+            background: #22d3ee;
+            color: #0e1b2e;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .back-arrow {
+            background: #fbbf24;
+            color: #1a1a2e;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .empty-label {
+            color: #555;
+            font-size: 0.9rem;
+            font-style: italic;
+            padding: 10px 0;
+            width: 100%;
+            text-align: center;
+        }
+
+        /* Arrows between items */
+        .queue-arrow {
+            flex-shrink: 0;
+            color: #4a5a6a;
+            font-size: 1.2rem;
+        }
+
+        /* Feedback */
+        .feedback {
+            text-align: center;
+            min-height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .feedback-msg {
+            padding: 10px 20px;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            animation: slideInUp 0.3s ease;
+        }
+
+        .feedback-msg.success {
+            background: rgba(67, 233, 123, 0.15);
+            border: 1px solid rgba(67, 233, 123, 0.3);
+            color: #43e97b;
+        }
+
+        .feedback-msg.error {
+            background: rgba(247, 121, 125, 0.15);
+            border: 1px solid rgba(247, 121, 125, 0.3);
+            color: #f7797d;
+        }
+
+        .feedback-msg.info {
+            background: rgba(102, 126, 234, 0.15);
+            border: 1px solid rgba(102, 126, 234, 0.3);
+            color: #667eea;
+        }
+
+        /* History log */
+        .history-panel {
+            background: #16213e;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+            border: 1px solid #2a2a4a;
+            max-height: 520px;
+            overflow-y: auto;
+        }
+
+        .history-panel h3 {
+            margin: 0 0 12px 0;
+            font-size: 0.95rem;
+            color: #22d3ee;
+        }
+
+        .history-entry {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.82rem;
+            padding: 6px 10px;
+            margin: 4px 0;
+            border-radius: 8px;
+            background: rgba(255,255,255,0.03);
+            animation: slideInUp 0.2s ease;
+        }
+
+        .history-entry .op-enqueue { color: #43e97b; }
+        .history-entry .op-dequeue { color: #f7797d; }
+        .history-entry .op-peek { color: #667eea; }
+        .history-entry .op-clear { color: #ffcb6b; }
+        .history-entry .timestamp { color: #555; font-size: 0.72rem; }
+
+        .no-history {
+            color: #555;
+            font-size: 0.85rem;
+            font-style: italic;
+        }
+
+        /* Algo panel */
+        .algo-panel {
+            background: #16213e;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+            border: 1px solid #2a2a4a;
+        }
+
+        .algo-panel h3 {
+            margin: 0 0 10px 0;
+            font-size: 0.95rem;
+            color: #22d3ee;
+        }
+
+        .algo-panel p {
+            margin: 0 0 8px 0;
+            font-size: 0.85rem;
+            color: #999;
+            line-height: 1.6;
+        }
+
+        .algo-panel p:last-child { margin-bottom: 0; }
+
+        .algo-panel code {
+            font-family: 'Fira Code', monospace;
+            background: rgba(34, 211, 238, 0.1);
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: #22d3ee;
+            font-size: 0.82rem;
+        }
+
+        /* Animations */
+        @keyframes slideInUp {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideInRight {
+            0% { opacity: 0; transform: translateX(60px) scale(0.7); }
+            70% { transform: translateX(-4px) scale(1.04); }
+            100% { opacity: 1; transform: translateX(0) scale(1); }
+        }
+
+        @keyframes slideOutLeft {
+            0% { opacity: 1; transform: translateX(0) scale(1); }
+            100% { opacity: 0; transform: translateX(-80px) scale(0.5); }
+        }
+
+        @keyframes peekPulse {
+            0% { box-shadow: 0 0 0 0 rgba(102, 126, 234, 0.5); }
+            50% { box-shadow: 0 0 20px 6px rgba(102, 126, 234, 0.4); transform: scale(1.08); }
+            100% { box-shadow: 0 0 0 0 rgba(102, 126, 234, 0); transform: scale(1); }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Interactive Queue Visualizer</h1>
+        <p class="subtitle">Enqueue, dequeue, and explore how a FIFO queue works</p>
+
+        <div class="fifo-banner">
+            <strong>FIFO — First In, First Out</strong>
+            <span>Items join at the <b style="color:#fbbf24">back</b> and leave from the <b style="color:#22d3ee">front</b>, just like a real queue!</span>
+        </div>
+
+        <div class="main-layout">
+            <div class="left-col">
+                <!-- Controls -->
+                <div class="controls">
+                    <input type="text" class="input-field" id="valueInput" placeholder="Enter a value" maxlength="8">
+                    <button class="btn btn-enqueue" onclick="enqueue()">Enqueue</button>
+                    <button class="btn btn-dequeue" onclick="dequeue()">Dequeue</button>
+                    <button class="btn btn-peek" onclick="peek()">Peek</button>
+                    <button class="btn btn-clear" onclick="clearQueue()">Clear</button>
+                </div>
+
+                <!-- Size counter -->
+                <div class="size-counter">Size: <span id="sizeDisplay">0/8</span></div>
+
+                <!-- Queue visual -->
+                <div class="queue-viewport">
+                    <div class="queue-labels">
+                        <span class="queue-label front">Front (dequeue)</span>
+                        <span class="queue-label back">Back (enqueue)</span>
+                    </div>
+                    <div class="queue-track" id="queueTrack">
+                        <div class="empty-label">Queue is empty</div>
+                    </div>
+                </div>
+
+                <!-- Feedback -->
+                <div class="feedback" id="feedback"></div>
+
+                <!-- How it works -->
+                <div class="algo-panel">
+                    <h3>How a Queue Works</h3>
+                    <p><code>enqueue(item)</code> — Adds an item to the <b style="color:#fbbf24">back</b> of the queue.</p>
+                    <p><code>dequeue()</code> — Removes and returns the item at the <b style="color:#22d3ee">front</b>. The item that has been waiting the longest leaves first.</p>
+                    <p><code>peek()</code> — Returns the front item without removing it.</p>
+                    <p>Real-world examples: printer job queues, CPU task scheduling, customers waiting in line.</p>
+                </div>
+            </div>
+
+            <!-- History log -->
+            <div class="history-panel">
+                <h3>Operation History</h3>
+                <div id="historyLog">
+                    <div class="no-history">No operations yet</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const MAX_SIZE = 8;
+        const COLORS = ['#06b6d4', '#0891b2', '#0e7490', '#22d3ee', '#67e8f9', '#155e75', '#164e63', '#0d9488'];
+
+        const queue = [];
+        const history = [];
+        let colorIndex = 0;
+        const queueTrack = document.getElementById('queueTrack');
+        const feedbackEl = document.getElementById('feedback');
+        const historyLog = document.getElementById('historyLog');
+        const sizeDisplay = document.getElementById('sizeDisplay');
+        const valueInput = document.getElementById('valueInput');
+
+        function nextColor() {
+            const c = COLORS[colorIndex % COLORS.length];
+            colorIndex++;
+            return c;
+        }
+
+        function showFeedback(msg, type) {
+            feedbackEl.innerHTML = `<div class="feedback-msg ${type}">${msg}</div>`;
+            setTimeout(() => { feedbackEl.innerHTML = ''; }, 3000);
+        }
+
+        function addHistory(operation, value, result) {
+            const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            let opClass, text;
+            if (operation === 'ENQUEUE') {
+                opClass = 'op-enqueue';
+                text = `ENQUEUE "${value}"`;
+            } else if (operation === 'DEQUEUE') {
+                opClass = 'op-dequeue';
+                text = `DEQUEUE → "${result}"`;
+            } else if (operation === 'PEEK') {
+                opClass = 'op-peek';
+                text = `PEEK → "${result}"`;
+            } else if (operation === 'CLEAR') {
+                opClass = 'op-clear';
+                text = `CLEAR (${value} items removed)`;
+            }
+            history.unshift({ opClass, text, time });
+            renderHistory();
+        }
+
+        function renderHistory() {
+            if (history.length === 0) {
+                historyLog.innerHTML = '<div class="no-history">No operations yet</div>';
+                return;
+            }
+            historyLog.innerHTML = history.map(h =>
+                `<div class="history-entry"><span class="${h.opClass}">${h.text}</span> <span class="timestamp">${h.time}</span></div>`
+            ).join('');
+        }
+
+        function renderQueue() {
+            sizeDisplay.textContent = `${queue.length}/${MAX_SIZE}`;
+
+            if (queue.length === 0) {
+                queueTrack.innerHTML = '<div class="empty-label">Queue is empty</div>';
+                return;
+            }
+
+            queueTrack.innerHTML = '';
+            queue.forEach((item, index) => {
+                const el = document.createElement('div');
+                el.className = 'queue-item';
+                el.style.background = item.color;
+                el.textContent = item.value;
+                el.id = 'q-item-' + index;
+
+                // FRONT badge on first item
+                if (index === 0) {
+                    const badge = document.createElement('span');
+                    badge.className = 'front-arrow';
+                    badge.textContent = 'FRONT';
+                    el.appendChild(badge);
+                }
+
+                // BACK badge on last item
+                if (index === queue.length - 1) {
+                    const badge = document.createElement('span');
+                    badge.className = 'back-arrow';
+                    badge.textContent = 'BACK';
+                    el.appendChild(badge);
+                }
+
+                queueTrack.appendChild(el);
+
+                // Arrow between items
+                if (index < queue.length - 1) {
+                    const arrow = document.createElement('span');
+                    arrow.className = 'queue-arrow';
+                    arrow.textContent = '→';
+                    queueTrack.appendChild(arrow);
+                }
+            });
+
+            // Scroll to end to show newly enqueued items
+            queueTrack.scrollLeft = queueTrack.scrollWidth;
+        }
+
+        function enqueue() {
+            const value = valueInput.value.trim();
+            if (!value) {
+                showFeedback('Please enter a value to enqueue', 'error');
+                return;
+            }
+            if (queue.length >= MAX_SIZE) {
+                showFeedback(`Queue is full! Maximum size is ${MAX_SIZE}`, 'error');
+                return;
+            }
+            const color = nextColor();
+            queue.push({ value, color });
+            valueInput.value = '';
+            valueInput.focus();
+            showFeedback(`Enqueued "${value}" at the back`, 'success');
+            addHistory('ENQUEUE', value);
+            renderQueue();
+        }
+
+        function dequeue() {
+            if (queue.length === 0) {
+                showFeedback('Queue is empty — nothing to dequeue', 'error');
+                return;
+            }
+
+            // Animate removal of front item
+            const frontEl = document.getElementById('q-item-0');
+            if (frontEl) {
+                frontEl.classList.add('removing');
+            }
+
+            const removed = queue.shift();
+            setTimeout(() => {
+                showFeedback(`Dequeued "${removed.value}" from the front`, 'success');
+                addHistory('DEQUEUE', null, removed.value);
+                renderQueue();
+            }, 320);
+        }
+
+        function peek() {
+            if (queue.length === 0) {
+                showFeedback('Queue is empty — nothing to peek', 'error');
+                return;
+            }
+            const frontValue = queue[0].value;
+            showFeedback(`Front of queue: "${frontValue}"`, 'info');
+            addHistory('PEEK', null, frontValue);
+
+            // Pulse animation on front item
+            const frontEl = document.getElementById('q-item-0');
+            if (frontEl) {
+                frontEl.classList.remove('peeking');
+                void frontEl.offsetWidth; // reflow to restart animation
+                frontEl.classList.add('peeking');
+            }
+        }
+
+        function clearQueue() {
+            if (queue.length === 0) {
+                showFeedback('Queue is already empty', 'error');
+                return;
+            }
+            const count = queue.length;
+            queue.length = 0;
+            showFeedback(`Cleared ${count} item${count > 1 ? 's' : ''} from the queue`, 'success');
+            addHistory('CLEAR', count);
+            renderQueue();
+        }
+
+        // Enter key triggers enqueue
+        valueInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                enqueue();
+            }
+        });
+
+        renderQueue();
+    </script>
+<footer style="text-align:center;padding:1.5rem;color:#888;font-size:0.85rem;border-top:1px solid #333;margin-top:2rem;">
+  <p>&copy; Dr Galan 2026. Created by <a href="https://coderra.je" target="_blank" rel="noopener" style="color:#6ea8fe;text-decoration:none;">Coderra.je</a></p>
+</footer>
+</body>
+</html>

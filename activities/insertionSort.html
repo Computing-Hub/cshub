@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Insertion Sort — Interactive Visualization</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    padding: 20px;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #1a1a2e 0%, #1a2240 50%, #1a1a2e 100%);
+    color: #e0e0e0;
+    min-height: 100vh;
+}
+
+.container { max-width: 960px; margin: 0 auto; }
+
+h1 {
+    text-align: center;
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 0 0 4px 0;
+    background: linear-gradient(135deg, #818cf8, #6366f1);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.subtitle {
+    text-align: center;
+    font-size: 0.95rem;
+    color: #888;
+    margin: 0 0 24px 0;
+}
+
+/* Controls */
+.controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+}
+
+.btn {
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.88rem;
+    font-weight: 600;
+    padding: 9px 20px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    color: #fff;
+    transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+}
+
+.btn:active:not(:disabled) { transform: translateY(0); }
+.btn:disabled { opacity: 0.4; cursor: default; transform: none; box-shadow: none; }
+
+.btn-step { background: linear-gradient(135deg, #818cf8, #6366f1); }
+.btn-play { background: linear-gradient(135deg, #f59e0b, #d97706); }
+.btn-reset { background: linear-gradient(135deg, #4a4a6a, #3a3a5a); }
+
+.speed-group {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.82rem;
+    color: #888;
+}
+
+.speed-group input[type="range"] {
+    width: 100px;
+    accent-color: #818cf8;
+}
+
+/* Counters */
+.counters {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    margin-bottom: 16px;
+    font-size: 0.88rem;
+    color: #aaa;
+}
+
+.counters strong {
+    font-family: 'Fira Code', monospace;
+    color: #818cf8;
+}
+
+/* Legend */
+.legend {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-bottom: 16px;
+    font-size: 0.76rem;
+    color: #888;
+}
+
+.legend-item { display: flex; align-items: center; gap: 5px; }
+.legend-swatch { width: 14px; height: 14px; border-radius: 3px; }
+
+/* Boundary label */
+.boundary-label {
+    display: flex;
+    justify-content: center;
+    gap: 32px;
+    margin-bottom: 8px;
+    font-size: 0.76rem;
+    font-weight: 600;
+    color: #888;
+}
+
+.boundary-label .sorted-side { color: #10b981; }
+.boundary-label .unsorted-side { color: #475569; }
+
+/* Bar area */
+.bar-viewport {
+    background: rgba(255,255,255,0.03);
+    border: 2px solid #2a2a4a;
+    border-radius: 16px;
+    padding: 24px 16px 16px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+    margin-bottom: 16px;
+    position: relative;
+}
+
+.bar-area {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 6px;
+    height: 220px;
+}
+
+.bar-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    flex: 1;
+    max-width: 56px;
+}
+
+.bar {
+    width: 100%;
+    border-radius: 6px 6px 2px 2px;
+    transition: height 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+    min-height: 12px;
+}
+
+.bar-label {
+    font-family: 'Fira Code', monospace;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #888;
+    transition: color 0.2s;
+}
+
+.bar.default { background: #475569; }
+.bar.key { background: #f59e0b; box-shadow: 0 0 14px rgba(245, 158, 11, 0.5); }
+.bar.comparing { background: #06b6d4; box-shadow: 0 0 12px rgba(6, 182, 212, 0.4); }
+.bar.shifting { background: #ec4899; box-shadow: 0 0 12px rgba(236, 72, 153, 0.4); }
+.bar.sorted { background: #10b981; box-shadow: 0 0 8px rgba(16, 185, 129, 0.3); }
+
+/* Step description */
+.step-desc {
+    font-size: 0.85rem;
+    color: #ccc;
+    min-height: 44px;
+    line-height: 1.6;
+    padding: 12px 16px;
+    background: #16213e;
+    border-radius: 12px;
+    border: 1px solid #2a2a4a;
+    margin-bottom: 16px;
+    text-align: center;
+}
+
+.step-desc .val-key { color: #f59e0b; font-weight: 700; }
+.step-desc .val-shift { color: #ec4899; font-weight: 700; }
+.step-desc .val-no { color: #888; }
+.step-desc .val-pass { color: #818cf8; font-weight: 700; }
+.step-desc .val-done { color: #10b981; font-weight: 700; }
+
+/* Algo panel */
+.algo-panel {
+    background: #16213e;
+    border-radius: 16px;
+    padding: 20px;
+    border: 1px solid #2a2a4a;
+}
+
+.algo-panel h3 {
+    margin: 0 0 12px 0;
+    font-size: 0.95rem;
+    color: #818cf8;
+}
+
+.algo-panel p {
+    margin: 0 0 8px 0;
+    font-size: 0.84rem;
+    color: #999;
+    line-height: 1.7;
+}
+
+.algo-panel p:last-child { margin-bottom: 0; }
+
+.algo-panel code {
+    font-family: 'Fira Code', monospace;
+    font-size: 0.78rem;
+    background: rgba(129, 140, 248, 0.1);
+    color: #818cf8;
+    padding: 1px 5px;
+    border-radius: 3px;
+}
+
+.algo-panel .pseudo {
+    background: rgba(0,0,0,0.2);
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin: 12px 0;
+    font-family: 'Fira Code', monospace;
+    font-size: 0.78rem;
+    line-height: 1.8;
+    color: #b0b0c8;
+}
+
+.algo-panel .pseudo .kw { color: #c792ea; }
+.algo-panel .pseudo .fn { color: #82aaff; }
+.algo-panel .pseudo .cm { color: #555; font-style: italic; }
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+@media (max-width: 600px) {
+    body { padding: 12px; }
+    h1 { font-size: 1.5rem; }
+    .bar-area { height: 160px; gap: 4px; }
+    .bar-label { font-size: 0.7rem; }
+    .counters { gap: 12px; font-size: 0.8rem; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+<h1>Insertion Sort</h1>
+<p class="subtitle">Pick up each element and slide it into its correct position — like sorting a hand of cards</p>
+
+<!-- Controls -->
+<div class="controls">
+    <button class="btn btn-step" id="btnStep" onclick="step()">Step</button>
+    <button class="btn btn-play" id="btnPlay" onclick="togglePlay()">Play</button>
+    <button class="btn btn-reset" onclick="reset()">Reset</button>
+    <div class="speed-group">
+        <span>Speed:</span>
+        <input type="range" id="speedSlider" min="100" max="1200" value="400" step="100">
+        <span id="speedLabel">400ms</span>
+    </div>
+</div>
+
+<!-- Counters -->
+<div class="counters">
+    <span>Pass: <strong id="passCount">0</strong></span>
+    <span>Comparisons: <strong id="compCount">0</strong></span>
+    <span>Shifts: <strong id="shiftCount">0</strong></span>
+</div>
+
+<!-- Legend -->
+<div class="legend">
+    <div class="legend-item"><div class="legend-swatch" style="background:#10b981"></div> Sorted region</div>
+    <div class="legend-item"><div class="legend-swatch" style="background:#f59e0b"></div> Key (picked up)</div>
+    <div class="legend-item"><div class="legend-swatch" style="background:#06b6d4"></div> Comparing</div>
+    <div class="legend-item"><div class="legend-swatch" style="background:#ec4899"></div> Shifting right</div>
+    <div class="legend-item"><div class="legend-swatch" style="background:#475569"></div> Unsorted</div>
+</div>
+
+<!-- Bars -->
+<div class="bar-viewport">
+    <div class="bar-area" id="barArea"></div>
+</div>
+
+<!-- Step description -->
+<div class="step-desc" id="stepDesc">Press <strong>Step</strong> or <strong>Play</strong> to begin Insertion Sort</div>
+
+<!-- Explanation -->
+<div class="algo-panel">
+    <h3>How Insertion Sort Works</h3>
+    <p>Insertion Sort builds the sorted portion one element at a time. It picks the next unsorted element (the <strong>"key"</strong>) and slides it leftward past any larger elements until it finds its correct position — just like inserting a playing card into a sorted hand.</p>
+    <div class="pseudo">
+<span class="kw">for</span> i = 1 <span class="kw">to</span> n-1:<br>
+&nbsp;&nbsp;key = arr[i] <span class="cm">// pick up this card</span><br>
+&nbsp;&nbsp;j = i - 1<br>
+&nbsp;&nbsp;<span class="kw">while</span> j &ge; 0 <span class="kw">and</span> arr[j] > key:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;arr[j+1] = arr[j] <span class="cm">// shift larger element right</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;j = j - 1<br>
+&nbsp;&nbsp;arr[j+1] = key <span class="cm">// insert key into correct slot</span>
+    </div>
+    <p><strong>Time complexity:</strong> Best case <code>O(n)</code> when the array is already sorted (each element compared once, no shifts needed). Average and worst case <code>O(n&sup2;)</code> — worst case occurs when the array is in reverse order.</p>
+    <p><strong>Space complexity:</strong> <code>O(1)</code> — sorts in place, only needs a temporary variable to hold the key.</p>
+    <p><strong>Key insight:</strong> The sorted region grows from left to right. At each step, everything to the left of the key is already sorted. Elements larger than the key shift one position right to make room.</p>
+</div>
+
+</div>
+
+<script>
+(function() {
+    const INITIAL = [6, 3, 8, 2, 7, 1, 5, 4];
+    const MAX_VAL = 8;
+    const BAR_H = 200;
+
+    let frames = [];
+    let frameIdx = 0;
+    let playing = false;
+    let timer = null;
+
+    const $ = id => document.getElementById(id);
+    const barArea    = $('barArea');
+    const stepDesc   = $('stepDesc');
+    const btnStep    = $('btnStep');
+    const btnPlay    = $('btnPlay');
+    const speedSlider = $('speedSlider');
+    const speedLabel  = $('speedLabel');
+
+    speedSlider.addEventListener('input', () => { speedLabel.textContent = speedSlider.value + 'ms'; });
+    function getSpeed() { return parseInt(speedSlider.value); }
+
+    // ── Record all frames ──
+    function recordInsertionSort(input) {
+        const arr = [...input];
+        const n = arr.length;
+        const fr = [];
+        let comps = 0, shifts = 0, pass = 0;
+        // sortedUpTo: index up to which the array is sorted (starts at 0 — first element is trivially sorted)
+        let sortedUpTo = 0;
+
+        fr.push({ arr: [...arr], keyIdx: -1, comparing: -1, shifting: -1, sortedUpTo, pass, comps, shifts,
+            desc: `Starting array: [${arr.join(', ')}]. The first element (${arr[0]}) is trivially sorted.` });
+
+        for (let i = 1; i < n; i++) {
+            pass = i;
+            const key = arr[i];
+
+            // Pick up the key
+            fr.push({ arr: [...arr], keyIdx: i, comparing: -1, shifting: -1, sortedUpTo, pass, comps, shifts,
+                desc: `<span class="val-pass">Pass ${pass}</span> — Pick up key = <span class="val-key">${key}</span> from position ${i}. Insert it into the sorted region [${arr.slice(0, i).join(', ')}].` });
+
+            let j = i - 1;
+
+            while (j >= 0) {
+                comps++;
+                // Compare key with arr[j]
+                fr.push({ arr: [...arr], keyIdx: i, comparing: j, shifting: -1, sortedUpTo, pass, comps, shifts,
+                    desc: `Compare key <span class="val-key">${key}</span> with ${arr[j]}: ${key} ${key < arr[j] ? '<' : '\u2265'} ${arr[j]}${key < arr[j] ? ' — need to shift ' + arr[j] + ' right!' : ' — <span class="val-no">stop, found insertion point</span>'}` });
+
+                if (key < arr[j]) {
+                    arr[j + 1] = arr[j];
+                    shifts++;
+                    // Show the shift
+                    fr.push({ arr: [...arr], keyIdx: -1, comparing: -1, shifting: j + 1, sortedUpTo, pass, comps, shifts,
+                        desc: `<span class="val-shift">Shift!</span> ${arr[j+1]} moves from position ${j} → ${j+1}` });
+                    j--;
+                } else {
+                    break;
+                }
+            }
+
+            // Insert the key
+            arr[j + 1] = key;
+            sortedUpTo = i;
+            fr.push({ arr: [...arr], keyIdx: j + 1, comparing: -1, shifting: -1, sortedUpTo, pass, comps, shifts,
+                desc: `Insert <span class="val-key">${key}</span> at position ${j + 1} → sorted region is now [${arr.slice(0, i + 1).join(', ')}]` });
+        }
+
+        fr.push({ arr: [...arr], keyIdx: -1, comparing: -1, shifting: -1, sortedUpTo: n - 1, pass, comps, shifts,
+            desc: `<span class="val-done">Insertion Sort complete!</span> [${arr.join(', ')}] — ${comps} comparisons, ${shifts} shifts.` });
+
+        return fr;
+    }
+
+    // ── Render bars ──
+    function renderBars(frame) {
+        barArea.innerHTML = '';
+        frame.arr.forEach((val, idx) => {
+            const wrapper = document.createElement('div');
+            wrapper.className = 'bar-wrapper';
+
+            const bar = document.createElement('div');
+            bar.className = 'bar';
+            bar.style.height = (val / MAX_VAL) * BAR_H + 'px';
+
+            if (idx === frame.keyIdx) bar.classList.add('key');
+            else if (idx === frame.shifting) bar.classList.add('shifting');
+            else if (idx === frame.comparing) bar.classList.add('comparing');
+            else if (idx <= frame.sortedUpTo) bar.classList.add('sorted');
+            else bar.classList.add('default');
+
+            const label = document.createElement('div');
+            label.className = 'bar-label';
+            label.textContent = val;
+
+            wrapper.appendChild(bar);
+            wrapper.appendChild(label);
+            barArea.appendChild(wrapper);
+        });
+    }
+
+    function renderFrame() {
+        const f = frames[frameIdx];
+        renderBars(f);
+        stepDesc.innerHTML = f.desc;
+        $('passCount').textContent = f.pass;
+        $('compCount').textContent = f.comps;
+        $('shiftCount').textContent = f.shifts;
+        btnStep.disabled = frameIdx >= frames.length - 1;
+        if (btnStep.disabled) stopPlay();
+    }
+
+    // ── Controls ──
+    window.step = function() {
+        if (frameIdx < frames.length - 1) { frameIdx++; renderFrame(); }
+    };
+
+    window.togglePlay = function() {
+        if (playing) { stopPlay(); }
+        else {
+            playing = true;
+            btnPlay.textContent = 'Pause';
+            btnPlay.style.background = 'linear-gradient(135deg, #ef4444, #dc2626)';
+            tick();
+        }
+    };
+
+    function tick() {
+        if (!playing) return;
+        if (frameIdx < frames.length - 1) { frameIdx++; renderFrame(); timer = setTimeout(tick, getSpeed()); }
+        else stopPlay();
+    }
+
+    function stopPlay() {
+        playing = false;
+        clearTimeout(timer);
+        btnPlay.textContent = 'Play';
+        btnPlay.style.background = 'linear-gradient(135deg, #f59e0b, #d97706)';
+    }
+
+    window.reset = function() {
+        stopPlay();
+        frameIdx = 0;
+        frames = recordInsertionSort(INITIAL);
+        renderFrame();
+    };
+
+    // ── Init ──
+    frames = recordInsertionSort(INITIAL);
+    renderFrame();
+})();
+</script>
+
+<footer style="text-align:center;padding:1.5rem;color:#888;font-size:0.85rem;border-top:1px solid #333;margin-top:2rem;">
+  <p>&copy; Dr Galan 2026. Created by <a href="https://coderra.je" target="_blank" rel="noopener" style="color:#6ea8fe;text-decoration:none;">Coderra.je</a></p>
+</footer>
+</body>
+</html>

@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Spot the Output — String Manipulation</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+body {
+  margin: 0; padding: 20px;
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(135deg, #1a1a2e 0%, #1a2e2e 50%, #1a1a2e 100%);
+  min-height: 100vh; color: #e0e0e0;
+}
+.container { max-width: 860px; margin: 0 auto; }
+h1 {
+  font-size: 2rem; font-weight: 700; text-align: center; margin: 0 0 4px;
+  background: linear-gradient(135deg, #06b6d4, #8b5cf6);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.subtitle { text-align: center; font-size: 0.95rem; color: #888; margin: 0 0 20px; }
+.back-link { display: inline-block; margin-bottom: 14px; color: #06b6d4; text-decoration: none; font-size: 0.88rem; }
+.back-link:hover { text-decoration: underline; }
+.panel {
+  background: #16213e; border-radius: 16px; border: 1px solid #2a2a4a;
+  padding: 20px; margin-bottom: 18px;
+}
+
+/* Nav */
+.challenge-nav { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-bottom: 10px; }
+.nav-btn {
+  font-family: 'Poppins', sans-serif; font-size: 0.82rem; font-weight: 600;
+  padding: 8px 14px; border: none; border-radius: 10px; cursor: pointer;
+  background: linear-gradient(135deg, #2a2a4a, #1a1a2e); color: #aaa;
+  transition: transform 0.15s, box-shadow 0.15s, background 0.2s;
+  position: relative;
+}
+.nav-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(6,182,212,0.2); }
+.nav-btn.active {
+  background: linear-gradient(135deg, #06b6d4, #8b5cf6); color: #fff;
+  box-shadow: 0 4px 18px rgba(6,182,212,0.35);
+}
+.nav-btn .badge {
+  position: absolute; top: -6px; right: -6px; width: 18px; height: 18px;
+  background: #43e97b; border-radius: 50%; font-size: 0.6rem; color: #000;
+  display: flex; align-items: center; justify-content: center; font-weight: 700;
+}
+
+/* Score tracker */
+.score-bar {
+  display: flex; justify-content: center; gap: 24px; margin-bottom: 10px;
+  font-size: 0.85rem; color: #888;
+}
+.score-bar span { font-weight: 600; }
+.score-bar .score-val { color: #06b6d4; }
+
+/* Question title */
+.q-title {
+  font-size: 1.05rem; font-weight: 600; margin: 0 0 4px; color: #e0e0e0;
+}
+.q-desc {
+  font-size: 0.85rem; color: #999; margin: 0 0 14px; line-height: 1.5;
+}
+
+/* Code display */
+.code-area {
+  background: #0d1117; border-radius: 12px; border: 1px solid #30363d;
+  padding: 20px; font-family: 'Fira Code', monospace;
+  font-size: 0.92rem; line-height: 2; color: #c9d1d9;
+  overflow-x: auto; white-space: pre-wrap; word-break: break-word;
+  margin-bottom: 18px;
+}
+
+/* Syntax highlighting */
+.kw { color: #ff79c6; }
+.fn { color: #8be9fd; }
+.str { color: #f1fa8c; }
+.num { color: #bd93f9; }
+.op { color: #ff79c6; }
+.cm { color: #6272a4; font-style: italic; }
+.meth { color: #50fa7b; }
+
+/* Options */
+.options-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+}
+.option-btn {
+  font-family: 'Fira Code', monospace; font-size: 0.88rem; font-weight: 500;
+  padding: 14px 18px; border: 2px solid #2a2a4a; border-radius: 12px;
+  background: rgba(42,42,74,0.3); color: #e0e0e0; cursor: pointer;
+  transition: transform 0.15s, border-color 0.2s, background 0.2s, box-shadow 0.2s;
+  text-align: center; word-break: break-word;
+}
+.option-btn:hover:not(.locked) {
+  transform: translateY(-2px); border-color: #06b6d4;
+  box-shadow: 0 4px 15px rgba(6,182,212,0.2);
+}
+.option-btn.selected {
+  border-color: #06b6d4; background: rgba(6,182,212,0.1);
+}
+.option-btn.correct {
+  border-color: #43e97b; background: rgba(67,233,123,0.12); color: #43e97b;
+  animation: popIn 0.3s ease;
+}
+.option-btn.wrong {
+  border-color: #f7797d; background: rgba(247,121,125,0.1); color: #f7797d;
+  animation: shake 0.4s ease;
+}
+.option-btn.locked { cursor: default; opacity: 0.6; }
+.option-btn.correct.locked { opacity: 1; }
+
+/* Buttons */
+.btn-row { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 16px; }
+.btn {
+  font-family: 'Poppins', sans-serif; font-size: 0.88rem; font-weight: 600;
+  padding: 10px 24px; border: none; border-radius: 10px; cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s; color: #fff;
+}
+.btn:hover { transform: translateY(-2px); }
+.btn:active { transform: translateY(0); }
+.btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+.btn-check { background: linear-gradient(135deg, #06b6d4, #0891b2); }
+.btn-check:hover:not(:disabled) { box-shadow: 0 4px 18px rgba(6,182,212,0.4); }
+.btn-next { background: linear-gradient(135deg, #43e97b, #38f9d7); color: #000; display: none; }
+.btn-next:hover:not(:disabled) { box-shadow: 0 4px 18px rgba(67,233,123,0.4); }
+.btn-next.visible { display: inline-block; }
+.btn-reset { background: linear-gradient(135deg, #667eea, #764ba2); }
+.btn-reset:hover:not(:disabled) { box-shadow: 0 4px 18px rgba(102,126,234,0.4); }
+
+/* Feedback */
+.feedback {
+  text-align: center; font-size: 0.9rem; font-weight: 600; padding: 12px;
+  border-radius: 10px; margin-top: 14px; animation: slideInUp 0.35s ease;
+  line-height: 1.6;
+}
+.feedback.success { background: rgba(67,233,123,0.12); color: #43e97b; border: 1px solid rgba(67,233,123,0.25); }
+.feedback.error { background: rgba(247,121,125,0.12); color: #f7797d; border: 1px solid rgba(247,121,125,0.25); }
+.hidden { display: none; }
+
+/* Best score */
+.best-score { text-align: center; font-size: 0.82rem; color: #666; margin-bottom: 6px; }
+.best-score strong { color: #8b5cf6; }
+
+/* Final results */
+.results-panel { text-align: center; animation: slideInUp 0.4s ease; }
+.results-panel .score-big {
+  font-size: 3rem; font-weight: 700;
+  background: linear-gradient(135deg, #06b6d4, #8b5cf6);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.results-panel .score-label { color: #888; font-size: 1rem; margin-top: 4px; }
+
+@keyframes slideInUp { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
+@keyframes popIn { 0% { transform:scale(0.85); opacity:0; } 100% { transform:scale(1); opacity:1; } }
+@keyframes shake { 0%,100% { transform:translateX(0); } 20% { transform:translateX(-6px); } 40% { transform:translateX(6px); } 60% { transform:translateX(-4px); } 80% { transform:translateX(4px); } }
+
+@media (max-width: 600px) {
+  body { padding: 12px; }
+  h1 { font-size: 1.5rem; }
+  .code-area { font-size: 0.8rem; padding: 14px; }
+  .options-grid { grid-template-columns: 1fr; }
+  .option-btn { font-size: 0.82rem; padding: 12px 14px; }
+  .panel { padding: 14px; }
+  .nav-btn { padding: 6px 10px; font-size: 0.75rem; }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+  <a href="../index.html" class="back-link">&larr; Back to Course</a>
+  <h1>Spot the Output</h1>
+  <p class="subtitle">What does each Python string snippet print? Pick the correct output.</p>
+
+  <div class="panel">
+    <div class="challenge-nav" id="challengeNav"></div>
+    <div class="score-bar">
+      <div>Question: <span class="score-val" id="questionNum">1/20</span></div>
+      <div>Score: <span class="score-val" id="totalScore">0</span> / 20</div>
+    </div>
+    <div class="best-score" id="bestScoreBar"></div>
+  </div>
+
+  <div id="questionArea">
+    <div class="panel">
+      <div class="q-title" id="qTitle"></div>
+      <div class="q-desc" id="qDesc"></div>
+      <div class="code-area" id="codeArea"></div>
+      <div class="options-grid" id="optionsGrid"></div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-check" id="btnSubmit" disabled>Submit Answer</button>
+      <button class="btn btn-next" id="btnNext">Next Question &rarr;</button>
+    </div>
+
+    <div id="feedbackArea"></div>
+  </div>
+
+  <div id="resultsArea" class="hidden">
+    <div class="panel results-panel">
+      <div class="score-big" id="finalScore"></div>
+      <p class="score-label" id="finalLabel"></p>
+      <div style="margin-top:20px;">
+        <button class="btn btn-reset" id="btnRestart">Start Again</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ============================================
+   QUESTIONS DATA
+   ============================================ */
+const questions = [
+  {
+    title: "Q1. Concatenation (+)",
+    desc: "What does this code print?",
+    code: 'print("Hello" + " " + "World")',
+    options: ["Hello World", "HelloWorld", "Hello  World", "Error"],
+    correct: 0,
+    explanation: 'The + operator joins strings exactly as they are. "Hello" + " " + "World" gives "Hello World" with a single space from the middle string.'
+  },
+  {
+    title: "Q2. Repetition (*)",
+    desc: "What does this code print?",
+    code: 'print("Ha" * 3)',
+    options: ["HaHaHa", "Ha Ha Ha", "Ha3", "Error"],
+    correct: 0,
+    explanation: 'The * operator repeats a string. "Ha" * 3 produces "HaHaHa" with no spaces between repetitions.'
+  },
+  {
+    title: "Q3. Indexing [n]",
+    desc: "What does this code print?",
+    code: 'print("Python"[0])',
+    options: ["y", "P", "Py", "Error"],
+    correct: 1,
+    explanation: 'Python uses zero-based indexing. Index 0 is the first character, so "Python"[0] returns "P".'
+  },
+  {
+    title: "Q4. Negative Indexing [-n]",
+    desc: "What does this code print?",
+    code: 'print("Computer"[-1])',
+    options: ["C", "e", "r", "Error"],
+    correct: 2,
+    explanation: 'Negative indexing counts from the end. -1 is the last character of "Computer", which is "r".'
+  },
+  {
+    title: "Q5. Slicing [a:b]",
+    desc: "What does this code print?",
+    code: 'print("ABCDEF"[1:4])',
+    options: ["ABC", "BCD", "BCDE", "ABCD"],
+    correct: 1,
+    explanation: 'Slicing [1:4] starts at index 1 (B) and goes up to but NOT including index 4 (E). Result: "BCD".'
+  },
+  {
+    title: "Q6. Slicing from Start [:n]",
+    desc: "What does this code print?",
+    code: 'print("Edexcel"[:3])',
+    options: ["Ede", "Edex", "ede", "Ed"],
+    correct: 0,
+    explanation: '[:3] slices from the start up to but not including index 3. Characters at 0,1,2 give "Ede".'
+  },
+  {
+    title: "Q7. len()",
+    desc: "What does this code print?",
+    code: 'print(len("Hello!"))',
+    options: ["5", "6", "7", "Error"],
+    correct: 1,
+    explanation: 'len() counts ALL characters including punctuation. "Hello!" has 5 letters + 1 exclamation mark = 6.'
+  },
+  {
+    title: "Q8. .find() — Found",
+    desc: "What does this code print?",
+    code: 'print("Hello World".find("World"))',
+    options: ["5", "6", "True", "1"],
+    correct: 1,
+    explanation: '.find() returns the index where the substring starts. "World" starts at index 6 (counting from 0).'
+  },
+  {
+    title: "Q9. .find() — Not Found",
+    desc: "What does this code print?",
+    code: 'print("Python".find("z"))',
+    options: ["0", "False", "-1", "Error"],
+    correct: 2,
+    explanation: 'When .find() cannot locate the substring, it returns -1. It does NOT raise an error or return False.'
+  },
+  {
+    title: "Q10. .index() — Not Found",
+    desc: "What does this code print?",
+    code: 'print("Python".index("z"))',
+    options: ["-1", "False", "None", "Error"],
+    correct: 3,
+    explanation: 'Unlike .find(), the .index() method raises a ValueError when the substring is not found. This causes an error.'
+  },
+  {
+    title: "Q11. .upper()",
+    desc: "What does this code print?",
+    code: 'print("alice".upper())',
+    options: ["Alice", "ALICE", "alice", "aLICE"],
+    correct: 1,
+    explanation: '.upper() converts ALL characters to uppercase. "alice" becomes "ALICE", not just the first letter.'
+  },
+  {
+    title: "Q12. .lower()",
+    desc: "What does this code print?",
+    code: 'print("GCSE".lower())',
+    options: ["Gcse", "gcse", "gCSE", "GCSE"],
+    correct: 1,
+    explanation: '.lower() converts ALL characters to lowercase. "GCSE" becomes "gcse".'
+  },
+  {
+    title: "Q13. .isalpha()",
+    desc: "What does this code print?",
+    code: 'print("Hello".isalpha())',
+    options: ["True", "False", "hello", "Error"],
+    correct: 0,
+    explanation: '.isalpha() returns True if ALL characters are letters (a-z, A-Z). "Hello" has only letters, so it returns True.'
+  },
+  {
+    title: "Q14. .isdigit()",
+    desc: "What does this code print?",
+    code: 'print("AB12".isdigit())',
+    options: ["True", "False", "2", "Error"],
+    correct: 1,
+    explanation: '.isdigit() returns True only if ALL characters are digits. "AB12" contains letters, so it returns False.'
+  },
+  {
+    title: "Q15. .isalnum()",
+    desc: "What does this code print?",
+    code: 'print("Room101".isalnum())',
+    options: ["False", "True", "Room", "Error"],
+    correct: 1,
+    explanation: '.isalnum() returns True if ALL characters are letters OR digits. "Room101" has only letters and digits (no spaces or symbols), so True.'
+  },
+  {
+    title: "Q16. .isupper() & .islower()",
+    desc: "What does this code print?",
+    code: 'print("HELLO".isupper(), "hello".islower())',
+    options: ["True True", "True False", "False True", "False False"],
+    correct: 0,
+    explanation: '"HELLO".isupper() is True (all uppercase). "hello".islower() is True (all lowercase). Printed with a space: "True True".'
+  },
+  {
+    title: "Q17. .replace()",
+    desc: "What does this code print?",
+    code: 'text = "I like cats"\nprint(text.replace("cats", "dogs"))',
+    options: ["I like dogs", "I like cats", "I like catsdogs", "Error"],
+    correct: 0,
+    explanation: '.replace() returns a NEW string with the replacement made. "cats" is replaced by "dogs", giving "I like dogs".'
+  },
+  {
+    title: "Q18. .split() with Indexing",
+    desc: "What does this code print?",
+    code: 'print("red,green,blue".split(",")[1])',
+    options: ["red", "green", "blue", "[\"red\",\"green\",\"blue\"]"],
+    correct: 1,
+    explanation: '.split(",") creates ["red", "green", "blue"]. Index [1] is the second element: "green".'
+  },
+  {
+    title: "Q19. .strip() + Concatenation",
+    desc: "What does this code print?",
+    code: 'print("  Hello  ".strip() + "!")',
+    options: ["  Hello  !", "Hello !", "Hello!", "  Hello!"],
+    correct: 2,
+    explanation: '.strip() removes leading AND trailing whitespace. "  Hello  " becomes "Hello", then + "!" gives "Hello!".'
+  },
+  {
+    title: "Q20. .format() & str()",
+    desc: "What does this code print?",
+    code: 'print("I am {} years old".format(15))\nprint("Age: " + str(15))',
+    options: [
+      "I am 15 years old\nAge: 15",
+      "I am {} years old\nAge: 15",
+      "I am 15 years old\nError",
+      "Error\nAge: 15"
+    ],
+    correct: 0,
+    explanation: '.format(15) replaces {} with 15. str(15) converts the integer to a string for concatenation. Both lines work correctly.'
+  }
+];
+
+/* ============================================
+   STATE
+   ============================================ */
+let current = 0;
+let score = 0;
+let selected = -1;
+let locked = false;
+let completed = JSON.parse(localStorage.getItem('spotOutputCompleted') || '[]');
+let bestScore = parseInt(localStorage.getItem('spotOutputBest') || '0', 10);
+
+/* ============================================
+   SYNTAX HIGHLIGHTING
+   ============================================ */
+function highlight(code) {
+  // Escape HTML
+  let s = code.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+  // Comments
+  s = s.replace(/(#.*)/g, '<span class="cm">$1</span>');
+
+  // Strings (double then single quotes)
+  s = s.replace(/("(?:[^"\\]|\\.)*")/g, '<span class="str">$1</span>');
+  s = s.replace(/('(?:[^'\\]|\\.)*')/g, '<span class="str">$1</span>');
+
+  // Numbers (standalone)
+  s = s.replace(/\b(\d+\.?\d*)\b/g, '<span class="num">$1</span>');
+
+  // Keywords
+  const kws = ['print', 'if', 'elif', 'else', 'for', 'while', 'def', 'return', 'import', 'from', 'in', 'not', 'and', 'or', 'True', 'False', 'None'];
+  kws.forEach(k => {
+    s = s.replace(new RegExp('\\b(' + k + ')\\b', 'g'), '<span class="kw">$1</span>');
+  });
+
+  // Methods (dot-prefixed)
+  s = s.replace(/\.(\w+)\(/g, '.<span class="fn">$1</span>(');
+
+  // Built-in functions
+  const fns = ['len', 'str', 'int', 'float', 'input', 'range', 'type'];
+  fns.forEach(f => {
+    s = s.replace(new RegExp('\\b(' + f + ')\\(', 'g'), '<span class="fn">$1</span>(');
+  });
+
+  return s;
+}
+
+/* ============================================
+   RENDER
+   ============================================ */
+function buildNav() {
+  const nav = document.getElementById('challengeNav');
+  nav.innerHTML = '';
+  questions.forEach((q, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'nav-btn' + (i === current ? ' active' : '');
+    btn.textContent = i + 1;
+    if (completed.includes(i)) {
+      const badge = document.createElement('span');
+      badge.className = 'badge';
+      badge.textContent = '\u2713';
+      btn.appendChild(badge);
+    }
+    btn.addEventListener('click', () => {
+      if (!locked) { current = i; loadQuestion(); }
+    });
+    nav.appendChild(btn);
+  });
+}
+
+function loadQuestion() {
+  locked = false;
+  selected = -1;
+  const q = questions[current];
+
+  document.getElementById('qTitle').textContent = q.title;
+  document.getElementById('qDesc').textContent = q.desc;
+  document.getElementById('questionNum').textContent = (current + 1) + '/' + questions.length;
+  document.getElementById('totalScore').textContent = score;
+  document.getElementById('feedbackArea').innerHTML = '';
+  document.getElementById('btnNext').classList.remove('visible');
+  document.getElementById('btnSubmit').disabled = true;
+  document.getElementById('questionArea').classList.remove('hidden');
+  document.getElementById('resultsArea').classList.add('hidden');
+
+  // Best score display
+  const bestBar = document.getElementById('bestScoreBar');
+  if (bestScore > 0) {
+    bestBar.innerHTML = 'Best score: <strong>' + bestScore + ' / 20</strong>';
+  } else {
+    bestBar.innerHTML = '';
+  }
+
+  // Code area with syntax highlighting
+  document.getElementById('codeArea').innerHTML = highlight(q.code);
+
+  // Options
+  const grid = document.getElementById('optionsGrid');
+  grid.innerHTML = '';
+  q.options.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'option-btn';
+    btn.textContent = opt;
+    btn.addEventListener('click', () => selectOption(i));
+    grid.appendChild(btn);
+  });
+
+  buildNav();
+}
+
+function selectOption(idx) {
+  if (locked) return;
+  selected = idx;
+  document.getElementById('btnSubmit').disabled = false;
+  const btns = document.querySelectorAll('.option-btn');
+  btns.forEach((b, i) => {
+    b.classList.toggle('selected', i === idx);
+  });
+}
+
+function submitAnswer() {
+  if (locked || selected === -1) return;
+  locked = true;
+
+  const q = questions[current];
+  const btns = document.querySelectorAll('.option-btn');
+
+  btns.forEach((b, i) => {
+    b.classList.add('locked');
+    b.classList.remove('selected');
+    if (i === q.correct) {
+      b.classList.add('correct');
+    } else if (i === selected && i !== q.correct) {
+      b.classList.add('wrong');
+    }
+  });
+
+  const fb = document.getElementById('feedbackArea');
+  if (selected === q.correct) {
+    score++;
+    if (!completed.includes(current)) completed.push(current);
+    localStorage.setItem('spotOutputCompleted', JSON.stringify(completed));
+    fb.innerHTML = '<div class="feedback success">Correct! ' + q.explanation + '</div>';
+  } else {
+    fb.innerHTML = '<div class="feedback error">Not quite. ' + q.explanation + '</div>';
+  }
+
+  document.getElementById('totalScore').textContent = score;
+  document.getElementById('btnSubmit').disabled = true;
+  buildNav();
+
+  if (current < questions.length - 1) {
+    document.getElementById('btnNext').classList.add('visible');
+  } else {
+    setTimeout(showResults, 1500);
+  }
+}
+
+function nextQuestion() {
+  current++;
+  loadQuestion();
+}
+
+function showResults() {
+  document.getElementById('questionArea').classList.add('hidden');
+  document.getElementById('resultsArea').classList.remove('hidden');
+
+  document.getElementById('finalScore').textContent = score + '/' + questions.length;
+
+  if (score > bestScore) {
+    bestScore = score;
+    localStorage.setItem('spotOutputBest', bestScore.toString());
+  }
+
+  let label = '';
+  const pct = score / questions.length;
+  if (pct === 1) label = 'Perfect score! You know your string methods inside out!';
+  else if (pct >= 0.8) label = 'Excellent! Nearly there \u2014 review the ones you missed.';
+  else if (pct >= 0.6) label = 'Good effort! Revisit the PLS string operations.';
+  else label = 'Keep practising! Go through the string methods and try again.';
+
+  document.getElementById('finalLabel').textContent = label;
+}
+
+function restartAll() {
+  current = 0;
+  score = 0;
+  completed = [];
+  localStorage.removeItem('spotOutputCompleted');
+  loadQuestion();
+}
+
+/* ============================================
+   EVENT LISTENERS
+   ============================================ */
+document.getElementById('btnSubmit').addEventListener('click', submitAnswer);
+document.getElementById('btnNext').addEventListener('click', nextQuestion);
+document.getElementById('btnRestart').addEventListener('click', restartAll);
+
+/* ============================================
+   INIT
+   ============================================ */
+loadQuestion();
+</script>
+
+<footer style="text-align:center;padding:1.5rem;color:#888;font-size:0.85rem;border-top:1px solid #333;margin-top:2rem;">
+  <p>&copy; Dr Galan 2026. Created by <a href="https://coderra.je" target="_blank" rel="noopener" style="color:#6ea8fe;text-decoration:none;">Coderra.je</a></p>
+</footer>
+</body>
+</html>

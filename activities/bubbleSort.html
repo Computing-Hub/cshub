@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bubble Sort — Interactive Visualization</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    padding: 20px;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #1a1a2e 0%, #2e1a2a 50%, #1a1a2e 100%);
+    color: #e0e0e0;
+    min-height: 100vh;
+}
+
+.container { max-width: 960px; margin: 0 auto; }
+
+h1 {
+    text-align: center;
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 0 0 4px 0;
+    background: linear-gradient(135deg, #f472b6, #ec4899);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.subtitle {
+    text-align: center;
+    font-size: 0.95rem;
+    color: #888;
+    margin: 0 0 24px 0;
+}
+
+/* Controls */
+.controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+}
+
+.btn {
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.88rem;
+    font-weight: 600;
+    padding: 9px 20px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    color: #fff;
+    transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+}
+
+.btn:active:not(:disabled) { transform: translateY(0); }
+.btn:disabled { opacity: 0.4; cursor: default; transform: none; box-shadow: none; }
+
+.btn-step { background: linear-gradient(135deg, #f472b6, #ec4899); }
+.btn-play { background: linear-gradient(135deg, #f59e0b, #d97706); }
+.btn-reset { background: linear-gradient(135deg, #4a4a6a, #3a3a5a); }
+
+.speed-group {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.82rem;
+    color: #888;
+}
+
+.speed-group input[type="range"] {
+    width: 100px;
+    accent-color: #f472b6;
+}
+
+/* Counters */
+.counters {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    margin-bottom: 16px;
+    font-size: 0.88rem;
+    color: #aaa;
+}
+
+.counters strong {
+    font-family: 'Fira Code', monospace;
+    color: #f472b6;
+}
+
+/* Legend */
+.legend {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-bottom: 16px;
+    font-size: 0.76rem;
+    color: #888;
+}
+
+.legend-item { display: flex; align-items: center; gap: 5px; }
+.legend-swatch { width: 14px; height: 14px; border-radius: 3px; }
+
+/* Bar area */
+.bar-viewport {
+    background: rgba(255,255,255,0.03);
+    border: 2px solid #2a2a4a;
+    border-radius: 16px;
+    padding: 24px 16px 16px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+    margin-bottom: 16px;
+}
+
+.bar-area {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 6px;
+    height: 220px;
+}
+
+.bar-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    flex: 1;
+    max-width: 56px;
+}
+
+.bar {
+    width: 100%;
+    border-radius: 6px 6px 2px 2px;
+    transition: height 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+    min-height: 12px;
+}
+
+.bar-label {
+    font-family: 'Fira Code', monospace;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #888;
+    transition: color 0.2s;
+}
+
+.bar.default { background: #475569; }
+.bar.comparing { background: #06b6d4; box-shadow: 0 0 12px rgba(6, 182, 212, 0.4); }
+.bar.swapping { background: #ec4899; box-shadow: 0 0 12px rgba(236, 72, 153, 0.4); }
+.bar.sorted { background: #10b981; box-shadow: 0 0 8px rgba(16, 185, 129, 0.3); }
+
+/* Step description */
+.step-desc {
+    font-size: 0.85rem;
+    color: #ccc;
+    min-height: 44px;
+    line-height: 1.6;
+    padding: 12px 16px;
+    background: #16213e;
+    border-radius: 12px;
+    border: 1px solid #2a2a4a;
+    margin-bottom: 16px;
+    text-align: center;
+}
+
+.step-desc .val-swap { color: #ec4899; font-weight: 700; }
+.step-desc .val-no { color: #888; }
+.step-desc .val-pass { color: #f472b6; font-weight: 700; }
+.step-desc .val-done { color: #10b981; font-weight: 700; }
+
+/* Algo panel */
+.algo-panel {
+    background: #16213e;
+    border-radius: 16px;
+    padding: 20px;
+    border: 1px solid #2a2a4a;
+}
+
+.algo-panel h3 {
+    margin: 0 0 12px 0;
+    font-size: 0.95rem;
+    color: #f472b6;
+}
+
+.algo-panel p {
+    margin: 0 0 8px 0;
+    font-size: 0.84rem;
+    color: #999;
+    line-height: 1.7;
+}
+
+.algo-panel p:last-child { margin-bottom: 0; }
+
+.algo-panel code {
+    font-family: 'Fira Code', monospace;
+    font-size: 0.78rem;
+    background: rgba(244, 114, 182, 0.1);
+    color: #f472b6;
+    padding: 1px 5px;
+    border-radius: 3px;
+}
+
+.algo-panel .pseudo {
+    background: rgba(0,0,0,0.2);
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin: 12px 0;
+    font-family: 'Fira Code', monospace;
+    font-size: 0.78rem;
+    line-height: 1.8;
+    color: #b0b0c8;
+}
+
+.algo-panel .pseudo .kw { color: #c792ea; }
+.algo-panel .pseudo .fn { color: #82aaff; }
+.algo-panel .pseudo .cm { color: #555; font-style: italic; }
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+@media (max-width: 600px) {
+    body { padding: 12px; }
+    h1 { font-size: 1.5rem; }
+    .bar-area { height: 160px; gap: 4px; }
+    .bar-label { font-size: 0.7rem; }
+    .counters { gap: 12px; font-size: 0.8rem; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+<h1>Bubble Sort</h1>
+<p class="subtitle">Watch adjacent elements compared and swapped — the largest values "bubble" to the end</p>
+
+<!-- Controls -->
+<div class="controls">
+    <button class="btn btn-step" id="btnStep" onclick="step()">Step</button>
+    <button class="btn btn-play" id="btnPlay" onclick="togglePlay()">Play</button>
+    <button class="btn btn-reset" onclick="reset()">Reset</button>
+    <div class="speed-group">
+        <span>Speed:</span>
+        <input type="range" id="speedSlider" min="100" max="1200" value="400" step="100">
+        <span id="speedLabel">400ms</span>
+    </div>
+</div>
+
+<!-- Counters -->
+<div class="counters">
+    <span>Pass: <strong id="passCount">0</strong></span>
+    <span>Comparisons: <strong id="compCount">0</strong></span>
+    <span>Swaps: <strong id="swapCount">0</strong></span>
+</div>
+
+<!-- Legend -->
+<div class="legend">
+    <div class="legend-item"><div class="legend-swatch" style="background:#475569"></div> Unsorted</div>
+    <div class="legend-item"><div class="legend-swatch" style="background:#06b6d4"></div> Comparing</div>
+    <div class="legend-item"><div class="legend-swatch" style="background:#ec4899"></div> Swapping</div>
+    <div class="legend-item"><div class="legend-swatch" style="background:#10b981"></div> Sorted</div>
+</div>
+
+<!-- Bars -->
+<div class="bar-viewport">
+    <div class="bar-area" id="barArea"></div>
+</div>
+
+<!-- Step description -->
+<div class="step-desc" id="stepDesc">Press <strong>Step</strong> or <strong>Play</strong> to begin Bubble Sort</div>
+
+<!-- Explanation -->
+<div class="algo-panel">
+    <h3>How Bubble Sort Works</h3>
+    <p>Bubble Sort repeatedly walks through the list, compares <strong>adjacent elements</strong>, and swaps them if they are in the wrong order. After each pass, the largest unsorted element "bubbles up" to its correct position at the end.</p>
+    <div class="pseudo">
+<span class="kw">for</span> i = 0 <span class="kw">to</span> n-1:<br>
+&nbsp;&nbsp;swapped = <span class="kw">false</span><br>
+&nbsp;&nbsp;<span class="kw">for</span> j = 0 <span class="kw">to</span> n-i-2:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">if</span> arr[j] > arr[j+1]:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="fn">swap</span>(arr[j], arr[j+1])<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;swapped = <span class="kw">true</span><br>
+&nbsp;&nbsp;<span class="kw">if not</span> swapped: <span class="kw">break</span> <span class="cm">// early termination</span>
+    </div>
+    <p><strong>Time complexity:</strong> Best case <code>O(n)</code> when the array is already sorted (one pass, no swaps → early termination). Average and worst case <code>O(n²)</code>.</p>
+    <p><strong>Space complexity:</strong> <code>O(1)</code> — sorts in place, only needs a temporary variable for swapping.</p>
+    <p><strong>Key insight:</strong> After pass 1, the largest element is guaranteed to be at the end. After pass 2, the two largest are in place. The sorted region grows from right to left with each pass.</p>
+</div>
+
+</div>
+
+<script>
+(function() {
+    const INITIAL = [6, 3, 8, 2, 7, 1, 5, 4];
+    const MAX_VAL = 8;
+    const BAR_H = 200;
+
+    let frames = [];
+    let frameIdx = 0;
+    let playing = false;
+    let timer = null;
+
+    const $ = id => document.getElementById(id);
+    const barArea    = $('barArea');
+    const stepDesc   = $('stepDesc');
+    const btnStep    = $('btnStep');
+    const btnPlay    = $('btnPlay');
+    const speedSlider = $('speedSlider');
+    const speedLabel  = $('speedLabel');
+
+    speedSlider.addEventListener('input', () => { speedLabel.textContent = speedSlider.value + 'ms'; });
+    function getSpeed() { return parseInt(speedSlider.value); }
+
+    // ── Record all frames ──
+    function recordBubbleSort(input) {
+        const arr = [...input];
+        const n = arr.length;
+        const fr = [];
+        let comps = 0, swaps = 0, pass = 0;
+        // sortedFrom: index from which everything to the right is sorted
+        let sortedFrom = n;
+
+        fr.push({ arr: [...arr], comparing: [], swapping: [], sortedFrom, pass, comps, swaps,
+            desc: `Starting array: [${arr.join(', ')}]` });
+
+        for (let i = 0; i < n - 1; i++) {
+            pass = i + 1;
+            let swapped = false;
+
+            fr.push({ arr: [...arr], comparing: [], swapping: [], sortedFrom, pass, comps, swaps,
+                desc: `<span class="val-pass">Pass ${pass}</span> — scan from left, comparing adjacent pairs.` });
+
+            for (let j = 0; j < n - i - 1; j++) {
+                comps++;
+                // Compare frame
+                fr.push({ arr: [...arr], comparing: [j, j + 1], swapping: [], sortedFrom, pass, comps, swaps,
+                    desc: `Compare ${arr[j]} and ${arr[j+1]}: ${arr[j]} ${arr[j] > arr[j+1] ? '>' : '\u2264'} ${arr[j+1]}${arr[j] > arr[j+1] ? ' — need to swap!' : ' — <span class="val-no">no swap needed</span>'}` });
+
+                if (arr[j] > arr[j + 1]) {
+                    [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]];
+                    swaps++;
+                    swapped = true;
+                    fr.push({ arr: [...arr], comparing: [], swapping: [j, j + 1], sortedFrom, pass, comps, swaps,
+                        desc: `<span class="val-swap">Swap!</span> ${arr[j+1]} and ${arr[j]} swapped → [${arr.join(', ')}]` });
+                }
+            }
+
+            // Mark end of pass — element at n-i-1 is now sorted
+            sortedFrom = n - i - 1;
+            fr.push({ arr: [...arr], comparing: [], swapping: [], sortedFrom, pass, comps, swaps,
+                desc: `End of pass ${pass}: <span class="val-pass">${arr[sortedFrom]}</span> is now in its final position.` });
+
+            if (!swapped) {
+                sortedFrom = 0;
+                fr.push({ arr: [...arr], comparing: [], swapping: [], sortedFrom, pass, comps, swaps,
+                    desc: `<span class="val-done">No swaps in pass ${pass} — array is sorted! Early termination.</span>` });
+                return fr;
+            }
+        }
+
+        sortedFrom = 0;
+        fr.push({ arr: [...arr], comparing: [], swapping: [], sortedFrom, pass, comps, swaps,
+            desc: `<span class="val-done">Bubble Sort complete!</span> [${arr.join(', ')}] — ${comps} comparisons, ${swaps} swaps.` });
+
+        return fr;
+    }
+
+    // ── Render bars ──
+    function renderBars(frame) {
+        barArea.innerHTML = '';
+        frame.arr.forEach((val, idx) => {
+            const wrapper = document.createElement('div');
+            wrapper.className = 'bar-wrapper';
+
+            const bar = document.createElement('div');
+            bar.className = 'bar';
+            bar.style.height = (val / MAX_VAL) * BAR_H + 'px';
+
+            if (frame.swapping.includes(idx)) bar.classList.add('swapping');
+            else if (frame.comparing.includes(idx)) bar.classList.add('comparing');
+            else if (idx >= frame.sortedFrom) bar.classList.add('sorted');
+            else bar.classList.add('default');
+
+            const label = document.createElement('div');
+            label.className = 'bar-label';
+            label.textContent = val;
+
+            wrapper.appendChild(bar);
+            wrapper.appendChild(label);
+            barArea.appendChild(wrapper);
+        });
+    }
+
+    function renderFrame() {
+        const f = frames[frameIdx];
+        renderBars(f);
+        stepDesc.innerHTML = f.desc;
+        $('passCount').textContent = f.pass;
+        $('compCount').textContent = f.comps;
+        $('swapCount').textContent = f.swaps;
+        btnStep.disabled = frameIdx >= frames.length - 1;
+        if (btnStep.disabled) stopPlay();
+    }
+
+    // ── Controls ──
+    window.step = function() {
+        if (frameIdx < frames.length - 1) { frameIdx++; renderFrame(); }
+    };
+
+    window.togglePlay = function() {
+        if (playing) { stopPlay(); }
+        else {
+            playing = true;
+            btnPlay.textContent = 'Pause';
+            btnPlay.style.background = 'linear-gradient(135deg, #ef4444, #dc2626)';
+            tick();
+        }
+    };
+
+    function tick() {
+        if (!playing) return;
+        if (frameIdx < frames.length - 1) { frameIdx++; renderFrame(); timer = setTimeout(tick, getSpeed()); }
+        else stopPlay();
+    }
+
+    function stopPlay() {
+        playing = false;
+        clearTimeout(timer);
+        btnPlay.textContent = 'Play';
+        btnPlay.style.background = 'linear-gradient(135deg, #f59e0b, #d97706)';
+    }
+
+    window.reset = function() {
+        stopPlay();
+        frameIdx = 0;
+        frames = recordBubbleSort(INITIAL);
+        renderFrame();
+    };
+
+    // ── Init ──
+    frames = recordBubbleSort(INITIAL);
+    renderFrame();
+})();
+</script>
+
+<footer style="text-align:center;padding:1.5rem;color:#888;font-size:0.85rem;border-top:1px solid #333;margin-top:2rem;">
+  <p>&copy; Dr Galan 2026. Created by <a href="https://coderra.je" target="_blank" rel="noopener" style="color:#6ea8fe;text-decoration:none;">Coderra.je</a></p>
+</footer>
+</body>
+</html>

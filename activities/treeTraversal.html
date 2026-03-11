@@ -74,8 +74,150 @@
         .btn-inorder { background: linear-gradient(135deg, #f472b6, #ec4899); }
         .btn-preorder { background: linear-gradient(135deg, #a78bfa, #8b5cf6); }
         .btn-postorder { background: linear-gradient(135deg, #34d399, #10b981); }
+        .btn-bfs { background: linear-gradient(135deg, #f59e0b, #d97706); }
         .btn-stop { background: linear-gradient(135deg, #f7797d, #c471ed); }
         .btn-reset { background: linear-gradient(135deg, #4a4a6a, #3a3a5a); }
+
+        .btn-divider {
+            width: 2px;
+            height: 28px;
+            background: #3a3a5a;
+            border-radius: 1px;
+        }
+
+        /* Strategy badges */
+        .strategy-badge {
+            display: inline-block;
+            font-size: 0.68rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            padding: 3px 8px;
+            border-radius: 6px;
+            margin-left: 6px;
+            vertical-align: middle;
+        }
+
+        .badge-dfs {
+            background: rgba(167, 139, 250, 0.15);
+            color: #a78bfa;
+        }
+
+        .badge-bfs {
+            background: rgba(245, 158, 11, 0.15);
+            color: #f59e0b;
+        }
+
+        /* DFS vs BFS explanation */
+        .explainer-panel {
+            background: #16213e;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+            border: 1px solid #2a2a4a;
+            margin-top: 20px;
+        }
+
+        .explainer-panel h3 {
+            margin: 0 0 14px 0;
+            font-size: 0.95rem;
+            color: #f472b6;
+        }
+
+        .explainer-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+
+        @media (max-width: 600px) {
+            .explainer-grid { grid-template-columns: 1fr; }
+        }
+
+        .explainer-card {
+            padding: 14px;
+            border-radius: 12px;
+            border: 1px solid #2a2a4a;
+        }
+
+        .explainer-card.dfs-card {
+            background: rgba(167, 139, 250, 0.06);
+            border-color: rgba(167, 139, 250, 0.2);
+        }
+
+        .explainer-card.bfs-card {
+            background: rgba(245, 158, 11, 0.06);
+            border-color: rgba(245, 158, 11, 0.2);
+        }
+
+        .explainer-card h4 {
+            margin: 0 0 8px 0;
+            font-size: 0.88rem;
+        }
+
+        .explainer-card.dfs-card h4 { color: #a78bfa; }
+        .explainer-card.bfs-card h4 { color: #f59e0b; }
+
+        .explainer-card p {
+            margin: 0 0 6px 0;
+            font-size: 0.82rem;
+            color: #999;
+            line-height: 1.6;
+        }
+
+        .explainer-card p:last-child { margin-bottom: 0; }
+
+        .explainer-card code {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.78rem;
+            background: rgba(244, 114, 182, 0.1);
+            color: #f472b6;
+            padding: 1px 5px;
+            border-radius: 3px;
+        }
+
+        .explainer-card ul {
+            margin: 6px 0 0 0;
+            padding-left: 18px;
+            font-size: 0.82rem;
+            color: #999;
+            line-height: 1.8;
+        }
+
+        /* Tree selector */
+        .tree-selector {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .tree-selector label {
+            font-size: 0.85rem;
+            color: #888;
+            font-weight: 600;
+        }
+
+        .tree-tab {
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.82rem;
+            font-weight: 600;
+            padding: 8px 18px;
+            border: 2px solid #4a4a6a;
+            border-radius: 10px;
+            cursor: pointer;
+            background: transparent;
+            color: #888;
+            transition: all 0.2s ease;
+        }
+
+        .tree-tab:hover { border-color: #f472b6; color: #f472b6; }
+
+        .tree-tab.active {
+            background: linear-gradient(135deg, #f472b6, #ec4899);
+            border-color: #f472b6;
+            color: #fff;
+        }
 
         /* Speed control */
         .speed-control {
@@ -265,13 +407,23 @@
 <body>
     <div class="container">
         <h1>Tree Traversal Visualization</h1>
-        <p class="subtitle">Watch in-order, pre-order, and post-order traversals step by step</p>
+        <p class="subtitle">Watch depth-first (in-order, pre-order, post-order) and breadth-first traversals step by step</p>
+
+        <!-- Tree selector -->
+        <div class="tree-selector">
+            <label>Tree:</label>
+            <button class="tree-tab active" onclick="switchTree('simple')">Simple (3 levels)</button>
+            <button class="tree-tab" onclick="switchTree('complex')">Complex (4 levels)</button>
+        </div>
 
         <!-- Controls -->
         <div class="controls">
             <button class="btn btn-inorder" id="btnInorder" onclick="startTraversal('inorder')">In-order</button>
             <button class="btn btn-preorder" id="btnPreorder" onclick="startTraversal('preorder')">Pre-order</button>
             <button class="btn btn-postorder" id="btnPostorder" onclick="startTraversal('postorder')">Post-order</button>
+            <span class="btn-divider"></span>
+            <button class="btn btn-bfs" id="btnBfs" onclick="startTraversal('bfs')">Breadth-first</button>
+            <span class="btn-divider"></span>
             <button class="btn btn-stop" id="btnStop" onclick="stopTraversal()" disabled>Stop</button>
             <button class="btn btn-reset" id="btnReset" onclick="resetTree()">Reset</button>
         </div>
@@ -301,28 +453,110 @@
 
         <!-- Algorithm explanation -->
         <div class="algo-panel" id="algoPanel">
-            <h3>Algorithm</h3>
+            <h3>Algorithm <span class="strategy-badge" id="algoBadge"></span></h3>
             <p id="algoText">Choose a traversal type above to see how it works.</p>
+        </div>
+
+        <!-- DFS vs BFS explainer -->
+        <div class="explainer-panel">
+            <h3>Depth-First Search (DFS) vs Breadth-First Search (BFS)</h3>
+            <div class="explainer-grid">
+                <div class="explainer-card dfs-card">
+                    <h4>Depth-First Search (DFS)</h4>
+                    <p>Goes as <strong>deep</strong> as possible down each branch before <strong>backtracking</strong> to explore the next branch. Uses a <code>stack</code> (or recursion, which is an implicit stack).</p>
+                    <p>All three recursive traversals are variations of DFS &mdash; they only differ in <em>when</em> the node is visited relative to its children:</p>
+                    <ul>
+                        <li><strong>Pre-order:</strong> Visit node, then children</li>
+                        <li><strong>In-order:</strong> Visit left child, then node, then right child</li>
+                        <li><strong>Post-order:</strong> Visit children, then node</li>
+                    </ul>
+                </div>
+                <div class="explainer-card bfs-card">
+                    <h4>Breadth-First Search (BFS)</h4>
+                    <p>Visits all nodes at the <strong>current depth level</strong> before moving to the next level (left to right, top to bottom). Uses a <code>queue</code> &mdash; no backtracking.</p>
+                    <p>Also called <strong>level-order traversal</strong>. Each node is dequeued, processed, then its children are enqueued for the next level.</p>
+                    <p>Unlike DFS, BFS never backtracks &mdash; it simply moves forward through the queue, one level at a time.</p>
+                </div>
+            </div>
         </div>
     </div>
 
     <script>
-        // Tree structure
-        const tree = {
-            A: { left: 'B', right: 'C' },
-            B: { left: 'D', right: 'E' },
-            C: { left: null, right: 'F' },
-            D: { left: null, right: null },
-            E: { left: null, right: null },
-            F: { left: null, right: null }
+        // Tree definitions
+        const trees = {
+            simple: {
+                data: {
+                    A: { left: 'B', right: 'C' },
+                    B: { left: 'D', right: 'E' },
+                    C: { left: null, right: 'F' },
+                    D: { left: null, right: null },
+                    E: { left: null, right: null },
+                    F: { left: null, right: null }
+                },
+                root: 'A',
+                colors: {
+                    A: '#f472b6', B: '#a78bfa', C: '#34d399',
+                    D: '#fbbf24', E: '#60a5fa', F: '#f87171'
+                },
+                height: 300,
+                positions: function(w, h) {
+                    const cx = w / 2;
+                    return {
+                        A: { x: cx, y: h * 0.15 },
+                        B: { x: cx - w * 0.25, y: h * 0.5 },
+                        C: { x: cx + w * 0.25, y: h * 0.5 },
+                        D: { x: cx - w * 0.37, y: h * 0.85 },
+                        E: { x: cx - w * 0.13, y: h * 0.85 },
+                        F: { x: cx + w * 0.37, y: h * 0.85 }
+                    };
+                }
+            },
+            complex: {
+                data: {
+                    A: { left: 'B', right: 'C' },
+                    B: { left: 'D', right: 'E' },
+                    C: { left: 'F', right: 'G' },
+                    D: { left: 'H', right: 'I' },
+                    E: { left: 'J', right: null },
+                    F: { left: null, right: 'K' },
+                    G: { left: 'L', right: 'M' },
+                    H: { left: null, right: null },
+                    I: { left: null, right: null },
+                    J: { left: null, right: null },
+                    K: { left: null, right: null },
+                    L: { left: null, right: null },
+                    M: { left: null, right: null }
+                },
+                root: 'A',
+                colors: {
+                    A: '#f472b6', B: '#a78bfa', C: '#34d399',
+                    D: '#fbbf24', E: '#60a5fa', F: '#f87171',
+                    G: '#fb923c', H: '#e879f9', I: '#22d3ee',
+                    J: '#a3e635', K: '#f43f5e', L: '#38bdf8', M: '#facc15'
+                },
+                height: 420,
+                positions: function(w, h) {
+                    const cx = w / 2;
+                    return {
+                        A: { x: cx,               y: h * 0.08 },
+                        B: { x: cx - w * 0.25,    y: h * 0.30 },
+                        C: { x: cx + w * 0.25,    y: h * 0.30 },
+                        D: { x: cx - w * 0.38,    y: h * 0.55 },
+                        E: { x: cx - w * 0.13,    y: h * 0.55 },
+                        F: { x: cx + w * 0.13,    y: h * 0.55 },
+                        G: { x: cx + w * 0.38,    y: h * 0.55 },
+                        H: { x: cx - w * 0.44,    y: h * 0.82 },
+                        I: { x: cx - w * 0.32,    y: h * 0.82 },
+                        J: { x: cx - w * 0.13,    y: h * 0.82 },
+                        K: { x: cx + w * 0.13,    y: h * 0.82 },
+                        L: { x: cx + w * 0.32,    y: h * 0.82 },
+                        M: { x: cx + w * 0.44,    y: h * 0.82 }
+                    };
+                }
+            }
         };
 
-        // Colors for output circles
-        const nodeColors = {
-            A: '#f472b6', B: '#a78bfa', C: '#34d399',
-            D: '#fbbf24', E: '#60a5fa', F: '#f87171'
-        };
-
+        let activeTreeKey = 'simple';
         let traversalSteps = [];
         let currentStep = -1;
         let isRunning = false;
@@ -342,23 +576,32 @@
 
         function getSpeed() { return parseInt(speedSlider.value); }
 
-        // Calculate responsive positions
-        function getNodePositions() {
-            const w = treeContainer.offsetWidth;
-            const h = treeContainer.offsetHeight;
-            const cx = w / 2;
-            return {
-                A: { x: cx, y: h * 0.15 },
-                B: { x: cx - w * 0.25, y: h * 0.5 },
-                C: { x: cx + w * 0.25, y: h * 0.5 },
-                D: { x: cx - w * 0.37, y: h * 0.85 },
-                E: { x: cx - w * 0.13, y: h * 0.85 },
-                F: { x: cx + w * 0.37, y: h * 0.85 }
-            };
+        function getActiveTree() { return trees[activeTreeKey]; }
+
+        function switchTree(key) {
+            if (isRunning) return;
+            activeTreeKey = key;
+            document.querySelectorAll('.tree-tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelector(`.tree-tab[onclick="switchTree('${key}')"]`).classList.add('active');
+            treeContainer.style.height = getActiveTree().height + 'px';
+            resetTree();
+        }
+
+        // Build edge list from tree data
+        function getEdges(treeData) {
+            const edges = [];
+            for (const node in treeData) {
+                if (treeData[node].left) edges.push([node, treeData[node].left]);
+                if (treeData[node].right) edges.push([node, treeData[node].right]);
+            }
+            return edges;
         }
 
         function renderTree() {
-            const pos = getNodePositions();
+            const t = getActiveTree();
+            const w = treeContainer.offsetWidth;
+            const h = treeContainer.offsetHeight;
+            const pos = t.positions(w, h);
             treeContainer.innerHTML = '';
 
             // SVG for arrows
@@ -383,14 +626,9 @@
             svg.appendChild(defs);
 
             // Draw edges
-            const edges = [
-                ['A', 'B'], ['A', 'C'], ['B', 'D'], ['B', 'E'], ['C', 'F']
-            ];
-
-            edges.forEach(([from, to]) => {
+            getEdges(t.data).forEach(([from, to]) => {
                 const p1 = pos[from];
                 const p2 = pos[to];
-                // Offset from center of node (radius ~24px)
                 const dx = p2.x - p1.x;
                 const dy = p2.y - p1.y;
                 const dist = Math.sqrt(dx * dx + dy * dy);
@@ -428,55 +666,87 @@
             });
         }
 
-        // Traversal algorithms
+        // Traversal algorithms (generic — use active tree)
         function inorder(node) {
             if (!node) return;
-            inorder(tree[node].left);
+            const t = getActiveTree().data;
+            inorder(t[node].left);
             traversalSteps.push(node);
-            inorder(tree[node].right);
+            inorder(t[node].right);
         }
 
         function preorder(node) {
             if (!node) return;
+            const t = getActiveTree().data;
             traversalSteps.push(node);
-            preorder(tree[node].left);
-            preorder(tree[node].right);
+            preorder(t[node].left);
+            preorder(t[node].right);
         }
 
         function postorder(node) {
             if (!node) return;
-            postorder(tree[node].left);
-            postorder(tree[node].right);
+            const t = getActiveTree().data;
+            postorder(t[node].left);
+            postorder(t[node].right);
             traversalSteps.push(node);
         }
 
+        function bfs(root) {
+            const t = getActiveTree().data;
+            const queue = [root];
+            while (queue.length > 0) {
+                const node = queue.shift();
+                traversalSteps.push(node);
+                if (t[node].left) queue.push(t[node].left);
+                if (t[node].right) queue.push(t[node].right);
+            }
+        }
+
         const algoDescriptions = {
-            inorder: 'In-order traversal visits: <code>Left subtree → Root → Right subtree</code>. It processes the left child first, then the current node, then the right child. For a BST, this gives nodes in ascending order.',
-            preorder: 'Pre-order traversal visits: <code>Root → Left subtree → Right subtree</code>. It processes the current node first, then recursively visits left and right children. Useful for copying a tree.',
-            postorder: 'Post-order traversal visits: <code>Left subtree → Right subtree → Root</code>. It processes children before the parent. Useful for deleting a tree or evaluating expressions.'
+            inorder: '<strong>In-order</strong> <em>(DFS)</em> visits: <code>Left subtree → Node → Right subtree</code>. It goes as deep as possible down the left branch, backtracks to visit the node, then explores the right branch. For a BST, this gives nodes in ascending order.',
+            preorder: '<strong>Pre-order</strong> <em>(DFS)</em> visits: <code>Node → Left subtree → Right subtree</code>. It visits the current node first, then goes deep into the left branch, backtracks, and explores the right. Useful for copying a tree.',
+            postorder: '<strong>Post-order</strong> <em>(DFS)</em> visits: <code>Left subtree → Right subtree → Node</code>. It goes as deep as possible into both branches before backtracking to visit the parent. Useful for deleting a tree or evaluating expressions.',
+            bfs: '<strong>Breadth-first</strong> <em>(BFS / Level-order)</em> visits: <code>Level 0 → Level 1 → Level 2 → ...</code>. It uses a <strong>queue</strong>: dequeue a node, visit it, then enqueue its children. No recursion, no backtracking — just process the queue until it is empty.'
+        };
+
+        const algoBadges = {
+            inorder: { text: 'DFS', cls: 'badge-dfs' },
+            preorder: { text: 'DFS', cls: 'badge-dfs' },
+            postorder: { text: 'DFS', cls: 'badge-dfs' },
+            bfs: { text: 'BFS', cls: 'badge-bfs' }
         };
 
         function setButtons(running) {
             document.getElementById('btnInorder').disabled = running;
             document.getElementById('btnPreorder').disabled = running;
             document.getElementById('btnPostorder').disabled = running;
+            document.getElementById('btnBfs').disabled = running;
             document.getElementById('btnStop').disabled = !running;
+            document.querySelectorAll('.tree-tab').forEach(tab => {
+                tab.style.pointerEvents = running ? 'none' : 'auto';
+                tab.style.opacity = running ? '0.4' : '1';
+            });
         }
 
         function startTraversal(type) {
             if (isRunning) return;
 
-            // Reset
+            const root = getActiveTree().root;
             traversalSteps = [];
             currentStep = -1;
             visitedNodes = [];
             isRunning = true;
 
-            if (type === 'inorder') inorder('A');
-            else if (type === 'preorder') preorder('A');
-            else if (type === 'postorder') postorder('A');
+            if (type === 'inorder') inorder(root);
+            else if (type === 'preorder') preorder(root);
+            else if (type === 'postorder') postorder(root);
+            else if (type === 'bfs') bfs(root);
 
             algoText.innerHTML = algoDescriptions[type];
+            const badge = document.getElementById('algoBadge');
+            const badgeInfo = algoBadges[type];
+            badge.textContent = badgeInfo.text;
+            badge.className = 'strategy-badge ' + badgeInfo.cls;
             outputSequence.innerHTML = '';
             setButtons(true);
             renderTree();
@@ -492,7 +762,6 @@
                 stepCounter.innerHTML = `Traversal complete — visited all <span>${traversalSteps.length}</span> nodes`;
                 isRunning = false;
                 setButtons(false);
-                // Remove highlight, keep visited
                 document.querySelectorAll('.tree-node').forEach(n => n.classList.remove('highlight'));
                 return;
             }
@@ -519,7 +788,7 @@
             }
             const circle = document.createElement('div');
             circle.className = 'output-circle';
-            circle.style.background = nodeColors[nodeId];
+            circle.style.background = getActiveTree().colors[nodeId];
             circle.textContent = nodeId;
             outputSequence.appendChild(circle);
 
@@ -543,6 +812,9 @@
             stepCounter.textContent = 'Select a traversal to begin';
             outputSequence.innerHTML = '<span class="output-empty">Start a traversal to see the visited order</span>';
             algoText.textContent = 'Choose a traversal type above to see how it works.';
+            const badge = document.getElementById('algoBadge');
+            badge.textContent = '';
+            badge.className = 'strategy-badge';
             setButtons(false);
             renderTree();
         }
@@ -552,6 +824,7 @@
             if (!isRunning) renderTree();
         });
 
+        treeContainer.style.height = getActiveTree().height + 'px';
         renderTree();
     </script>
 <footer style="text-align:center;padding:1.5rem;color:#888;font-size:0.85rem;border-top:1px solid #333;margin-top:2rem;">

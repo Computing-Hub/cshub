@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quick Sort — Best vs Worst Case</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    padding: 20px;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #1a1a2e 0%, #2a1a2e 50%, #1a1a2e 100%);
+    color: #e0e0e0;
+    min-height: 100vh;
+}
+
+h1 {
+    text-align: center;
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 0 0 4px 0;
+    background: linear-gradient(135deg, #f59e0b, #f97316);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.subtitle {
+    text-align: center;
+    font-size: 0.95rem;
+    color: #888;
+    margin: 0 0 24px 0;
+}
+
+/* Controls */
+.controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    max-width: 960px;
+    margin: 0 auto 20px auto;
+}
+
+.btn {
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.88rem;
+    font-weight: 600;
+    padding: 9px 20px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    color: #fff;
+    transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+}
+
+.btn:active:not(:disabled) { transform: translateY(0); }
+.btn:disabled { opacity: 0.4; cursor: default; transform: none; box-shadow: none; }
+
+.btn-step { background: linear-gradient(135deg, #f59e0b, #d97706); }
+.btn-play { background: linear-gradient(135deg, #10b981, #059669); }
+.btn-reset { background: linear-gradient(135deg, #4a4a6a, #3a3a5a); }
+
+.speed-group {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.82rem;
+    color: #888;
+}
+
+.speed-group input[type="range"] {
+    width: 100px;
+    accent-color: #f59e0b;
+}
+
+/* Panels grid */
+.panels-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    max-width: 960px;
+    margin: 0 auto 20px auto;
+}
+
+@media (max-width: 740px) {
+    .panels-grid { grid-template-columns: 1fr; }
+    body { padding: 12px; }
+    h1 { font-size: 1.5rem; }
+}
+
+.panel {
+    background: #16213e;
+    border-radius: 16px;
+    border: 2px solid #2a2a4a;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.panel.best { border-color: rgba(16, 185, 129, 0.3); }
+.panel.worst { border-color: rgba(239, 68, 68, 0.3); }
+
+.panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.panel-title {
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+.panel.best .panel-title { color: #10b981; }
+.panel.worst .panel-title { color: #ef4444; }
+
+.panel-badge {
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 6px;
+    letter-spacing: 0.5px;
+}
+
+.panel.best .panel-badge {
+    background: rgba(16, 185, 129, 0.15);
+    color: #10b981;
+}
+
+.panel.worst .panel-badge {
+    background: rgba(239, 68, 68, 0.15);
+    color: #ef4444;
+}
+
+.panel-subtitle {
+    font-size: 0.78rem;
+    color: #666;
+}
+
+/* Bar chart */
+.bar-area {
+    position: relative;
+    height: 200px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 5px;
+    padding: 0 4px;
+}
+
+.bar-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    flex: 1;
+    max-width: 48px;
+}
+
+.bar {
+    width: 100%;
+    border-radius: 6px 6px 2px 2px;
+    transition: height 0.25s ease, background 0.25s ease, box-shadow 0.25s ease;
+    position: relative;
+    min-height: 12px;
+}
+
+.bar-label {
+    font-family: 'Fira Code', monospace;
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: #888;
+    text-align: center;
+    transition: color 0.25s;
+}
+
+/* Bar states */
+.bar.default { background: #334155; }
+.bar.active { background: #475569; }
+.bar.pivot { background: #f59e0b; box-shadow: 0 0 12px rgba(245, 158, 11, 0.4); }
+.bar.comparing { background: #06b6d4; box-shadow: 0 0 12px rgba(6, 182, 212, 0.4); }
+.bar.swapping { background: #ec4899; box-shadow: 0 0 12px rgba(236, 72, 153, 0.4); }
+.bar.sorted { background: #10b981; box-shadow: 0 0 8px rgba(16, 185, 129, 0.3); }
+
+.bar.pivot + .bar-label { color: #f59e0b; }
+.bar.comparing + .bar-label { color: #06b6d4; }
+.bar.swapping + .bar-label { color: #ec4899; }
+.bar.sorted + .bar-label { color: #10b981; }
+
+/* Stats row */
+.stats-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.82rem;
+    color: #888;
+}
+
+.comp-count {
+    font-family: 'Fira Code', monospace;
+    font-size: 1.3rem;
+    font-weight: 700;
+}
+
+.panel.best .comp-count { color: #10b981; }
+.panel.worst .comp-count { color: #ef4444; }
+
+.depth-label {
+    font-size: 0.78rem;
+}
+
+/* Step description */
+.step-desc {
+    font-size: 0.8rem;
+    color: #999;
+    min-height: 38px;
+    line-height: 1.5;
+    padding: 8px 10px;
+    background: rgba(255,255,255,0.03);
+    border-radius: 8px;
+}
+
+.step-desc code {
+    font-family: 'Fira Code', monospace;
+    color: #f59e0b;
+    font-size: 0.78rem;
+}
+
+.step-desc .val-pivot { color: #f59e0b; font-weight: 600; }
+.step-desc .val-yes { color: #10b981; font-weight: 600; }
+.step-desc .val-no { color: #ef4444; font-weight: 600; }
+
+/* Done banner */
+.done-banner {
+    text-align: center;
+    font-weight: 700;
+    font-size: 0.95rem;
+    padding: 10px;
+    border-radius: 10px;
+    animation: popIn 0.4s ease;
+}
+
+.panel.best .done-banner {
+    background: rgba(16, 185, 129, 0.12);
+    color: #10b981;
+    border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.panel.worst .done-banner {
+    background: rgba(239, 68, 68, 0.12);
+    color: #ef4444;
+    border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+/* Legend */
+.legend {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 14px;
+    max-width: 960px;
+    margin: 0 auto 20px auto;
+    font-size: 0.78rem;
+    color: #888;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.legend-swatch {
+    width: 14px;
+    height: 14px;
+    border-radius: 3px;
+}
+
+/* Big O panel */
+.bigo-panel {
+    max-width: 960px;
+    margin: 0 auto;
+    background: #16213e;
+    border-radius: 16px;
+    border: 1px solid #2a2a4a;
+    padding: 24px;
+}
+
+.bigo-panel h3 {
+    margin: 0 0 14px 0;
+    font-size: 1rem;
+    color: #f59e0b;
+}
+
+.bigo-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+@media (max-width: 600px) {
+    .bigo-grid { grid-template-columns: 1fr; }
+}
+
+.bigo-card {
+    padding: 16px;
+    border-radius: 12px;
+    border: 1px solid #2a2a4a;
+}
+
+.bigo-card.best-card { background: rgba(16, 185, 129, 0.06); border-color: rgba(16, 185, 129, 0.2); }
+.bigo-card.worst-card { background: rgba(239, 68, 68, 0.06); border-color: rgba(239, 68, 68, 0.2); }
+
+.bigo-card h4 {
+    margin: 0 0 6px 0;
+    font-size: 0.9rem;
+}
+
+.bigo-card.best-card h4 { color: #10b981; }
+.bigo-card.worst-card h4 { color: #ef4444; }
+
+.bigo-notation {
+    font-family: 'Fira Code', monospace;
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin: 4px 0 8px 0;
+}
+
+.bigo-card.best-card .bigo-notation { color: #34d399; }
+.bigo-card.worst-card .bigo-notation { color: #f87171; }
+
+.bigo-card p {
+    margin: 0;
+    font-size: 0.82rem;
+    color: #999;
+    line-height: 1.6;
+}
+
+.bigo-card code {
+    font-family: 'Fira Code', monospace;
+    font-size: 0.78rem;
+    background: rgba(245, 158, 11, 0.1);
+    color: #f59e0b;
+    padding: 1px 5px;
+    border-radius: 3px;
+}
+
+.bigo-footer {
+    margin-top: 16px;
+    padding-top: 14px;
+    border-top: 1px solid #2a2a4a;
+    font-size: 0.82rem;
+    color: #888;
+    line-height: 1.6;
+}
+
+.bigo-footer strong { color: #f59e0b; }
+
+/* Animations */
+@keyframes popIn {
+    0% { opacity: 0; transform: scale(0.85); }
+    60% { transform: scale(1.03); }
+    100% { opacity: 1; transform: scale(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+</style>
+</head>
+<body>
+
+<h1>Quick Sort &mdash; Best vs Worst Case</h1>
+<p class="subtitle">Compare how pivot selection and data order affect the number of comparisons</p>
+
+<!-- Controls -->
+<div class="controls">
+    <button class="btn btn-step" id="btnStep" onclick="step()">Step</button>
+    <button class="btn btn-play" id="btnPlay" onclick="togglePlay()">Play</button>
+    <button class="btn btn-reset" onclick="reset()">Reset</button>
+    <div class="speed-group">
+        <span>Speed:</span>
+        <input type="range" id="speedSlider" min="100" max="1200" value="500" step="100">
+        <span id="speedLabel">500ms</span>
+    </div>
+</div>
+
+<!-- Legend -->
+<div class="legend">
+    <div class="legend-item"><div class="legend-swatch" style="background:#475569"></div> Active range</div>
+    <div class="legend-item"><div class="legend-swatch" style="background:#f59e0b"></div> Pivot</div>
+    <div class="legend-item"><div class="legend-swatch" style="background:#06b6d4"></div> Comparing</div>
+    <div class="legend-item"><div class="legend-swatch" style="background:#ec4899"></div> Swapping</div>
+    <div class="legend-item"><div class="legend-swatch" style="background:#10b981"></div> Sorted</div>
+</div>
+
+<!-- Side-by-side panels -->
+<div class="panels-grid">
+    <!-- Best case -->
+    <div class="panel best">
+        <div class="panel-header">
+            <span class="panel-title">Average Case</span>
+            <span class="panel-badge">Shuffled Array</span>
+        </div>
+        <p class="panel-subtitle">First-element pivot on random data &mdash; balanced partitions</p>
+        <div class="bar-area" id="bestBars"></div>
+        <div class="stats-row">
+            <span>Comparisons: <span class="comp-count" id="bestComp">0</span></span>
+            <span class="depth-label" id="bestDepth"></span>
+        </div>
+        <div class="step-desc" id="bestDesc">Press <strong>Step</strong> or <strong>Play</strong> to begin</div>
+    </div>
+
+    <!-- Worst case -->
+    <div class="panel worst">
+        <div class="panel-header">
+            <span class="panel-title">Worst Case</span>
+            <span class="panel-badge">Already Sorted</span>
+        </div>
+        <p class="panel-subtitle">First-element pivot on sorted data &mdash; maximally unbalanced</p>
+        <div class="bar-area" id="worstBars"></div>
+        <div class="stats-row">
+            <span>Comparisons: <span class="comp-count" id="worstComp">0</span></span>
+            <span class="depth-label" id="worstDepth"></span>
+        </div>
+        <div class="step-desc" id="worstDesc">Press <strong>Step</strong> or <strong>Play</strong> to begin</div>
+    </div>
+</div>
+
+<!-- Big O explanation -->
+<div class="bigo-panel">
+    <h3>Big O Analysis &mdash; Why Does This Happen?</h3>
+    <div class="bigo-grid">
+        <div class="bigo-card best-card">
+            <h4>Best / Average Case</h4>
+            <div class="bigo-notation">O(n log n)</div>
+            <p>
+                When the pivot splits the array roughly in half each time, we get
+                <code>log n</code> levels of recursion. Each level does <code>n</code>
+                comparisons total across all partitions.
+            </p>
+            <p style="margin-top:8px">
+                With 8 elements: <code>log₂(8) = 3</code> levels &times; 8 &asymp; <code>~16 comparisons</code>.
+            </p>
+        </div>
+        <div class="bigo-card worst-card">
+            <h4>Worst Case</h4>
+            <div class="bigo-notation">O(n&sup2;)</div>
+            <p>
+                When the pivot is always the smallest (or largest) element, one
+                partition has <code>n&minus;1</code> elements and the other has <code>0</code>.
+                This gives <code>n</code> levels of recursion.
+            </p>
+            <p style="margin-top:8px">
+                With 8 elements: <code>7+6+5+4+3+2+1</code> = <code>28 comparisons</code>.
+            </p>
+        </div>
+    </div>
+    <div class="bigo-footer">
+        <strong>Key takeaway:</strong> Quick Sort's performance depends heavily on pivot choice.
+        An already-sorted array with a first-element pivot triggers the worst case every time.
+        To avoid this, use strategies like <strong>random pivot</strong>,
+        <strong>median-of-three</strong>, or <strong>shuffle the array first</strong>.
+    </div>
+</div>
+
+<script>
+(function() {
+    // ── Data ──
+    const BEST_ARR  = [5, 3, 8, 2, 7, 1, 6, 4];
+    const WORST_ARR = [1, 2, 3, 4, 5, 6, 7, 8];
+    const MAX_VAL   = 8;
+    const BAR_H     = 180; // max bar height in px
+
+    // ── Record all animation frames for a quicksort run ──
+    function recordQuickSort(inputArr) {
+        const arr = [...inputArr];
+        const n = arr.length;
+        const frames = [];
+        const placed = new Set();
+        let comps = 0;
+
+        function snap(phase, lo, hi, extra) {
+            frames.push({
+                arr: [...arr],
+                phase,
+                lo, hi,
+                placed: new Set(placed),
+                comps,
+                ...extra
+            });
+        }
+
+        function qs(lo, hi, depth) {
+            if (lo > hi) return;
+            if (lo === hi) {
+                placed.add(lo);
+                snap('single', lo, hi, { depth });
+                return;
+            }
+
+            // Pivot = first element (Lomuto partition)
+            const pivotIdx = lo;
+            snap('pivot', lo, hi, { pivotIdx, depth });
+
+            // Move pivot to end
+            [arr[pivotIdx], arr[hi]] = [arr[hi], arr[pivotIdx]];
+            const pivotVal = arr[hi];
+            if (pivotIdx !== hi) {
+                snap('pivot-moved', lo, hi, { pivotPos: hi, pivotVal, depth });
+            }
+
+            let i = lo;
+            for (let j = lo; j < hi; j++) {
+                comps++;
+                const leq = arr[j] <= pivotVal;
+                snap('compare', lo, hi, {
+                    pivotPos: hi, pivotVal, comparing: j,
+                    storeIdx: i, leq, depth
+                });
+
+                if (leq) {
+                    if (i !== j) {
+                        [arr[i], arr[j]] = [arr[j], arr[i]];
+                        snap('swap', lo, hi, {
+                            pivotPos: hi, pivotVal,
+                            swapped: [i, j], storeIdx: i + 1, depth
+                        });
+                    }
+                    i++;
+                }
+            }
+
+            // Place pivot in final position
+            [arr[i], arr[hi]] = [arr[hi], arr[i]];
+            placed.add(i);
+            snap('placed', lo, hi, { placedIdx: i, pivotVal, depth });
+
+            qs(lo, i - 1, depth + 1);
+            qs(i + 1, hi, depth + 1);
+        }
+
+        snap('init', 0, n - 1, { depth: 0 });
+        qs(0, n - 1, 0);
+        snap('done', 0, n - 1, { depth: 0 });
+
+        return frames;
+    }
+
+    // ── Build frames ──
+    let bestFrames, worstFrames;
+    let bestIdx, worstIdx;
+    let playing = false;
+    let timer = null;
+
+    function buildFrames() {
+        bestFrames  = recordQuickSort(BEST_ARR);
+        worstFrames = recordQuickSort(WORST_ARR);
+        bestIdx = 0;
+        worstIdx = 0;
+    }
+
+    // ── DOM refs ──
+    const bestBarsEl  = document.getElementById('bestBars');
+    const worstBarsEl = document.getElementById('worstBars');
+    const bestCompEl  = document.getElementById('bestComp');
+    const worstCompEl = document.getElementById('worstComp');
+    const bestDescEl  = document.getElementById('bestDesc');
+    const worstDescEl = document.getElementById('worstDesc');
+    const bestDepthEl = document.getElementById('bestDepth');
+    const worstDepthEl= document.getElementById('worstDepth');
+    const btnStep     = document.getElementById('btnStep');
+    const btnPlay     = document.getElementById('btnPlay');
+    const speedSlider = document.getElementById('speedSlider');
+    const speedLabel  = document.getElementById('speedLabel');
+
+    speedSlider.addEventListener('input', () => {
+        speedLabel.textContent = speedSlider.value + 'ms';
+    });
+
+    function getSpeed() { return parseInt(speedSlider.value); }
+
+    // ── Render bars ──
+    function renderBars(container, frame) {
+        const arr = frame.arr;
+        container.innerHTML = '';
+
+        for (let idx = 0; idx < arr.length; idx++) {
+            const wrapper = document.createElement('div');
+            wrapper.className = 'bar-wrapper';
+
+            const bar = document.createElement('div');
+            bar.className = 'bar';
+            bar.style.height = (arr[idx] / MAX_VAL) * BAR_H + 'px';
+
+            // Determine state
+            if (frame.placed.has(idx) || frame.phase === 'done') {
+                bar.classList.add('sorted');
+            } else if (frame.swapped && frame.swapped.includes(idx)) {
+                bar.classList.add('swapping');
+            } else if (frame.comparing === idx) {
+                bar.classList.add('comparing');
+            } else if (frame.pivotIdx === idx || frame.pivotPos === idx) {
+                bar.classList.add('pivot');
+            } else if (frame.lo !== undefined && idx >= frame.lo && idx <= frame.hi) {
+                bar.classList.add('active');
+            } else {
+                bar.classList.add('default');
+            }
+
+            const label = document.createElement('div');
+            label.className = 'bar-label';
+            label.textContent = arr[idx];
+
+            wrapper.appendChild(bar);
+            wrapper.appendChild(label);
+            container.appendChild(wrapper);
+        }
+    }
+
+    // ── Step description text ──
+    function describeFrame(f) {
+        switch (f.phase) {
+            case 'init':
+                return 'Starting array: [' + f.arr.join(', ') + ']';
+            case 'pivot':
+                return 'Subarray [' + f.lo + '..' + f.hi + '] — Pivot selected: <span class="val-pivot">' + f.arr[f.pivotIdx] + '</span> (first element)';
+            case 'pivot-moved':
+                return 'Pivot <span class="val-pivot">' + f.pivotVal + '</span> moved to end for partitioning';
+            case 'compare':
+                return 'Is <code>' + f.arr[f.comparing] + ' ≤ ' + f.pivotVal + '</code>? ' +
+                    (f.leq ? '<span class="val-yes">Yes — move to left partition</span>'
+                           : '<span class="val-no">No — stays in right partition</span>');
+            case 'swap':
+                return 'Swap positions ' + f.swapped[0] + ' and ' + f.swapped[1] +
+                    ' → [' + f.arr.join(', ') + ']';
+            case 'placed':
+                return 'Pivot <span class="val-pivot">' + f.pivotVal + '</span> placed at final position ' + f.placedIdx + ' ✓';
+            case 'single':
+                return 'Single element at position ' + f.lo + ' — already sorted ✓';
+            case 'done':
+                return '<strong>Sorted!</strong> [' + f.arr.join(', ') + ']';
+            default:
+                return '';
+        }
+    }
+
+    // ── Render one panel ──
+    function renderPanel(barsEl, compEl, descEl, depthEl, frame, isDone) {
+        renderBars(barsEl, frame);
+        compEl.textContent = frame.comps;
+        descEl.innerHTML = describeFrame(frame);
+        if (frame.depth !== undefined && frame.phase !== 'done' && frame.phase !== 'init') {
+            depthEl.textContent = 'Depth: ' + frame.depth;
+        } else {
+            depthEl.textContent = '';
+        }
+    }
+
+    function renderAll() {
+        renderPanel(bestBarsEl, bestCompEl, bestDescEl, bestDepthEl,
+                    bestFrames[bestIdx], bestIdx >= bestFrames.length - 1);
+        renderPanel(worstBarsEl, worstCompEl, worstDescEl, worstDepthEl,
+                    worstFrames[worstIdx], worstIdx >= worstFrames.length - 1);
+
+        const allDone = bestIdx >= bestFrames.length - 1 && worstIdx >= worstFrames.length - 1;
+        btnStep.disabled = allDone;
+        if (allDone) stopPlay();
+    }
+
+    // ── Controls ──
+    window.step = function() {
+        let advanced = false;
+        if (bestIdx < bestFrames.length - 1) { bestIdx++; advanced = true; }
+        if (worstIdx < worstFrames.length - 1) { worstIdx++; advanced = true; }
+        if (advanced) renderAll();
+    };
+
+    window.togglePlay = function() {
+        if (playing) {
+            stopPlay();
+        } else {
+            playing = true;
+            btnPlay.textContent = 'Pause';
+            btnPlay.style.background = 'linear-gradient(135deg, #f59e0b, #d97706)';
+            tick();
+        }
+    };
+
+    function tick() {
+        if (!playing) return;
+        step();
+        const allDone = bestIdx >= bestFrames.length - 1 && worstIdx >= worstFrames.length - 1;
+        if (!allDone) {
+            timer = setTimeout(tick, getSpeed());
+        } else {
+            stopPlay();
+        }
+    }
+
+    function stopPlay() {
+        playing = false;
+        clearTimeout(timer);
+        btnPlay.textContent = 'Play';
+        btnPlay.style.background = 'linear-gradient(135deg, #10b981, #059669)';
+    }
+
+    window.reset = function() {
+        stopPlay();
+        buildFrames();
+        renderAll();
+    };
+
+    // ── Init ──
+    buildFrames();
+    renderAll();
+})();
+</script>
+
+<footer style="text-align:center;padding:1.5rem;color:#888;font-size:0.85rem;border-top:1px solid #333;margin-top:2rem;">
+  <p>&copy; Dr Galan 2026. Created by <a href="https://coderra.je" target="_blank" rel="noopener" style="color:#6ea8fe;text-decoration:none;">Coderra.je</a></p>
+</footer>
+</body>
+</html>

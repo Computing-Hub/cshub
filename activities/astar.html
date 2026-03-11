@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A* Search Algorithm — Interactive</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    padding: 20px;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #1a1a2e 0%, #1e1a2e 50%, #1a1a2e 100%);
+    color: #e0e0e0;
+    min-height: 100vh;
+}
+
+.container { max-width: 960px; margin: 0 auto; }
+
+h1 {
+    text-align: center;
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 0 0 4px 0;
+    background: linear-gradient(135deg, #a78bfa, #7c3aed);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.subtitle {
+    text-align: center;
+    font-size: 0.95rem;
+    color: #888;
+    margin: 0 0 20px 0;
+}
+
+/* Formula banner */
+.formula-banner {
+    text-align: center;
+    padding: 14px 20px;
+    background: rgba(167, 139, 250, 0.08);
+    border: 1px solid rgba(167, 139, 250, 0.25);
+    border-radius: 12px;
+    margin-bottom: 20px;
+}
+
+.formula {
+    font-family: 'Fira Code', monospace;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #e0e0e0;
+    margin-bottom: 6px;
+}
+
+.formula .f-f { color: #f59e0b; }
+.formula .f-g { color: #34d399; }
+.formula .f-h { color: #a78bfa; }
+
+.formula-detail {
+    font-size: 0.82rem;
+    color: #999;
+    line-height: 1.6;
+}
+
+.formula-detail strong { font-weight: 600; }
+.formula-detail .f-g { color: #34d399; }
+.formula-detail .f-h { color: #a78bfa; }
+.formula-detail .f-f { color: #f59e0b; }
+
+/* Graph selector */
+.graph-selector {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+.graph-selector label {
+    font-size: 0.85rem;
+    color: #888;
+    font-weight: 600;
+}
+
+.graph-tab {
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 600;
+    padding: 8px 18px;
+    border: 2px solid #3a2a5a;
+    border-radius: 10px;
+    cursor: pointer;
+    background: transparent;
+    color: #888;
+    transition: all 0.2s ease;
+}
+
+.graph-tab:hover { border-color: #a78bfa; color: #a78bfa; }
+
+.graph-tab.active {
+    background: linear-gradient(135deg, #a78bfa, #7c3aed);
+    border-color: #a78bfa;
+    color: #fff;
+}
+
+/* Controls */
+.controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+}
+
+.btn {
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.88rem;
+    font-weight: 600;
+    padding: 9px 20px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    color: #fff;
+    transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+}
+
+.btn:active:not(:disabled) { transform: translateY(0); }
+.btn:disabled { opacity: 0.4; cursor: default; transform: none; box-shadow: none; }
+
+.btn-step { background: linear-gradient(135deg, #a78bfa, #7c3aed); }
+.btn-play { background: linear-gradient(135deg, #f59e0b, #d97706); }
+.btn-reset { background: linear-gradient(135deg, #4a4a6a, #3a3a5a); }
+
+.speed-group {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.82rem;
+    color: #888;
+}
+
+.speed-group input[type="range"] {
+    width: 100px;
+    accent-color: #a78bfa;
+}
+
+/* Legend */
+.legend {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-bottom: 16px;
+    font-size: 0.76rem;
+    color: #888;
+}
+
+.legend-item { display: flex; align-items: center; gap: 5px; }
+.legend-swatch { width: 14px; height: 14px; border-radius: 3px; }
+
+/* Graph viewport */
+.graph-viewport {
+    background: rgba(255,255,255,0.03);
+    border: 2px solid #2a2a4a;
+    border-radius: 16px;
+    padding: 10px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+    margin-bottom: 16px;
+    overflow: hidden;
+}
+
+.graph-svg { width: 100%; display: block; }
+
+/* Step description */
+.step-desc {
+    font-size: 0.85rem;
+    color: #ccc;
+    min-height: 44px;
+    line-height: 1.6;
+    padding: 12px 16px;
+    background: #16213e;
+    border-radius: 12px;
+    border: 1px solid #2a2a4a;
+    margin-bottom: 16px;
+    text-align: center;
+}
+
+.step-desc .val-update { color: #f59e0b; font-weight: 700; }
+.step-desc .val-current { color: #a78bfa; font-weight: 700; }
+.step-desc .val-no { color: #888; }
+.step-desc .val-done { color: #a78bfa; font-weight: 700; }
+.step-desc .val-goal { color: #f472b6; font-weight: 700; }
+
+/* Table */
+.table-panel {
+    background: #16213e;
+    border-radius: 16px;
+    padding: 20px;
+    border: 1px solid #2a2a4a;
+    margin-bottom: 16px;
+    overflow-x: auto;
+}
+
+.table-panel h3 {
+    margin: 0 0 12px 0;
+    font-size: 0.95rem;
+    color: #a78bfa;
+}
+
+.dist-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+}
+
+.dist-table th {
+    background: rgba(167, 139, 250, 0.1);
+    color: #a78bfa;
+    font-weight: 600;
+    padding: 8px 10px;
+    text-align: center;
+    border-bottom: 2px solid #2a2a4a;
+    font-size: 0.8rem;
+    letter-spacing: 0.3px;
+    white-space: nowrap;
+}
+
+.dist-table td {
+    padding: 8px 10px;
+    text-align: center;
+    border-bottom: 1px solid #1a2a3a;
+    font-family: 'Fira Code', monospace;
+    font-size: 0.85rem;
+    transition: background 0.3s;
+}
+
+.dist-table tr.row-current { background: rgba(167, 139, 250, 0.08); }
+.dist-table tr.row-updated td { animation: flashUpdate 0.8s ease; }
+.dist-table .cell-visited { color: #a78bfa; }
+.dist-table .cell-unvisited { color: #666; }
+.dist-table .cell-infinity { color: #555; }
+.dist-table .cell-updated { color: #f59e0b; font-weight: 700; }
+.dist-table .old-val { text-decoration: line-through; color: #555; font-size: 0.75rem; margin-right: 4px; }
+.dist-table .cell-h { color: #a78bfa; }
+.dist-table .cell-f { color: #e0e0e0; }
+
+/* Comparison banner */
+.compare-banner {
+    display: none;
+    padding: 14px 20px;
+    border-radius: 12px;
+    margin-bottom: 16px;
+    text-align: center;
+    background: rgba(167, 139, 250, 0.08);
+    border: 1px solid rgba(167, 139, 250, 0.25);
+}
+
+.compare-banner.show { display: block; }
+
+.compare-banner p {
+    margin: 0;
+    font-size: 0.85rem;
+    color: #ccc;
+    line-height: 1.6;
+}
+
+.compare-banner strong { color: #a78bfa; }
+.compare-banner .dij { color: #34d399; }
+
+/* Algo panel */
+.algo-panel {
+    background: #16213e;
+    border-radius: 16px;
+    padding: 20px;
+    border: 1px solid #2a2a4a;
+    margin-bottom: 16px;
+}
+
+.algo-panel h3 {
+    margin: 0 0 12px 0;
+    font-size: 0.95rem;
+    color: #a78bfa;
+}
+
+.algo-panel p {
+    margin: 0 0 8px 0;
+    font-size: 0.84rem;
+    color: #999;
+    line-height: 1.7;
+}
+
+.algo-panel p:last-child { margin-bottom: 0; }
+
+.algo-panel code {
+    font-family: 'Fira Code', monospace;
+    font-size: 0.78rem;
+    background: rgba(167, 139, 250, 0.1);
+    color: #a78bfa;
+    padding: 1px 5px;
+    border-radius: 3px;
+}
+
+.algo-panel .pseudo {
+    background: rgba(0,0,0,0.2);
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin: 12px 0;
+    font-family: 'Fira Code', monospace;
+    font-size: 0.78rem;
+    line-height: 1.8;
+    color: #b0b0c8;
+}
+
+.algo-panel .pseudo .kw { color: #c792ea; }
+.algo-panel .pseudo .fn { color: #82aaff; }
+.algo-panel .pseudo .cm { color: #555; font-style: italic; }
+.algo-panel .pseudo .hl { color: #f59e0b; }
+
+/* Comparison grid */
+.vs-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-top: 16px;
+}
+
+@media (max-width: 600px) { .vs-grid { grid-template-columns: 1fr; } }
+
+.vs-card {
+    padding: 14px;
+    border-radius: 12px;
+    border: 1px solid #2a2a4a;
+}
+
+.vs-card.dij-card { background: rgba(52, 211, 153, 0.06); border-color: rgba(52, 211, 153, 0.2); }
+.vs-card.astar-card { background: rgba(167, 139, 250, 0.06); border-color: rgba(167, 139, 250, 0.2); }
+
+.vs-card h4 { margin: 0 0 6px 0; font-size: 0.88rem; }
+.vs-card.dij-card h4 { color: #34d399; }
+.vs-card.astar-card h4 { color: #a78bfa; }
+
+.vs-card p {
+    margin: 0;
+    font-size: 0.82rem;
+    color: #999;
+    line-height: 1.6;
+}
+
+@keyframes flashUpdate {
+    0% { background: rgba(245, 158, 11, 0.3); }
+    100% { background: transparent; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+@media (max-width: 600px) {
+    body { padding: 12px; }
+    h1 { font-size: 1.5rem; }
+    .dist-table { font-size: 0.75rem; }
+    .dist-table td, .dist-table th { padding: 5px 6px; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+<h1>A* Search Algorithm</h1>
+<p class="subtitle">See how the heuristic guides A* toward the goal, exploring fewer nodes than Dijkstra</p>
+
+<!-- Formula -->
+<div class="formula-banner">
+    <div class="formula"><span class="f-f">f(n)</span> = <span class="f-g">g(n)</span> + <span class="f-h">h(n)</span></div>
+    <div class="formula-detail">
+        <span class="f-g"><strong>g(n)</strong> = actual cost from start to n</span> &nbsp;|&nbsp;
+        <span class="f-h"><strong>h(n)</strong> = heuristic estimate from n to goal</span> &nbsp;|&nbsp;
+        <span class="f-f"><strong>f(n)</strong> = total estimated cost</span>
+    </div>
+</div>
+
+<!-- Graph selector -->
+<div class="graph-selector">
+    <label>Graph:</label>
+    <button class="graph-tab active" id="tabSimple" onclick="switchGraph('simple')">Simple (5 nodes)</button>
+    <button class="graph-tab" id="tabComplex" onclick="switchGraph('complex')">Complex (7 nodes)</button>
+</div>
+
+<!-- Controls -->
+<div class="controls">
+    <button class="btn btn-step" id="btnStep" onclick="step()">Step</button>
+    <button class="btn btn-play" id="btnPlay" onclick="togglePlay()">Play</button>
+    <button class="btn btn-reset" onclick="reset()">Reset</button>
+    <div class="speed-group">
+        <span>Speed:</span>
+        <input type="range" id="speedSlider" min="200" max="1500" value="700" step="100">
+        <span id="speedLabel">700ms</span>
+    </div>
+</div>
+
+<!-- Legend -->
+<div class="legend">
+    <div class="legend-item"><div class="legend-swatch" style="background:#334155"></div> Unvisited</div>
+    <div class="legend-item"><div class="legend-swatch" style="background:#a78bfa"></div> Current node</div>
+    <div class="legend-item"><div class="legend-swatch" style="background:#06b6d4"></div> Exploring edge</div>
+    <div class="legend-item"><div class="legend-swatch" style="background:#f59e0b"></div> Updated</div>
+    <div class="legend-item"><div class="legend-swatch" style="background:#10b981"></div> Visited</div>
+    <div class="legend-item"><div class="legend-swatch" style="background:transparent;border:2px dashed #f472b6"></div> Goal</div>
+</div>
+
+<!-- Graph SVG -->
+<div class="graph-viewport">
+    <svg id="graphSvg" class="graph-svg" viewBox="0 0 860 420" preserveAspectRatio="xMidYMid meet"></svg>
+</div>
+
+<!-- Step description -->
+<div class="step-desc" id="stepDesc">Press <strong>Step</strong> or <strong>Play</strong> to begin A* from node A toward the goal</div>
+
+<!-- Table -->
+<div class="table-panel">
+    <h3>A* Tracking Table &mdash; g(n) + h(n) = f(n)</h3>
+    <table class="dist-table" id="distTable"></table>
+</div>
+
+<!-- Comparison banner -->
+<div class="compare-banner" id="compareBanner">
+    <p id="compareText"></p>
+</div>
+
+<!-- Explanation -->
+<div class="algo-panel">
+    <h3>How A* Search Works</h3>
+    <p>A* is an <strong>informed</strong> search algorithm that combines the actual distance travelled so far with an <strong>estimated remaining distance</strong> to decide which node to explore next.</p>
+    <div class="pseudo">
+<span class="kw">set</span> g[source] = 0, f[source] = <span class="hl">h(source)</span>, all others = &infin;<br>
+<span class="kw">while</span> there are unvisited nodes with finite f:<br>
+&nbsp;&nbsp;current = unvisited node <span class="kw">with</span> smallest <span class="hl">f(n) = g(n) + h(n)</span><br>
+&nbsp;&nbsp;<span class="kw">if</span> current == goal: <span class="fn">STOP</span> <span class="cm">// shortest path found!</span><br>
+&nbsp;&nbsp;<span class="fn">mark</span> current as visited<br>
+&nbsp;&nbsp;<span class="kw">for each</span> unvisited neighbour of current:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;newG = g[current] + edge weight<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">if</span> newG &lt; g[neighbour]:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;g[neighbour] = newG<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="hl">f[neighbour] = newG + h(neighbour)</span> <span class="cm">// update total estimate</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;previous[neighbour] = current
+    </div>
+    <p><strong>The heuristic h(n)</strong> estimates the remaining cost from node n to the goal. It must be <strong>admissible</strong> &mdash; it must never <em>overestimate</em> the true remaining distance. If it does, A* might miss the optimal path. Common admissible heuristics include straight-line (Euclidean) distance and Manhattan distance.</p>
+    <p><strong>Why does A* explore fewer nodes?</strong> Dijkstra picks the node with the lowest <code>g(n)</code> &mdash; distance from the start. A* picks the node with the lowest <code>f(n) = g(n) + h(n)</code>, which factors in how close a node is to the <em>goal</em>. This steers the search in the right direction, skipping nodes that are far from the goal. A* also <strong>stops as soon as the goal is reached</strong>, while Dijkstra must visit every node.</p>
+    <p><strong>Special case:</strong> If <code>h(n) = 0</code> for all nodes, the heuristic gives no guidance and A* degrades to Dijkstra exactly.</p>
+
+    <div class="vs-grid">
+        <div class="vs-card dij-card">
+            <h4>Dijkstra</h4>
+            <p>Explores <strong>all directions equally</strong>. Picks the node with the smallest <code>g(n)</code>. Must visit every reachable node. No knowledge of where the goal is.</p>
+        </div>
+        <div class="vs-card astar-card">
+            <h4>A* Search</h4>
+            <p>Explores <strong>toward the goal</strong>. Picks the node with the smallest <code>f(n) = g(n) + h(n)</code>. Stops when the goal is reached. Uses a heuristic to skip irrelevant nodes.</p>
+        </div>
+    </div>
+</div>
+
+</div>
+
+<script>
+(function() {
+    // ── Graph definitions ──
+    // Same structure as Dijkstra graphs, plus goal + heuristic h values
+    const graphs = {
+        simple: {
+            nodes: {
+                A: { x: 86,  y: 190 },
+                B: { x: 301, y: 70  },
+                C: { x: 430, y: 270 },
+                D: { x: 645, y: 110 },
+                E: { x: 791, y: 210 }
+            },
+            edges: [
+                { from: 'A', to: 'B', weight: 2 },
+                { from: 'A', to: 'C', weight: 10 },
+                { from: 'B', to: 'C', weight: 4 },
+                { from: 'B', to: 'D', weight: 8 },
+                { from: 'C', to: 'D', weight: 3 },
+                { from: 'C', to: 'E', weight: 6 },
+                { from: 'D', to: 'E', weight: 1 }
+            ],
+            source: 'A',
+            goal: 'E',
+            h: { A: 8, B: 6, C: 3, D: 1, E: 0 }
+        },
+        complex: {
+            nodes: {
+                A: { x: 69,  y: 170 },
+                B: { x: 215, y: 50  },
+                C: { x: 275, y: 250 },
+                D: { x: 473, y: 330 },
+                E: { x: 473, y: 70  },
+                F: { x: 671, y: 210 },
+                G: { x: 800, y: 90  }
+            },
+            edges: [
+                { from: 'A', to: 'B', weight: 3 },
+                { from: 'A', to: 'C', weight: 7 },
+                { from: 'A', to: 'D', weight: 12 },
+                { from: 'B', to: 'C', weight: 2 },
+                { from: 'B', to: 'E', weight: 6 },
+                { from: 'C', to: 'D', weight: 4 },
+                { from: 'C', to: 'E', weight: 3 },
+                { from: 'D', to: 'F', weight: 5 },
+                { from: 'E', to: 'F', weight: 2 },
+                { from: 'E', to: 'G', weight: 8 },
+                { from: 'F', to: 'G', weight: 3 }
+            ],
+            source: 'A',
+            goal: 'G',
+            h: { A: 10, B: 8, C: 6, D: 7, E: 4, F: 3, G: 0 }
+        }
+    };
+
+    const NODE_R = 22;
+
+    // ── State ──
+    let activeGraphKey = 'simple';
+    let frames = [];
+    let frameIdx = 0;
+    let playing = false;
+    let timer = null;
+
+    // ── DOM ──
+    const $ = id => document.getElementById(id);
+    const svgEl      = $('graphSvg');
+    const stepDesc   = $('stepDesc');
+    const distTable  = $('distTable');
+    const btnStep    = $('btnStep');
+    const btnPlay    = $('btnPlay');
+    const speedSlider = $('speedSlider');
+    const speedLabel  = $('speedLabel');
+
+    speedSlider.addEventListener('input', () => { speedLabel.textContent = speedSlider.value + 'ms'; });
+    function getSpeed() { return parseInt(speedSlider.value); }
+    function getGraph() { return graphs[activeGraphKey]; }
+
+    // ── Adjacency list ──
+    function buildAdj(graph) {
+        const adj = {};
+        for (const n in graph.nodes) adj[n] = [];
+        graph.edges.forEach(e => {
+            adj[e.from].push({ to: e.to, w: e.weight });
+            adj[e.to].push({ to: e.from, w: e.weight });
+        });
+        return adj;
+    }
+
+    // ── Count Dijkstra visits (for comparison) ──
+    function dijkstraVisitCount(graph) {
+        const nodeNames = Object.keys(graph.nodes);
+        const adj = buildAdj(graph);
+        const dist = {};
+        const visited = new Set();
+        nodeNames.forEach(n => { dist[n] = Infinity; });
+        dist[graph.source] = 0;
+        while (true) {
+            let current = null, min = Infinity;
+            nodeNames.forEach(n => { if (!visited.has(n) && dist[n] < min) { min = dist[n]; current = n; } });
+            if (current === null) break;
+            visited.add(current);
+            adj[current].forEach(({ to, w }) => {
+                if (!visited.has(to)) {
+                    const nd = dist[current] + w;
+                    if (nd < dist[to]) dist[to] = nd;
+                }
+            });
+        }
+        return visited.size;
+    }
+
+    // ── Record A* frames ──
+    function recordAStar(graph) {
+        const nodeNames = Object.keys(graph.nodes);
+        const adj = buildAdj(graph);
+        const g = {}, f = {}, prev = {};
+        const visited = new Set();
+        const hVals = graph.h;
+        const goal = graph.goal;
+        const fr = [];
+
+        nodeNames.forEach(n => { g[n] = Infinity; f[n] = Infinity; prev[n] = null; });
+        g[graph.source] = 0;
+        f[graph.source] = hVals[graph.source];
+
+        function snap(type, extra) {
+            fr.push({
+                type,
+                dist: { ...g },
+                f: { ...f },
+                h: { ...hVals },
+                prev: { ...prev },
+                visited: new Set(visited),
+                goal,
+                ...extra
+            });
+        }
+
+        snap('init', {
+            desc: `Initialise: g(${graph.source}) = 0, f(${graph.source}) = 0 + h(${graph.source}) = ${hVals[graph.source]}. Goal: <span class="val-goal">${goal}</span>`
+        });
+
+        while (true) {
+            // Pick unvisited node with smallest f
+            let current = null, minF = Infinity;
+            nodeNames.forEach(n => {
+                if (!visited.has(n) && f[n] < minF) { minF = f[n]; current = n; }
+            });
+            if (current === null) break;
+
+            // Goal reached?
+            if (current === goal) {
+                visited.add(current);
+                const pathEdges = [];
+                let p = goal;
+                while (prev[p] !== null) { pathEdges.push([prev[p], p]); p = prev[p]; }
+                snap('done', {
+                    current,
+                    pathEdges,
+                    nodesVisitedCount: visited.size,
+                    desc: `<span class="val-goal">Goal ${goal} reached!</span> Shortest path cost = ${g[goal]}. A* visited only <strong>${visited.size}</strong> node${visited.size > 1 ? 's' : ''}.`
+                });
+                return fr;
+            }
+
+            snap('visit', {
+                current,
+                desc: `Visit <span class="val-current">${current}</span> — lowest f = ${f[current]} (g=${g[current]} + h=${hVals[current]}). Explore unvisited neighbours.`
+            });
+
+            adj[current].forEach(({ to, w }) => {
+                if (visited.has(to)) return;
+                const newG = g[current] + w;
+                const newF = newG + hVals[to];
+
+                if (newG < g[to]) {
+                    const oldG = g[to];
+                    const oldF = f[to];
+                    g[to] = newG;
+                    f[to] = newF;
+                    prev[to] = current;
+                    const oldGStr = oldG === Infinity ? '\u221E' : oldG;
+                    const oldFStr = oldF === Infinity ? '\u221E' : oldF;
+                    snap('update', {
+                        current,
+                        exploringEdge: [current, to],
+                        updatedNode: to,
+                        oldDist: oldG,
+                        oldF,
+                        desc: `Edge ${current}\u2192${to} (w=${w}): g = ${g[current]}+${w} = ${newG}, f = ${newG}+${hVals[to]} = ${newF} < ${oldFStr} \u2014 <span class="val-update">update ${to}!</span>`
+                    });
+                } else {
+                    snap('no-update', {
+                        current,
+                        exploringEdge: [current, to],
+                        desc: `Edge ${current}\u2192${to} (w=${w}): g = ${g[current]}+${w} = ${newG} \u2265 ${g[to]} \u2014 <span class="val-no">no update</span>`
+                    });
+                }
+            });
+
+            visited.add(current);
+            snap('visited', {
+                current,
+                desc: `Node <span class="val-done">${current}</span> finalised (g = ${g[current]}, f = ${f[current]}).`
+            });
+        }
+
+        snap('done', { pathEdges: [], nodesVisitedCount: visited.size, desc: 'Algorithm complete — goal not reachable.' });
+        return fr;
+    }
+
+    // ── Render SVG ──
+    function renderGraph(frame) {
+        const graph = getGraph();
+        const nodes = graph.nodes;
+        const edges = graph.edges;
+        let html = '';
+
+        const exploringFrom = frame.exploringEdge ? frame.exploringEdge[0] : null;
+        const exploringTo = frame.exploringEdge ? frame.exploringEdge[1] : null;
+        const pathEdgeSet = new Set();
+        if (frame.pathEdges) frame.pathEdges.forEach(([a, b]) => { pathEdgeSet.add(a+'-'+b); pathEdgeSet.add(b+'-'+a); });
+        const visitedEdgeSet = new Set();
+        for (const n in frame.prev) {
+            if (frame.prev[n] && frame.visited.has(n)) {
+                visitedEdgeSet.add(frame.prev[n]+'-'+n);
+                visitedEdgeSet.add(n+'-'+frame.prev[n]);
+            }
+        }
+
+        // Edges
+        edges.forEach(e => {
+            const p1 = nodes[e.from], p2 = nodes[e.to];
+            const key = e.from+'-'+e.to;
+            let stroke = '#334155', sw = 2.5, op = 0.5;
+
+            if (pathEdgeSet.has(key)) {
+                stroke = '#10b981'; sw = 4; op = 1;
+            } else if (exploringFrom && exploringTo &&
+                       ((exploringFrom===e.from && exploringTo===e.to)||(exploringFrom===e.to && exploringTo===e.from))) {
+                stroke = frame.type === 'update' ? '#f59e0b' : '#06b6d4'; sw = 4; op = 1;
+            } else if (visitedEdgeSet.has(key)) {
+                stroke = '#10b981'; sw = 3; op = 0.7;
+            }
+
+            html += `<line x1="${p1.x}" y1="${p1.y}" x2="${p2.x}" y2="${p2.y}" stroke="${stroke}" stroke-width="${sw}" opacity="${op}" stroke-linecap="round"/>`;
+
+            // Weight label
+            const mx = (p1.x+p2.x)/2, my = (p1.y+p2.y)/2;
+            const dx = p2.x-p1.x, dy = p2.y-p1.y, len = Math.sqrt(dx*dx+dy*dy);
+            const nx = -dy/len*14, ny = dx/len*14;
+            let lc = '#667';
+            if (exploringFrom && exploringTo && ((exploringFrom===e.from && exploringTo===e.to)||(exploringFrom===e.to && exploringTo===e.from)))
+                lc = frame.type==='update' ? '#f59e0b' : '#06b6d4';
+            else if (pathEdgeSet.has(key) || visitedEdgeSet.has(key)) lc = '#34d399';
+            html += `<text x="${mx+nx}" y="${my+ny}" text-anchor="middle" dominant-baseline="central" fill="${lc}" font-family="Fira Code, monospace" font-size="13" font-weight="600">${e.weight}</text>`;
+        });
+
+        // Nodes
+        Object.keys(nodes).forEach(n => {
+            const p = nodes[n];
+            let fill = '#1a1a2e', sc = '#4a4a6a', sw = 3, tc = '#e0e0e0', shadow = '';
+            const isGoal = n === frame.goal;
+
+            if (frame.type === 'done') {
+                fill = 'rgba(16,185,129,0.15)'; sc = '#10b981'; tc = '#34d399';
+                if (isGoal) { sc = '#f472b6'; tc = '#f472b6'; }
+            } else if (n === frame.current && (frame.type==='visit'||frame.type==='update'||frame.type==='no-update')) {
+                fill = '#a78bfa'; sc = '#a78bfa'; tc = '#fff';
+                shadow = `<circle cx="${p.x}" cy="${p.y}" r="${NODE_R+6}" fill="none" stroke="#a78bfa" stroke-width="2" opacity="0.3"/>`;
+            } else if (n === frame.updatedNode && frame.type === 'update') {
+                fill = 'rgba(245,158,11,0.2)'; sc = '#f59e0b'; tc = '#f59e0b';
+                shadow = `<circle cx="${p.x}" cy="${p.y}" r="${NODE_R+6}" fill="none" stroke="#f59e0b" stroke-width="2" opacity="0.3"/>`;
+            } else if (frame.visited.has(n)) {
+                fill = 'rgba(16,185,129,0.15)'; sc = '#10b981'; tc = '#34d399';
+            } else if (isGoal) {
+                sc = '#f472b6';
+            }
+
+            html += shadow;
+            // Goal dashed ring
+            if (isGoal && frame.type !== 'done') {
+                html += `<circle cx="${p.x}" cy="${p.y}" r="${NODE_R+4}" fill="none" stroke="#f472b6" stroke-width="2" stroke-dasharray="4,3" opacity="0.6"/>`;
+            }
+            html += `<circle cx="${p.x}" cy="${p.y}" r="${NODE_R}" fill="${fill}" stroke="${sc}" stroke-width="${sw}"/>`;
+            html += `<text x="${p.x}" y="${p.y}" text-anchor="middle" dominant-baseline="central" fill="${tc}" font-family="Fira Code, monospace" font-size="15" font-weight="700">${n}</text>`;
+
+            // g label
+            const gVal = frame.dist[n];
+            const gStr = gVal === Infinity ? '\u221E' : gVal;
+            let gColor = '#555';
+            if (n===frame.updatedNode && frame.type==='update') gColor = '#f59e0b';
+            else if (frame.visited.has(n) || frame.type==='done') gColor = '#34d399';
+            else if (gVal !== Infinity) gColor = '#aaa';
+            html += `<text x="${p.x}" y="${p.y+NODE_R+14}" text-anchor="middle" fill="${gColor}" font-family="Fira Code, monospace" font-size="10" font-weight="600">g=${gStr}</text>`;
+
+            // h label
+            html += `<text x="${p.x}" y="${p.y+NODE_R+26}" text-anchor="middle" fill="#7c6cbd" font-family="Fira Code, monospace" font-size="10" font-weight="600">h=${frame.h[n]}</text>`;
+        });
+
+        svgEl.innerHTML = html;
+    }
+
+    // ── Render table ──
+    function renderTable(frame) {
+        const nodeNames = Object.keys(getGraph().nodes);
+        let html = '<thead><tr><th>Node</th><th>g(n)</th><th>h(n)</th><th>f(n)</th><th>Previous</th><th>Visited</th></tr></thead><tbody>';
+
+        nodeNames.forEach(n => {
+            const gVal = frame.dist[n];
+            const fVal = frame.f[n];
+            const p = frame.prev[n];
+            const v = frame.visited.has(n);
+            const isCurrent = n===frame.current && (frame.type==='visit'||frame.type==='update'||frame.type==='no-update'||frame.type==='visited');
+            const isUpdated = n===frame.updatedNode && frame.type==='update';
+
+            let rowClass = '';
+            if (isUpdated) rowClass = 'row-updated';
+            else if (isCurrent) rowClass = 'row-current';
+
+            // g cell
+            let gHtml;
+            if (isUpdated && frame.oldDist !== undefined) {
+                const oldStr = frame.oldDist === Infinity ? '\u221E' : frame.oldDist;
+                gHtml = `<span class="old-val">${oldStr}</span> <span class="cell-updated">${gVal}</span>`;
+            } else if (gVal === Infinity) {
+                gHtml = '<span class="cell-infinity">\u221E</span>';
+            } else { gHtml = gVal; }
+
+            // h cell
+            const hHtml = `<span class="cell-h">${frame.h[n]}</span>`;
+
+            // f cell
+            let fHtml;
+            if (isUpdated && frame.oldF !== undefined) {
+                const oldFStr = frame.oldF === Infinity ? '\u221E' : frame.oldF;
+                fHtml = `<span class="old-val">${oldFStr}</span> <span class="cell-updated">${fVal}</span>`;
+            } else if (fVal === Infinity) {
+                fHtml = '<span class="cell-infinity">\u221E</span>';
+            } else { fHtml = `<span class="cell-f">${fVal}</span>`; }
+
+            const prevHtml = p ? p : '<span class="cell-infinity">\u2014</span>';
+            const visitHtml = v ? '<span class="cell-visited">\u2713</span>' : '<span class="cell-unvisited">\u2717</span>';
+
+            html += `<tr class="${rowClass}"><td>${n}</td><td>${gHtml}</td><td>${hHtml}</td><td>${fHtml}</td><td>${prevHtml}</td><td>${visitHtml}</td></tr>`;
+        });
+
+        html += '</tbody>';
+        distTable.innerHTML = html;
+    }
+
+    // ── Render frame ──
+    function renderFrame() {
+        const f = frames[frameIdx];
+        renderGraph(f);
+        renderTable(f);
+        stepDesc.innerHTML = f.desc;
+        btnStep.disabled = frameIdx >= frames.length - 1;
+        if (btnStep.disabled) stopPlay();
+
+        // Comparison banner
+        const banner = $('compareBanner');
+        if (f.type === 'done' && f.nodesVisitedCount) {
+            const dijCount = dijkstraVisitCount(getGraph());
+            const aCount = f.nodesVisitedCount;
+            const skipped = dijCount - aCount;
+            if (skipped > 0) {
+                $('compareText').innerHTML = `<strong>A* visited ${aCount} nodes</strong> to reach the goal. <span class="dij">Dijkstra would visit all ${dijCount} nodes</span>. The heuristic let A* skip <strong>${skipped} node${skipped>1?'s':''}</strong> entirely!`;
+            } else {
+                $('compareText').innerHTML = `A* visited ${aCount} nodes &mdash; the same as Dijkstra on this small graph. On larger graphs, the heuristic advantage becomes dramatic.`;
+            }
+            banner.classList.add('show');
+        } else {
+            banner.classList.remove('show');
+        }
+    }
+
+    // ── Controls ──
+    window.step = function() {
+        if (frameIdx < frames.length - 1) { frameIdx++; renderFrame(); }
+    };
+
+    window.togglePlay = function() {
+        if (playing) { stopPlay(); }
+        else {
+            playing = true;
+            btnPlay.textContent = 'Pause';
+            btnPlay.style.background = 'linear-gradient(135deg, #ef4444, #dc2626)';
+            tick();
+        }
+    };
+
+    function tick() {
+        if (!playing) return;
+        if (frameIdx < frames.length - 1) { frameIdx++; renderFrame(); timer = setTimeout(tick, getSpeed()); }
+        else stopPlay();
+    }
+
+    function stopPlay() {
+        playing = false;
+        clearTimeout(timer);
+        btnPlay.textContent = 'Play';
+        btnPlay.style.background = 'linear-gradient(135deg, #f59e0b, #d97706)';
+    }
+
+    window.reset = function() {
+        stopPlay();
+        $('compareBanner').classList.remove('show');
+        frameIdx = 0;
+        frames = recordAStar(getGraph());
+        renderFrame();
+    };
+
+    window.switchGraph = function(key) {
+        if (playing) stopPlay();
+        activeGraphKey = key;
+        document.querySelectorAll('.graph-tab').forEach(t => t.classList.remove('active'));
+        $('tab' + key.charAt(0).toUpperCase() + key.slice(1)).classList.add('active');
+        reset();
+    };
+
+    // ── Init ──
+    frames = recordAStar(getGraph());
+    renderFrame();
+})();
+</script>
+
+<footer style="text-align:center;padding:1.5rem;color:#888;font-size:0.85rem;border-top:1px solid #333;margin-top:2rem;">
+  <p>&copy; Dr Galan 2026. Created by <a href="https://coderra.je" target="_blank" rel="noopener" style="color:#6ea8fe;text-decoration:none;">Coderra.je</a></p>
+</footer>
+</body>
+</html>
