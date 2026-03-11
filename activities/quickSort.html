@@ -429,9 +429,9 @@ h1 {
     <div class="panel worst">
         <div class="panel-header">
             <span class="panel-title">Worst Case</span>
-            <span class="panel-badge">Already Sorted</span>
+            <span class="panel-badge">Reverse Sorted</span>
         </div>
-        <p class="panel-subtitle">First-element pivot on sorted data &mdash; maximally unbalanced</p>
+        <p class="panel-subtitle">First-element pivot on reverse-sorted data &mdash; maximally unbalanced</p>
         <div class="bar-area" id="worstBars"></div>
         <div class="stats-row">
             <span>Comparisons: <span class="comp-count" id="worstComp">0</span></span>
@@ -472,7 +472,7 @@ h1 {
     </div>
     <div class="bigo-footer">
         <strong>Key takeaway:</strong> Quick Sort's performance depends heavily on pivot choice.
-        An already-sorted array with a first-element pivot triggers the worst case every time.
+        A reverse-sorted array with a first-element pivot triggers the worst case every time.
         To avoid this, use strategies like <strong>random pivot</strong>,
         <strong>median-of-three</strong>, or <strong>shuffle the array first</strong>.
     </div>
@@ -482,7 +482,7 @@ h1 {
 (function() {
     // ── Data ──
     const BEST_ARR  = [5, 3, 8, 2, 7, 1, 6, 4];
-    const WORST_ARR = [1, 2, 3, 4, 5, 6, 7, 8];
+    const WORST_ARR = [8, 7, 6, 5, 4, 3, 2, 1];
     const MAX_VAL   = 8;
     const BAR_H     = 180; // max bar height in px
 
