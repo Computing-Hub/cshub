@@ -3,932 +3,833 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>GCSE Computer Science - Haute Vallee School</title>
+  <title>CS Hub - GCSE Computer Science Tutoring</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    /* --- Reset & Base --- */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --color-bg: #f0f2f5;
+      --color-text: #1a1a2e;
+      --color-text-light: #555570;
+      --color-white: #ffffff;
+      --color-link: #4361ee;
+      --color-link-hover: #3a0ca3;
+      --gradient-hero: linear-gradient(135deg, #4361ee 0%, #7209b7 50%, #f72585 100%);
+      --gradient-blue: linear-gradient(135deg, #4361ee, #4cc9f0);
+      --gradient-green: linear-gradient(135deg, #06d6a0, #1b9aaa);
+      --gradient-orange: linear-gradient(135deg, #f77f00, #fcbf49);
+      --gradient-pink: linear-gradient(135deg, #f72585, #b5179e);
+      --gradient-purple: linear-gradient(135deg, #7209b7, #560bad);
+      --font-body: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+      --font-code: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+      --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
+      --shadow-lg: 0 8px 30px rgba(0,0,0,0.12);
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --radius-xl: 24px;
+    }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--color-bg);
+      color: var(--color-text);
+      line-height: 1.7;
+      font-size: 1.05rem;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { color: var(--color-link); text-decoration: none; }
+    a:hover { color: var(--color-link-hover); }
+
+    /* --- Navigation --- */
+    .site-nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(0,0,0,0.08);
+      padding: 0 2rem;
+    }
+
+    .nav-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+    }
+
+    .nav-logo {
+      font-weight: 800;
+      font-size: 1.3rem;
+      color: var(--color-text);
+    }
+
+    .nav-logo span {
+      background: var(--gradient-hero);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+      align-items: center;
+    }
+
+    .nav-links a {
+      color: var(--color-text-light);
+      font-weight: 500;
+      font-size: 0.95rem;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--color-text); }
+
+    .nav-cta {
+      background: var(--gradient-hero);
+      color: white !important;
+      -webkit-text-fill-color: white !important;
+      padding: 0.5rem 1.2rem;
+      border-radius: 8px;
+      font-weight: 600;
+      transition: opacity 0.2s;
+    }
+
+    .nav-cta:hover { opacity: 0.9; }
+
+    /* Mobile nav toggle */
+    .nav-toggle {
+      display: none;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0.5rem;
+    }
+
+    .nav-toggle span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: var(--color-text);
+      margin: 5px 0;
+      transition: 0.3s;
+    }
+
+    /* --- Hero --- */
+    .hero {
+      background: var(--gradient-hero);
+      color: white;
+      padding: 8rem 2rem 5rem;
+      text-align: center;
+    }
+
+    .hero-inner {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .hero h1 {
+      font-size: 3rem;
+      font-weight: 800;
+      line-height: 1.15;
+      margin-bottom: 1.2rem;
+    }
+
+    .hero .subtitle {
+      font-size: 1.25rem;
+      opacity: 0.9;
+      margin-bottom: 2rem;
+      line-height: 1.6;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 0.85rem 2rem;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 1.05rem;
+      cursor: pointer;
+      border: none;
+      transition: transform 0.2s, box-shadow 0.2s;
+      text-align: center;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .btn-white {
+      background: white;
+      color: #4361ee;
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: white;
+      border: 2px solid rgba(255,255,255,0.6);
+    }
+
+    .btn-outline:hover { border-color: white; color: white; }
+
+    .btn-primary {
+      background: var(--gradient-hero);
+      color: white;
+    }
+
+    /* --- Sections --- */
+    .section {
+      padding: 5rem 2rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .section-alt {
+      background: var(--color-white);
+    }
+
+    .section-alt .section {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .section-heading {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .section-heading h2 {
+      font-size: 2rem;
+      font-weight: 800;
+      margin-bottom: 0.75rem;
+    }
+
+    .section-heading p {
+      color: var(--color-text-light);
+      font-size: 1.1rem;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* --- Services Grid --- */
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .service-card {
+      background: var(--color-white);
+      border-radius: var(--radius-lg);
+      padding: 2rem;
+      box-shadow: var(--shadow-sm);
+      transition: transform 0.2s, box-shadow 0.2s;
+      border: 1px solid rgba(0,0,0,0.05);
+    }
+
+    .section-alt .service-card {
+      background: var(--color-bg);
+    }
+
+    .service-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .service-icon {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      display: block;
+    }
+
+    .service-card h3 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .service-card p {
+      color: var(--color-text-light);
+      font-size: 0.95rem;
+    }
+
+    /* --- Stats --- */
+    .stats-section {
+      background: var(--color-text);
+      color: white;
+      padding: 3.5rem 2rem;
+    }
+
+    .stats-grid {
+      max-width: 900px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 2rem;
+      text-align: center;
+    }
+
+    .stat-number {
+      font-size: 2.5rem;
+      font-weight: 800;
+      display: block;
+      background: var(--gradient-hero);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .stat-label {
+      font-size: 0.9rem;
+      opacity: 0.7;
+      margin-top: 0.25rem;
+      display: block;
+    }
+
+    /* --- Free Resources Preview --- */
+    .preview-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .preview-card {
+      background: var(--color-white);
+      border-radius: var(--radius-md);
+      padding: 1.5rem;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid rgba(0,0,0,0.05);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .preview-card:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .preview-card h4 {
+      font-size: 1.05rem;
+      font-weight: 600;
+      margin-bottom: 0.4rem;
+    }
+
+    .preview-card p {
+      color: var(--color-text-light);
+      font-size: 0.9rem;
+      margin-bottom: 1rem;
+    }
+
+    .preview-card .badge {
+      display: inline-block;
+      background: #e6f9f1;
+      color: #06d6a0;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 0.2rem 0.6rem;
+      border-radius: 20px;
+      text-transform: uppercase;
+    }
+
+    .preview-card .badge-premium {
+      background: #fce4f3;
+      color: #f72585;
+    }
+
+    /* --- About / Tutor Section --- */
+    .about-content {
+      display: grid;
+      grid-template-columns: 1fr 1.5fr;
+      gap: 3rem;
+      align-items: center;
+    }
+
+    .about-photo {
+      width: 100%;
+      aspect-ratio: 1;
+      border-radius: var(--radius-xl);
+      background: var(--gradient-blue);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 6rem;
+    }
+
+    .about-text h3 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+
+    .about-text p {
+      color: var(--color-text-light);
+      margin-bottom: 1rem;
+    }
+
+    .credentials {
+      list-style: none;
+      margin-top: 1.5rem;
+    }
+
+    .credentials li {
+      padding: 0.4rem 0;
+      font-weight: 500;
+    }
+
+    .credentials li::before {
+      content: "\2713";
+      color: #06d6a0;
+      font-weight: 700;
+      margin-right: 0.5rem;
+    }
+
+    /* --- Pricing --- */
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .pricing-card {
+      background: var(--color-white);
+      border-radius: var(--radius-lg);
+      padding: 2.5rem 2rem;
+      box-shadow: var(--shadow-sm);
+      border: 2px solid rgba(0,0,0,0.05);
+      text-align: center;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .section-alt .pricing-card {
+      background: var(--color-bg);
+    }
+
+    .pricing-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .pricing-card.featured {
+      border-color: #4361ee;
+      position: relative;
+    }
+
+    .pricing-card.featured::before {
+      content: "Most Popular";
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--gradient-hero);
+      color: white;
+      padding: 0.25rem 1rem;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .pricing-card h3 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .pricing-price {
+      font-size: 2.5rem;
+      font-weight: 800;
+      margin: 1rem 0;
+    }
+
+    .pricing-price span {
+      font-size: 1rem;
+      font-weight: 400;
+      color: var(--color-text-light);
+    }
+
+    .pricing-features {
+      list-style: none;
+      text-align: left;
+      margin: 1.5rem 0 2rem;
+    }
+
+    .pricing-features li {
+      padding: 0.4rem 0;
+      color: var(--color-text-light);
+      font-size: 0.95rem;
+    }
+
+    .pricing-features li::before {
+      content: "\2713";
+      color: #06d6a0;
+      font-weight: 700;
+      margin-right: 0.5rem;
+    }
+
+    /* --- CTA Section --- */
+    .cta-section {
+      background: var(--gradient-hero);
+      color: white;
+      text-align: center;
+      padding: 5rem 2rem;
+    }
+
+    .cta-section h2 {
+      font-size: 2rem;
+      font-weight: 800;
+      margin-bottom: 1rem;
+    }
+
+    .cta-section p {
+      font-size: 1.15rem;
+      opacity: 0.9;
+      margin-bottom: 2rem;
+      max-width: 500px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* --- Footer --- */
+    .site-footer {
+      background: var(--color-text);
+      color: rgba(255,255,255,0.6);
+      text-align: center;
+      padding: 2.5rem 2rem;
+      font-size: 0.9rem;
+    }
+
+    .site-footer a { color: rgba(255,255,255,0.8); }
+    .site-footer a:hover { color: white; }
+    .site-footer p { margin-bottom: 0.3rem; }
+
+    /* --- Responsive --- */
+    @media (max-width: 900px) {
+      .nav-links { display: none; }
+      .nav-links.open {
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        top: 64px;
+        left: 0;
+        right: 0;
+        background: white;
+        padding: 1rem 2rem 2rem;
+        border-bottom: 1px solid rgba(0,0,0,0.1);
+        gap: 1rem;
+      }
+      .nav-toggle { display: block; }
+
+      .hero h1 { font-size: 2.2rem; }
+      .hero .subtitle { font-size: 1.1rem; }
+
+      .about-content {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+
+      .about-photo {
+        max-width: 200px;
+        margin: 0 auto;
+      }
+
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.5rem;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .hero { padding: 7rem 1.5rem 3.5rem; }
+      .hero h1 { font-size: 1.8rem; }
+      .section { padding: 3rem 1.5rem; }
+      .hero-buttons { flex-direction: column; align-items: center; }
+      .btn { width: 100%; max-width: 300px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        transition: none !important;
+        animation: none !important;
+      }
+    }
+  </style>
 </head>
-<body class="index-page">
+<body>
+
+  <!-- ===== NAVIGATION ===== -->
+  <nav class="site-nav">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo"><span>CS Hub</span></a>
+      <button class="nav-toggle" id="nav-toggle" aria-label="Toggle navigation">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="nav-links" id="nav-links">
+        <li><a href="#services">What I Offer</a></li>
+        <li><a href="#resources">Free Resources</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#pricing">Pricing</a></li>
+        <li><a href="#contact" class="nav-cta">Get Started</a></li>
+      </ul>
+    </div>
+  </nav>
 
   <!-- ===== HERO ===== -->
   <header class="hero">
-    <h1>GCSE Computer Science<br>Haute Vall&eacute;e School</h1>
-    <p class="subtitle">Learn to code right in your browser &mdash; no installs, no fuss</p>
-    <div class="badge-row">
-      <span class="badge">11 Chapters</span>
-      <span class="badge">Runs in Browser</span>
-      <span class="badge">100% Free</span>
+    <div class="hero-inner">
+      <h1>GCSE Computer Science Tutoring That Works</h1>
+      <p class="subtitle">Expert 1-to-1 online tutoring, interactive learning resources, and exam preparation &mdash; everything your child needs to achieve their target grade.</p>
+      <div class="hero-buttons">
+        <a href="#contact" class="btn btn-white">Book a Free Consultation</a>
+        <a href="resources.html" class="btn btn-outline">Browse Free Resources</a>
+      </div>
     </div>
   </header>
 
-  <!-- ===== SIDEBAR + CONTENT LAYOUT ===== -->
-  <div class="site-layout">
-
-    <!-- ===== LEFT SIDEBAR NAVIGATION ===== -->
-    <nav class="sidebar" id="sidebar">
-      <button class="sidebar-toggle" id="sidebar-toggle" aria-label="Toggle navigation">
-        <span></span><span></span><span></span>
-      </button>
-
-      <div class="sidebar-inner" id="sidebar-inner">
-
-        <!-- Algorithms & Problem Solving -->
-        <div class="nav-group open">
-          <div class="nav-group-title" onclick="this.parentElement.classList.toggle('open')">
-            <span class="nav-group-icon">&#x1F4A1;</span>
-            Algorithms &amp; Problem Solving
-            <span class="nav-chevron"></span>
-          </div>
-          <ul class="nav-group-links">
-            <li><a href="theory/computational-thinking.html">Computational Thinking</a></li>
-            <li><a href="theory/pseudocode-flowcharts.html">Pseudocode &amp; Flowcharts</a></li>
-            <li><a href="theory/programming-constructs.html">Programming Constructs</a></li>
-            <li><a href="theory/search-sort-algorithms.html">Search &amp; Sort Algorithms</a></li>
-          </ul>
-        </div>
-
-        <!-- Data Representation -->
-        <div class="nav-group open">
-          <div class="nav-group-title" onclick="this.parentElement.classList.toggle('open')">
-            <span class="nav-group-icon">&#x1F522;</span>
-            Data Representation
-            <span class="nav-chevron"></span>
-          </div>
-          <ul class="nav-group-links">
-            <li><a href="theory/data-representation.html">Number Systems</a></li>
-            <li><a href="theory/binary-addition.html">Binary Addition</a></li>
-            <li><a href="theory/hexadecimal.html">Hexadecimal</a></li>
-            <li><a href="theory/binary-shifts.html">Binary Shifts</a></li>
-            <li><a href="theory/twos-complement.html">Two&rsquo;s Complement</a></li>
-            <li><a href="theory/ascii-unicode.html">ASCII &amp; Unicode</a></li>
-            <li><a href="theory/image-representation.html">Image Representation</a></li>
-            <li><a href="theory/sound-representation.html">Sound Representation</a></li>
-            <li><a href="theory/compression.html">Compression</a></li>
-          </ul>
-        </div>
-
-        <!-- Computer Systems -->
-        <div class="nav-group open">
-          <div class="nav-group-title" onclick="this.parentElement.classList.toggle('open')">
-            <span class="nav-group-icon">&#x1F5A5;</span>
-            Computer Systems
-            <span class="nav-chevron"></span>
-          </div>
-          <ul class="nav-group-links">
-            <li><a href="theory/computer-systems.html">Computer Systems</a></li>
-            <li><a href="theory/logic-gates.html">Logic Gates</a></li>
-          </ul>
-        </div>
-
-        <!-- Networks -->
-        <div class="nav-group open">
-          <div class="nav-group-title" onclick="this.parentElement.classList.toggle('open')">
-            <span class="nav-group-icon">&#x1F310;</span>
-            Networks
-            <span class="nav-chevron"></span>
-          </div>
-          <ul class="nav-group-links">
-            <li><a href="theory/networks.html">Types of Networks</a></li>
-            <li><a href="theory/client-server-p2p.html">Client-Server vs P2P</a></li>
-            <li><a href="theory/network-topologies.html">Network Topologies</a></li>
-            <li><a href="theory/network-protocols.html">Network Protocols</a></li>
-            <li><a href="theory/tcp-ip-model.html">The TCP/IP Model</a></li>
-            <li><a href="theory/packet-switching.html">Packet Switching</a></li>
-            <li><a href="theory/ip-addressing.html">IP Addressing &amp; MAC</a></li>
-            <li><a href="theory/network-hardware.html">Network Hardware</a></li>
-            <li><a href="theory/network-security.html">Network Security</a></li>
-          </ul>
-        </div>
-
-        <!-- Issues & Impact -->
-        <div class="nav-group open">
-          <div class="nav-group-title" onclick="this.parentElement.classList.toggle('open')">
-            <span class="nav-group-icon">&#x2696;</span>
-            Issues &amp; Impact
-            <span class="nav-chevron"></span>
-          </div>
-          <ul class="nav-group-links">
-            <li><a href="theory/issues-and-impact.html">Issues &amp; Impact</a></li>
-          </ul>
-        </div>
-
-        <!-- Python Programming (moved up for prominence) -->
-        <div class="nav-group open">
-          <div class="nav-group-title" onclick="this.parentElement.classList.toggle('open')">
-            <span class="nav-group-icon">&#x1F40D;</span>
-            Python Programming
-            <span class="nav-chevron"></span>
-          </div>
-          <ul class="nav-group-links">
-            <li><a href="chapters/01-what-is-programming.html">What is Programming?</a></li>
-            <li><a href="chapters/02-variables.html">Variables &amp; Data Types</a></li>
-            <li><a href="chapters/03-input-output.html">Input &amp; Output</a></li>
-            <li><a href="chapters/04-if-statements.html">If Statements</a></li>
-            <li><a href="chapters/05-loops.html">Loops</a></li>
-            <li><a href="chapters/06-functions.html">Functions</a></li>
-            <li><a href="chapters/07-lists.html">Lists</a></li>
-            <li><a href="chapters/08-dictionaries.html">Dictionaries</a></li>
-            <li><a href="chapters/09-string-manipulation.html">String Manipulation</a></li>
-            <li><a href="chapters/10-error-handling.html">Error Handling</a></li>
-            <li><a href="chapters/11-capstone-quiz-game.html">Capstone: Quiz Game</a></li>
-          </ul>
-        </div>
-
-        <!-- Paper 2 Exam Skills (NEW) -->
-        <div class="nav-group open">
-          <div class="nav-group-title" onclick="this.parentElement.classList.toggle('open')">
-            <span class="nav-group-icon">&#x1F4DD;</span>
-            Paper 2 Exam Skills
-            <span class="nav-chevron"></span>
-          </div>
-          <ul class="nav-group-links">
-            <li><a href="paper2/index.html"><strong>Paper 2 Parsons Puzzles (Edexcel 2025)</strong></a></li>
-            <li><a href="activities/paper2-practice.html">Paper 2 Exam Practice</a></li>
-            <li><a href="activities/pls-quiz.html">PLS Quick-Fire Quiz</a></li>
-            <li><a href="activities/code-comparison.html">Compare &amp; Critique Code</a></li>
-            <li><a href="activities/comment-first-coding.html">Comment-First Coding</a></li>
-            <li><a href="activities/fillTheGap.html">Fill the Gap</a></li>
-            <li><a href="activities/stringSpotOutput.html">Spot the Output &mdash; Strings</a></li>
-            <li><a href="activities/stringFillTheGap.html">Fill the Gap &mdash; Strings</a></li>
-            <li><a href="activities/fileSpotOutput.html">Spot the Output &mdash; Files</a></li>
-            <li><a href="activities/fileFillTheGap.html">Fill the Gap &mdash; Files</a></li>
-            <li><a href="activities/validationCategories.html">Categorise the Validation</a></li>
-            <li><a href="activities/validationFillTheGap.html">Fill the Gap &mdash; Validation</a></li>
-            <li><a href="activities/edexcel-python-puzzles.html">Python Puzzles (Edexcel)</a></li>
-            <li><a href="activities/pls-category-game.html">PLS Function Sorter</a></li>
-          </ul>
-        </div>
-
-        <!-- Exam Info -->
-        <div class="nav-group open">
-          <div class="nav-group-title" onclick="this.parentElement.classList.toggle('open')">
-            <span class="nav-group-icon">&#x1F4CA;</span>
-            Exam Info
-            <span class="nav-chevron"></span>
-          </div>
-          <ul class="nav-group-links">
-            <li><a href="gcse_cs_grade_boundaries.html">Grade Boundaries</a></li>
-          </ul>
-        </div>
-
-        <!-- Paper 1 Exam Skills (NEW) -->
-        <div class="nav-group open">
-          <div class="nav-group-title" onclick="this.parentElement.classList.toggle('open')">
-            <span class="nav-group-icon">&#x1F4CB;</span>
-            Paper 1 Exam Skills
-            <span class="nav-chevron"></span>
-          </div>
-          <ul class="nav-group-links">
-            <li><a href="paper1/index.html"><strong>Paper 1 Parsons Puzzles (OCR 2023)</strong></a></li>
-            <li><a href="paper1-edexcel/index.html"><strong>Paper 1 Interactive Revision (Edexcel 2023)</strong></a></li>
-            <li><a href="activities/six-mark-builder.html">6-Mark Answer Builder</a></li>
-            <li><a href="activities/binary-speed-drill.html">Binary Maths Speed Drill</a></li>
-            <li><a href="activities/key-terms-quiz.html">Key Terms Precision Quiz</a></li>
-            <li><a href="activities/gcse_cs_flashcards.html">GCSE CS Flashcards</a></li>
-            <li><a href="activities/gcse_cs_interactive_exam_feedback.html">Paper 1 Exam Feedback Walkthrough</a></li>
-            <li><a href="activities/truth-tables-2.html">Truth Tables</a></li>
-          </ul>
-        </div>
-
-        <!-- Interactive Activities -->
-        <div class="nav-group open">
-          <div class="nav-group-title" onclick="this.parentElement.classList.toggle('open')">
-            <span class="nav-group-icon">&#x1F3AF;</span>
-            Interactive Activities
-            <span class="nav-chevron"></span>
-          </div>
-          <ul class="nav-group-links">
-            <li><a href="activities/storySequencing.html">Story Sequencing</a></li>
-            <li><a href="activities/recipeSequencing.html">Recipe Sequencing</a></li>
-            <li><a href="activities/codeSequencing.html">Code Sequencing</a></li>
-            <li><a href="activities/linearSearch.html">Linear Search Simulator</a></li>
-            <li><a href="activities/binarySearch.html">Binary Search Simulator</a></li>
-            <li><a href="activities/algorithms-cards.html">Algorithms Card Demo</a></li>
-            <li><a href="activities/merge6.html">Merge Sort Visualiser</a></li>
-            <li><a href="activities/bubbleSort.html">Bubble Sort Visualiser</a></li>
-            <li><a href="activities/insertionSort.html">Insertion Sort Visualiser</a></li>
-            <li><a href="activities/quickSort.html">Quick Sort Visualiser</a></li>
-            <li><a href="activities/treeTraversal.html">Tree Traversal Explorer</a></li>
-            <li><a href="activities/dijkstra.html">Dijkstra&rsquo;s Shortest Path</a></li>
-            <li><a href="activities/astar.html">A* Pathfinding</a></li>
-            <li><a href="activities/queue.html">Queue Simulator</a></li>
-            <li><a href="activities/cpuRegisters.html">CPU Registers Explorer</a></li>
-            <li><a href="activities/fetchExecuteCycle.html">Fetch-Execute Cycle</a></li>
-            <li><a href="activities/primaryMemory.html">Primary Memory</a></li>
-            <li><a href="activities/secondaryStorage.html">Secondary Storage</a></li>
-            <li><a href="activities/linkedList.html">Linked List Explorer</a></li>
-            <li><a href="activities/stack.html">Stack Simulator</a></li>
-            <li><a href="activities/findErrors.html">Find the Errors</a></li>
-            <li><a href="activities/logicRuntimeErrors.html">Logic vs Runtime Errors</a></li>
-            <li><a href="activities/trace_table.html">Trace Table Challenge</a></li>
-            <li><a href="activities/trace_table2.html">Trace Table Challenge 2</a></li>
-            <li><a href="activities/pythonactivities3.html">Python I/O Challenges</a></li>
-            <li><a href="activities/database.html">SQL Query Challenges</a></li>
-          </ul>
-        </div>
-
+  <!-- ===== STATS ===== -->
+  <div class="stats-section">
+    <div class="stats-grid">
+      <div>
+        <span class="stat-number">11</span>
+        <span class="stat-label">Python Chapters</span>
       </div>
-    </nav>
-
-    <!-- ===== MAIN CONTENT ===== -->
-    <main class="main-content">
-
-      <!-- ===== STATS ===== -->
-      <div class="stats-bar">
-        <div class="stat">
-          <span class="stat-number">11</span>
-          <span class="stat-label">Chapters</span>
-        </div>
-        <div class="stat">
-          <span class="stat-number">33</span>
-          <span class="stat-label">Exercises</span>
-        </div>
-        <div class="stat">
-          <span class="stat-number">24</span>
-          <span class="stat-label">Theory Topics</span>
-        </div>
-        <div class="stat">
-          <span class="stat-number">26</span>
-          <span class="stat-label">Activities</span>
-        </div>
-        <div class="stat">
-          <span class="stat-number">35+</span>
-          <span class="stat-label">Games</span>
-        </div>
+      <div>
+        <span class="stat-number">25</span>
+        <span class="stat-label">Theory Topics</span>
       </div>
-
-      <!-- ===== PAPER 2 EXAM SKILLS (NEW) ===== -->
-      <div class="section-heading">
-        <span class="icon" role="img" aria-label="memo">&#x1F4DD;</span>
-        <h2>Paper 2 Exam Skills</h2>
+      <div>
+        <span class="stat-number">45+</span>
+        <span class="stat-label">Interactive Activities</span>
       </div>
-
-      <p>Targeted activities based on the Chief Examiner's feedback to help you develop the skills tested in Paper 2 &mdash; reading, analysing, debugging, and designing code:</p>
-
-      <div class="resource-grid">
-        <div class="resource-card">
-          <span class="card-icon" role="img" aria-label="puzzle">&#x1F9E9;</span>
-          <h4>Paper 2 Parsons Puzzles</h4>
-          <p>Edexcel 1CP2/02 Summer 2025 &mdash; Interactive coding puzzles with drag-and-drop blocks</p>
-          <a href="paper2/index.html" class="button">Start</a>
-        </div>
-
-        <div class="resource-card">
-          <span class="card-icon" role="img" aria-label="exam paper">&#x1F4C4;</span>
-          <h4>Paper 2 Exam Practice</h4>
-          <p>6 exam-style questions mirroring the real Paper 2 format</p>
-          <a href="activities/paper2-practice.html" class="button">Start</a>
-        </div>
-
-        <div class="resource-card">
-          <span class="card-icon" role="img" aria-label="lightning">&#x26A1;</span>
-          <h4>PLS Quick-Fire Quiz</h4>
-          <p>20 rapid questions on the Programming Language Subset</p>
-          <a href="activities/pls-quiz.html" class="button">Start</a>
-        </div>
-
-        <div class="resource-card">
-          <span class="card-icon" role="img" aria-label="scales">&#x2696;</span>
-          <h4>Compare &amp; Critique Code</h4>
-          <p>8 side-by-side code comparisons to sharpen your analysis skills</p>
-          <a href="activities/code-comparison.html" class="button">Start</a>
-        </div>
-
-        <div class="resource-card">
-          <span class="card-icon" role="img" aria-label="notepad">&#x1F5D2;</span>
-          <h4>Comment-First Coding</h4>
-          <p>Learn to plan with comments before writing code</p>
-          <a href="activities/comment-first-coding.html" class="button">Start</a>
-        </div>
-
-        <div class="resource-card">
-          <span class="card-icon" role="img" aria-label="jigsaw">&#x1F9E9;</span>
-          <h4>Fill the Gap</h4>
-          <p>Drag Python blocks into the gaps to complete 10 programs covering key Paper 2 skills</p>
-          <a href="activities/fillTheGap.html" class="button">Start</a>
-        </div>
-
-        <div class="resource-card">
-          <span class="card-icon" role="img" aria-label="magnifying glass">&#x1F50D;</span>
-          <h4>Spot the Output &mdash; Strings</h4>
-          <p>20 multiple-choice questions on all 19 PLS string operations &mdash; pick the correct output</p>
-          <a href="activities/stringSpotOutput.html" class="button">Start</a>
-        </div>
-
-        <div class="resource-card">
-          <span class="card-icon" role="img" aria-label="jigsaw">&#x1F9E9;</span>
-          <h4>Fill the Gap &mdash; Strings</h4>
-          <p>10 drag-and-drop challenges focused entirely on string manipulation methods</p>
-          <a href="activities/stringFillTheGap.html" class="button">Start</a>
-        </div>
-
-        <div class="resource-card">
-          <span class="card-icon" role="img" aria-label="magnifying glass">&#x1F50D;</span>
-          <h4>Spot the Output &mdash; Files</h4>
-          <p>20 multiple-choice questions on file reading, writing, appending and CSV processing</p>
-          <a href="activities/fileSpotOutput.html" class="button">Start</a>
-        </div>
-
-        <div class="resource-card">
-          <span class="card-icon" role="img" aria-label="file folder">&#x1F4C1;</span>
-          <h4>Fill the Gap &mdash; Files</h4>
-          <p>10 drag-and-drop challenges on reading, writing and processing text files</p>
-          <a href="activities/fileFillTheGap.html" class="button">Start</a>
-        </div>
-
-        <div class="resource-card">
-          <span class="card-icon" role="img" aria-label="label">&#x1F3F7;</span>
-          <h4>Categorise the Validation</h4>
-          <p>Drag 15 code snippets into the correct validation type: range, type, length, presence or format</p>
-          <a href="activities/validationCategories.html" class="button">Start</a>
-        </div>
-
-        <div class="resource-card">
-          <span class="card-icon" role="img" aria-label="jigsaw">&#x1F9E9;</span>
-          <h4>Fill the Gap &mdash; Validation</h4>
-          <p>10 drag-and-drop challenges on input validation patterns including range, type and format checks</p>
-          <a href="activities/validationFillTheGap.html" class="button">Start</a>
-        </div>
-
-        <div class="resource-card">
-          <span class="card-icon" role="img" aria-label="puzzle">&#x1F9E9;</span>
-          <h4>Python Puzzles (Edexcel)</h4>
-          <p>10 Parsons-style Python puzzles across 3 difficulty levels covering key Edexcel GCSE topics</p>
-          <a href="activities/edexcel-python-puzzles.html" class="button">Start</a>
-        </div>
-
-        <div class="resource-card">
-          <span class="card-icon" role="img" aria-label="categories">&#x1F4E6;</span>
-          <h4>PLS Function Sorter</h4>
-          <p>Drag Python functions into the correct category &mdash; Built-in, List, String, Math or Random</p>
-          <a href="activities/pls-category-game.html" class="button">Start</a>
-        </div>
+      <div>
+        <span class="stat-number">100%</span>
+        <span class="stat-label">Browser-Based</span>
       </div>
-
-      <!-- ===== PAPER 1 EXAM SKILLS (NEW) ===== -->
-      <div class="section-heading">
-        <span class="icon" role="img" aria-label="clipboard">&#x1F4CB;</span>
-        <h2>Paper 1 Exam Skills</h2>
-      </div>
-
-      <p>Targeted activities to build the skills most tested in the Paper 1 written exam &mdash; precise definitions, binary arithmetic, and structured extended responses:</p>
-
-      <div class="resource-grid">
-        <div class="resource-card">
-          <span class="card-icon" role="img" aria-label="puzzle">&#x1F9E9;</span>
-          <h4>Paper 1 Parsons Puzzles</h4>
-          <p>OCR J277/01 June 2023 &mdash; Build answers from small blocks covering all 7 questions (80 marks)</p>
-          <a href="paper1/index.html" class="button">Start</a>
-        </div>
-
-        <div class="resource-card">
-          <span class="card-icon" role="img" aria-label="exam paper">&#x1F4C4;</span>
-          <h4>Paper 1 Interactive Revision (Edexcel 2023)</h4>
-          <p>Edexcel 1CP2/01 June 2023 &mdash; MCQs, matching, truth tables, Parsons puzzles &amp; model answers (75 marks)</p>
-          <a href="paper1-edexcel/index.html" class="button">Start</a>
-        </div>
-
-        <div class="resource-card">
-          <span class="card-icon" role="img" aria-label="writing">&#x270D;</span>
-          <h4>6-Mark Answer Builder</h4>
-          <p>Master extended response questions with the PEAC framework</p>
-          <a href="activities/six-mark-builder.html" class="button">Start</a>
-        </div>
-
-        <div class="resource-card">
-          <span class="card-icon" role="img" aria-label="stopwatch">&#x23F1;</span>
-          <h4>Binary Maths Speed Drill</h4>
-          <p>Timed binary, hex and denary conversions &mdash; no calculator allowed</p>
-          <a href="activities/binary-speed-drill.html" class="button">Start</a>
-        </div>
-
-        <div class="resource-card">
-          <span class="card-icon" role="img" aria-label="bullseye">&#x1F3AF;</span>
-          <h4>Key Terms Precision Quiz</h4>
-          <p>60 terms with mark-scheme-quality definitions across all 5 topics</p>
-          <a href="activities/key-terms-quiz.html" class="button">Start</a>
-        </div>
-
-        <div class="resource-card">
-          <span class="card-icon" role="img" aria-label="flashcard">&#x1F4C7;</span>
-          <h4>GCSE CS Flashcards</h4>
-          <p>Flip-card revision covering key GCSE Computer Science topics</p>
-          <a href="activities/gcse_cs_flashcards.html" class="button">Start</a>
-        </div>
-
-        <div class="resource-card">
-          <span class="card-icon" role="img" aria-label="feedback">&#x1F4AC;</span>
-          <h4>Paper 1 Exam Feedback Walkthrough</h4>
-          <p>Interactive walkthrough of 3 questions students found hardest on Paper 1</p>
-          <a href="activities/gcse_cs_interactive_exam_feedback.html" class="button">Start</a>
-        </div>
-
-        <div class="resource-card">
-          <span class="card-icon" role="img" aria-label="logic gate">&#x1F50C;</span>
-          <h4>Truth Tables</h4>
-          <p>Interactive truth table challenges for AND, OR, NOT, XOR, NAND and NOR logic gates</p>
-          <a href="activities/truth-tables-2.html" class="button">Start</a>
-        </div>
-      </div>
-
-      <!-- ===== PYTHON CODING GAMES ===== -->
-      <div class="section-heading">
-        <span class="icon" role="img" aria-label="snake">&#x1F40D;</span>
-        <h2>Python Coding Challenges</h2>
-      </div>
-
-      <p>Practise your Python skills with these interactive coding games from the <a href="https://hvgcse.cshub.org.je/" target="_blank" rel="noopener">CS Hub</a>:</p>
-
-      <div class="resource-grid">
-        <div class="resource-card">
-          <span class="card-icon" role="img" aria-label="bug">&#x1F41B;</span>
-          <h4>Code Fixer</h4>
-          <p>Find and fix 30 bugs across 3 real Python programs</p>
-          <a href="https://hvgcse.cshub.org.je/Python_Code_Fixer.html" class="button" target="_blank" rel="noopener">Play</a>
-        </div>
-
-        <div class="resource-card">
-          <span class="card-icon" role="img" aria-label="detective">&#x1F575;</span>
-          <h4>Error Spotter</h4>
-          <p>20 questions on syntax, logic, runtime and indentation errors</p>
-          <a href="https://hvgcse.cshub.org.je/Python_Error_Spotter.html" class="button" target="_blank" rel="noopener">Play</a>
-        </div>
-
-        <div class="resource-card">
-          <span class="card-icon" role="img" aria-label="building blocks">&#x1F9F1;</span>
-          <h4>Program Builder</h4>
-          <p>14 drag-and-drop code challenges</p>
-          <a href="https://hvgcse.cshub.org.je/Program_Builder.html" class="button" target="_blank" rel="noopener">Play</a>
-        </div>
-
-        <div class="resource-card">
-          <span class="card-icon" role="img" aria-label="file">&#x1F4C4;</span>
-          <h4>File Processing Builder</h4>
-          <p>4 challenges building file handling programs</p>
-          <a href="https://hvgcse.cshub.org.je/File_Processing_Builder.html" class="button" target="_blank" rel="noopener">Play</a>
-        </div>
-
-        <div class="resource-card">
-          <span class="card-icon" role="img" aria-label="puzzle">&#x1F9E9;</span>
-          <h4>Array Learning Game</h4>
-          <p>Interactive 1D/2D array practice with Parsons problems</p>
-          <a href="https://hvgcse.cshub.org.je/array-learning-game.html" class="button" target="_blank" rel="noopener">Play</a>
-        </div>
-
-        <div class="resource-card">
-          <span class="card-icon" role="img" aria-label="search">&#x1F50D;</span>
-          <h4>Array Search Builder</h4>
-          <p>4 challenges building 2D array search programs</p>
-          <a href="https://hvgcse.cshub.org.je/Array_Search_Builder.html" class="button" target="_blank" rel="noopener">Play</a>
-        </div>
-
-        <div class="resource-card">
-          <span class="card-icon" role="img" aria-label="blocks">&#x1F4E6;</span>
-          <h4>Python Blocks</h4>
-          <p>Visual block-based Python with Blockly</p>
-          <a href="https://hvgcse.cshub.org.je/hvide.html" class="button" target="_blank" rel="noopener">Open</a>
-        </div>
-
-        <div class="resource-card">
-          <span class="card-icon" role="img" aria-label="mind map">&#x1F5FA;</span>
-          <h4>Programming Mindmap</h4>
-          <p>Interactive visual overview of programming concepts</p>
-          <a href="https://hvgcse.cshub.org.je/ProgrammingMindmap.html" class="button" target="_blank" rel="noopener">View</a>
-        </div>
-
-        <div class="resource-card">
-          <span class="card-icon" role="img" aria-label="turtle">&#x1F422;</span>
-          <h4>Turtle Graphics</h4>
-          <p>10 progressive turtle drawing exercises with live canvas</p>
-          <a href="https://hvgcse.cshub.org.je/turtle.html" class="button" target="_blank" rel="noopener">Play</a>
-        </div>
-
-        <div class="resource-card">
-          <span class="card-icon" role="img" aria-label="function">&#x2699;</span>
-          <h4>Subroutines Practice</h4>
-          <p>10 exam-style coding challenges on procedures &amp; functions</p>
-          <a href="https://hvgcse.cshub.org.je/subroutines.html" class="button" target="_blank" rel="noopener">Play</a>
-        </div>
-      </div>
-
-      <!-- ===== QUIZ SHOW GAMES ===== -->
-      <div class="section-heading">
-        <span class="icon" role="img" aria-label="game controller">&#x1F3AE;</span>
-        <h2>Quiz Show Games</h2>
-      </div>
-
-      <p>Test your GCSE Computer Science knowledge with these TV-style quiz games:</p>
-
-      <div class="resource-grid">
-        <div class="resource-card">
-          <span class="card-icon" role="img" aria-label="trophy">&#x1F3C6;</span>
-          <h4>CS Jeopardy</h4>
-          <p>Jeopardy-style quiz covering all GCSE topics</p>
-          <a href="https://hvgcse.cshub.org.je/CS_Jeopardy.html" class="button" target="_blank" rel="noopener">Play</a>
-        </div>
-
-        <div class="resource-card">
-          <span class="card-icon" role="img" aria-label="money">&#x1F4B0;</span>
-          <h4>Computer Scientist?</h4>
-          <p>Who Wants to Be a Millionaire with CS lifelines</p>
-          <a href="https://hvgcse.cshub.org.je/Who_Wants_To_Be_A_Computer_Scientist.html" class="button" target="_blank" rel="noopener">Play</a>
-        </div>
-
-        <div class="resource-card">
-          <span class="card-icon" role="img" aria-label="runner">&#x1F3C3;</span>
-          <h4>The Chase</h4>
-          <p>Outrun the Chaser with risk-reward offers</p>
-          <a href="https://hvgcse.cshub.org.je/The_Chase.html" class="button" target="_blank" rel="noopener">Play</a>
-        </div>
-
-        <div class="resource-card">
-          <span class="card-icon" role="img" aria-label="chain">&#x1F517;</span>
-          <h4>Weakest Link</h4>
-          <p>Money chain quiz with vote-offs and finale</p>
-          <a href="https://hvgcse.cshub.org.je/Weakest_Link.html" class="button" target="_blank" rel="noopener">Play</a>
-        </div>
-
-        <div class="resource-card">
-          <span class="card-icon" role="img" aria-label="hexagon">&#x2B21;</span>
-          <h4>Blockbusters</h4>
-          <p>Hex grid quiz &mdash; connect left to right</p>
-          <a href="https://hvgcse.cshub.org.je/Blockbusters.html" class="button" target="_blank" rel="noopener">Play</a>
-        </div>
-
-        <div class="resource-card">
-          <span class="card-icon" role="img" aria-label="clock">&#x23F1;</span>
-          <h4>CS Countdown</h4>
-          <p>Race the clock &mdash; points equal seconds left</p>
-          <a href="https://hvgcse.cshub.org.je/CS_Countdown.html" class="button" target="_blank" rel="noopener">Play</a>
-        </div>
-      </div>
-
-      <!-- ===== PUZZLE & WORD GAMES ===== -->
-      <div class="section-heading">
-        <span class="icon" role="img" aria-label="puzzle">&#x1F9E9;</span>
-        <h2>Puzzle &amp; Word Games</h2>
-      </div>
-
-      <p>Sharpen your computing vocabulary and problem-solving skills:</p>
-
-      <div class="resource-grid">
-        <div class="resource-card">
-          <span class="card-icon" role="img" aria-label="locked">&#x1F512;</span>
-          <h4>Escape Room</h4>
-          <p>Solve computing puzzles to escape</p>
-          <a href="https://hvgcse.cshub.org.je/CS_Escape_Room.html" class="button" target="_blank" rel="noopener">Play</a>
-        </div>
-
-        <div class="resource-card">
-          <span class="card-icon" role="img" aria-label="crossword">&#x1F4DD;</span>
-          <h4>CS Crossword</h4>
-          <p>Interactive crossword with computing vocabulary</p>
-          <a href="https://hvgcse.cshub.org.je/CS_Crossword.html" class="button" target="_blank" rel="noopener">Play</a>
-        </div>
-
-        <div class="resource-card">
-          <span class="card-icon" role="img" aria-label="soup bowl">&#x1F372;</span>
-          <h4>Word Soup</h4>
-          <p>Word search with hidden computing terms</p>
-          <a href="https://hvgcse.cshub.org.je/Word_Soup.html" class="button" target="_blank" rel="noopener">Play</a>
-        </div>
-
-        <div class="resource-card">
-          <span class="card-icon" role="img" aria-label="grid">&#x1F532;</span>
-          <h4>Connect Wall</h4>
-          <p>Find 4 groups of 4 connected items</p>
-          <a href="https://hvgcse.cshub.org.je/Connect_Wall.html" class="button" target="_blank" rel="noopener">Play</a>
-        </div>
-      </div>
-
-      <!-- ===== TOPIC REVISION GAMES ===== -->
-      <div class="section-heading">
-        <span class="icon" role="img" aria-label="books">&#x1F4DA;</span>
-        <h2>Topic Revision Games</h2>
-      </div>
-
-      <p>Deep-dive practice games for specific GCSE topics:</p>
-
-      <div class="resource-grid">
-        <div class="resource-card">
-          <span class="card-icon" role="img" aria-label="cpu">&#x1F4BB;</span>
-          <h4>Hardware Games</h4>
-          <p>FDE cycle, CPU components, storage &amp; embedded systems</p>
-          <a href="https://hvgcse.cshub.org.je/Hardware_Topic_Games.html" class="button" target="_blank" rel="noopener">Play</a>
-        </div>
-
-        <div class="resource-card">
-          <span class="card-icon" role="img" aria-label="gear">&#x2699;</span>
-          <h4>Software Games</h4>
-          <p>OS functions, utility software &amp; code reviews</p>
-          <a href="https://hvgcse.cshub.org.je/Software_Topic_Games.html" class="button" target="_blank" rel="noopener">Play</a>
-        </div>
-
-        <div class="resource-card">
-          <span class="card-icon" role="img" aria-label="language">&#x1F4AC;</span>
-          <h4>Languages Games</h4>
-          <p>Low/high-level languages, compilers &amp; interpreters</p>
-          <a href="https://hvgcse.cshub.org.je/Languages_Topic_Games.html" class="button" target="_blank" rel="noopener">Play</a>
-        </div>
-
-        <div class="resource-card">
-          <span class="card-icon" role="img" aria-label="shield">&#x1F6E1;</span>
-          <h4>Cybersecurity</h4>
-          <p>Network security, malware, threats &amp; protection</p>
-          <a href="https://hvgcse.cshub.org.je/cybersecurity.html" class="button" target="_blank" rel="noopener">Play</a>
-        </div>
-
-        <div class="resource-card">
-          <span class="card-icon" role="img" aria-label="joystick">&#x1F579;</span>
-          <h4>Paper 1 Revision Games</h4>
-          <p>65 MCQs, matching pairs, binary challenge &amp; more</p>
-          <a href="https://hvgcse.cshub.org.je/revision-games/index.html" class="button" target="_blank" rel="noopener">Play</a>
-        </div>
-      </div>
-
-      <!-- ===== EXAM PREPARATION ===== -->
-      <div class="section-heading">
-        <span class="icon" role="img" aria-label="pencil">&#x270F;</span>
-        <h2>Exam Preparation</h2>
-      </div>
-
-      <p>Get exam-ready with these targeted practice tools:</p>
-
-      <div class="resource-grid">
-        <div class="resource-card">
-          <span class="card-icon" role="img" aria-label="bar chart">&#x1F4CA;</span>
-          <h4>Grade Boundaries</h4>
-          <p>GCSE Computer Science grade boundaries &mdash; see what marks you need for each grade</p>
-          <a href="gcse_cs_grade_boundaries.html" class="button">View</a>
-        </div>
-
-        <div class="resource-card">
-          <span class="card-icon" role="img" aria-label="building">&#x1F3D7;</span>
-          <h4>Paper 1 Answer Builder</h4>
-          <p>Build exam answers with Parsons-style sentence stacking</p>
-          <a href="https://hvgcse.cshub.org.je/Paper1_Answer_Builder.html" class="button" target="_blank" rel="noopener">Start</a>
-        </div>
-
-        <div class="resource-card">
-          <span class="card-icon" role="img" aria-label="exam">&#x1F4C3;</span>
-          <h4>Paper 2 Forecast Exam 1</h4>
-          <p>75-mark practice exam with marking and model answers</p>
-          <a href="https://hvgcse.cshub.org.je/Paper2_Forecast01.html" class="button" target="_blank" rel="noopener">Start</a>
-        </div>
-
-        <div class="resource-card">
-          <span class="card-icon" role="img" aria-label="exam">&#x1F4C3;</span>
-          <h4>Paper 2 Forecast Exam 2</h4>
-          <p>75-mark practice exam with marking and model answers</p>
-          <a href="https://hvgcse.cshub.org.je/Paper2_Forecast02.html" class="button" target="_blank" rel="noopener">Start</a>
-        </div>
-
-        <div class="resource-card">
-          <span class="card-icon" role="img" aria-label="book">&#x1F4D6;</span>
-          <h4>Command Words Guide</h4>
-          <p>Exam command words explained with examples</p>
-          <a href="https://hvgcse.cshub.org.je/command_words_guide.html" class="button" target="_blank" rel="noopener">View</a>
-        </div>
-
-        <div class="resource-card">
-          <span class="card-icon" role="img" aria-label="exam">&#x1F4C3;</span>
-          <h4>Paper 2 Practice Exam</h4>
-          <p>10-question, 120-mark Paper 2 exam with live Python execution</p>
-          <a href="https://hvgcse.cshub.org.je/paper2.html" class="button" target="_blank" rel="noopener">Start</a>
-        </div>
-
-        <div class="resource-card">
-          <span class="card-icon" role="img" aria-label="guide">&#x1F4D1;</span>
-          <h4>PLS Exam Strategy Guide</h4>
-          <p>How to use the PLS document in exams, with 2022&ndash;2024 paper walkthroughs</p>
-          <a href="https://hvgcse.cshub.org.je/pls_teaching_guide.html" class="button" target="_blank" rel="noopener">View</a>
-        </div>
-      </div>
-
-      <!-- ===== INTERACTIVE ACTIVITIES ===== -->
-      <div class="section-heading">
-        <span class="icon" role="img" aria-label="target">&#x1F3AF;</span>
-        <h2>Interactive Activities</h2>
-      </div>
-
-      <p>Hands-on interactive activities to explore CS concepts visually. Each activity explains or demonstrates a key idea through interactive challenges:</p>
-
-      <div class="resource-grid">
-        <div class="resource-card">
-          <span class="card-icon" role="img" aria-label="cards">&#x1F3B4;</span>
-          <h4>Story Sequencing</h4>
-          <p>Drag story cards into the correct order to practise sequencing</p>
-          <a href="activities/storySequencing.html" class="button">Start</a>
-        </div>
-
-        <div class="resource-card">
-          <span class="card-icon" role="img" aria-label="cookie">&#x1F36A;</span>
-          <h4>Recipe Sequencing</h4>
-          <p>Put cookie-baking steps in the right order</p>
-          <a href="activities/recipeSequencing.html" class="button">Start</a>
-        </div>
-
-        <div class="resource-card">
-          <span class="card-icon" role="img" aria-label="code">&#x1F4BB;</span>
-          <h4>Code Sequencing</h4>
-          <p>Arrange Python code blocks in the right order</p>
-          <a href="activities/codeSequencing.html" class="button">Start</a>
-        </div>
-
-        <div class="resource-card">
-          <span class="card-icon" role="img" aria-label="search">&#x1F50D;</span>
-          <h4>Linear Search</h4>
-          <p>Step through a linear search with visual animations</p>
-          <a href="activities/linearSearch.html" class="button">Start</a>
-        </div>
-
-        <div class="resource-card">
-          <span class="card-icon" role="img" aria-label="magnifying glass">&#x1F50E;</span>
-          <h4>Binary Search</h4>
-          <p>Interactive binary search with pseudocode tracking</p>
-          <a href="activities/binarySearch.html" class="button">Start</a>
-        </div>
-
-        <div class="resource-card">
-          <span class="card-icon" role="img" aria-label="sort">&#x1F500;</span>
-          <h4>Merge Sort</h4>
-          <p>Watch divide-and-conquer split and merge arrays</p>
-          <a href="activities/merge6.html" class="button">Start</a>
-        </div>
-
-        <div class="resource-card">
-          <span class="card-icon" role="img" aria-label="bubble">&#x1F4A7;</span>
-          <h4>Bubble Sort</h4>
-          <p>Watch adjacent elements compared and swapped — largest values "bubble" to the end</p>
-          <a href="activities/bubbleSort.html" class="button">Start</a>
-        </div>
-
-        <div class="resource-card">
-          <span class="card-icon" role="img" aria-label="cards">&#x1F0CF;</span>
-          <h4>Insertion Sort</h4>
-          <p>Pick up each element and slide it into its correct position — like sorting cards</p>
-          <a href="activities/insertionSort.html" class="button">Start</a>
-        </div>
-
-        <div class="resource-card">
-          <span class="card-icon" role="img" aria-label="fast forward">&#x23E9;</span>
-          <h4>Quick Sort</h4>
-          <p>Compare two arrays to see how pivot selection affects performance</p>
-          <a href="activities/quickSort.html" class="button">Start</a>
-        </div>
-
-        <div class="resource-card">
-          <span class="card-icon" role="img" aria-label="tree">&#x1F333;</span>
-          <h4>Tree Traversal</h4>
-          <p>Visualise pre-order, in-order, post-order (DFS) and breadth-first traversals</p>
-          <a href="activities/treeTraversal.html" class="button">Start</a>
-        </div>
-
-        <div class="resource-card">
-          <span class="card-icon" role="img" aria-label="route">&#x1F6E4;</span>
-          <h4>Dijkstra&rsquo;s Shortest Path</h4>
-          <p>Step through Dijkstra&rsquo;s algorithm on two graphs with distance tracking tables</p>
-          <a href="activities/dijkstra.html" class="button">Start</a>
-        </div>
-
-        <div class="resource-card">
-          <span class="card-icon" role="img" aria-label="star">&#x2B50;</span>
-          <h4>A* Pathfinding</h4>
-          <p>Explore A* with heuristics — see how f(n) = g(n) + h(n) skips unnecessary nodes</p>
-          <a href="activities/astar.html" class="button">Start</a>
-        </div>
-
-        <div class="resource-card">
-          <span class="card-icon" role="img" aria-label="queue">&#x1F4E5;</span>
-          <h4>Queue Simulator</h4>
-          <p>Enqueue, dequeue and peek to understand FIFO behaviour</p>
-          <a href="activities/queue.html" class="button">Start</a>
-        </div>
-
-        <div class="resource-card">
-          <span class="card-icon" role="img" aria-label="chip">&#x1F4DF;</span>
-          <h4>CPU Registers</h4>
-          <p>Learn and quiz on PC, MAR, MDR, CIR, ACC, ALU, CU</p>
-          <a href="activities/cpuRegisters.html" class="button">Start</a>
-        </div>
-
-        <div class="resource-card">
-          <span class="card-icon" role="img" aria-label="cycle">&#x1F504;</span>
-          <h4>Fetch-Execute Cycle</h4>
-          <p>Step through all 12 stages of the FDE cycle</p>
-          <a href="activities/fetchExecuteCycle.html" class="button">Start</a>
-        </div>
-
-        <div class="resource-card">
-          <span class="card-icon" role="img" aria-label="memory">&#x1F9E0;</span>
-          <h4>Primary Memory</h4>
-          <p>Learn, categorise and quiz on RAM, ROM and Cache</p>
-          <a href="activities/primaryMemory.html" class="button">Start</a>
-        </div>
-
-        <div class="resource-card">
-          <span class="card-icon" role="img" aria-label="disk">&#x1F4BE;</span>
-          <h4>Secondary Storage</h4>
-          <p>Explore HDD, SSD, optical, USB and cloud storage</p>
-          <a href="activities/secondaryStorage.html" class="button">Start</a>
-        </div>
-
-        <div class="resource-card">
-          <span class="card-icon" role="img" aria-label="link">&#x1F517;</span>
-          <h4>Linked List</h4>
-          <p>Add, remove and search with visual pointer animations</p>
-          <a href="activities/linkedList.html" class="button">Start</a>
-        </div>
-
-        <div class="resource-card">
-          <span class="card-icon" role="img" aria-label="stack">&#x1F4DA;</span>
-          <h4>Stack Simulator</h4>
-          <p>Push, pop and peek to understand LIFO behaviour</p>
-          <a href="activities/stack.html" class="button">Start</a>
-        </div>
-
-        <div class="resource-card">
-          <span class="card-icon" role="img" aria-label="bug">&#x1F41B;</span>
-          <h4>Find the Errors</h4>
-          <p>6-level game finding syntax, runtime and logic errors</p>
-          <a href="activities/findErrors.html" class="button">Start</a>
-        </div>
-
-        <div class="resource-card">
-          <span class="card-icon" role="img" aria-label="warning">&#x26A0;</span>
-          <h4>Logic vs Runtime Errors</h4>
-          <p>8 challenges identifying and fixing different error types</p>
-          <a href="activities/logicRuntimeErrors.html" class="button">Start</a>
-        </div>
-
-        <div class="resource-card">
-          <span class="card-icon" role="img" aria-label="table">&#x1F4CA;</span>
-          <h4>Trace Table</h4>
-          <p>Track variable changes as code executes line by line</p>
-          <a href="activities/trace_table.html" class="button">Start</a>
-        </div>
-
-        <div class="resource-card">
-          <span class="card-icon" role="img" aria-label="chart">&#x1F4C8;</span>
-          <h4>Trace Table 2</h4>
-          <p>Advanced program tracing with output tracking</p>
-          <a href="activities/trace_table2.html" class="button">Start</a>
-        </div>
-
-        <div class="resource-card">
-          <span class="card-icon" role="img" aria-label="keyboard">&#x2328;</span>
-          <h4>Python I/O Challenges</h4>
-          <p>5 challenges with input, type conversion and output</p>
-          <a href="activities/pythonactivities3.html" class="button">Start</a>
-        </div>
-
-        <div class="resource-card">
-          <span class="card-icon" role="img" aria-label="database">&#x1F5C4;</span>
-          <h4>SQL Query Challenges</h4>
-          <p>10 interactive SQL challenges on a products database</p>
-          <a href="activities/database.html" class="button">Start</a>
-        </div>
-
-        <div class="resource-card">
-          <span class="card-icon" role="img" aria-label="art">&#x1F3A8;</span>
-          <h4>Bitmap Image Builder</h4>
-          <p>Pixel art builder showing binary representation &amp; file size in real time</p>
-          <a href="https://hvgcse.cshub.org.je/bitmap.html" class="button" target="_blank" rel="noopener">Start</a>
-        </div>
-
-        <div class="resource-card">
-          <span class="card-icon" role="img" aria-label="speaker">&#x1F50A;</span>
-          <h4>Sound Wave Visualiser</h4>
-          <p>Real-time sound waves with adjustable sample rate &amp; bit depth</p>
-          <a href="https://hvgcse.cshub.org.je/sound.html" class="button" target="_blank" rel="noopener">Start</a>
-        </div>
-
-        <div class="resource-card">
-          <span class="card-icon" role="img" aria-label="compress">&#x1F5DC;</span>
-          <h4>Compression Simulator</h4>
-          <p>RLE pixel-grid simulator &amp; dictionary encoder</p>
-          <a href="https://hvgcse.cshub.org.je/compression.html" class="button" target="_blank" rel="noopener">Start</a>
-        </div>
-      </div>
-
-    </main>
-
+    </div>
   </div>
 
+  <!-- ===== SERVICES ===== -->
+  <div id="services">
+    <div class="section">
+      <div class="section-heading">
+        <h2>What I Offer</h2>
+        <p>Flexible options to suit every learner, from self-study resources to personalised tutoring.</p>
+      </div>
+
+      <div class="services-grid">
+        <div class="service-card">
+          <span class="service-icon" role="img" aria-label="video call">&#x1F4F9;</span>
+          <h3>1-to-1 Online Tutoring</h3>
+          <p>Live Zoom sessions tailored to your child's needs. I focus on building confidence, filling knowledge gaps, and developing exam technique.</p>
+        </div>
+
+        <div class="service-card">
+          <span class="service-icon" role="img" aria-label="books">&#x1F4DA;</span>
+          <h3>Interactive Learning Resources</h3>
+          <p>Self-paced Python coding chapters, theory lessons, and 45+ interactive activities &mdash; all running directly in the browser. No installs needed.</p>
+        </div>
+
+        <div class="service-card">
+          <span class="service-icon" role="img" aria-label="exam paper">&#x1F4DD;</span>
+          <h3>Exam Preparation</h3>
+          <p>Targeted practice for Edexcel and OCR exam papers with Parsons puzzles, mock exams, and mark-scheme-quality model answers.</p>
+        </div>
+
+        <div class="service-card">
+          <span class="service-icon" role="img" aria-label="snake">&#x1F40D;</span>
+          <h3>Python Coding Practice</h3>
+          <p>Run real Python code in the browser with instant feedback. Exercises graded by difficulty so students progress at their own pace.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== FREE RESOURCES PREVIEW ===== -->
+  <div class="section-alt" id="resources">
+    <div class="section">
+      <div class="section-heading">
+        <h2>Free Resources to Get Started</h2>
+        <p>Try these interactive activities and see the quality of the learning materials for yourself.</p>
+      </div>
+
+      <div class="preview-grid">
+        <div class="preview-card">
+          <span class="badge">Free</span>
+          <h4>Binary Maths Speed Drill</h4>
+          <p>Timed binary, hex and denary conversions</p>
+          <a href="activities/binary-speed-drill.html">Try it &rarr;</a>
+        </div>
+
+        <div class="preview-card">
+          <span class="badge">Free</span>
+          <h4>Bubble Sort Visualiser</h4>
+          <p>Watch elements compared and swapped step by step</p>
+          <a href="activities/bubbleSort.html">Try it &rarr;</a>
+        </div>
+
+        <div class="preview-card">
+          <span class="badge">Free</span>
+          <h4>CPU Registers Explorer</h4>
+          <p>Learn and quiz on PC, MAR, MDR, CIR, ACC, ALU, CU</p>
+          <a href="activities/cpuRegisters.html">Try it &rarr;</a>
+        </div>
+
+        <div class="preview-card">
+          <span class="badge">Free</span>
+          <h4>What is Programming?</h4>
+          <p>First chapter &mdash; write and run Python in your browser</p>
+          <a href="chapters/01-what-is-programming.html">Try it &rarr;</a>
+        </div>
+
+        <div class="preview-card">
+          <span class="badge">Free</span>
+          <h4>SQL Query Challenges</h4>
+          <p>10 interactive SQL challenges on a products database</p>
+          <a href="activities/database.html">Try it &rarr;</a>
+        </div>
+
+        <div class="preview-card">
+          <span class="badge">Free</span>
+          <h4>Key Terms Precision Quiz</h4>
+          <p>60 terms with mark-scheme definitions across all topics</p>
+          <a href="activities/key-terms-quiz.html">Try it &rarr;</a>
+        </div>
+      </div>
+
+      <div style="text-align: center; margin-top: 2rem;">
+        <a href="resources.html" class="btn btn-primary">View All Resources &rarr;</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== ABOUT ===== -->
+  <div id="about">
+    <div class="section">
+      <div class="section-heading">
+        <h2>Your Tutor</h2>
+      </div>
+
+      <div class="about-content">
+        <div class="about-photo" aria-label="Tutor photo placeholder">&#x1F468;&#x200D;&#x1F3EB;</div>
+        <div class="about-text">
+          <h3>Dr Galan</h3>
+          <p>I'm a Computer Science teacher with a passion for making complex topics accessible and engaging. I built all the resources on this platform to help my students succeed &mdash; and now I'm making them available to learners everywhere.</p>
+          <p>Every resource is designed with accessibility in mind: ADHD/dyslexia-friendly layouts, high contrast, clear typography, and interactive elements that keep students engaged.</p>
+          <ul class="credentials">
+            <li>Experienced GCSE Computer Science Teacher</li>
+            <li>PhD in Computer Science</li>
+            <li>Specialist in Edexcel &amp; OCR exam boards</li>
+            <li>Creator of 45+ interactive learning activities</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== PRICING ===== -->
+  <div class="section-alt" id="pricing">
+    <div class="section">
+      <div class="section-heading">
+        <h2>Pricing</h2>
+        <p>Simple, transparent pricing. No hidden fees or long-term commitments.</p>
+      </div>
+
+      <div class="pricing-grid">
+        <div class="pricing-card">
+          <h3>Free Resources</h3>
+          <div class="pricing-price">&pound;0</div>
+          <ul class="pricing-features">
+            <li>Selected interactive activities</li>
+            <li>Sample Python chapters</li>
+            <li>Theory topic pages</li>
+            <li>Sorting &amp; search visualisers</li>
+          </ul>
+          <a href="resources.html" class="btn btn-primary">Browse Resources</a>
+        </div>
+
+        <div class="pricing-card featured">
+          <h3>1-to-1 Tutoring</h3>
+          <div class="pricing-price">&pound;--<span>/hour</span></div>
+          <ul class="pricing-features">
+            <li>Live Zoom sessions</li>
+            <li>Personalised lesson plans</li>
+            <li>Full access to all resources</li>
+            <li>Homework &amp; exam practice</li>
+            <li>Progress tracking</li>
+            <li>Email support between sessions</li>
+          </ul>
+          <a href="#contact" class="btn btn-primary">Book a Session</a>
+        </div>
+
+        <div class="pricing-card">
+          <h3>Resource Pack</h3>
+          <div class="pricing-price">&pound;--</div>
+          <ul class="pricing-features">
+            <li>Full access to all activities</li>
+            <li>All 11 Python chapters</li>
+            <li>All 25 theory topics</li>
+            <li>Exam practice papers</li>
+            <li>Downloadable revision guides</li>
+          </ul>
+          <a href="#contact" class="btn btn-primary">Get Access</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== CTA / CONTACT ===== -->
+  <div class="cta-section" id="contact">
+    <h2>Ready to Get Started?</h2>
+    <p>Book a free 15-minute consultation to discuss your child's needs and how I can help.</p>
+    <div class="hero-buttons">
+      <!-- Replace # with your Calendly or booking link -->
+      <a href="#" class="btn btn-white">Book Free Consultation</a>
+      <!-- Replace # with your email link -->
+      <a href="mailto:admin@coderra.je" class="btn btn-outline">Email Me</a>
+    </div>
+  </div>
+
+  <!-- ===== FOOTER ===== -->
   <footer class="site-footer">
-    <p>GCSE Computer Science &mdash; Haute Vallee School</p>
-    <p>Built with <a href="https://pyodide.org/">Pyodide</a> &mdash; Python runs in your browser</p>
+    <p>CS Hub &mdash; GCSE Computer Science Tutoring</p>
     <p>&copy; Dr Galan 2026. Created by <a href="https://coderra.je" target="_blank" rel="noopener">Coderra.je</a></p>
   </footer>
 
   <script>
-    // Sidebar toggle for mobile
-    var toggle = document.getElementById('sidebar-toggle');
-    var inner = document.getElementById('sidebar-inner');
+    // Mobile nav toggle
+    var toggle = document.getElementById('nav-toggle');
+    var links = document.getElementById('nav-links');
     toggle.addEventListener('click', function () {
-      inner.classList.toggle('open');
-      toggle.classList.toggle('active');
+      links.classList.toggle('open');
+    });
+
+    // Smooth scroll for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(function (anchor) {
+      anchor.addEventListener('click', function (e) {
+        var target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          e.preventDefault();
+          links.classList.remove('open');
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
     });
   </script>
 
